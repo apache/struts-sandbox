@@ -19,18 +19,11 @@
  -->
 
 
-  <extend>../build/project.xml</extend>
+  <extend>build/project.xml</extend>
   <id>struts-sandbox</id>
   <name>Struts Sandbox</name>
 
   <package>org.apache.struts</package>
-
-  <url>http://jakarta.apache.org/struts/contrib/${pom.artifactId.substring(8)}/index.html</url>
-  <issueTrackingUrl>http://issues.apache.org/</issueTrackingUrl>
-  
-  <siteAddress>jakarta.apache.org/struts</siteAddress>
-  <siteDirectory>/www/jakarta.apache.org/struts/contrib/${pom.artifactId.substring(8)}/</siteDirectory>
-  <distributionDirectory>/www/jakarta.apache.org/builds/jakarta-commons-sandbox/${pom.artifactId.substring(8)}/</distributionDirectory>
 
   <repository>
     <connection>scm|svn|http|//svn.apache.org/repos/asf/struts/sandbox/trunk</connection>
@@ -63,13 +56,6 @@
         <url>http://jakarta.apache.org/cactus</url>
       </dependency>
 
-      <!-- for tld generation -->
-      <dependency>
-          <groupId>xalan</groupId>
-          <artifactId>xalan</artifactId>
-          <version>2.5.1</version>
-          <url>http://xml.apache.org/xalan</url>
-      </dependency>
     </dependencies>
 
   <build>
