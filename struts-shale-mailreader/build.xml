@@ -54,7 +54,7 @@
   <property name="jsp-api.jar"      value="${server.home}/common/lib/jsp-api.jar"/>
   <property name="jstl.jar"         value="${jstl.home}/lib/jstl.jar"/>
   <property name="junit.jar"        value="${junit.home}/junit.jar"/>
-  <property name="mailreader.jar"   value="${basedir}/../../struts-examples/mailreader/target/lib/struts-mailreader.jar"/>
+  <property name="mailreader.jar"   value="${basedir}/../../../core/trunk/struts-examples/mailreader/target/lib/struts-mailreader.jar"/>
   <property name="servlet-api.jar"  value="${server.home}/common/lib/servlet-api.jar"/>
   <property name="shale.jar"        value="${basedir}/../struts-shale/target/lib/shale.jar"/>
   <property name="standard.jar"     value="${jstl.home}/lib/standard.jar"/>
@@ -271,7 +271,7 @@
                 author="true"
                private="true"
                version="true"
-          packagenames="org.apache.struts.*"
+          packagenames="org.apache.shale.*"
            windowtitle="${project.name} (Version ${project.version})"
               doctitle="${project.name} (Version ${project.version})"
                 bottom="Copyright &#169; 2003-2004 - The Apache Software Foundation">
