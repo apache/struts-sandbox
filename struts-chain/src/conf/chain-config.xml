@@ -133,6 +133,7 @@
       <!-- Establish exception handling filter -->
       <command
           className="org.apache.struts.chain.ExceptionCatcher"
+        catalogName="struts"
    exceptionCommand="servlet-exception"/>
 
 
