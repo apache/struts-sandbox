@@ -29,18 +29,11 @@
 # directory.
 
 
-# The absolute or relative pathname of the directory containing your
-# Servlet API classes JAR file (servlet.jar)
-servlet.home=/usr/local/jakarta-tomcat-4.1.27/commons/lib
+# The absolute or relative pathname to the Commons Chain Distribution
+chain.home=/usr/local/commons-chain-1.0
 
+# The absolute or relative pathname to the directory containing Servlet API
+servlet.home=/usr/local/jakarta-tomcat-4.1.29/commons/lib
 
-# The absolute or relative pathname of the Struts Nightly Build (2004/01/19 or later)
-struts.home=/usr/local/jakarta-struts
-
-
-# The absolute or relative pathname of the Commons Chain
-# distribution
-chain.home=/usr/local/jakarta-commons/chain/dist
-
-# The absolute or relative pathname of the Struts core source repository
-struts.core.home=../../../core/trunk
+# The absolute or relative pathname to the Struts distribution
+struts.home=/usr/local/jakarta-struts-1.2.4
