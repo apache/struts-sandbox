@@ -1,5 +1,5 @@
 /*
- * Copyright 2004 The Apache Software Foundation.
+ * Copyright 2004-2005 The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package org.apache.shale.faces;
 
 import org.apache.shale.ViewController;
 import org.apache.shale.ViewControllerMapper;
+import org.apache.shale.util.TokenProcessor;
 
 /**
  * <p>{@link ShaleConstants} are manifest constants defining global identifiers shared across
@@ -29,6 +30,21 @@ import org.apache.shale.ViewControllerMapper;
 public interface ShaleConstants {
     
     
+    /**
+     * <p>Appication scope attribute key under which the
+     * {@link TokenProcessor} instance for this application is stored.</p>
+     */
+    public static final String TOKEN_PROCESSOR =
+      "org.apache.shale.TOKEN_PROCESSOR";
+
+
+    /**
+     * <p>Session scope attribute key under which we keep a <code>Set</code>
+     * containing the valid transaction tokens for this session.</p>
+     */
+    public static final String TOKENS = "org.apache.shale.TOKENS";
+
+
     /**
      * <p>Application scope attribute under which the
      * {@link ViewControllerMapper} for translating view identifiers

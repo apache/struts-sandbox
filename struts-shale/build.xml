@@ -1,6 +1,6 @@
 <!--
 
- Copyright 2004 The Apache Software Foundation.
+ Copyright 2004-2005 The Apache Software Foundation.
  
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -188,7 +188,7 @@
     </copy>
     <copy    todir="${build.home}/classes/META-INF">
       <fileset dir="src/conf"
-          includes="*faces-config.xml"/>
+          includes="*faces-config.xml taglib.tld"/>
     </copy>
   </target>
 
@@ -249,7 +249,7 @@
           packagenames="org.apache.shale.*"
            windowtitle="${project.name} (Version ${project.version})"
               doctitle="${project.name} (Version ${project.version})"
-                bottom="Copyright &#169; 2004 - The Apache Software Foundation">
+                bottom="Copyright &#169; 2004-2005 - The Apache Software Foundation">
       <classpath refid="compile.classpath"/>
     </javadoc>
 

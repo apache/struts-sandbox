@@ -1,5 +1,5 @@
 /*
- * Copyright 2004 The Apache Software Foundation.
+ * Copyright 2004-2005 The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -132,7 +132,7 @@ public class ShalePhaseListener implements PhaseListener {
      * <p>Call the <code>preprocess()</code> method of the {@link ViewController}
      * that has been restored, if this is a postback.</p>
      *
-     * @event <code>PhaseEvent</code> for the current event
+     * @param event <code>PhaseEvent</code> for the current event
      */
     private void afterRestoreView(PhaseEvent event) {
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2004 The Apache Software Foundation.
+ * Copyright 2004-2005 The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,6 +38,8 @@ import org.apache.commons.chain.config.ConfigParser;
 import org.apache.commons.chain.impl.CatalogBase;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.shale.ViewControllerMapper;
+import org.apache.shale.util.Messages;
 import org.apache.shale.view.DefaultViewControllerMapper;
 
 /**
@@ -127,6 +129,16 @@ public class ShaleApplicationFilter implements Filter {
       "org/apache/shale/faces/shale-config.xml";
 
 
+      /**
+       * <p>The name of the context initialization parameter that defines the
+       * fully qualified class name of the {@link ViewControllerMapper} to be
+       * used is stored.  If not present, the default value is
+       * <code>org.apache.shale.view.DefaultViewControllerMapper</code>.</p>
+       */
+    public static final String VIEW_CONTROLLER_MAPPER =
+      "org.apache.shale.VIEW_CONTROLLER_MAPPER";
+
+
     /**
      * <p>The <code>Log</code> instance for this class.</p>
      */
@@ -156,6 +168,14 @@ public class ShaleApplicationFilter implements Filter {
 
 
     /**
+     * <p>Message resources for this class.</p>
+     */
+    private static Messages messages =
+      new Messages("org.apache.shale.Bundle",
+                   ShaleApplicationFilter.class.getClassLoader());
+
+
+    /**
      * <p>The JSF <code>PhaseListener</code> that we have registered.</p>
      */
     private PhaseListener phaseListener = null;
@@ -169,7 +189,7 @@ public class ShaleApplicationFilter implements Filter {
      */
     public void destroy() {
 
-        log.info("Finalizing Shale application filter");
+        log.info(messages.getMessage("filter.finalizing"));
 
         if (phaseListener != null) {
             getLifecycle().removePhaseListener(phaseListener);
@@ -224,15 +244,14 @@ public class ShaleApplicationFilter implements Filter {
      */
     public void init(FilterConfig config) throws ServletException {
 
-        log.info("Initializing Shale application filter");
+        log.info(messages.getMessage("filter.initializing"));
 
         this.config = config;
         context = config.getServletContext();
         phaseListener = new ShalePhaseListener();
         getLifecycle().addPhaseListener(phaseListener);
-        // FIXME - make the mapper pluggable
         context.setAttribute(ShaleConstants.VIEW_MAPPER,
-          new DefaultViewControllerMapper());
+                             getViewControllerMapper());
 
         // Look up the "shale" catalog and ensure "standard" is defined
         try {
@@ -261,7 +280,8 @@ public class ShaleApplicationFilter implements Filter {
         Catalog catalog = CatalogFactory.getInstance().getCatalog(CATALOG_NAME);
         if (catalog == null) {
             if (log.isDebugEnabled()) {
-                log.debug("Creating catalog '" + CATALOG_NAME + "'");
+                log.debug(messages.getMessage("filter.creatingCatalog",
+                                              new Object[] { CATALOG_NAME }));
             }
             catalog = new CatalogBase();
             CatalogFactory.getInstance().addCatalog(CATALOG_NAME, catalog);
@@ -274,7 +294,8 @@ public class ShaleApplicationFilter implements Filter {
 
         // Configure based on our default resource
         if (log.isDebugEnabled()) {
-            log.debug("Parsing default resource '" + RESOURCE_NAME + "'");
+            log.debug(messages.getMessage("filter.parsingResource",
+                                          new Object[] { RESOURCE_NAME }));
         }
         ConfigParser parser = new ConfigParser();
         URL url = this.getClass().getClassLoader().getResource(RESOURCE_NAME);
@@ -306,6 +327,46 @@ public class ShaleApplicationFilter implements Filter {
         LifecycleFactory factory = (LifecycleFactory)
           FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
         return factory.getLifecycle(lifecycleId);
+
+    }
+
+
+    /**
+     * <p>Create and return the {@link ViewControllerMapper} instance
+     * we will use for this application
+     *
+     * @exception ServletException if no instance can be created
+     */
+    private ViewControllerMapper getViewControllerMapper() throws ServletException {
+
+        String className = context.getInitParameter(VIEW_CONTROLLER_MAPPER);
+        if (className == null) {
+            className = "org.apache.shale.view.DefaultViewControllerMapper";
+        }
+        ClassLoader cl = Thread.currentThread().getContextClassLoader();
+        if (cl == null) {
+            cl = this.getClass().getClassLoader();
+        }
+        try {
+            Class clazz = cl.loadClass(className);
+            return (ViewControllerMapper) clazz.newInstance();
+        } catch (ClassCastException e) {
+            throw new ServletException
+              (messages.getMessage("filter.vcmCast",
+                                   new Object[] { className }), e);
+        } catch (ClassNotFoundException e) {
+            throw new ServletException
+              (messages.getMessage("filter.vcmClass",
+                                   new Object[] { className }), e);
+        } catch (IllegalAccessException e) {
+            throw new ServletException
+              (messages.getMessage("filter.vcmAccess",
+                                   new Object[] { className }), e);
+        } catch (InstantiationException e) {
+            throw new ServletException
+              (messages.getMessage("filter.vcmInstantiate",
+                                   new Object[] { className }), e);
+        }
 
     }
 

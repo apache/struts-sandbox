@@ -1,5 +1,5 @@
 /*
- * Copyright 2004 The Apache Software Foundation.
+ * Copyright 2004-2005 The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import org.apache.shale.util.Messages;
 
 /**
  * <p>{@link ShaleViewHandler} is a custom implementation of <code>ViewHandler</code> that adds support
@@ -65,6 +66,14 @@ public class ShaleViewHandler extends ViewHandler {
      * <p>Log instance for this class.</p>
      */
     private static final Log log = LogFactory.getLog(ShaleViewHandler.class);
+
+
+    /**
+     * <p>Message resources for this class.</p>
+     */
+    private static Messages messages =
+      new Messages("org.apache.shale.Bundle",
+                   ShaleViewHandler.class.getClassLoader());
 
 
     // ------------------------------------------------------ Instance Variables
@@ -201,7 +210,7 @@ public class ShaleViewHandler extends ViewHandler {
         // Map our view identifier to a corresponding managed bean name
         ViewControllerMapper mapper = getViewControllerMapper(context);
         if (mapper == null) {
-            log.warn("No ViewControllerMapper configured for this application");
+            log.warn(messages.getMessage("view.noViewControllerMapper"));
             return;
         }
         String viewName = mapper.mapViewId(viewId);
@@ -214,13 +223,13 @@ public class ShaleViewHandler extends ViewHandler {
         try {
             vc = (ViewController) vb.getValue(context);
         } catch (ClassCastException e) {
-            log.warn("Bean for viewId '" + viewId + "' under name '" +
-              viewName + "' is not a ViewController");
+            log.warn(messages.getMessage("view.notViewController", 
+                                         new Object[] { viewId, viewName }));
             return;
         }
         if (vc == null) {
-            log.warn("No ViewController for viewId '" + viewId +
-              "' found under name '" + viewName + "'");
+            log.warn(messages.getMessage("view.noViewController",
+                                         new Object[] { viewId, viewName }));
             return;
         }
 

@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import org.apache.commons.chain.web.servlet.ServletWebContext;
+import org.apache.shale.util.Messages;
 
 /**
  * <p>Commons Chain <code>Context</code> implementation for Shale.</p>
@@ -68,6 +69,17 @@ public class ShaleWebContext extends ServletWebContext {
      * <p>The <code>FacesContext</code> for the current request (if any).</p>
      */
     private FacesContext facesContext = null;
+
+
+    // -------------------------------------------------------- Static Variables
+
+
+    /**
+     * <p>Message resources for this class.</p>
+     */
+    private static Messages messages =
+      new Messages("org.apache.shale.Bundle",
+                   ShaleWebContext.class.getClassLoader());
 
 
     // -------------------------------------------------------------- Properties
@@ -116,8 +128,8 @@ public class ShaleWebContext extends ServletWebContext {
      */
     public void setRequest(HttpServletRequest request) {
         if (!(request instanceof HttpServletRequestWrapper)) {
-            // FIXME - i18n
-            throw new IllegalArgumentException("Must be an HttpServletRequestWrapper");
+            throw new IllegalArgumentException
+              (messages.getMessage("context.requestWrapper"));
         }
         initialize(getContext(), request, getResponse());
     }
@@ -137,8 +149,8 @@ public class ShaleWebContext extends ServletWebContext {
      */
     public void setResponse(HttpServletResponse response) {
         if (!(response instanceof HttpServletResponseWrapper)) {
-            // FIXME - i18n
-            throw new IllegalArgumentException("Must be an HttpServletResponseWrapper");
+            throw new IllegalArgumentException
+              (messages.getMessage("context.responseWrapper"));
         }
         initialize(getContext(), getRequest(), response);
     }

@@ -287,24 +287,17 @@ must be met by an implementation of a controller for dialogs:</p>
     in such a manner that navigation can be performed by an event handler
     for one view, without having to be aware of the details of the overall
     structure of the entire dialog.</li>
-<li>Description of a dialog should include not only support for navigation
-    (first, previous, next, last, and so on) but also some mechanism for
-    scripting the entire dialog's flow.  Examples of descriptions might be
-    some scripting language that supports "continuations" (i.e. the ability
-    to suspend execution and restart it later), or Java APIs that make state
-    saving and restoring easy to perform in view-specific event handlers.</li>
+<li>Dialogs must be able to support one or more entry methods, which initialize
+    the dialog's data structures as needed, store the dialog instance in
+    session scope, and return a logical outcome for navigating to the
+    first view within the dialog.</li>
+<li>Dialogs must be able to support one or more exit methods (typically one
+    for succesful completion and one for cancellation) which clean up any
+    allocated resources, remove the dialog instance from session scope, and
+    return a logical outcome for navigating to the next view that is not
+    within the dialog.</li>
 <li>Dialog descriptions must be self documenting enough for tools to be
     able to produce high quality user experiences at design time.</li>
-<li>In addition to generic navigation, the dialog controller
-    must support one or more mechanisms to exit from the dialog (typically
-    via "finish" and "cancel" controls, but not limited to these).</li>
-<li>To the maximum degree feasible, the dialog controller must manage the
-    browser's "back" and "forwards" buttons, treating them as if the
-    corresponding navigation controls had been utilized (in terms of
-    undoing and redoing changes to the state information being maintained).
-    Clearly, this will require restrictions on persistent changes to model
-    tier data performed as each step of the dialog is executed, but those
-    restrictions should be explicitly documented and easy to obey.</li>
 </ul>
 
 <h3>2.4 View Controller</h3>

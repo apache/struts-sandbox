@@ -1,4 +1,4 @@
-<!--
+/*
  * Copyright 2004-2005 The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,13 +12,35 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
--->
+ */
 
-<!-- $Id$ -->
+package org.apache.shale.taglib;
 
-<body>
+import javax.faces.webapp.UIComponentTag;
+import org.apache.shale.component.Token;
 
-<p>This package defines the fundamental interfaces and manifest constants
-for the overall controller architecture.</p>
+/**
+ * <p>JSP custom tag for the {@link Token} component.</p>
+ *
+ * $Id$
+ */
+public class TokenTag extends UIComponentTag {
+    
 
-</body>
+    /**
+     * <p>Return the required component type.</p>
+     */
+    public String getComponentType() {
+        return "org.apache.shale.Token";
+    }
+
+
+    /**
+     * <p>Return the required renderer type.</p>
+     */
+    public String getRendererType() {
+        return "org.apache.shale.Token";
+    }
+
+
+}

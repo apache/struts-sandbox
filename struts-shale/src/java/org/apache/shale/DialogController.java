@@ -1,5 +1,5 @@
 /*
- * Copyright 2004 The Apache Software Foundation.
+ * Copyright 2004-2005 The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,46 +17,43 @@
 package org.apache.shale;
 
 import java.io.Serializable;
-import java.util.Map;
 
 /**
  * <p>{@link DialogController} is an interface describing a JavaBean that
  * manages the current state of a dialog (that is, a conversation that
- * requires multiple HTTP requests to interact with the user).  In addition,
- * processing methods are provided so that event handlers in the
- * {@link ViewController} for an individual view can navigate to various
- * portions of the dialog, without having to be aware of the identifers of
- * the other views that comprise the overall dialog.</p>
+ * requires multiple HTTP requests to interact with the user).  Note that,
+ * because {@link DialogController} instances are stored in session scope,
+ * all state information that is maintained should be serializable so that
+ * your application may operate in a distributed container.</p>
  *
- * <p>The basic {@link DialogController} interface provides a generic
- * set of attributes in which an application may store arbitrary information
- * representing the state of the overall computation.  To operate robustly
- * in servlet containers that support session migration and/or saving and
- * restoring on application restart, all such attributes (and, indeed, any
- * implementation of the {@link DialogController} interface) must be
- * Serializable.</p>
+ * <p>A {@link DialogController} instance comes into being when an
+ * initiaization method (normally <code>enter()</code>) is called.  This method
+ * should cause the dialog instance to be stored in session scope
+ * (this is typically automatic if the dialog instance is a managed bean),
+ * allocate any needed resources, and return a logical outcome that may be
+ * used by the <code>NavigationHandler</code> to select the first view
+ * that is part of this dialog.</p>
  *
- * <p>Best practices for creating {@link DialogController} implementations
- * include the following:</p>
- * <ul>
- * <li>Because {@link DialogController} instances will typically be saved
- *     across HTTP requests (in an <code>HttpSession</code>, cached in a
- *     database or filesystem, etc.) you should minimize the amount of state
- *     information that is maintained.</li>
- * <li>Do not maintain state information that can be easily recalculated.
- *     For example, keep primary keys of relevant database rows rather than
- *     the complete rows themselves -- that data can be re-acquired as
- *     needed in some later step of the dialog.</li>
- * <li>In general, no changes to the underlying persistent data in your
- *     application's model tier should be made until the user selects a
- *     "finish" or "apply" command.  This allows easy implementation of
- *     a "cancel" operation, which normally involves just throwing away
- *     the {@link DialogController} instance.</li>
- * <li>Although such access will be uncommon, {@link DialogController}
- *     instances will typically be visible to multiple processing threads,
- *     so appropriate synchronizations should be performed when saving
- *     and restoring the state information stored in an instance.</li>
- * </ul>
+ * <p>If a particular {@link DialogController} wishes to provide additonal
+ * initialization methods for alternate starting conditions, these additional
+ * methods should be implemented with the same method signature, and fulfill
+ * the same responsibilities.</p>
+ *
+ * <p>A {@link DialogController} instance completes its work when one of
+ * its termination methods is called.  The interface defines two termination
+ * methods (<code>exit()</code> and <code>cancel()</code>), indicating
+ * "successful" and "cancelled" completion of the dialog, respectively.
+ * Such a termination method should persist any transaction represented
+ * by the state of this dialog (if termination was successful), release
+ * any acquired resources, cause the dialog instance to be removed from
+ * session scope, and return a logical outcome that may be used by the
+ * <code>NavigationHandler</code> to select the first view that is
+ * <strong>not</strong> part of this dialog.</p>
+ *
+ * <p>If a particular {@link DialogController} wishes to provide additonal
+ * termination methods for variations on completion status, these additional
+ * methods should be implemented with the same method signature, and fulfill
+ * the same responsibilities.</p>
  *
  * <p><strong>WARNING</strong> - this is a very early prototype of what a
  * {@link DialogController} might look like.  The final design might assign
@@ -73,57 +70,43 @@ public interface DialogController extends Serializable {
     // -------------------------------------------------------------- Properties
 
     
-    /**
-     * <p>Return a <code>Map</code> in which event handlers executing on behalf
-     * of a dialog may store general purpose information, which will be
-     * maintained by Struts across HTTP requests.  To operate robustly in
-     * containers that support session migration or saving/restoring on
-     * server (or application) restart, all keys and values stored in this
-     * <code>Map</code> must be Serializable.</p>
-     */
-    public Map getAttributes();
-    
-
     // ------------------------------------------------------ Navigation Methods
 
 
     /**
-     * <p>Return a logical outcome that will navigate to a view informing
-     * the user that this dialog has been terminated abnormally.  The caller
-     * should ensure that no persistent state change be performed as a
-     * result of the partial completion of this dialog.</p>
+     * <p>Termination method indicating that this dialog has been completed
+     * abnormally.  Any saved state information should be released without
+     * impact on the persistent data for the application, any alocated
+     * resources should be released, and this {@link DialogController}
+     * instance should be removed from session scope.</p>
      *
-     * @exception UnsupportedOperationException if not supported for
-     *  this dialog
+     * @return Logical outcome used for navigation outside this dialog
      */
     public String cancel();
     
     
     /**
-     * <p>Return a logical outcome that will navigate to some view external
-     * to the current dialog, or <code>null</code> if there is no need to
-     * perform such navigation (perhaps because a pop-up window containing
-     * the dialog will be closing itself.</p>
+     * <p>Initialization method indicating that this dialog has been entered.
+     * Any desired resources should be allocated, and this
+     * {@link DialogController} instance should be added to session scope
+     * (if this was not already done by virtue of being a managed bean).</p>
      *
-     * @exception UnsupportedOperationException if not supported for
-     *  this dialog
+     * @return Logical outcome used for navigation to the first
+     *  view within this dialog
+     */
+    public String enter();
+
+
+    /**
+     * <p>Termination method indicating that this dialog has been completed
+     * successfully.  Any transaction represented by the saved state
+     * information should be persisted, any allocated resources should be
+     * released, and this {@link DialogController} instance should be
+     * removed from session scope.
+     *
+     * @return Logical outcome used for navigation outside this dialog
      */
     public String exit();
-    
-    
-    /**
-     * <p>Return a logical outcome that will navigate to a view confirming
-     * to the user that any persistent state changes required to reflect
-     * the execution of this dialog have been completed.  The caller should
-     * ensure that all such changes have been performed before navigation
-     * to this confirmation view is actually performed, because the user is
-     * likely to cancel this view (if it appears in a popup window) using
-     * browser based controls instead of any application provided controls.</p>
-     *
-     * @exception UnsupportedOperationException if not supported for
-     *  this dialog
-     */
-    public String finish();
     
     
     /**
@@ -134,7 +117,7 @@ public interface DialogController extends Serializable {
      * @exception UnsupportedOperationException if not supported for
      *  this dialog
      */
-    public String first();
+    // public String first();
 
 
     /**
@@ -145,7 +128,7 @@ public interface DialogController extends Serializable {
      * @exception UnsupportedOperationException if not supported for
      *  this dialog
      */
-    public String last();
+    // public String last();
 
 
     /**
@@ -156,7 +139,7 @@ public interface DialogController extends Serializable {
      * @exception UnsupportedOperationException if not supported for
      *  this dialog
      */
-    public String next();
+    // public String next();
 
 
     /**
@@ -167,7 +150,7 @@ public interface DialogController extends Serializable {
      * @exception UnsupportedOperationException if not supported for
      *  this dialog
      */
-    public String previous();
+    // public String previous();
 
 
 }
