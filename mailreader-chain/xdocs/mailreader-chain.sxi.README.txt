@@ -1,0 +1,4 @@
+MailReader-Chain.sxi is an OpenOffice presentation. 
+
+OpenOffice is a free productivity suite compatible with all major office suites, that you can download from <http://www.OpenOffice.org>. 
+
