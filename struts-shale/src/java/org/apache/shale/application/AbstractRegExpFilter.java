@@ -270,7 +270,15 @@ public abstract class AbstractRegExpFilter implements Command {
         // Set up to parse the specified expression
         StreamTokenizer st =
           new StreamTokenizer(new StringReader(expr));
+        st.eolIsSignificant(false);
         st.lowerCaseMode(false);
+        st.slashSlashComments(false);
+        st.slashStarComments(false);
+        st.wordChars(0x00, 0xff);
+        st.quoteChar('\'');
+        st.quoteChar('"');
+        st.whitespaceChars(0, ' ');
+        st.whitespaceChars(',', ',');
         List list = new ArrayList();
         int type = 0;
 
