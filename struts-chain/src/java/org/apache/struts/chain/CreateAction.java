@@ -230,7 +230,7 @@ public class CreateAction implements Command {
         Map actions = (Map) wcontext.getApplicationScope().get(actionsKey);
         if (actions == null) {
             actions = new HashMap();
-            wcontext.getApplicationScope().put(actionKey, actions);
+            wcontext.getApplicationScope().put(actionsKey, actions);
         }
         return (actions);
 
