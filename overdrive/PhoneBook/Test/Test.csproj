@@ -105,6 +105,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Commands\SelectAllTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Resources\Command\AppConfig.xml"
                     BuildAction = "Content"
                 />
