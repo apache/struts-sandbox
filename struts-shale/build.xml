@@ -47,7 +47,7 @@
   <property name="commons-beanutils.jar"
                                     value="${beanutils.home}/commons-beanutils.jar"/>
   <property name="commons-chain.jar"
-                                    value="${chain.home}/commons-chain.jar"/>
+                                    value="${chain.home}/commons-chain-1.0.jar"/>
   <property name="commons-digester.jar"
                                     value="${digester.home}/commons-digester.jar"/>
 <!--
