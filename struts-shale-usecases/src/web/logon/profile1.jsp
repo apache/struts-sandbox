@@ -78,7 +78,7 @@
 
       <%-- actions --%>
 
-      <h:outputText       value=""/>
+      <s:token             id="token"/>
 
       <h:panelGroup>
         <h:commandButton   id="next"
@@ -95,6 +95,8 @@
                        action="#{logon$profile1.cancel}"
                         value="#{messages['label.cancel']}"/>
       </h:panelGroup>
+
+      <h:message          for="token"/>
 
     </h:panelGrid>
 

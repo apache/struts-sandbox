@@ -27,6 +27,12 @@
 
   <display-name>Struts-Shale MailReader Example</display-name>
 
+  <!-- JSF RI verify objects at start -->
+  <context-param>
+    <param-name>com.sun.faces.verifyObjects</param-name>
+    <param-value>true</param-value>
+  </context-param>
+
   <!-- Select JSF State Saving Mode -->
   <context-param>
     <param-name>javax.faces.STATE_SAVING_METHOD</param-name>

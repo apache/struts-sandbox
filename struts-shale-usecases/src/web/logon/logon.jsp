@@ -83,7 +83,7 @@
 
       <%-- actions --%>
 
-      <h:outputText     value=""/>
+      <s:token             id="token"/>
 
       <h:panelGroup>
         <h:commandButton   id="logon"
@@ -95,6 +95,8 @@
           <h:outputText value="#{messages['logon.create']}"/>
         </h:commandLink>
       </h:panelGroup>
+
+      <h:message          for="token"/>
 
     </h:panelGrid>
 
