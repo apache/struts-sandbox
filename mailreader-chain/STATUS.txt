@@ -1,0 +1,43 @@
+MailReader Demonstration Application (for Commons Chain)
+------------------------------------------------------------------------
+
+Help people manage multiple email subscriptions by allowing users to 
+create one or more accounts and attach one or more subscriptions to 
+each account. 
+
+(Note that this is a demonstration application only. It does not 
+actually check email accounts.)
+
+------------------------------------------------------------------------
+
+Status Levels 
+
+ 4 Development
+   Testing
+   Client Review
+ 1 Complete
+--
+ 5 Total
+------------------------------------------------------------------------
+
+Story Index
+
+* Select language
+* Create an account
+* Login into an account 
+* Maintain account record (master)
+* Maintain subscription records (child)
+
+------------------------------------------------------------------------
+
+[ ] Select language
+
+Upon opening the application, users may select one of the supported 
+languages, including English, Japanese, and Russian. 
+
+On selecting a language, the page is redisplayed in that language. The 
+user may select another language, or continue using the one selected.
+
+------------------------------------------------------------------------
+========================================================================
+
