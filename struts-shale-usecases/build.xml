@@ -67,7 +67,7 @@
                                 classname="com.sun.faces.RIConstants"
                                 classpath="${jsf-impl.jar}"/>
   <available                     property="myfaces.present"
-                                classname="net.sourceforge.myfaces.config.MyfacesConfig"
+                                classname="org.apache.myfaces.config.MyfacesConfig"
                                 classpath="${jsf-impl.jar}"/>
 
   <!-- Build Defaults -->
@@ -138,7 +138,6 @@
     <echo  message="commons-chain.jar =${commons-chain.jar}"/>
     <echo  message="jsf-api.jar =      ${jsf-api.jar}"/>
     <echo  message="jsf-impl.jar =     ${jsf-impl.jar}"/>
-    <echo  message="mailreader.jar =   ${mailreader.jar}"/>
     <echo  message="shale.jar =        ${shale.jar}"/>
     <echo  message="jsfri.present =    ${jsfri.present}"/>
     <echo  message="myfaces.present=   ${myfaces.present}"/>
@@ -228,11 +227,19 @@
   <target name="libraries.myfaces" depends="libraries"
             if="myfaces.present">
 
-    <!-- Copy additional libraries required by MyFaces implementation -->
+    <!-- Copy additional libraries required by MyFaces (version 1.0.8) -->
     <copy        todir="${build.home}/${context.path}/WEB-INF/lib"
                   file="${jsf.home}/lib/commons-codec-1.2.jar"/>
     <copy        todir="${build.home}/${context.path}/WEB-INF/lib"
                   file="${jsf.home}/lib/commons-el.jar"/>
+    <copy        todir="${build.home}/${context.path}/WEB-INF/lib"
+                  file="${jsf.home}/lib/commons-fileupload-1.0.jar"/>
+    <copy        todir="${build.home}/${context.path}/WEB-INF/lib"
+                  file="${jsf.home}/lib/commons-validator.jar"/>
+    <copy        todir="${build.home}/${context.path}/WEB-INF/lib"
+                  file="${jsf.home}/lib/jakarta-oro.jar"/>
+    <copy        todir="${build.home}/${context.path}/WEB-INF/lib"
+                  file="${jsf.home}/lib/myfaces-extensions.jar"/>
 
   </target>
 

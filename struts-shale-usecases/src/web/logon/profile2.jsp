@@ -80,6 +80,7 @@
                         value="#{messages['label.finish']}"/>
         <h:commandButton   id="cancel"
                        action="#{logon$profile2.cancel}"
+                    immediate="true"
                         value="#{messages['label.cancel']}"/>
       </h:panelGroup>
 
