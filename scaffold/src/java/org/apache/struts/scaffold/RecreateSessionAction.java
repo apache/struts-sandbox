@@ -30,6 +30,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.Globals;
 
 import org.apache.commons.scaffold.lang.Tokens;
 
@@ -61,13 +62,13 @@ public final class RecreateSessionAction extends BaseAction {
 
         HttpSession session = request.getSession();
 
-        Locale locale = (Locale) session.getAttribute(Action.LOCALE_KEY);
+        Locale locale = (Locale) session.getAttribute(Globals.LOCALE_KEY);
 
         session.invalidate();
 
         session = request.getSession(true);
 
-        session.setAttribute(Action.LOCALE_KEY,locale);
+        session.setAttribute(Globals.LOCALE_KEY,locale);
 
         return mapping.findForward(Tokens.SUCCESS);
     }

@@ -26,13 +26,9 @@ import org.apache.commons.beanutils.BeanUtils;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
-// import org.apache.struts.validator.ValidatorForm; // Struts 1.1
-import com.wintecinc.struts.action.ValidatorForm; // Struts 1.0.x
 
-import org.apache.commons.scaffold.lang.ParameterException;
 import org.apache.commons.scaffold.lang.Tokens;
 import org.apache.commons.scaffold.util.BizRequest;
-import org.apache.commons.scaffold.util.Message;
 import org.apache.commons.scaffold.util.MessageImpl;
 import org.apache.commons.scaffold.util.Messages;
 import org.apache.commons.scaffold.util.MessagesImpl;

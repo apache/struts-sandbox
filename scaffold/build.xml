@@ -5,44 +5,37 @@
 <project name="scaffold" default="compile.lib">
 
     <!-- Change this to compile against a different version  -->
-    <property name="compile.classpath" value="compile.classpath_1_0"/>
+    <property name="compile.classpath" value="compile.classpath_1_2"/>
 
     <!-- Local system paths -->
-    <property name="distpath.project" value="/projects/lib"/>
-    <property name="distpath.javasoft" value="/javasoft/lib"/>
-    <property name="distpath.jakarta" value="/jakarta/lib"/>
+    <property name="path.dist" value="./target"/>
+    <property name="path.javasoft" value="/opt/JavaSoft/lib"/>
+    <property name="path.jakarta" value="/opt/jakarta"/>
+    <property name="path.sf" value="/opt/sourceforge"/>
+    <property name="path.struts" value="/opt/struts/jakarta-struts-1.2.4-lib"/>
 
     <!-- Project settings -->
     <property name="project.title" value="scaffold"/>
     <property name="project.version" value="0.6"/>
-    <property name="project.distname" value="struts-scaffold_1_0"/>
+    <property name="project.distname" value="struts-scaffold_1_2"/>
 
     <!-- Standard Javasoft jars -->
-    <property name="servlet.jar"   value="${distpath.javasoft}/servlet.jar"/>
-    <property name="jdbc20ext.jar" value="${distpath.javasoft}/jdbc2_0-stdext.jar"/>
+    <property name="servlet.jar"   value="${path.javasoft}/servletapi_2_3.jar"/>
+    <property name="jdbc20ext.jar" value="${path.javasoft}/jdbc2_0-stdext.jar"/>
 
     <!-- Path settings -->
     <property name="doc.path" value="./doc/api"/>
     <property name="doc.src" value="./src/java"/>
 
     <!-- Build working classpath -->
-    <path id="compile.classpath_1_0">
-        <pathelement path ="lib/commons-beanutils.jar"/>
-        <pathelement path ="lib/commons-digester.jar"/>
-        <pathelement path ="lib/commons-scaffold_1_0.jar"/>
-        <pathelement path ="lib/struts_1_0_2.jar"/>
-        <pathelement path ="lib/struts-validator_1_0.jar"/>
-        <pathelement path ="classes"/>
-        <pathelement path ="${classpath}"/>
-    </path>
-
-    <!-- Build working classpath -->
-    <path id="compile.classpath_1_1">
-        <pathelement path ="lib/lucene_1_2.jar"/>
-        <pathelement path ="lib/poolman_2_0_4.jar"/>
-        <pathelement path ="lib/commons-beanutils.jar"/>
-        <pathelement path ="lib/commons-digester.jar"/>
-        <pathelement path ="lib/struts_1_1_b1.jar"/>
+    <path id="compile.classpath_1_2">
+        <pathelement path ="${path.jakarta}/lucene-1.4.3.jar"/>
+        <pathelement path ="${path.sf}/poolman-2-0-4/lib/poolman.jar"/>
+        <pathelement path ="${path.struts}/commons-beanutils.jar"/>
+        <pathelement path ="${path.struts}/commons-digester.jar"/>
+        <pathelement path ="${path.jakarta}/commons-scaffold.jar"/>
+        <pathelement path ="${path.jakarta}/commons-resources.jar"/>
+        <pathelement path ="${path.struts}/struts.jar"/>
         <pathelement path ="classes"/>
         <pathelement path ="${classpath}"/>
     </path>
@@ -70,11 +63,12 @@
     <!-- Normal build of application -->
     <target name="compile" depends="prepare,resources">
       <copy
-        file="./LICENSE"
+        file="./LICENSE.txt"
         todir="classes"/>
         <!-- Remove "jikes" value if you must use javac instead -->
         <!-- property name="build.compiler" value="jikes"/ -->
         <javac srcdir="src" destdir="classes">
+            <classpath path="${servlet.jar}:${jdbc20ext.jar}" />
             <classpath refid="${compile.classpath}"/>
         </javac>
     </target>
@@ -111,10 +105,10 @@
         description="Create binary distribution">
 
       <mkdir
-        dir="${distpath.project}"/>
+        dir="${path.dist}"/>
 
       <jar
-        jarfile="${distpath.project}/${project.distname}.jar"
+        jarfile="${path.dist}/${project.distname}.jar"
         basedir="./classes"/>
 
     </target>
@@ -124,14 +118,14 @@
         description="Create distribution">
 
       <mkdir
-        dir="${distpath.project}"/>
+        dir="${path.dist}"/>
 
-      <zip zipfile="${distpath.project}/${project.distname}.zip">
+      <zip zipfile="${path.dist}/${project.distname}.zip">
         <zipfileset dir="." prefix="struts-scaffold"/>
       </zip>
 
       <jar
-        jarfile="${distpath.project}/${project.distname}.jar"
+        jarfile="${path.dist}/${project.distname}.jar"
         basedir="./classes"/>
 
     </target>

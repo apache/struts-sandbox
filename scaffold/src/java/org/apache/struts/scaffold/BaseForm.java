@@ -30,11 +30,10 @@ import org.apache.commons.beanutils.PropertyUtils;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
-// import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
-// import org.apache.struts.validator.ValidatorForm; // Struts 1.1
-import com.wintecinc.struts.action.ValidatorForm; // Struts 1.0.x
+import org.apache.struts.validator.DynaValidatorForm;
+import org.apache.struts.Globals;
 
 import org.apache.commons.scaffold.lang.ChainedException;
 import org.apache.commons.scaffold.lang.Log;
@@ -44,10 +43,9 @@ import org.apache.commons.scaffold.text.ConvertUtils;
 
 /**
  * Enhanced base ActionForm.
- * :TODO: Extend from DynaValidatorForm in 1.1 version.
  * @version $Rev$ $Date$
  */
-public class BaseForm extends ValidatorForm {
+public class BaseForm extends DynaValidatorForm {
 
 
 // ---------------------------------------------------------- Remote Host
@@ -92,7 +90,7 @@ public class BaseForm extends ValidatorForm {
      * The session attribute key for our session locale [Action.LOCALE_KEY].
      * (Suggestion only, may be overridden by presentation framework
      */
-    public static String STRUTS_LOCALE_KEY = Action.LOCALE_KEY;
+    public static String STRUTS_LOCALE_KEY = Globals.LOCALE_KEY;
 
 
     /**
@@ -164,7 +162,7 @@ public class BaseForm extends ValidatorForm {
         Locale locale = getSessionLocale();
         if (null==locale) locale = Locale.getDefault();
 
-        request.getSession(true).setAttribute(Action.LOCALE_KEY,locale);
+        request.getSession(true).setAttribute(Globals.LOCALE_KEY,locale);
 
     } // end putSessionLocale
 

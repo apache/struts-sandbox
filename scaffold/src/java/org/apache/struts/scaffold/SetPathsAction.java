@@ -17,7 +17,7 @@
  */
  
  
-package org.apache.struts.scaffold.SetPathsAction;
+package org.apache.struts.scaffold;
 
 import java.io.IOException;
 
@@ -29,8 +29,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 
 import org.apache.struts.scaffold.BaseAction;
-import org.apache.commons.scaffold.lang.Log;
-import org.apache.commons.scaffold.lang.Tokens;
 
 
 /**
@@ -61,7 +59,6 @@ public final class SetPathsAction extends BaseAction {
             HttpServletResponse response)
         throws Exception {
 
-        servlet.log(Log.TOKENS_PARSING,Log.DEBUG);
         String[] tokens = tokenize(mapping.getParameter());
         int helperCount = tokens.length;
 

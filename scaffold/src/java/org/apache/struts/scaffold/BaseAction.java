@@ -1,14 +1,19 @@
 /*
- * $Id$ 
+// MUST! :FIXME: Need to provide equivalent of
+// ActionFormBean formBean = servlet.findFormBean(helperName);
+*/
+
+/*
+ * $Id$
  *
  * Copyright 2001-2004 The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,7 +35,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.*;
 
-import org.apache.struts.util.MessageResources;
+import org.apache.struts.Globals;
 
 import org.apache.commons.scaffold.lang.BaseException;
 import org.apache.commons.scaffold.lang.Log;
@@ -61,8 +66,7 @@ public class BaseAction extends Action {
      * @deprecated Will be removed after Struts 1.1 final ships.
      */
     private final boolean isStruts_1_0() {
-        return true;  // Struts 1.0.x
-//      return false; // Struts 1.1
+           return false; // Struts 1.1+
     }
 
 // ---------------------------------------------------------------- Log
@@ -73,7 +77,8 @@ public class BaseAction extends Action {
      * @param level The debug level to test
      */
     protected boolean isLogLevel(int level) {
-        return (servlet.getDebug()>=level);
+        // FIXME: return servlet.getDebug()>=level);
+        return false;
     }
 
 
@@ -81,7 +86,8 @@ public class BaseAction extends Action {
      * Is logging set to debugging?
      */
     protected boolean isDebug() {
-        return (servlet.getDebug()>=Log.DEBUG);
+        // FIXME: return (servlet.getDebug()>=Log.DEBUG);
+        return false;
     }
 
 
@@ -89,7 +95,8 @@ public class BaseAction extends Action {
      * Is logging set to verbose?
      */
     protected boolean isVerbose() {
-        return (servlet.getDebug()>=Log.VERBOSE);
+        // FIXME: return (servlet.getDebug()>=Log.VERBOSE);
+        return false;
     }
 
 
@@ -105,7 +112,7 @@ public class BaseAction extends Action {
     protected void setException(
             HttpServletRequest request,
             Exception e) {
-        request.setAttribute(EXCEPTION_KEY,e);
+        request.setAttribute(Globals.EXCEPTION_KEY,e);
     }
 
 
@@ -115,7 +122,7 @@ public class BaseAction extends Action {
      * @param request The HTTP request we are processing
      */
     protected Exception getException(HttpServletRequest request) {
-        return (Exception) request.getAttribute(EXCEPTION_KEY);
+        return (Exception) request.getAttribute(Globals.EXCEPTION_KEY);
     }
 
 
@@ -136,7 +143,7 @@ public class BaseAction extends Action {
         Locale result = null;
         HttpSession session = request.getSession();
         if (session!=null) {
-            result = (Locale) session.getAttribute(Action.LOCALE_KEY);
+            result = (Locale) session.getAttribute(Globals.LOCALE_KEY);
             if (result == null) result = Locale.getDefault();
         } else {
             result = Locale.getDefault();
@@ -159,7 +166,7 @@ public class BaseAction extends Action {
             Locale locale) {
 
         HttpSession session = request.getSession(true);
-        session.setAttribute(Action.LOCALE_KEY,locale);
+        session.setAttribute(Globals.LOCALE_KEY,locale);
 
     } // end setLocale()
 
@@ -215,15 +222,6 @@ return servlet.getServletContext().getAttribute(getRemoteServerName());
 
 
     /**
-     * Return the application resources for this web application,
-     * if any.
-     */
-    protected MessageResources getMessageResources() {
-        return servlet.getResources();
-    }
-
-
-    /**
      * Number of replacement parameters permitted in Struts 1.0.
      * See also saveConfirm.
      */
@@ -235,7 +233,7 @@ return servlet.getServletContext().getAttribute(getRemoteServerName());
      * parameters from a List, and adds them to an ActionErrors
      * collection.
      *
-     * // :FIXME: In 1.1 this should be updated to use the
+     * // :FIXME: This should be updated to use the
      * new ActionMessages superclass.
      *
      * @param request The request we are servicing
@@ -295,7 +293,7 @@ return servlet.getServletContext().getAttribute(getRemoteServerName());
      * If it doesn't exist, and create is true, a new collection is
      * returned.
      *
-     * :FIXME: In 1.1 this should be the ActionMessage superclass
+     * :FIXME: This should be the ActionMessage superclass
      * @param request The HTTP request we are processing
      * @param create Whether to create a new collection if one does
      * not exist
@@ -305,9 +303,8 @@ return servlet.getServletContext().getAttribute(getRemoteServerName());
             HttpServletRequest request,
             boolean create) {
 
-            // :FIXME: In 1.1 should use public static
         final String
-            MESSAGE_KEY = "org.apache.struts.action.ACTION_MESSAGE";
+            MESSAGE_KEY = Globals.MESSAGE_KEY;
 
         ActionErrors alerts = (ActionErrors)
             request.getAttribute(MESSAGE_KEY);
@@ -391,14 +388,14 @@ return servlet.getServletContext().getAttribute(getRemoteServerName());
             boolean create) {
 
         ActionErrors alerts = (ActionErrors)
-            request.getAttribute(ERROR_KEY);
+            request.getAttribute(Globals.ERROR_KEY);
 
         if ((null==alerts) && (create)) {
 
             alerts = new ActionErrors();
                 // Bypass Action.SaveError() since it
                 // won't accept a blank collection
-            request.setAttribute(ERROR_KEY,alerts);
+            request.setAttribute(Globals.ERROR_KEY,alerts);
 
         }
 
@@ -543,8 +540,9 @@ return servlet.getServletContext().getAttribute(getRemoteServerName());
         }
 
         Object bean = null;
-
-        ActionFormBean formBean = servlet.findFormBean(helperName);
+            // MUST! :FIXME: Need to provide equivalent of
+            // ActionFormBean formBean = servlet.findFormBean(helperName);
+        ActionFormBean formBean = null;
         if (formBean != null) {
             String className = null;
             className = formBean.getType();
@@ -679,7 +677,6 @@ return servlet.getServletContext().getAttribute(getRemoteServerName());
 
             // override to provide functionality, like
             // myBusinessObject.execute(form);
-        servlet.log(Log.BASE_LOGIC_EXECUTING,Log.DEBUG);
 
     } // end executeLogic()
 

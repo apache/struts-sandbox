@@ -63,7 +63,7 @@ public class ProcessAction extends BaseHelperAction {
             Object bean) {
 
         if (null==scope) {
-            servlet.log(Log.PROCESS_BEAN_NULL_SCOPE,Log.DEBUG);
+            //
         }
         else if (Tokens.REQUEST.equals(scope)) {
             request.setAttribute(name,bean);
@@ -78,7 +78,6 @@ public class ProcessAction extends BaseHelperAction {
             StringBuffer sb = new StringBuffer("exposeInScope: ");
             sb.append(scope);
             sb.append(Tokens.INVALID_SCOPE);
-            servlet.log(sb.toString(),Log.DEBUG);
             throw new IllegalArgumentException(sb.toString());
         }
 
@@ -341,8 +340,6 @@ public class ProcessAction extends BaseHelperAction {
 
         if (result!=null) {
 
-            servlet.log(Log.HELPER_OUTCOME,Log.DEBUG);
-
             if (result.isAggregate()) {
                     // recurse for each ProcessResult in collection
                 Collection collection = (Collection)
@@ -459,7 +456,6 @@ public class ProcessAction extends BaseHelperAction {
         BaseForm userBean =
             getUserProfile(mapping,form,request,response);
 
-        servlet.log(Log.HELPER_PROCESSING,Log.DEBUG);
         Map properties = null;
         for (int i = 0; i < helpers.length; i++) {
 
@@ -474,7 +470,6 @@ public class ProcessAction extends BaseHelperAction {
 
                         // Merge user profile (if found)
                         // and our form into a single map
-                    servlet.log(Log.HELPER_POPULATE,Log.DEBUG);
                     properties = formBean.merge(userBean);
 
                         // Pass up the Locale, RemoteNode, and RemoteServer (if any)
@@ -492,7 +487,6 @@ public class ProcessAction extends BaseHelperAction {
             }
 
                 // Execute business logic, using values from  map
-            servlet.log(Log.HELPER_EXECUTING,Log.DEBUG);
             ProcessResult result = (ProcessResult)
                 dataBean.execute(properties);
 

@@ -40,9 +40,7 @@ import org.apache.commons.scaffold.lang.Tokens;
 import org.apache.commons.scaffold.util.BizRequest;
 import org.apache.commons.scaffold.util.BizResponse;
 import org.apache.commons.scaffold.util.BizService;
-import org.apache.commons.scaffold.util.Message;
-import org.apache.commons.scaffold.util.ResultList;
-import org.apache.commons.scaffold.util.ResultListBase;
+import org.apache.commons.resources.Message;
 
 /**
  * Advanced framework class to invoke a business service
@@ -72,7 +70,6 @@ public class BizAction extends BaseHelperAction {
             Object bean) {
 
         if ((null==scope) || (null==bean)) {
-            servlet.log(Log.PROCESS_BEAN_NULL_SCOPE,Log.DEBUG);
             return;
         }
         
@@ -122,7 +119,6 @@ public class BizAction extends BaseHelperAction {
             StringBuffer sb = new StringBuffer("exposeInScope: ");
             sb.append(scope);
             sb.append(Tokens.INVALID_SCOPE);
-            servlet.log(sb.toString(),Log.DEBUG);
             throw new IllegalArgumentException(sb.toString());
         }
 
@@ -233,7 +229,7 @@ public class BizAction extends BaseHelperAction {
      *
      * @param mapping The ActionMapping used to select this instance
      * @param request The HTTP request we are processing
-     * @param BizResponse The BizResponse we are handling
+     * @param bizResponse The BizResponse we are handling
      */
     protected void checkDispatch(
             ActionMapping mapping,
@@ -261,7 +257,7 @@ public class BizAction extends BaseHelperAction {
      *
      * @param mapping The ActionMapping used to select this instance
      * @param request The HTTP request we are processing
-     * @param BizResponse The BizResponse we are handling
+     * @param bizResponse The BizResponse we are handling
      */
     protected void checkOutcome(
             ActionMapping mapping,
@@ -269,8 +265,6 @@ public class BizAction extends BaseHelperAction {
             BizResponse bizResponse) throws Exception {
 
         if (bizResponse!=null) {
-
-            servlet.log(Log.HELPER_OUTCOME,Log.DEBUG);
 
             if (bizResponse.isAggregate()) {
                     // recurse for each BizResponse in collection
@@ -472,8 +466,7 @@ public class BizAction extends BaseHelperAction {
 			// Any other way to do this?
 		BizResponse bizResponse = 
 			new org.apache.commons.scaffold.util.BizResponseImpl(); 
-		Message message = 
-				new org.apache.commons.scaffold.util.MessageImpl(
+		Message message = new org.apache.commons.scaffold.util.MessageImpl(
 			template,
 			mapping.getPath(),
 			mapping.getParameter()
@@ -550,7 +543,6 @@ public class BizAction extends BaseHelperAction {
             Object[] helpers) throws Exception {
 
 		BizResponse bizResponse = null;
- 		servlet.log(Log.HELPER_PROCESSING,Log.DEBUG);
         try {
 
             // Cast our form bean; snag our request bean
@@ -558,7 +550,6 @@ public class BizAction extends BaseHelperAction {
         	BizRequest bizRequest = bizForm.getBizRequest();
 
             // Munge the parameter property
-	        servlet.log(Log.TOKENS_PARSING,Log.DEBUG);
 	        String[] tokens = tokenize(mapping.getParameter());
 
             // Create our business service helper
@@ -566,7 +557,6 @@ public class BizAction extends BaseHelperAction {
 	        BizService bizService = (BizService) helper;
 
             // Process business logic
-            servlet.log(Log.HELPER_EXECUTING,Log.DEBUG);            
             if (tokens.length>1) {
 
 	            // Pass along the helper's parameter, if any

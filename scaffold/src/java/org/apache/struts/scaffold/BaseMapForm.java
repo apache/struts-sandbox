@@ -17,10 +17,6 @@
  */
 package org.apache.struts.scaffold;
 
-
-import java.util.Map;
-
-
 /**
  * Enhanced base ActionForm for Struts 1.1 and later.
  *
@@ -29,34 +25,6 @@ import java.util.Map;
 public class BaseMapForm extends BaseForm {
 
 // ----------------------------------------------------------- Properties
-
-    /**
-     * The map for field properties [null].
-     * Can be used since 1.1 as an alternative
-     * to individual properties for each field.
-     */
-    private Map map = null;
-
-
-    /**
-     * Set the properties map.
-     *
-     * @param map The map to use for our properties
-     */
-    public void setMap(Map map) throws Exception {
-        this.map = map;
-    }
-
-
-    /**
-     * Get the properties map.
-     *
-     * @return The map being used for our properties
-     */
-    public Map getMap() throws Exception {
-        return this.map;
-    }
-
 
     /**
      * Associates the specified value with the specified key in

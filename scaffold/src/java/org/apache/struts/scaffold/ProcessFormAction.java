@@ -78,7 +78,7 @@ public class ProcessFormAction extends ProcessAction {
             Object bean) {
 
         if (null==scope) {
-            servlet.log(Log.PROCESS_BEAN_NULL_SCOPE,Log.DEBUG);
+            //
         }
         if (null==bean) super.exposeInScope(request,response,name,scope,bean);
         else if (Tokens.REQUEST.equals(scope)) {
@@ -127,7 +127,6 @@ public class ProcessFormAction extends ProcessAction {
             StringBuffer sb = new StringBuffer("exposeInScope: ");
             sb.append(scope);
             sb.append(Tokens.INVALID_SCOPE);
-            servlet.log(sb.toString(),Log.DEBUG);
             throw new IllegalArgumentException(sb.toString());
         }
 

@@ -57,7 +57,7 @@ public class MenuForm extends ActionForm {
     /**
      * Set the keyName.
      *
-     * @param key The new keyName
+     * @param keyName The new keyName
      */
     public void setKeyName(String keyName) {
         this.keyName = keyName;
@@ -88,7 +88,7 @@ public class MenuForm extends ActionForm {
     /**
      * Set the value.
      *
-     * @param value The new value
+     * @param keyValue The new value
      */
     public void setKeyValue(String keyValue) {
         this.keyValue = keyValue;
@@ -112,7 +112,7 @@ public class MenuForm extends ActionForm {
     /**
      * Set the page key
      *
-     * @param key The new page key
+     * @param page The new page key
      */
     public void setPage(int page) {
         this.page = page;
@@ -137,7 +137,7 @@ public class MenuForm extends ActionForm {
     /**
      * Set the dispatch
      *
-     * @param key The new dispatch
+     * @param dispatch The new dispatch
      */
     public void setDispatch(String dispatch) {
         this.dispatch = dispatch;
@@ -221,7 +221,7 @@ public class MenuForm extends ActionForm {
      * <p>
      * Mnemoric: T-V / value
      *
-     * @param value The new KeyValue
+     * @param keyValue The new KeyValue
      */
     public void setT(String keyValue) {
         setKeyValue(keyValue);

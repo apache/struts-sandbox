@@ -102,16 +102,13 @@ public class ProcessDispatchAction extends ProcessFormAction {
         BaseForm userBean =
             getUserProfile(mapping,form,request,response);
 
-        servlet.log(Log.HELPER_PROCESSING,Log.DEBUG);
         Map properties = null;
 
             // Munge the parameter property
-        servlet.log(Log.TOKENS_PARSING,Log.DEBUG);
         String[] tokens = tokenize(mapping.getParameter());
                
             // Create our ProcessBean helper
         Object helper = createHelperObject(request,tokens[0]);
-        servlet.log(Log.HELPER_EXECUTING,Log.DEBUG);
         ProcessBean dataBean = (ProcessBean) helper;
         
             // Pass along the helper's parameter, if any
@@ -127,7 +124,6 @@ public class ProcessDispatchAction extends ProcessFormAction {
 
                     // Merge user profile (if found)
                     // and our form into a single map
-                servlet.log(Log.HELPER_POPULATE,Log.DEBUG);
                 properties = formBean.merge(userBean);
 
                     // Pass up the Locale and RemoteServer (if any)
@@ -144,8 +140,6 @@ public class ProcessDispatchAction extends ProcessFormAction {
         }
 
             // Execute business logic, using values from  map
-        servlet.log(Log.HELPER_EXECUTING,Log.DEBUG);
-
         Method method = dataBean.getClass().getMethod(tokens[1],types);
         Object args[] = { properties };
 

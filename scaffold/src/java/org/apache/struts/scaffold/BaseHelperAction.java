@@ -23,7 +23,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 
-import org.apache.commons.scaffold.lang.Log;
 import org.apache.commons.scaffold.lang.Tokens;
 
 
@@ -55,9 +54,9 @@ public class BaseHelperAction extends BaseAction {
      * @param form The ActionForm
      * @param request The HTTP request we are processing
      * @param response The HTTP response we are creating
-     * @param helper The object instantiated from type given as parameter.
-     * @exception IOException if an input/output error occurs
-     * @exception ServletException if a servlet exception occurs
+     * @param helpers The object instantiated from type given as parameter.
+     * @exception java.io.IOException if an input/output error occurs
+     * @exception javax.servlet.ServletException if a servlet exception occurs
      */
     protected void executeLogic(
             ActionMapping mapping,
@@ -97,7 +96,6 @@ public class BaseHelperAction extends BaseAction {
             HttpServletResponse response)
         throws Exception {
 
-        servlet.log(Log.TOKENS_PARSING,Log.DEBUG);
         String[] tokens = tokenize(mapping.getParameter());
         int helperCount = tokens.length;
         Object[] helpers = new Object[helperCount];
@@ -106,7 +104,6 @@ public class BaseHelperAction extends BaseAction {
             helpers[i] = createHelperObject(request,tokens[i]);
         }
 
-        servlet.log(Log.HELPER_EXECUTING,Log.DEBUG);
         executeLogic(mapping,form,request,response,helpers);
     }
 

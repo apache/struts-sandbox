@@ -3,11 +3,23 @@
 =======================================================================
 [Ordering is LIFO. Last thing done for a day is the first item listed.]
 
+
+*** WARNING - PACKAGE IS UNDERGOING AN UPDATE AND *IS NOT STABLE*. ***
+
+
+
 // -------------------------------------------------------------- FIXME
+
+BaseAction - !MUST! provide equivalent of
+ActionFormBean formBean = servlet.findFormBean(helperName);
+BizFormImple - Ditto.
 
 RemoveAttributeAction - Needs to be tested.
 
 // ---------------------------------------------------------------- TODO
+
+- BizAction - Resolve message handling with latest Commons Resources
+- BizForm++ - Update for latest releases
 
 - ProcessDispatchAction: Refactor with ProcessAction so there is not 
 so much duplicate code here
@@ -16,9 +28,14 @@ so much duplicate code here
 - ProcessFormAction: Change from BeanUtil.populate to copyProperties
 - RemoveAttributeAction: Add support for multiple attributes
 
-
 // ------------------------------------------------------------ CHANGES
 
+[2004-12-28]
++ BaseAction: Extend from DynaValidatorForm
++ *: Remove obsolete logging statements
++ *: Move to Global.* constants
++ Began updating code for latest releases.
++ Updated build for latest releases.
 
 [2002-11-11]
 + BaseAction: Extend from ValidatorForm again.
