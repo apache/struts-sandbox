@@ -1,0 +1,115 @@
+body
+{
+    background: #FFFFFF;
+	color: black;
+	margin: 0% 5% 0% 10%;
+    font-family: sans-serif;
+}
+
+A:hover { font-weight:bold; }
+
+h1, h2, h3, h4, h5, h6 
+{
+	font-family: Verdana,Arial,Helvetica,sans-serif;
+	color:#003399;
+}
+
+h1 
+{
+	font-size:18pt;
+}
+
+.HeaderStyle 
+{
+	background-color:#003399;
+	color:#FFFFFF;
+	font-weight:bold;
+	padding: 30px 10px;
+}
+
+.ItemStyle 
+{
+	background-color:#EEEEEE;
+	color:#000000;
+	border-top-width: thin;
+	border-right-width: thin;
+	border-bottom-width: thin;
+	border-left-width: thin;
+	border-top-style: none;
+	border-right-style: solid;
+	border-bottom-style: none;
+	border-left-style: solid;
+	border-top-color: #000000;
+	border-right-color: #000000;
+	border-bottom-color: #000000;
+	border-left-color: #000000;
+	padding: 10px;
+}
+
+.AlternatingItemStyle 
+{
+	background-color:#DDDDDD;
+	color:#000000;
+	padding: 10px;
+}
+
+.SelectedItemStyle 
+{
+	background-color:#9999FF;
+	font-style:italic;
+	color:#000000;
+}
+
+.EditItemStyle 
+{
+	background-color:#FF9F9F;
+	font-style:italic;
+}
+
+.PagerStyle a
+{
+	font-style:italic;
+	font-size:18px;
+	text-decoration:none;
+}
+
+.HighlightedItemStyle
+{
+	background-color:#9999CC;
+	cursor:pointer;
+}
+
+td.readonly 
+{
+  font-weight:bold;
+}
+
+td.hint {
+  font-size:80%;
+  font-family:Verdana,Arial,Helvetica,sans-serif;
+  font-weight:normal;
+}
+
+td.subtitle {
+  background-color:#FFFFFF;
+  font-family:Verdana,Arial,Helvetica,sans-serif;
+  font-weight:bold;
+}
+
+td.title {
+  font-size:140%;
+  font-family:Verdana,Arial,Helvetica,sans-serif;
+  font-weight:bold;
+}
+.DataGridStyle {
+	margin: 0px;
+	padding: 10px;
+}
+td {
+	padding: 0px 10px;
+}
+
+.app_name 
+{
+	font-size:10pt;
+}
