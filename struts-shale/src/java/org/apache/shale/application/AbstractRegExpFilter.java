@@ -25,6 +25,8 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.chain.Command;
 import org.apache.commons.chain.Context;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.shale.faces.ShaleWebContext;
 
 /**
@@ -37,12 +39,12 @@ import org.apache.shale.faces.ShaleWebContext;
  * <li>If the specified value is <code>null</code>, call <code>reject()</code>
  *     and return <code>true</code> to indicate that request procesing is
  *     complete.</li>
- * <li>If there are any exclude patterns, and the value matches one of
- *     these patterns, call <code>reject()</code> and return
- *     <code>true</code> to indicate that request processing is complete.</li>
  * <li>If there are any include patterns, and the value matches one of
  *     these patterns, call <code>accept()</code> and return
  *     <code>false</code> to indicate request processing should continue.</li>
+ * <li>If there are any exclude patterns, and the value matches one of
+ *     these patterns, call <code>reject()</code> and return
+ *     <code>true</code> to indicate that request processing is complete.</li>
  * <li>If there are any include patterns, and the value does not match one of
  *     these patterns, call <code>reject()</code> and return
  *     <code>true</code> to indicate that request processing is complete.</li>
@@ -64,6 +66,15 @@ import org.apache.shale.faces.ShaleWebContext;
 
 public abstract class AbstractRegExpFilter implements Command {
 
+
+
+    // -------------------------------------------------------- Static Variables
+
+
+    /**
+     * <p>Log instance for this class.</p>
+     */
+    private static final Log log = LogFactory.getLog(AbstractRegExpFilter.class);
 
 
     // ------------------------------------------------------ Instance Variables
@@ -154,24 +165,49 @@ public abstract class AbstractRegExpFilter implements Command {
         // Acquire the value to be tested
         ShaleWebContext webContext = (ShaleWebContext) context;
         String value = value(webContext);
-        if (value == null) {
-            reject(webContext);
-            return true;
+        if (log.isDebugEnabled()) {
+            log.debug("execute(" + value + ")");
         }
-
-        // Check for a match on the excluded list
-        if (matches(value, excludesPatterns, false)) {
+        if (value == null) {
+            if (log.isTraceEnabled()) {
+                log.trace("  reject(null)");
+            }
             reject(webContext);
             return true;
         }
 
         // Check for a match on the included list
         if (matches(value, includesPatterns, true)) {
+            if (log.isTraceEnabled()) {
+                log.trace("  accept(include)");
+            }
             accept(webContext);
             return false;
         }
 
+        // Check for a match on the excluded list
+        if (matches(value, excludesPatterns, false)) {
+            if (log.isTraceEnabled()) {
+                log.trace("  reject(exclude)");
+            }
+            reject(webContext);
+            return true;
+        }
+
+        // If there was at least one include pattern,
+        // unconditionally reject this request
+        if ((includesPatterns != null) && (includesPatterns.length > 0)) {
+            if (log.isTraceEnabled()) {
+                log.trace("  reject(not include)");
+            }
+            reject(webContext);
+            return true;
+        }
+
         // Unconditionally accept this request
+        if (log.isTraceEnabled()) {
+            log.trace("  accept(default)");
+        }
         accept(webContext);
         return false;
 
