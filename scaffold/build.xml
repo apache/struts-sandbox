@@ -89,7 +89,7 @@
             destdir="./doc/api"
             classpath="${servlet.jar}:${jdbc20ext.jar}"
             packagenames="org.*"
-            author="true"
+            author="false"
             private="true"
             version="true"
             windowtitle="${project.title} API Documentation"

@@ -62,7 +62,7 @@
                 lib/struts-101.jar:
                 lib/lucene.jar:"
             packagenames="org.apache.artimus.*"
-            author="true"
+            author="false"
             private="true"
             version="true"
             windowtitle="Artimus API Documentation"
