@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+  Copyright 2004 The Apache Software Foundation.
+ 
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+ 
+      http://www.apache.org/licenses/LICENSE-2.0
+ 
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+  $Id: build.xml 54942 2004-10-16 22:39:25Z craigmcc $
+
+-->
+
+<!--
+
+  This configuration file defines the default Chain of Command configuration
+  for a Catalog named "shale", which is in turn utilized by a filter
+  (ShaleApplicationFilter) to perform application level controller
+  functionality on every request.  You may customize these chains either
+  by replacing this configuration file with a different one, or by populating
+  your own versions of these commands in the "shale" catalog.
+
+-->
+
+<catalog           name="shale">
+
+
+  <!-- ================ Perform Dispatch Processing ======================== -->
+
+  <chain           name="standard">
+
+    <!-- Invoke "preprocess" command if it exists -->
+    <command  className="org.apache.commons.chain.generic.LookupCommand"
+            catalogName="shale"
+                   name="preprocess"
+               optional="true"/>
+
+    <!-- Invoke the remainder of the filter chain -->
+    <command  className="org.apache.shale.faces.InvokeCommand"/>
+
+    <!-- Invoke "postprocess" command if it exists -->
+    <command  className="org.apache.commons.chain.generic.LookupCommand"
+            catalogName="shale"
+                   name="postprocess"
+               optional="true"/>
+
+  </chain>
+
+
+</catalog>

@@ -25,6 +25,22 @@
 # $Id:  $
 #
 
+# The absolute or relative pathname of the directory containing the
+# Jakarta Commons BeanUtils library
+beanutils.home = /usr/local/commons-beanutils-1.7
+
+# The absolute or relative pathname of the directory containing the
+# Jakarta Commons Chain library
+chain.home = /usr/local/commons-chain-1.0
+
+# The absolute or relative pathname of the directory containing the
+# Jakarta Commons Digester library
+digester.home = /usr/local/commons-digester-1.6
+
+# The absolute or relative pathname of the directory containing the
+# Jakarta Commons Logging library
+logging.home = /usr/local/commons-logging-1.0.4
+
 # The absolute or relative pathname of the directory containing your
 # Servlet API classes JAR file (servlet.jar)
 server.home = /usr/local/jakarta-tomcat-5.0.28

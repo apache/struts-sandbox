@@ -33,34 +33,39 @@
 
 
   <!-- Dependency home directory defaults -->
+  <property name="beanutils.home"   value="/usr/local/commons-beanutils-1.7.0"/>
+  <property name="chain.home"       value="/usr/local/commons-chain-1.0"/>
+  <property name="digester.home"    value="/usr/local/commons-digester-1.6"/>
   <property name="jsf.home"         value="/usr/local/jsf-1_1_01"/>
   <property name="junit.home"       value="/usr/local/junit-3.8.1"/>
+  <property name="logging.home"     value="/usr/local/commons-logging-1.0.4"/>
   <property name="server.home"      value="/usr/local/jakarta-tomcat-5.0.28"/>
+  <property name="shale-test.home"  value="${basedir}/../struts-shale-test/dist"/>
 
 
   <!-- Dependency library defaults -->
-<!--
   <property name="commons-beanutils.jar"
-                                    value="${struts.home}/lib/commons-beanutils.jar"/>
-  <property name="commons-collections.jar"
-                                    value="${struts.home}/lib/commons-collections.jar"/>
+                                    value="${beanutils.home}/commons-beanutils.jar"/>
+  <property name="commons-chain.jar"
+                                    value="${chain.home}/commons-chain.jar"/>
   <property name="commons-digester.jar"
-                                    value="${struts.home}/lib/commons-digester.jar"/>
+                                    value="${digester.home}/commons-digester.jar"/>
+<!--
   <property name="commons-fileupload.jar"
                                     value="${struts.home}/lib/commons-fileupload.jar"/>
 -->
   <property name="commons-logging.jar"
-                                    value="${struts.home}/lib/commons-logging.jar"/>
+                                    value="${logging.home}/commons-logging.jar"/>
 <!--
   <property name="commons-validator.jar"
                                     value="${struts.home}/lib/commons-validator.jar"/>
-  <property name="jakarta-oro.jar"  value="${struts.home}/lib/jakarta-oro.jar"/>
 -->
   <property name="jsf-api.jar"      value="${jsf.home}/lib/jsf-api.jar"/>
   <property name="jsf-impl.jar"     value="${jsf.home}/lib/jsf-impl.jar"/>
   <property name="jsp-api.jar"      value="${server.home}/common/lib/jsp-api.jar"/>
   <property name="junit.jar"        value="${junit.home}/junit.jar"/>
   <property name="servlet-api.jar"  value="${server.home}/common/lib/servlet-api.jar"/>
+  <property name="shale-test.jar"   value="${shale-test.home}/lib/shale-test.jar"/>
 
 
   <!-- Conditional Processing Flags -->
@@ -94,10 +99,11 @@
 
   <!-- Compile Classpath -->
   <path id="compile.classpath">
-<!--
     <pathelement location="${commons-beanutils.jar}"/>
-    <pathelement location="${commons-collections.jar}"/>
+    <pathelement location="${commons-chain.jar}"/>
     <pathelement location="${commons-digester.jar}"/>
+<!--
+    <pathelement location="${commons-fileupload.jar}"/>
 -->
     <pathelement location="${commons-logging.jar}"/>
 <!--
@@ -112,10 +118,11 @@
 
   <!-- Test Classpath -->
   <path id="test.classpath">
-<!--
     <pathelement location="${commons-beanutils.jar}"/>
-    <pathelement location="${commons-collections.jar}"/>
+    <pathelement location="${commons-chain.jar}"/>
     <pathelement location="${commons-digester.jar}"/>
+<!--
+    <pathelement location="${commons-fileupload.jar}"/>
 -->
     <pathelement location="${commons-logging.jar}"/>
 <!--
@@ -125,9 +132,11 @@
     <pathelement location="${jsp-api.jar}"/>
     <pathelement location="${junit.jar}"/>
     <pathelement location="${servlet-api.jar}"/>
+    <pathelement location="${shale-test.jar}"/>
     <pathelement location="${build.home}/classes"/>
     <pathelement location="${build.home}/test-classes"/>
   </path>
+
 
   <!-- ==================== Maintenance Targets ============================ -->
 
@@ -145,8 +154,14 @@
     <filter  token="package"  value="${project.package}"/>
     <filter  token="state"    value="${systest.state.saving}"/>
     <filter  token="version"  value="${project.version}"/>
-    <echo  message="jsf-api.jar =    ${jsf-api.jar}"/>
-    <echo  message="jsf-impl.jar =   ${jsf-impl.jar}"/>
+    <echo  message="commons-beanutils.jar =  ${commons-beanutils.jar}"/>
+    <echo  message="commons-chain.jar =      ${commons-chain.jar}"/>
+    <echo  message="commons-digester.jar =   ${commons-digester.jar}"/>
+    <echo  message="commons-logging.jar =    ${commons-logging.jar}"/>
+    <echo  message="jsf-api.jar =            ${jsf-api.jar}"/>
+    <echo  message="jsf-impl.jar =           ${jsf-impl.jar}"/>
+    <echo  message="jsp-api.jar =            ${jsp-api.jar}"/>
+    <echo  message="servlet-api.jar =        ${servlet-api.jar}"/>
     <echo  message="jsfri.present =  ${jsfri.present}"/>
     <echo  message="myfaces.present= ${myfaces.present}"/>
   </target>
