@@ -16,6 +16,8 @@
 
 package org.apache.shale.faces;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.shale.ViewController;
 
 import javax.faces.event.PhaseEvent;
@@ -26,14 +28,23 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * <p>{@link ShalePhaseListener} is a JavaServer Faces <code>PhaseListener</code> that implements phase
- * related functionality.</p>
+ * <p>{@link ShalePhaseListener} is a JavaServer Faces <code>PhaseListener</code>
+ * that implements phase related functionality.</p>
  *
  * $Id$
  */
 
 public class ShalePhaseListener implements PhaseListener {
     
+
+    // -------------------------------------------------------- Static Variables
+
+
+    /**
+     * <p>The <code>Log</code> instance for this class.</p>
+     */
+    private static final Log log = LogFactory.getLog(ShalePhaseListener.class);
+
 
     // --------------------------------------------------- PhaseListener Methods
 
@@ -46,8 +57,14 @@ public class ShalePhaseListener implements PhaseListener {
      */
     public void afterPhase(PhaseEvent event) {
 
+        if (log.isTraceEnabled()) {
+            log.trace("afterPhase(" + event.getFacesContext() +
+                      "," + event.getPhaseId() + ")");
+        }
         PhaseId phaseId = event.getPhaseId();
-        if (PhaseId.RENDER_RESPONSE.equals(phaseId)) {
+        if (PhaseId.RESTORE_VIEW.equals(phaseId)) {
+            afterRestoreView(event);
+        } else if (PhaseId.RENDER_RESPONSE.equals(phaseId)) {
             afterRenderResponse(event);
         }
 
@@ -62,6 +79,10 @@ public class ShalePhaseListener implements PhaseListener {
      */
     public void beforePhase(PhaseEvent event) {
 
+        if (log.isTraceEnabled()) {
+            log.trace("beforePhase(" + event.getFacesContext() +
+                      "," + event.getPhaseId() + ")");
+        }
         PhaseId phaseId = event.getPhaseId();
         if (PhaseId.RENDER_RESPONSE.equals(phaseId)) {
             beforeRenderResponse(event);
@@ -107,9 +128,33 @@ public class ShalePhaseListener implements PhaseListener {
     }
 
 
+    /**
+     * <p>Call the <code>preprocess()</code> method of the {@link ViewController}
+     * that has been restored, if this is a postback.</p>
+     *
+     * @event <code>PhaseEvent</code> for the current event
+     */
+    private void afterRestoreView(PhaseEvent event) {
+
+        Map map = event.getFacesContext().getExternalContext().getRequestMap();
+        List list = (List) map.get(ShaleConstants.VIEWS_INITIALIZED);
+        if (list == null) {
+            return;
+        }
+        Iterator vcs = list.iterator();
+        while (vcs.hasNext()) {
+            ViewController vc = (ViewController) vcs.next();
+            if (vc.isPostBack()) {
+                vc.preprocess();
+            }
+        }
+
+    }
+
+
 
     /**
-     * <p>Call the <code>prepare()</code> method of the {@link ViewController}
+     * <p>Call the <code>prerender()</code> method of the {@link ViewController}
      * for the view about to be rendered (if any).</p>
      *
      * @param event <code>PhaseEvent</code> for the current event
@@ -122,7 +167,7 @@ public class ShalePhaseListener implements PhaseListener {
         if (vc == null) {
             return;
         }
-        vc.prepare();
+        vc.prerender();
         map.remove(ShaleConstants.VIEW_RENDERED);
 
     }

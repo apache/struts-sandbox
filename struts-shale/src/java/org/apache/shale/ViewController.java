@@ -19,7 +19,7 @@ package org.apache.shale;
 /**
  * <p>{@link ViewController} is a "backing bean" interface which adds several
  * extension points to the standard JavaServer Faces lifecycle. The extension
- * points help Struts interact with JSF <code>UIComponents</code>.
+ * points help Shale interact with JSF <code>UIComponent</code>s.
  * </p>
   * <p>
  * A "backing bean" represents a convenient place to retrieve and store
@@ -73,7 +73,6 @@ package org.apache.shale;
  *
  * <p>Since the ViewController is a backing bean, you have the option of
  * establishing other links with the UIComponents, such as:</p>
- *
  * <ul>
  * <li>You may use the <code>binding</code> property of any JSF
  *     <code>UIComponent</code> to establish a linkage between a component
@@ -96,7 +95,7 @@ package org.apache.shale;
  * <h3>ViewController Lifecycle</h3>
  *
  * <p>Once you have configured the use of a {@link ViewController} backing bean
- * associated with a JSF view, Struts will provide the following services:</p>
+ * associated with a JSF view, Shale will provide the following services:</p>
  * <ul>
  * <li>Whenever a JSF view with the appropriate <code>view identifier</code>
  *     is created or restored, an appropriate instance of the corresponding
@@ -117,19 +116,29 @@ package org.apache.shale;
  * <li>The <code>init()</code> method will be called, allowing the backing bean
  *     to acquire data from the model tier as needed to prepare for execution
  *     of the JSF request processing lifecycle for this view.</li>
- * <li>Standard JSF processing and event handling is performed.  For a restored
- *     view, the entire lifecycle is executed.  For a newly created view, only
- *     the <em>Render Response</em> phase is executed.</li>
- * <li>Immediately prior to the <em>Render Response</em> phase, the
- *     <code>prepare()</code> method will be called, but only on the
- *     {@link ViewController} for whose view JSF will actually perform the
- *     rendering.  If your {@link ViewController} performed navigation to
- *     a different view (either directly via the <code>NavigationHandler</code>
- *     or indirectly by virtue of a non-null return from an action method),
- *     this method will <strong>not</strong> be called.</p>
+ * <li>For a restored view (i.e. where the <code>postBack</code> property
+ *     was set to <code>true</code>, the <code>preprocess()</code> method will
+ *     be called after the component tree has been restored by the
+ *     <em>Restore View</em> phase.  This method will <strong>not</strong>
+ *     be called for a view that will only be rendered.</p>
+ * <li>For a restored view, standard JSF processing and event handling occurs
+ *     for the <em>Apply Request Values</em> through <em>Invoke Application</em>
+ *     phases of the request processing lifecycle.  As a side effect, it is
+ *     possible that navigation to a different view will have occurred.  In
+ *     this case, the corresponding <code>ViewController</code> for the new
+ *     view will have been instantiated, and its <code>init()</code> method
+ *     will have been called, as described above.</li>
+ * <li>For the <code>ViewController</code> whose view will be rendered, the
+ *     <code>preprocess()</code> method will be called.  If your
+ *     <code>ViewController</code> performed navigation to a different view,
+ *     this method will <strong>NOT</strong> be called on the original view;
+ *     however, it will be called on the <code>ViewController</code> instance
+ *     for the page that was navigated to.</li>
  * <li>The <code>destroy()</code> method will be called, allowing the backing
  *     bean to clean up any resources that it has allocated before processing
- *     for this HTTP request is completed.</li>
+ *     for this HTTP request is completed.  In the case where navigation has
+ *     occurred, this call will take place on both <code>ViewController</code>
+ *     instances that have been initialized.</li>
  * </ul>
  *
  * $Id$
@@ -203,6 +212,20 @@ public interface ViewController {
 
 
     /**
+     * <p>Called after the component tree has been restored (in <em>Restore
+     * View</em> phase), if the current request is a postback.  If this view
+     * is only going to be rendered (because of either direct navigation, or
+     * because this view was navigated to from a different view), this method
+     * will <strong>NOT</strong> be called.  As such, this method makes a good
+     * place to acquire information from your model tier that will be required
+     * during the execution of the <em>Apply Request Values</em> through
+     * <em>Invoke Application</em> phases of the request processing lifecycle.
+     * </p>
+     */
+    public void preprocess();
+
+
+    /**
      * <p>Called before the <em>Render Response</em> processing for this request
      * is performed, whether or not this is a post back request.  This method
      * will be called only for the view that will actually be rendered.  For
@@ -211,7 +234,7 @@ public interface ViewController {
      * from your model tier that is required to complete this view's
      * presentation.</p>
      */
-    public void prepare();
+    public void prerender();
 
 
 }

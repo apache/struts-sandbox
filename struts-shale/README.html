@@ -347,7 +347,13 @@ related methods will be called by the framework:</p>
         created and framework-defined properties (see above) have been set.
         This is a useful place to acquire resources that will be needed for
         either a form submit or for rendering a new view.</li>
-    <li><strong>prepare()</strong> - Called immediate before the currently
+    <li><strong>preprocess()</strong> - Called after a view has been restored
+        (in JSF terms, this happens at the end of <em>Restore View</em> phase).
+        This method is only called for a postback request, and is useful for
+        acquiring references to model data that will be needed during the
+        processing of the postback (in JSF terms, <em>Apply Request Values</em>
+        through <em>Invoke Application</em> phases).</i>
+    <li><strong>prerender()</strong> - Called immediate before the currently
         selected view is rendered (in JSF terms, this happens at the beginning
         of <em>Render Response</em> phase, before the <code>encode()</code>
         methods of the components have been called).  This method is only

@@ -93,7 +93,14 @@ public class AbstractViewController implements ViewController {
     /**
      * <p>The default implementation does nothing.</p>
      */
-    public void prepare() {
+    public void preprocess() {
+    }
+
+
+    /**
+     * <p>The default implementation does nothing.</p>
+     */
+    public void prerender() {
     }
 
 
