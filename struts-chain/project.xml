@@ -22,7 +22,7 @@
 
 <project>
   <pomVersion>3</pomVersion>
-  <extend>../../project.xml</extend>
+  <extend>../../../core/trunk/project.xml</extend>
   <name>struts-chain</name>
   <id>struts-chain</id>
   <groupId>struts</groupId>
@@ -51,12 +51,22 @@
       <artifactId>struts</artifactId>
       <version>SNAPSHOT</version>
     </dependency>
-  </dependencies>
+    <dependency>
+      <groupId>mockobjects</groupId>
+      <artifactId>mockobjects-core</artifactId>
+      <version>0.09</version>
+    </dependency>
+    <dependency>
+      <groupId>mockobjects</groupId>
+      <artifactId>mockobjects-jdk1.3-j2ee1.2</artifactId>
+      <version>0.09</version>
+    </dependency>
+</dependencies>
   <build>
     <nagEmailAddress>struts-dev@jakarta.apache.org</nagEmailAddress>
     <sourceDirectory>src/java</sourceDirectory>
-    <!-- Unit test cases 
     <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
+    <!-- Unit test cases 
     <integrationUnitTestSourceDirectory />
     <aspectSourceDirectory />
     <unitTest>
