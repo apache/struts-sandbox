@@ -35,6 +35,7 @@
 
   <property name="chain.home"       value="../../../jakarta-commons/chain/dist"/>
   <property name="servlet.home"     value="/usr/local/tomcat-4.1/common/lib"/>
+  <property name="struts.core.home" value="../../../core/trunk"/>
   <property name="struts.home"      value="../../dist"/>
 
 
@@ -207,7 +208,7 @@
 
     <!-- Copy example webapp from standard build -->
     <copy    todir="${build.home}/webapps/example">
-      <fileset dir="../../target/example"/>
+      <fileset dir="${struts.core.home}/target/example"/>
     </copy>
 
     <!-- Copy override files from our local directory -->
