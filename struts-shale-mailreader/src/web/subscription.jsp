@@ -1,5 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %>
 <%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
 
@@ -27,7 +26,15 @@
                       var="messages"/>
 <html>
 <head>
-  <title><c:choose>
+  <title>
+    <h:outputText   value="#{messages['subscription.title.create']}"
+                 rendered="#{state.mode == 'CREATE'}"/>
+    <h:outputText   value="#{messages['subscription.title.delete']}"
+                 rendered="#{state.mode == 'DELETE'}"/>
+    <h:outputText   value="#{messages['subscription.title.edit']}"
+                 rendered="#{state.mode == 'EDIT'}"/>
+<%--
+  <c:choose>
     <c:when          test="${state.mode == 'CREATE'}">
       <h:outputText    id="titleCreate"
                     value="#{messages['subscription.title.create']}"/>
@@ -40,7 +47,9 @@
       <h:outputText    id="titleEdit"
                     value="#{messages['subscription.title.edit']}"/>
     </c:when>
-  </c:choose></title>
+  </c:choose>
+--%>
+  </title>
 </head>
 <body>
 
@@ -54,6 +63,16 @@
 
     <f:facet name="header">
       <h:panelGroup>
+        <h:outputText
+                    value="#{messages['subscription.title.create']}"
+                 rendered="#{state.mode == 'CREATE'}"/>
+        <h:outputText
+                    value="#{messages['subscription.title.delete']}"
+                 rendered="#{state.mode == 'DELETE'}"/>
+        <h:outputText
+                    value="#{messages['subscription.title.edit']}"
+                 rendered="#{state.mode == 'EDIT'}"/>
+<%--
         <c:choose>
           <c:when    test="${state.mode == 'CREATE'}">
             <h:outputText
@@ -71,6 +90,7 @@
                     value="#{messages['subscription.title.edit']}"/>
           </c:when>
         </c:choose>
+--%>
       </h:panelGroup>
     </f:facet>
 
@@ -91,6 +111,24 @@
       <h:outputText value="#{messages['prompt.mailHostname']}"/>
     </h:outputLabel>
 
+    <h:panelGroup>
+      <h:inputText     id="host"
+                     size="50"
+                    value="#{subscription.host}"
+                 rendered="#{state.mode == 'CREATE'}"/>
+      <h:outputText value="#{subscription.host}"
+                 rendered="#{state.mode != 'CREATE'}"/>
+    </h:panelGroup>
+
+    <h:panelGroup>
+      <h:message       id="hostMessages"
+                      for="host"
+                 rendered="#{state.mode == 'CREATE'"/>
+      <h:outputText value=""
+                 rendered="#{state.mode != 'CREATE'"/>
+    </h:panelGroup>
+
+<%--
     <c:choose>
       <c:when        test="${state.mode == 'CREATE'}">
         <h:inputText   id="host"
@@ -106,6 +144,7 @@
                     value=""/>
       </c:otherwise>
     </c:choose>
+--%>
 
     <%-- Third row --%>
 
@@ -159,6 +198,22 @@
 
     <%-- Seventh row --%>
 
+    <h:panelGroup>
+      <h:commandButton
+                      id="confirm"
+                  action="#{subscription.save}"
+                    type="SUBMIT"
+                   value="#{messages['button.confirm']}"
+                rendered="#{state.mode == 'DELETE'}"/>
+      <h:commandButton
+                      id="save"
+                  action="#{subscription.save}"
+                    type="SUBMIT"
+                   value="#{messages['button.save']}"
+                rendered="#{state.mode != 'DELETE'}"/>
+    </h:panelGroup>
+
+<%--
     <c:choose>
       <c:when        test="${state.mode == 'DELETE'}">
         <h:commandButton
@@ -175,6 +230,7 @@
                     value="#{messages['button.save']}"/>
       </c:otherwise>
     </c:choose>
+--%>
 
     <h:panelGroup      id="reset_and_cancel">
       <h:commandButton id="reset"

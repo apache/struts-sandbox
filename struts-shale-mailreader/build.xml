@@ -34,8 +34,9 @@
 
 
   <!-- Dependency home directory defaults -->
+  <property name="chain.home"       value="/usr/local/commons-chain-1.0"/>
   <property name="jsf.home"         value="/usr/local/jsf-1_1_01"/>
-  <property name="jstl.home"        value="/usr/local/standard-1_0_3"/>
+  <property name="jstl.home"        value="/usr/local/jakarta-taglibs-standard-1.1.2"/>
   <property name="junit.home"       value="/usr/local/junit-3.8.1"/>
   <property name="server.home"      value="/usr/local/jakarta-tomcat-5.0.28"/>
 
@@ -43,6 +44,8 @@
   <!-- Dependency library defaults -->
   <property name="commons-beanutils.jar"
                                     value="${jsf.home}/lib/commons-beanutils.jar"/>
+  <property name="commons-chain.jar"
+                                    value="${chain.home}/commons-chain.jar"/>
   <property name="commons-collections.jar"
                                     value="${jsf.home}/lib/commons-collections.jar"/>
   <property name="commons-digester.jar"
@@ -86,6 +89,7 @@
   <!-- Compile Classpath -->
   <path id="compile.classpath">
     <pathelement location="${commons-beanutils.jar}"/>
+    <pathelement location="${commons-chain.jar}"/>
     <pathelement location="${commons-collections.jar}"/>
     <pathelement location="${commons-digester.jar}"/>
     <pathelement location="${commons-logging.jar}"/>
@@ -133,6 +137,7 @@
     <filter  token="state"      value="${webapp.state.saving}"/>
     <filter  token="version"    value="${project.version}"/>
     <echo  message="build.standalone = ${build.standalone}"/>
+    <echo  message="commons-chain.jar =${commons-chain.jar}"/>
     <echo  message="jsf-api.jar =      ${jsf-api.jar}"/>
     <echo  message="jsf-impl.jar =     ${jsf-impl.jar}"/>
     <echo  message="mailreader.jar =   ${mailreader.jar}"/>
@@ -166,6 +171,8 @@
     <mkdir         dir="${build.home}/${context.path}/WEB-INF/lib"/>
     <copy        todir="${build.home}/${context.path}/WEB-INF/lib"
                   file="${commons-beanutils.jar}"/>
+    <copy        todir="${build.home}/${context.path}/WEB-INF/lib"
+                  file="${commons-chain.jar}"/>
     <copy        todir="${build.home}/${context.path}/WEB-INF/lib"
                   file="${commons-collections.jar}"/>
     <copy        todir="${build.home}/${context.path}/WEB-INF/lib"
