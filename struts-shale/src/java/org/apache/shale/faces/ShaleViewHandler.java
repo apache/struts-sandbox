@@ -221,14 +221,15 @@ public class ShaleViewHandler extends ViewHandler {
             context.getApplication().createValueBinding("#{" + viewName + "}");
         ViewController vc = null;
         try {
-            vc = (ViewController) vb.getValue(context);
+            Object vcObject = vb.getValue(context);
+            if (vcObject == null) {
+                log.warn(messages.getMessage("view.noViewController",
+                                             new Object[] { viewId, viewName }));
+                return;
+            }
+            vc = (ViewController) vcObject;
         } catch (ClassCastException e) {
             log.warn(messages.getMessage("view.notViewController", 
-                                         new Object[] { viewId, viewName }));
-            return;
-        }
-        if (vc == null) {
-            log.warn(messages.getMessage("view.noViewController",
                                          new Object[] { viewId, viewName }));
             return;
         }

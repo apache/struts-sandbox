@@ -55,7 +55,7 @@
     <attribute>
       <name>binding</name>
       <required>false</required>
-      <exprvalue>false</exprvalue>
+      <rtexprvalue>false</rtexprvalue>
       <description>
         Value binding expression used to bind this component instance
         to a backing bean property.
@@ -65,7 +65,7 @@
     <attribute>
       <name>id</name>
       <required>false</required>
-      <exprvalue>false</exprvalue>
+      <rtexprvalue>false</rtexprvalue>
       <description>
         Component identifier of this component.  If specified, this identifier
         must be unique within the context of the closest parent UIComponent
@@ -76,7 +76,7 @@
     <attribute>
       <name>rendered</name>
       <required>false</required>
-      <exprvalue>false</exprvalue>
+      <rtexprvalue>false</rtexprvalue>
       <description>
         Flag indicating whether this component should be rendered.
         Default value is true.

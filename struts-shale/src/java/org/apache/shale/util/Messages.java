@@ -20,6 +20,7 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 /**
@@ -139,7 +140,11 @@ public class Messages {
     public String getMessage(String key, Locale locale) {
 
         ResourceBundle rb = getBundle(locale);
-        return rb.getString(key);
+        try {
+            return rb.getString(key);
+        } catch (MissingResourceException e) {
+            return null;
+        }
 
     }
 
