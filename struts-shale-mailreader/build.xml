@@ -45,7 +45,7 @@
   <property name="commons-beanutils.jar"
                                     value="${jsf.home}/lib/commons-beanutils.jar"/>
   <property name="commons-chain.jar"
-                                    value="${chain.home}/commons-chain.jar"/>
+                                    value="${chain.home}/commons-chain-1.0.jar"/>
   <property name="commons-collections.jar"
                                     value="${jsf.home}/lib/commons-collections.jar"/>
   <property name="commons-digester.jar"

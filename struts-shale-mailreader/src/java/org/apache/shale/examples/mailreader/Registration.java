@@ -269,13 +269,11 @@ public class Registration extends BaseViewController {
      * table, so that the correct row can be positioned to before calling
      * the event handler.</p>
      */
-    public void init() {
+    public void preprocess() {
 
-        if (isPostBack()) {
-            State state = getState();
-            if ("EDIT".equals(state.getMode())) {
-                setSubscriptions(state.getUser().getSubscriptions());
-            }
+        State state = getState();
+        if ("EDIT".equals(state.getMode())) {
+            setSubscriptions(state.getUser().getSubscriptions());
         }
 
     }
@@ -288,7 +286,7 @@ public class Registration extends BaseViewController {
      * subscriptions for the currently logged in user.  (If this is a
      * postback, we will have done this already in <code>init()</code>.)</p>
      */
-    public void prepare() {
+    public void prerender() {
 
         State state = getState();
 
@@ -308,7 +306,8 @@ public class Registration extends BaseViewController {
             setReplyToAddress(user.getReplyToAddress());
         }
 
-        // Look up the subscriptions for the currently logged on user.
+        // Look up the subscriptions for the currently logged on user,
+        // if we have not done so already.
         // If we were using a real database, this is where executing the
         // query and opening the result set would occur
         if (!isPostBack()) {

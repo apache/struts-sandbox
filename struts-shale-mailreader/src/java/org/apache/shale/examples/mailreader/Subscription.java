@@ -180,7 +180,7 @@ public class Subscription extends BaseViewController {
      * <p>If this is not a postack, and we are in DELETE or EDIT mode,
      * prepopulate the field values for the subscription update form.</p>
      */
-    public void prepare() {
+    public void prerender() {
 
         State state = getState();
 
