@@ -20,6 +20,8 @@ import java.util.Locale;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.shale.faces.ShaleConstants;
 import org.apache.shale.util.Messages;
 import org.apache.shale.util.TokenProcessor;
@@ -34,6 +36,12 @@ public class Token extends UIInput {
     
 
     // -------------------------------------------------------- Static Variables
+
+
+    /**
+     * <p>Log instance for this class.</p>
+     */
+    private static final Log log = LogFactory.getLog(Token.class);
 
 
     /**
@@ -61,7 +69,7 @@ public class Token extends UIInput {
     /**
      * <p>Return the component family for this component.</p>
      */
-    public String getFamiy() {
+    public String getFamily() {
         return "org.apache.shale.Token";
     }
 
@@ -78,16 +86,26 @@ public class Token extends UIInput {
     public void validate(FacesContext context) {
 
         super.validate(context);
-        String token = (String) getSubmittedValue();
+        String token = (String) getValue();
+        if (log.isDebugEnabled()) {
+            log.debug("Validating token '" + token + "'");
+        }
         TokenProcessor tp = getTokenProcessor(context);
         if (!tp.verify(context, token)) {
+            if (log.isDebugEnabled()) {
+                log.debug("  Validation failed!");
+            }
             setValid(false);
             String summary = messages.getMessage("token.invalid");
             FacesMessage message = new FacesMessage(summary);
             message.setSeverity(FacesMessage.SEVERITY_ERROR);
+            context.addMessage(getClientId(context), message);
         }
 
     }
+
+
+    // ---------------------------------------------------------- Public Methods
 
 
     /**
@@ -95,11 +113,15 @@ public class Token extends UIInput {
      * of this component.  As a side effect, the transaction token value will
      * be saved for verification on a subsequent submit.</p>
      */
-    public Object getValue() {
+    public String getToken() {
 
         FacesContext context = FacesContext.getCurrentInstance();
         TokenProcessor tp = getTokenProcessor(context);
-        return tp.generate(context);
+        String token = tp.generate(context);
+        if (log.isDebugEnabled()) {
+            log.debug("Generating token '" + token + "'");
+        }
+        return token;
 
     }
 

@@ -22,7 +22,7 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
+import javax.faces.el.PropertyResolver;
 import org.apache.shale.faces.ShaleConstants;
 
 /**
@@ -55,9 +55,10 @@ public class TokenProcessor {
     public synchronized String generate(FacesContext context) {
 
         // Acquire the session identifier for this request
-        ValueBinding vb =
-          context.getApplication().createValueBinding("#{facesContext.session.id}");
-        byte id[] = ((String) vb.getValue(context)).getBytes();
+        // (creating the session if necessary)
+        Object session = context.getExternalContext().getSession(true);
+        PropertyResolver pr = context.getApplication().getPropertyResolver();
+        byte id[] = ((String) pr.getValue(session, "id")).getBytes();
 
         // Acquire the timestamp we will use for this request
         long current = System.currentTimeMillis();

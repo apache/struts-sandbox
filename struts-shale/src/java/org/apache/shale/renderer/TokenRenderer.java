@@ -81,7 +81,8 @@ public class TokenRenderer extends Renderer {
             String clientId = token.getClientId(context);
             writer.writeAttribute("id", clientId, "id");
             writer.writeAttribute("name", clientId, "id");
-            writer.writeAttribute("value", token.getValue(), "value");
+            writer.writeAttribute("type", "hidden", null);
+            writer.writeAttribute("value", token.getToken(), null);
         }
 
     }
