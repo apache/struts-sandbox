@@ -15,6 +15,7 @@
  */
 using System;
 using System.Collections;
+using Nexus.Core;
 using NUnit.Framework;
 
 namespace PhoneBook.Core
@@ -23,7 +24,7 @@ namespace PhoneBook.Core
 	/// Base class for unit tests.
 	/// </summary>
 	[TestFixture]
-	public class BaseTest
+	public class BaseTest : BaseNexusTest
 	{
 		/// <summary>
 		/// Dummy test to exercise infrastructure.

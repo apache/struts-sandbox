@@ -90,6 +90,16 @@
                     Project = "{3150F3E8-9A04-4FED-B16F-CEA57756E934}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "Nexus.Core"
+                    AssemblyName = "Nexus.Core"
+                    HintPath = "..\..\Nexus\Core\bin\Debug\Nexus.Core.dll"
+                />
+                <Reference
+                    Name = "Nexus.Test"
+                    AssemblyName = "Nexus.Test"
+                    HintPath = "..\..\Nexus\Test\bin\Debug\Nexus.Test.dll"
+                />
             </References>
         </Build>
         <Files>

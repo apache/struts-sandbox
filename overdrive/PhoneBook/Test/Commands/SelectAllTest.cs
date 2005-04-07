@@ -13,16 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+using System.Collections;
+using Nexus.Core;
 using NUnit.Framework;
 
 namespace PhoneBook.Core.Commands
 {
 	/// <summary>
-	/// Exercise SelectAll Command.
+	/// Exercise SelectAll Command per [OVR-5].
 	/// </summary>
 	[TestFixture]
 	public class SelectAllTest : BaseTest
 	{
+		
 		/// <summary>
 		/// SelectAll and succeed.
 		/// </summary>
@@ -33,16 +36,20 @@ namespace PhoneBook.Core.Commands
 		public void SelectAll_Pass ()
 		{
 			// TODO: Write code to pass text [OVR-5]
-			/*
-			IRequestContext context = Controller.ExecuteContext (App.SELECT_ALL);
-			AssertNominal (context);
-			AssertOutcome (context.HasOutcome);
+			IRequestContext context = controller.ExecuteContext (App.SELECT_ALL);
+			Assert.IsTrue (context.IsNominal,"Expected command to pass.");
+			Assert.IsTrue (context.HasOutcome,"Expected command to set an Outcome.");
 			IList list = context.Outcome as IList;
-			AssertListNotEmpty(list);
+			bool notEmpty = ((list!=null) && (list.Count>0));
+			Assert.IsTrue (notEmpty,"Expected outcome to be a not-empty list");
 			IDictionary row = list[0] as IDictionary;
-			string[] fields = {App.FIRST_NAME, App.LAST_NAME, App.USER_NAME, App.EXTENSION, App.HIRED, App.HOURS, App.EDITOR};
-			AssertFields (context,fields);
-			*/
+			string[] KEYS = {App.FIRST_NAME, App.LAST_NAME, App.USER_NAME, App.EXTENSION, App.HIRED, App.HOURS, App.EDITOR};
+			bool valid = true;
+			foreach (string key in KEYS)
+			{
+				valid = valid && row.Contains (key);
+			}
+			Assert.IsTrue (valid,"Expected row to contain all keys.");
 		}
 	}
 }
