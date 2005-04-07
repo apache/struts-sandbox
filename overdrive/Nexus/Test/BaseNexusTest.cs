@@ -1,4 +1,6 @@
+using Agility.Extras.Spring;
 using NUnit.Framework;
+using Spring.Context;
 
 namespace Nexus.Core
 {
@@ -8,15 +10,14 @@ namespace Nexus.Core
 	[TestFixture]
 	public class BaseNexusTest
 	{
-
 		protected IController controller;
 
 		[SetUp]
 		public virtual void SetUp ()
 		{
-			// TODO: Implement Objects.Facotory [OVR-8]
-			// IApplicationContext factory = Objects.Factory ();
-			// controller = new Controller (factory);
+			// TODO: Implement Objects.Factory [OVR-8]
+			IApplicationContext factory = Objects.Factory ();
+			controller = new Controller (factory);
 		}
 	}
 }

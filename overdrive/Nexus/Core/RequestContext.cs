@@ -4,16 +4,39 @@ using Agility.Core;
 namespace Nexus.Core
 {
 	/// <summary>
-	/// Summary description for RequestContext.
+	/// Concrete IRequestContext implementation.
 	/// </summary>
 	public class RequestContext : Context, IRequestContext
 	{
 
-		public bool ContainsKeys(string[] keys)
+		/// <summary>
+		/// Convenience constructor to set Command on instantiation.
+		/// </summary>
+		/// <param name="command">Name of Command processing this Context.</param>
+		public RequestContext (string command)
 		{
-			// TODO:  Add RequestContext.ContainsKeys implementation
-			return false;
+			Command = command;
 		}
+
+		/// <summary>
+		/// Default, no argument constructor.
+		/// </summary>
+		public RequestContext ()
+		{
+		}
+
+		public string Command
+		{
+			get { return this [Tokens.COMMAND] as string; }
+			set { this [Tokens.COMMAND] = value; }
+		}
+
+		public IRequestCommand CommandBin
+		{
+			get { return this [Tokens.COMMAND_BIN] as IRequestCommand; }
+			set { this [Tokens.COMMAND_BIN] = value; }
+		}
+
 
 		public bool HasOutcome
 		{

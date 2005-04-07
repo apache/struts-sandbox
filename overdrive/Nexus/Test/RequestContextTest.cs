@@ -14,7 +14,6 @@ namespace Nexus.Core
 		IRequestContext context;
 		Exception fault;
 		IList list;
-		string[] KEYS = {"KEY1","KEY2"};
 
 		/// <summary>
 		/// Initialize private fields.
@@ -25,7 +24,6 @@ namespace Nexus.Core
 			context = new RequestContext();
 			Assert.IsTrue (context.IsNominal,"Expected nominal state for a new IRequestContext.");			
 			Assert.IsFalse(context.HasOutcome,"Expected no Outcome for a new IRequestContext.");			
-			Assert.IsFalse(context.ContainsKeys(KEYS),"Expected no custom keys for a new IRequestContext.");
 
 			fault = new ApplicationException("RequestContextTest");
 			list = new ArrayList();
@@ -74,16 +72,5 @@ namespace Nexus.Core
 			Assert.IsTrue (context.HasOutcome);
 		}	
 
-		/// <summary>
-		/// If the context contains keys specified in an array, ContextKeys returns true.
-		/// </summary>
-		public void ContainsKeys()
-		{
-			foreach (string key in KEYS)
-			{
-				context[key] = key;
-			}
-			Assert.IsTrue (context.ContainsKeys (KEYS),"Expected to find keys added to context.");			
-		}
 	}
 }

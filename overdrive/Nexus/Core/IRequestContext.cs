@@ -17,11 +17,21 @@ namespace Nexus.Core
 	{
 
 		/// <summary>
-		/// Return true if this context contains all of the given keys,.
+		/// Identifier for the top-level Command (or Chain) processing this Context.
 		/// </summary>
-		/// <returns>True if this context contains all of the given keys.</returns>
-		bool ContainsKeys (string[] keys);
-		
+		/// <remarks>
+		/// Corresponds to ID of INexusCommand for the initial Command or Chain.
+		/// </remarks>
+		string Command { get; set; }
+
+		/// <summary>
+		/// Instance of the top-level Command (or Chain) processing this Context.
+		/// </summary>
+		/// <remarks>
+		/// Corresponds to ID of INexusCommand for the initial Command or Chain.
+		/// </remarks>
+		IRequestCommand CommandBin { get; set; }
+
 		/// <summary>
 		/// Return true if an Outcome object is present.
 		/// </summary>

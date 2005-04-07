@@ -99,12 +99,27 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IRequestCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IRequestContext.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "RequestCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "RequestContext.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Tokens.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
