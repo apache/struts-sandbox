@@ -1,9 +1,6 @@
-This product includes software developed by
-The Apache Software Foundation (http://www.apache.org/).
+NOTICE
 
-This product includes the JavaServer Faces reference
-implementation, developed by Sun Microsystems
-(http://java.sun.com/j2ee/javaserverfaces/) and
-redistributed in accordance with license terms found
-in LICENSE-JSF.txt.
-
+This software consists of voluntary contributions made by many
+individuals on behalf of the Apache Software Foundation and was 
+originally based, in part, on public domain software written by the 
+Oklahoma Department of Environmental Quality, Oklahoma City OK US.
