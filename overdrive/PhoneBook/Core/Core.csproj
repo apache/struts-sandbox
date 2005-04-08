@@ -79,6 +79,21 @@
                     AssemblyName = "System.Xml"
                     HintPath = "..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
+                <Reference
+                    Name = "IBatisNet.DataMapper"
+                    AssemblyName = "IBatisNet.DataMapper"
+                    HintPath = "..\..\iBatisNet.bin\IBatisNet.DataMapper.dll"
+                />
+                <Reference
+                    Name = "Nexus.Core"
+                    AssemblyName = "Nexus.Core"
+                    HintPath = "..\..\Nexus\Core\bin\Debug\Nexus.Core.dll"
+                />
+                <Reference
+                    Name = "Agility.Core"
+                    AssemblyName = "Agility.Core"
+                    HintPath = "..\..\Nexus\Core\bin\Debug\Agility.Core.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -94,6 +109,16 @@
                     BuildAction = "Compile"
                 />
                 <Folder RelPath = "bin\Debug\" />
+                <File
+                    RelPath = "Commands\AppCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Commands\BaseList.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
             </Include>
         </Files>
     </CSHARP>

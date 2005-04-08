@@ -25,19 +25,14 @@ namespace PhoneBook.Core.Commands
 	[TestFixture]
 	public class SelectAllTest : BaseTest
 	{
-		
+
 		/// <summary>
-		/// SelectAll and succeed.
+		/// Assert result of SelectAll, after another method runs the command.
 		/// </summary>
-		/// <remarks>
-		/// Nonfunctional work in progress.
-		/// </remarks>
-		[Test]
-		public void SelectAll_Pass ()
+		/// <param name="context">Context with result to assert.</param>		
+		public void SelectAll_Result(IRequestContext context)
 		{
-			// TODO: Write code to pass text [OVR-5]
-			IRequestContext context = controller.ExecuteContext (App.SELECT_ALL);
-			Assert.IsTrue (context.IsNominal,"Expected command to pass.");
+			AssertNominal(context);
 			Assert.IsTrue (context.HasOutcome,"Expected command to set an Outcome.");
 			IList list = context.Outcome as IList;
 			bool notEmpty = ((list!=null) && (list.Count>0));
@@ -50,6 +45,29 @@ namespace PhoneBook.Core.Commands
 				valid = valid && row.Contains (key);
 			}
 			Assert.IsTrue (valid,"Expected row to contain all keys.");
+		}
+
+		/// <summary>
+		/// SelectAll and succeed, without using Catalog.
+		/// </summary>
+		[Test]
+		public void SelectAll_Pass_Without_Catalog ()
+		{
+			BaseList command = new BaseList();
+			command.ID = App.SELECT_ALL;
+			IRequestContext context = command.NewContext ();
+			command.Execute(context);
+			SelectAll_Result(context);
+		}
+
+		/// <summary>
+		/// SelectAll and succeed, using catalog.
+		/// </summary>
+		[Test]
+		public void SelectAll_Pass ()
+		{
+			IRequestContext context = controller.ExecuteContext (App.SELECT_ALL);
+			SelectAll_Result(context);
 		}
 	}
 }

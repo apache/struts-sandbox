@@ -5,8 +5,10 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:noNamespaceSchemaLocation="SqlMap.xsd" >
 
+<!--
 	<alias>
 		<typeAlias alias="KeyValue" type="Agility.Extras.KeyValue,Agility.Extras" />
 	</alias>
+-->
 
 </sqlMap>

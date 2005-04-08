@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+
+<sqlMap 
+	namespace="PhoneBook" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:noNamespaceSchemaLocation="SqlMap.xsd" >
+	
+	<statements>
+		<select id="select_all" resultClass="Hashtable">
+			SELECT 
+				pk_entry,
+				last_name,
+				first_name,
+				extension,
+				user_name,
+				editor,
+				hired,
+				hours
+			FROM entry
+		</select>
+	</statements>
+
+</sqlMap>

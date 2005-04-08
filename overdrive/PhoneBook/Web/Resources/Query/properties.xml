@@ -2,6 +2,6 @@
 <settings>
 	<add key="provider" value="ByteFx" />
 	<add key="development" value="Host=localhost;Database=phonebook;Username=root" />
-	<add key="production" value="Host=zippy;Database=phonebook;Username=zippy;Password=butth34d" />
+	<add key="production" value="Host=zippy;Database=phonebook;Username=phonebookApp;Password=p1nH34d" />
 </settings>
 

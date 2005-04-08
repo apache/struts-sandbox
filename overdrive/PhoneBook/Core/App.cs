@@ -23,7 +23,7 @@ namespace PhoneBook.Core
 		/// <summary>
 		/// Token for user_name property.
 		/// </summary>
-		public const string USER_NAME = "user";
+		public const string USER_NAME = "user_name";
 
 		/// <summary>
 		/// Token for extension property.
