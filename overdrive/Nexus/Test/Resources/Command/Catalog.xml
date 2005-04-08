@@ -3,8 +3,8 @@
   "http://www.springframework.net/dtd/spring-objects.dtd">
 <objects> 
 
-  <object id="list_all" type="Nexus.Core.Commands.ListAll">
-    <property name="ID"><value>list_all</value></property>  
+  <object id="ListAll" type="Nexus.Core.Commands.ListAll, Nexus.Test">
+    <property name="ID"><value>ListAll</value></property>  
   </object>
 
 </objects>
