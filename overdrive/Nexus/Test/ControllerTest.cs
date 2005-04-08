@@ -16,6 +16,7 @@ namespace Nexus.Core
 		public void ExecuteContext()
 		{
 			IRequestContext context = controller.ExecuteContext(App.LIST_ALL);
+			AssertNominal(context);
 			Assert.IsTrue (context.IsNominal,"Expected nominal result.");
 			Assert.IsTrue(context.HasOutcome,"Expected outcome from command.");
 		}

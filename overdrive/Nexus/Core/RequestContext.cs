@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Agility.Core;
 
 namespace Nexus.Core
@@ -42,79 +43,79 @@ namespace Nexus.Core
 		{
 			get
 			{
-				// TODO:  Add RequestContext.HasOutcome getter implementation
-				return false;
+				return Contains (Command);
 			}
 		}
 
 		public object Outcome
 		{
-			get
-			{
-				// TODO:  Add RequestContext.Outcome getter implementation
-				return null;
-			}
-			set
-			{
-				// TODO:  Add RequestContext.Outcome setter implementation
-			}
+			get { return this [Command]; }
+			set { this [Command] = value; }
 		}
 
 		public Agility.Core.IContext Errors
 		{
-			get
-			{
-				// TODO:  Add RequestContext.Errors getter implementation
-				return null;
-			}
-			set
-			{
-				// TODO:  Add RequestContext.Errors setter implementation
-			}
+			get { return this [Tokens.ERRORS] as IContext; }
+			set { this [Tokens.ERRORS] = value; }
 		}
 
-		public void AddError(string template)
+		/// <summary>
+		/// Convenience method to lazily instantiate a message store.
+		/// </summary>
+		/// <param name="template">Message template to add to the queue.</param>
+		/// <param name="queue">Token for queue of messages within the store.</param>
+		/// <param name="key">Token for message store.</param>
+		private void AddStore (string template, string queue, string key)
 		{
-			// TODO:  Add RequestContext.AddError implementation
+			IContext store = this [key] as IContext;
+			if (null == store)
+			{
+				store = new Context (); // FIXME: Spring?
+				this [key] = store;
+			}
+			IList list;
+			if (store.Contains (queue))
+				list = store [queue] as IList;
+			else
+			{
+				list = new ArrayList (); // FIXME: Spring?
+				store [queue] = list;
+			}
+			list.Add (template);
 		}
+
+		public void AddError (string template)
+		{
+			AddStore (template, Tokens.GENERIC_MESSAGE, Tokens.ERRORS);
+		}
+
 
 		public bool HasErrors
 		{
-			get
-			{
-				// TODO:  Add RequestContext.HasErrors getter implementation
-				return false;
-			}
+			get{return this.ContainsKey (Tokens.ERRORS);}
 		}
 
 		public Exception Fault
 		{
-			get
-			{
-				// TODO:  Add RequestContext.Fault getter implementation
-				return null;
-			}
+			get { return this [Tokens.FAULT] as Exception; }
 			set
 			{
-				// TODO:  Add RequestContext.Fault setter implementation
+				Exception e = value as Exception;
+				this [Tokens.FAULT] = e;
+				AddError (e.Message);
 			}
 		}
 
 		public bool HasFault
 		{
-			get
-			{
-				// TODO:  Add RequestContext.HasFault getter implementation
-				return false;
-			}
+			get{return this.ContainsKey (Tokens.FAULT);}
 		}
 
 		public bool IsNominal
 		{
 			get
 			{
-				// TODO:  Add RequestContext.IsNominal getter implementation
-				return false;
+				return (!HasErrors && !HasFault);
 			}
 		}
 

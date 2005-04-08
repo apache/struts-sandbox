@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Nexus.Core.Commands;
 using NUnit.Framework;
 
 namespace Nexus.Core
@@ -22,6 +23,8 @@ namespace Nexus.Core
 		public void SetUp()
 		{
 			context = new RequestContext();
+			context.Command = "list_all";
+			context.CommandBin = new ListAll();
 			Assert.IsTrue (context.IsNominal,"Expected nominal state for a new IRequestContext.");			
 			Assert.IsFalse(context.HasOutcome,"Expected no Outcome for a new IRequestContext.");			
 

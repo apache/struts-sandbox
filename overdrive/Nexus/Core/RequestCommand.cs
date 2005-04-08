@@ -3,9 +3,9 @@ using Agility.Core;
 namespace Nexus.Core
 {
 	/// <summary>
-	/// Concrete IRequestCommand implementation.
+	/// Abstract IRequestCommand; subclass must implement RequestExecute.
 	/// </summary>
-	public class RequestCommand : IRequestCommand
+	public abstract class RequestCommand : IRequestCommand
 	{
 
 		/// <summary>
@@ -31,16 +31,12 @@ namespace Nexus.Core
 			return new RequestContext (ID);
 		}
 
-		public virtual bool RequestExecute(IRequestContext context)
-		{
-			// TODO:  Add RequestCommand.NexusExecute implementation
-			return STOP;
-		}
+		public abstract bool RequestExecute(IRequestContext context);
 
-		public virtual bool Execute (IContext context)
+		public virtual bool Execute (IContext _context)
 		{
-			IRequestContext nexus = context as IRequestContext;
-			return RequestExecute (nexus);
+			IRequestContext context = _context as IRequestContext;
+			return RequestExecute (context);
 		}
 	}
 }
