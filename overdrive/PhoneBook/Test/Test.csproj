@@ -100,6 +100,11 @@
                     AssemblyName = "Nexus.Test"
                     HintPath = "..\..\Nexus\Test\bin\Debug\Nexus.Test.dll"
                 />
+                <Reference
+                    Name = "Agility.Core"
+                    AssemblyName = "Agility.Core"
+                    HintPath = "..\..\Agility\Core\bin\Debug\Agility.Core.dll"
+                />
             </References>
         </Build>
         <Files>
