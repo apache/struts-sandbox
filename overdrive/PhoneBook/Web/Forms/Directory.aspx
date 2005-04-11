@@ -12,13 +12,14 @@
 	<body>
 		<h1>PhoneBook</h1>
 			<form id="frm" method="post" runat="server">
-			<asp:Panel ID="pnlList" Runat="server">
+			<asp:Panel ID="pnlFind">
 			  <table><tr>
-			  <td><asp:DropDownList ID="lstSelect"></asp:DropDownList></td>			  
-			  <td><asp:TextBox ID="txtInput" Runat="server"></asp:TextBox></td>
-			  <td><asp:Button ID="btnInput" Runat="server"></asp:Button></td>
-			  <td><asp:Button ID="btnAdd" Runat="server"></asp:Button></td>
-			  </td></table>
+			  <td>Sort by: </td><td><asp:DropDownList ID="lstSelect"></asp:DropDownList>
+			  <td>Search for:<asp:TextBox ID="txtFind" Runat="server"></asp:TextBox> <asp:Button ID="cmdFind" Runat="server"></asp:Button></td>
+			  <td><asp:Button ID="cmdAdd" Runat="server"></asp:Button></td>
+			  </tr></table>
+			</asp:panel>
+			<asp:Panel ID="pnlList" Runat="server">
             	<asp:DataGrid id="repList" Runat="server" 
 					PagerStyle-Mode="NumericPages" AllowPaging="true" PageSize="10" OnPageIndexChanged="List_PageIndexChanged">
 					<HeaderStyle CssClass="HeaderStyle" BackColor="#CCCC99"></HeaderStyle>

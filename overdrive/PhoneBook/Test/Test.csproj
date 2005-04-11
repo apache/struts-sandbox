@@ -106,9 +106,9 @@
                     HintPath = "..\..\iBatisNet.bin\ByteFX.MySqlClient.dll"
                 />
                 <Reference
-                    Name = "PhoneBook.Core"
-                    AssemblyName = "PhoneBook.Core"
-                    HintPath = "..\Core\bin\Debug\PhoneBook.Core.dll"
+                    Name = "Core"
+                    Project = "{3150F3E8-9A04-4FED-B16F-CEA57756E934}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
         </Build>

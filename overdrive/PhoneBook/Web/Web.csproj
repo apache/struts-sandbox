@@ -89,6 +89,21 @@
                     AssemblyName = "System.Xml"
                     HintPath = "..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
+                <Reference
+                    Name = "Core"
+                    Project = "{3150F3E8-9A04-4FED-B16F-CEA57756E934}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "Agility.Core"
+                    AssemblyName = "Agility.Core"
+                    HintPath = "..\..\Agility\Core\bin\Debug\Agility.Core.dll"
+                />
+                <Reference
+                    Name = "Nexus.Core"
+                    AssemblyName = "Nexus.Core"
+                    HintPath = "..\..\Nexus\Core\bin\Debug\Nexus.Core.dll"
+                />
             </References>
         </Build>
         <Files>

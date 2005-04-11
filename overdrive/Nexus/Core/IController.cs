@@ -25,6 +25,15 @@ namespace Nexus.Core
 	/// </p></remarks>
 	public interface IController
 	{
+
+		/// <summary>
+		/// Obtain object instance for name.
+		/// </summary>
+		/// <param name="name"></param>
+		/// <returns></returns>
+		/// 
+		object GetObject (string name);
+
 		/// <summary>
 		/// Obtain and execute the IRequestContext.
 		/// </summary>

@@ -46,9 +46,19 @@ namespace PhoneBook.Core
 		public const string EDITOR = "editor";
 
 		/// <summary>
-		/// Token for seledct all command.
+		/// Token for select all command.
 		/// </summary>
 		public const string SELECT_ALL = "select_all";
+
+		/// <summary>
+		/// Token for Find Helper class.
+		/// </summary>
+		public const string FIND_HELPER ="find_helper";
+
+		/// <summary>
+		/// Token for List Helper class.
+		/// </summary>
+		public const string LIST_HELPER ="list_helper";
 
 	}
 }
