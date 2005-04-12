@@ -140,6 +140,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Resources\Command\AppConfig.xml"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "Resources\Command\Catalog.xml"
                     BuildAction = "Content"
                 />

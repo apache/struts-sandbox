@@ -18,19 +18,19 @@ using Spring.Context;
 using Spring.Context.Support;
 using Spring.Objects.Factory.Xml;
 
-namespace Agility.Extras.Spring
+namespace Nexus.Extras.Spring
 {
 	/// <summary>
 	/// A singleton configuration loader for Spring. 
 	/// </summary>
 	public class Objects
 	{
-
 		// Controller: Obviously, this should be configurable, like iBATIS. 
 
 		private static string[] files = {
+			"/Resources/Command/AppConfig.xml",
 			"/Resources/Command/Catalog.xml"
-		};
+	};
 
 		private Objects ()
 		{

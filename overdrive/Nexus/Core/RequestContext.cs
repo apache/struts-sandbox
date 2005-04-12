@@ -24,7 +24,6 @@ namespace Nexus.Core
 	/// </summary>
 	public class RequestContext : Context, IRequestContext
 	{
-
 		/// <summary>
 		/// Convenience constructor to set Command on instantiation.
 		/// </summary>
@@ -56,10 +55,7 @@ namespace Nexus.Core
 
 		public bool HasOutcome
 		{
-			get
-			{
-				return Contains (Command);
-			}
+			get { return Contains (Command); }
 		}
 
 		public object Outcome
@@ -68,7 +64,7 @@ namespace Nexus.Core
 			set { this [Command] = value; }
 		}
 
-		public Agility.Core.IContext Errors
+		public IContext Errors
 		{
 			get { return this [Tokens.ERRORS] as IContext; }
 			set { this [Tokens.ERRORS] = value; }
@@ -107,7 +103,7 @@ namespace Nexus.Core
 
 		public bool HasErrors
 		{
-			get{return this.ContainsKey (Tokens.ERRORS);}
+			get { return this.ContainsKey (Tokens.ERRORS); }
 		}
 
 		public Exception Fault
@@ -123,15 +119,12 @@ namespace Nexus.Core
 
 		public bool HasFault
 		{
-			get{return this.ContainsKey (Tokens.FAULT);}
+			get { return this.ContainsKey (Tokens.FAULT); }
 		}
 
 		public bool IsNominal
 		{
-			get
-			{
-				return (!HasErrors && !HasFault);
-			}
+			get { return (!HasErrors && !HasFault); }
 		}
 
 	}

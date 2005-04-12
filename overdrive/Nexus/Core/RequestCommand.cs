@@ -22,7 +22,6 @@ namespace Nexus.Core
 	/// </summary>
 	public abstract class RequestCommand : IRequestCommand
 	{
-
 		/// <summary>
 		/// Return STOP if a Command is part of a Chain.
 		/// </summary>
@@ -46,7 +45,7 @@ namespace Nexus.Core
 			return new RequestContext (ID);
 		}
 
-		public abstract bool RequestExecute(IRequestContext context);
+		public abstract bool RequestExecute (IRequestContext context);
 
 		public virtual bool Execute (IContext _context)
 		{

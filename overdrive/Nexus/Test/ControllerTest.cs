@@ -23,17 +23,16 @@ namespace Nexus.Core
 	[TestFixture]
 	public class ControllerTest : BaseNexusTest
 	{
-
 		/// <summary>
 		/// A simple "list all" command should return nominal with an outcome. 
 		/// </summary>
 		[Test]
-		public void ExecuteContext()
+		public void ExecuteContext ()
 		{
-			IRequestContext context = controller.ExecuteContext(App.LIST_ALL);
-			AssertNominal(context);
-			Assert.IsTrue (context.IsNominal,"Expected nominal result.");
-			Assert.IsTrue(context.HasOutcome,"Expected outcome from command.");
+			IRequestContext context = controller.ExecuteContext (App.LIST_ALL);
+			AssertNominal (context);
+			Assert.IsTrue (context.IsNominal, "Expected nominal result.");
+			Assert.IsTrue (context.HasOutcome, "Expected outcome from command.");
 		}
 	}
 }

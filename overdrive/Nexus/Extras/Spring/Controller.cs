@@ -17,7 +17,7 @@ using System;
 using Nexus.Core;
 using Spring.Context;
 
-namespace Agility.Extras.Spring
+namespace Nexus.Extras.Spring
 {
 	/// <summary>
 	/// Concrete IController implementation using Spring as an IOC container.

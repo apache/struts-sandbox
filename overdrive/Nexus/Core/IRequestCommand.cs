@@ -28,7 +28,6 @@ namespace Nexus.Core
 	/// </remarks>
 	public interface IRequestCommand : ICommand
 	{
-
 		/// <summary>
 		/// An identifier for this Command. 
 		/// </summary>
@@ -36,7 +35,7 @@ namespace Nexus.Core
 		/// Corresponds to the Command property of IHelperContext. 
 		/// </remarks>
 		/// <returns>An identifier for this Command.</returns>
-		string ID {get; set;}
+		string ID { get; set; }
 
 		/// <summary>
 		/// Factory method to provide an empty context that can be used with the Command instance.
@@ -52,6 +51,6 @@ namespace Nexus.Core
 		/// </p></remarks>
 		/// <param name="context">Context to process.</param>
 		bool RequestExecute (IRequestContext context);
-	
+
 	}
 }

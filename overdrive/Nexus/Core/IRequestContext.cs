@@ -30,7 +30,6 @@ namespace Nexus.Core
 	/// </remarks>
 	public interface IRequestContext : IContext
 	{
-
 		/// <summary>
 		/// Identifier for the top-level Command (or Chain) processing this Context.
 		/// </summary>
@@ -103,7 +102,7 @@ namespace Nexus.Core
 		/// TODO: Refactor as NameValueCollection ?
 		/// </remark>
 		IContext Errors { get; set; }
-		
+
 		/// <summary>
 		/// Add an error message under the "global" key.
 		/// </summary>

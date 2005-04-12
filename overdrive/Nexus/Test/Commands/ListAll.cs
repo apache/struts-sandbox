@@ -22,13 +22,12 @@ namespace Nexus.Core.Commands
 	/// </summary>
 	public class ListAll : RequestCommand
 	{
-
 		public override bool RequestExecute (IRequestContext context)
 		{
 			// IList list = Mapper.Get ().QueryForList (ID, context);
 			// Fake it:
-			IList list = new ArrayList();
-			list.Add("data");
+			IList list = new ArrayList ();
+			list.Add ("data");
 			context.Outcome = list;
 			return CONTINUE;
 		}
