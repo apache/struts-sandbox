@@ -104,6 +104,21 @@
                     AssemblyName = "Nexus.Core"
                     HintPath = "..\..\Nexus\Core\bin\Debug\Nexus.Core.dll"
                 />
+                <Reference
+                    Name = "Spring.Core"
+                    AssemblyName = "Spring.Core"
+                    HintPath = "..\..\SpringNet.bin\Spring.Core.dll"
+                />
+                <Reference
+                    Name = "Spring.Web"
+                    AssemblyName = "Spring.Web"
+                    HintPath = "..\..\SpringNet.bin\Spring.Web.dll"
+                />
+                <Reference
+                    Name = "Nexus.Extras"
+                    AssemblyName = "Nexus.Extras"
+                    HintPath = "..\..\Nexus\Extras\bin\Debug\Nexus.Extras.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -164,6 +179,10 @@
                     RelPath = "Forms\Directory.aspx.resx"
                     DependentUpon = "Directory.aspx.cs"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Forms\Web.config"
+                    BuildAction = "Content"
                 />
                 <File
                     RelPath = "Resources\Command\AppConfig.xml"

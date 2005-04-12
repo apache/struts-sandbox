@@ -117,15 +117,15 @@ namespace PhoneBook.Web
 
 		private void Find_Load ()
 		{
-			myFindHelper.Execute(pnlFind.Controls);
-			if (!myFindHelper.IsNominal )
+			// TODO: myFindHelper.Execute(pnlFind.Controls);
+			if (true) // TODO: (!myFindHelper.IsNominal )
 			{
-				Page_Error = myFindHelper;
+				// TODO: Page_Error = myFindHelper;
 			} 
 			else
 			{
-				Page_Title = myFindHelper.Title;
-				Page_Prompt = myFindHelper.Prompt;
+				// TODO: Page_Title = myFindHelper.Title;
+				// TODO: Page_Prompt = myFindHelper.Prompt;
 			}
 			pnlFind.Visible = true;
 		}
@@ -134,20 +134,20 @@ namespace PhoneBook.Web
 
 		protected void Find_Submit (object sender, EventArgs e)
 		{
-			myListHelper.Execute(pnlFind.Controls);
-			if (List_Load ()) pnlFind.Visible = false;
+			// TODO: myListHelper.Execute(pnlFind.Controls);
+			List_Load ();
 		}
 
 		protected void Add_Submit (object sender, EventArgs e)
 		{
 			// call business logic
-			myListHelper.DataInsert (repList);
+			// TODO: myListHelper.DataInsert (repList);
 			// act on outcome
-			if (myListHelper.IsNominal)
+			if (true) // TODO: (myListHelper.IsNominal)
 			{
 				List_ItemIndex = 0;
-				myListHelper.DataBind (repList);
-				Page_Prompt = myListHelper.Prompt;
+				// TODO: myListHelper.DataBind (repList);
+				// TODO: Page_Prompt = myListHelper.Prompt;
 				List_Insert = true;
 				pnlList.Visible = true;
 			}
@@ -172,13 +172,13 @@ namespace PhoneBook.Web
 		// Data access method
 		private bool List_Load ()
 		{
-			bool okay = myListHelper.IsNominal;
+			bool okay = true ; // TODO: myListHelper.IsNominal;
 			if (okay)
 			{
-				repList.DataSource = myListHelper.List;
+				// TODO: repList.DataSource = myListHelper.List;
 				repList.DataBind ();
-				Page_Title = myListHelper.Title;
-				Page_Prompt = myListHelper.Prompt;
+				// TODO: Page_Title = myListHelper.Title;
+				// TODO: Page_Prompt = myListHelper.Prompt;
 				pnlList.Visible = true;
 			}
 			else
@@ -221,8 +221,8 @@ namespace PhoneBook.Web
 			{
 				Page_Title = msg_TITLE;
 				Page_Prompt = msg_PROMPT;
-				myFindHelper = Controller.GetObject(App.FIND_HELPER) as IViewHelper;
-				myListHelper = Controller.GetObject(App.LIST_HELPER) as IEditHelper;
+				// TODO: myFindHelper = Controller.GetObject(App.FIND_HELPER) as IViewHelper;
+				// TODO: myListHelper = Controller.GetObject(App.LIST_HELPER) as IEditHelper;
 				Find_Load(); 
 			}
 		}
