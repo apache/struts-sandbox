@@ -1,10 +1,9 @@
 using System;
-using System.Collections;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using Nexus.Core;
-using PhoneBook.Core;
+using Nexus.Core.Helpers;
 
 namespace PhoneBook.Web
 {
@@ -247,54 +246,5 @@ namespace PhoneBook.Web
 		}
 		#endregion
 
-		#region PROPOSED INTERFACES TO IMPLEMENT
-
-		public interface IViewHelper
-		{
-			void Execute(ControlCollection controls);
-			bool IsNominal { get; }
-			string Title {get;}
-			string Prompt {get;}
-		}
-
-		public interface IListHelper : IViewHelper
-		{
-			IList List {get;}
-		}
-
-		public interface IEditHelper : IListHelper
-		{
-				string EditText { get; set; }
-				string QuitText { get; set; }
-				string SaveText { get; set; }
-
-				string ListCommand { get; set; }
-				string SaveCommand { get; set; }
-				string DataKeyField { get; set; }
-
-				IList DataFields { get; set; }
-				IList DataLabels { get; set; }
-
-				int BindColumns (DataGrid grid, int i);
-				void DataSource (DataGrid grid);
-				void DataInsert (DataGrid grid);
-				void DataBind (DataGrid grid);
-				void Save (string key, ControlCollection controls);
-		}
-
-		public abstract class ViewHelper : IViewHelper
-		{
-			public static string HtmlErrorBuilder(IViewHelper value)
-			{
-				return null; // TODO: implementation	
-			}
-
-			public abstract void Execute (ControlCollection controls);
-			public abstract bool IsNominal { get; }
-			public abstract string Title { get; }
-			public abstract string Prompt { get; }
-		}
-
-		#endregion 
 	}
 }
