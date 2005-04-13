@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<!DOCTYPE objects PUBLIC "-//SPRING//DTD OBJECT//EN"
+  "http://www.springframework.net/dtd/spring-objects.dtd">
+<objects>
+
+  <object id="Controller" type="Nexus.Extras.Spring.Controller, Nexus.Extras">
+  </object>
+
+</objects>

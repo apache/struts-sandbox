@@ -130,12 +130,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "RequestCommandTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "RequestContextTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Commands\ListAll.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Helpers\ViewHelperTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

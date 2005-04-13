@@ -30,7 +30,7 @@ namespace Nexus.Extras.Spring
 		private static string[] files = {
 			"/Resources/Command/AppConfig.xml",
 			"/Resources/Command/Catalog.xml"
-	};
+		};
 
 		private Objects ()
 		{

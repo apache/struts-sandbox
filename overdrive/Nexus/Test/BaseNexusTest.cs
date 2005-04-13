@@ -23,21 +23,37 @@ using Spring.Context;
 namespace Nexus.Core
 {
 	/// <summary>
-	/// Summary description for BaseNexusTest.
+	/// Provide base SetUp method and convenience methods.
 	/// </summary>
 	[TestFixture]
 	public class BaseNexusTest
 	{
 		protected IController controller;
 
+		/// <summary>
+		/// Setup controller between tests.
+		/// </summary>
 		[SetUp]
 		public virtual void SetUp ()
 		{
 			// TODO: Implement Objects.Factory [OVR-8]
 			IApplicationContext factory = Objects.Factory ();
-			controller = new Controller (factory);
+			controller = new Controller (factory); // sic
 		}
 
+		/// <summary>
+		/// Exercise SetuP method.
+		/// </summary>
+		[Test]
+		public void AssertSetUp ()
+		{
+			Assert.IsTrue (controller != null, "Expected non-null controller.");
+		}
+
+		/// <summary>
+		/// Convenience method to confirm that no Exception was caught.
+		/// </summary>
+		/// <param name="context">Context under test</param>
 		public void AssertNoFault (IRequestContext context)
 		{
 			bool hasFault = context.HasFault;
@@ -45,6 +61,10 @@ namespace Nexus.Core
 				Assert.Fail (context.Fault.Message);
 		}
 
+		/// <summary>
+		/// Convenience method to confirm that there are no errors or Exception.
+		/// </summary>
+		/// <param name="context">Context under test</param>
 		public void AssertNominal (IRequestContext context)
 		{
 			AssertNoFault (context);
