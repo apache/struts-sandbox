@@ -119,6 +119,11 @@
                     AssemblyName = "Nexus.Extras"
                     HintPath = "..\..\Nexus\Extras\bin\Debug\Nexus.Extras.dll"
                 />
+                <Reference
+                    Name = "Nexus.Web"
+                    AssemblyName = "Nexus.Web"
+                    HintPath = "..\..\Nexus\Web\bin\Nexus.Web.dll"
+                />
             </References>
         </Build>
         <Files>

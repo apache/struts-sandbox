@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
 <HTML>
 	<HEAD>
-		<title id="msgTitle" runat="server"></title>		
+		<title>PhoneBook Directory</title>		
 		<meta name="GENERATOR" Content="Microsoft Visual Studio .NET 7.1">
 		<meta name="CODE_LANGUAGE" Content="C#">
 		<meta name="vs_defaultClientScript" content="JavaScript">
@@ -10,18 +10,18 @@
 		<LINK href="default.css" type="text/css" rel="stylesheet">
 	</HEAD>
 	<body>
-		<h1>PhoneBook</h1>
-			<form id="frm" method="post" runat="server">
+		<h1>PhoneBook Directory</h1>
+			<form id="frmDirectory" method="post" runat="server">
+			
 			<!-- ERROR -->
-			<asp:Panel id=pnlError Runat="server">
+			<asp:Panel id="pnlError" Runat="server">
 			<HR>
-			<asp:Label id=lblError Runat="server"></asp:Label>
+			<asp:Label id="lblError" Runat="server"></asp:Label>
 			</asp:Panel>
+		
 			<!-- PROMPT -->
-			<asp:Panel id=pnlPrompt Runat="server">
-			<HR>
-			<asp:Label id=lblPrompt Runat="server"></asp:Label>
-			</asp:Panel>
+			<p>To select entries, choose a filter or search for a Name or Extension.</p>	
+
 			<!-- FIND -->
 			<asp:Panel ID="pnlFind" Runat="server">
 			  <table><tr>
@@ -30,16 +30,17 @@
 			  <td><asp:Button ID="cmdAdd" Runat="server"></asp:Button></td>
 			  </tr></table>
 			</asp:panel>
-			<!-- FIND -->			
+			
+			<!-- LIST -->			
 			<asp:Panel ID="pnlList" Runat="server">
             	<asp:DataGrid id="repList" Runat="server" 
-					PagerStyle-Mode="NumericPages" AllowPaging="true" PageSize="10" OnPageIndexChanged="List_PageIndexChanged">
+					PagerStyle-Mode="NumericPages" AllowPaging="true" PageSize="10">
 					<HeaderStyle CssClass="HeaderStyle" BackColor="#CCCC99"></HeaderStyle>
 					<AlternatingItemStyle CssClass="AlternatingItemStyle" BackColor="#CCCC99"></AlternatingItemStyle>
 					<EditItemStyle CssClass="EditItemStyle"></EditItemStyle>
             	</asp:DataGrid>
 			</asp:Panel>
-			</asp:Panel>
+
 		</form>
 	</body>
 </HTML>

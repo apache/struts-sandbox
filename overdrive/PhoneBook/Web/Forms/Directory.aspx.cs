@@ -26,19 +26,8 @@ namespace PhoneBook.Web
 			set { _Controller = value; }
 		}
 
-		protected HtmlGenericControl msgTitle;
 		protected Panel pnlError;
 		protected Label lblError;
-		protected Panel pnlPrompt;
-		protected Label lblPrompt;
-
-		protected string Page_Title
-		{
-			set
-			{
-				msgTitle.InnerText = value;
-			}
-		}
 
 		protected IViewHelper Page_Error 
 		{
@@ -49,47 +38,10 @@ namespace PhoneBook.Web
 			}
 		}
 
-		protected string Page_Prompt
-		{
-			set
-			{
-				lblPrompt.Text = value;
-				pnlPrompt.Visible = true;
-			}
-		}
-		
-		private int List_ItemIndex
-		{
-			get
-			{
-				return (int) ViewState["ITEM_INDEX"];
-			}
-			set
-			{
-				ViewState["ITEM_INDEX"] = value;
-				if (repList!=null) repList.EditItemIndex = value;
-			}
-		}
-
-		private bool List_Insert
-		{
-			get
-			{
-				return (bool) ViewState["INSERT"];
-			}
-			set
-			{
-				ViewState["INSERT"] = value;
-				cmdAdd.Visible = !value;
-			}
-		}
-		
 		#endregion
 
 		#region Messages
 
-		private const string msg_TITLE = "PhoneBook Application";
-		private const string msg_PROMPT = "To select entries, choose a filter or search for a Name or Extension.";
 		private const string msg_FIND_CMD = "FIND";
 		private const string msg_ADD_CMD = "ADD NEW";
 
@@ -98,11 +50,10 @@ namespace PhoneBook.Web
 		#region Find
 
 		protected Panel pnlFind;
-		protected IViewHelper myFindHelper;
 		protected DropDownList lstSelect;
 		protected TextBox txtFind;
 		protected Button cmdFind;
-		protected Button cmdAdd;
+		protected IViewHelper myFindHelper;
 
 		// pageload events - These methods populate controls to display
 
@@ -121,11 +72,6 @@ namespace PhoneBook.Web
 			{
 				// TODO: Page_Error = myFindHelper;
 			} 
-			else
-			{
-				// TODO: Page_Title = myFindHelper.Title;
-				// TODO: Page_Prompt = myFindHelper.Prompt;
-			}
 			pnlFind.Visible = true;
 		}
 
@@ -137,29 +83,14 @@ namespace PhoneBook.Web
 			List_Load ();
 		}
 
-		protected void Add_Submit (object sender, EventArgs e)
-		{
-			// call business logic
-			// TODO: myListHelper.DataInsert (repList);
-			// act on outcome
-			if (true) // TODO: (myListHelper.IsNominal)
-			{
-				List_ItemIndex = 0;
-				// TODO: myListHelper.DataBind (repList);
-				// TODO: Page_Prompt = myListHelper.Prompt;
-				List_Insert = true;
-				pnlList.Visible = true;
-			}
-			else Page_Error = myListHelper;
-		}
-
 		#endregion
 
 		#region panel List
 
 		protected Panel pnlList;
-		protected IEditHelper myListHelper;
 		protected DataGrid repList;
+		protected Button cmdAdd;
+		protected IListHelper myListHelper;
 		
 		// pageload events
 
@@ -168,7 +99,6 @@ namespace PhoneBook.Web
 			// Put user code to initialize the list here
 		}
 
-		// Data access method
 		private bool List_Load ()
 		{
 			bool okay = true ; // TODO: myListHelper.IsNominal;
@@ -176,8 +106,6 @@ namespace PhoneBook.Web
 			{
 				// TODO: repList.DataSource = myListHelper.List;
 				repList.DataBind ();
-				// TODO: Page_Title = myListHelper.Title;
-				// TODO: Page_Prompt = myListHelper.Prompt;
 				pnlList.Visible = true;
 			}
 			else
@@ -209,6 +137,22 @@ namespace PhoneBook.Web
 			repList.DataBind ();
 		}
 
+		protected void Add_Submit (object sender, EventArgs e)
+		{
+			// call business logic
+			// TODO: myListHelper.DataInsert (repList);
+			// act on outcome
+			if (true) // TODO: (myListHelper.IsNominal)
+			{
+				// TODO: myListHelper.ItemIndex = 0;
+				// TODO: myListHelper.DataBind (repList);
+				// TODO: myListHelper.Insert = true;
+				pnlList.Visible = true;
+			}
+			else Page_Error = myListHelper;
+		}
+
+
 		#endregion
 
 		private void Page_Load(object sender, System.EventArgs e)
@@ -218,10 +162,8 @@ namespace PhoneBook.Web
 			bool isFirstView = (!IsPostBack);
 			if (isFirstView)
 			{
-				Page_Title = msg_TITLE;
-				Page_Prompt = msg_PROMPT;
-				// TODO: myFindHelper = Controller.GetObject(App.FIND_HELPER) as IViewHelper;
-				// TODO: myListHelper = Controller.GetObject(App.LIST_HELPER) as IEditHelper;
+				// TODO: myFindHelper = Controller.GetHelper(App.FIND_HELPER);
+				// TODO: myListHelper = Controller.GetHelper(App.LIST_HELPER) as IListHelper;
 				Find_Load(); 
 			}
 		}
