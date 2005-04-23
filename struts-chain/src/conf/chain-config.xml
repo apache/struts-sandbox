@@ -208,8 +208,9 @@
 
 
       <!--
-      If you want to use Tiles, uncomment this command, and modify your 
-      Struts Configuration to use this PlugIn:
+      If you want to use Tiles, uncomment this command, and the one in the
+      'servlet-exception' chain below, and modify your Struts Configuration
+      to use this PlugIn:
       "org.apache.struts.chain.legacy.TilesPlugin"
       
       This PlugIn is required because the basic TilesPlugIn tests at initialization
@@ -248,6 +249,15 @@
       <!-- Execute the configured exception handler (if any) -->
       <command
           className="org.apache.struts.chain.servlet.ExceptionHandler"/>
+
+      <!--
+      If you want to use Tiles, uncomment this command, and the one in the
+      'servlet-standard' chain below. This one is needed to allow Tiles to
+      be used from global exception handlers.
+
+      <command
+          className="org.apache.struts.chain.servlet.TilesPreProcessor"/>
+      -->
 
       <!-- Follow the returned ForwardConfig (if any) -->
       <command
