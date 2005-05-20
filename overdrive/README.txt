@@ -1,3 +1,5 @@
+About OverDrive
+
 OverDrive is a working whiteboard proposal for a new Struts subproject. The subproject will feature a set of best-practice applications written using a MVC framework that merges Struts with the Commons Chain of Responsiblity package.
 
 ----
@@ -28,5 +30,68 @@ The MVC Framework behind the OverDrive applications bundles two major components
 
 ----
 
-For More see http://204.157.11.160/docs/display/OVR/Home
+Installing a development copy of OverDrive 
+
+SUBVERSION
+
+* Use subversion to checkout OverDrive from the Apache repository
+
+* If you are using [TortoiseSVN|http://tortoisesvn.tigris.org/] (recommended) 
+** Create a likely subdirectory (e.g. /projects/Struts/OverDrive)
+** Right-click on the sudirectory and select Checkout
+** Enter the URL: [https://svn.apache.org/repos/asf/struts/sandbox/trunk/overdrive]
+*** Be sure the destination path is set to the folder you created!
+
+* After the checkout:
+** Download the external dependencies to the same directory from [http://people.apache.org/~husted/overdrive-external-bin.zip]
+** Unzip this archive to the same directory, to create the folders 
+*** iBatisNet.Bin, NUnitAsp.bin, SpringNet.bin. 
+** This archive contains development versions, so be sure to use these rather than the released versions. Our goal is to stay current with the development versions for now.
+** If you have not already done so, also install NUnit 2.2 or later. There is a MSI available from  [http://NUnit.org], along with a Mono-friendly ZIP. 
+
+VISUAL STUDIO
+
+h2. NUnit
+
+* To run the NUnit Tests (v2.2)
+** Configure the Test project to run NUnit
+*** Right Click on Tests, select Properties
+*** Open Configuration Properties
+*** Open Debugging
+*** Change Debug Mode to to Program
+*** Press Apply 
+*** For Start Application, browse to your instance of nunit-gui.exe
+
+h2. PhoneBook
+
+* The PhoneBook application has a web project. To allow running this in-place: 
+** Right-click on the PhoneBook/Web folder 
+** Open Sharing and Security/Web Sharing
+** Set the sharename to PhoneBook
+
+DATABASE
+
+* Right now, the PhoneBook application is using a MySQL 3.x database by default. We mean to change that to SharpHSQL Real Soon Now [http://www.c-sharpcorner.com/database/SharpHSQL.asp]. But for now, you need MySQL 3.x installed. 
+** Create a database named phonebook
+** Create an entry table 
+
+# Database: phonebook
+# Table: 'entry'
+# 
+CREATE TABLE `entry` (
+  `pk_entry` char(36) NOT NULL default '',
+  `last_name` char(18) NOT NULL default '',
+  `first_name` char(18) NOT NULL default '',
+  `extension` char(18) NOT NULL default '',
+  `user_name` char(9) NOT NULL default '',
+  `editor` tinyint(3) unsigned NOT NULL default '0',
+  `hired` datetime NOT NULL default '0000-00-00 00:00:00',
+  `hours` double NOT NULL default '37.5'
+) TYPE=MyISAM ROW_FORMAT=FIXED; 
+
+----
+
+For more help, visit http://opensource.atlassian.com/confluence/oss/display/OVR/Home
+
+----
 
