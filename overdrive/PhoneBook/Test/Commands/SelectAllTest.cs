@@ -30,7 +30,7 @@ namespace PhoneBook.Core.Commands
 		/// Assert result of SelectAll, after another method runs the command.
 		/// </summary>
 		/// <param name="context">Context with result to assert.</param>		
-		public void SelectAll_Result(IRequestContext context)
+		private void SelectAll_Result(IRequestContext context)
 		{
 			AssertNominal(context);
 			Assert.IsTrue (context.HasOutcome,"Expected command to set an Outcome.");

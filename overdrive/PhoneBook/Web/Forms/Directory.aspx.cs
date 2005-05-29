@@ -1,8 +1,6 @@
 using System;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Nexus.Core;
-using Nexus.Core.Helpers;
 
 namespace PhoneBook.Web
 {
@@ -15,27 +13,8 @@ namespace PhoneBook.Web
 	
 		#region Page Properties
 
-		private IController _Controller;
-		/// <summary>
-		/// Instance of our application controller (injected by Spring).
-		/// </summary>
-		public IController Controller
-		{
-			get { return _Controller; }
-			set { _Controller = value; }
-		}
-
 		protected Panel pnlError;
 		protected Label lblError;
-
-		protected IViewHelper Page_Error 
-		{
-			set
-			{
-				lblError.Text = ViewHelper.HtmlErrorBuilder (value);
-				pnlError.Visible = true;
-			}
-		}
 
 		#endregion
 
@@ -43,8 +22,6 @@ namespace PhoneBook.Web
 
 		private const string msg_FIND_CMD = "FIND";
 		private const string msg_ADD_CMD = "ADD NEW";
-		private const string msg_FIND_HELPER_NULL = "Directory.aspx.cs.View_Load: myFindHelper failed. Is it serializable?";
-		private const string msg_LIST_HELPER_NULL = "Directory.aspx.cs.View_Load: myListHelper failed. Is it serializable?";
 
 		#endregion
 
@@ -54,7 +31,6 @@ namespace PhoneBook.Web
 		protected DropDownList lstSelect;
 		protected TextBox txtFind;
 		protected Button cmdFind;
-		protected IViewHelper myFindHelper;
 
 		// pageload events - These methods populate controls to display
 
@@ -68,11 +44,6 @@ namespace PhoneBook.Web
 
 		private void Find_Load ()
 		{
-			// TODO: myFindHelper.Execute(pnlFind.Controls);
-			if (true) // TODO: (!myFindHelper.IsNominal )
-			{
-				// TODO: Page_Error = myFindHelper;
-			} 
 			pnlFind.Visible = true;
 		}
 
@@ -80,7 +51,6 @@ namespace PhoneBook.Web
 
 		protected void Find_Submit (object sender, EventArgs e)
 		{
-			// TODO: myListHelper.Execute(pnlFind.Controls);
 			List_Load ();
 		}
 
@@ -91,7 +61,6 @@ namespace PhoneBook.Web
 		protected Panel pnlList;
 		protected DataGrid repList;
 		protected Button cmdAdd;
-		protected IListHelper myListHelper;
 		
 		// pageload events
 
@@ -102,15 +71,14 @@ namespace PhoneBook.Web
 
 		private bool List_Load ()
 		{
-			bool okay = true ; // TODO: myListHelper.IsNominal;
+			bool okay = true ; // TODO: ...
 			if (okay)
 			{
-				// TODO: repList.DataSource = myListHelper.List;
+				// TODO: repList.DataSource = ... ;
 				repList.DataBind ();
 				pnlList.Visible = true;
 			}
-			else
-				Page_Error = myListHelper;
+			// TODO: else ...
 			return okay;
 		}
 
@@ -133,56 +101,24 @@ namespace PhoneBook.Web
 
 		protected void List_PageIndexChanged (object sender, DataGridPageChangedEventArgs e)
 		{
-			Find_Submit(null,null); // ISSUE: Is this a kludge?
+			Find_Submit(null,null); 
 			repList.CurrentPageIndex = e.NewPageIndex;
-			repList.DataBind (); // ISSUE:  myListHelper.DataBind (repList);
+			repList.DataBind (); 
 		}
 
 		protected void Add_Submit (object sender, EventArgs e)
 		{
-			// call business logic
-			// TODO: myListHelper.DataInsert (repList);
-			// act on outcome
-			if (true) // TODO: (myListHelper.IsNominal)
-			{
-				// TODO: myListHelper.ItemIndex = 0;
-				// TODO: myListHelper.DataBind (repList);
-				// TODO: myListHelper.Insert = true;
-				pnlList.Visible = true;
-			}
-			else Page_Error = myListHelper;
+			// TODO: ...
 		}
 
 
 		#endregion
 
-		private void View_Init()
-		{
-			// TODO: myFindHelper = Controller.GetFindHelper(App.FIND_HELPER);
-			// TODO: ViewState[App.FIND_HELPER] = myFindHelper;
-			// TODO: myListHelper = Controller.GetListHelper(App.LIST_HELPER);
-			// TODO: ViewState[App.LIST_HELPER] = myListHelper;
-		}
-
-		private void View_Load()
-		{
-			// TODO: myFindHelper = ViewState[App.FIND_HELPER] as IFindHelper;
-			// if (null==myFindHelper) throw new ApplicationException(msg_FIND_HELPER_NULL);			
-			// TODO: myListHelper = ViewState[App.LIST_HELPER] as IListHelper;
-			// if (null==myListHelper) throw new ApplicationException(msg_LIST_HELPER_NULL);			
-		}
-
 		private void Page_Load(object sender, System.EventArgs e)
 		{
 			Find_Init();
 			List_Init();
-			bool isFirstView = (!IsPostBack);
-			if  (isFirstView)
-			{	
-				View_Init();
-				Find_Load();
-			} 
-			View_Load();
+			if  (!IsPostBack) Find_Load();
 		}
 
 		#region Web Form Designer generated code
@@ -203,35 +139,6 @@ namespace PhoneBook.Web
 		{    
 			this.Load += new System.EventHandler(this.Page_Load);
 		}
-		#endregion
-
-		#region Draft APIs
-
-		/*
-
-draft APIs
-
-IFindHelper 
-
-static void HtmlErrorBuilder (IViewHelper);
-bool Execute(pnlFind.Controls);
-bool IsNominal;
-
-IListHelper 
-
-IList myListHelper.List();
-void DataInsert (repList);
-int ItemIndex;
-DataBind (DataGrid);
-bool Insert;
-
-IViewController
-
-IFindHelper GetFindHelper(string);
-IListHelper GetListHelper(string);
-				
-		*/
-
 		#endregion
 
 	}
