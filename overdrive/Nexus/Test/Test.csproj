@@ -145,11 +145,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Helpers\ViewHelperTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Resources\Command\AppConfig.xml"
                     BuildAction = "Content"
                 />

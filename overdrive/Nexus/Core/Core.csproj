@@ -94,7 +94,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ContextList.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IContextList.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IKeyValue.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -105,6 +120,11 @@
                 />
                 <File
                     RelPath = "IRequestContext.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "KeyValue.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -120,36 +140,6 @@
                 />
                 <File
                     RelPath = "Tokens.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Helpers\EditHelper.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Helpers\IEditHelper.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Helpers\IListHelper.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Helpers\IViewHelper.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Helpers\ListHelper.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Helpers\ViewHelper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
