@@ -114,10 +114,14 @@ namespace PhoneBook.Web
 
 		#endregion
 
-		private void Page_Load(object sender, System.EventArgs e)
+		private void Page_Init()
 		{
 			Find_Init();
 			List_Init();
+		}
+
+		private void Page_Load(object sender, System.EventArgs e)
+		{
 			if  (!IsPostBack) Find_Load();
 		}
 
@@ -129,6 +133,7 @@ namespace PhoneBook.Web
 			//
 			InitializeComponent();
 			base.OnInit(e);
+			Page_Init();
 		}
 		
 		/// <summary>

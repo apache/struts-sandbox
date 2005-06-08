@@ -136,11 +136,11 @@
                 />
                 <File
                     RelPath = "bin\Debug\providers.config"
-                    BuildAction = "None"
+                    BuildAction = "Content"
                 />
                 <File
                     RelPath = "bin\Debug\sqlmap.config"
-                    BuildAction = "None"
+                    BuildAction = "Content"
                 />
                 <File
                     RelPath = "Commands\SelectAllTest.cs"
