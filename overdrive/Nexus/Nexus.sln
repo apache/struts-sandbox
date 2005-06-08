@@ -12,7 +12,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extras", "Extras\Extras.csp
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "http://localhost/Nexus/Web.csproj", "{ED34316C-030F-44E2-BD09-0F55496F822A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "http://localhost/Nexus/Web.csproj", "{0CEB9BDE-7AA3-4239-8898-EFFB88CDDD93}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -34,10 +34,10 @@ Global
 		{7931CACD-0E73-4DD2-A373-FF6A01CE6186}.Debug.Build.0 = Debug|.NET
 		{7931CACD-0E73-4DD2-A373-FF6A01CE6186}.Release.ActiveCfg = Release|.NET
 		{7931CACD-0E73-4DD2-A373-FF6A01CE6186}.Release.Build.0 = Release|.NET
-		{ED34316C-030F-44E2-BD09-0F55496F822A}.Debug.ActiveCfg = Debug|.NET
-		{ED34316C-030F-44E2-BD09-0F55496F822A}.Debug.Build.0 = Debug|.NET
-		{ED34316C-030F-44E2-BD09-0F55496F822A}.Release.ActiveCfg = Release|.NET
-		{ED34316C-030F-44E2-BD09-0F55496F822A}.Release.Build.0 = Release|.NET
+		{0CEB9BDE-7AA3-4239-8898-EFFB88CDDD93}.Debug.ActiveCfg = Debug|.NET
+		{0CEB9BDE-7AA3-4239-8898-EFFB88CDDD93}.Debug.Build.0 = Debug|.NET
+		{0CEB9BDE-7AA3-4239-8898-EFFB88CDDD93}.Release.ActiveCfg = Release|.NET
+		{0CEB9BDE-7AA3-4239-8898-EFFB88CDDD93}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

@@ -32,6 +32,7 @@ The MVC Framework behind the OverDrive applications bundles two major components
 
 Installing a development copy of OverDrive 
 
+
 SUBVERSION
 
 * Use subversion to checkout OverDrive from the Apache repository
@@ -49,25 +50,46 @@ SUBVERSION
 ** This archive contains development versions, so be sure to use these rather than the released versions. Our goal is to stay current with the development versions for now.
 ** If you have not already done so, also install NUnit 2.2 or later. There is a MSI available from  [http://NUnit.org], along with a Mono-friendly ZIP. 
 
+* Using the Ankh plugin for Subversion is suggested.
+** [http://www.tigris.org/]
+
+
 VISUAL STUDIO
 
 h2. NUnit
 
 * To run the NUnit Tests (v2.2)
 ** Configure the Test project to run NUnit
-*** Right Click on Tests, select Properties
-*** Open Configuration Properties
-*** Open Debugging
-*** Change Debug Mode to to Program
+*** Right Click on "Tests", select "Properties"
+*** Open "Configuration Properties"
+*** Open "Debugging"
+*** Change "Debug Mode" to "Program"
 *** Press Apply 
-*** For Start Application, browse to your instance of nunit-gui.exe
+*** For "Start Application", browse to your instance of "nunit-gui.exe".
+
+* Using the TestDriven.Net plugin rather than the NUnit GUI is suggested.
+** [http://www.testdriven.net/]
+
+h2. Agility 
+
+* Build Agility first
+
+h2. Nexus
+
+* The Nexus solution has a web project. To allow running the project in-place: 
+** Right-click on the "Nexus/Web" folder 
+** Open "Sharing" and "Security/Web Sharing"
+** Set the sharename to "Nexus"
+* Build Agility before building Nexus
 
 h2. PhoneBook
 
-* The PhoneBook application has a web project. To allow running this in-place: 
-** Right-click on the PhoneBook/Web folder 
-** Open Sharing and Security/Web Sharing
-** Set the sharename to PhoneBook
+* The PhoneBook solution has a web project. To allow running the project in-place: 
+** Right-click on the "PhoneBook/Web" folder 
+** Open "Sharing" and "Security/Web" Sharing
+** Set the sharename to "Phonebook"
+* Build Nexus before building PhoneBook
+
 
 DATABASE
 
