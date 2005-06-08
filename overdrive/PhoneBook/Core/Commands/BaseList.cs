@@ -11,7 +11,8 @@ namespace PhoneBook.Core.Commands
 		public override bool RequestExecute (IRequestContext context)
 		{
 			IList rows = Mapper ().QueryForList (ID, null);
-			context.Outcome = rows;
+			AppContextList list = new AppContextList (rows);
+			context.Outcome = list;
 			return CONTINUE;
 		}
 	}

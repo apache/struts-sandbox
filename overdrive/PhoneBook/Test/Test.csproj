@@ -143,7 +143,16 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "bin\Debug\sqlmap.config.xml"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "Commands\SelectAllTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Forms\DirectoryTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

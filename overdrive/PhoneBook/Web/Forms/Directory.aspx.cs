@@ -1,6 +1,10 @@
 using System;
+using System.Collections;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Nexus.Core;
+using PhoneBook.Core;
+using PhoneBook.Core.Commands;
 
 namespace PhoneBook.Web
 {
@@ -11,19 +15,23 @@ namespace PhoneBook.Web
 	public class Directory : Page
 	{
 	
-		#region Page Properties
-
-		protected Panel pnlError;
-		protected Label lblError;
-
-		#endregion
-
 		#region Messages
 
 		private const string msg_FIND_CMD = "FIND";
 		private const string msg_ADD_CMD = "ADD NEW";
 
 		#endregion
+
+		public IList GetDataSource ()
+		{
+			BaseList command = new BaseList();
+			command.ID = App.SELECT_ALL;
+			IRequestContext context = command.NewContext ();
+			command.Execute(context);
+			IList result = context.Outcome as IList;
+			return result;
+		}
+
 
 		#region Find
 
@@ -69,17 +77,10 @@ namespace PhoneBook.Web
 			// Put user code to initialize the list here
 		}
 
-		private bool List_Load ()
+		private void List_Load ()
 		{
-			bool okay = true ; // TODO: ...
-			if (okay)
-			{
-				// TODO: repList.DataSource = ... ;
-				repList.DataBind ();
-				pnlList.Visible = true;
-			}
-			// TODO: else ...
-			return okay;
+			repList.DataSource = GetDataSource();
+			repList.DataBind ();
 		}
 
 		// postback events 
@@ -122,7 +123,11 @@ namespace PhoneBook.Web
 
 		private void Page_Load(object sender, System.EventArgs e)
 		{
-			if  (!IsPostBack) Find_Load();
+			if  (!IsPostBack)
+			{
+				Find_Load();
+				List_Load();
+			}
 		}
 
 		#region Web Form Designer generated code
@@ -147,4 +152,5 @@ namespace PhoneBook.Web
 		#endregion
 
 	}
+
 }

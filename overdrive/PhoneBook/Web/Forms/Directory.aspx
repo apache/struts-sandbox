@@ -13,12 +13,6 @@
 		<h1>PhoneBook Directory</h1>
 			<form id="frmDirectory" method="post" runat="server">
 			
-			<!-- ERROR -->
-			<asp:Panel id="pnlError" Runat="server">
-			<HR>
-			<asp:Label id="lblError" Runat="server"></asp:Label>
-			</asp:Panel>
-		
 			<!-- PROMPT -->
 			<p>To select entries, choose a filter or search for a Name or Extension.</p>	
 
@@ -34,10 +28,18 @@
 			<!-- LIST -->			
 			<asp:Panel ID="pnlList" Runat="server">
             	<asp:DataGrid id="repList" Runat="server" 
-					PagerStyle-Mode="NumericPages" AllowPaging="true" PageSize="10">
+					PagerStyle-Mode="NumericPages" AllowPaging="true" PageSize="10" AutoGenerateColumns=False>
 					<HeaderStyle CssClass="HeaderStyle" BackColor="#CCCC99"></HeaderStyle>
 					<AlternatingItemStyle CssClass="AlternatingItemStyle" BackColor="#CCCC99"></AlternatingItemStyle>
 					<EditItemStyle CssClass="EditItemStyle"></EditItemStyle>
+					<Columns>
+						<asp:BoundColumn DataField="last_name" HeaderText="LAST NAME"></asp:BoundColumn>
+						<asp:BoundColumn DataField="first_name" HeaderText="FIRST NAME"></asp:BoundColumn>
+						<asp:BoundColumn DataField="extension" HeaderText="EXTENSION"></asp:BoundColumn>
+						<asp:BoundColumn DataField="user_name" HeaderText="USER"></asp:BoundColumn>
+						<asp:BoundColumn DataField="hired" HeaderText="HIRE DATE"></asp:BoundColumn>
+						<asp:BoundColumn DataField="hours" HeaderText="HOURS"></asp:BoundColumn>
+					</Columns>
             	</asp:DataGrid>
 			</asp:Panel>
 
