@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<objects xmlns="http://www.springframework.net" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+
+ <!-- Base Elements (parents)-->
+ 
+ <object id="BaseLogic" >
+ </object>
+ 
+ <object id="BaseMapper" >
+     <property name="Mapper"><ref object="Mapper"/></property>
+ </object>
+ 
+ <object id="BaseController" >
+     <property name="Controller"><ref object="Controller" /></property>
+ </object>
+
+ <object id="BaseChain" />
+ 
+ <!-- ISSUE: We should have a parent for each of the standard base commands. -->
+ 
+ <object id="BaseHelper" singleton="false" scope="request" >
+	<property name="Controller">
+		<ref object="Controller" />
+	</property>
+</object>
+			
+</objects>

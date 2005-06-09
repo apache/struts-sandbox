@@ -16,6 +16,7 @@
 using System.Collections;
 using System.Text;
 using Agility.Core;
+using Agility.Extras.Spring;
 using Nexus.Extras.Spring;
 using NUnit.Framework;
 using Spring.Context;

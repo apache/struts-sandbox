@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<objects xmlns="http://www.springframework.net" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+
+ <!-- FIELD TABLE -->
+ 
+	<object id="FieldTable" type="Agility.Nexus.FieldTable">
+		<property name="AddFields">
+			<list>
+			</list>
+		</property>
+	</object>
+		
+<!-- FIELDS -->
+	
+	 <!-- parent fields -->
+
+ 		<!-- "d" is .NET for "short date" --> 
+	<object id="date" type="Agility.Nexus.FieldContext">
+		<property name="Alert"><value>{0} must be a valid date</value></property>
+		<property name="DataFormat"><value>d</value></property>
+		<property name="DataTypeName"><value>System.DateTime</value></property>
+	</object>
+	
+	<object id="list" type="Agility.Nexus.FieldContext">
+		<property name="ControlTypeName"><value>select</value></property>
+	</object>
+		
+
+	<object id="" type="Agility.Nexus.FieldContext">
+		<property name="ID"><value></value></property>
+	</object>
+
+	 <!-- instance fields (dates and lists) -->	
+	 
+			 
+</objects>
