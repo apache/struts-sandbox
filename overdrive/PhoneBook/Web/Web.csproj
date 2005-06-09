@@ -134,6 +134,11 @@
                     AssemblyName = "ByteFX.MySqlClient"
                     HintPath = "..\..\iBatisNet.bin\ByteFX.MySqlClient.dll"
                 />
+                <Reference
+                    Name = "Castle.DynamicProxy"
+                    AssemblyName = "Castle.DynamicProxy"
+                    HintPath = "..\..\iBatisNet.bin\Castle.DynamicProxy.dll"
+                />
             </References>
         </Build>
         <Files>

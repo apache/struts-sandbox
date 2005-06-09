@@ -135,6 +135,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Objects.xml"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "bin\Debug\providers.config"
                     BuildAction = "Content"
                 />

@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?> 
 <settings>
+    <add key="root" value="../../" />
 	<add key="provider" value="ByteFx" />
 	<add key="development" value="Host=localhost;Database=phonebook;Username=root" />
 	<add key="production" value="Host=zippy;Database=phonebook;Username=phonebookApp;Password=p1nH34d" />
