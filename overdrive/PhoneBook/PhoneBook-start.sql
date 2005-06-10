@@ -15,4 +15,4 @@ INSERT INTO `entry` (`pk_entry`,`last_name`,`first_name`,`extension`,`user_name`
  ('7c424227-8e19-4fb5-b089-423cfca723e1','Roosevelt','Theodore','5557438942','bull',0,'2001-09-14 00:00:00',37.5),
  ('9320ea40-0c01-43e8-9cec-8fb9b3928c2c','Kennedy','John F.','5557433928','fitz',0,'1987-05-29 00:00:00',37.5),
  ('3b27c933-c1dc-4d85-9744-c7d9debae196','Pierce','Franklin','5557437919','hawkeye',0,'1984-11-18 00:00:00',35),
- ('554ff9e7-a6f5-478a-b76b-a666f5c54e40','Jeffrson','Thomas','5557435440','monty',0,'1976-07-04 00:00:00',37.5);
+ ('554ff9e7-a6f5-478a-b76b-a666f5c54e40','Jefferson','Thomas','5557435440','monty',0,'1976-07-04 00:00:00',37.5);

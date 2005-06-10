@@ -29,7 +29,7 @@ namespace Nexus.Core
 		[Test]
 		public void ExecuteContext ()
 		{
-			IRequestContext context = controller.ExecuteContext (App.LIST_ALL);
+			IRequestContext context = controller.ExecuteContext ("list_all");
 			AssertNominal (context);
 			Assert.IsTrue (context.IsNominal, "Expected nominal result.");
 			Assert.IsTrue (context.HasOutcome, "Expected outcome from command.");

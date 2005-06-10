@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<objects xmlns="http://www.springframework.net" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+	
+<!-- controller commands 
+	
+  <object id="convert_input" type="Nexus.Validators.ConvertInput">
+    <property name="ID"><value>ConvertInput</value></property>
+    <property name="Template"><value>{0} is required.</value></property>
+  </object>
+
+  <object id="format_output" type="Nexus.Validators.FormatOutput">
+    <property name="ID"><value>FormatOutput</value></property>    
+    <property name="Template"><value>{0} is required.</value></property>
+  </object>
+  
+-->
+
+  <!-- pre-op   
+  <object id="pre-op" type="Nexus.NexusChain, Agility.Nexus">
+	<property name="AddCommands">
+		<list>
+			<ref object="convert_input"/>
+		</list>   
+    </property>           
+  </object>  
+  -->
+
+  <!-- post-op 
+  <object id="post-op" type="Nexus.NexusChain, Agility.Nexus">
+	<property name="AddCommands">
+		<list>
+			<ref object="format_output"/>
+		</list>   
+    </property>           
+  </object>
+-->
+    		
+ <!-- Nexus Controller -->
+
+  <object id="Controller" type="Nexus.Extras.Spring.Controller"/>
+  
+<!-- iBATIS Mapper -->
+  
+  <object id="Mapper" type="IBatisNet.DataMapper.Mapper, IBatisNet.DataMapper" 
+		factory-method="Instance"/> 
+    
+</objects>

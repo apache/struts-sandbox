@@ -50,9 +50,6 @@ SUBVERSION
 ** This archive contains development versions, so be sure to use these rather than the released versions. Our goal is to stay current with the development versions for now.
 ** If you have not already done so, also install NUnit 2.2 or later. There is a MSI available from  [http://NUnit.org], along with a Mono-friendly ZIP. 
 
-* Using the Ankh plugin for Subversion is suggested.
-** [http://www.tigris.org/]
-
 
 VISUAL STUDIO
 
@@ -89,6 +86,11 @@ h2. PhoneBook
 ** Open "Sharing" and "Security/Web" Sharing
 ** Set the sharename to "Phonebook"
 * Build Nexus before building PhoneBook
+
+h2. Subversion 
+
+* Using the Ankh plugin for Subversion is suggested.
+** [http://ankhsvn.tigris.org/]
 
 
 DATABASE
