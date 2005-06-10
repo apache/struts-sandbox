@@ -35,11 +35,33 @@ namespace Nexus.Core
 		object GetObject (string name);
 
 		/// <summary>
+		/// Obtain new NexusContext for command, including embedded resources.
+		/// </summary>
+		/// <param name="command">Our command</param>
+		/// <returns>NexusContext with embedded resources.</returns>
+		/// 
+		IRequestContext GetContext (IRequestCommand command);
+
+		/// <summary>
 		/// Obtain and execute the IRequestContext.
 		/// </summary>
 		/// <param name="command">Our command name</param>
 		/// <returns>Context after execution</returns>
 		/// 
 		IRequestContext ExecuteContext (string command);
+
+
+		/// <summary>
+		/// Execute a Command as part of a View layer chain.
+		/// </summary>
+		/// <remarks><p>
+		/// Among other things, the View layer chain may transfer 
+		/// data between the FieldState and the root Context. 
+		/// The View layer chain acts as a  Front Controller.
+		/// </p></remarks>
+		/// <param name="context">Context to execute</param>
+		/// 
+		void ExecuteView (IRequestContext context);
+
 	}
 }

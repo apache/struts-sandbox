@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 using System;
+using System.Collections;
 using Agility.Core;
+using Nexus.Core.Tables;
 
 namespace Nexus.Core
 {
@@ -36,6 +38,7 @@ namespace Nexus.Core
 		/// <remarks>
 		/// Corresponds to ID of INexusCommand for the initial Command or Chain.
 		/// </remarks>
+		/// 
 		string Command { get; set; }
 
 		/// <summary>
@@ -44,12 +47,31 @@ namespace Nexus.Core
 		/// <remarks>
 		/// Corresponds to ID of INexusCommand for the initial Command or Chain.
 		/// </remarks>
+		/// 
 		IRequestCommand CommandBin { get; set; }
+
+
+		/// <summary>
+		/// Instance of the global Field Table for this application.
+		/// </summary>
+		/// <remarks>
+		/// Corresponds to ID of INexusCommand for the initial Command or Chain.
+		/// </remarks>
+		/// 
+		IFieldTable FieldTable { get; set; }
+
+
+		/// <summary>
+		/// 
+		/// </summary>
+		IList FieldSet { get; set; }
+
 
 		/// <summary>
 		/// Return true if an Outcome object is present.
 		/// </summary>
 		/// <returns>True if an Outcome context is present.</returns>
+		/// 
 		bool HasOutcome { get; }
 
 		/// <summary>
@@ -93,6 +115,7 @@ namespace Nexus.Core
 		/// in its own right. 
 		/// </p>
 		///	</remarks>
+		///	
 		object Outcome { get; set; }
 
 		/// <summary>
@@ -101,18 +124,21 @@ namespace Nexus.Core
 		/// <remark>
 		/// TODO: Refactor as NameValueCollection ?
 		/// </remark>
-		IContext Errors { get; set; }
+		/// 
+		IDictionary Errors { get; set; }
 
 		/// <summary>
 		/// Add an error message under the "global" key.
 		/// </summary>
 		/// <param name="template">Message template.</param>
+		/// 
 		void AddError (string template);
 
 		/// <summary>
 		/// Indicate whether errors exist.
 		/// </summary>
 		/// <returns>True if there are errors. False otherwise.</returns>
+		/// 
 		bool HasErrors { get; }
 
 		/// <summary>
@@ -122,18 +148,49 @@ namespace Nexus.Core
 		/// A IViewContext is readonly, 
 		/// but another interface (e.g. IHelperContext) may extend to add a setter, if needed.
 		/// </remark>
+		/// 
 		Exception Fault { get; set; }
 
 		/// <summary>
 		/// Indicate whether an Exception was caught.
 		/// </summary>
 		/// <returns>True if an Exception was caught.</returns>
+		/// 
 		bool HasFault { get; }
 
 		/// <summary>
 		/// Indicate whether context is free of faults and errors.
 		/// </summary>
 		/// <returns>True if there are no faults or errors.</returns>
+		/// 
 		bool IsNominal { get; }
+
+		/// <summary>
+		/// A list of error messages, keyed by the field causing the error, or to a magic global key.
+		/// </summary>
+		IDictionary Messages { get; set; }
+
+		/// <summary>
+		/// Add a message, creating the context if needed.
+		/// </summary>
+		/// <remarks>
+		/// Multiple messages can be added for a key and retrieved as a List.
+		/// </remarks>
+		/// <param name="template">Message template.</param>
+		/// <param name="message">Message key.</param>
+		void AddMessage (string template, string message);
+
+		/// <summary>
+		/// Add a message under the "global" key.
+		/// </summary>
+		/// <param name="template">Message template.</param>
+		void AddMessage (string template);
+
+		/// <summary>
+		/// Indicate whether messages exist.
+		/// </summary>
+		/// <returns>True if there are messages. False otherwise.</returns>
+		bool HasMessages {get;}
+
 	}
 }

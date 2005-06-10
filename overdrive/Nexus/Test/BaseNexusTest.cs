@@ -15,7 +15,6 @@
  */
 using System.Collections;
 using System.Text;
-using Agility.Core;
 using Agility.Extras.Spring;
 using Nexus.Extras.Spring;
 using NUnit.Framework;
@@ -73,7 +72,7 @@ namespace Nexus.Core
 			if (hasErrors)
 			{
 				StringBuilder outer = new StringBuilder ();
-				IContext store = context.Errors;
+				IDictionary store = context.Errors;
 				ICollection keys = store.Keys;
 				foreach (string key in keys)
 				{

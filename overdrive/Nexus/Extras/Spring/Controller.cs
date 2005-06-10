@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 using System;
+using Agility.Core;
 using Nexus.Core;
+using Nexus.Core.Tables;
 using Spring.Context;
 
 namespace Nexus.Extras.Spring
@@ -75,11 +77,26 @@ namespace Nexus.Extras.Spring
 			return command;
 		}
 
-		/// <summary>
-		/// Token for Command object.
-		/// </summary>
-		private string COMMAND_BIN = Tokens.COMMAND_BIN;
+		public IRequestContext GetContext (IRequestCommand command)
+		{
+			IRequestContext context = null;
+			try
+			{
+				context = command.NewContext ();
+				context [Tokens.COMMAND_BIN] = command;
+				context [Tokens.FIELD_TABLE] = GetFieldTable ();
+			}
+			catch (Exception e)
+			{
+				context = new RequestContext ();
+				context.Fault = e;
+				// TODO: Log exception(faults) (Log all errors in verbose mode?)
+				// TODO: Provide an alternate location on fault? -- Declarative exception handing
+			}
+			return context;
 
+		}
+		
 		public IRequestContext GetContext (string name)
 		{
 			IRequestContext context = null;
@@ -87,7 +104,7 @@ namespace Nexus.Extras.Spring
 			{
 				IRequestCommand command = GetCommand (name);
 				context = command.NewContext ();
-				context [COMMAND_BIN] = command;
+				context [Tokens.COMMAND_BIN] = command;
 			}
 			catch (Exception e)
 			{
@@ -99,6 +116,22 @@ namespace Nexus.Extras.Spring
 			return context;
 		}
 
+		/// <summary>
+		/// Field for GetFieldTable method.
+		/// </summary>
+		private IFieldTable _FieldTable = null;
+
+		/// <summary>
+		/// Access method for the Controller's FieldTable.
+		/// </summary>
+		/// <returns></returns>
+		public IFieldTable GetFieldTable ()
+		{
+			if (_FieldTable == null)
+				_FieldTable = GetObject (Tokens.FIELD_ID) as IFieldTable;
+			return _FieldTable;
+		}
+
 		public void Execute (IRequestContext context)
 		{
 			if (null == context)
@@ -107,7 +140,7 @@ namespace Nexus.Extras.Spring
 				// TODO: Add a message about null context
 			}
 
-			IRequestCommand command = context [COMMAND_BIN] as IRequestCommand;
+			IRequestCommand command = context [Tokens.COMMAND_BIN] as IRequestCommand;
 
 			if (null == command)
 			{
@@ -135,6 +168,24 @@ namespace Nexus.Extras.Spring
 			Execute (context);
 			return context;
 		}
+
+		public void ExecuteView (IRequestContext context)
+		{
+			IRequestCommand command = context [Tokens.COMMAND_BIN] as IRequestCommand;
+			IChain chain = new Chain ();
+			chain.AddCommand (GetCommand (Tokens.PRE_OP));
+			chain.AddCommand (command);
+			chain.AddCommand (GetCommand (Tokens.POST_OP));
+			try
+			{
+				chain.Execute (context);
+			}
+			catch (Exception e)
+			{
+				context.Fault = e;
+			}
+		}
+
 
 	}
 }

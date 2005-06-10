@@ -42,6 +42,26 @@ namespace Nexus.Core
 		public const string ERRORS = "__ERRORS";
 
 		/// <summary>
+		/// Token for Messages property.
+		/// </summary>
+		public const string MESSAGES = "__MESSAGES";
+
+		/// <summary>
+		/// Token for FieldTable property.
+		/// </summary>
+		public const string FIELD_TABLE = "__FIELD_TABLE";
+
+		/// <summary>
+		/// Token for IFieldTable object.
+		/// </summary>
+		public const string FIELD_ID = "FieldTable";
+
+		/// <summary>
+		/// Token for FieldSet property.
+		/// </summary>
+		public const string FIELD_SET = "__FIELD_SET";
+
+		/// <summary>
 		/// Token for a generic message.
 		/// </summary>
 		public const string GENERIC_MESSAGE = "__GENERIC_MESSAGE";
@@ -51,6 +71,15 @@ namespace Nexus.Core
 		/// </summary>
 		public const string FAULT = "__FAULT";
 
+		/// <summary>
+		/// Token for pre-op command.
+		/// </summary>
+		public const string PRE_OP = "pre-op";
+
+		/// <summary>
+		/// Token for post-op command.
+		/// </summary>
+		public const string POST_OP = "post-op";
 
 	}
 }

@@ -16,6 +16,7 @@
 using System;
 using System.Collections;
 using Agility.Core;
+using Nexus.Core.Tables;
 
 namespace Nexus.Core
 {
@@ -52,6 +53,17 @@ namespace Nexus.Core
 			set { this [Tokens.COMMAND_BIN] = value; }
 		}
 
+		public IFieldTable FieldTable
+		{
+			get { return this [Tokens.FIELD_TABLE] as IFieldTable; }
+			set { this [Tokens.FIELD_TABLE] = value; }			
+		}
+
+		public IList FieldSet
+		{
+			get { return this [Tokens.FIELD_SET] as IList; }
+			set { this [Tokens.FIELD_SET] = value; }
+		}
 
 		public bool HasOutcome
 		{
@@ -62,12 +74,6 @@ namespace Nexus.Core
 		{
 			get { return this [Command]; }
 			set { this [Command] = value; }
-		}
-
-		public IContext Errors
-		{
-			get { return this [Tokens.ERRORS] as IContext; }
-			set { this [Tokens.ERRORS] = value; }
 		}
 
 		/// <summary>
@@ -95,11 +101,16 @@ namespace Nexus.Core
 			list.Add (template);
 		}
 
+		public IDictionary Errors
+		{
+			get { return this [Tokens.ERRORS] as IDictionary; }
+			set { this [Tokens.ERRORS] = value; }
+		}
+
 		public void AddError (string template)
 		{
 			AddStore (template, Tokens.GENERIC_MESSAGE, Tokens.ERRORS);
 		}
-
 
 		public bool HasErrors
 		{
@@ -125,6 +136,27 @@ namespace Nexus.Core
 		public bool IsNominal
 		{
 			get { return (!HasErrors && !HasFault); }
+		}
+
+		public IDictionary Messages
+		{
+			get { return this [Tokens.MESSAGES] as IDictionary; }
+			set { this [Tokens.MESSAGES] = value; }
+		}
+
+		public void AddMessage (string template)
+		{
+			AddStore (template, Tokens.GENERIC_MESSAGE, Tokens.MESSAGES);
+		}
+
+		public void AddMessage (string template, string queue)
+		{
+			AddStore (template, queue, Tokens.MESSAGES);
+		}
+
+		public bool HasMessages
+		{
+			get { return this.ContainsKey (Tokens.MESSAGES); }
 		}
 
 	}
