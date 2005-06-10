@@ -15,104 +15,138 @@
  */
 using System;
 using System.Collections;
-using System.Text;
-using Agility.Core;
+using Nexus.Core.Tables;
 
 namespace Nexus.Core.Helpers
 {
 	/// <summary>
 	/// Standard implementation of IViewHelper.
 	/// </summary>
-	public class ViewHelper : IViewHelper
+	public abstract class ViewHelper : IViewHelper
 	{
-		public ViewHelper ()
-		{
-			Context = new RequestContext ();
-		}
-
-		/// <summary>
-		/// Build a set of error messages using HTML markup.
-		/// </summary>
-		/// <param name="errors">A list of error messages</param>
-		/// <returns>HTML markup presenting the errors.</returns>
-		public static string HtmlErrorList (IList errors)
-		{
-			StringBuilder sb = new StringBuilder ("<ul>");
-			foreach (object o in errors)
-			{
-				sb.Append ("<li>");
-				sb.Append (o.ToString ());
-				sb.Append ("</li>");
-			}
-			sb.Append ("</ul>");
-
-			return sb.ToString ();
-		}
-
-		/// <summary>
-		/// Build a set error messages using HTML markup.
-		/// </summary>
-		/// <param name="fault">An exception instance, if any</param>
-		/// <param name="store">A context listing errors, if any</param>
-		/// <returns>HTML markup presenting the errors.</returns>
-		public static string HtmlErrorBuilder (Exception fault, IContext store)
-		{
-			string errorMarkup = null;
-			if (store != null)
-			{
-				IList errors = new ArrayList ();
-				ICollection keys = store.Keys;
-				foreach (string key in keys)
-				{
-					IList sublist = store [key] as IList;
-					foreach (string message in sublist) errors.Add (message);
-				}
-				errorMarkup = HtmlErrorList (errors);
-			}
-
-			if (errorMarkup != null)
-			{
-				StringBuilder sb = new StringBuilder (errorMarkup);
-				return sb.ToString ();
-			}
-			return null;
-		}
-
-		public static string HtmlErrorBuilder (IViewHelper helper)
-		{
-			return HtmlErrorBuilder (helper.Fault, helper.Errors);
-		}
+		#region private 
 
 		private IRequestContext _Context;
 		public IRequestContext Context
 		{
-			get { return _Context; }
-			set { _Context = value; }
+			get
+			{
+				if (_Context==null)
+				{
+					_Context = Controller.GetContext(Command);
+				}				
+				return _Context;
+			}
 		}
 
-		public IContext Errors
+		#endregion
+
+		#region Read and Bind 
+
+		public abstract void ExecuteBind (ICollection controls);
+
+		public abstract void ReadExecute (ICollection controls);
+
+		public abstract void Bind (ICollection controls);
+
+		public abstract void Read (ICollection controls);
+
+		public void Execute ()
 		{
-			get { return Context [Tokens.ERRORS] as IContext; }
+			Controller.ExecuteView(Context);
+		}
+
+		#endregion
+
+		#region Errors ... 
+
+		public IDictionary Errors
+		{
+			get { return Context.Errors; }
 		}
 
 		public bool HasErrors
 		{
-			get { return Context.Contains (Tokens.ERRORS); }
+			get { return Context.HasErrors; }
 		}
 
 		public Exception Fault
 		{
-			get { return Context [Tokens.FAULT] as Exception; }
+			get { return Context.Fault; }
 		}
 
 		public bool HasFault
 		{
-			get { return Context.Contains (Tokens.FAULT); }
+			get { return Context.HasFault; }
 		}
 
 		public bool IsNominal
 		{
 			get { return (!HasErrors && !HasFault); }
 		}
+
+		public IDictionary Messages
+		{
+			get { return Context.Messages; }
+		}
+
+		public bool HasMessages
+		{
+			get { return Context.HasMessages; }
+		}
+
+		#endregion 
+
+		#region Tables
+
+		public IFieldTable FieldTable
+		{
+			get { return Context.FieldTable; }
+		}
+		
+		public IList FieldSet
+		{
+			get { return Context.FieldSet; }
+		}
+		
+		public string Prefix
+		{
+			get { throw new NotImplementedException (); }
+			set { throw new NotImplementedException (); }
+		}
+		
+		public string ListSuffix
+		{
+			get { throw new NotImplementedException (); }
+			set { throw new NotImplementedException (); }
+		}
+
+		#endregion 
+
+		#region Properties
+
+		public bool NullIfEmpty
+		{
+			get { throw new NotImplementedException (); }
+			set { throw new NotImplementedException (); }
+		}
+		public string SelectItemPrompt
+		{
+			get { throw new NotImplementedException (); }
+			set { throw new NotImplementedException (); }
+		}
+		public IController Controller
+		{
+			get { throw new NotImplementedException (); }
+			set { throw new NotImplementedException (); }
+		}
+		public IRequestCommand Command
+		{
+			get { throw new NotImplementedException (); }
+			set { throw new NotImplementedException (); }
+		
+		}
+
+		#endregion 
 	}
 }
