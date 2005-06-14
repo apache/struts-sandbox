@@ -40,15 +40,15 @@ namespace Nexus.Core
 		public const string COMMAND_BIN = "__COMMAND_BIN";
 
 		/// <summary>
-		/// Token for Errors property.
+		/// Token for Alerts property.
 		/// </summary>
 		/// 
-		public const string ERRORS = "__ERRORS";
+		public const string ALERTS = "__ALERTS";
 
 		/// <summary>
-		/// Token for Messages property.
+		/// Token for Hints property.
 		/// </summary>
-		public const string MESSAGES = "__MESSAGES";
+		public const string HINTS = "__HINTS";
 
 		/// <summary>
 		/// Token for FieldTable property.

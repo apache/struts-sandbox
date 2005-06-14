@@ -65,7 +65,7 @@ namespace Nexus.Web.Helpers
 
 		public string HtmlErrorBuilder ()
 		{
-			return HtmlErrorBuilder (Fault, Errors);
+			return HtmlErrorBuilder (Fault, Alerts);
 		}
 
 		#endregion 

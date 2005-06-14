@@ -106,20 +106,20 @@ namespace Nexus.Core
 			list.Add (template);
 		}
 
-		public IDictionary Errors
+		public IDictionary Alerts
 		{
-			get { return this [Tokens.ERRORS] as IDictionary; }
-			set { this [Tokens.ERRORS] = value; }
+			get { return this [Tokens.ALERTS] as IDictionary; }
+			set { this [Tokens.ALERTS] = value; }
 		}
 
-		public void AddError (string template)
+		public void AddAlert (string template)
 		{
-			AddStore (template, Tokens.GENERIC_MESSAGE, Tokens.ERRORS);
+			AddStore (template, Tokens.GENERIC_MESSAGE, Tokens.ALERTS);
 		}
 
-		public bool HasErrors
+		public bool HasAlerts
 		{
-			get { return this.ContainsKey (Tokens.ERRORS); }
+			get { return this.ContainsKey (Tokens.ALERTS); }
 		}
 
 		public Exception Fault
@@ -129,7 +129,7 @@ namespace Nexus.Core
 			{
 				Exception e = value as Exception;
 				this [Tokens.FAULT] = e;
-				AddError (e.Message);
+				AddAlert (e.Message);
 			}
 		}
 
@@ -140,28 +140,28 @@ namespace Nexus.Core
 
 		public bool IsNominal
 		{
-			get { return (!HasErrors && !HasFault); }
+			get { return (!HasAlerts && !HasFault); }
 		}
 
-		public IDictionary Messages
+		public IDictionary Hints
 		{
-			get { return this [Tokens.MESSAGES] as IDictionary; }
-			set { this [Tokens.MESSAGES] = value; }
+			get { return this [Tokens.HINTS] as IDictionary; }
+			set { this [Tokens.HINTS] = value; }
 		}
 
-		public void AddMessage (string template)
+		public void AddHint (string template)
 		{
-			AddStore (template, Tokens.GENERIC_MESSAGE, Tokens.MESSAGES);
+			AddStore (template, Tokens.GENERIC_MESSAGE, Tokens.HINTS);
 		}
 
-		public void AddMessage (string template, string queue)
+		public void AddHint (string template, string queue)
 		{
-			AddStore (template, queue, Tokens.MESSAGES);
+			AddStore (template, queue, Tokens.HINTS);
 		}
 
-		public bool HasMessages
+		public bool HasHints
 		{
-			get { return this.ContainsKey (Tokens.MESSAGES); }
+			get { return this.ContainsKey (Tokens.HINTS); }
 		}
 
 	}

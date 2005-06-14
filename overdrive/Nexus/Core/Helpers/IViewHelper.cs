@@ -89,19 +89,20 @@ namespace Nexus.Core.Helpers
 		// ----
 
 		/// <summary>
-		/// A list of error messages, keyed by the field causing the 
-		/// error, or to a magic global key.
+		/// A list of alert (or error) messages, 
+		/// keyed by the field causing the message, 
+		/// or to a magic global key.
 		/// </summary>
 		/// 
-		IDictionary Errors { get; }
+		IDictionary Alerts { get; }
 
 
 		/// <summary>
-		/// Return true if errors are queued.
+		/// Return true if alerts are queued.
 		/// </summary>
-		/// <returns>True if errors are queued.</returns>
+		/// <returns>True if alerts are queued.</returns>
 		/// 
-		bool HasErrors { get; }
+		bool HasAlerts { get; }
 
 
 		/// <summary>
@@ -119,7 +120,7 @@ namespace Nexus.Core.Helpers
 
 
 		/// <summary>
-		/// Return true if there are no errors or exception pending.
+		/// Return true if there are no alerts or fault pending.
 		/// </summary>
 		/// <returns>True if all is well.</returns>
 		/// 
@@ -127,19 +128,20 @@ namespace Nexus.Core.Helpers
 
 
 		/// <summary>
-		/// A list of text messages, keyed by a field or other 
-		/// identifier, or to a magic global key.
+		/// A list of hint (or advisory) messages, 
+		/// keyed by a field or other identifier, 
+		/// or to a magic global key.
 		/// </summary>
 		/// 
-		IDictionary Messages { get; }
+		IDictionary Hints { get; }
 
 
 		/// <summary>
-		/// Return true if Messages are queued.
+		/// Return true if Hints are queued.
 		/// </summary>
-		/// <returns>True if Messages are queued.</returns>
+		/// <returns>True if Hints are queued.</returns>
 		/// 
-		bool HasMessages { get; }
+		bool HasHints { get; }
 
 
 		// ----
@@ -171,11 +173,10 @@ namespace Nexus.Core.Helpers
 
 		/* 
 			// TODO: Messengers
-			string Text(string key); 
-			string TextIndex {get;}
-			ITextTable TextTable {get;}
+			string Message(string key); 
+			string MessageIndex {get;}
+			IMessageTable MessageTable {get;}
 		*/
-
 
 		// ----
 
@@ -241,7 +242,7 @@ namespace Nexus.Core.Helpers
 		/// usually set by dependency injection.
 		/// </summary>
 		/// 
-		IRequestCatalog RequestCatalog { get; set; }
+		IRequestCatalog Catalog { get; set; }
 
 
 		/// <summary>

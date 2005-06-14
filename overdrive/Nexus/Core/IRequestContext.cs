@@ -111,29 +111,29 @@ namespace Nexus.Core
 		object Outcome { get; set; }
 
 		/// <summary>
-		/// A list of error messages, 
-		/// keyed by the field causing the error, 
+		/// A list of alert (or error) messages, 
+		/// keyed by the field causing the message, 
 		/// or to a magic global key.
 		/// </summary>
 		/// <remark><p>
 		/// TODO: Refactor as NameValueCollection ?
 		/// </p></remark>
 		/// 
-		IDictionary Errors { get; set; }
+		IDictionary Alerts { get; set; }
 
 		/// <summary>
-		/// Add an error message under the "global" key.
+		/// Add an alert message under the "global" key.
 		/// </summary>
 		/// <param name="template">Message template.</param>
 		/// 
-		void AddError (string template);
+		void AddAlert (string template);
 
 		/// <summary>
-		/// Indicate whether errors exist.
+		/// Indicate whether alerts exist.
 		/// </summary>
-		/// <returns>True if there are errors.</returns>
+		/// <returns>True if there are alerts.</returns>
 		/// 
-		bool HasErrors { get; }
+		bool HasAlerts { get; }
 
 		/// <summary>
 		/// An Exception, if thrown.
@@ -154,45 +154,45 @@ namespace Nexus.Core
 		bool HasFault { get; }
 
 		/// <summary>
-		/// Indicate whether context is free of fault and errors.
+		/// Indicate whether context is free of fault and alerts.
 		/// </summary>
-		/// <returns>True if there are no fault or errors.</returns>
+		/// <returns>True if there are no fault or alerts.</returns>
 		/// 
 		bool IsNominal { get; }
 
 		/// <summary>
-		/// A list of advisory or warning messages (!errors), 
+		/// A list of hint (advisory or warning) messages (!errors), 
 		/// keyed by the field causing the message, 
 		/// or to a magic global key.
 		/// </summary>
 		/// 
-		IDictionary Messages { get; set; }
+		IDictionary Hints { get; set; }
 
 		/// <summary>
-		/// Add a message, creating the context if needed.
+		/// Add a hint, creating the context if needed.
 		/// </summary>
 		/// <remarks><p>
-		/// Multiple messages can be added for a key and 
+		/// Multiple hints can be added for a key and 
 		/// retrieved as a List.
 		/// </p></remarks>
 		/// <param name="template">Message template.</param>
 		/// <param name="message">Message key.</param>
 		/// 
-		void AddMessage (string template, string message);
+		void AddHint (string template, string message);
 
 		/// <summary>
-		/// Add a message under the "global" key.
+		/// Add a hint under the "global" key.
 		/// </summary>
 		/// <param name="template">Message template.</param>
 		/// 
-		void AddMessage (string template);
+		void AddHint (string template);
 
 		/// <summary>
-		/// Indicate whether messages exist.
+		/// Indicate whether hints exist.
 		/// </summary>
-		/// <returns>True if there are messages.</returns>
+		/// <returns>True if there are hints.</returns>
 		/// 
-		bool HasMessages { get; }
+		bool HasHints { get; }
 
 	}
 }

@@ -50,18 +50,18 @@ namespace Nexus.Core
 		}
 
 		/// <summary>
-		/// A IRequestContext is not nominal if an error is added. 
+		/// A IRequestContext is not nominal if an alert is added. 
 		/// </summary>
 		/// 
 		[Test]
-		public void IsNominal_Error ()
+		public void IsNominal_Alert ()
 		{
-			context.AddError ("Business logic error");
-			Assert.IsFalse (context.IsNominal, "Expected non-nominal state after adding error message.");
+			context.AddAlert ("Business logic alert");
+			Assert.IsFalse (context.IsNominal, "Expected non-nominal state after adding alert message.");
 		}
 
 		/// <summary>
-		/// A IRequestContext is not nominal is an Exception is set.
+		/// A IRequestContext is not nominal if an Exception is set.
 		/// </summary>
 		/// 
 		[Test]
@@ -80,8 +80,8 @@ namespace Nexus.Core
 		[Test]
 		public void IsNominal_Errors_and_Fault ()
 		{
-			context.AddError ("Business logic error");
-			context.AddError ("Business logic error 2");
+			context.AddAlert ("Business logic error");
+			context.AddAlert ("Business logic error 2");
 			context.Fault = fault;
 			Assert.IsFalse (context.IsNominal,
 			                "Expected non-nominal state after adding errors and Exception.");

@@ -67,19 +67,19 @@ namespace Nexus.Core
 
 		/// <summary>
 		/// Convenience method to confirm 
-		/// that there are no errors or Exception.
+		/// that there are no alerts or fault.
 		/// </summary>
 		/// <param name="context">Context under test</param>
 		/// 
 		public void AssertNominal (IRequestContext context)
 		{
 			AssertNoFault (context);
-			bool hasErrors = context.HasErrors;
-			if (hasErrors)
+			bool hasAlerts = context.HasAlerts;
+			if (hasAlerts)
 			{
 				// TODO: Use new TextOnly method here.
 				StringBuilder outer = new StringBuilder ();
-				IDictionary store = context.Errors;
+				IDictionary store = context.Alerts;
 				ICollection keys = store.Keys;
 				foreach (string key in keys)
 				{

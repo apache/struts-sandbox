@@ -33,7 +33,7 @@ namespace Nexus.Core.Helpers
 			get
 			{
 				if (_Context == null)
-					_Context = RequestCatalog.GetContext (Command);
+					_Context = Catalog.GetContext (Command);
 				return _Context;
 			}
 		}
@@ -52,21 +52,21 @@ namespace Nexus.Core.Helpers
 
 		public void Execute ()
 		{
-			RequestCatalog.ExecuteView (Context);
+			Catalog.ExecuteView (Context);
 		}
 
 		#endregion
 
-		#region Errors ... 
+		#region Messages ... 
 
-		public IDictionary Errors
+		public IDictionary Alerts
 		{
-			get { return Context.Errors; }
+			get { return Context.Alerts; }
 		}
 
-		public bool HasErrors
+		public bool HasAlerts
 		{
-			get { return Context.HasErrors; }
+			get { return Context.HasAlerts; }
 		}
 
 		public Exception Fault
@@ -81,17 +81,17 @@ namespace Nexus.Core.Helpers
 
 		public bool IsNominal
 		{
-			get { return (!HasErrors && !HasFault); }
+			get { return (!HasAlerts && !HasFault); }
 		}
 
-		public IDictionary Messages
+		public IDictionary Hints
 		{
-			get { return Context.Messages; }
+			get { return Context.Hints; }
 		}
 
-		public bool HasMessages
+		public bool HasHints
 		{
-			get { return Context.HasMessages; }
+			get { return Context.HasHints; }
 		}
 
 		#endregion 
@@ -134,7 +134,7 @@ namespace Nexus.Core.Helpers
 			get { throw new NotImplementedException (); }
 			set { throw new NotImplementedException (); }
 		}
-		public IRequestCatalog RequestCatalog
+		public IRequestCatalog Catalog
 		{
 			get { throw new NotImplementedException (); }
 			set { throw new NotImplementedException (); }
