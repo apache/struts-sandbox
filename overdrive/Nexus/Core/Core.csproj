@@ -94,7 +94,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "IController.cs"
+                    RelPath = "IRequestCatalog.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
