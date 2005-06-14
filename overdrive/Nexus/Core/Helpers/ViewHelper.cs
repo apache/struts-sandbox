@@ -22,6 +22,7 @@ namespace Nexus.Core.Helpers
 	/// <summary>
 	/// Standard implementation of IViewHelper.
 	/// </summary>
+	/// 
 	public abstract class ViewHelper : IViewHelper
 	{
 		#region private 
@@ -41,7 +42,7 @@ namespace Nexus.Core.Helpers
 
 		#endregion
 
-		#region Read and Bind 
+		#region Read and Bind (abstract)
 
 		public abstract void ExecuteBind (ICollection controls);
 
@@ -106,7 +107,7 @@ namespace Nexus.Core.Helpers
 		
 		public IList FieldSet
 		{
-			get { return Context.FieldSet; }
+			get { throw new NotImplementedException (); }
 		}
 		
 		public string Prefix

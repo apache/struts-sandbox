@@ -20,12 +20,12 @@ namespace Nexus.Core
 	/// <summary>
 	/// Use an IRequestContext to process a Command [OVR-9]
 	/// </summary>
-	/// <remarks>
-	/// <p>
-	/// Rather than have each command cast its context to an IRequestContext, 
+	/// <remarks><p>
+	/// Rather than have each command cast its context to an 
+	/// IRequestContext, 
 	/// provide a IRequestCommand with an alternative signature. 
-	/// </p>
-	/// </remarks>
+	/// </p></remarks>
+	/// 
 	public interface IRequestCommand : ICommand
 	{
 		/// <summary>
@@ -35,12 +35,15 @@ namespace Nexus.Core
 		/// Corresponds to the Command property of IHelperContext. 
 		/// </remarks>
 		/// <returns>An identifier for this Command.</returns>
+		/// 
 		string ID { get; set; }
 
 		/// <summary>
-		/// Factory method to provide an empty context that can be used with the Command instance.
+		/// Factory method to provide an empty context that can be used 
+		/// with the Command instance.
 		/// </summary>
 		/// <returns>Context instance with Command ID set.</returns>
+		/// 
 		IRequestContext NewContext ();
 
 		/// <summary>
@@ -50,6 +53,7 @@ namespace Nexus.Core
 		/// Expected to be called from Execute as a casting convenience.
 		/// </p></remarks>
 		/// <param name="context">Context to process.</param>
+		/// 
 		bool RequestExecute (IRequestContext context);
 
 	}

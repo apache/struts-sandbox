@@ -25,6 +25,7 @@ namespace Nexus.Core
 	/// <summary>
 	/// Provide base SetUp method and convenience methods.
 	/// </summary>
+	/// 
 	[TestFixture]
 	public class BaseNexusTest
 	{
@@ -33,6 +34,7 @@ namespace Nexus.Core
 		/// <summary>
 		/// Setup controller between tests.
 		/// </summary>
+		/// 
 		[SetUp]
 		public virtual void SetUp ()
 		{
@@ -42,8 +44,9 @@ namespace Nexus.Core
 		}
 
 		/// <summary>
-		/// Exercise SetuP method.
+		/// Exercise Setup method.
 		/// </summary>
+		/// 
 		[Test]
 		public void AssertSetUp ()
 		{
@@ -54,6 +57,7 @@ namespace Nexus.Core
 		/// Convenience method to confirm that no Exception was caught.
 		/// </summary>
 		/// <param name="context">Context under test</param>
+		/// 
 		public void AssertNoFault (IRequestContext context)
 		{
 			bool hasFault = context.HasFault;
@@ -62,15 +66,18 @@ namespace Nexus.Core
 		}
 
 		/// <summary>
-		/// Convenience method to confirm that there are no errors or Exception.
+		/// Convenience method to confirm 
+		/// that there are no errors or Exception.
 		/// </summary>
 		/// <param name="context">Context under test</param>
+		/// 
 		public void AssertNominal (IRequestContext context)
 		{
 			AssertNoFault (context);
 			bool hasErrors = context.HasErrors;
 			if (hasErrors)
 			{
+				// TODO: Use new TextOnly method here.
 				StringBuilder outer = new StringBuilder ();
 				IDictionary store = context.Errors;
 				ICollection keys = store.Keys;

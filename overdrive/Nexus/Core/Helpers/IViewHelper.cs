@@ -20,20 +20,27 @@ using Nexus.Core.Tables;
 namespace Nexus.Core.Helpers
 {
 	/// <summary>
-	/// A facade for use by a code-behind to simplify access to the IRequestContext and IRequestCommand. 
+	/// A facade for use by a code-behind to simplify access to the 
+	/// IRequestContext and IRequestCommand. 
 	/// </summary>
 	/// <remarks><p>
-	/// The controller for a helper may also act as a "front controller" to ensure routine tasks are carried out.
-	/// These tasks can include input validation, data conversion, text formatting, command logging, and so forth.
+	/// The controller for a helper may also act as a "front controller" 
+	/// to ensure routine tasks are carried out.
+	/// These tasks can include input validation, data conversion, 
+	/// text formatting, command logging, and so forth.
 	/// </p></remarks>
+	/// 
 	public interface IViewHelper
 	{
 
 		/// <summary>
-		/// Invoke the helper's command and bind the output to controls in the given collection.
+		/// Invoke the helper's command and bind the output to 
+		/// controls in the given collection.
 		/// </summary>
 		/// <remarks><p>
-		/// Most code behinds will call either ExecuteBind or ReadExecute by passing in the collection of controls from a panel control. 
+		/// Most code behinds will call either ExecuteBind or 
+		/// ReadExecute by passing in the collection of controls 
+		/// from a panel control. 
 		/// </p></remarks>
 		/// <param name="controls">Collection of controls to populate.</param>
 		/// 
@@ -41,20 +48,26 @@ namespace Nexus.Core.Helpers
 
 
 		/// <summary>
-		/// Read input from the controls in the given collection, and invoke the helper's command.
+		/// Read input from the controls in the given collection, 
+		/// and invoke the helper's command.
 		/// </summary>
-		/// <param name="controls">Collection of controls to populate.</param>
+		/// <param name="controls">Collection of controls to 
+		/// populate.</param>
 		/// <remarks><p>
-		/// Most code behinds will call either ExecuteBind or ReadExecute by passing in the collection of controls from a panel control. 
+		/// Most code behinds will call either ExecuteBind or 
+		/// ReadExecute by passing in the collection of controls 
+		/// from a panel control. 
 		/// </p></remarks>
 		/// 
 		void ReadExecute (ICollection controls);
 
 
 		/// <summary>
-		/// Bind the output of the helper's command to controls in the given collection.
+		/// Bind the output of the helper's command to controls in the 
+		/// given collection.
 		/// </summary>
-		/// <param name="controls">Collection of controls to populate.</param>
+		/// <param name="controls">Collection of controls to 
+		/// populate.</param>
 		/// 
 		void Bind (ICollection controls);
 
@@ -77,7 +90,8 @@ namespace Nexus.Core.Helpers
 		// ----
 		
 		/// <summary>
-		/// A list of error messages, keyed by the field causing the error, or to a magic global key.
+		/// A list of error messages, keyed by the field causing the 
+		/// error, or to a magic global key.
 		/// </summary>
 		/// 
 		IDictionary Errors { get; }
@@ -87,18 +101,21 @@ namespace Nexus.Core.Helpers
 		/// Return true if errors are queued.
 		/// </summary>
 		/// <returns>True if errors are queued.</returns>
+		/// 
 		bool HasErrors { get; }
 
 
 		/// <summary>
 		/// An Exception, if thrown.
 		/// </summary>
+		/// 
 		Exception Fault { get; }
 
 		/// <summary>
 		/// Return true if an exception is caught.
 		/// </summary>
 		/// <returns>True if an exception is caught.</returns>
+		/// 
 		bool HasFault { get; }
 
 
@@ -106,11 +123,13 @@ namespace Nexus.Core.Helpers
 		/// Return true if there are no errors or exception pending.
 		/// </summary>
 		/// <returns>True if all is well.</returns>
+		/// 
 		bool IsNominal { get; }
 
 
 		/// <summary>
-		/// A list of text messages, keyed by a field or other identifier, or to a magic global key.
+		/// A list of text messages, keyed by a field or other 
+		/// identifier, or to a magic global key.
 		/// </summary>
 		/// 
 		IDictionary Messages { get; }
@@ -126,26 +145,32 @@ namespace Nexus.Core.Helpers
 		// ----
 
 		/// <summary>
-		/// Set of IFieldContext definitions available to the application, usually set by the controller.
+		/// Set of IFieldContext definitions available to the application, 
+		/// usually set by the controller.
 		/// </summary>
 		/// <remarks><p>
-		/// The FieldTable can be used to convert display strings to native types on input, 
+		/// The FieldTable can be used to convert display strings to native 
+		/// types on input, 
 		/// and from native types to display strings on output. 
 		/// The FieldTable can also be used to generate UI controls. 
 		/// </p></remarks>
+		/// 
 		IFieldTable FieldTable { get;}
 
 
 		/// <summary>
-		/// Set of IFieldContext definitions to be used with this helper, usually set by dependency injection.
+		/// Set of IFieldContext definitions to be used with this helper, 
+		/// usually set by dependency injection.
 		/// </summary>
 		/// <remarks><p>
-		/// Some helpers generate DataGrids or DataForms based on the FieldDefinitions 
+		/// Some helpers generate DataGrids or DataForms based on the 
+		/// FieldDefinitions 
 		/// </p></remarks>
+		/// 
 		IList FieldSet {get;}
 		
 		/* 
-			// TODO: 
+			// TODO: Messengers
 			string Text(string key); 
 			string TextIndex {get;}
 			ITextTable TextTable {get;}
@@ -155,10 +180,12 @@ namespace Nexus.Core.Helpers
 		// ----
 
 		/// <summary>
-		/// Prefix to trim from the id of a control during Read and Bind.
+		/// Prefix to trim from the id of a control during Read and 
+		/// Bind.
 		/// </summary>
 		/// <remarks><p>
-		/// The Prefix is needed when a single page uses a control more than once  
+		/// The Prefix is needed when a single page uses a control 
+		/// more than once  
 		/// often in separate panels.
 		/// </p></remarks>
 		/// 
@@ -166,14 +193,17 @@ namespace Nexus.Core.Helpers
 
 
 		/// <summary>
-		/// Suffix to truncate from a list control id in order to set a corresponding value field ["_list"].
+		/// Suffix to truncate from a list control id in order to set a 
+		/// corresponding value field ["_list"].
 		/// </summary>
 		/// <remark><p>
-		/// When processing a single-value list control, if the id ends with the list suffix, 
-		/// the suffix is removed, and a field with the remaining name is set to the selected item value.
+		/// When processing a single-value list control, if the id ends with 
+		/// the list suffix, 
+		/// the suffix is removed, and a field with the remaining name is set 
+		/// to the selected item value.
 		/// </p><P>
-		/// So, the selected item from a list control with the id "facility_key_list" will be 
-		/// set to a field named "facility_key".
+		/// So, the selected item from a list control with the id 
+		/// "facility_key_list" will be set to a field named "facility_key".
 		/// </P></remark>
 		/// 
 		string ListSuffix {get; set;}
@@ -187,7 +217,8 @@ namespace Nexus.Core.Helpers
 
 
 		/// <summary>
-		/// If a control value is an empty string, set the value to null instead [TRUE].
+		/// If a control value is an empty string, set the value to null 
+		/// instead [TRUE].
 		/// </summary>
 		/// 
 		bool NullIfEmpty {get; set;}
@@ -206,14 +237,16 @@ namespace Nexus.Core.Helpers
 		// ----
 
 		/// <summary>
-		/// The controller for this helper, usually set by dependency injection.
+		/// The controller for this helper, usually set by dependency 
+		/// injection.
 		/// </summary>
 		/// 
 		IController Controller { get; set; }
 
 
 		/// <summary>
-		/// The command (or chain of commands) for this helper, usually set by dependency injection.
+		/// The command (or chain of commands) for this helper, usually set 
+		/// by dependency injection.
 		/// </summary>
 		/// 
 		IRequestCommand Command { get; set; }

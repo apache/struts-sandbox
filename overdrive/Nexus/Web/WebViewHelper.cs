@@ -6,8 +6,9 @@ using Nexus.Core.Helpers;
 namespace Nexus.Web.Helpers
 {
 	/// <summary>
-	/// Summary description for WebViewHelper.
+	/// Default implementation of IWebViewHelper [OVR-14].
 	/// </summary>
+	/// 
 	public class WebViewHelper : ViewHelper
 	{
 
@@ -18,6 +19,7 @@ namespace Nexus.Web.Helpers
 		/// </summary>
 		/// <param name="errors">A list of error messages</param>
 		/// <returns>HTML markup presenting the errors.</returns>
+		/// 
 		public static string HtmlErrorList (IList errors)
 		{
 			StringBuilder sb = new StringBuilder ("<ul>");
@@ -38,6 +40,7 @@ namespace Nexus.Web.Helpers
 		/// <param name="fault">An exception instance, if any</param>
 		/// <param name="store">A context listing errors, if any</param>
 		/// <returns>HTML markup presenting the errors.</returns>
+		/// 
 		public string HtmlErrorBuilder (Exception fault, IDictionary store)
 		{
 			string errorMarkup = null;

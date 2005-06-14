@@ -23,12 +23,14 @@ namespace Nexus.Core
 	/// <summary>
 	/// Concrete IRequestContext implementation.
 	/// </summary>
+	/// 
 	public class RequestContext : Context, IRequestContext
 	{
 		/// <summary>
 		/// Convenience constructor to set Command on instantiation.
 		/// </summary>
 		/// <param name="command">Name of Command processing this Context.</param>
+		/// 
 		public RequestContext (string command)
 		{
 			Command = command;
@@ -37,6 +39,7 @@ namespace Nexus.Core
 		/// <summary>
 		/// Default, no argument constructor.
 		/// </summary>
+		/// 
 		public RequestContext ()
 		{
 		}
@@ -80,14 +83,16 @@ namespace Nexus.Core
 		/// Convenience method to lazily instantiate a message store.
 		/// </summary>
 		/// <param name="template">Message template to add to the queue.</param>
-		/// <param name="queue">Token for queue of messages within the store.</param>
+		/// <param name="queue">Token for queue of messages within the 
+		/// store.</param>
 		/// <param name="key">Token for message store.</param>
+		/// 
 		private void AddStore (string template, string queue, string key)
 		{
 			IContext store = this [key] as IContext;
 			if (null == store)
 			{
-				store = new Context (); // FIXME: Spring?
+				store = new Context (); // ISSUE: Spring?
 				this [key] = store;
 			}
 			IList list;
@@ -95,7 +100,7 @@ namespace Nexus.Core
 				list = store [queue] as IList;
 			else
 			{
-				list = new ArrayList (); // FIXME: Spring?
+				list = new ArrayList (); // ISSUE: Spring?
 				store [queue] = list;
 			}
 			list.Add (template);

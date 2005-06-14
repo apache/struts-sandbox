@@ -22,8 +22,10 @@ using Spring.Context;
 namespace Nexus.Extras.Spring
 {
 	/// <summary>
-	/// Concrete IController implementation using Spring as an IOC container.
+	/// Concrete IController implementation using Spring as an IOC 
+	/// container [OVR-8].
 	/// </summary>
+	/// 
 	public class Controller : IController, IApplicationContextAware
 	{
 		private IApplicationContext _Factory = null;
@@ -48,10 +50,15 @@ namespace Nexus.Extras.Spring
 			return _Factory;
 		}
 
+		static string msg_NAME = "name";
+		static string msg_NULL = "Command name cannot be null.";
+		static string msg_MISSING = "Object is not found in Factory.";
+		string msg_TYPE = "Command is not a IRequestCommand or IRequestChain.";
+
 		public object GetObject (string name)
 		{
 			if (null == name)
-				throw new ArgumentNullException ("name", "IController.GetObject");
+				throw new ArgumentNullException (msg_NAME, "IController.GetObject");
 			return Factory ().GetObject (name);
 		}
 
@@ -59,19 +66,19 @@ namespace Nexus.Extras.Spring
 		{
 			if (null == name)
 			{
-				Exception e = new Exception ("Command name cannot be null.");
+				Exception e = new Exception (msg_NULL);
 				throw(e);
 			}
 			object o = GetObject (name);
 			if (o == null)
 			{
-				Exception e = new Exception ("Object is not found in Factory.");
+				Exception e = new Exception (msg_MISSING);
 				throw(e);
 			}
 			IRequestCommand command = o as IRequestCommand;
 			if (command == null)
 			{
-				Exception e = new Exception ("Command is not a IRequestCommand or IRequestChain.");
+				Exception e = new Exception (msg_TYPE);
 				throw(e);
 			}
 			return command;
@@ -90,8 +97,8 @@ namespace Nexus.Extras.Spring
 			{
 				context = new RequestContext ();
 				context.Fault = e;
-				// TODO: Log exception(faults) (Log all errors in verbose mode?)
-				// TODO: Provide an alternate location on fault? -- Declarative exception handing
+				// ISSUE: Log exception(faults) (Log all errors in verbose mode?)
+				// ISSUE: Provide an alternate location on fault? -- Declarative exception handing
 			}
 			return context;
 
@@ -110,8 +117,8 @@ namespace Nexus.Extras.Spring
 			{
 				context = new RequestContext ();
 				context.Fault = e;
-				// TODO: Log exception(faults) (Log all errors in verbose mode?)
-				// TODO: Provide an alternate location on fault? -- Declarative exception handing
+				// ISSUE: Log exception(faults) (Log all errors in verbose mode?)
+				// ISSUE: Provide an alternate location on fault? -- Declarative exception handing
 			}
 			return context;
 		}
@@ -119,12 +126,14 @@ namespace Nexus.Extras.Spring
 		/// <summary>
 		/// Field for GetFieldTable method.
 		/// </summary>
+		/// 
 		private IFieldTable _FieldTable = null;
 
 		/// <summary>
 		/// Access method for the Controller's FieldTable.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>FieldTable for this Controller</returns></returns>
+		/// 
 		public IFieldTable GetFieldTable ()
 		{
 			if (_FieldTable == null)
@@ -137,14 +146,14 @@ namespace Nexus.Extras.Spring
 			if (null == context)
 			{
 				context = new RequestContext ();
-				// TODO: Add a message about null context
+				// ISSUE: Add a message about null context
 			}
 
 			IRequestCommand command = context [Tokens.COMMAND_BIN] as IRequestCommand;
 
 			if (null == command)
 			{
-				// TODO: Add a message about null command.
+				// ISSUE: Add a message about null command.
 				// (A null context with then have two messages.)
 			}
 			else
@@ -158,8 +167,8 @@ namespace Nexus.Extras.Spring
 					context.Fault = e;
 				}
 			}
-			// TODO: Log exception(faults) (Log all errors in verbose mode?)
-			// TODO: Provide an alternate location on fault? -- Declarative exception handing?
+			// ISSUE: Log exception(faults) (Log all errors in verbose mode?)
+			// ISSUE: Provide an alternate location on fault? -- Declarative exception handing?
 		}
 
 		public IRequestContext ExecuteContext (string command)

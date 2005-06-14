@@ -23,6 +23,7 @@ namespace Nexus.Core
 	/// <summary>
 	/// Exercise IRequestContext per [OVR-7].
 	/// </summary>
+	/// 
 	[TestFixture]
 	public class RequestContextTest
 	{
@@ -33,6 +34,7 @@ namespace Nexus.Core
 		/// <summary>
 		/// Initialize private fields.
 		/// </summary>
+		/// 
 		[SetUp]
 		public void SetUp ()
 		{
@@ -50,6 +52,7 @@ namespace Nexus.Core
 		/// <summary>
 		/// A IRequestContext is not nominal if an error is added. 
 		/// </summary>
+		/// 
 		[Test]
 		public void IsNominal_Error ()
 		{
@@ -60,28 +63,34 @@ namespace Nexus.Core
 		/// <summary>
 		/// A IRequestContext is not nominal is an Exception is set.
 		/// </summary>
+		/// 
 		[Test]
 		public void IsNominal_Fault ()
 		{
 			context.Fault = fault;
-			Assert.IsFalse (context.IsNominal, "Expected non-nominal state after setting Exception.");
+			Assert.IsFalse (context.IsNominal, 
+				"Expected non-nominal state after setting Exception.");
 		}
 
 		/// <summary>
-		/// A IRequestContext is not nominal if multiple errors are added and an Exception is set.
+		/// A IRequestContext is not nominal if multiple errors are added 
+		/// and an Exception is set.
 		/// </summary>
+		/// 
 		[Test]
 		public void IsNominal_Errors_and_Fault ()
 		{
 			context.AddError ("Business logic error");
 			context.AddError ("Business logic error 2");
 			context.Fault = fault;
-			Assert.IsFalse (context.IsNominal, "Expected non-nominal state after adding errors and Exception.");
+			Assert.IsFalse (context.IsNominal, 
+				"Expected non-nominal state after adding errors and Exception.");
 		}
 
 		/// <summary>
 		/// If data is set to the Outcome property, HasOutcome is true.
 		/// </summary>
+		/// 
 		[Test]
 		public void HasOutcome ()
 		{

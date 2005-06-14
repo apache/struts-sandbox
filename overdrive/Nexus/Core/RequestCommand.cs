@@ -20,16 +20,20 @@ namespace Nexus.Core
 	/// <summary>
 	/// Abstract IRequestCommand; subclass must implement RequestExecute.
 	/// </summary>
+	/// 
 	public abstract class RequestCommand : IRequestCommand
 	{
 		/// <summary>
-		/// Return STOP if a Command is part of a Chain.
+		/// Execute should return STOP if problem occurs, 
+		/// so that a Chain can exit processing on error. 
 		/// </summary>
+		/// 
 		public const bool STOP = true;
 
 		/// <summary>
-		/// Return CONTINUE if another Command can run.
+		/// Return CONTINUE if another Command could run.
 		/// </summary>
+		/// 
 		public const bool CONTINUE = false;
 
 		private string _ID = null;
@@ -42,6 +46,7 @@ namespace Nexus.Core
 		public virtual IRequestContext NewContext ()
 		{
 			// Return a new instance on each call.
+			// ISSUE: Spring?
 			return new RequestContext (ID);
 		}
 

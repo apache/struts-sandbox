@@ -19,6 +19,7 @@ namespace Nexus.Core
 	/// <summary>
 	/// Tokens representing context keys.
 	/// </summary>
+	/// 
 	public class Tokens
 	{
 		private Tokens ()
@@ -29,16 +30,19 @@ namespace Nexus.Core
 		/// <summary>
 		/// Token for Command property.
 		/// </summary>
+		/// 
 		public const string COMMAND = "__COMMAND";
 
 		/// <summary>
 		/// Token for CommandBin property.
 		/// </summary>
+		/// 
 		public const string COMMAND_BIN = "__COMMAND_BIN";
 
 		/// <summary>
 		/// Token for Errors property.
 		/// </summary>
+		/// 
 		public const string ERRORS = "__ERRORS";
 
 		/// <summary>
@@ -49,6 +53,7 @@ namespace Nexus.Core
 		/// <summary>
 		/// Token for FieldTable property.
 		/// </summary>
+		/// 
 		public const string FIELD_TABLE = "__FIELD_TABLE";
 
 		/// <summary>
@@ -59,26 +64,31 @@ namespace Nexus.Core
 		/// <summary>
 		/// Token for FieldSet property.
 		/// </summary>
+		/// 
 		public const string FIELD_SET = "__FIELD_SET";
 
 		/// <summary>
 		/// Token for a generic message.
 		/// </summary>
+		/// 
 		public const string GENERIC_MESSAGE = "__GENERIC_MESSAGE";
 
 		/// <summary>
 		/// Token for Fault property.
 		/// </summary>
+		/// 
 		public const string FAULT = "__FAULT";
 
 		/// <summary>
 		/// Token for pre-op command.
 		/// </summary>
+		/// 
 		public const string PRE_OP = "pre-op";
 
 		/// <summary>
 		/// Token for post-op command.
 		/// </summary>
+		/// 
 		public const string POST_OP = "post-op";
 
 	}

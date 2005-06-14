@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+using Nexus.Core.Commands;
 using NUnit.Framework;
 
 namespace Nexus.Core
@@ -20,16 +21,18 @@ namespace Nexus.Core
 	/// <summary>
 	/// Exercise IController per [OVR-8].
 	/// </summary>
+	/// 
 	[TestFixture]
 	public class ControllerTest : BaseNexusTest
 	{
 		/// <summary>
 		/// A simple "list all" command should return nominal with an outcome. 
 		/// </summary>
+		/// 
 		[Test]
 		public void ExecuteContext ()
 		{
-			IRequestContext context = controller.ExecuteContext ("list_all");
+			IRequestContext context = controller.ExecuteContext (ListAll.LIST_ALL);
 			AssertNominal (context);
 			Assert.IsTrue (context.IsNominal, "Expected nominal result.");
 			Assert.IsTrue (context.HasOutcome, "Expected outcome from command.");

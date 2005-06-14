@@ -21,6 +21,7 @@ namespace Nexus.Core
 	/// <summary>
 	/// Exercise methods of standard IRequestCommand implementation [OVR-9].
 	/// </summary>
+	/// 
 	[TestFixture]
 	public class RequestCommandTest
 	{
@@ -29,6 +30,7 @@ namespace Nexus.Core
 		/// <summary>
 		/// Create a default command between test runs. 
 		/// </summary>
+		/// 
 		[SetUp]
 		public void SetUp ()
 		{
@@ -38,6 +40,7 @@ namespace Nexus.Core
 		/// <summary>
 		/// A NewContext is not null.
 		/// </summary>
+		/// 
 		[Test]
 		public void NewRequestContext ()
 		{
@@ -48,6 +51,7 @@ namespace Nexus.Core
 		/// <summary>
 		///  A successful command returns a nominal result.
 		/// </summary>
+		/// 
 		public void RequestExecute ()
 		{
 			IRequestContext context = command.NewContext ();

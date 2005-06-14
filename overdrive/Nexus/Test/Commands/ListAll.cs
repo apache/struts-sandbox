@@ -20,14 +20,27 @@ namespace Nexus.Core.Commands
 	/// <summary>
 	/// Return a list as the outcome.
 	/// </summary>
+	/// 
 	public class ListAll : RequestCommand
 	{
+		/// <summary>
+		/// Test ID for Command.
+		/// </summary>
+		/// 
+		public const string LIST_ALL = "ListAll";
+
+		/// <summary>
+		/// Fake name for test data.
+		/// </summary>
+		/// 
+		const string DATA = "data";
+
 		public override bool RequestExecute (IRequestContext context)
 		{
 			// IList list = Mapper.Get ().QueryForList (ID, context);
 			// Fake it:
 			IList list = new ArrayList ();
-			list.Add ("data");
+			list.Add (DATA);
 			context.Outcome = list;
 			return CONTINUE;
 		}

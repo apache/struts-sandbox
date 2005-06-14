@@ -22,20 +22,23 @@ namespace Nexus.Core
 	/// </summary>
 	/// <remarks><p>
 	/// The caller should only need to know the name of a Command 
-	/// to be able to acquire the appropriate Context, and then execute the request. 
+	/// to be able to acquire the appropriate Context, 
+	/// and then execute the request. 
 	/// </p></remarks>
+	/// 
 	public interface IController
 	{
 		/// <summary>
 		/// Obtain object instance for name.
 		/// </summary>
-		/// <param name="name"></param>
-		/// <returns></returns>
+		/// <param name="name">ID for object to return</param>
+		/// <returns>Instantiated object corresonding to name</returns>
 		/// 
 		object GetObject (string name);
 
 		/// <summary>
-		/// Obtain new NexusContext for command, including embedded resources.
+		/// Obtain new NexusContext for command, 
+		/// including embedded resources.
 		/// </summary>
 		/// <param name="command">Our command</param>
 		/// <returns>NexusContext with embedded resources.</returns>
@@ -57,7 +60,7 @@ namespace Nexus.Core
 		/// <remarks><p>
 		/// Among other things, the View layer chain may transfer 
 		/// data between the FieldState and the root Context. 
-		/// The View layer chain acts as a  Front Controller.
+		/// The View layer chain acts as a Front Controller.
 		/// </p></remarks>
 		/// <param name="context">Context to execute</param>
 		/// 

@@ -21,32 +21,35 @@ using Nexus.Core.Tables;
 namespace Nexus.Core
 {
 	/// <summary>
-	/// Exchange data between business and presentation layers per [OVR-7]. 
+	/// Exchange data between business and presentation layers [OVR-7]. 
 	/// </summary>
-	/// <remarks>
-	/// <p>
-	/// An IRequestContext can predefine whatever properties we need for storing input, 
-	/// output, messages, and other common attributes, including Locale (or Culture) 
-	/// and user credentials. 
-	/// </p>
-	/// </remarks>
+	/// <remarks><p>
+	/// An IRequestContext can predefine whatever properties we need for 
+	/// storing input, output, messages, and other common attributes, 
+	/// including Locale (or Culture) and user credentials. 
+	/// </p></remarks>
+	/// 
 	public interface IRequestContext : IContext
 	{
 		/// <summary>
-		/// Identifier for the top-level Command (or Chain) processing this Context.
+		/// Identifier for the top-level Command (or Chain) processing 
+		/// this Context.
 		/// </summary>
-		/// <remarks>
-		/// Corresponds to ID of INexusCommand for the initial Command or Chain.
-		/// </remarks>
+		/// <remarks><P>
+		/// Corresponds to ID of INexusCommand for the initial Command 
+		/// or Chain.
+		/// </P></remarks>
 		/// 
 		string Command { get; set; }
 
 		/// <summary>
-		/// Instance of the top-level Command (or Chain) processing this Context.
+		/// Instance of the top-level Command (or Chain) processing this 
+		/// Context.
 		/// </summary>
-		/// <remarks>
-		/// Corresponds to ID of INexusCommand for the initial Command or Chain.
-		/// </remarks>
+		/// <remarks><p>
+		/// Corresponds to ID of INexusCommand for the initial Command 
+		/// or Chain.
+		/// </p></remarks>
 		/// 
 		IRequestCommand CommandBin { get; set; }
 
@@ -54,17 +57,12 @@ namespace Nexus.Core
 		/// <summary>
 		/// Instance of the global Field Table for this application.
 		/// </summary>
-		/// <remarks>
-		/// Corresponds to ID of INexusCommand for the initial Command or Chain.
-		/// </remarks>
+		/// <remarks><p>
+		/// Corresponds to ID of INexusCommand for the initial Command or 
+		/// Chain.
+		/// </p></remarks>
 		/// 
 		IFieldTable FieldTable { get; set; }
-
-
-		/// <summary>
-		/// 
-		/// </summary>
-		IList FieldSet { get; set; }
 
 
 		/// <summary>
@@ -77,29 +75,25 @@ namespace Nexus.Core
 		/// <summary>
 		/// Return a IList stored under the Command ID, if any.
 		/// </summary>
-		/// <remarks>
-		/// <p>
+		/// <remarks><p>
 		/// Some Commands returns List of values.
 		/// So that Commands can work together as part of a Chain, 
 		/// list-based Commands are expected to store the 
 		/// list under their own Command ID.
-		/// Outcome is a convenient method to access the 
+		/// Outcome is a convenience method to access the 
 		/// initial or "outermost" Command or Chain ID. 
-		/// </p>
-		/// <p>
+		/// </p><p>
 		/// To allow use as subcommands in a Chain, 
-		/// INexusCommand implementations should prefer the idiom 
+		/// IRequestCommand implementations should prefer the idiom 
 		/// <code>Context[ID] = object</code>
 		/// to using the Outcome directly. 
 		/// Since they might not be the initial Command,
 		/// but rather a subcommand, or link, in a Chain.
-		/// </p>
-		/// <p>
+		/// </p><p>
 		/// Outcome is more convenient to presentation layer clients, 
 		/// who are looking for the top-level output, 
 		/// rather than output of a particular subcommand.
-		/// </p>
-		/// <p>
+		/// </p><p>
 		/// As mentioned, both Outcome and the context[ID] idiom 
 		/// can be used by Command that return lists of values. 
 		/// Commands that return a single set of fields 
@@ -107,23 +101,23 @@ namespace Nexus.Core
 		/// This strategy allows one Command to obtain field values 
 		/// to be used by another Command 
 		/// (like piping output between Unix shell commands.)
-		/// </p>
-		/// <p>
+		/// </p><p>
 		/// Note that "Outcome" is an "alias" to an entry in 
 		/// this context. 
 		/// Unlike FieldState, Outcome is not a subcontext 
 		/// in its own right. 
-		/// </p>
-		///	</remarks>
+		/// </p></remarks>
 		///	
 		object Outcome { get; set; }
 
 		/// <summary>
-		/// A list of error messages, keyed by the field causing the error, or to a magic global key.
+		/// A list of error messages, 
+		/// keyed by the field causing the error, 
+		/// or to a magic global key.
 		/// </summary>
-		/// <remark>
+		/// <remark><p>
 		/// TODO: Refactor as NameValueCollection ?
-		/// </remark>
+		/// </p></remark>
 		/// 
 		IDictionary Errors { get; set; }
 
@@ -137,7 +131,7 @@ namespace Nexus.Core
 		/// <summary>
 		/// Indicate whether errors exist.
 		/// </summary>
-		/// <returns>True if there are errors. False otherwise.</returns>
+		/// <returns>True if there are errors.</returns>
 		/// 
 		bool HasErrors { get; }
 
@@ -146,7 +140,8 @@ namespace Nexus.Core
 		/// </summary>
 		/// <remark>
 		/// A IViewContext is readonly, 
-		/// but another interface (e.g. IHelperContext) may extend to add a setter, if needed.
+		/// but another interface (e.g. IHelperContext) may extend to add a 
+		/// setter, if needed.
 		/// </remark>
 		/// 
 		Exception Fault { get; set; }
@@ -159,37 +154,44 @@ namespace Nexus.Core
 		bool HasFault { get; }
 
 		/// <summary>
-		/// Indicate whether context is free of faults and errors.
+		/// Indicate whether context is free of fault and errors.
 		/// </summary>
-		/// <returns>True if there are no faults or errors.</returns>
+		/// <returns>True if there are no fault or errors.</returns>
 		/// 
 		bool IsNominal { get; }
 
 		/// <summary>
-		/// A list of error messages, keyed by the field causing the error, or to a magic global key.
+		/// A list of advisory or warning messages (!errors), 
+		/// keyed by the field causing the message, 
+		/// or to a magic global key.
 		/// </summary>
+		/// 
 		IDictionary Messages { get; set; }
 
 		/// <summary>
 		/// Add a message, creating the context if needed.
 		/// </summary>
-		/// <remarks>
-		/// Multiple messages can be added for a key and retrieved as a List.
-		/// </remarks>
+		/// <remarks><p>
+		/// Multiple messages can be added for a key and 
+		/// retrieved as a List.
+		/// </p></remarks>
 		/// <param name="template">Message template.</param>
 		/// <param name="message">Message key.</param>
+		/// 
 		void AddMessage (string template, string message);
 
 		/// <summary>
 		/// Add a message under the "global" key.
 		/// </summary>
 		/// <param name="template">Message template.</param>
+		/// 
 		void AddMessage (string template);
 
 		/// <summary>
 		/// Indicate whether messages exist.
 		/// </summary>
-		/// <returns>True if there are messages. False otherwise.</returns>
+		/// <returns>True if there are messages.</returns>
+		/// 
 		bool HasMessages {get;}
 
 	}

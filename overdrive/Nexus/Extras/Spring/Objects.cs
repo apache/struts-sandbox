@@ -9,19 +9,16 @@ namespace Agility.Extras.Spring
 	/// A singleton implementation of the IHelper protocol, 
 	/// using static methods and the Spring object factory.
 	/// </summary>
-	/// <remarks>
-	/// <p>
+	/// <remarks><p>
 	/// Since static methods are used here, as a convenience, 
 	/// it is not possible to implement IHelper. 
 	/// However, the same method signatures are otherwise used.
-	/// </p>
-	/// <p>
+	/// </p><p>
 	/// Of course, an alternative is to provide the Factory
 	/// method a singlton, and then obtain the Helpers 
 	/// class from the Factory, but implementing the 
 	/// IHelpers interface as a singleton seems simpler.
-	/// </p>
-	/// </remarks>
+	/// </p></remarks>
 	public class Objects
 	{
 		private static string FILE = "/Objects.xml";
@@ -31,6 +28,7 @@ namespace Agility.Extras.Spring
 			// private constructor prevents instantiation. 
 		}
 
+		// ISSUE: Remove this kludge and adopt latest iBATIS approach.
 		private static string _rootDirectory =
 			AppDomain.CurrentDomain.BaseDirectory.Replace (@"\bin", "").Replace (@"\Debug", "").Replace (@"\Release", "");
 
