@@ -24,8 +24,8 @@ namespace Nexus.Core.Helpers
 	/// IRequestContext and IRequestCommand. 
 	/// </summary>
 	/// <remarks><p>
-	/// The controller for a helper may also act as a "front controller" 
-	/// to ensure routine tasks are carried out.
+	/// The helper may also work with the catalog to act as a 
+	/// "front controller" by ensuring routine tasks are carried out.
 	/// These tasks can include input validation, data conversion, 
 	/// text formatting, command logging, and so forth.
 	/// </p></remarks>
@@ -138,6 +138,7 @@ namespace Nexus.Core.Helpers
 		/// Return true if Messages are queued.
 		/// </summary>
 		/// <returns>True if Messages are queued.</returns>
+		/// 
 		bool HasMessages { get; }
 
 
@@ -145,7 +146,7 @@ namespace Nexus.Core.Helpers
 
 		/// <summary>
 		/// Set of IFieldContext definitions available to the application, 
-		/// usually set by the controller.
+		/// usually set by the catalog.
 		/// </summary>
 		/// <remarks><p>
 		/// The FieldTable can be used to convert display strings to native 
@@ -236,11 +237,11 @@ namespace Nexus.Core.Helpers
 		// ----
 
 		/// <summary>
-		/// The controller for this helper, usually set by dependency 
-		/// injection.
+		/// The catalog for this helper, 
+		/// usually set by dependency injection.
 		/// </summary>
 		/// 
-		IController Controller { get; set; }
+		IRequestCatalog RequestCatalog { get; set; }
 
 
 		/// <summary>

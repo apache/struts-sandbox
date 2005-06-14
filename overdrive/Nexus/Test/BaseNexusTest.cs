@@ -29,10 +29,10 @@ namespace Nexus.Core
 	[TestFixture]
 	public class BaseNexusTest
 	{
-		protected IController controller;
+		protected IRequestCatalog catalog;
 
 		/// <summary>
-		/// Setup controller between tests.
+		/// Setup catalog between tests.
 		/// </summary>
 		/// 
 		[SetUp]
@@ -40,7 +40,7 @@ namespace Nexus.Core
 		{
 			// TODO: Implement Objects.Factory [OVR-8]
 			IApplicationContext factory = Objects.Factory ();
-			controller = new Controller (factory); // sic
+			catalog = new Catalog (factory); // sic
 		}
 
 		/// <summary>
@@ -50,7 +50,7 @@ namespace Nexus.Core
 		[Test]
 		public void AssertSetUp ()
 		{
-			Assert.IsTrue (controller != null, "Expected non-null controller.");
+			Assert.IsTrue (catalog != null, "Expected non-null catalog.");
 		}
 
 		/// <summary>

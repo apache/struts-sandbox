@@ -1,4 +1,5 @@
- /*
+using Agility.Core;
+/*
  * Copyright 2005 The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,16 +18,11 @@
 namespace Nexus.Core
 {
 	/// <summary>
-	/// Interact with the caller, controlling and managing 
-	/// the processing of a request [OVR-8]. 
+	///  Extend ICatalog to automatically set IFieldTable, 
+	///  IMessageTable and provide convenience methods [OVR-8]. 
 	/// </summary>
-	/// <remarks><p>
-	/// The caller should only need to know the name of a Command 
-	/// to be able to acquire the appropriate Context, 
-	/// and then execute the request. 
-	/// </p></remarks>
 	/// 
-	public interface IController
+	public interface IRequestCatalog : ICatalog
 	{
 		/// <summary>
 		/// Obtain object instance for name.

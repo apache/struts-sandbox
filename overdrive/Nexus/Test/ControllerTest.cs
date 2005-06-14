@@ -19,11 +19,11 @@ using NUnit.Framework;
 namespace Nexus.Core
 {
 	/// <summary>
-	/// Exercise IController per [OVR-8].
+	/// Exercise IRequestCatalog per [OVR-8].
 	/// </summary>
 	/// 
 	[TestFixture]
-	public class ControllerTest : BaseNexusTest
+	public class CatalogTest : BaseNexusTest
 	{
 		/// <summary>
 		/// A simple "list all" command should return nominal with an outcome. 
@@ -32,7 +32,7 @@ namespace Nexus.Core
 		[Test]
 		public void ExecuteContext ()
 		{
-			IRequestContext context = controller.ExecuteContext (ListAll.LIST_ALL);
+			IRequestContext context = catalog.ExecuteContext (ListAll.LIST_ALL);
 			AssertNominal (context);
 			Assert.IsTrue (context.IsNominal, "Expected nominal result.");
 			Assert.IsTrue (context.HasOutcome, "Expected outcome from command.");

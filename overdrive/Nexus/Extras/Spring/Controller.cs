@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 using System;
+using System.Collections;
 using Agility.Core;
 using Nexus.Core;
 using Nexus.Core.Tables;
@@ -22,11 +23,11 @@ using Spring.Context;
 namespace Nexus.Extras.Spring
 {
 	/// <summary>
-	/// Concrete IController implementation using Spring as an IOC 
-	/// container [OVR-8].
+	/// Concrete IRequestCatalog implementation 
+	/// using Spring as an IOC container [OVR-8].
 	/// </summary>
 	/// 
-	public class Controller : IController, IApplicationContextAware
+	public class Catalog : IRequestCatalog, IApplicationContextAware
 	{
 		private IApplicationContext _Factory = null;
 
@@ -36,11 +37,11 @@ namespace Nexus.Extras.Spring
 			set { _Factory = value; }
 		}
 
-		public Controller ()
+		public Catalog ()
 		{
 		}
 
-		public Controller (IApplicationContext value)
+		public Catalog (IApplicationContext value)
 		{
 			ApplicationContext = value;
 		}
@@ -58,11 +59,16 @@ namespace Nexus.Extras.Spring
 		public object GetObject (string name)
 		{
 			if (null == name)
-				throw new ArgumentNullException (msg_NAME, "IController.GetObject");
+				throw new ArgumentNullException (msg_NAME, "ICatalog.GetObject");
 			return Factory ().GetObject (name);
 		}
 
-		public IRequestCommand GetCommand (string name)
+		public void AddCommand (string name, ICommand command)
+		{
+			throw new NotImplementedException ();
+		}
+
+		public ICommand GetCommand (string name)
 		{
 			if (null == name)
 			{
@@ -82,6 +88,11 @@ namespace Nexus.Extras.Spring
 				throw(e);
 			}
 			return command;
+		}
+
+		public IEnumerator GetNames ()
+		{
+			throw new NotImplementedException ();
 		}
 
 		public IRequestContext GetContext (IRequestCommand command)
@@ -109,7 +120,7 @@ namespace Nexus.Extras.Spring
 			IRequestContext context = null;
 			try
 			{
-				IRequestCommand command = GetCommand (name);
+				IRequestCommand command = GetCommand (name) as IRequestCommand;
 				context = command.NewContext ();
 				context [Tokens.COMMAND_BIN] = command;
 			}
@@ -130,9 +141,9 @@ namespace Nexus.Extras.Spring
 		private IFieldTable _FieldTable = null;
 
 		/// <summary>
-		/// Access method for the Controller's FieldTable.
+		/// Access method for the Catalog's FieldTable.
 		/// </summary>
-		/// <returns>FieldTable for this Controller</returns></returns>
+		/// <returns>FieldTable for this Catalog</returns></returns>
 		/// 
 		public IFieldTable GetFieldTable ()
 		{

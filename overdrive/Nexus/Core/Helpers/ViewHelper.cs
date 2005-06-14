@@ -33,7 +33,7 @@ namespace Nexus.Core.Helpers
 			get
 			{
 				if (_Context == null)
-					_Context = Controller.GetContext (Command);
+					_Context = RequestCatalog.GetContext (Command);
 				return _Context;
 			}
 		}
@@ -52,7 +52,7 @@ namespace Nexus.Core.Helpers
 
 		public void Execute ()
 		{
-			Controller.ExecuteView (Context);
+			RequestCatalog.ExecuteView (Context);
 		}
 
 		#endregion
@@ -134,7 +134,7 @@ namespace Nexus.Core.Helpers
 			get { throw new NotImplementedException (); }
 			set { throw new NotImplementedException (); }
 		}
-		public IController Controller
+		public IRequestCatalog RequestCatalog
 		{
 			get { throw new NotImplementedException (); }
 			set { throw new NotImplementedException (); }

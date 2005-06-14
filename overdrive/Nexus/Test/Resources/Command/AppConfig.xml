@@ -3,7 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
 	
-<!-- controller commands 
+<!-- catalog commands 
 	
   <object id="convert_input" type="Nexus.Validators.ConvertInput">
     <property name="ID"><value>ConvertInput</value></property>
@@ -37,9 +37,9 @@
   </object>
 -->
     		
- <!-- Nexus Controller -->
+ <!-- Nexus Catalog -->
 
-  <object id="Controller" type="Nexus.Extras.Spring.Controller"/>
+  <object id="Catalog" type="Nexus.Extras.Spring.Catalog"/>
   
 <!-- iBATIS Mapper -->
   
