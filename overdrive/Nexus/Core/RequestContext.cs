@@ -46,26 +46,26 @@ namespace Nexus.Core
 
 		public string Command
 		{
-			get { return this [Tokens.COMMAND] as string; }
-			set { this [Tokens.COMMAND] = value; }
+			get { return this [Tokens.Command] as string; }
+			set { this [Tokens.Command] = value; }
 		}
 
 		public IRequestCommand CommandBin
 		{
-			get { return this [Tokens.COMMAND_BIN] as IRequestCommand; }
-			set { this [Tokens.COMMAND_BIN] = value; }
+			get { return this [Tokens.CommandBin] as IRequestCommand; }
+			set { this [Tokens.CommandBin] = value; }
 		}
 
 		public IFieldTable FieldTable
 		{
-			get { return this [Tokens.FIELD_TABLE] as IFieldTable; }
-			set { this [Tokens.FIELD_TABLE] = value; }
+			get { return this [Tokens.FieldTable] as IFieldTable; }
+			set { this [Tokens.FieldTable] = value; }
 		}
 
 		public IList FieldSet
 		{
-			get { return this [Tokens.FIELD_SET] as IList; }
-			set { this [Tokens.FIELD_SET] = value; }
+			get { return this [Tokens.FieldSet] as IList; }
+			set { this [Tokens.FieldSet] = value; }
 		}
 
 		public bool HasOutcome
@@ -108,34 +108,34 @@ namespace Nexus.Core
 
 		public IDictionary Alerts
 		{
-			get { return this [Tokens.ALERTS] as IDictionary; }
-			set { this [Tokens.ALERTS] = value; }
+			get { return this [Tokens.Alerts] as IDictionary; }
+			set { this [Tokens.Alerts] = value; }
 		}
 
 		public void AddAlert (string template)
 		{
-			AddStore (template, Tokens.GENERIC_MESSAGE, Tokens.ALERTS);
+			AddStore (template, Tokens.GenericMessage, Tokens.Alerts);
 		}
 
 		public bool HasAlerts
 		{
-			get { return this.ContainsKey (Tokens.ALERTS); }
+			get { return this.ContainsKey (Tokens.Alerts); }
 		}
 
 		public Exception Fault
 		{
-			get { return this [Tokens.FAULT] as Exception; }
+			get { return this [Tokens.Fault] as Exception; }
 			set
 			{
 				Exception e = value as Exception;
-				this [Tokens.FAULT] = e;
+				this [Tokens.Fault] = e;
 				AddAlert (e.Message);
 			}
 		}
 
 		public bool HasFault
 		{
-			get { return this.ContainsKey (Tokens.FAULT); }
+			get { return this.ContainsKey (Tokens.Fault); }
 		}
 
 		public bool IsNominal
@@ -145,23 +145,23 @@ namespace Nexus.Core
 
 		public IDictionary Hints
 		{
-			get { return this [Tokens.HINTS] as IDictionary; }
-			set { this [Tokens.HINTS] = value; }
+			get { return this [Tokens.Hints] as IDictionary; }
+			set { this [Tokens.Hints] = value; }
 		}
 
 		public void AddHint (string template)
 		{
-			AddStore (template, Tokens.GENERIC_MESSAGE, Tokens.HINTS);
+			AddStore (template, Tokens.GenericMessage, Tokens.Hints);
 		}
 
 		public void AddHint (string template, string queue)
 		{
-			AddStore (template, queue, Tokens.HINTS);
+			AddStore (template, queue, Tokens.Hints);
 		}
 
 		public bool HasHints
 		{
-			get { return this.ContainsKey (Tokens.HINTS); }
+			get { return this.ContainsKey (Tokens.Hints); }
 		}
 
 	}

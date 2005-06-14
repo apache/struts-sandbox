@@ -57,7 +57,7 @@ namespace Nexus.Core.Helpers
 
 		#endregion
 
-		#region Messages ... 
+		#region Messages
 
 		public IDictionary Alerts
 		{
@@ -103,21 +103,23 @@ namespace Nexus.Core.Helpers
 			get { return Context.FieldTable; }
 		}
 
+		private IList _FieldSet;
 		public IList FieldSet
 		{
-			get { throw new NotImplementedException (); }
+			get { return _FieldSet; }
+			set { _FieldSet = value; }
 		}
 
 		public string Prefix
 		{
-			get { throw new NotImplementedException (); }
-			set { throw new NotImplementedException (); }
+			get { return Context[Tokens.Prefix] as string; }
+			set { Context[Tokens.Prefix] = value; }
 		}
 
 		public string ListSuffix
 		{
-			get { throw new NotImplementedException (); }
-			set { throw new NotImplementedException (); }
+			get { return Context[Tokens.ListSuffix] as string; }
+			set { Context[Tokens.ListSuffix] = value; }
 		}
 
 		#endregion 
@@ -126,24 +128,34 @@ namespace Nexus.Core.Helpers
 
 		public bool NullIfEmpty
 		{
-			get { throw new NotImplementedException (); }
-			set { throw new NotImplementedException (); }
+			get
+			{
+				bool v = (Boolean) Context[Tokens.NullIfEmpty];				
+				return v;
+			}
+			set
+			{	Boolean b = new Boolean();
+				bool v = b.Equals (true) ? true : false ;
+				Context[Tokens.NullIfEmpty] = v;
+			}
 		}
+
 		public string SelectItemPrompt
 		{
-			get { throw new NotImplementedException (); }
-			set { throw new NotImplementedException (); }
+			get { return Context[Tokens.SelectItemPrompt] as string; }
+			set { Context[Tokens.SelectItemPrompt] = value; }
 		}
+
 		public IRequestCatalog Catalog
 		{
-			get { throw new NotImplementedException (); }
-			set { throw new NotImplementedException (); }
+			get { return Context[Tokens.Catalog] as IRequestCatalog; }
+			set { Context[Tokens.Catalog] = value; }
 		}
+
 		public IRequestCommand Command
 		{
-			get { throw new NotImplementedException (); }
-			set { throw new NotImplementedException (); }
-
+			get { return Context[Tokens.Command] as IRequestCommand; }
+			set { Context[Tokens.Command] = value; }
 		}
 
 		#endregion 

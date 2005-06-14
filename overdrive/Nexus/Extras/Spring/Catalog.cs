@@ -101,8 +101,8 @@ namespace Nexus.Extras.Spring
 			try
 			{
 				context = command.NewContext ();
-				context [Tokens.COMMAND_BIN] = command;
-				context [Tokens.FIELD_TABLE] = GetFieldTable ();
+				context [Tokens.CommandBin] = command;
+				context [Tokens.FieldTable] = GetFieldTable ();
 			}
 			catch (Exception e)
 			{
@@ -122,7 +122,7 @@ namespace Nexus.Extras.Spring
 			{
 				IRequestCommand command = GetCommand (name) as IRequestCommand;
 				context = command.NewContext ();
-				context [Tokens.COMMAND_BIN] = command;
+				context [Tokens.CommandBin] = command;
 			}
 			catch (Exception e)
 			{
@@ -148,7 +148,7 @@ namespace Nexus.Extras.Spring
 		public IFieldTable GetFieldTable ()
 		{
 			if (_FieldTable == null)
-				_FieldTable = GetObject (Tokens.FIELD_ID) as IFieldTable;
+				_FieldTable = GetObject (Tokens.FieldTable) as IFieldTable;
 			return _FieldTable;
 		}
 
@@ -160,7 +160,7 @@ namespace Nexus.Extras.Spring
 				// ISSUE: Add a message about null context
 			}
 
-			IRequestCommand command = context [Tokens.COMMAND_BIN] as IRequestCommand;
+			IRequestCommand command = context [Tokens.CommandBin] as IRequestCommand;
 
 			if (null == command)
 			{
@@ -191,7 +191,7 @@ namespace Nexus.Extras.Spring
 
 		public void ExecuteView (IRequestContext context)
 		{
-			IRequestCommand command = context [Tokens.COMMAND_BIN] as IRequestCommand;
+			IRequestCommand command = context [Tokens.CommandBin] as IRequestCommand;
 			IChain chain = new Chain ();
 			chain.AddCommand (GetCommand (Tokens.PRE_OP));
 			chain.AddCommand (command);

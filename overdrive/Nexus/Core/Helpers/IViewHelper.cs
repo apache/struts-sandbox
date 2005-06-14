@@ -169,7 +169,7 @@ namespace Nexus.Core.Helpers
 		/// FieldDefinitions 
 		/// </p></remarks>
 		/// 
-		IList FieldSet { get; }
+		IList FieldSet { get; set; }
 
 		/* 
 			// TODO: Messengers
