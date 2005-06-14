@@ -32,7 +32,6 @@ namespace Nexus.Core.Helpers
 	/// 
 	public interface IViewHelper
 	{
-
 		/// <summary>
 		/// Invoke the helper's command and bind the output to 
 		/// controls in the given collection.
@@ -76,7 +75,7 @@ namespace Nexus.Core.Helpers
 		/// Invoke the helper's command.
 		/// </summary>
 		/// 
-		void Execute();
+		void Execute ();
 
 
 		/// <summary>
@@ -88,7 +87,7 @@ namespace Nexus.Core.Helpers
 
 
 		// ----
-		
+
 		/// <summary>
 		/// A list of error messages, keyed by the field causing the 
 		/// error, or to a magic global key.
@@ -155,7 +154,7 @@ namespace Nexus.Core.Helpers
 		/// The FieldTable can also be used to generate UI controls. 
 		/// </p></remarks>
 		/// 
-		IFieldTable FieldTable { get;}
+		IFieldTable FieldTable { get; }
 
 
 		/// <summary>
@@ -167,8 +166,8 @@ namespace Nexus.Core.Helpers
 		/// FieldDefinitions 
 		/// </p></remarks>
 		/// 
-		IList FieldSet {get;}
-		
+		IList FieldSet { get; }
+
 		/* 
 			// TODO: Messengers
 			string Text(string key); 
@@ -176,7 +175,7 @@ namespace Nexus.Core.Helpers
 			ITextTable TextTable {get;}
 		*/
 
-		
+
 		// ----
 
 		/// <summary>
@@ -206,7 +205,7 @@ namespace Nexus.Core.Helpers
 		/// "facility_key_list" will be set to a field named "facility_key".
 		/// </P></remark>
 		/// 
-		string ListSuffix {get; set;}
+		string ListSuffix { get; set; }
 
 		/* 
 			// TODO: 
@@ -221,7 +220,7 @@ namespace Nexus.Core.Helpers
 		/// instead [TRUE].
 		/// </summary>
 		/// 
-		bool NullIfEmpty {get; set;}
+		bool NullIfEmpty { get; set; }
 
 
 		/// <summary>
@@ -231,7 +230,7 @@ namespace Nexus.Core.Helpers
 		/// To disable feature, set to a null string.
 		/// </p></remarks>
 		/// 
-		string SelectItemPrompt {get; set;}
+		string SelectItemPrompt { get; set; }
 
 
 		// ----

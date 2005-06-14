@@ -1,5 +1,3 @@
-using System;
-
 namespace Nexus
 {
 	/// <summary>
@@ -8,7 +6,7 @@ namespace Nexus
 	/// 
 	public class WebHelper
 	{
-		public WebHelper()
+		public WebHelper ()
 		{
 			//
 			// TODO: Add constructor logic here

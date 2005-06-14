@@ -50,10 +50,10 @@ namespace Nexus.Extras.Spring
 			return _Factory;
 		}
 
-		static string msg_NAME = "name";
-		static string msg_NULL = "Command name cannot be null.";
-		static string msg_MISSING = "Object is not found in Factory.";
-		string msg_TYPE = "Command is not a IRequestCommand or IRequestChain.";
+		private static string msg_NAME = "name";
+		private static string msg_NULL = "Command name cannot be null.";
+		private static string msg_MISSING = "Object is not found in Factory.";
+		private string msg_TYPE = "Command is not a IRequestCommand or IRequestChain.";
 
 		public object GetObject (string name)
 		{
@@ -103,7 +103,7 @@ namespace Nexus.Extras.Spring
 			return context;
 
 		}
-		
+
 		public IRequestContext GetContext (string name)
 		{
 			IRequestContext context = null;

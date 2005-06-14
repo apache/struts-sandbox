@@ -33,7 +33,7 @@ namespace Nexus.Core.Commands
 		/// Fake name for test data.
 		/// </summary>
 		/// 
-		const string DATA = "data";
+		private const string DATA = "data";
 
 		public override bool RequestExecute (IRequestContext context)
 		{

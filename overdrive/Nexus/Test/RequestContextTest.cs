@@ -68,8 +68,8 @@ namespace Nexus.Core
 		public void IsNominal_Fault ()
 		{
 			context.Fault = fault;
-			Assert.IsFalse (context.IsNominal, 
-				"Expected non-nominal state after setting Exception.");
+			Assert.IsFalse (context.IsNominal,
+			                "Expected non-nominal state after setting Exception.");
 		}
 
 		/// <summary>
@@ -83,8 +83,8 @@ namespace Nexus.Core
 			context.AddError ("Business logic error");
 			context.AddError ("Business logic error 2");
 			context.Fault = fault;
-			Assert.IsFalse (context.IsNominal, 
-				"Expected non-nominal state after adding errors and Exception.");
+			Assert.IsFalse (context.IsNominal,
+			                "Expected non-nominal state after adding errors and Exception.");
 		}
 
 		/// <summary>

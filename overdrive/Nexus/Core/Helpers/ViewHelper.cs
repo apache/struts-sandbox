@@ -32,10 +32,8 @@ namespace Nexus.Core.Helpers
 		{
 			get
 			{
-				if (_Context==null)
-				{
-					_Context = Controller.GetContext(Command);
-				}				
+				if (_Context == null)
+					_Context = Controller.GetContext (Command);
 				return _Context;
 			}
 		}
@@ -54,7 +52,7 @@ namespace Nexus.Core.Helpers
 
 		public void Execute ()
 		{
-			Controller.ExecuteView(Context);
+			Controller.ExecuteView (Context);
 		}
 
 		#endregion
@@ -104,18 +102,18 @@ namespace Nexus.Core.Helpers
 		{
 			get { return Context.FieldTable; }
 		}
-		
+
 		public IList FieldSet
 		{
 			get { throw new NotImplementedException (); }
 		}
-		
+
 		public string Prefix
 		{
 			get { throw new NotImplementedException (); }
 			set { throw new NotImplementedException (); }
 		}
-		
+
 		public string ListSuffix
 		{
 			get { throw new NotImplementedException (); }
@@ -145,7 +143,7 @@ namespace Nexus.Core.Helpers
 		{
 			get { throw new NotImplementedException (); }
 			set { throw new NotImplementedException (); }
-		
+
 		}
 
 		#endregion 

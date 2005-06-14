@@ -59,7 +59,7 @@ namespace Nexus.Core
 		public IFieldTable FieldTable
 		{
 			get { return this [Tokens.FIELD_TABLE] as IFieldTable; }
-			set { this [Tokens.FIELD_TABLE] = value; }			
+			set { this [Tokens.FIELD_TABLE] = value; }
 		}
 
 		public IList FieldSet

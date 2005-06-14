@@ -192,7 +192,7 @@ namespace Nexus.Core
 		/// </summary>
 		/// <returns>True if there are messages.</returns>
 		/// 
-		bool HasMessages {get;}
+		bool HasMessages { get; }
 
 	}
 }

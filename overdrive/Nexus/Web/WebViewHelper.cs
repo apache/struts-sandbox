@@ -11,7 +11,6 @@ namespace Nexus.Web.Helpers
 	/// 
 	public class WebViewHelper : ViewHelper
 	{
-
 		#region Error Builders
 
 		/// <summary>

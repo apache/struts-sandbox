@@ -11,7 +11,6 @@ namespace Nexus.Core.Tables
 	/// 
 	public interface IFieldTable : IContext, ISerializable
 	{
-
 		/// <summary>
 		/// Add a field to the set. 
 		/// </summary>
