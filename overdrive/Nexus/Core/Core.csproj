@@ -99,12 +99,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IRequestChain.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IRequestCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "IRequestContext.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "RequestChain.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -134,6 +144,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Tables\FieldContext.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Tables\FieldTable.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Tables\IFieldContext.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -144,7 +164,32 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Validators\ConvertInput.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Validators\FormatOutput.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Validators\IValidator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Validators\IValidatorContext.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Validators\Validator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Validators\ValidatorContext.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

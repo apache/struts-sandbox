@@ -3,47 +3,70 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
 	
-<!-- catalog commands 
+<!-- catalog commands -->
 	
-  <object id="convert_input" type="Nexus.Validators.ConvertInput">
+  <object id="ConvertInput" type="Nexus.Core.Validators.ConvertInput">
     <property name="ID"><value>ConvertInput</value></property>
     <property name="Template"><value>{0} is required.</value></property>
   </object>
 
-  <object id="format_output" type="Nexus.Validators.FormatOutput">
+  <object id="FormatOutput" type="Nexus.Core.Validators.FormatOutput">
     <property name="ID"><value>FormatOutput</value></property>    
     <property name="Template"><value>{0} is required.</value></property>
   </object>
-  
--->
 
-  <!-- pre-op   
-  <object id="pre-op" type="Nexus.NexusChain, Agility.Nexus">
+  <!-- pre-op -->
+  <object id="pre-op" type="Nexus.Core.RequestChain">
+    <property name="ID"><value>pre-op</value></property>    
 	<property name="AddCommands">
 		<list>
-			<ref object="convert_input"/>
+			<ref object="ConvertInput"/>
 		</list>   
     </property>           
   </object>  
-  -->
 
-  <!-- post-op 
-  <object id="post-op" type="Nexus.NexusChain, Agility.Nexus">
+  <!-- post-op -->
+  <object id="post-op" type="Nexus.Core.RequestChain">
+    <property name="ID"><value>post-op</value></property>    
 	<property name="AddCommands">
 		<list>
-			<ref object="format_output"/>
+			<ref object="FormatOutput"/>
 		</list>   
     </property>           
   </object>
--->
     		
- <!-- Nexus Catalog -->
+ <!-- Catalog 
+  <object id="Catalog" type="Nexus.Extras.Spring.Catalog"/>  
+ -->  
+  
+ <!-- FieldTable -->
+ 
+	<object id="FieldTable" type="Nexus.Core.Tables.FieldTable">
+		<property name="Strict"><value>true</value></property>
+		<property name="AddFields">
+			<list>
+				<ref object="pk_something"/> 
+				<ref object="SomeDate"/> 
+				<ref object="SomethingResult"/> 
+			</list>
+		</property>
+	</object>
+	
+<!-- Fields -->
 
-  <object id="Catalog" type="Nexus.Extras.Spring.Catalog"/>
-  
-<!-- iBATIS Mapper -->
-  
-  <object id="Mapper" type="IBatisNet.DataMapper.Mapper, IBatisNet.DataMapper" 
-		factory-method="Instance"/> 
-    
+	<object id="pk_something" type="Nexus.Core.Tables.FieldContext">
+		<property name="ID"><value>pk_something</value></property>
+	</object>
+	
+	<object id="SomethingResult" type="Nexus.Core.Tables.FieldContext">
+		<property name="ID"><value>SomethingResult</value></property>
+	</object>
+
+	<object id="SomeDate" type="Nexus.Core.Tables.FieldContext">
+		<property name="ID"><value>SomeDate</value></property>
+		<property name="Alert"><value>{0} must be a valid date</value></property>
+		<property name="DataFormat"><value>d</value></property>
+		<property name="DataTypeName"><value>System.DateTime</value></property>
+	</object>
+	       
 </objects>

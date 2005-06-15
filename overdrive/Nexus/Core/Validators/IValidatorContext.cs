@@ -1,6 +1,6 @@
 using Agility.Core;
 
-namespace Nexus.Validators
+namespace Nexus.Core.Validators
 {
 	/// <summary>
 	/// Encapsulate values needed by standard IValidatorCommands [OVR-13].

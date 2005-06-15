@@ -23,12 +23,27 @@ using Spring.Context;
 namespace Nexus.Extras.Spring
 {
 	/// <summary>
-	/// Concrete IRequestCatalog implementation 
+	/// Implement IRequestCatalog  
 	/// using Spring as an IOC container [OVR-8].
 	/// </summary>
 	/// 
 	public class Catalog : IRequestCatalog, IApplicationContextAware
 	{
+
+		#region Messages 
+
+		private const string msg_ADD_COMMAND = "This catalog instance is created through dependency injection.";
+		private const string msg_MISSING = "Object is not found in Factory.";
+		private const string msg_NAME = "name";
+		private const string msg_NULL = "Command name cannot be null.";
+		private const string msg_TYPE = "Command is not a IRequestCommand or IRequestChain.";
+		private const string msg_CATALOG_CONTEXT_NULL = "Catalog: Context cannot be null!";
+		private const string msg_CATALOG_COMMAND_NULL = "Catalog: Command within Context cannot be null! -- Was Context retrieved from Catalog?";
+
+		#endregion
+
+		#region IApplicationContextAware 
+
 		private IApplicationContext _Factory = null;
 
 		public IApplicationContext ApplicationContext
@@ -37,37 +52,45 @@ namespace Nexus.Extras.Spring
 			set { _Factory = value; }
 		}
 
-		public Catalog ()
-		{
-		}
-
-		public Catalog (IApplicationContext value)
-		{
-			ApplicationContext = value;
-		}
-
-		public IApplicationContext Factory ()
-		{
-			return _Factory;
-		}
-
-		private static string msg_NAME = "name";
-		private static string msg_NULL = "Command name cannot be null.";
-		private static string msg_MISSING = "Object is not found in Factory.";
-		private string msg_TYPE = "Command is not a IRequestCommand or IRequestChain.";
-
-		public object GetObject (string name)
+		/// <summary>
+		/// Allow safe access to Factory.GetObject.
+		/// </summary>
+		/// <param name="name">ID for object</param>
+		/// <returns>Object instance</returns>
+		/// <exception cref="Exception">
+		/// Throws Exception if name is null.
+		/// </exception>
+		private object GetObject (string name)
 		{
 			if (null == name)
-				throw new ArgumentNullException (msg_NAME, "ICatalog.GetObject");
+				throw new ArgumentNullException (msg_NAME, "Nexus.Extras.Spring.Catalog.GetObject");
 			return Factory ().GetObject (name);
 		}
 
+		#endregion
+
+		#region ICatalog
+
+		/// <summary>
+		/// Not implemented as Catalog is expected to be created by an IOC framework.
+		/// </summary>
+		/// <param name="name">ID for command</param>
+		/// <param name="command">Command instance</param>
 		public void AddCommand (string name, ICommand command)
 		{
-			throw new NotImplementedException ();
+			throw new NotImplementedException (msg_ADD_COMMAND); // OK
 		}
 
+		/// <summary>
+		/// Obtain Command and verify that instance is a IRequestCommand.
+		/// </summary>
+		/// <param name="name">Command ID</param>
+		/// <returns>IRequestCommand instance for name</returns>
+		/// <exception cref="Exception">
+		/// Throws Exception if name is null, 
+		/// name is not in catalog, 
+		/// or if instance for name is not a IRequestCommand
+		/// </exception>
 		public ICommand GetCommand (string name)
 		{
 			if (null == name)
@@ -92,47 +115,40 @@ namespace Nexus.Extras.Spring
 
 		public IEnumerator GetNames ()
 		{
-			throw new NotImplementedException ();
+			string[] names = _Factory.GetObjectDefinitionNames ();
+			IEnumerator enu = names.GetEnumerator ();
+			return enu;
 		}
 
-		public IRequestContext GetContext (IRequestCommand command)
+		#endregion
+
+		#region IRequestCatalog
+
+		/// <summary>
+		/// Default constructor.
+		/// </summary>
+		public Catalog ()
 		{
-			IRequestContext context = null;
-			try
-			{
-				context = command.NewContext ();
-				context [Tokens.CommandBin] = command;
-				context [Tokens.FieldTable] = GetFieldTable ();
-			}
-			catch (Exception e)
-			{
-				context = new RequestContext ();
-				context.Fault = e;
-				// ISSUE: Log exception(faults) (Log all errors in verbose mode?)
-				// ISSUE: Provide an alternate location on fault? -- Declarative exception handing
-			}
-			return context;
-
 		}
 
-		public IRequestContext GetContext (string name)
+		/// <summary>
+		/// Construct object and set ApplicationContext.
+		/// </summary>
+		/// <param name="value">Our ApplicationContext</param>
+		public Catalog (IApplicationContext value)
 		{
-			IRequestContext context = null;
-			try
-			{
-				IRequestCommand command = GetCommand (name) as IRequestCommand;
-				context = command.NewContext ();
-				context [Tokens.CommandBin] = command;
-			}
-			catch (Exception e)
-			{
-				context = new RequestContext ();
-				context.Fault = e;
-				// ISSUE: Log exception(faults) (Log all errors in verbose mode?)
-				// ISSUE: Provide an alternate location on fault? -- Declarative exception handing
-			}
-			return context;
+			ApplicationContext = value;
 		}
+
+		/// <summary>
+		/// Provide the IApplicationContext instance.
+		/// </summary>
+		/// <returns>IApplicationContext instance</returns>
+		public IApplicationContext Factory ()
+		{
+			return _Factory;
+		}
+
 
 		/// <summary>
 		/// Field for GetFieldTable method.
@@ -145,29 +161,82 @@ namespace Nexus.Extras.Spring
 		/// </summary>
 		/// <returns>FieldTable for this Catalog</returns></returns>
 		/// 
-		public IFieldTable GetFieldTable ()
+		private IFieldTable GetFieldTable ()
 		{
 			if (_FieldTable == null)
-				_FieldTable = GetObject (Tokens.FieldTable) as IFieldTable;
+				_FieldTable = GetObject (Tokens.FIELD_TABLE_ID) as IFieldTable;
 			return _FieldTable;
 		}
 
-		public void Execute (IRequestContext context)
+		public IRequestContext GetRequest (string command)
+		{
+			ICommand _command = GetCommand(command);
+			IRequestCommand _rc = _command as IRequestCommand;
+			return GetRequest(_rc);
+		}
+		
+		public IRequestContext GetRequest (IRequestCommand command)
+		{
+			IRequestContext context = null;
+			try
+			{
+				context = command.NewContext ();
+				context [Tokens.CommandBin] = command;
+				context [Tokens.FieldTable] = GetFieldTable ();
+				// TODO: MessageTable
+			}
+			catch (Exception e)
+			{
+				context = new RequestContext ();
+				context.Fault = e;
+				// ISSUE: Log exception(faults) (Log all errors in verbose mode?)
+				// ISSUE: Provide an alternate location on fault? -- Declarative exception handing
+			}
+			return context;
+
+		}
+
+		public IRequestContext GetRequest(string command, IDictionary input) {
+
+			IRequestContext context = GetRequest(command);
+			context.Criteria = input;
+			return context;			
+		}	
+
+		/// <summary>
+		/// Confirm that the Context is not null, and the Context's Command is not null.
+		/// </summary>
+		/// <param name="context">IRequestContext to verify</param>
+		/// <returns>The non-null Command for this Context</returns>
+		private IRequestCommand VerifyRequest(IRequestContext context)
 		{
 			if (null == context)
 			{
 				context = new RequestContext ();
-				// ISSUE: Add a message about null context
+				context.AddAlert (msg_CATALOG_CONTEXT_NULL);
 			}
 
 			IRequestCommand command = context [Tokens.CommandBin] as IRequestCommand;
 
 			if (null == command)
 			{
-				// ISSUE: Add a message about null command.
-				// (A null context with then have two messages.)
-			}
-			else
+				context.AddAlert (msg_CATALOG_COMMAND_NULL);
+			}			
+
+			return command;
+		}
+
+		public IRequestContext ExecuteRequest (string command)
+		{
+			IRequestContext context = GetRequest(command);
+			ExecuteRequest(context);
+			return context;
+		}
+
+		public void ExecuteRequest (IRequestContext context)
+		{			
+			IRequestCommand command = VerifyRequest(context);
+			if (context.IsNominal)
 			{
 				try
 				{
@@ -178,34 +247,31 @@ namespace Nexus.Extras.Spring
 					context.Fault = e;
 				}
 			}
+
 			// ISSUE: Log exception(faults) (Log all errors in verbose mode?)
 			// ISSUE: Provide an alternate location on fault? -- Declarative exception handing?
 		}
 
-		public IRequestContext ExecuteContext (string command)
-		{
-			IRequestContext context = GetContext (command);
-			Execute (context);
-			return context;
-		}
-
 		public void ExecuteView (IRequestContext context)
 		{
-			IRequestCommand command = context [Tokens.CommandBin] as IRequestCommand;
-			IChain chain = new Chain ();
-			chain.AddCommand (GetCommand (Tokens.PRE_OP));
-			chain.AddCommand (command);
-			chain.AddCommand (GetCommand (Tokens.POST_OP));
-			try
-			{
-				chain.Execute (context);
-			}
-			catch (Exception e)
-			{
-				context.Fault = e;
+			IRequestCommand command = VerifyRequest(context);
+			if (context.IsNominal) {
+				IChain chain = new Chain ();
+				chain.AddCommand (GetCommand (Tokens.PRE_OP_ID));
+				chain.AddCommand (command);
+				chain.AddCommand (GetCommand (Tokens.POST_OP_ID));
+				try
+				{
+					chain.Execute (context);
+				}
+				catch (Exception e)
+				{
+					context.Fault = e;
+				}
 			}
 		}
 
+		#endregion
 
 	}
 }

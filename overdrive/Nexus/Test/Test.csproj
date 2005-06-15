@@ -125,6 +125,15 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ObjectByKeyTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Objects.xml"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "RequestCommandTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -136,6 +145,11 @@
                 />
                 <File
                     RelPath = "Commands\ListAll.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Commands\ObjectByKey.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

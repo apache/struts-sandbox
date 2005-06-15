@@ -47,16 +47,22 @@ namespace Nexus.Core
 		*/
 		
 		/// <summary>
-		/// Token for a generic message property.
+		/// Token for Alert property.
 		/// </summary>
-		/// <remarks><p>
-		/// A dot is used to communicate the idea 
-		/// that the message catagory has no name
-		/// and to avoid using a language constant 
-		/// in a language-neutral content.
-		/// </p></remarks>
 		/// 
-		public const string GenericMessage = ".";
+		public const string Alert = "_Alert";
+
+		/// <summary>
+		/// Token for Alerts property.
+		/// </summary>
+		/// 
+		public const string Alerts = "_Alerts";
+
+		/// <summary>
+		/// Token for Catalog property.
+		/// </summary>
+		/// 
+		public const string Catalog = "_Catalog";
 
 		/// <summary>
 		/// Token for Command property.
@@ -71,27 +77,34 @@ namespace Nexus.Core
 		public const string CommandBin = "_CommandBin";
 
 		/// <summary>
-		/// Token for Alerts property.
+		/// Token for ControlTypeName ControlTypeName.
 		/// </summary>
 		/// 
-		public const string Alerts = "_Alerts";
+		public const string ControlTypeName = "_ControlTypeName";
 
 		/// <summary>
-		/// Token for Hints property.
-		/// </summary>
-		public const string Hints = "_Hints";
-
-		/// <summary>
-		/// Token for FieldTable property.
+		/// Token for Criteria property.
 		/// </summary>
 		/// 
-		public const string FieldTable = "_FieldTable";
+		public const string Criteria = "_Criteria";
 
 		/// <summary>
-		/// Token for FieldSet property.
+		/// Token for DataFormat DataFormat.
 		/// </summary>
 		/// 
-		public const string FieldSet = "_FieldSet";
+		public const string DataFormat = "_DataFormat";
+
+		/// <summary>
+		/// Token for DataType DataType.
+		/// </summary>
+		/// 
+		public const string DataType = "_DataType";
+
+		/// <summary>
+		/// Token for DataTypeName DataTypeName.
+		/// </summary>
+		/// 
+		public const string DataTypeName = "_DataTypeName";
 
 		/// <summary>
 		/// Token for Fault property.
@@ -100,10 +113,55 @@ namespace Nexus.Core
 		public const string Fault = "_Fault";
 
 		/// <summary>
-		/// Token for Prefix property.
+		/// Token for FieldSet property.
 		/// </summary>
 		/// 
-		public const string Prefix = "_Prefix";
+		public const string FieldSet = "_FieldSet";
+
+		/// <summary>
+		/// Token for FieldTable property.
+		/// </summary>
+		/// 
+		public const string FieldTable = "_FieldTable";
+
+		/// <summary>
+		/// Token for a generic message property.
+		/// </summary>
+		/// <remarks><p>
+		/// A dot is used to communicate the idea 
+		/// that the message catagory has no name
+		/// and to avoid using a language constant 
+		/// in a language-neutral content.
+		/// </p></remarks>
+		/// 
+		public const string GenericMessage = ".";
+
+		/// <summary>
+		/// Token for Hint property.
+		/// </summary>
+		public const string Hint = "_Hint";
+
+		/// <summary>
+		/// Token for Hints property.
+		/// </summary>
+		public const string Hints = "_Hints";
+
+		/// <summary>
+		/// Token for Help property.
+		/// </summary>
+		public const string Help = "_Help";
+
+		/// <summary>
+		/// Token for ID ID.
+		/// </summary>
+		/// 
+		public const string ID = "_ID";
+
+		/// <summary>
+		/// Token for Label Label.
+		/// </summary>
+		/// 
+		public const string Label = "_Label";
 
 		/// <summary>
 		/// Token for ListSuffix property.
@@ -118,16 +176,16 @@ namespace Nexus.Core
 		public const string NullIfEmpty = "_NullIfEmpty";
 
 		/// <summary>
+		/// Token for Prefix property.
+		/// </summary>
+		/// 
+		public const string Prefix = "_Prefix";
+
+		/// <summary>
 		/// Token for SelectItemPrompt property.
 		/// </summary>
 		/// 
 		public const string SelectItemPrompt = "_SelectItemPrompt";
-
-		/// <summary>
-		/// Token for Catalog property.
-		/// </summary>
-		/// 
-		public const string Catalog = "_Catalog";
 
 		#endregion
 
@@ -137,13 +195,34 @@ namespace Nexus.Core
 		/// Token for the pre-op command element.
 		/// </summary>
 		/// 
-		public const string PRE_OP = "pre-op";
+		public const string PRE_OP_ID = "pre-op";
 
 		/// <summary>
 		/// Token for the post-op command element.
 		/// </summary>
 		/// 
-		public const string POST_OP = "post-op";
+		public const string POST_OP_ID = "post-op";
+
+		/// <summary>
+		/// Token for FieldTable command element.
+		/// </summary>
+		/// 
+		public const string FIELD_TABLE_ID = "FieldTable";
+
+
+		#endregion
+
+		#region Control Type Names
+
+		/// <summary>
+		/// Token for input Control Type Name.
+		/// </summary>
+		public const string INPUT_CONTROL = "input";
+
+		/// <summary>
+		/// Token for select Control Type Name.
+		/// </summary>
+		public const string SELECT_CONTROL = "select";
 
 		#endregion
 

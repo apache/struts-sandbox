@@ -33,7 +33,7 @@ namespace Nexus.Core.Helpers
 			get
 			{
 				if (_Context == null)
-					_Context = Catalog.GetContext (Command);
+					_Context = Catalog.GetRequest (Command);
 				return _Context;
 			}
 		}

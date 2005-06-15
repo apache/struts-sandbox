@@ -27,39 +27,51 @@ namespace Nexus.Core
 	/// An IRequestContext can predefine whatever properties we need for 
 	/// storing input, output, messages, and other common attributes, 
 	/// including Locale (or Culture) and user credentials. 
+	/// </p><p>
+	/// A key member is the FieldTable. 
+	/// The FieldTable uses XForms terminology for its members 
+	/// and IRequestContext members follow suit. 
+	/// For example, "errors" are called "Alerts" and generic 
+	/// messages are called "Hints, 
+	/// since these are terms used by the FieldTable and XForms.
 	/// </p></remarks>
 	/// 
 	public interface IRequestContext : IContext
 	{
+
+		#region Processing 
+
 		/// <summary>
-		/// Identifier for the top-level Command (or Chain) processing 
+		/// Identify the top-level Command (or Chain) processing 
 		/// this Context.
 		/// </summary>
 		/// <remarks><P>
-		/// Corresponds to ID of INexusCommand for the initial Command 
-		/// or Chain.
+		/// The Command property corresponds to ID of INexusCommand 
+		/// for the initial Command or Chain.
 		/// </P></remarks>
 		/// 
 		string Command { get; set; }
 
 		/// <summary>
-		/// Instance of the top-level Command (or Chain) processing this 
-		/// Context.
+		/// Provide the top-level Command (or Chain) processing this Context.
 		/// </summary>
 		/// <remarks><p>
-		/// Corresponds to ID of INexusCommand for the initial Command 
-		/// or Chain.
+		/// Command corresponds to ID of INexusCommand for the 
+		/// initial Command or Chain.
 		/// </p></remarks>
 		/// 
 		IRequestCommand CommandBin { get; set; }
 
 
 		/// <summary>
-		/// Instance of the global Field Table for this application.
+		/// Provide the Field Table for this Context.
 		/// </summary>
 		/// <remarks><p>
-		/// Corresponds to ID of INexusCommand for the initial Command or 
-		/// Chain.
+		/// The default implementation uses the Catalog to inject the global 
+		/// Field Table reference. 
+		/// The Context, and members with access to a Context, 
+		/// can use the FieldTable to validate and format values, 
+		/// and even to create controls that display values.
 		/// </p></remarks>
 		/// 
 		IFieldTable FieldTable { get; set; }
@@ -111,7 +123,55 @@ namespace Nexus.Core
 		object Outcome { get; set; }
 
 		/// <summary>
-		/// A list of alert (or error) messages, 
+		/// Indicate whether a Criteria is present.
+		/// </summary>
+		/// <returns>True if a Criteria is present.</returns>
+		bool HasCriteria ();
+
+		/// <summary>
+		/// Provide an optional subcontext containing input or output 
+		/// values, usually expressed as display strings.
+		/// </summary>
+		/// <remarks>
+		/// <p>
+		/// Criteria is provided for Commands that accept input 
+		/// from other components which may need to be validated, 
+		/// converted, or formatted before use.
+		/// If the proposed FieldState is accepted, 
+		/// the entries may be merged into the root Context, 
+		/// perhaps after type conversion or formatting tasks.
+		/// If the proposed FieldState is not accepted, 
+		/// the entries are not merged into the root Context, 
+		/// and there should be Errors or a Fault explaining 
+		/// why the FieldState (e.g input) cannot be accepted.
+		/// </p>
+		/// <p>
+		/// In practice, it is expected, but not required, that 
+		/// all the FieldState entries will contain string values.
+		/// </p>
+		/// <p>
+		/// Commands should only act on the Criteria in order 
+		/// to transfer values between the FieldState and the 
+		/// root Context. 
+		/// Conventional Commands will look to the root Context 
+		/// for the state and make any expected changes 
+		/// or additions directly to the root context.
+		/// FieldState is not expected to be used by a Commands 
+		/// unless input is being submitted from an untrusted or 
+		/// naive component, or needs to be transformed for use 
+		/// by a display component.
+		/// </p>
+		/// </remarks>
+		IDictionary Criteria { get; set; }
+
+		#endregion 
+
+		#region Messaging
+
+		string FormatTemplate (string template, string value);
+
+		/// <summary>
+		/// Record a list of alert (or error) messages, 
 		/// keyed by the field causing the message, 
 		/// or to a magic global key.
 		/// </summary>
@@ -129,6 +189,23 @@ namespace Nexus.Core
 		void AddAlert (string template);
 
 		/// <summary>
+		/// Add an alert message, creating the context if needed. 
+		/// </summary>
+		/// <remarks>
+		/// Multiple messages can be added for a key and retrieved as a List.
+		/// </remarks>
+		/// <param name="template">Message template.</param>
+		/// <param name="message">Message key.</param>
+		void AddAlert (string template, string message);
+
+		/// <summary>
+		/// Add a formatted Alert error message
+		/// for the given field key via the FieldTable.
+		/// </summary>
+		/// <param name="key">Key from the FieldTable</param>
+		void AddAlertForField (string key);
+
+		/// <summary>
 		/// Indicate whether alerts exist.
 		/// </summary>
 		/// <returns>True if there are alerts.</returns>
@@ -136,13 +213,8 @@ namespace Nexus.Core
 		bool HasAlerts { get; }
 
 		/// <summary>
-		/// An Exception, if thrown.
+		/// Record an Exception, if thrown.
 		/// </summary>
-		/// <remark>
-		/// A IViewContext is readonly, 
-		/// but another interface (e.g. IHelperContext) may extend to add a 
-		/// setter, if needed.
-		/// </remark>
 		/// 
 		Exception Fault { get; set; }
 
@@ -161,7 +233,7 @@ namespace Nexus.Core
 		bool IsNominal { get; }
 
 		/// <summary>
-		/// A list of hint (advisory or warning) messages (!errors), 
+		/// Record hint (advisory or warning) messages (!errors), 
 		/// keyed by the field causing the message, 
 		/// or to a magic global key.
 		/// </summary>
@@ -194,5 +266,6 @@ namespace Nexus.Core
 		/// 
 		bool HasHints { get; }
 
+		#endregion
 	}
 }

@@ -1,3 +1,4 @@
+using System.Collections;
 using Agility.Core;
 /*
  * Copyright 2005 The Apache Software Foundation.
@@ -24,34 +25,53 @@ namespace Nexus.Core
 	/// 
 	public interface IRequestCatalog : ICatalog
 	{
-		/// <summary>
-		/// Obtain object instance for name.
-		/// </summary>
-		/// <param name="name">ID for object to return</param>
-		/// <returns>Instantiated object corresonding to name</returns>
-		/// 
-		object GetObject (string name);
 
 		/// <summary>
-		/// Obtain new NexusContext for command, 
+		/// Obtain a IRequestContext for command ID, 
+		/// including embedded resources.
+		/// </summary>
+		/// <param name="command">Our command ID</param>
+		/// <returns>IRequestContext with embedded resources.</returns>
+		/// 
+		IRequestContext GetRequest (string command);
+
+		/// <summary>
+		/// Obtain a IRequestContext for command ID, 
+		/// including embedded resources, 
+		/// and process string-based input. 
+		/// </summary>
+		/// <param name="command">Our command ID</param>
+		/// <param name="input">Our input values</param>
+		/// <returns>IRequestContext with embedded resources.</returns>
+		/// 
+		IRequestContext GetRequest (string command, IDictionary input);
+
+		/// <summary>
+		/// Obtain a IRequestContext for the command, 
 		/// including embedded resources.
 		/// </summary>
 		/// <param name="command">Our command</param>
-		/// <returns>NexusContext with embedded resources.</returns>
+		/// <returns>IRequestContext with embedded resources.</returns>
 		/// 
-		IRequestContext GetContext (IRequestCommand command);
+		IRequestContext GetRequest (IRequestCommand command);
 
 		/// <summary>
-		/// Obtain and execute the IRequestContext.
+		/// Obtain and execute a IRequestContext.
 		/// </summary>
-		/// <param name="command">Our command name</param>
+		/// <param name="command">Our command ID</param></param>
 		/// <returns>Context after execution</returns>
 		/// 
-		IRequestContext ExecuteContext (string command);
-
+		IRequestContext ExecuteRequest (string command);
 
 		/// <summary>
-		/// Execute a Command as part of a View layer chain.
+		/// Execute a IRequestContext.
+		/// </summary>
+		/// <param name="context">Context to execute</param>
+		/// 
+		void ExecuteRequest (IRequestContext context);
+
+		/// <summary>
+		/// Execute a IRequestContext as part of a View layer chain.
 		/// </summary>
 		/// <remarks><p>
 		/// Among other things, the View layer chain may transfer 

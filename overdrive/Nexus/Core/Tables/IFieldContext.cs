@@ -4,14 +4,21 @@ using System.Runtime.Serialization;
 namespace Nexus.Core.Tables
 {
 	/// <summary>
-	/// Properties common to controls, including Alert, Constraints, 
-	/// ControlType, and DataType. 
+	/// Provide properties common to controls, 
+	/// including Alert, Constraints, ControlType, and DataType. 
 	/// </summary>
 	/// <remark><p>
-	/// Validation commands can use the FieldContext properties to verify 
-	/// input. 
+	/// Validation commands can use the FieldContext properties 
+	/// to verify input. 
 	/// The FieldContext entries are made available through a FieldTable.
-	/// </p></remark>
+	/// The FieldContext members follow XForms terminology. 
+	/// </p>
+	/// <p>
+	/// XForms [http://www.w3.org/MarkUp/Forms/]. 
+	/// XForms Controls [http://www.orbeon.com/ops/doc/processors-xforms].
+	/// XPath 2.0 for .NET [http://sourceforge.net/projects/saxondotnet/].
+	/// </p>
+	/// </remark>
 	/// 
 	public interface IFieldContext : ISerializable
 	{
@@ -22,8 +29,14 @@ namespace Nexus.Core.Tables
 		string Alert { get; set; }
 
 		/// <summary>
-		/// Cannonical name of the Control Type (input, select, et al.).
+		/// Name for the default Control Type.
 		/// </summary>
+		/// <remarks><p>
+		/// Standard control types are: input, secret, textarea, select1, select, submit, upload.
+		/// </p><p>
+		/// XForms distinguishes between Lists, Radio Buttons, and CheckBoxes through additional 
+		/// parameters. For now, all three can be identified as select1 or select.
+		/// </p></remarks>
 		/// 
 		string ControlTypeName { get; set; }
 
@@ -34,10 +47,13 @@ namespace Nexus.Core.Tables
 		string DataFormat { get; set; }
 
 		/// <summary>
-		/// Type of native data - Boolean, Byte Char, DateTime, Decimal, 
-		/// Double, Int16, Int32, Int64, SByte, Single, String, TimeSpan, 
-		/// UInt16, UInt32, UInt64.
+		/// Type of native data.
 		/// </summary>
+		/// <remarks>
+		/// Standard data types are: Boolean, Byte Char, DateTime, Decimal, 
+		/// Double, Int16, Int32, Int64, SByte, Single, String, TimeSpan, 
+		/// UInt16, UInt32, UInt64
+		/// </remarks>
 		/// 
 		Type DataType { get; set; }
 
@@ -46,6 +62,12 @@ namespace Nexus.Core.Tables
 		/// </summary>
 		/// 
 		string DataTypeName { get; set; }
+
+		/// <summary>
+		/// Help - Gets or sets text for a context-sensitive help screen.
+		/// </summary>
+		/// 
+		string Help { get; set; }
 
 		/// <summary>
 		/// Hint - Gets or sets an onscreen or hover hint.
@@ -60,7 +82,7 @@ namespace Nexus.Core.Tables
 		string ID { get; set; }
 
 		/// <summary>
-		/// the label for the control.
+		/// The label for the control.
 		/// </summary>
 		/// 
 		string Label { get; set; }

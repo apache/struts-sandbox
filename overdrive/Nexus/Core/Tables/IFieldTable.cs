@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Runtime.Serialization;
 using Agility.Core;
-using Nexus.Validators;
+using Nexus.Core.Validators;
 
 namespace Nexus.Core.Tables
 {

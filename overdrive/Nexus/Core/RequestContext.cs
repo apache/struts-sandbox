@@ -15,17 +15,37 @@
  */
 using System;
 using System.Collections;
+using System.Text;
 using Agility.Core;
 using Nexus.Core.Tables;
 
 namespace Nexus.Core
 {
 	/// <summary>
-	/// Concrete IRequestContext implementation.
+	/// Implement IRequestContext.
 	/// </summary>
 	/// 
 	public class RequestContext : Context, IRequestContext
 	{
+
+		/// <summary>
+		/// Express state as a key=value list.
+		/// </summary>
+		/// <returns>Formatted string representing state.</returns>
+		public override string ToString ()
+		{
+			StringBuilder sb = new StringBuilder ();
+			foreach (DictionaryEntry e in this)
+			{
+				sb.Append ("[");
+				sb.Append (e.Key);
+				sb.Append ("=");
+				sb.Append (e.Value.ToString ());
+				sb.Append ("], ");
+			}
+			return sb.ToString ();
+		}
+
 		/// <summary>
 		/// Convenience constructor to set Command on instantiation.
 		/// </summary>
@@ -80,6 +100,32 @@ namespace Nexus.Core
 		}
 
 		/// <summary>
+		/// Instantiate Criteria, if needed.
+		/// </summary>
+		private void LazyCriteria ()
+		{
+			// Naive, but we expect a Context instance to be single-threaded.
+			if (this [Tokens.Criteria] == null)
+				this [Tokens.Criteria] = new Hashtable (); // TODO: Spring?
+		}
+
+		public IDictionary Criteria
+		{
+			get
+			{
+				LazyCriteria ();
+				return this [Tokens.Criteria] as IDictionary;
+			}
+			set { this [Tokens.Criteria] = value; }
+		}
+
+		public bool HasCriteria ()
+		{
+			return ContainsKey (Tokens.Criteria);
+		}
+
+
+		/// <summary>
 		/// Convenience method to lazily instantiate a message store.
 		/// </summary>
 		/// <param name="template">Message template to add to the queue.</param>
@@ -106,6 +152,13 @@ namespace Nexus.Core
 			list.Add (template);
 		}
 
+		public string FormatTemplate (string template, string value)
+		{
+			StringBuilder sb = new StringBuilder ();
+			sb.AppendFormat (template, value);
+			return sb.ToString ();
+		}
+
 		public IDictionary Alerts
 		{
 			get { return this [Tokens.Alerts] as IDictionary; }
@@ -115,6 +168,17 @@ namespace Nexus.Core
 		public void AddAlert (string template)
 		{
 			AddStore (template, Tokens.GenericMessage, Tokens.Alerts);
+		}
+
+		public void AddAlert (string template, string queue)
+		{
+			AddStore (template, queue, Tokens.Alerts);
+		}
+
+		public void AddAlertForField (string key)
+		{
+			string message = FormatTemplate (FieldTable.Alert (key), key);
+			AddAlert (message, key);
 		}
 
 		public bool HasAlerts
