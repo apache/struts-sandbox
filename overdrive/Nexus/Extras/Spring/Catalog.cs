@@ -29,7 +29,6 @@ namespace Nexus.Extras.Spring
 	/// 
 	public class Catalog : IRequestCatalog, IApplicationContextAware
 	{
-
 		#region Messages 
 
 		private const string msg_ADD_COMMAND = "This catalog instance is created through dependency injection.";
@@ -170,11 +169,11 @@ namespace Nexus.Extras.Spring
 
 		public IRequestContext GetRequest (string command)
 		{
-			ICommand _command = GetCommand(command);
+			ICommand _command = GetCommand (command);
 			IRequestCommand _rc = _command as IRequestCommand;
-			return GetRequest(_rc);
+			return GetRequest (_rc);
 		}
-		
+
 		public IRequestContext GetRequest (IRequestCommand command)
 		{
 			IRequestContext context = null;
@@ -196,19 +195,19 @@ namespace Nexus.Extras.Spring
 
 		}
 
-		public IRequestContext GetRequest(string command, IDictionary input) {
-
-			IRequestContext context = GetRequest(command);
+		public IRequestContext GetRequest (string command, IDictionary input)
+		{
+			IRequestContext context = GetRequest (command);
 			context.Criteria = input;
-			return context;			
-		}	
+			return context;
+		}
 
 		/// <summary>
 		/// Confirm that the Context is not null, and the Context's Command is not null.
 		/// </summary>
 		/// <param name="context">IRequestContext to verify</param>
 		/// <returns>The non-null Command for this Context</returns>
-		private IRequestCommand VerifyRequest(IRequestContext context)
+		private IRequestCommand VerifyRequest (IRequestContext context)
 		{
 			if (null == context)
 			{
@@ -219,23 +218,21 @@ namespace Nexus.Extras.Spring
 			IRequestCommand command = context [Tokens.CommandBin] as IRequestCommand;
 
 			if (null == command)
-			{
 				context.AddAlert (msg_CATALOG_COMMAND_NULL);
-			}			
 
 			return command;
 		}
 
 		public IRequestContext ExecuteRequest (string command)
 		{
-			IRequestContext context = GetRequest(command);
-			ExecuteRequest(context);
+			IRequestContext context = GetRequest (command);
+			ExecuteRequest (context);
 			return context;
 		}
 
 		public void ExecuteRequest (IRequestContext context)
-		{			
-			IRequestCommand command = VerifyRequest(context);
+		{
+			IRequestCommand command = VerifyRequest (context);
 			if (context.IsNominal)
 			{
 				try
@@ -254,8 +251,9 @@ namespace Nexus.Extras.Spring
 
 		public void ExecuteView (IRequestContext context)
 		{
-			IRequestCommand command = VerifyRequest(context);
-			if (context.IsNominal) {
+			IRequestCommand command = VerifyRequest (context);
+			if (context.IsNominal)
+			{
 				IChain chain = new Chain ();
 				chain.AddCommand (GetCommand (Tokens.PRE_OP_ID));
 				chain.AddCommand (command);
@@ -272,6 +270,5 @@ namespace Nexus.Extras.Spring
 		}
 
 		#endregion
-
 	}
 }

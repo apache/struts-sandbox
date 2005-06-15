@@ -38,7 +38,6 @@ namespace Nexus.Core
 	/// 
 	public interface IRequestContext : IContext
 	{
-
 		#region Processing 
 
 		/// <summary>

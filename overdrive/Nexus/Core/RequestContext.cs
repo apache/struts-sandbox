@@ -27,7 +27,6 @@ namespace Nexus.Core
 	/// 
 	public class RequestContext : Context, IRequestContext
 	{
-
 		/// <summary>
 		/// Express state as a key=value list.
 		/// </summary>

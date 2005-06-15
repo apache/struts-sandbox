@@ -9,7 +9,6 @@ namespace Nexus.Core
 	/// </summary>
 	public class RequestChain : RequestCommand, IRequestChain
 	{
-
 		private Chain chain = new Chain ();
 
 		public void AddCommand (ICommand _command)

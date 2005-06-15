@@ -112,14 +112,14 @@ namespace Nexus.Core.Helpers
 
 		public string Prefix
 		{
-			get { return Context[Tokens.Prefix] as string; }
-			set { Context[Tokens.Prefix] = value; }
+			get { return Context [Tokens.Prefix] as string; }
+			set { Context [Tokens.Prefix] = value; }
 		}
 
 		public string ListSuffix
 		{
-			get { return Context[Tokens.ListSuffix] as string; }
-			set { Context[Tokens.ListSuffix] = value; }
+			get { return Context [Tokens.ListSuffix] as string; }
+			set { Context [Tokens.ListSuffix] = value; }
 		}
 
 		#endregion 
@@ -130,32 +130,33 @@ namespace Nexus.Core.Helpers
 		{
 			get
 			{
-				bool v = (Boolean) Context[Tokens.NullIfEmpty];				
+				bool v = (Boolean) Context [Tokens.NullIfEmpty];
 				return v;
 			}
 			set
-			{	Boolean b = new Boolean();
-				bool v = b.Equals (true) ? true : false ;
-				Context[Tokens.NullIfEmpty] = v;
+			{
+				Boolean b = new Boolean ();
+				bool v = b.Equals (true) ? true : false;
+				Context [Tokens.NullIfEmpty] = v;
 			}
 		}
 
 		public string SelectItemPrompt
 		{
-			get { return Context[Tokens.SelectItemPrompt] as string; }
-			set { Context[Tokens.SelectItemPrompt] = value; }
+			get { return Context [Tokens.SelectItemPrompt] as string; }
+			set { Context [Tokens.SelectItemPrompt] = value; }
 		}
 
 		public IRequestCatalog Catalog
 		{
-			get { return Context[Tokens.Catalog] as IRequestCatalog; }
-			set { Context[Tokens.Catalog] = value; }
+			get { return Context [Tokens.Catalog] as IRequestCatalog; }
+			set { Context [Tokens.Catalog] = value; }
 		}
 
 		public IRequestCommand Command
 		{
-			get { return Context[Tokens.Command] as IRequestCommand; }
-			set { Context[Tokens.Command] = value; }
+			get { return Context [Tokens.Command] as IRequestCommand; }
+			set { Context [Tokens.Command] = value; }
 		}
 
 		#endregion 

@@ -1,5 +1,4 @@
 using System;
-using Nexus.Core;
 
 namespace Nexus.Core.Commands
 {

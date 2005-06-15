@@ -25,7 +25,6 @@ namespace Nexus.Core
 	/// 
 	public interface IRequestCatalog : ICatalog
 	{
-
 		/// <summary>
 		/// Obtain a IRequestContext for command ID, 
 		/// including embedded resources.

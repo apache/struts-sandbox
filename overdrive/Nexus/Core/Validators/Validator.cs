@@ -77,36 +77,36 @@ namespace Nexus.Core.Validators
 				switch (mode)
 				{
 					case MODE_INPUT:
-					{
-						have = (fields.Contains (key));
-						if (have)
 						{
-							string source = fields [key] as string;
-							// TODO: Spring?
-							IValidatorContext _context = new ValidatorContext (key, source);
-							okay = table.Convert (_context);
-							if (okay)
-								// set to main context
-								context [key] = _context.Target;
+							have = (fields.Contains (key));
+							if (have)
+							{
+								string source = fields [key] as string;
+								// TODO: Spring?
+								IValidatorContext _context = new ValidatorContext (key, source);
+								okay = table.Convert (_context);
+								if (okay)
+									// set to main context
+									context [key] = _context.Target;
+							}
+							break;
 						}
-						break;
-					}
 
 					case MODE_OUTPUT:
-					{
-						have = (context.Contains (key));
-						if (have)
 						{
-							object source = context [key];
-							// TODO: Spring?
-							IValidatorContext _context = new ValidatorContext (key, source);
-							okay = table.Format (_context);
-							if (okay)
-								// set to field buffer
-								fields [key] = _context.Target;
+							have = (context.Contains (key));
+							if (have)
+							{
+								object source = context [key];
+								// TODO: Spring?
+								IValidatorContext _context = new ValidatorContext (key, source);
+								okay = table.Format (_context);
+								if (okay)
+									// set to field buffer
+									fields [key] = _context.Target;
+							}
+							break;
 						}
-						break;
-					}
 				}
 
 				if ((have) && (!okay))

@@ -45,7 +45,7 @@ namespace Nexus.Core
 		/// 
 		public const string Property = "_Property";
 		*/
-		
+
 		/// <summary>
 		/// Token for Alert property.
 		/// </summary>
@@ -205,7 +205,6 @@ namespace Nexus.Core
 		/// 
 		public const string Target = "_Target";
 
-
 		#endregion
 
 		#region Command elements
@@ -228,7 +227,6 @@ namespace Nexus.Core
 		/// 
 		public const string FIELD_TABLE_ID = "FieldTable";
 
-
 		#endregion
 
 		#region Control Type Names
@@ -244,6 +242,5 @@ namespace Nexus.Core
 		public const string SELECT_CONTROL = "select";
 
 		#endregion
-
 	}
 }

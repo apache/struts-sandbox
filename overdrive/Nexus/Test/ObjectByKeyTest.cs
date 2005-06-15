@@ -11,11 +11,10 @@ namespace Nexus.Core
 	[TestFixture]
 	public class ObjectByKeyTest : BaseNexusTest
 	{
-
 		public const string OBJECT_BY_KEY = "ObjectByKey";
 		public const string OBJECT_BY_KEY_WITH_VALIDATE = "ObjectByKeyWithValidate";
 		public const string OBJECT_BY_KEY_WITH_REQUIRED = "ObjectByKeyWithRequired";
-		
+
 		private string PK_SOMETHING = ObjectByKey.PK_SOMETHING;
 		private string PK_SOMETHING_VALUE = ObjectByKey.PK_SOMETHING_VALUE;
 		private const string PK_SOMETHING_RESULT = ObjectByKey.PK_SOMETHING_RESULT;
@@ -62,7 +61,7 @@ namespace Nexus.Core
 		[Test]
 		public void ObjectByKey_UnTrusted_Fail ()
 		{
-			IDictionary fields = new Hashtable();
+			IDictionary fields = new Hashtable ();
 			IRequestContext context = catalog.GetRequest (OBJECT_BY_KEY_WITH_REQUIRED, fields);
 
 			catalog.ExecuteRequest (context); // do the actual work
@@ -107,7 +106,7 @@ namespace Nexus.Core
 		[Test]
 		public void ObjectByKey_Format_Date ()
 		{
-			IDictionary fields = new Hashtable();
+			IDictionary fields = new Hashtable ();
 			fields [PK_SOMETHING] = PK_SOMETHING_VALUE;
 			fields [PK_SOME_DATE] = DateTime.Now.ToShortDateString ();
 			IRequestContext context = catalog.GetRequest (OBJECT_BY_KEY_WITH_VALIDATE, fields);

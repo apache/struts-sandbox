@@ -1,6 +1,5 @@
 using System;
 using Agility.Core;
-using Nexus.Core.Tables;
 
 namespace Nexus.Core.Tables
 {

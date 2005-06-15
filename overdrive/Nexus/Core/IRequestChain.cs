@@ -5,7 +5,7 @@ namespace Nexus.Core
 	/// <summary>
 	/// Composite IChain and IRequestCommand.
 	/// </summary>
-	public interface IRequestChain: IChain, IRequestCommand
+	public interface IRequestChain : IChain, IRequestCommand
 	{
 	}
 }

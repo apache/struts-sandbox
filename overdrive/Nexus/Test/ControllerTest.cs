@@ -32,7 +32,7 @@ namespace Nexus.Core
 		[Test]
 		public void ExecuteRequest ()
 		{
-			IRequestContext context = catalog.ExecuteRequest(ListAll.LIST_ALL);
+			IRequestContext context = catalog.ExecuteRequest (ListAll.LIST_ALL);
 			AssertNominal (context);
 			Assert.IsTrue (context.IsNominal, "Expected nominal result.");
 			Assert.IsTrue (context.HasOutcome, "Expected outcome from command.");
