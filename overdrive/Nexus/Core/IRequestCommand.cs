@@ -82,7 +82,7 @@ namespace Nexus.Core
 		IList AddRequiredIDs { set; }
 
 		/// <summary>
-		/// Field IDs related to this Command, including any RequiredIDs.
+		/// Record FieldContext IDs related to this Command, including any RequiredIDs.
 		/// </summary>
 		/// <remarks><p>
 		/// If a Field ID is not specified as a  RelatedID or a RequiredID, 
@@ -115,7 +115,7 @@ namespace Nexus.Core
 		IList AddRelatedIDs { set; }
 
 		/// <summary>
-		/// Field IDs provided during the processing of a Chain. 
+		/// Record Field IDs provided during the processing of a Chain. 
 		/// </summary>
 		/// <remarks><p>
 		/// When Commands are chained, the output from one Command may be  used 
@@ -136,7 +136,7 @@ namespace Nexus.Core
 		IList AddRuntimeIDs { set; }
 
 		/// <summary>
-		/// Operations to perform with HelperContext.
+		/// Invoke the business operation.
 		/// </summary>
 		/// <remarks><p>
 		/// Expected to be called from Execute as a casting convenience.

@@ -3,8 +3,7 @@ using Nexus.Core;
 namespace Nexus.Core.Validators
 {
 	/// <summary>
-	/// A IValidator command is a NexusCommand that provides a message Template to use 
-	/// when validation fails.
+	/// Provide a message Template to use when validation fails [OVR-13].
 	/// </summary>
 	public interface IValidatorCommand : IRequestCommand
 	{

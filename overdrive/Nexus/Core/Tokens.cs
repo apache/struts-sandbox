@@ -17,7 +17,7 @@
 namespace Nexus.Core
 {
 	/// <summary>
-	/// Tokens representing context keys.
+	/// Provide tokens representing context keys.
 	/// </summary>
 	/// <remarks><p>
 	/// The common convention of using CAPITALS for constants 
@@ -113,6 +113,12 @@ namespace Nexus.Core
 		public const string Fault = "_Fault";
 
 		/// <summary>
+		/// Token for FieldKey property.
+		/// </summary>
+		/// 
+		public const string FieldKey = "_FieldKey";
+
+		/// <summary>
 		/// Token for FieldSet property.
 		/// </summary>
 		/// 
@@ -186,6 +192,19 @@ namespace Nexus.Core
 		/// </summary>
 		/// 
 		public const string SelectItemPrompt = "_SelectItemPrompt";
+
+		/// <summary>
+		/// Token for Source property.
+		/// </summary>
+		/// 
+		public const string Source = "_Source";
+
+		/// <summary>
+		/// Token for Target property.
+		/// </summary>
+		/// 
+		public const string Target = "_Target";
+
 
 		#endregion
 

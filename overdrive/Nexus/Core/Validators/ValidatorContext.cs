@@ -1,10 +1,11 @@
 using Agility.Core;
+using Nexus.Core;
 using Nexus.Core.Validators;
 
 namespace Agility.Nexus.Validators
 {
 	/// <summary>
-	/// Concrete IValidatorContext implementation.
+	/// Implement IValidatorContext.
 	/// </summary>
 	public class ValidatorContext : Context, IValidatorContext
 	{
@@ -18,25 +19,22 @@ namespace Agility.Nexus.Validators
 			Source = source;
 		}
 
-		private const string _FieldKey = "_FieldKey";
 		public string FieldKey
 		{
-			get { return this [_FieldKey] as string; }
-			set { this [_FieldKey] = value; }
+			get { return this [Tokens.FieldKey] as string; }
+			set { this [Tokens.FieldKey] = value; }
 		}
 
-		private const string _Source = "_Source";
 		public object Source
 		{
-			get { return this [_Source]; }
-			set { this [_Source] = value; }
+			get { return this [Tokens.Source]; }
+			set { this [Tokens.Source] = value; }
 		}
 
-		private const string _Target = "_Target";
 		public object Target
 		{
-			get { return this [_Target]; }
-			set { this [_Target] = value; }
+			get { return this [Tokens.Target]; }
+			set { this [Tokens.Target] = value; }
 		}
 	}
 }

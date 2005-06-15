@@ -24,14 +24,14 @@ namespace Nexus.Core.Tables
 		IList AddFields { set; }
 
 		/// <summary>
-		/// If true, requires that all fields, including strings fields, 
-		/// be specified [FALSE].
+		/// Indicate whether this FieldTable must include all fields, 
+		/// including strings fields [FALSE].
 		/// </summary>
 		/// 
 		bool Strict { set; get; }
 
 		/// <summary>
-		/// For a given field id, return the Alert message.
+		/// Provide the Alert message for a given field id.
 		/// </summary>
 		/// <param name="id">FieldContext ID</param>
 		/// <returns>Alert mesasge for FieldContext ID</returns>
@@ -39,8 +39,8 @@ namespace Nexus.Core.Tables
 		string Alert (string id);
 
 		/// <summary>
-		/// Utilitizing the FieldContext settings, convert and copy values 
-		/// from the Criteria into the main Context.
+		/// Convert and copy values from the Criteria into the main Context, 
+		/// utilitizing the FieldContext settings.
 		/// </summary>
 		/// <param name="context">Context to process (including Criteria)</param>
 		/// <returns>True if nominal</returns>
@@ -48,8 +48,8 @@ namespace Nexus.Core.Tables
 		bool Convert (IValidatorContext context);
 
 		/// <summary>
-		/// Utilizing the FieldContext settings, format and copy values from 
-		/// the main Context into the Criteria.
+		/// Format and copy values from the main Context into the Criteria,
+		/// utilizing the FieldContext settings.
 		/// </summary>
 		/// <param name="context">Context to process (including Criteria)</param>
 		/// <returns>True if nominal</returns>
@@ -67,7 +67,7 @@ namespace Nexus.Core.Tables
 		bool IsRichControl (string name);
 
 		/// <summary>
-		/// Obtains the FieldContext for the given ID.
+		/// Obtain the FieldContext for the given ID.
 		/// </summary>
 		/// <param name="id">FieldContext ID</param>
 		/// <returns>FieldContext for ID</returns>

@@ -64,7 +64,7 @@ namespace Nexus.Core
 
 
 		/// <summary>
-		/// Provide the Field Table for this Context.
+		/// Provide the FieldTable for this Context.
 		/// </summary>
 		/// <remarks><p>
 		/// The default implementation uses the Catalog to inject the global 
@@ -94,7 +94,8 @@ namespace Nexus.Core
 		/// list under their own Command ID.
 		/// Outcome is a convenience method to access the 
 		/// initial or "outermost" Command or Chain ID. 
-		/// </p><p>
+		/// </p>
+		/// <p>
 		/// To allow use as subcommands in a Chain, 
 		/// IRequestCommand implementations should prefer the idiom 
 		/// <code>Context[ID] = object</code>

@@ -6,7 +6,7 @@ using Nexus.Core.Tables;
 namespace Nexus.Core.Validators
 {
 	/// <summary>
-	/// A base class to use when implementating Validators. 
+	/// Provide a base class to use when implementating Validators. 
 	/// </summary>
 	/// <remarks>
 	/// Subclasses must provide a NexusExecute method.

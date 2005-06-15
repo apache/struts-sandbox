@@ -20,7 +20,7 @@ using Nexus.Core.Tables;
 namespace Nexus.Core.Helpers
 {
 	/// <summary>
-	/// A facade for use by a code-behind to simplify access to the 
+	/// Provide a facade for use by a code-behind to simplify access to the 
 	/// IRequestContext and IRequestCommand. 
 	/// </summary>
 	/// <remarks><p>
@@ -89,7 +89,7 @@ namespace Nexus.Core.Helpers
 		// ----
 
 		/// <summary>
-		/// A list of alert (or error) messages, 
+		/// Record a list of alert (or error) messages, 
 		/// keyed by the field causing the message, 
 		/// or to a magic global key.
 		/// </summary>
@@ -98,7 +98,7 @@ namespace Nexus.Core.Helpers
 
 
 		/// <summary>
-		/// Return true if alerts are queued.
+		/// Indicate if alerts are queued.
 		/// </summary>
 		/// <returns>True if alerts are queued.</returns>
 		/// 
@@ -106,21 +106,21 @@ namespace Nexus.Core.Helpers
 
 
 		/// <summary>
-		/// An Exception, if thrown.
+		/// Record an Exception, if thrown.
 		/// </summary>
 		/// 
 		Exception Fault { get; }
 
 		/// <summary>
-		/// Return true if an exception is caught.
+		/// Indicate whether an Exception is caught.
 		/// </summary>
-		/// <returns>True if an exception is caught.</returns>
+		/// <returns>True if an Exception is caught.</returns>
 		/// 
 		bool HasFault { get; }
 
 
 		/// <summary>
-		/// Return true if there are no alerts or fault pending.
+		/// Indicate if there are no alerts or fault pending.
 		/// </summary>
 		/// <returns>True if all is well.</returns>
 		/// 
@@ -128,7 +128,7 @@ namespace Nexus.Core.Helpers
 
 
 		/// <summary>
-		/// A list of hint (or advisory) messages, 
+		/// Record a list of hint (or advisory) messages, 
 		/// keyed by a field or other identifier, 
 		/// or to a magic global key.
 		/// </summary>
@@ -137,7 +137,7 @@ namespace Nexus.Core.Helpers
 
 
 		/// <summary>
-		/// Return true if Hints are queued.
+		/// Indicate if Hints are queued.
 		/// </summary>
 		/// <returns>True if Hints are queued.</returns>
 		/// 
@@ -147,24 +147,24 @@ namespace Nexus.Core.Helpers
 		// ----
 
 		/// <summary>
-		/// Set of IFieldContext definitions available to the application, 
-		/// usually set by the catalog.
+		/// Provide the Field Table for this Helper.
 		/// </summary>
 		/// <remarks><p>
-		/// The FieldTable can be used to convert display strings to native 
-		/// types on input, 
-		/// and from native types to display strings on output. 
-		/// The FieldTable can also be used to generate UI controls. 
+		/// The default implementation uses the Catalog to inject the global 
+		/// Field Table reference. 
+		/// The Context, and members with access to a Context, 
+		/// can use the FieldTable to validate and format values, 
+		/// and even to create controls that display values.
 		/// </p></remarks>
 		/// 
 		IFieldTable FieldTable { get; }
 
 
 		/// <summary>
-		/// Set of IFieldContext definitions to be used with this helper, 
-		/// usually set by dependency injection.
+		/// Provide a set of IFieldContext definitions to be used with this helper. 
 		/// </summary>
 		/// <remarks><p>
+		/// The FieldSet is usually set by dependency injection.
 		/// Some helpers generate DataGrids or DataForms based on the 
 		/// FieldDefinitions 
 		/// </p></remarks>
@@ -181,21 +181,20 @@ namespace Nexus.Core.Helpers
 		// ----
 
 		/// <summary>
-		/// Prefix to trim from the id of a control during Read and 
+		/// Provide a prefix to trim from the id of a control during Read and 
 		/// Bind.
 		/// </summary>
 		/// <remarks><p>
 		/// The Prefix is needed when a single page uses a control 
-		/// more than once  
-		/// often in separate panels.
+		/// more than once often in separate panels.
 		/// </p></remarks>
 		/// 
 		string Prefix { get; set; }
 
 
 		/// <summary>
-		/// Suffix to truncate from a list control id in order to set a 
-		/// corresponding value field ["_list"].
+		/// Provide a suffix to truncate from a list control id 
+		/// in order to set a corresponding value field ["_list"].
 		/// </summary>
 		/// <remark><p>
 		/// When processing a single-value list control, if the id ends with 
@@ -218,15 +217,20 @@ namespace Nexus.Core.Helpers
 
 
 		/// <summary>
-		/// If a control value is an empty string, set the value to null 
-		/// instead [TRUE].
+		/// Indicate whether to set the value read from control to null 
+		/// if it is an empty string [TRUE].
 		/// </summary>
+		/// <remarks><p>
+		/// If a control is blank, it may still return an empty string. 
+		/// In a IDictionary, an empty string is a valid value, 
+		/// so the entry for the control will still exist. 
+		/// </p></remarks>
 		/// 
 		bool NullIfEmpty { get; set; }
 
 
 		/// <summary>
-		/// String token to insert as item 0 to a list controls ["--v---"].
+		/// Provide a string token to insert as item 0 to a list controls ["--v--"].
 		/// </summary>
 		/// <remarks><p>
 		/// To disable feature, set to a null string.
@@ -238,7 +242,7 @@ namespace Nexus.Core.Helpers
 		// ----
 
 		/// <summary>
-		/// The catalog for this helper, 
+		/// Provide the catalog for this helper, 
 		/// usually set by dependency injection.
 		/// </summary>
 		/// 
@@ -246,8 +250,8 @@ namespace Nexus.Core.Helpers
 
 
 		/// <summary>
-		/// The command (or chain of commands) for this helper, usually set 
-		/// by dependency injection.
+		/// Provide the command (or chain of commands) for this helper, 
+		/// usually set by dependency injection.
 		/// </summary>
 		/// 
 		IRequestCommand Command { get; set; }
