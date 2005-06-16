@@ -101,7 +101,6 @@ DATABASE
 
 # Database: phonebook
 # Table: 'entry'
-# 
 CREATE TABLE `entry` (
   `pk_entry` char(36) NOT NULL default '',
   `last_name` char(18) NOT NULL default '',
