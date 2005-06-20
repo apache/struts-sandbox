@@ -3,7 +3,9 @@
   "http://www.springframework.net/dtd/spring-objects.dtd">
 <objects>
 
-  <object id="Controller" type="Nexus.Extras.Spring.Controller, Nexus.Extras">
-  </object>
+ <!-- FieldTable -->
+ 
+	<object id="FieldTable" type="Nexus.Core.Tables.FieldTable">
+	</object>
 
 </objects>

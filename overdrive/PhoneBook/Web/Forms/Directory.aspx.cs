@@ -6,7 +6,7 @@ using Nexus.Core;
 using PhoneBook.Core;
 using PhoneBook.Core.Commands;
 
-namespace PhoneBook.Web
+namespace PhoneBook.Web.Forms
 {
 
 	/// <summary>

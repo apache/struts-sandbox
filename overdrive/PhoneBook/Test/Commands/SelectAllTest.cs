@@ -66,7 +66,7 @@ namespace PhoneBook.Core.Commands
 		[Test]
 		public void SelectAll_Pass ()
 		{
-			IRequestContext context = controller.ExecuteContext (App.SELECT_ALL);
+			IRequestContext context = catalog.ExecuteRequest (App.SELECT_ALL);
 			SelectAll_Result(context);
 		}
 	}

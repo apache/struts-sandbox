@@ -5,6 +5,7 @@
 
 	<object id="Base" />
 	
+	<import resource="Resources/Command/AppConfig.xml"/>
 	<import resource="Resources/Command/Catalog.xml"/>
 	
 </objects>
