@@ -26,23 +26,22 @@ namespace PhoneBook.Core.Commands
 	[TestFixture]
 	public class SelectAllTest : BaseTest
 	{
-
 		/// <summary>
 		/// Assert result of SelectAll, after another method runs the command.
 		/// </summary>
 		/// <param name="context">Context with result to assert.</param>	
 		/// 	
-		private void SelectAll_Result(IRequestContext context)
+		private void SelectAll_Result (IRequestContext context)
 		{
-			IList list = AssertListOutcome(context);
-			IDictionary row = list[0] as IDictionary;
+			IList list = AssertListOutcome (context);
+			IDictionary row = list [0] as IDictionary;
 			string[] KEYS = {App.FIRST_NAME, App.LAST_NAME, App.USER_NAME, App.EXTENSION, App.HIRED, App.HOURS, App.EDITOR};
 			bool valid = true;
 			foreach (string key in KEYS)
 			{
 				valid = valid && row.Contains (key);
 			}
-			Assert.IsTrue (valid,"Expected row to contain all keys.");
+			Assert.IsTrue (valid, "Expected row to contain all keys.");
 		}
 
 		/// <summary>
@@ -52,11 +51,11 @@ namespace PhoneBook.Core.Commands
 		[Test]
 		public void SelectAll_Pass_Without_Catalog ()
 		{
-			BaseList command = new BaseList();
+			BaseList command = new BaseList ();
 			command.ID = App.SELECT_ALL;
 			IRequestContext context = command.NewContext ();
-			command.Execute(context);
-			SelectAll_Result(context);
+			command.Execute (context);
+			SelectAll_Result (context);
 		}
 
 		/// <summary>
@@ -67,7 +66,7 @@ namespace PhoneBook.Core.Commands
 		public void SelectAll_Pass ()
 		{
 			IRequestContext context = catalog.ExecuteRequest (App.SELECT_ALL);
-			SelectAll_Result(context);
+			SelectAll_Result (context);
 		}
 	}
 }

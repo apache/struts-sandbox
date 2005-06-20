@@ -8,14 +8,12 @@ using PhoneBook.Core.Commands;
 
 namespace PhoneBook.Web.Forms
 {
-
 	/// <summary>
 	///  Maintain a list of employees with their telephone extension [OVR-5]. 
 	/// </summary>
 	/// 
 	public class Directory : Page
 	{
-	
 		#region Messages
 
 		private const string msg_ADD_CMD = "ADD NEW";
@@ -26,14 +24,13 @@ namespace PhoneBook.Web.Forms
 
 		public IList GetDataSource ()
 		{
-			BaseList command = new BaseList();
+			BaseList command = new BaseList ();
 			command.ID = App.SELECT_ALL;
 			IRequestContext context = command.NewContext ();
-			command.Execute(context);
+			command.Execute (context);
 			IList result = context.Outcome as IList;
 			return result;
 		}
-
 
 		#region Find
 
@@ -52,7 +49,7 @@ namespace PhoneBook.Web.Forms
 
 		private DropDownList[] GetLists ()
 		{
-			DropDownList[] lists = {lstLastName,lstFirstName,lstExtension,lstUserName,lstHireDate,lstHours,lstEditor};
+			DropDownList[] lists = {lstLastName, lstFirstName, lstExtension, lstUserName, lstHireDate, lstHours, lstEditor};
 			return lists;
 		}
 
@@ -61,9 +58,9 @@ namespace PhoneBook.Web.Forms
 			cmdListAll.Text = msg_LIST_ALL_CMD;
 			cmdPrint.Text = msg_PRINT_CMD;
 
-			foreach (DropDownList filter in GetLists())
+			foreach (DropDownList filter in GetLists ())
 			{
-				filter.AutoPostBack = true;				
+				filter.AutoPostBack = true;
 			}
 		}
 
@@ -83,7 +80,7 @@ namespace PhoneBook.Web.Forms
 		protected Panel pnlList;
 		protected DataGrid repList;
 		protected Button cmdAdd;
-		
+
 		// pageload events
 
 		private void List_Init ()
@@ -94,7 +91,7 @@ namespace PhoneBook.Web.Forms
 
 		private void List_Load ()
 		{
-			repList.DataSource = GetDataSource();
+			repList.DataSource = GetDataSource ();
 			repList.DataBind ();
 		}
 
@@ -117,27 +114,25 @@ namespace PhoneBook.Web.Forms
 
 		protected void List_PageIndexChanged (object sender, DataGridPageChangedEventArgs e)
 		{
-			Find_Filter(null,null); 
+			Find_Filter (null, null);
 			repList.CurrentPageIndex = e.NewPageIndex;
-			repList.DataBind (); 
+			repList.DataBind ();
 		}
 
 		#endregion
 
-		protected void Page_Init()
+		protected void Page_Init ()
 		{
-			Find_Init();
-			List_Init();
+			Find_Init ();
+			List_Init ();
 		}
 
-		protected void Page_Load(object sender, System.EventArgs e)
+		protected void Page_Load (object sender, EventArgs e)
 		{
-			if  (IsPostBack)
+			if (IsPostBack)
+				Find_Filter (sender, e);
 			{
-				Find_Filter(sender, e);	
-			}
-			{
-				List_Load();
+				List_Load ();
 			}
 		}
 	}

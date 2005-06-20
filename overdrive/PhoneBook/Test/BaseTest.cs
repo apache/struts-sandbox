@@ -27,20 +27,19 @@ namespace PhoneBook.Core
 	[TestFixture]
 	public class BaseTest : BaseNexusTest
 	{
-
 		/// <summary>
 		/// Confirm that the outcome is a non-null, non-empty list.
 		/// </summary>
 		/// <param name="context">Context to confirm</param>
 		/// <returns>The non-null, non-empty list</returns>
 		/// 
-		protected IList AssertListOutcome(IRequestContext context)
+		protected IList AssertListOutcome (IRequestContext context)
 		{
-			AssertNominal(context);
-			Assert.IsTrue (context.HasOutcome,"Expected command to set an Outcome.");
+			AssertNominal (context);
+			Assert.IsTrue (context.HasOutcome, "Expected command to set an Outcome.");
 			IList list = context.Outcome as IList;
-			bool notEmpty = ((list!=null) && (list.Count>0));
-			Assert.IsTrue (notEmpty,"Expected outcome to be a not-empty list");			
+			bool notEmpty = ((list != null) && (list.Count > 0));
+			Assert.IsTrue (notEmpty, "Expected outcome to be a not-empty list");
 			return list;
 		}
 

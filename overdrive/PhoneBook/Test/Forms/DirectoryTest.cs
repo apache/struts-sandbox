@@ -19,28 +19,26 @@ using NUnit.Framework;
 
 namespace WNE.Core.Forms
 {
-
 	/// <summary>
 	/// Exercise the Directory page controls.
 	/// </summary>
 	[TestFixture]
 	public class DirectoryTest : WebFormTestCase
 	{
+		private PanelTester pnlFind;
+		private DropDownListTester lstLastName;
+		private DropDownListTester lstFirstName;
+		private DropDownListTester lstExtension;
+		private DropDownListTester lstUserName;
+		private DropDownListTester lstHireDate;
+		private DropDownListTester lstHours;
+		private DropDownListTester lstEditor;
+		private ButtonTester cmdListAll;
+		private ButtonTester cmdPrint;
 
-		PanelTester pnlFind;
-		DropDownListTester lstLastName;
-		DropDownListTester lstFirstName;
-		DropDownListTester lstExtension;
-		DropDownListTester lstUserName;
-		DropDownListTester lstHireDate;
-		DropDownListTester lstHours;
-		DropDownListTester lstEditor;
-		ButtonTester cmdListAll;
-		ButtonTester cmdPrint;
-
-		PanelTester pnlList;
-		DataGridTester repList;
-		ButtonTester cmdAdd;
+		private PanelTester pnlList;
+		private DataGridTester repList;
+		private ButtonTester cmdAdd;
 
 		/// <summary>
 		/// Provide an array of the DropDownListTesters.
@@ -49,7 +47,7 @@ namespace WNE.Core.Forms
 		/// 
 		private DropDownListTester[] GetLists ()
 		{
-			DropDownListTester[] lists = {lstLastName,lstFirstName,lstExtension,lstUserName,lstHireDate,lstHours,lstEditor};
+			DropDownListTester[] lists = {lstLastName, lstFirstName, lstExtension, lstUserName, lstHireDate, lstHours, lstEditor};
 			return lists;
 		}
 
@@ -60,21 +58,21 @@ namespace WNE.Core.Forms
 		protected override void SetUp ()
 		{
 			base.SetUp ();
-			
-			pnlFind = new PanelTester("pnlFind", CurrentWebForm);
-			lstLastName = new DropDownListTester("lstLastName",CurrentWebForm);
-			lstFirstName = new DropDownListTester("lstFirstName",CurrentWebForm);
-			lstExtension = new DropDownListTester("lstExtension",CurrentWebForm);
-			lstUserName = new DropDownListTester("lstUserName",CurrentWebForm);
-			lstHireDate = new DropDownListTester("lstHireDate",CurrentWebForm);
-			lstHours = new DropDownListTester("lstHours",CurrentWebForm);
-			lstEditor = new DropDownListTester("lstEditor",CurrentWebForm);
-			cmdListAll = new ButtonTester("cmdListAll",CurrentWebForm);
-			cmdPrint = new ButtonTester("cmdPrint",CurrentWebForm);
 
-			pnlList = new PanelTester("pnlList",CurrentWebForm);
-			repList = new DataGridTester("repList",CurrentWebForm);
-			cmdAdd = new ButtonTester("cmdAdd",CurrentWebForm);
+			pnlFind = new PanelTester ("pnlFind", CurrentWebForm);
+			lstLastName = new DropDownListTester ("lstLastName", CurrentWebForm);
+			lstFirstName = new DropDownListTester ("lstFirstName", CurrentWebForm);
+			lstExtension = new DropDownListTester ("lstExtension", CurrentWebForm);
+			lstUserName = new DropDownListTester ("lstUserName", CurrentWebForm);
+			lstHireDate = new DropDownListTester ("lstHireDate", CurrentWebForm);
+			lstHours = new DropDownListTester ("lstHours", CurrentWebForm);
+			lstEditor = new DropDownListTester ("lstEditor", CurrentWebForm);
+			cmdListAll = new ButtonTester ("cmdListAll", CurrentWebForm);
+			cmdPrint = new ButtonTester ("cmdPrint", CurrentWebForm);
+
+			pnlList = new PanelTester ("pnlList", CurrentWebForm);
+			repList = new DataGridTester ("repList", CurrentWebForm);
+			cmdAdd = new ButtonTester ("cmdAdd", CurrentWebForm);
 
 			Browser.GetPage ("http://localhost/PhoneBook/Forms/Directory.aspx");
 		}
@@ -85,18 +83,18 @@ namespace WNE.Core.Forms
 		/// </summary>
 		/// 
 		[Test]
-		public void FindControls()
+		public void FindControls ()
 		{
-			WebAssert.Visible(pnlFind);
-			foreach (DropDownListTester list in GetLists())
+			WebAssert.Visible (pnlFind);
+			foreach (DropDownListTester list in GetLists ())
 			{
 				WebAssert.Visible (list);
 			}
-			WebAssert.Visible(cmdListAll);
-			WebAssert.Visible(cmdPrint);
-			WebAssert.Visible(pnlList);
-			WebAssert.Visible(repList);
-			WebAssert.NotVisible (cmdAdd);// Visible if Editor
+			WebAssert.Visible (cmdListAll);
+			WebAssert.Visible (cmdPrint);
+			WebAssert.Visible (pnlList);
+			WebAssert.Visible (repList);
+			WebAssert.NotVisible (cmdAdd); // Visible if Editor
 		}
 
 		/// <summary>
@@ -104,12 +102,12 @@ namespace WNE.Core.Forms
 		/// </summary>
 		/// 
 		[Test]
-		public void ListControls()
+		public void ListControls ()
 		{
-			foreach (DropDownListTester list in GetLists())
+			foreach (DropDownListTester list in GetLists ())
 			{
-				Assert.IsTrue(list.Items.Count >0,list.HtmlId + ": Expected all filter lists to have items.");
-			}			
+				Assert.IsTrue (list.Items.Count > 0, list.HtmlId + ": Expected all filter lists to have items.");
+			}
 		}
 
 	}

@@ -27,7 +27,7 @@ namespace PhoneBook.Core.Commands
 		public SqlMapper Mapper ()
 		{
 			// return IBatisNet.DataMapper.Mapper.Instance();
-			return IBatisNet.DataMapper.Mapper.Instance();
+			return IBatisNet.DataMapper.Mapper.Instance ();
 		}
 	}
 }

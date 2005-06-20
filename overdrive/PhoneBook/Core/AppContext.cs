@@ -23,9 +23,8 @@ namespace PhoneBook.Core
 	/// exposed by the application.
 	/// </summary>
 	/// 
-	public class AppContext: Hashtable
+	public class AppContext : Hashtable
 	{
-
 		#region Constructors
 
 		/// <summary>
@@ -92,9 +91,9 @@ namespace PhoneBook.Core
 			}
 		}
 		*/
+
 		#endregion
-		
-		
+
 		/*
 		public string property
 		{
@@ -105,38 +104,38 @@ namespace PhoneBook.Core
 
 		public string first_name
 		{
-			get { return this[App.FIRST_NAME] as string; }
-			set { this[App.FIRST_NAME] = value; }
+			get { return this [App.FIRST_NAME] as string; }
+			set { this [App.FIRST_NAME] = value; }
 		}
 
 		public string last_name
 		{
-			get { return this[App.LAST_NAME] as string; }
-			set { this[App.LAST_NAME] = value; }
+			get { return this [App.LAST_NAME] as string; }
+			set { this [App.LAST_NAME] = value; }
 		}
 
 		public string extension
 		{
-			get { return this[App.EXTENSION] as string; }
-			set { this[App.EXTENSION] = value; }
+			get { return this [App.EXTENSION] as string; }
+			set { this [App.EXTENSION] = value; }
 		}
 
 		public string user_name
 		{
-			get { return this[App.USER_NAME] as string; }
-			set { this[App.USER_NAME] = value; }
+			get { return this [App.USER_NAME] as string; }
+			set { this [App.USER_NAME] = value; }
 		}
 
 		public string hired
 		{
-			get { return this[App.HIRED] as string; }
-			set { this[App.HIRED] = value; }
+			get { return this [App.HIRED] as string; }
+			set { this [App.HIRED] = value; }
 		}
 
 		public string hours
 		{
-			get { return this[App.HOURS] as string; }
-			set { this[App.HOURS] = value; }
+			get { return this [App.HOURS] as string; }
+			set { this [App.HOURS] = value; }
 		}
 
 	}

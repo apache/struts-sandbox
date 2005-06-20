@@ -27,26 +27,25 @@ namespace PhoneBook.Core.Commands
 	[TestFixture]
 	public class FilterLists : BaseTest
 	{
-
 		/// <summary>
 		/// Confirm that a list is returned as the outcome, 
 		/// and that each item on the list is not-empty and unique.
 		/// </summary>
 		/// <param name="context">Context returned by command</param>
 		/// 
-		private void FilterList_Result(IRequestContext context)
+		private void FilterList_Result (IRequestContext context)
 		{
-			IList list = AssertListOutcome(context);
+			IList list = AssertListOutcome (context);
 			foreach (string key in list)
 			{
-				Assert.IsNotNull (key,"Expected each item to be non-null");
-				Assert.IsTrue (key.Length>0,"Expected each item to be non-empty");
+				Assert.IsNotNull (key, "Expected each item to be non-null");
+				Assert.IsTrue (key.Length > 0, "Expected each item to be non-empty");
 			}
-			IDictionary keys = new Hashtable(list.Count);
+			IDictionary keys = new Hashtable (list.Count);
 			foreach (string key in list)
 			{
 				if (keys.Contains (key)) Assert.Fail (key + ": Expected each item to be unique");
-				keys.Add (key,key);				
+				keys.Add (key, key);
 			}
 		}
 
@@ -55,10 +54,10 @@ namespace PhoneBook.Core.Commands
 		/// </summary>
 		/// 
 		[Test]
-		public void TestLastNameFilterList()
+		public void TestLastNameFilterList ()
 		{
 			IRequestContext context = catalog.ExecuteRequest (App.LIST_LAST_NAMES);
-			FilterList_Result(context);			
+			FilterList_Result (context);
 		}
 
 	}
