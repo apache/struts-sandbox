@@ -22,6 +22,7 @@ namespace PhoneBook.Core.Commands
 	/// <summary>
 	/// Exercise SelectAll Command per [OVR-5].
 	/// </summary>
+	/// 
 	[TestFixture]
 	public class SelectAllTest : BaseTest
 	{
@@ -29,14 +30,11 @@ namespace PhoneBook.Core.Commands
 		/// <summary>
 		/// Assert result of SelectAll, after another method runs the command.
 		/// </summary>
-		/// <param name="context">Context with result to assert.</param>		
+		/// <param name="context">Context with result to assert.</param>	
+		/// 	
 		private void SelectAll_Result(IRequestContext context)
 		{
-			AssertNominal(context);
-			Assert.IsTrue (context.HasOutcome,"Expected command to set an Outcome.");
-			IList list = context.Outcome as IList;
-			bool notEmpty = ((list!=null) && (list.Count>0));
-			Assert.IsTrue (notEmpty,"Expected outcome to be a not-empty list");
+			IList list = AssertListOutcome(context);
 			IDictionary row = list[0] as IDictionary;
 			string[] KEYS = {App.FIRST_NAME, App.LAST_NAME, App.USER_NAME, App.EXTENSION, App.HIRED, App.HOURS, App.EDITOR};
 			bool valid = true;
@@ -50,6 +48,7 @@ namespace PhoneBook.Core.Commands
 		/// <summary>
 		/// SelectAll and succeed, without using Catalog.
 		/// </summary>
+		/// 
 		[Test]
 		public void SelectAll_Pass_Without_Catalog ()
 		{
@@ -63,6 +62,7 @@ namespace PhoneBook.Core.Commands
 		/// <summary>
 		/// SelectAll and succeed, using catalog.
 		/// </summary>
+		/// 
 		[Test]
 		public void SelectAll_Pass ()
 		{

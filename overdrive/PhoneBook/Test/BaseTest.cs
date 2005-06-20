@@ -21,22 +21,42 @@ using NUnit.Framework;
 namespace PhoneBook.Core
 {
 	/// <summary>
-	/// Base class for unit tests.
+	/// Provide a base class so unit tests can share utility.
 	/// </summary>
+	/// 
 	[TestFixture]
 	public class BaseTest : BaseNexusTest
 	{
+
 		/// <summary>
-		/// Dummy test to exercise infrastructure.
+		/// Confirm that the outcome is a non-null, non-empty list.
 		/// </summary>
+		/// <param name="context">Context to confirm</param>
+		/// <returns>The non-null, non-empty list</returns>
+		/// 
+		protected IList AssertListOutcome(IRequestContext context)
+		{
+			AssertNominal(context);
+			Assert.IsTrue (context.HasOutcome,"Expected command to set an Outcome.");
+			IList list = context.Outcome as IList;
+			bool notEmpty = ((list!=null) && (list.Count>0));
+			Assert.IsTrue (notEmpty,"Expected outcome to be a not-empty list");			
+			return list;
+		}
+
+		/// <summary>
+		/// Exercise the testing infrastructure.
+		/// </summary>
+		/// 
 		[Test]
 		public void Pass ()
 		{
 		}
 
 		/// <summary>
-		/// Demonstration GUIDs and provide a device for generating GUIDs if needed.
+		/// Demonstrate GUIDs and provide a device for generating GUIDs if needed.
 		/// </summary>
+		/// 
 		[Test]
 		public void GuidString ()
 		{

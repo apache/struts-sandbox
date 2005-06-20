@@ -151,6 +151,11 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "Commands\FilterLists.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Commands\SelectAllTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -170,6 +175,10 @@
                 />
                 <File
                     RelPath = "Resources\Query\default.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Resources\Query\FilterLists.xml"
                     BuildAction = "Content"
                 />
                 <File

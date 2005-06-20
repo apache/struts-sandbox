@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+
+<sqlMap 
+	namespace="PhoneBook" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:noNamespaceSchemaLocation="SqlMap.xsd" >
+	
+	<statements>
+		<select id="list_last_names" resultClass="string">
+			SELECT DISTINCT 
+				last_name
+			FROM entry
+			ORDER BY last_name			
+		</select>
+	</statements>
+
+</sqlMap>

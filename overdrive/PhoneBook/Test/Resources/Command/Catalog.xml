@@ -7,6 +7,8 @@
 	<property name="ID"><value>select_all</value></property>
   </object>
 
+  <object id="list_last_names" type="PhoneBook.Core.Commands.BaseFilterList, PhoneBook.Core">
+	<property name="ID"><value>list_last_names</value></property>
+  </object>
+
 </objects>
-
-
