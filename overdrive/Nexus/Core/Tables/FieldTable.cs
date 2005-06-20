@@ -231,7 +231,7 @@ namespace Nexus.Core.Tables
 			try
 			{
 				// t = System.Convert.ToDateTime (input);
-				t = Convert.ToDateTime (input);
+				t = System.Convert.ToDateTime (input);
 			}
 			catch (InvalidCastException e)
 			{

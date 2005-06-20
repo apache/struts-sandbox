@@ -78,7 +78,6 @@ namespace Nexus.Core
 		/// <summary>
 		/// Add a IList of IDs to the list of {@link RequiredIds}.
 		///</summary>
-		///<remarks>
 		IList AddRequiredIDs { set; }
 
 		/// <summary>
@@ -111,7 +110,6 @@ namespace Nexus.Core
 		/// <summary>
 		/// Add a IList of IDs to the list of {@link RelatedIds}.
 		///</summary>
-		///<remarks>
 		IList AddRelatedIDs { set; }
 
 		/// <summary>
@@ -132,7 +130,6 @@ namespace Nexus.Core
 		/// <summary>
 		/// Add a IList of IDs to the list of {@link RuntimeIds}.
 		///</summary>
-		///<remarks>
 		IList AddRuntimeIDs { set; }
 
 		/// <summary>

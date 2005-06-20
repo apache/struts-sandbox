@@ -57,7 +57,7 @@ namespace Nexus.Core
 		/// <summary>
 		/// Obtain and execute a IRequestContext.
 		/// </summary>
-		/// <param name="command">Our command ID</param></param>
+		/// <param name="command">Our command ID</param>
 		/// <returns>Context after execution</returns>
 		/// 
 		IRequestContext ExecuteRequest (string command);
