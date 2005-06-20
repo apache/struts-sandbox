@@ -17,8 +17,9 @@ namespace PhoneBook.Web.Forms
 	
 		#region Messages
 
-		private const string msg_FIND_CMD = "FIND";
 		private const string msg_ADD_CMD = "ADD NEW";
+		private const string msg_PRINT_CMD = "PRINT";
+		private const string msg_LIST_ALL_CMD = "SHOW ALL";
 
 		#endregion
 
@@ -36,35 +37,47 @@ namespace PhoneBook.Web.Forms
 		#region Find
 
 		protected Panel pnlFind;
-		protected DropDownList lstSelect;
-		protected TextBox txtFind;
-		protected Button cmdFind;
+		protected DropDownList lstLastName;
+		protected DropDownList lstFirstName;
+		protected DropDownList lstExtension;
+		protected DropDownList lstUserName;
+		protected DropDownList lstHireDate;
+		protected DropDownList lstHours;
+		protected DropDownList lstEditor;
+		protected Button cmdListAll;
+		protected Button cmdPrint;
 
 		// pageload events - These methods populate controls to display
 
-		private void Find_Init ()
+		private DropDownList[] GetLists ()
 		{
-			this.cmdFind.Click += new EventHandler (this.Find_Submit);
-			this.cmdFind.Text = msg_FIND_CMD;
-			this.cmdAdd.Click += new EventHandler (this.Add_Submit);
-			this.cmdAdd.Text = msg_ADD_CMD;
+			DropDownList[] lists = {lstLastName,lstFirstName,lstExtension,lstUserName,lstHireDate,lstHours,lstEditor};
+			return lists;
 		}
 
-		private void Find_Load ()
+		private void Find_Init ()
 		{
-			pnlFind.Visible = true;
+			cmdListAll.Text = msg_LIST_ALL_CMD;
+			cmdPrint.Text = msg_PRINT_CMD;
+
+			foreach (DropDownList filter in GetLists())
+			{
+				filter.AutoPostBack = true;				
+			}
 		}
+
 
 		// postback events - These events respond to user input (to controls displayed by pageload methods)
 
-		protected void Find_Submit (object sender, EventArgs e)
+		protected void Find_Filter (object sender, EventArgs e)
 		{
+			// TODO: See if filter changed.
 			List_Load ();
 		}
 
 		#endregion
 
-		#region panel List
+		#region List
 
 		protected Panel pnlList;
 		protected DataGrid repList;
@@ -74,7 +87,8 @@ namespace PhoneBook.Web.Forms
 
 		private void List_Init ()
 		{
-			// Put user code to initialize the list here
+			this.cmdAdd.Text = msg_ADD_CMD;
+			this.cmdAdd.Visible = false; // TODO: True if user is editor
 		}
 
 		private void List_Load ()
@@ -102,55 +116,28 @@ namespace PhoneBook.Web.Forms
 
 		protected void List_PageIndexChanged (object sender, DataGridPageChangedEventArgs e)
 		{
-			Find_Submit(null,null); 
+			Find_Filter(null,null); 
 			repList.CurrentPageIndex = e.NewPageIndex;
 			repList.DataBind (); 
 		}
 
-		protected void Add_Submit (object sender, EventArgs e)
-		{
-			// TODO: ...
-		}
-
-
 		#endregion
 
-		private void Page_Init()
+		protected void Page_Init()
 		{
 			Find_Init();
 			List_Init();
 		}
 
-		private void Page_Load(object sender, System.EventArgs e)
+		protected void Page_Load(object sender, System.EventArgs e)
 		{
-			if  (!IsPostBack)
+			if  (IsPostBack)
 			{
-				Find_Load();
+				Find_Filter(sender, e);	
+			}
+			{
 				List_Load();
 			}
 		}
-
-		#region Web Form Designer generated code
-		override protected void OnInit(EventArgs e)
-		{
-			//
-			// CODEGEN: This call is required by the ASP.NET Web Form Designer.
-			//
-			InitializeComponent();
-			base.OnInit(e);
-			Page_Init();
-		}
-		
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{    
-			this.Load += new System.EventHandler(this.Page_Load);
-		}
-		#endregion
-
 	}
-
 }

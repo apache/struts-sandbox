@@ -1,4 +1,4 @@
-<%@ Page language="c#" Codebehind="Directory.aspx.cs" AutoEventWireup="false" Inherits="PhoneBook.Web.Forms.Directory" %>
+<%@ Page language="c#" Codebehind="Directory.aspx.cs" AutoEventWireup="true" Inherits="PhoneBook.Web.Forms.Directory" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
 <HTML>
 	<HEAD>
@@ -14,14 +14,31 @@
 			<form id="frmDirectory" method="post" runat="server">
 			
 			<!-- PROMPT -->
-			<p>To select entries, choose a filter or search for a Name or Extension.</p>	
+			<p>Select a filter to display fewer entries.</p>	
 
 			<!-- FIND -->
 			<asp:Panel ID="pnlFind" Runat="server">
 			  <table><tr>
-			  <td>Sort by: </td><td><asp:DropDownList ID="lstSelect"></asp:DropDownList>
-			  <td>Search for:<asp:TextBox ID="txtFind" Runat="server"></asp:TextBox> <asp:Button ID="cmdFind" Runat="server"></asp:Button></td>
-			  <td><asp:Button ID="cmdAdd" Runat="server"></asp:Button></td>
+			  <td colspan="7" >
+				  <asp:Button ID="cmdListAll" Runat="server"></asp:Button>
+				  <asp:Button ID="cmdPrint" Runat="server"></asp:Button>
+			  </td>
+			  <tr>
+			  <td>Last Name</td>
+			  <td>First Name</td>
+			  <td>Extension</td>
+			  <td>User</td>
+			  <td>Hire Date</td>
+			  <td>Hours</td>			  
+			  <td>Editor</td>			  
+			  </tr><tr>
+			  <td><asp:DropDownList ID="lstLastName" Runat=server></asp:DropDownList></td>
+			  <td><asp:DropDownList ID="lstFirstName" Runat=server></asp:DropDownList></td>
+			  <td><asp:DropDownList ID="lstExtension" Runat=server></asp:DropDownList></td>
+			  <td><asp:DropDownList ID="lstUserName" Runat=server></asp:DropDownList></td>
+			  <td><asp:DropDownList ID="lstHireDate" Runat=server></asp:DropDownList></td>
+			  <td><asp:DropDownList ID="lstHours" Runat=server></asp:DropDownList></td>
+			  <td><asp:DropDownList ID="lstEditor" Runat=server></asp:DropDownList></td>
 			  </tr></table>
 			</asp:panel>
 			
@@ -41,6 +58,7 @@
 						<asp:BoundColumn DataField="hours" HeaderText="HOURS"></asp:BoundColumn>
 					</Columns>
             	</asp:DataGrid>
+        		<p><asp:Button ID="cmdAdd" Runat="server"></asp:Button></p>
 			</asp:Panel>
 
 		</form>
