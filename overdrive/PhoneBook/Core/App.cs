@@ -81,5 +81,11 @@ namespace PhoneBook.Core
 		/// 
 		public const string LIST_LAST_NAMES = "list_last_names";
 
+		/// <summary>
+		/// Token for Directory View command.
+		/// </summary>
+		/// 
+		public const string DIRECTORY_VIEW = "directory_view";
+
 	}
 }

@@ -151,6 +151,11 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "Commands\DirectoryViewTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Commands\FilterLists.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

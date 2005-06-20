@@ -25,7 +25,7 @@ namespace PhoneBook.Core.Commands
 	/// </summary>
 	/// 
 	[TestFixture]
-	public class FilterLists : BaseTest
+	public class FilterListsTest : BaseTest
 	{
 		/// <summary>
 		/// Confirm that a list is returned as the outcome, 

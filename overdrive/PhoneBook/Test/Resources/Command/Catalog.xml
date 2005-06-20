@@ -10,5 +10,21 @@
   <object id="list_last_names" type="PhoneBook.Core.Commands.BaseFilterList, PhoneBook.Core">
 	<property name="ID"><value>list_last_names</value></property>
   </object>
+  
+    <object id="directory_view" type="Nexus.Core.RequestChain, Nexus.Core">
+		<property name="ID">
+			<value>directory_view</value>
+		</property>
+		<property name="RelatedIDs">
+			<list>
+				<value>list_last_names</value>
+			</list>
+		</property>
+		<property name="AddCommands">
+			<list>
+				<ref object="list_last_names" />
+			</list>
+		</property>
+	</object>
 
 </objects>

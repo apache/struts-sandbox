@@ -19,9 +19,9 @@ using Nexus.Core;
 namespace PhoneBook.Core.Commands
 {
 	/// <summary>
-	/// Execute database statement for ID, 
+	/// Execute database statement for QueryID, 
 	/// convert list returned to an AppContextList,  
-	/// and set result as outcome.
+	/// and place converted list in context under ID.
 	/// </summary>
 	/// 
 	public class BaseList : AppCommand
@@ -30,7 +30,7 @@ namespace PhoneBook.Core.Commands
 		{
 			IList rows = Mapper ().QueryForList (QueryID, null);
 			AppContextList list = new AppContextList (rows);
-			context.Outcome = list;
+			context[ID] = list;
 			return CONTINUE;
 		}
 	}
