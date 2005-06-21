@@ -27,4 +27,7 @@
 		</property>
 	</object>
 
+  <object id="directory_view_helper" type="PhoneBook.Web.AppHelper, PhoneBook.Web">
+  </object>
+
 </objects>

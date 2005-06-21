@@ -3,6 +3,10 @@
   "http://www.springframework.net/dtd/spring-objects.dtd">
 <objects>
 
+ <!-- Catalog -->
+ 
+	<object id="Catalog" type="Nexus.Extras.Spring.Catalog"/>
+ 
  <!-- FieldTable -->
  
 	<object id="FieldTable" type="Nexus.Core.Tables.FieldTable">

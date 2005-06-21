@@ -87,5 +87,10 @@ namespace PhoneBook.Core
 		/// 
 		public const string DIRECTORY_VIEW = "directory_view";
 
+		/// <summary>
+		/// Token for Directory View helpere.
+		/// </summary>
+		/// 
+		public const string DIRECTORY_VIEW_HELPER = "directory_view_helper";
 	}
 }

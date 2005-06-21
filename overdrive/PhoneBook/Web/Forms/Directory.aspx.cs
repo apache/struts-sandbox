@@ -22,6 +22,26 @@ namespace PhoneBook.Web.Forms
 
 		#endregion
 
+		#region Properties 
+
+		/// <summary>
+		/// Field for ViewHelper.
+		/// </summary>
+		/// 
+		private AppHelper _ViewHelper;
+
+		/// <summary>
+		/// Obtain dynamic data for the default view.
+		/// </summary>
+		///
+		public virtual AppHelper ViewHelper
+		{
+			get { return _ViewHelper; }
+			set { _ViewHelper = value; }
+		}
+
+		#endregion
+
 		public IList GetDataSource ()
 		{
 			BaseList command = new BaseList ();
@@ -131,9 +151,8 @@ namespace PhoneBook.Web.Forms
 		{
 			if (IsPostBack)
 				Find_Filter (sender, e);
-			{
-				List_Load ();
-			}
+			else
+				ViewHelper.ExecuteBind (pnlFind.Controls);
 		}
 	}
 }

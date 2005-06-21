@@ -19,18 +19,16 @@ using Nexus.Core;
 namespace PhoneBook.Core.Commands
 {
 	/// <summary>
-	/// Execute database statement for QueryID, 
-	/// convert list returned to an AppContextList,  
-	/// and place converted list in context under ID.
+	/// Execute database statement for QueryID 
+	/// and pass through list in context under ID.
 	/// </summary>
 	/// 
-	public class BaseList : AppCommand
+	public class BaseFilterList : AppCommand
 	{
 		public override bool RequestExecute (IRequestContext context)
 		{
 			IList rows = Mapper ().QueryForList (QueryID, null);
-			AppContextList list = new AppContextList (rows);
-			context [ID] = list;
+			context [ID] = rows;
 			return CONTINUE;
 		}
 	}
