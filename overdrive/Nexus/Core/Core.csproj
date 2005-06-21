@@ -99,6 +99,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IKeyValueList.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IRequestCatalog.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -120,6 +125,11 @@
                 />
                 <File
                     RelPath = "KeyValue.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "KeyValueList.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

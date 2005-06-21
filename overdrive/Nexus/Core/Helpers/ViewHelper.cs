@@ -25,20 +25,26 @@ namespace Nexus.Core.Helpers
 	/// 
 	public abstract class ViewHelper : IViewHelper
 	{
-		#region Context
 
-		private IRequestContext _Context;
-		public IRequestContext Context
-		{
-			get
-			{
-				if (_Context == null)
-					_Context = Catalog.GetRequest (Command);
-				return _Context;
-			}
-		}
+		/// <summary>
+		/// Default setting for ListSuffix ["_list"].
+		/// </summary>
+		public const string LIST_SUFFIX = "_list";
 
-		#endregion
+		/// <summary>
+		/// Default setting for NullIfEmpty [true].
+		/// </summary>
+		public const bool NULL_IF_EMPTY = true;
+
+		/// <summary>
+		/// Default setting for Prefix [""].
+		/// </summary>
+		public const string PREFIX = "";
+
+		/// <summary>
+		/// Default setting for SelectItemPrompt ["--v--"].
+		/// </summary>
+		public const string SELECT_ITEM_PROMPT = "--v--";
 
 		#region Read and Bind (abstract)
 
@@ -54,6 +60,14 @@ namespace Nexus.Core.Helpers
 		{
 			Catalog.ExecuteView (Context);
 		}
+
+		#endregion
+
+		#region Messages (abstract) 
+
+		public abstract string ErrorsText { get; }
+
+		public abstract string HintsText { get; }
 
 		#endregion
 
@@ -84,6 +98,7 @@ namespace Nexus.Core.Helpers
 			get { return (!HasAlerts && !HasFault); }
 		}
 
+
 		public IDictionary Hints
 		{
 			get { return Context.Hints; }
@@ -110,55 +125,97 @@ namespace Nexus.Core.Helpers
 			set { _FieldSet = value; }
 		}
 
-		public string Prefix
-		{
-			get { return Context [Tokens.Prefix] as string; }
-			set { Context [Tokens.Prefix] = value; }
-		}
-
-		public string ListSuffix
-		{
-			get { return Context [Tokens.ListSuffix] as string; }
-			set { Context [Tokens.ListSuffix] = value; }
-		}
-
 		#endregion 
 
-		#region Properties
+		#region Options
 
+		private string _Prefix = PREFIX;
+		public string Prefix
+		{
+			get { return _Prefix; }
+			set { _Prefix = value; }
+		}
+
+		private string _ListSuffix = LIST_SUFFIX;
+		public string ListSuffix
+		{
+			get { return _ListSuffix; }
+			set { _ListSuffix = value; }
+		}
+
+		private bool _NullIfEmpty = NULL_IF_EMPTY;
 		public bool NullIfEmpty
 		{
 			get
 			{
-				bool v = (Boolean) Context [Tokens.NullIfEmpty];
-				return v;
+				return _NullIfEmpty;
 			}
 			set
 			{
-				Boolean b = new Boolean ();
-				bool v = b.Equals (true) ? true : false;
-				Context [Tokens.NullIfEmpty] = v;
+				_NullIfEmpty = value; 
 			}
 		}
 
+		private string _SelectItemPrompt = SELECT_ITEM_PROMPT;
 		public string SelectItemPrompt
 		{
-			get { return Context [Tokens.SelectItemPrompt] as string; }
-			set { Context [Tokens.SelectItemPrompt] = value; }
+			get { return _SelectItemPrompt; }
+			set { _SelectItemPrompt = value; }
 		}
 
+		#endregion
+
+		#region Properties
+
+		private IRequestCatalog _Catalog;
+		/// <summary>
+		/// Provide the application object catalog for this Helper.
+		/// </summary>
+		/// <remarks>
+		/// The Catalog is usually set through dependency injection. 
+		/// The Catalog and Command must be set before calling other methods.
+		/// </remarks>
+		/// 
 		public IRequestCatalog Catalog
 		{
-			get { return Context [Tokens.Catalog] as IRequestCatalog; }
-			set { Context [Tokens.Catalog] = value; }
+			get { return _Catalog; }
+			set { _Catalog = value; }
 		}
 
+		private IRequestCommand _Command;
+		/// <summary>
+		/// Provide the command for this Helper.
+		/// </summary>
+		/// <remarks>
+		/// The Command is usually set through dependency injection. 
+		/// The Catalog and Command must be set before calling other methods.
+		/// </remarks>
+		/// 
 		public IRequestCommand Command
 		{
-			get { return Context [Tokens.Command] as IRequestCommand; }
-			set { Context [Tokens.Command] = value; }
+			get { return _Command; }
+			set { _Command  = value; }
 		}
 
+		private IRequestContext _Context;
+		/// <summary>
+		/// Provide the runtime context for this Helper.
+		/// </summary>
+		/// <remarks>
+		/// The Context is obtained through reference to the Catalog and Command.
+		/// All other properties and methods of the Helper refer to the Context, 
+		/// making Context the cornerstone property.
+		/// </remarks>
+		/// 
+		public IRequestContext Context
+		{
+			get
+			{
+				if (_Context == null)
+					_Context = Catalog.GetRequest (Command);
+				return _Context;
+			}
+		}
 		#endregion 
 	}
 }

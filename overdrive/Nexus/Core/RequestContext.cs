@@ -134,10 +134,10 @@ namespace Nexus.Core
 		/// 
 		private void AddStore (string template, string queue, string key)
 		{
-			IContext store = this [key] as IContext;
+			IDictionary store = this [key] as IDictionary;
 			if (null == store)
 			{
-				store = new Context (); // ISSUE: Spring?
+				store = new Hashtable (); // ISSUE: Spring?
 				this [key] = store;
 			}
 			IList list;

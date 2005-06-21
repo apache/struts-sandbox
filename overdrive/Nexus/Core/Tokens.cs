@@ -59,12 +59,6 @@ namespace Nexus.Core
 		public const string Alerts = "_Alerts";
 
 		/// <summary>
-		/// Token for Catalog property.
-		/// </summary>
-		/// 
-		public const string Catalog = "_Catalog";
-
-		/// <summary>
 		/// Token for Command property.
 		/// </summary>
 		/// 
@@ -168,30 +162,6 @@ namespace Nexus.Core
 		/// </summary>
 		/// 
 		public const string Label = "_Label";
-
-		/// <summary>
-		/// Token for ListSuffix property.
-		/// </summary>
-		/// 
-		public const string ListSuffix = "_ListSuffix";
-
-		/// <summary>
-		/// Token for NullIfEmpty property.
-		/// </summary>
-		/// 
-		public const string NullIfEmpty = "_NullIfEmpty";
-
-		/// <summary>
-		/// Token for Prefix property.
-		/// </summary>
-		/// 
-		public const string Prefix = "_Prefix";
-
-		/// <summary>
-		/// Token for SelectItemPrompt property.
-		/// </summary>
-		/// 
-		public const string SelectItemPrompt = "_SelectItemPrompt";
 
 		/// <summary>
 		/// Token for Source property.

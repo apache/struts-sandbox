@@ -34,7 +34,12 @@ namespace Nexus.Core.Tables
 
 		public Type DataType
 		{
-			get { return this [Tokens.DataType] as Type; }
+			get
+			{
+				Type v = this [Tokens.DataType] as Type;
+				if (v==null) v = typeof(String);
+				return v;
+			}
 			set
 			{
 				this [Tokens.DataType] = value;

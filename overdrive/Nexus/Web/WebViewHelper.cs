@@ -18,6 +18,7 @@ using System.Collections;
 using System.Text;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Nexus.Core;
 using Nexus.Core.Helpers;
 
 namespace Nexus.Web.Helpers
@@ -28,71 +29,12 @@ namespace Nexus.Web.Helpers
 	/// 
 	public class WebViewHelper : ViewHelper
 	{
-		#region Error Builders
-
-		/// <summary>
-		/// Build a set of error messages using HTML markup.
-		/// </summary>
-		/// <param name="errors">A list of error messages</param>
-		/// <returns>HTML markup presenting the errors.</returns>
-		/// 
-		public static string HtmlErrorList (IList errors)
-		{
-			StringBuilder sb = new StringBuilder ("<ul>");
-			foreach (object o in errors)
-			{
-				sb.Append ("<li>");
-				sb.Append (o.ToString ());
-				sb.Append ("</li>");
-			}
-			sb.Append ("</ul>");
-
-			return sb.ToString ();
-		}
-
-		/// <summary>
-		/// Build a set error messages using HTML markup.
-		/// </summary>
-		/// <param name="fault">An exception instance, if any</param>
-		/// <param name="store">A context listing errors, if any</param>
-		/// <returns>HTML markup presenting the errors.</returns>
-		/// 
-		public string HtmlErrorBuilder (Exception fault, IDictionary store)
-		{
-			string errorMarkup = null;
-			if (store != null)
-			{
-				IList errors = new ArrayList ();
-				ICollection keys = Context.Keys;
-				foreach (string key in keys)
-				{
-					IList sublist = store [key] as IList;
-					foreach (string message in sublist) errors.Add (message);
-				}
-				errorMarkup = HtmlErrorList (errors);
-			}
-
-			if (errorMarkup != null)
-			{
-				StringBuilder sb = new StringBuilder (errorMarkup);
-				return sb.ToString ();
-			}
-			return null;
-		}
-
-		public string HtmlErrorBuilder ()
-		{
-			return HtmlErrorBuilder (Fault, Alerts);
-		}
-
-		#endregion 
-
 		#region IViewHelper
 
 		public override void ExecuteBind (ICollection controls)
 		{
 			Execute ();
-			Bind (controls);
+			if (IsNominal) Bind (controls);
 		}
 
 		public override void ReadExecute (ICollection controls)
@@ -112,6 +54,23 @@ namespace Nexus.Web.Helpers
 			ControlCollection cc = controls as ControlCollection;
 			ReadControls (cc, Context.Criteria, Prefix, ListSuffix, NullIfEmpty);
 		}
+
+		public override string ErrorsText
+		{
+			get
+			{
+				return HtmlMessageBuilder (Alerts);
+			}
+		}
+
+		public override string HintsText
+		{
+			get
+			{
+				return HtmlMessageBuilder (Hints);
+			}
+		}
+
 
 		#endregion
 
@@ -137,7 +96,7 @@ namespace Nexus.Web.Helpers
 				{
 					ListControl x = (ListControl) t;
 					string root = RootId (x.ID, prefix, list_suffix);
-					IList s = dictionary [root + list_suffix] as IList; // this_key_list
+					IList s = dictionary [x.ID] as IList; // this_key_list
 					string r = dictionary [root] as string; // this_key
 					if ((null == r) || (0 == r.Length))
 						BindListControl (x, s);
@@ -162,7 +121,7 @@ namespace Nexus.Web.Helpers
 		private void BindListControl (ListControl control, IList list)
 		{
 			bool insertKey = ((list != null) && (!list.Contains (String.Empty)) && (!list.Contains (SelectItemPrompt)));
-			if (insertKey) list.Insert (0, SelectItemPrompt);
+			if (insertKey) list.Insert (0, new KeyValue (String.Empty, SelectItemPrompt));
 			BindListControl (control, list, null);
 		}
 
@@ -287,6 +246,7 @@ namespace Nexus.Web.Helpers
 		private string RootId (string id, string prefix, string suffix)
 		{
 			int v = id.LastIndexOf (suffix);
+			if (v<1) return id;
 			string fore = id.Substring (0, v);
 			string root = ToColumn (fore, prefix);
 			return root;
@@ -355,5 +315,58 @@ namespace Nexus.Web.Helpers
 		}
 
 		#endregion
+
+		#region Message utilities
+
+		/// <summary>
+		/// Build a set of messages using HTML markup.
+		/// </summary>
+		/// <param name="messages">A list of messages</param>
+		/// <returns>HTML markup presenting the messages.</returns>
+		/// 
+		private string HtmlMessageList (IList messages)
+		{
+			StringBuilder sb = new StringBuilder ("<ul>");
+			foreach (object o in messages)
+			{
+				sb.Append ("<li>");
+				sb.Append (o.ToString ());
+				sb.Append ("</li>");
+			}
+			sb.Append ("</ul>");
+
+			return sb.ToString ();
+		}
+
+		/// <summary>
+		/// Build a set error messages using HTML markup.
+		/// </summary>
+		/// <param name="store">A context listing errors, if any</param>
+		/// <returns>HTML markup presenting the errors.</returns>
+		/// 
+		private string HtmlMessageBuilder (IDictionary store)
+		{
+			string messageMarkup = null;
+			if (store != null)
+			{
+				IList messages = new ArrayList ();
+				ICollection keys = store.Keys;
+				foreach (string key in keys)
+				{
+					IList sublist = store [key] as IList;
+					foreach (string message in sublist) messages.Add (message);
+				}
+				messageMarkup = HtmlMessageList (messages);
+			}
+
+			if (messageMarkup != null)
+			{
+				StringBuilder sb = new StringBuilder (messageMarkup);
+				return sb.ToString ();
+			}
+			return null;
+		}
+
+		#endregion 
 	}
 }

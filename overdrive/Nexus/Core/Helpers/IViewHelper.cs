@@ -93,6 +93,9 @@ namespace Nexus.Core.Helpers
 		/// keyed by the field causing the message, 
 		/// or to a magic global key.
 		/// </summary>
+		/// <remarks>
+		/// When recalling Alerts, by default include the Fault.
+		/// </remarks>
 		/// 
 		IDictionary Alerts { get; }
 
@@ -108,6 +111,9 @@ namespace Nexus.Core.Helpers
 		/// <summary>
 		/// Record an Exception, if thrown.
 		/// </summary>
+		/// <remarks>
+		/// By default, the Fault will be included in the list of Alerts.
+		/// </remarks>
 		/// 
 		Exception Fault { get; }
 
@@ -126,6 +132,16 @@ namespace Nexus.Core.Helpers
 		/// 
 		bool IsNominal { get; }
 
+		/// <summary>
+		/// Return the Alerts, including any Fault, formatted for display by a UI control.
+		/// </summary>
+		/// <remarks>
+		/// If messages are localized or customized, 
+		/// the helper will return correct version for the user.
+		/// UI specific implementation may markup the errors as needed.
+		/// </remarks>
+		/// 
+		string ErrorsText { get; } 
 
 		/// <summary>
 		/// Record a list of hint (or advisory) messages, 
@@ -143,6 +159,17 @@ namespace Nexus.Core.Helpers
 		/// 
 		bool HasHints { get; }
 
+
+		/// <summary>
+		/// Return Hints formatted for display by a UI control.
+		/// </summary>
+		/// <remarks>
+		/// If messages are localized or customized, 
+		/// the helper will return correct version for the user.
+		/// UI specific implementatiosn may markup the messages as needed.
+		/// </remarks>
+		/// 
+		string HintsText { get; } 
 
 		// ----
 

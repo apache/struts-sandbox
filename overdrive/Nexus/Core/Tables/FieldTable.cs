@@ -56,7 +56,14 @@ namespace Nexus.Core.Tables
 
 		private bool IsStringType (Type dataType)
 		{
-			return ((typeof (String) == dataType) || (typeof (string) == dataType) || (null == dataType));
+			bool v = (typeof (string).IsAssignableFrom (dataType));
+			return v;
+		}
+
+		private bool IsCollectionType (Type dataType)
+		{
+			bool v = (typeof (ICollection)).IsAssignableFrom (dataType);
+			return (v);
 		}
 
 		public bool IsRichControl (string name)
@@ -78,7 +85,7 @@ namespace Nexus.Core.Tables
 			if ((fieldContext == null))
 			{
 				if (Strict)
-					throw new ArgumentNullException ("Agility.Nexus.FieldTable.Convert", id);
+					throw new ArgumentNullException ("Nexus.Core.FieldTable.Convert", id);
 				else
 				{
 					context.Target = source;
@@ -141,10 +148,17 @@ namespace Nexus.Core.Tables
 			if ((fieldContext == null))
 			{
 				if (Strict)
-					throw new ArgumentNullException ("Nexus.Core.FieldTable", "Format");
+					throw new ArgumentNullException ("Nexus.Core.FieldTable.Format", id);
 				else
 				{
-					context.Target = (source == null) ? null : source.ToString ();
+					if (source == null)
+						context.Target = null;
+					else
+					{
+						Type sourceType = source.GetType ();
+						if (IsCollectionType (sourceType)) context.Target = source;
+						else context.Target = source.ToString ();
+					}
 					return true;
 				}
 			}
