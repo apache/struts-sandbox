@@ -13,6 +13,12 @@
 		<h1>PhoneBook Directory</h1>
 			<form id="frmDirectory" method="post" runat="server">
 			
+			<!-- ERROR -->
+			<asp:Panel ID="pnlError" Runat="server">
+			<p><asp:Label ID="lblError" Runat="server"></asp:Label></p>
+			<hr>
+			</asp:Panel>
+			
 			<!-- PROMPT -->
 			<p>Select a filter to display fewer entries.</p>	
 
@@ -32,7 +38,7 @@
 			  <td>Hours</td>			  
 			  <td>Editor</td>			  
 			  </tr><tr>
-			  <td><asp:DropDownList ID="lstLastName" Runat=server></asp:DropDownList></td>
+			  <td><asp:DropDownList ID="last_name_list" Runat=server></asp:DropDownList></td>
 			  <td><asp:DropDownList ID="lstFirstName" Runat=server></asp:DropDownList></td>
 			  <td><asp:DropDownList ID="lstExtension" Runat=server></asp:DropDownList></td>
 			  <td><asp:DropDownList ID="lstUserName" Runat=server></asp:DropDownList></td>

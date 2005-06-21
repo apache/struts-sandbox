@@ -3,6 +3,37 @@
   "http://www.springframework.net/dtd/spring-objects.dtd">
 <objects>
 
+  <object id="select_all" type="PhoneBook.Core.Commands.BaseList, PhoneBook.Core">
+	<property name="ID"><value>select_all</value></property>
+  </object>
+
+  <object id="last_name_list" type="PhoneBook.Core.Commands.BaseFilterList, PhoneBook.Core">
+	<property name="ID"><value>last_name_list</value></property>
+  </object>
+  
+    <object id="directory_view" parent="BaseChain">
+		<property name="ID">
+			<value>directory_view</value>
+		</property>
+		<property name="RelatedIDs">
+			<list>
+				<value>last_name_list</value>
+			</list>
+		</property>
+		<property name="AddCommands">
+			<list>
+				<ref object="last_name_list" />
+			</list>
+		</property>
+	</object>
+
+  <object id="directory_view_helper" type="PhoneBook.Web.AppHelper, PhoneBook.Web">
+		<property name="Catalog">
+			<ref object="Catalog" />
+		</property>
+		<property name="Command">
+			<ref object="directory_view" />
+		</property>
+  </object>
+
 </objects>
-
-

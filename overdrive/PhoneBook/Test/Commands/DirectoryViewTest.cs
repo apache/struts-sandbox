@@ -19,14 +19,14 @@ namespace PhoneBook.Core.Commands
 		public void ContainsFilters ()
 		{
 			IRequestContext context = catalog.ExecuteRequest (App.DIRECTORY_VIEW);
-			string[] keys = {App.LIST_LAST_NAMES};
+			string[] keys = {App.LAST_NAME_LIST};
 			foreach (string key in keys)
 			{
 				Assert.IsTrue (context.Contains (key), key + ": Expected context to contain key.");
 			}
 		}
 
-		// TODO: [Test]
+		[Test]
 		public void HelperContains ()
 		{
 			IViewHelper helper = catalog.GetHelper (App.DIRECTORY_VIEW_HELPER);

@@ -120,6 +120,11 @@
                     AssemblyName = "NUnitAsp"
                     HintPath = "..\..\NUnitAsp.bin\NUnitAsp.dll"
                 />
+                <Reference
+                    Name = "Web"
+                    Project = "{948EE344-D033-4358-88E8-77FDE080D93C}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>
@@ -169,6 +174,10 @@
                     RelPath = "Forms\DirectoryTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Resources\Command\AppBase.xml"
+                    BuildAction = "Content"
                 />
                 <File
                     RelPath = "Resources\Command\AppConfig.xml"

@@ -3,10 +3,6 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
 
-	<object id="Base" />
-	
-	<import resource="Resources/Command/AppBase.xml"/>
-	<import resource="Resources/Command/AppConfig.xml"/>
-	<import resource="Resources/Command/Catalog.xml"/>
-	
+	<object id="BaseChain" type="Nexus.Core.RequestChain, Nexus.Core"></object>
+
 </objects>

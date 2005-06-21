@@ -16,6 +16,7 @@
 using NUnit.Extensions.Asp;
 using NUnit.Extensions.Asp.AspTester;
 using NUnit.Framework;
+using PhoneBook.Core;
 
 namespace WNE.Core.Forms
 {
@@ -26,7 +27,7 @@ namespace WNE.Core.Forms
 	public class DirectoryTest : WebFormTestCase
 	{
 		private PanelTester pnlFind;
-		private DropDownListTester lstLastName;
+		private DropDownListTester last_name_list;
 		private DropDownListTester lstFirstName;
 		private DropDownListTester lstExtension;
 		private DropDownListTester lstUserName;
@@ -47,7 +48,7 @@ namespace WNE.Core.Forms
 		/// 
 		private DropDownListTester[] GetLists ()
 		{
-			DropDownListTester[] lists = {lstLastName, lstFirstName, lstExtension, lstUserName, lstHireDate, lstHours, lstEditor};
+			DropDownListTester[] lists = {last_name_list, lstFirstName, lstExtension, lstUserName, lstHireDate, lstHours, lstEditor};
 			return lists;
 		}
 
@@ -60,7 +61,7 @@ namespace WNE.Core.Forms
 			base.SetUp ();
 
 			pnlFind = new PanelTester ("pnlFind", CurrentWebForm);
-			lstLastName = new DropDownListTester ("lstLastName", CurrentWebForm);
+			last_name_list = new DropDownListTester (App.LAST_NAME_LIST, CurrentWebForm);
 			lstFirstName = new DropDownListTester ("lstFirstName", CurrentWebForm);
 			lstExtension = new DropDownListTester ("lstExtension", CurrentWebForm);
 			lstUserName = new DropDownListTester ("lstUserName", CurrentWebForm);

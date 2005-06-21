@@ -7,27 +7,33 @@
 	<property name="ID"><value>select_all</value></property>
   </object>
 
-  <object id="list_last_names" type="PhoneBook.Core.Commands.BaseFilterList, PhoneBook.Core">
-	<property name="ID"><value>list_last_names</value></property>
+  <object id="last_name_list" type="PhoneBook.Core.Commands.BaseFilterList, PhoneBook.Core">
+	<property name="ID"><value>last_name_list</value></property>
   </object>
   
-    <object id="directory_view" type="Nexus.Core.RequestChain, Nexus.Core">
+    <object id="directory_view" parent="BaseChain">
 		<property name="ID">
 			<value>directory_view</value>
 		</property>
 		<property name="RelatedIDs">
 			<list>
-				<value>list_last_names</value>
+				<value>last_name_list</value>
 			</list>
 		</property>
 		<property name="AddCommands">
 			<list>
-				<ref object="list_last_names" />
+				<ref object="last_name_list" />
 			</list>
 		</property>
 	</object>
 
   <object id="directory_view_helper" type="PhoneBook.Web.AppHelper, PhoneBook.Web">
+		<property name="Catalog">
+			<ref object="Catalog" />
+		</property>
+		<property name="Command">
+			<ref object="directory_view" />
+		</property>
   </object>
 
 </objects>

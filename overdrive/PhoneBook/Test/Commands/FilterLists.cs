@@ -36,14 +36,17 @@ namespace PhoneBook.Core.Commands
 		private void FilterList_Result (IRequestContext context)
 		{
 			IList list = AssertListOutcome (context);
-			foreach (string key in list)
+			foreach (IKeyValue item in list)
 			{
-				Assert.IsNotNull (key, "Expected each item to be non-null");
-				Assert.IsTrue (key.Length > 0, "Expected each item to be non-empty");
+				Assert.IsNotNull (item, "Expected each item to be non-null");
+				string key = item.Value as string;
+				Assert.IsNotNull (key,"Expected each key to be non-null");
+				Assert.IsTrue (key.Length > 0, "Expected each key to be non-empty");
 			}
 			IDictionary keys = new Hashtable (list.Count);
-			foreach (string key in list)
+			foreach (IKeyValue item in list)
 			{
+				string key = item.Value as string;			
 				if (keys.Contains (key)) Assert.Fail (key + ": Expected each item to be unique");
 				keys.Add (key, key);
 			}
@@ -56,7 +59,7 @@ namespace PhoneBook.Core.Commands
 		[Test]
 		public void TestLastNameFilterList ()
 		{
-			IRequestContext context = catalog.ExecuteRequest (App.LIST_LAST_NAMES);
+			IRequestContext context = catalog.ExecuteRequest (App.LAST_NAME_LIST);
 			FilterList_Result (context);
 		}
 

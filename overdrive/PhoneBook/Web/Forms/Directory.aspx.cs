@@ -3,6 +3,7 @@ using System.Collections;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Nexus.Core;
+using Nexus.Core.Helpers;
 using PhoneBook.Core;
 using PhoneBook.Core.Commands;
 
@@ -22,19 +23,34 @@ namespace PhoneBook.Web.Forms
 
 		#endregion
 
-		#region Properties 
+		#region Page Properties 
+
+		protected Panel pnlError;
+		protected Label lblError;
+
+		/// <summary>
+		/// Display a list of error mesasges.
+		/// </summary>
+		public IViewHelper Page_Error
+		{
+			set
+			{
+				lblError.Text = value.ErrorsText;
+				pnlError.Visible = true;
+			}
+		}
 
 		/// <summary>
 		/// Field for ViewHelper.
 		/// </summary>
 		/// 
-		private AppHelper _ViewHelper;
+		private IViewHelper _ViewHelper;
 
 		/// <summary>
 		/// Obtain dynamic data for the default view.
 		/// </summary>
 		///
-		public virtual AppHelper ViewHelper
+		public virtual IViewHelper ViewHelper
 		{
 			get { return _ViewHelper; }
 			set { _ViewHelper = value; }
@@ -55,7 +71,7 @@ namespace PhoneBook.Web.Forms
 		#region Find
 
 		protected Panel pnlFind;
-		protected DropDownList lstLastName;
+		protected DropDownList last_name_list;
 		protected DropDownList lstFirstName;
 		protected DropDownList lstExtension;
 		protected DropDownList lstUserName;
@@ -69,7 +85,7 @@ namespace PhoneBook.Web.Forms
 
 		private DropDownList[] GetLists ()
 		{
-			DropDownList[] lists = {lstLastName, lstFirstName, lstExtension, lstUserName, lstHireDate, lstHours, lstEditor};
+			DropDownList[] lists = {last_name_list, lstFirstName, lstExtension, lstUserName, lstHireDate, lstHours, lstEditor};
 			return lists;
 		}
 
@@ -84,6 +100,14 @@ namespace PhoneBook.Web.Forms
 			}
 		}
 
+		private void Find_Load ()
+		{
+			IViewHelper h = ViewHelper;
+			h.ExecuteBind (pnlFind.Controls);
+			bool ok = (h.IsNominal);
+			if (!ok)
+				Page_Error = h;
+		}
 
 		// postback events - These events respond to user input (to controls displayed by pageload methods)
 
@@ -143,6 +167,7 @@ namespace PhoneBook.Web.Forms
 
 		protected void Page_Init ()
 		{
+			pnlError.Visible = false;
 			Find_Init ();
 			List_Init ();
 		}
@@ -152,7 +177,11 @@ namespace PhoneBook.Web.Forms
 			if (IsPostBack)
 				Find_Filter (sender, e);
 			else
-				ViewHelper.ExecuteBind (pnlFind.Controls);
+			{
+				Find_Load ();
+				List_Load ();
+			}
 		}
+
 	}
 }

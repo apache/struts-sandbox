@@ -79,7 +79,7 @@ namespace PhoneBook.Core
 		/// Token for List Last Names command.
 		/// </summary>
 		/// 
-		public const string LIST_LAST_NAMES = "list_last_names";
+		public const string LAST_NAME_LIST = "last_name_list";
 
 		/// <summary>
 		/// Token for Directory View command.
