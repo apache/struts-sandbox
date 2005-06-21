@@ -25,7 +25,7 @@ namespace Nexus.Core.Helpers
 	/// 
 	public abstract class ViewHelper : IViewHelper
 	{
-		#region private 
+		#region Context
 
 		private IRequestContext _Context;
 		public IRequestContext Context

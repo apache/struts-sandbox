@@ -1,5 +1,3 @@
-using System.Collections;
-using Agility.Core;
 /*
  * Copyright 2005 The Apache Software Foundation.
  * 
@@ -15,6 +13,9 @@ using Agility.Core;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+using System.Collections;
+using Agility.Core;
+using Nexus.Core.Helpers;
 
 namespace Nexus.Core
 {
@@ -26,24 +27,31 @@ namespace Nexus.Core
 	public interface IRequestCatalog : ICatalog
 	{
 		/// <summary>
+		/// Obtains a IViewHelper for helper ID.
+		/// </summary>
+		/// <param name="name">Our helper ID</param>
+		/// <returns>IViewHelper or null</returns>
+		IViewHelper GetHelper (string name);
+
+		/// <summary>
 		/// Obtain a IRequestContext for command ID, 
 		/// including embedded resources.
 		/// </summary>
-		/// <param name="command">Our command ID</param>
+		/// <param name="name">Our command ID</param>
 		/// <returns>IRequestContext with embedded resources.</returns>
 		/// 
-		IRequestContext GetRequest (string command);
+		IRequestContext GetRequest (string name);
 
 		/// <summary>
 		/// Obtain a IRequestContext for command ID, 
 		/// including embedded resources, 
 		/// and process string-based input. 
 		/// </summary>
-		/// <param name="command">Our command ID</param>
+		/// <param name="name">Our command ID</param>
 		/// <param name="input">Our input values</param>
 		/// <returns>IRequestContext with embedded resources.</returns>
 		/// 
-		IRequestContext GetRequest (string command, IDictionary input);
+		IRequestContext GetRequest (string name, IDictionary input);
 
 		/// <summary>
 		/// Obtain a IRequestContext for the command, 
@@ -57,10 +65,10 @@ namespace Nexus.Core
 		/// <summary>
 		/// Obtain and execute a IRequestContext.
 		/// </summary>
-		/// <param name="command">Our command ID</param>
+		/// <param name="name">Our command ID</param>
 		/// <returns>Context after execution</returns>
 		/// 
-		IRequestContext ExecuteRequest (string command);
+		IRequestContext ExecuteRequest (string name);
 
 		/// <summary>
 		/// Execute a IRequestContext.

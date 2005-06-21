@@ -17,6 +17,7 @@ using System;
 using System.Collections;
 using Agility.Core;
 using Nexus.Core;
+using Nexus.Core.Helpers;
 using Nexus.Core.Tables;
 using Spring.Context;
 
@@ -33,9 +34,9 @@ namespace Nexus.Extras.Spring
 
 		private const string msg_ADD_COMMAND = "This catalog instance is created through dependency injection.";
 		private const string msg_MISSING = "Object is not found in Factory.";
-		private const string msg_NAME = "name";
-		private const string msg_NULL = "Command name cannot be null.";
+		private const string msg_NULL = "Object ID cannot be null.";
 		private const string msg_TYPE = "Command is not a IRequestCommand or IRequestChain.";
+		private const string msg_TYPE_HELPER = "Object is not a IViewHelper.";
 		private const string msg_CATALOG_CONTEXT_NULL = "Catalog: Context cannot be null!";
 		private const string msg_CATALOG_COMMAND_NULL = "Catalog: Command within Context cannot be null! -- Was Context retrieved from Catalog?";
 
@@ -57,13 +58,22 @@ namespace Nexus.Extras.Spring
 		/// <param name="name">ID for object</param>
 		/// <returns>Object instance</returns>
 		/// <exception cref="Exception">
-		/// Throws Exception if name is null.
+		/// Throws Exception if name is null or object is not in catalog.
 		/// </exception>
 		private object GetObject (string name)
 		{
 			if (null == name)
-				throw new ArgumentNullException (msg_NAME, "Nexus.Extras.Spring.Catalog.GetObject");
-			return Factory ().GetObject (name);
+			{
+				Exception e = new Exception (msg_NULL);
+				throw(e);
+			}
+			object o = Factory ().GetObject (name);
+			if (o == null)
+			{
+				Exception e = new Exception (msg_MISSING);
+				throw(e);
+			}
+			return o;
 		}
 
 		#endregion
@@ -92,17 +102,7 @@ namespace Nexus.Extras.Spring
 		/// </exception>
 		public ICommand GetCommand (string name)
 		{
-			if (null == name)
-			{
-				Exception e = new Exception (msg_NULL);
-				throw(e);
-			}
 			object o = GetObject (name);
-			if (o == null)
-			{
-				Exception e = new Exception (msg_MISSING);
-				throw(e);
-			}
 			IRequestCommand command = o as IRequestCommand;
 			if (command == null)
 			{
@@ -167,9 +167,21 @@ namespace Nexus.Extras.Spring
 			return _FieldTable;
 		}
 
-		public IRequestContext GetRequest (string command)
+		public IViewHelper GetHelper (string name)
 		{
-			ICommand _command = GetCommand (command);
+			object o = GetObject (name);
+			IViewHelper helper = o as IViewHelper;
+			if (helper == null)
+			{
+				Exception e = new Exception (msg_TYPE_HELPER);
+				throw(e);
+			}
+			return helper;
+		}
+
+		public IRequestContext GetRequest (string name)
+		{
+			ICommand _command = GetCommand (name);
 			IRequestCommand _rc = _command as IRequestCommand;
 			return GetRequest (_rc);
 		}
@@ -195,9 +207,9 @@ namespace Nexus.Extras.Spring
 
 		}
 
-		public IRequestContext GetRequest (string command, IDictionary input)
+		public IRequestContext GetRequest (string name, IDictionary input)
 		{
-			IRequestContext context = GetRequest (command);
+			IRequestContext context = GetRequest (name);
 			context.Criteria = input;
 			return context;
 		}
@@ -223,9 +235,9 @@ namespace Nexus.Extras.Spring
 			return command;
 		}
 
-		public IRequestContext ExecuteRequest (string command)
+		public IRequestContext ExecuteRequest (string name)
 		{
-			IRequestContext context = GetRequest (command);
+			IRequestContext context = GetRequest (name);
 			ExecuteRequest (context);
 			return context;
 		}
