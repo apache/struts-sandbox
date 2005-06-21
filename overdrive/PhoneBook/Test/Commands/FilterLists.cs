@@ -40,13 +40,13 @@ namespace PhoneBook.Core.Commands
 			{
 				Assert.IsNotNull (item, "Expected each item to be non-null");
 				string key = item.Value as string;
-				Assert.IsNotNull (key,"Expected each key to be non-null");
+				Assert.IsNotNull (key, "Expected each key to be non-null");
 				Assert.IsTrue (key.Length > 0, "Expected each key to be non-empty");
 			}
 			IDictionary keys = new Hashtable (list.Count);
 			foreach (IKeyValue item in list)
 			{
-				string key = item.Value as string;			
+				string key = item.Value as string;
 				if (keys.Contains (key)) Assert.Fail (key + ": Expected each item to be unique");
 				keys.Add (key, key);
 			}

@@ -39,12 +39,11 @@
 			  <td>Editor</td>			  
 			  </tr><tr>
 			  <td><asp:DropDownList ID="last_name_list" Runat=server></asp:DropDownList></td>
-			  <td><asp:DropDownList ID="lstFirstName" Runat=server></asp:DropDownList></td>
-			  <td><asp:DropDownList ID="lstExtension" Runat=server></asp:DropDownList></td>
-			  <td><asp:DropDownList ID="lstUserName" Runat=server></asp:DropDownList></td>
-			  <td><asp:DropDownList ID="lstHireDate" Runat=server></asp:DropDownList></td>
-			  <td><asp:DropDownList ID="lstHours" Runat=server></asp:DropDownList></td>
-			  <td><asp:DropDownList ID="lstEditor" Runat=server></asp:DropDownList></td>
+			  <td><asp:DropDownList ID="first_name_list" Runat=server></asp:DropDownList></td>
+			  <td><asp:DropDownList ID="extension_list" Runat=server></asp:DropDownList></td>
+			  <td><asp:DropDownList ID="user_name_list" Runat=server></asp:DropDownList></td>
+			  <td><asp:DropDownList ID="hired_list" Runat=server></asp:DropDownList></td>
+			  <td><asp:DropDownList ID="hours_list" Runat=server></asp:DropDownList></td>
 			  </tr></table>
 			</asp:panel>
 			

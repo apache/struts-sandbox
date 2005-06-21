@@ -28,12 +28,12 @@ namespace WNE.Core.Forms
 	{
 		private PanelTester pnlFind;
 		private DropDownListTester last_name_list;
-		private DropDownListTester lstFirstName;
-		private DropDownListTester lstExtension;
-		private DropDownListTester lstUserName;
-		private DropDownListTester lstHireDate;
-		private DropDownListTester lstHours;
-		private DropDownListTester lstEditor;
+		private DropDownListTester first_name_list;
+		private DropDownListTester extension_list;
+		private DropDownListTester user_name_list;
+		private DropDownListTester hired_list;
+		private DropDownListTester hours_list;
+		// TODO: private DropDownListTester editor_list;
 		private ButtonTester cmdListAll;
 		private ButtonTester cmdPrint;
 
@@ -48,7 +48,7 @@ namespace WNE.Core.Forms
 		/// 
 		private DropDownListTester[] GetLists ()
 		{
-			DropDownListTester[] lists = {last_name_list, lstFirstName, lstExtension, lstUserName, lstHireDate, lstHours, lstEditor};
+			DropDownListTester[] lists = {last_name_list, first_name_list, extension_list, user_name_list, hired_list, hours_list};
 			return lists;
 		}
 
@@ -62,12 +62,12 @@ namespace WNE.Core.Forms
 
 			pnlFind = new PanelTester ("pnlFind", CurrentWebForm);
 			last_name_list = new DropDownListTester (App.LAST_NAME_LIST, CurrentWebForm);
-			lstFirstName = new DropDownListTester ("lstFirstName", CurrentWebForm);
-			lstExtension = new DropDownListTester ("lstExtension", CurrentWebForm);
-			lstUserName = new DropDownListTester ("lstUserName", CurrentWebForm);
-			lstHireDate = new DropDownListTester ("lstHireDate", CurrentWebForm);
-			lstHours = new DropDownListTester ("lstHours", CurrentWebForm);
-			lstEditor = new DropDownListTester ("lstEditor", CurrentWebForm);
+			first_name_list = new DropDownListTester (App.FIRST_NAME_LIST, CurrentWebForm);
+			extension_list = new DropDownListTester (App.EXTENSION_LIST, CurrentWebForm);
+			user_name_list = new DropDownListTester (App.USER_NAME_LIST, CurrentWebForm);
+			hired_list = new DropDownListTester (App.HIRED_LIST, CurrentWebForm);
+			hours_list = new DropDownListTester (App.HOURS_LIST, CurrentWebForm);
+			// TODO: editor_list = new DropDownListTester (App.EDITOR_LIST, CurrentWebForm);
 			cmdListAll = new ButtonTester ("cmdListAll", CurrentWebForm);
 			cmdPrint = new ButtonTester ("cmdPrint", CurrentWebForm);
 

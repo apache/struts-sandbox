@@ -72,12 +72,12 @@ namespace PhoneBook.Web.Forms
 
 		protected Panel pnlFind;
 		protected DropDownList last_name_list;
-		protected DropDownList lstFirstName;
-		protected DropDownList lstExtension;
-		protected DropDownList lstUserName;
-		protected DropDownList lstHireDate;
-		protected DropDownList lstHours;
-		protected DropDownList lstEditor;
+		protected DropDownList first_name_list;
+		protected DropDownList extension_list;
+		protected DropDownList user_name_list;
+		protected DropDownList hired_list;
+		protected DropDownList hours_list;
+		// TODO: protected DropDownList editor_list;
 		protected Button cmdListAll;
 		protected Button cmdPrint;
 
@@ -85,7 +85,7 @@ namespace PhoneBook.Web.Forms
 
 		private DropDownList[] GetLists ()
 		{
-			DropDownList[] lists = {last_name_list, lstFirstName, lstExtension, lstUserName, lstHireDate, lstHours, lstEditor};
+			DropDownList[] lists = {last_name_list, first_name_list, extension_list, user_name_list, hired_list, hours_list};
 			return lists;
 		}
 
