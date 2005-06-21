@@ -7,10 +7,30 @@
 	<property name="ID"><value>select_all</value></property>
   </object>
 
-  <object id="last_name_list" type="PhoneBook.Core.Commands.BaseFilterList, PhoneBook.Core">
+  <object id="last_name_list" parent="BaseFilterList">
 	<property name="ID"><value>last_name_list</value></property>
   </object>
+
+  <object id="first_name_list" parent="BaseFilterList">
+	<property name="ID"><value>first_name_list</value></property>
+  </object>
   
+  <object id="extension_list" parent="BaseFilterList">
+	<property name="ID"><value>extension_list</value></property>
+  </object>
+
+  <object id="user_name_list" parent="BaseFilterList">
+	<property name="ID"><value>user_name_list</value></property>
+  </object>
+
+  <object id="hired_list" parent="BaseFilterList">
+	<property name="ID"><value>hired_list</value></property>
+  </object>
+
+  <object id="hours_list" parent="BaseFilterList">
+	<property name="ID"><value>hours_list</value></property>
+  </object>
+
     <object id="directory_view" parent="BaseChain">
 		<property name="ID">
 			<value>directory_view</value>
@@ -18,11 +38,21 @@
 		<property name="RelatedIDs">
 			<list>
 				<value>last_name_list</value>
+				<value>first_name_list</value>
+				<value>extension_list</value>
+				<value>user_name_list</value>
+				<value>hired_list</value>
+				<value>hours_list</value>
 			</list>
 		</property>
 		<property name="AddCommands">
 			<list>
 				<ref object="last_name_list" />
+				<ref object="first_name_list" />
+				<ref object="extension_list" />
+				<ref object="user_name_list" />
+				<ref object="hired_list" />
+				<ref object="hours_list" />
 			</list>
 		</property>
 	</object>

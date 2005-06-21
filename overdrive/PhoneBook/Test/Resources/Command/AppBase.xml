@@ -3,6 +3,8 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
 
-	<object id="BaseChain" type="Nexus.Core.RequestChain, Nexus.Core"></object>
+	<object id="BaseChain" type="Nexus.Core.RequestChain, Nexus.Core"/>
+	
+	<object id="BaseFilterList" type="PhoneBook.Core.Commands.BaseFilterList, PhoneBook.Core"/>
 
 </objects>

@@ -82,6 +82,36 @@ namespace PhoneBook.Core
 		public const string LAST_NAME_LIST = "last_name_list";
 
 		/// <summary>
+		/// Token for List Last Names command.
+		/// </summary>
+		/// 
+		public const string FIRST_NAME_LIST = "first_name_list";
+
+		/// <summary>
+		/// Token for List Extensions command.
+		/// </summary>
+		/// 
+		public const string EXTENSION_LIST = "extension_list";
+
+		/// <summary>
+		/// Token for List UserNames command.
+		/// </summary>
+		/// 
+		public const string USER_NAME_LIST = "user_name_list";
+
+		/// <summary>
+		/// Token for List Hire Dates command.
+		/// </summary>
+		/// 
+		public const string HIRED_LIST = "hired_list";
+
+		/// <summary>
+		/// Token for List Hours command.
+		/// </summary>
+		/// 
+		public const string HOURS_LIST = "hours_list";
+
+		/// <summary>
 		/// Token for Directory View command.
 		/// </summary>
 		/// 

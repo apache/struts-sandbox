@@ -6,12 +6,49 @@
 	xsi:noNamespaceSchemaLocation="SqlMap.xsd" >
 	
 	<statements>
-		<select id="list_last_names" resultClass="string">
+
+		<select id="last_name_list" resultClass="string">
 			SELECT DISTINCT 
 				last_name
 			FROM entry
 			ORDER BY last_name			
 		</select>
+		
+		<select id="first_name_list" resultClass="string">
+			SELECT DISTINCT 
+				first_name
+			FROM entry
+			ORDER BY first_name
+		</select>
+		
+		<select id="extension_list" resultClass="string">
+			SELECT DISTINCT 
+				extension
+			FROM entry
+			ORDER BY extension
+		</select>
+
+		<select id="user_name_list" resultClass="string">
+			SELECT DISTINCT 
+				user_name
+			FROM entry
+			ORDER BY user_name
+		</select>
+
+		<select id="hired_list" resultClass="string">
+			SELECT DISTINCT 
+				hired
+			FROM entry
+			ORDER BY hired
+		</select>
+
+		<select id="hours_list" resultClass="string">
+			SELECT DISTINCT 
+				hours
+			FROM entry
+			ORDER BY hours
+		</select>
+
 	</statements>
 
 </sqlMap>

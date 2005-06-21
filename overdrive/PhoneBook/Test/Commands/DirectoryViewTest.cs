@@ -12,20 +12,23 @@ namespace PhoneBook.Core.Commands
 	public class DirectoryViewTest : BaseTest
 	{
 		/// <summary>
-		/// Confirm that context contains the expected attributes for the list filters.
+		/// Confirm that Context contains the expected attributes for the list filters.
 		/// </summary>
 		/// 
 		[Test]
 		public void ContainsFilters ()
 		{
 			IRequestContext context = catalog.ExecuteRequest (App.DIRECTORY_VIEW);
-			string[] keys = {App.LAST_NAME_LIST};
+			string[] keys = {App.LAST_NAME_LIST,App.FIRST_NAME_LIST,App.EXTENSION_LIST,App.USER_NAME_LIST,App.HIRED_LIST,App.HOURS_LIST};
 			foreach (string key in keys)
 			{
 				Assert.IsTrue (context.Contains (key), key + ": Expected context to contain key.");
 			}
 		}
 
+		/// <summary>
+		/// Confirm that Helper contains the expected command.
+		/// </summary>
 		[Test]
 		public void HelperContains ()
 		{
