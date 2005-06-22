@@ -37,7 +37,7 @@ namespace Nexus.Core.Tables
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException ("value", "Nexus.Core.Tables.FieldTable.AddFieldContext");
+					throw new ArgumentNullException ("value is null or wrong type", "Nexus.Core.Tables.FieldTable.AddFieldContext");
 				Field [value.ID] = value;
 			}
 		}
@@ -47,7 +47,7 @@ namespace Nexus.Core.Tables
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException ("value", "Nexus.Core.Tables.FieldTable.AddFieldContexts");
+					throw new ArgumentNullException ("value is null or wrong type", "Nexus.Core.Tables.FieldTable.AddFieldContexts");
 				IEnumerator elements = value.GetEnumerator ();
 				while (elements.MoveNext ()) AddFieldContext = elements.Current as IFieldContext;
 			}

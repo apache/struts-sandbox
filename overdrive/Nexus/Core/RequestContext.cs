@@ -55,6 +55,14 @@ namespace Nexus.Core
 			Command = command;
 		}
 
+		public RequestContext(IDictionary entries)
+		{
+			foreach (DictionaryEntry entry in entries)
+			{
+				Add(entry.Key,entry.Value);
+			}
+		}
+
 		/// <summary>
 		/// Default, no argument constructor.
 		/// </summary>

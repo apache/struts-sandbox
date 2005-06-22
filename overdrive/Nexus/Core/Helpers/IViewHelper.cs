@@ -96,12 +96,16 @@ namespace Nexus.Core.Helpers
 		/// <summary>
 		/// Access result of operation as an IList.
 		/// </summary>
-		/// <remarks>
+		/// <remarks><p>
 		/// If the Helper is designed to return a List result, 
 		/// this method saves casting the outcome.
 		/// If the Helper is not designed to return the result as a IList, 
 		/// this method returns a single-value result as a one-entry list.
-		/// </remarks>
+		/// </p><p>
+		/// Note this since this is the Helper Outcome, 
+		/// the result is relative to the Criteria, 
+		/// rather than the main Context.
+		/// </p></remarks>
 		/// 
 		IList Outcome { get; }
 

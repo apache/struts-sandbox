@@ -95,7 +95,7 @@ namespace Nexus.Core.Helpers
 			get
 			{
 				IList result = null;
-				object o = Context.Outcome;
+				object o = Context.Criteria[Context.Command];
 				if (o == null)
 				{
 					result = new ArrayList (1);

@@ -33,6 +33,57 @@ namespace Nexus.Core.Validators
 			set { _Template = value; }
 		}
 
+		public virtual bool ExecuteConvert (IProcessorContext context)
+		{
+			bool okay = false;
+			string id = context.FieldKey;
+			IFieldTable table = context.FieldTable;
+			IFieldContext fieldContext = table.GetFieldContext (id); // enforces Strict
+
+			if ((fieldContext == null))
+			{
+				context.Target = context.Source;
+				return true;
+			}
+
+			IProcessor processor = table.GetProcessor (fieldContext.ProcessorID);
+			okay = processor.ConvertInput (context);
+			return okay;
+		}
+
+		public virtual bool ExecuteFormat (IProcessorContext context)
+		{
+			bool okay = false;
+			string id = context.FieldKey;
+			object source = context.Source;
+			IFieldTable table = context.FieldTable;
+			IFieldContext fieldContext = table.GetFieldContext (id); // Enforces Strict
+
+			if ((fieldContext == null))
+			{
+				if (source == null)
+					context.Target = null;
+				else
+				{
+					// TODO: Remove exception code and replace with Collection processors
+					Type sourceType = source.GetType ();
+					if (IsCollectionType (sourceType)) context.Target = source;
+					else context.Target = source.ToString ();
+				}
+				return true;
+			}
+
+			IProcessor processor = table.GetProcessor (fieldContext.ProcessorID);
+			okay = processor.FormatOutput (context);
+			return okay;
+		}
+
+		private bool IsCollectionType (Type dataType)
+		{
+			bool v = (typeof (ICollection)).IsAssignableFrom (dataType);
+			return (v);
+		}
+
 		public abstract bool ExecuteProcess (IProcessorContext context);
 
 		#endregion
@@ -112,55 +163,5 @@ namespace Nexus.Core.Validators
 
 		#endregion
 
-		public virtual bool ExecuteConvert (IProcessorContext context)
-		{
-			bool okay = false;
-			string id = context.FieldKey;
-			IFieldTable table = context.FieldTable;
-			IFieldContext fieldContext = table.GetFieldContext (id); // enforces Strict
-
-			if ((fieldContext == null))
-			{
-				context.Target = context.Source;
-				return true;
-			}
-
-			IProcessor processor = table.GetProcessor (fieldContext.ProcessorID);
-			okay = processor.ConvertInput (context);
-			return okay;
-		}
-
-		public virtual bool ExecuteFormat (IProcessorContext context)
-		{
-			bool okay = false;
-			string id = context.FieldKey;
-			object source = context.Source;
-			IFieldTable table = context.FieldTable;
-			IFieldContext fieldContext = table.GetFieldContext (id); // Enforces Strict
-
-			if ((fieldContext == null))
-			{
-				if (source == null)
-					context.Target = null;
-				else
-				{
-					// TODO: Remove exception code and replace with Collection processors
-					Type sourceType = source.GetType ();
-					if (IsCollectionType (sourceType)) context.Target = source;
-					else context.Target = source.ToString ();
-				}
-				return true;
-			}
-
-			IProcessor processor = table.GetProcessor (fieldContext.ProcessorID);
-			okay = processor.FormatOutput (context);
-			return okay;
-		}
-
-		private bool IsCollectionType (Type dataType)
-		{
-			bool v = (typeof (ICollection)).IsAssignableFrom (dataType);
-			return (v);
-		}
 	}
 }
