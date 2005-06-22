@@ -3,6 +3,8 @@
   "http://www.springframework.net/dtd/spring-objects.dtd">
 <objects>
 
+	<!-- basic commands -->
+	
   <object id="select_all" type="PhoneBook.Core.Commands.BaseList, PhoneBook.Core">
 	<property name="ID"><value>select_all</value></property>
   </object>
@@ -30,6 +32,9 @@
   <object id="hours_list" parent="BaseFilterList">
 	<property name="ID"><value>hours_list</value></property>
   </object>
+  
+  
+	<!-- chains -->
 
     <object id="directory_view" parent="BaseChain">
 		<property name="ID">
@@ -56,13 +61,19 @@
 			</list>
 		</property>
 	</object>
+	
+	
+  <!-- helpers -->
 
-  <object id="directory_view_helper" type="PhoneBook.Web.AppHelper, PhoneBook.Web">
-		<property name="Catalog">
-			<ref object="Catalog" />
-		</property>
+  <object id="directory_view_helper" parent="BaseHelper">
 		<property name="Command">
 			<ref object="directory_view" />
+		</property>
+  </object>
+
+  <object id="list_all_helper" parent="BaseHelper">
+		<property name="Command">
+			<ref object="select_all" />
 		</property>
   </object>
 

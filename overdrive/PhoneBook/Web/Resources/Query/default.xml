@@ -7,7 +7,7 @@
 
 <!--
 	<alias>
-		<typeAlias alias="KeyValue" type="Agility.Extras.KeyValue,Agility.Extras" />
+		<typeAlias alias="KeyValue" type="Nexus.Core.KeyValue, Nexus.Core" />
 	</alias>
 -->
 

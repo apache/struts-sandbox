@@ -20,7 +20,8 @@ namespace PhoneBook.Core.Commands
 {
 	/// <summary>
 	/// Execute database statement for QueryID 
-	/// and pass through list in context under ID.
+	/// and wrap result in KeyValue objects 
+	/// so that lists can be displayed by standard methods.
 	/// </summary>
 	/// 
 	public class BaseFilterList : AppCommand

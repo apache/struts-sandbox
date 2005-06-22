@@ -7,4 +7,10 @@
 	
 	<object id="BaseFilterList" type="PhoneBook.Core.Commands.BaseFilterList, PhoneBook.Core"/>
 
+	<object id="BaseHelper" type="PhoneBook.Web.AppHelper, PhoneBook.Web">
+		<property name="Catalog">
+			<ref object="Catalog" />
+		</property>
+	</object>
+
 </objects>

@@ -25,7 +25,7 @@
 			<!-- FIND -->
 			<asp:Panel ID="pnlFind" Runat="server">
 			  <table><tr>
-			  <td colspan="7" >
+			  <td colspan="6" >
 				  <asp:Button ID="cmdListAll" Runat="server"></asp:Button>
 				  <asp:Button ID="cmdPrint" Runat="server"></asp:Button>
 			  </td>
@@ -36,7 +36,6 @@
 			  <td>User</td>
 			  <td>Hire Date</td>
 			  <td>Hours</td>			  
-			  <td>Editor</td>			  
 			  </tr><tr>
 			  <td><asp:DropDownList ID="last_name_list" Runat=server></asp:DropDownList></td>
 			  <td><asp:DropDownList ID="first_name_list" Runat=server></asp:DropDownList></td>

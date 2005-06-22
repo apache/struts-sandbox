@@ -68,5 +68,21 @@ namespace PhoneBook.Core.Commands
 			IRequestContext context = catalog.ExecuteRequest (App.SELECT_ALL);
 			SelectAll_Result (context);
 		}
+
+		[Test]
+		public void SelectAll_Format()
+		{
+			IRequestContext context = catalog.ExecuteRequest (App.SELECT_ALL);
+			IList list = context.Outcome as IList;
+			AppContext row = list [0] as AppContext;
+			Assert.IsNotNull (row,"Expected rows to be AppContexts");
+
+			string hired = row.hired;
+			Assert.IsTrue (hired.Length<"##/##/#### ".Length,hired + ": Expected short date format.");	
+
+			string extension = row.extension;
+			Assert.IsTrue (extension.Length>"1234567890".Length, extension + ": Expected formatted extension.");
+
+		}
 	}
 }

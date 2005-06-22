@@ -2,10 +2,7 @@ using System;
 using System.Collections;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Nexus.Core;
 using Nexus.Core.Helpers;
-using PhoneBook.Core;
-using PhoneBook.Core.Commands;
 
 namespace PhoneBook.Web.Forms
 {
@@ -40,12 +37,11 @@ namespace PhoneBook.Web.Forms
 			}
 		}
 
-		/// <summary>
-		/// Field for ViewHelper.
-		/// </summary>
-		/// 
-		private IViewHelper _ViewHelper;
+		#endregion
 
+		#region Helpers
+
+		private IViewHelper _ViewHelper;
 		/// <summary>
 		/// Obtain dynamic data for the default view.
 		/// </summary>
@@ -56,17 +52,14 @@ namespace PhoneBook.Web.Forms
 			set { _ViewHelper = value; }
 		}
 
-		#endregion
-
-		public IList GetDataSource ()
+		private IViewHelper _FindHelper;
+		public virtual IViewHelper FindHelper
 		{
-			BaseList command = new BaseList ();
-			command.ID = App.SELECT_ALL;
-			IRequestContext context = command.NewContext ();
-			command.Execute (context);
-			IList result = context.Outcome as IList;
-			return result;
+			get { return _FindHelper; }
+			set { _FindHelper = value; }
 		}
+
+		#endregion
 
 		#region Find
 
@@ -83,7 +76,7 @@ namespace PhoneBook.Web.Forms
 
 		// pageload events - These methods populate controls to display
 
-		private DropDownList[] GetLists ()
+		private DropDownList[] FilterList ()
 		{
 			DropDownList[] lists = {last_name_list, first_name_list, extension_list, user_name_list, hired_list, hours_list};
 			return lists;
@@ -92,12 +85,38 @@ namespace PhoneBook.Web.Forms
 		private void Find_Init ()
 		{
 			cmdListAll.Text = msg_LIST_ALL_CMD;
-			cmdPrint.Text = msg_PRINT_CMD;
+			cmdListAll.Click += new EventHandler(ListAll_Click);
 
-			foreach (DropDownList filter in GetLists ())
+			cmdPrint.Text = msg_PRINT_CMD;
+			cmdPrint.Click +=new EventHandler(Print_Click);
+
+			foreach (DropDownList filter in FilterList ())
 			{
 				filter.AutoPostBack = true;
+				filter.SelectedIndexChanged += new EventHandler(Filter_Changed);
 			}
+		}
+
+		private void Filter_Reset(DropDownList except)
+		{
+			int exceptIndex = 0;
+			if (except!= null ) exceptIndex = except.SelectedIndex;
+			foreach (DropDownList filter in FilterList ())
+			{
+				filter.SelectedIndex = 0;
+			}
+			if (except!=null) except.SelectedIndex = exceptIndex;			
+		}
+
+		private void Filter_Changed (object sender, EventArgs e)
+		{
+			DropDownList list = sender as DropDownList;
+			string id = list.ID;
+			int v = id.LastIndexOf (FindHelper.ListSuffix);
+			string key = id.Substring (0, v);
+			FindHelper.Context[key] = list.SelectedValue;
+			Filter_Reset(list);
+			List_Load(FindHelper);
 		}
 
 		private void Find_Load ()
@@ -105,17 +124,23 @@ namespace PhoneBook.Web.Forms
 			IViewHelper h = ViewHelper;
 			h.ExecuteBind (pnlFind.Controls);
 			bool ok = (h.IsNominal);
-			if (!ok)
+			if (!ok) 
 				Page_Error = h;
 		}
 
 		// postback events - These events respond to user input (to controls displayed by pageload methods)
 
-		protected void Find_Filter (object sender, EventArgs e)
+		private void ListAll_Click (object sender, EventArgs e)
 		{
-			// TODO: See if filter changed.
-			List_Load ();
+			Filter_Reset(null);
+			List_Load(FindHelper);
 		}
+
+		private void Print_Click (object sender, EventArgs e)
+		{
+			throw new NotImplementedException ();
+		}
+
 
 		#endregion
 
@@ -133,10 +158,17 @@ namespace PhoneBook.Web.Forms
 			this.cmdAdd.Visible = false; // TODO: True if user is editor
 		}
 
-		private void List_Load ()
+		private void List_Load (IViewHelper helper)
 		{
-			repList.DataSource = GetDataSource ();
-			repList.DataBind ();
+			helper.Execute();
+			bool ok = helper.IsNominal;
+			if (!ok) Page_Error = helper;
+			else
+			{
+				IList result = helper.Outcome;
+				repList.DataSource = result;
+				repList.DataBind ();
+			}
 		}
 
 		// postback events 
@@ -158,12 +190,13 @@ namespace PhoneBook.Web.Forms
 
 		protected void List_PageIndexChanged (object sender, DataGridPageChangedEventArgs e)
 		{
-			Find_Filter (null, null);
 			repList.CurrentPageIndex = e.NewPageIndex;
 			repList.DataBind ();
 		}
 
 		#endregion
+
+		#region Page 
 
 		protected void Page_Init ()
 		{
@@ -174,14 +207,14 @@ namespace PhoneBook.Web.Forms
 
 		protected void Page_Load (object sender, EventArgs e)
 		{
-			if (IsPostBack)
-				Find_Filter (sender, e);
-			else
+			if (!IsPostBack)
 			{
 				Find_Load ();
-				List_Load ();
+				List_Load (FindHelper);
 			}
 		}
+
+		#endregion
 
 	}
 }

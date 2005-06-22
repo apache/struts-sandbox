@@ -6,18 +6,40 @@
 	xsi:noNamespaceSchemaLocation="SqlMap.xsd" >
 	
 	<statements>
-		<select id="select_all" resultClass="Hashtable">
+		<select id="filter" paramClass="Hashtable" resultClass="Hashtable">
 			SELECT 
 				pk_entry,
 				last_name,
 				first_name,
 				extension,
 				user_name,
-				editor,
 				hired,
-				hours
+				hours,
+				editor
 			FROM entry
+			<dynamic prepend="WHERE">			
+				<isNotNull property="last_name" prepend="AND">
+					last_name=#last_name#
+				</isNotNull>
+				<isNotNull property="first_name" prepend="AND">
+					first_name=#first_name#
+				</isNotNull>
+				<isNotNull property="extension" prepend="AND">
+					extension=#extension#
+				</isNotNull>
+				<isNotNull property="user_name" prepend="AND">
+					user_name=#user_name#
+				</isNotNull>
+				<isNotNull property="hired" prepend="AND">
+					hired=#hired#
+				</isNotNull>
+				<isNotNull property="hours" prepend="AND">
+					hours=#hours#
+				</isNotNull>
+			</dynamic>			
 		</select>
+				
 	</statements>
+	
 
 </sqlMap>

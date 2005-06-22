@@ -11,8 +11,21 @@
  <!-- FieldTable -->
  				
 	<object id="FieldTable" type="Nexus.Core.Tables.FieldTable">
+		<property name="AddFields">
+			<list>
+				<ref object="hired"/> 
+			</list>
+		</property>
 	</object>
 	
+ 		<!-- "d" is .NET for "short date" --> 
+	<object id="hired" type="Nexus.Core.Tables.FieldContext">
+		<property name="ID"><value>hired</value></property>	
+		<property name="Alert"><value>{0} must be a valid date</value></property>
+		<property name="DataFormat"><value>d</value></property>
+		<property name="DataTypeName"><value>System.DateTime</value></property>
+	</object>
+		
 <!-- Validators -->
 	
   <object id="convert_input" type="Nexus.Core.Validators.ConvertInput">
