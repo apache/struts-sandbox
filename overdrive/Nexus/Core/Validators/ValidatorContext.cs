@@ -7,21 +7,21 @@ using Nexus.Core.Validators;
 namespace Agility.Nexus.Validators
 {
 	/// <summary>
-	/// Implement IValidatorContext.
+	/// Implement IProcessorContext.
 	/// </summary>
-	public class ValidatorContext : Context, IValidatorContext
+	public class ProcessorContext : Context, IProcessorContext
 	{
-		public ValidatorContext ()
+		public ProcessorContext ()
 		{
 		}
 
-		public ValidatorContext (string key, object source)
+		public ProcessorContext (string key, object source)
 		{
 			FieldKey = key;
 			Source = source;
 		}
 
-		public ValidatorContext (string key, IRequestContext context)
+		public ProcessorContext (string key, IRequestContext context)
 		{
 			FieldKey = key;
 			this [Tokens.Context] = context;

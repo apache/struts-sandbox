@@ -3,16 +3,16 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
 	
-<!-- catalog commands -->
+<!-- Request Processors -->
 	
   <object id="ConvertInput" type="Nexus.Core.Validators.ConvertInput">
     <property name="ID"><value>ConvertInput</value></property>
-    <property name="Template"><value>{0} is required.</value></property>
+    <property name="Required"><value>{0} is required.</value></property>
   </object>
 
   <object id="FormatOutput" type="Nexus.Core.Validators.FormatOutput">
     <property name="ID"><value>FormatOutput</value></property>    
-    <property name="Template"><value>{0} is required.</value></property>
+    <property name="Required"><value>{0} is required.</value></property>
   </object>
 
   <!-- pre-op -->
@@ -43,11 +43,18 @@
  
 	<object id="FieldTable" type="Nexus.Core.Tables.FieldTable">
 		<property name="Strict"><value>true</value></property>
-		<property name="AddFields">
+		<property name="AddFieldContexts">
 			<list>
 				<ref object="pk_something"/> 
 				<ref object="SomeDate"/> 
 				<ref object="SomethingResult"/> 
+			</list>
+		</property>
+		<property name="AddProcessors">
+			<list>
+				<ref object="CollectionProcessor"/> 
+				<ref object="DateTimeProcessor"/> 
+				<ref object="StringProcessor"/> 
 			</list>
 		</property>
 	</object>
@@ -56,17 +63,33 @@
 
 	<object id="pk_something" type="Nexus.Core.Tables.FieldContext">
 		<property name="ID"><value>pk_something</value></property>
+		<property name="ProcessorID"><value>StringProcessor</value></property>
 	</object>
 	
 	<object id="SomethingResult" type="Nexus.Core.Tables.FieldContext">
 		<property name="ID"><value>SomethingResult</value></property>
+		<property name="ProcessorID"><value>StringProcessor</value></property>
 	</object>
 
 	<object id="SomeDate" type="Nexus.Core.Tables.FieldContext">
 		<property name="ID"><value>SomeDate</value></property>
+		<property name="ProcessorID"><value>DateTimeProcessor</value></property>
 		<property name="Alert"><value>{0} must be a valid date</value></property>
+	</object>
+	
+<!-- Field Processors -->
+
+	<object id="CollectionProcessor" type="Nexus.Core.Validators.CollectionProcessor">
+		<property name="ID"><value>CollectionProcessor</value></property>
+	</object>
+
+	<object id="DateTimeProcessor" type="Nexus.Core.Validators.DateTimeProcessor">
+		<property name="ID"><value>DateTimeProcessor</value></property>
 		<property name="DataFormat"><value>d</value></property>
-		<property name="DataTypeName"><value>System.DateTime</value></property>
+	</object>
+
+	<object id="StringProcessor" type="Nexus.Core.Validators.StringProcessor">
+		<property name="ID"><value>StringProcessor</value></property>
 	</object>
 	       
 </objects>

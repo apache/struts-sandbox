@@ -32,29 +32,10 @@ namespace Nexus.Core.Tables
 			set { this [Tokens.DataFormat] = value; }
 		}
 
-		public Type DataType
+		public string ProcessorID
 		{
-			get
-			{
-				Type v = this [Tokens.DataType] as Type;
-				if (v == null) v = typeof (String);
-				return v;
-			}
-			set
-			{
-				this [Tokens.DataType] = value;
-				this [Tokens.DataTypeName] = value.FullName;
-			}
-		}
-
-		public string DataTypeName
-		{
-			get { return this [Tokens.DataTypeName] as string; }
-			set
-			{
-				this [Tokens.DataType] = Type.GetType (value);
-				this [Tokens.DataTypeName] = value;
-			}
+			get { return this [Tokens.DataTypeID] as string; }
+			set { this [Tokens.DataTypeID] = value; }
 		}
 
 		public string Hint

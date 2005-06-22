@@ -184,12 +184,27 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Validators\CollectionProcessor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Validators\ConvertInput.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Validators\DateTimeProcessor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Validators\FormatOutput.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Validators\IProcessor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -200,6 +215,16 @@
                 />
                 <File
                     RelPath = "Validators\IValidatorContext.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Validators\Processor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Validators\StringProcessor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

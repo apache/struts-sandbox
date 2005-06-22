@@ -71,7 +71,7 @@ namespace Nexus.Core
 
 
 		[Test]
-		public void ObjectByKey_Validate ()
+		public void ObjectByKey_Process ()
 		{
 			IDictionary fields = new Hashtable ();
 			fields [PK_SOMETHING] = PK_SOMETHING_VALUE;

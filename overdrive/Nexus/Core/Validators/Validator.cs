@@ -11,56 +11,42 @@ namespace Nexus.Core.Validators
 	/// <remarks>
 	/// Subclasses must provide a NexusExecute method.
 	/// </remarks>
-	public abstract class Validator : RequestCommand, IValidatorCommand
+	public abstract class ProcessorCommand : RequestCommand, IProcessorCommand
 	{
-		#region Properties
+		#region IRequestCommand 
+
+		public override bool RequestExecute (IRequestContext context)
+		{
+			ProcessRelated (context);
+			ProcessRequired (context);
+			return context.HasAlerts;
+		}
+
+		#endregion
+
+		#region IProcessorCommand
 
 		private string _Template = null;
-		public virtual string Template
+		public virtual string Required
 		{
 			get { return _Template; }
 			set { _Template = value; }
 		}
 
-		private bool _Continue = false;
-		public virtual bool Continue
-		{
-			get { return _Continue; }
-			set { _Continue = value; }
-		}
-
-		public const bool MODE_INPUT = false;
-		public const bool MODE_OUTPUT = true;
-
-		private bool _Mode = MODE_INPUT;
-		public virtual bool Mode
-		{
-			get { return _Mode; }
-			set { _Mode = value; }
-		}
+		public abstract bool ExecuteProcess (IProcessorContext context);
 
 		#endregion
 
-		public ICollection CombinedIDs (IRequestContext context)
-		{
-			IDictionary combined = new Hashtable ();
-			IList relatedIDs = context.CommandBin.RelatedIDs; // outer list
-			if (relatedIDs != null) foreach (string i in relatedIDs) combined [i] = i;
-			IList requiredIDs = context.CommandBin.RequiredIDs; // inner list
-			if (requiredIDs != null) foreach (string i in requiredIDs) combined [i] = i;
-			return combined.Keys;
-		}
-
 		#region ProcessRequired
 
-		public void AssertProcessRequired (IRequestContext context)
+		private void AssertProcessRequired (IRequestContext context)
 		{
 			IDictionary criteria = context.Criteria;
 			if (null == criteria)
 				throw new ArgumentNullException ("Criteria", "BaseValidator.NexusExecute.AssertProcessRequired");
 		}
 
-		public virtual void ProcessRequired (IRequestContext context, bool mode)
+		private void ProcessRequired (IRequestContext context)
 		{
 			IList requiredIDs = context.CommandBin.RequiredIDs; // inner list
 			if (requiredIDs == null) return;
@@ -83,7 +69,7 @@ namespace Nexus.Core.Validators
 				bool okay = (context.Contains (id) && (null != context [id]) && (!String.Empty.Equals (context [id].ToString ())));
 				if (!okay)
 				{
-					string message = context.FormatTemplate (Template, id);
+					string message = context.FormatTemplate (Required, id);
 					context.AddAlert (message, id);
 				}
 			}
@@ -93,7 +79,7 @@ namespace Nexus.Core.Validators
 
 		#region ProcessRelated
 
-		public void AssertProcessRelated (IRequestContext context)
+		private void AssertProcessRelated (IRequestContext context)
 		{
 			AssertProcessRequired (context);
 
@@ -102,31 +88,79 @@ namespace Nexus.Core.Validators
 				throw new ArgumentNullException ("FieldTable", "BaseValidator.NexusExecute.AssertProcessRelated");
 		}
 
-		public abstract bool ProcessExecute (IValidatorContext context);
-
-		public virtual void ProcessRelated (IRequestContext context, bool mode)
+		private void ProcessRelated (IRequestContext context)
 		{
 			AssertProcessRelated (context);
 
 			ICollection related = CombinedIDs (context);
 			foreach (string key in related)
 			{
-				IValidatorContext _context = new ValidatorContext (key, context);
-				ProcessExecute (_context);
+				IProcessorContext _context = new ProcessorContext (key, context);
+				ExecuteProcess (_context);
 			}
+		}
+
+		private ICollection CombinedIDs (IRequestContext context)
+		{
+			IDictionary combined = new Hashtable ();
+			IList relatedIDs = context.CommandBin.RelatedIDs; // outer list
+			if (relatedIDs != null) foreach (string i in relatedIDs) combined [i] = i;
+			IList requiredIDs = context.CommandBin.RequiredIDs; // inner list
+			if (requiredIDs != null) foreach (string i in requiredIDs) combined [i] = i;
+			return combined.Keys;
 		}
 
 		#endregion
 
-		// public abstract bool ProcessExecute(ValidatorContext context);
-
-		public override bool RequestExecute (IRequestContext context)
+		public virtual bool ExecuteConvert (IProcessorContext context)
 		{
-			ProcessRelated (context, Mode);
-			ProcessRequired (context, Mode);
-			if (Continue) return CONTINUE;
-			return context.HasAlerts;
+			bool okay = false;
+			string id = context.FieldKey;
+			IFieldTable table = context.FieldTable;
+			IFieldContext fieldContext = table.GetFieldContext (id); // enforces Strict
+
+			if ((fieldContext == null))
+			{
+				context.Target = context.Source;
+				return true;
+			}
+
+			IProcessor processor = table.GetProcessor (fieldContext.ProcessorID);
+			okay = processor.ConvertInput (context);
+			return okay;
 		}
 
+		public virtual bool ExecuteFormat (IProcessorContext context)
+		{
+			bool okay = false;
+			string id = context.FieldKey;
+			object source = context.Source;
+			IFieldTable table = context.FieldTable;
+			IFieldContext fieldContext = table.GetFieldContext (id); // Enforces Strict
+
+			if ((fieldContext == null))
+			{
+				if (source == null)
+					context.Target = null;
+				else
+				{
+					// TODO: Remove exception code and replace with Collection processors
+					Type sourceType = source.GetType ();
+					if (IsCollectionType (sourceType)) context.Target = source;
+					else context.Target = source.ToString ();
+				}
+				return true;
+			}
+
+			IProcessor processor = table.GetProcessor (fieldContext.ProcessorID);
+			okay = processor.FormatOutput (context);
+			return okay;
+		}
+
+		private bool IsCollectionType (Type dataType)
+		{
+			bool v = (typeof (ICollection)).IsAssignableFrom (dataType);
+			return (v);
+		}
 	}
 }

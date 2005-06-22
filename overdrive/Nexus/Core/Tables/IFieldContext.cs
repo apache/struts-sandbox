@@ -1,11 +1,10 @@
-using System;
 using System.Runtime.Serialization;
 
 namespace Nexus.Core.Tables
 {
 	/// <summary>
 	/// Provide properties common to controls, 
-	/// including Alert, Constraints, ControlType, and DataType. 
+	/// including Alert, Constraints, ControlType, and Processor. 
 	/// </summary>
 	/// <remark><p>
 	/// Validation commands can use the FieldContext properties 
@@ -23,7 +22,7 @@ namespace Nexus.Core.Tables
 	public interface IFieldContext : ISerializable
 	{
 		/// <summary>
-		/// Intitial error message to display when Constraints fail.
+		/// Custom error message to display when input validation fails.
 		/// </summary>
 		/// 
 		string Alert { get; set; }
@@ -41,48 +40,38 @@ namespace Nexus.Core.Tables
 		string ControlTypeName { get; set; }
 
 		/// <summary>
-		/// Formatting instructions for the value, according to DateType.
+		/// Provide custom formatting instructions for the value, 
+		/// overriding any defaults for the Processor..
 		/// </summary>
 		/// 
 		string DataFormat { get; set; }
 
 		/// <summary>
-		/// Type of native data.
-		/// </summary>
-		/// <remarks>
-		/// Standard data types are: Boolean, Byte Char, DateTime, Decimal, 
-		/// Double, Int16, Int32, Int64, SByte, Single, String, TimeSpan, 
-		/// UInt16, UInt32, UInt64
-		/// </remarks>
-		/// 
-		Type DataType { get; set; }
-
-		/// <summary>
-		/// Cannonical name of the DataType.
+		/// Identify the processor for this field.
 		/// </summary>
 		/// 
-		string DataTypeName { get; set; }
+		string ProcessorID { get; set; }
 
 		/// <summary>
-		/// Help - Gets or sets text for a context-sensitive help screen.
+		/// Record the text for a context-sensitive help screen.
 		/// </summary>
 		/// 
 		string Help { get; set; }
 
 		/// <summary>
-		/// Hint - Gets or sets an onscreen or hover hint.
+		/// Record an onscreen or hover hint.
 		/// </summary>
 		/// 
 		string Hint { get; set; }
 
 		/// <summary>
-		/// Name of the control (also dictionary key).
+		/// Identify the unique name of this field.
 		/// </summary>
 		/// 
 		string ID { get; set; }
 
 		/// <summary>
-		/// The label for the control.
+		/// Record a label for the control.
 		/// </summary>
 		/// 
 		string Label { get; set; }

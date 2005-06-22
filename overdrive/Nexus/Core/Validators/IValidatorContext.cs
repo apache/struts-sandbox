@@ -5,10 +5,10 @@ using Nexus.Core.Tables;
 namespace Nexus.Core.Validators
 {
 	/// <summary>
-	/// Encapsulate values needed by standard IValidatorCommands [OVR-13].
+	/// Encapsulate values needed by standard IProcessorCommands [OVR-13].
 	/// </summary>
 	/// 
-	public interface IValidatorContext : IContext
+	public interface IProcessorContext : IContext
 	{
 		/// <summary>
 		/// Identify the field under validation.

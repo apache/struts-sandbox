@@ -89,6 +89,11 @@ namespace Nexus.Core
 		public const string Criteria = "_Criteria";
 
 		/// <summary>
+		/// Token for Processor property.
+		/// </summary>
+		public const string Processor = "_Processor";
+
+		/// <summary>
 		/// Token for DataFormat DataFormat.
 		/// </summary>
 		/// 
@@ -104,7 +109,7 @@ namespace Nexus.Core
 		/// Token for DataTypeName DataTypeName.
 		/// </summary>
 		/// 
-		public const string DataTypeName = "_DataTypeName";
+		public const string DataTypeID = "_DataTypeID";
 
 		/// <summary>
 		/// Token for Fault property.
@@ -123,6 +128,11 @@ namespace Nexus.Core
 		/// </summary>
 		/// 
 		public const string FieldTable = "_FieldTable";
+
+		/// <summary>
+		/// Token for Field property.
+		/// </summary>
+		public const string Field = "_Field";
 
 		/// <summary>
 		/// Token for a generic message property.
