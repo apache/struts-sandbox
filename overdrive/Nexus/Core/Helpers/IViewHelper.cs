@@ -85,6 +85,25 @@ namespace Nexus.Core.Helpers
 		/// 
 		void Read (ICollection controls);
 
+		
+		/// <summary>
+		/// Store input and output values.
+		/// </summary>
+		/// 
+		IRequestContext Context {get;}
+
+		
+		/// <summary>
+		/// Access result of operation as an IList.
+		/// </summary>
+		/// <remarks>
+		/// If the Helper is designed to return a List result, 
+		/// this method saves casting the outcome.
+		/// If the Helper is not designed to return the result as a IList, 
+		/// this method returns a single-value result as a one-entry list.
+		/// </remarks>
+		/// 
+		IList Outcome {get;}
 
 		// ----
 

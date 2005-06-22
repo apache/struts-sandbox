@@ -17,7 +17,7 @@
 namespace Nexus.Core
 {
 	/// <summary>
-	/// Generic object to represent a key/value pair, 
+	/// Represent a key/value pair, 
 	/// as stored in an IDictionary or displayed 
 	/// by a list in a user interface.
 	/// </summary>
