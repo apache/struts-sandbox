@@ -57,20 +57,13 @@ namespace Nexus.Web.Helpers
 
 		public override string ErrorsText
 		{
-			get
-			{
-				return HtmlMessageBuilder (Alerts);
-			}
+			get { return HtmlMessageBuilder (Alerts); }
 		}
 
 		public override string HintsText
 		{
-			get
-			{
-				return HtmlMessageBuilder (Hints);
-			}
+			get { return HtmlMessageBuilder (Hints); }
 		}
-
 
 		#endregion
 
@@ -246,7 +239,7 @@ namespace Nexus.Web.Helpers
 		private string RootId (string id, string prefix, string suffix)
 		{
 			int v = id.LastIndexOf (suffix);
-			if (v<1) return id;
+			if (v < 1) return id;
 			string fore = id.Substring (0, v);
 			string root = ToColumn (fore, prefix);
 			return root;

@@ -45,7 +45,7 @@ namespace Nexus.Core.Tables
 		/// <param name="context">Context to process (including Criteria)</param>
 		/// <returns>True if nominal</returns>
 		/// 
-		bool Convert (IValidatorContext context);
+		bool Convert_Execute (IValidatorContext context);
 
 		/// <summary>
 		/// Format and copy values from the main Context into the Criteria,
@@ -54,24 +54,14 @@ namespace Nexus.Core.Tables
 		/// <param name="context">Context to process (including Criteria)</param>
 		/// <returns>True if nominal</returns>
 		/// 
-		bool Format (IValidatorContext context);
+		bool Format_Execute (IValidatorContext context);
 
 		/// <summary>
-		/// Determine if the control is a simple value or a rich 
-		/// control, like a drop down list. 
-		/// </summary>
-		/// <param name="name">ID for Control</param>
-		/// <returns>True if control is a multivalue control,
-		/// like a list</returns>
-		/// 
-		bool IsRichControl (string name);
-
-		/// <summary>
-		/// Obtain the FieldContext for the given ID.
+		/// Obtain the FieldContext for the given ID, observering Strict setting.
 		/// </summary>
 		/// <param name="id">FieldContext ID</param>
 		/// <returns>FieldContext for ID</returns>
 		/// 
-		IFieldContext Get (string id);
+		IFieldContext GetField (string id);
 	}
 }

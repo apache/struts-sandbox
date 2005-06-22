@@ -77,6 +77,12 @@ namespace Nexus.Core
 		public const string ControlTypeName = "_ControlTypeName";
 
 		/// <summary>
+		/// Token for Context property.
+		/// </summary>
+		/// 
+		public const string Context = "_Context";
+
+		/// <summary>
 		/// Token for Criteria property.
 		/// </summary>
 		/// 
@@ -111,12 +117,6 @@ namespace Nexus.Core
 		/// </summary>
 		/// 
 		public const string FieldKey = "_FieldKey";
-
-		/// <summary>
-		/// Token for FieldSet property.
-		/// </summary>
-		/// 
-		public const string FieldSet = "_FieldSet";
 
 		/// <summary>
 		/// Token for FieldTable property.

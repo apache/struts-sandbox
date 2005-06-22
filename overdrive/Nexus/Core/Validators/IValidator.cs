@@ -7,5 +7,7 @@ namespace Nexus.Core.Validators
 	{
 		string Template { get; set; }
 		bool Continue { get; set; }
+		bool ProcessExecute (IValidatorContext context);
+
 	}
 }

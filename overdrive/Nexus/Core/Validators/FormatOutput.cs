@@ -1,3 +1,6 @@
+using System.Collections;
+using Nexus.Core.Tables;
+
 namespace Nexus.Core.Validators
 {
 	/// <summary>
@@ -6,9 +9,26 @@ namespace Nexus.Core.Validators
 	/// </summary>
 	public class FormatOutput : Validator
 	{
-		public FormatOutput ()
+		public override bool ProcessExecute (IValidatorContext outgoing)
 		{
-			Mode = MODE_OUTPUT;
+			string key = outgoing.FieldKey;
+			IRequestContext context = outgoing.Context;
+			IDictionary criteria = outgoing.Criteria;
+			IFieldTable table = outgoing.FieldTable;
+
+			bool have = (context.Contains (key));
+			if (have)
+			{
+				outgoing.Source = context [key];
+				bool okay = table.Format_Execute (outgoing);
+				if (okay)
+					// set to field buffer
+					criteria [key] = outgoing.Target;
+				else context.AddAlertForField (key);
+				return STOP;
+			}
+
+			return CONTINUE;
 		}
 	}
 }

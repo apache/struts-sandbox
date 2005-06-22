@@ -6,7 +6,7 @@ using Nexus.Core.Validators;
 namespace Nexus.Core.Tables
 {
 	/// <summary>
-	/// Default implementation of IFieldTable.
+	/// Implement IFieldTable.
 	/// </summary>
 	/// <remarks><p>
 	/// Validator
@@ -21,6 +21,8 @@ namespace Nexus.Core.Tables
 	[Serializable]
 	public class FieldTable : Context, IFieldTable
 	{
+		#region IFieldTable
+
 		private bool _Strict = false;
 		public virtual bool Strict
 		{
@@ -51,49 +53,20 @@ namespace Nexus.Core.Tables
 
 		public virtual string Alert (string id)
 		{
-			return Get (id).Alert;
+			return GetField (id).Alert;
 		}
 
-		private bool IsStringType (Type dataType)
-		{
-			bool v = (typeof (string).IsAssignableFrom (dataType));
-			return v;
-		}
-
-		private bool IsCollectionType (Type dataType)
-		{
-			bool v = (typeof (ICollection)).IsAssignableFrom (dataType);
-			return (v);
-		}
-
-		public bool IsRichControl (string name)
-		{
-			return !(Tokens.INPUT_CONTROL.Equals (name));
-		}
-
-		public virtual bool Convert (IValidatorContext context)
+		// FIXME: This is begging for a Chain
+		public virtual bool Convert_Execute (IValidatorContext context)
 		{
 			bool okay = false;
-
-			// FIXME: This is begging for a Chain
-
-			#region non DataTypes
-
 			string id = context.FieldKey;
 			string source = context.Source as string;
-			IFieldContext fieldContext = Get (id);
-			if ((fieldContext == null))
-			{
-				if (Strict)
-					throw new ArgumentNullException ("Nexus.Core.FieldTable.Convert", id);
-				else
-				{
-					context.Target = source;
-					return true;
-				}
-			}
+			IFieldContext fieldContext = GetField (id); // enforces Strict
 
-			if (IsRichControl (fieldContext.ControlTypeName))
+			#region Not registered
+
+			if ((fieldContext == null))
 			{
 				context.Target = source;
 				return true;
@@ -101,14 +74,23 @@ namespace Nexus.Core.Tables
 
 			#endregion
 
-			#region DataTypes
+			#region Registered
 
 			bool processed = false;
 
-			if ((typeof (DateTime) == fieldContext.DataType))
+			// Collection
+			if (IsCollectionType (fieldContext.DataType))
 			{
 				processed = true;
-				if (IsInput (source))
+				context.Target = source; // TODO: Recurse into collection
+				okay = true;
+			}
+
+			// Date
+			if (IsDateType (fieldContext.DataType))
+			{
+				processed = true;
+				if (IsStringEmpty (source))
 				{
 					DateTime t = DateTime_Convert (fieldContext, source);
 					bool isDateTimeEmpty = DateTime_Empty.Equals (t);
@@ -117,11 +99,12 @@ namespace Nexus.Core.Tables
 				}
 				else
 				{
-					context.Target = null; // We could use DateTime_Empty here,
-					okay = true; //  but there's an issue with iBATIS
+					context.Target = null; // FIXME: We could use DateTime_Empty here,
+					okay = true; //  but there was an issue with iBATIS (is there still?)
 				}
 			}
 
+			// String
 			if (IsStringType (fieldContext.DataType))
 			{
 				processed = true;
@@ -139,44 +122,48 @@ namespace Nexus.Core.Tables
 			return okay;
 		}
 
-		public virtual bool Format (IValidatorContext context)
+		// FIXME: This is begging for a Chain
+		public virtual bool Format_Execute (IValidatorContext context)
 		{
 			bool okay = false;
 			string id = context.FieldKey;
 			object source = context.Source;
-			IFieldContext fieldContext = Get (id);
+			IFieldContext fieldContext = GetField (id); // Enforces Strict
+
+			#region Not Registered
+
 			if ((fieldContext == null))
 			{
-				if (Strict)
-					throw new ArgumentNullException ("Nexus.Core.FieldTable.Format", id);
+				if (source == null)
+					context.Target = null;
 				else
 				{
-					if (source == null)
-						context.Target = null;
-					else
-					{
-						Type sourceType = source.GetType ();
-						if (IsCollectionType (sourceType)) context.Target = source;
-						else context.Target = source.ToString ();
-					}
-					return true;
+					Type sourceType = source.GetType ();
+					if (IsCollectionType (sourceType)) context.Target = source;
+					else context.Target = source.ToString ();
 				}
-			}
-
-			if (IsRichControl (fieldContext.ControlTypeName))
-			{
-				context.Target = source;
 				return true;
 			}
 
+			#endregion
+
+			#region Registered
+
 			bool processed = false;
-			if ((typeof (DateTime) == fieldContext.DataType))
+
+			// Collection
+			if (IsCollectionType (fieldContext.DataType))
 			{
 				processed = true;
-				SByte dbNull = 0;
-				bool isDateTimeEmpty = ((null == source) || (DBNull.Value.Equals (source)) || (dbNull.Equals (source) || String.Empty.Equals (source)));
-				// We could use DateTime_Empty here, but there's an issue with iBATIS
-				if (isDateTimeEmpty)
+				context.Target = source; // TODO: Recurse into collection
+				okay = true;
+			}
+
+			// Date
+			if (IsDateType (fieldContext.DataType))
+			{
+				processed = true;
+				if (IsDateEmpty (source))
 				{
 					context.Target = String.Empty;
 					okay = true;
@@ -185,10 +172,11 @@ namespace Nexus.Core.Tables
 				{
 					string target = DateTime_Format (fieldContext, source);
 					context.Target = target;
-					okay = IsInput (target);
+					okay = IsStringEmpty (target);
 				}
 			}
 
+			// String
 			if (IsStringType (fieldContext.DataType))
 			{
 				processed = true;
@@ -198,40 +186,102 @@ namespace Nexus.Core.Tables
 
 			// TODO: Other types. 
 
+			#endregion
+
 			if (!processed)
 				throw new ArgumentOutOfRangeException ("Agility.Nexus.FieldTable.DataType", id);
 
 			return okay;
 		}
 
-		public virtual IFieldContext Get (string id)
+		public virtual IFieldContext GetField (string id)
 		{
 			IFieldContext fieldContext = this [id] as IFieldContext;
 			bool problem = ((fieldContext == null) && (Strict));
 			if (problem)
-				throw new ArgumentNullException ("Agility.Nexus.FieldTable", "Get");
+				throw new ArgumentNullException ("Agility.Nexus.FieldTable", "GetField");
 			return fieldContext;
 		}
 
+		#endregion
 
-		/// <summary>
-		/// Determine whether string is null or empty.
-		/// </summary>
-		/// <param name="v">String to test.</param>
-		/// <returns>True if the string is valid input (not null and not empty).</returns>
-		/// 
-		private bool IsInput (string v)
-		{
-			return ((v != null) && (!String.Empty.Equals (v)));
-		}
-
-		#region DateTime
-
-		// TODO: Create a IDataTrip interface with Convert and Format methods. 
+		// TODO: Create a IDataTrip interface with IsType, IsEmpty, Convert, and Format methods. 
 		// The runtime instances could then be injected into FieldTable
 		// or added to a list, for extensibility
 
+		#region Collection Convert/Format 
+
+		private bool IsCollectionType (Type dataType)
+		{
+			bool v = (typeof (ICollection)).IsAssignableFrom (dataType);
+			return (v);
+		}
+
+		#region Notes
+
+		/*
+			/// <summary>
+			/// Instantiate from an IDictionary, 
+			/// formatting each entry using the FieldTable from a INexusContext, 
+			/// and reporting any conversion or formatting errors in the INexusContext.
+			/// </summary>
+			/// <remarks><p>
+			/// The result of a query will come back as a list of IDictionaries, 
+			/// using native, unformatted data types. 
+			/// This constructor can be used to loop through a list of IDictionaires, 
+			/// create a AppContext for each entry, and formatting any values 
+			/// along the way. (Dates being the best example.) 
+			/// The result is a AppContextList that can be used as a DataGrid 
+			/// DataSource (or whatever). 
+			/// </p></remarks>
+			/// <param name="dictionary">Values for new object</param>
+			/// <param name="context">Context with FieldTable and error handler</param>
+			public AppContext (IDictionary dictionary, IRequestContext context)
+			{
+			#region Assert parameters
+
+				if (null == dictionary) throw new ArgumentNullException ("dictionary", "AppContext(IDictionary,INexusContext");
+				if (null == context) throw new ArgumentNullException ("context", "AppContext(IDictionary,INexusContext");
+				IFieldTable table = context.FieldTable;
+				if (null == table) throw new ArgumentNullException ("FieldTable", "AppContext(IDictionary,INexusContext");
+
+			#endregion
+
+				IEnumerator keys = dictionary.Keys.GetEnumerator ();
+				while (keys.MoveNext ())
+				{
+					string key = keys.Current as string;
+					IValidatorContext input = new ValidatorContext (); // ISSUE: Spring? [WNE-63]
+					input.FieldKey = key;
+					input.Source = dictionary [key];
+					bool okay = table.Format (input);
+					if (!okay)
+						// OR, do we just want to push convert/format(id) up?
+						context.AddAlertForField (key);
+					this.Add (key, input.Target);
+				}
+			}
+			*/
+
+		#endregion
+
+		#endregion
+
+		#region DateTime Convert/Format
+
 		private DateTime DateTime_Empty = DateTime.MinValue;
+
+		private bool IsDateEmpty (object source)
+		{
+			SByte dbNull = 0;
+			return ((null == source) || (DBNull.Value.Equals (source)) || (dbNull.Equals (source) || String.Empty.Equals (source)));
+		}
+
+		private bool IsDateType (Type dataType)
+		{
+			bool v = (typeof (DateTime)).IsAssignableFrom (dataType);
+			return (v);
+		}
 
 		/// <summary>
 		/// Substitute default value (MinValue) if conversion fails. 
@@ -239,13 +289,12 @@ namespace Nexus.Core.Tables
 		/// <param name="fieldContext">Our field definition.</param>
 		/// <param name="input">The string to convert.</param>
 		/// <returns>A DateTime value, using MinValue to represent failure.</returns>
-		public DateTime DateTime_Convert (IFieldContext fieldContext, string input)
+		private DateTime DateTime_Convert (IFieldContext fieldContext, string input)
 		{
 			DateTime t = DateTime_Empty;
 			try
 			{
-				// t = System.Convert.ToDateTime (input);
-				t = System.Convert.ToDateTime (input);
+				t = Convert.ToDateTime (input);
 			}
 			catch (InvalidCastException e)
 			{
@@ -265,7 +314,7 @@ namespace Nexus.Core.Tables
 		/// <param name="fieldContext">Our field definition.</param>
 		/// <param name="value">The value to format.</param>
 		/// <returns>Formatted representation or an empty string.</returns>
-		public string DateTime_Format (IFieldContext fieldContext, object value)
+		private string DateTime_Format (IFieldContext fieldContext, object value)
 		{
 			DateTime t = DateTime_Empty;
 			try
@@ -282,26 +331,44 @@ namespace Nexus.Core.Tables
 
 		#endregion
 
-		#region Utilities
+		#region String Convert/Format
 
 		private string String_Empty = String.Empty;
 
-		public string String_Convert (IFieldContext fieldContext, string input)
+		/// <summary>
+		/// Determine whether string is null or empty.
+		/// </summary>
+		/// <param name="v">String to test.</param>
+		/// <returns>True if the string is valid input (not null and not empty).</returns>
+		/// 
+		private bool IsStringEmpty (string v)
+		{
+			return ((v != null) && (!String_Empty.Equals (v)));
+		}
+
+		private bool IsStringType (Type dataType)
+		{
+			bool v = (typeof (string).IsAssignableFrom (dataType));
+			return v;
+		}
+
+		private string String_Convert (IFieldContext fieldContext, string input)
 		{
 			bool isNull = (input == null);
 			return isNull ? String_Empty : input;
 			// If null, return empty string rather than null
-
 		}
 
-		public string String_Format (IFieldContext fieldContext, object value)
+		private string String_Format (IFieldContext fieldContext, object value)
 		{
 			string t = String_Empty;
-			bool valid = (value != null);
-			string format = (fieldContext.DataFormat != null) ? fieldContext.DataFormat : String.Empty;
-			return valid ? String.Format (format, value) : t;
+			if (value == null) return t;
+			string format = (fieldContext.DataFormat == null) ? t : fieldContext.DataFormat;
+			if (format.Equals (t)) return value.ToString ();
+			return String.Format (format, value);
 		}
 
 		#endregion
 	}
+
 }

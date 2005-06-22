@@ -1,5 +1,7 @@
+using System.Collections;
 using Agility.Core;
 using Nexus.Core;
+using Nexus.Core.Tables;
 using Nexus.Core.Validators;
 
 namespace Agility.Nexus.Validators
@@ -19,6 +21,12 @@ namespace Agility.Nexus.Validators
 			Source = source;
 		}
 
+		public ValidatorContext (string key, IRequestContext context)
+		{
+			FieldKey = key;
+			this [Tokens.Context] = context;
+		}
+
 		public string FieldKey
 		{
 			get { return this [Tokens.FieldKey] as string; }
@@ -35,6 +43,21 @@ namespace Agility.Nexus.Validators
 		{
 			get { return this [Tokens.Target]; }
 			set { this [Tokens.Target] = value; }
+		}
+
+		public IRequestContext Context
+		{
+			get { return this [Tokens.Context] as IRequestContext; }
+		}
+
+		public IDictionary Criteria
+		{
+			get { return Context.Criteria; }
+		}
+
+		public IFieldTable FieldTable
+		{
+			get { return Context.FieldTable; }
 		}
 	}
 }

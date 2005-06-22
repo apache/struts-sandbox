@@ -85,14 +85,14 @@ namespace Nexus.Core.Helpers
 		/// 
 		void Read (ICollection controls);
 
-		
+
 		/// <summary>
 		/// Store input and output values.
 		/// </summary>
 		/// 
-		IRequestContext Context {get;}
+		IRequestContext Context { get; }
 
-		
+
 		/// <summary>
 		/// Access result of operation as an IList.
 		/// </summary>
@@ -103,7 +103,7 @@ namespace Nexus.Core.Helpers
 		/// this method returns a single-value result as a one-entry list.
 		/// </remarks>
 		/// 
-		IList Outcome {get;}
+		IList Outcome { get; }
 
 		// ----
 
@@ -160,7 +160,7 @@ namespace Nexus.Core.Helpers
 		/// UI specific implementation may markup the errors as needed.
 		/// </remarks>
 		/// 
-		string ErrorsText { get; } 
+		string ErrorsText { get; }
 
 		/// <summary>
 		/// Record a list of hint (or advisory) messages, 
@@ -188,7 +188,7 @@ namespace Nexus.Core.Helpers
 		/// UI specific implementatiosn may markup the messages as needed.
 		/// </remarks>
 		/// 
-		string HintsText { get; } 
+		string HintsText { get; }
 
 		// ----
 

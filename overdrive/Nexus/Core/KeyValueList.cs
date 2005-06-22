@@ -7,11 +7,12 @@ namespace Nexus.Core
 	/// </summary>
 	public class KeyValueList : ArrayList, IKeyValueList
 	{
-
 		/// <summary>
 		/// Construct instance without parameters.
 		/// </summary>
-		public KeyValueList() {}
+		public KeyValueList ()
+		{
+		}
 
 		/// <summary>
 		/// Add members of given list to this list.

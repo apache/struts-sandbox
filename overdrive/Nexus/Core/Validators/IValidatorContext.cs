@@ -1,4 +1,6 @@
+using System.Collections;
 using Agility.Core;
+using Nexus.Core.Tables;
 
 namespace Nexus.Core.Validators
 {
@@ -9,21 +11,36 @@ namespace Nexus.Core.Validators
 	public interface IValidatorContext : IContext
 	{
 		/// <summary>
-		/// The identifer for the field under validation.
+		/// Identify the field under validation.
 		/// </summary>
 		/// 
 		string FieldKey { get; set; }
 
 		/// <summary>
-		/// The source value that we to process.
+		/// Record the source value to process.
 		/// </summary>
 		/// 
 		object Source { get; set; }
 
 		/// <summary>
-		/// The target value after conversion or formatting.
+		/// Reorod the target value after conversion or formatting.
 		/// </summary>
 		/// 
 		object Target { get; set; }
+
+		/// <summary>
+		/// Identify the main IRequestContext being processed.
+		/// </summary>
+		IRequestContext Context { get; }
+
+		/// <summary>
+		/// Identify the set of input/output fields being processed.
+		/// </summary>
+		IDictionary Criteria { get; }
+
+		/// <summary>
+		/// Identify the FieldTable being utilized.
+		/// </summary>
+		IFieldTable FieldTable { get; }
 	}
 }

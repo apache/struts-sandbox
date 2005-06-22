@@ -37,7 +37,7 @@ namespace Nexus.Core.Tables
 			get
 			{
 				Type v = this [Tokens.DataType] as Type;
-				if (v==null) v = typeof(String);
+				if (v == null) v = typeof (String);
 				return v;
 			}
 			set

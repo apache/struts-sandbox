@@ -11,7 +11,7 @@ namespace Nexus.Core.Validators
 	/// <remarks>
 	/// Subclasses must provide a NexusExecute method.
 	/// </remarks>
-	public class Validator : RequestCommand, IValidatorCommand
+	public abstract class Validator : RequestCommand, IValidatorCommand
 	{
 		#region Properties
 
@@ -50,72 +50,6 @@ namespace Nexus.Core.Validators
 			if (requiredIDs != null) foreach (string i in requiredIDs) combined [i] = i;
 			return combined.Keys;
 		}
-
-		#region ProcessRelated
-
-		public void AssertProcessRelated (IRequestContext context)
-		{
-			AssertProcessRequired (context);
-
-			IFieldTable table = context.FieldTable;
-			if (null == table)
-				throw new ArgumentNullException ("FieldTable", "BaseValidator.NexusExecute.AssertProcessRelated");
-		}
-
-		public virtual void ProcessRelated (IRequestContext context, bool mode)
-		{
-			AssertProcessRelated (context);
-
-			IDictionary fields = context.Criteria;
-			IFieldTable table = context.FieldTable;
-			ICollection related = CombinedIDs (context);
-			foreach (string key in related)
-			{
-				bool have = false;
-				bool okay = false;
-
-				switch (mode)
-				{
-					case MODE_INPUT:
-						{
-							have = (fields.Contains (key));
-							if (have)
-							{
-								string source = fields [key] as string;
-								// TODO: Spring?
-								IValidatorContext _context = new ValidatorContext (key, source);
-								okay = table.Convert (_context);
-								if (okay)
-									// set to main context
-									context [key] = _context.Target;
-							}
-							break;
-						}
-
-					case MODE_OUTPUT:
-						{
-							have = (context.Contains (key));
-							if (have)
-							{
-								object source = context [key];
-								// TODO: Spring?
-								IValidatorContext _context = new ValidatorContext (key, source);
-								okay = table.Format (_context);
-								if (okay)
-									// set to field buffer
-									fields [key] = _context.Target;
-							}
-							break;
-						}
-				}
-
-				if ((have) && (!okay))
-					context.AddAlertForField (key);
-
-			} // end while		
-		}
-
-		#endregion
 
 		#region ProcessRequired
 
@@ -156,6 +90,35 @@ namespace Nexus.Core.Validators
 		}
 
 		#endregion 
+
+		#region ProcessRelated
+
+		public void AssertProcessRelated (IRequestContext context)
+		{
+			AssertProcessRequired (context);
+
+			IFieldTable table = context.FieldTable;
+			if (null == table)
+				throw new ArgumentNullException ("FieldTable", "BaseValidator.NexusExecute.AssertProcessRelated");
+		}
+
+		public abstract bool ProcessExecute (IValidatorContext context);
+
+		public virtual void ProcessRelated (IRequestContext context, bool mode)
+		{
+			AssertProcessRelated (context);
+
+			ICollection related = CombinedIDs (context);
+			foreach (string key in related)
+			{
+				IValidatorContext _context = new ValidatorContext (key, context);
+				ProcessExecute (_context);
+			}
+		}
+
+		#endregion
+
+		// public abstract bool ProcessExecute(ValidatorContext context);
 
 		public override bool RequestExecute (IRequestContext context)
 		{

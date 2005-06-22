@@ -25,7 +25,6 @@ namespace Nexus.Core.Helpers
 	/// 
 	public abstract class ViewHelper : IViewHelper
 	{
-
 		/// <summary>
 		/// Default setting for ListSuffix ["_list"].
 		/// </summary>
@@ -97,17 +96,17 @@ namespace Nexus.Core.Helpers
 			{
 				IList result = null;
 				object o = Context.Outcome;
-				if (o==null)
+				if (o == null)
 				{
-					result = new ArrayList(1);
+					result = new ArrayList (1);
 					result.Add (Context.Criteria);
 				}
 				else
 				{
 					result = o as IList;
-					if (result==null)
+					if (result == null)
 					{
-						result = new ArrayList(1);
+						result = new ArrayList (1);
 						result.Add (o);
 					}
 				}
@@ -192,14 +191,8 @@ namespace Nexus.Core.Helpers
 		private bool _NullIfEmpty = NULL_IF_EMPTY;
 		public bool NullIfEmpty
 		{
-			get
-			{
-				return _NullIfEmpty;
-			}
-			set
-			{
-				_NullIfEmpty = value; 
-			}
+			get { return _NullIfEmpty; }
+			set { _NullIfEmpty = value; }
 		}
 
 		private string _SelectItemPrompt = SELECT_ITEM_PROMPT;
@@ -240,7 +233,7 @@ namespace Nexus.Core.Helpers
 		public IRequestCommand Command
 		{
 			get { return _Command; }
-			set { _Command  = value; }
+			set { _Command = value; }
 		}
 
 		#endregion 

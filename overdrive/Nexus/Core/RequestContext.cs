@@ -81,12 +81,6 @@ namespace Nexus.Core
 			set { this [Tokens.FieldTable] = value; }
 		}
 
-		public IList FieldSet
-		{
-			get { return this [Tokens.FieldSet] as IList; }
-			set { this [Tokens.FieldSet] = value; }
-		}
-
 		public bool HasOutcome
 		{
 			get { return Contains (Command); }
