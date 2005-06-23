@@ -69,7 +69,7 @@ namespace Nexus.Web.Helpers
 
 		#region Bind methods
 
-		private void BindControls (ControlCollection controls, IDictionary dictionary, string prefix, string list_suffix)
+		public void BindControls (ControlCollection controls, IDictionary dictionary, string prefix, string list_suffix)
 		{
 			foreach (Control t in controls)
 			{
@@ -111,7 +111,7 @@ namespace Nexus.Web.Helpers
 			}
 		}
 
-		private void BindListControl (ListControl control, IList list)
+		protected void BindListControl (ListControl control, IList list)
 		{
 			bool insertKey = ((list != null) && (!list.Contains (String.Empty)) && (!list.Contains (SelectItemPrompt)));
 			if (insertKey) list.Insert (0, new KeyValue (String.Empty, SelectItemPrompt));
@@ -126,7 +126,7 @@ namespace Nexus.Web.Helpers
 		/// <param name="list">List of TextKey objects.</param>
 		/// <param name="value">Value to select, or null if nothing is selected.</param>
 		/// 
-		private void BindListControl (ListControl control, IList list, string value)
+		protected void BindListControl (ListControl control, IList list, string value)
 		{
 			control.DataTextField = "Value";
 			control.DataValueField = "Key";
@@ -139,7 +139,8 @@ namespace Nexus.Web.Helpers
 
 		#region Read method
 
-		private void ReadControls (ControlCollection controls, IDictionary dictionary, string prefix, string list_suffix, bool nullIfEmpty)
+		// See also ReadGridControls in Extra Utilities
+		public void ReadControls (ControlCollection controls, IDictionary dictionary, string prefix, string list_suffix, bool nullIfEmpty)
 		{
 			foreach (Control t in controls)
 			{
@@ -183,17 +184,17 @@ namespace Nexus.Web.Helpers
 
 		#region Control utilities
 
-		private bool IsCheckBox (Control control)
+		protected bool IsCheckBox (Control control)
 		{
 			return (typeof (CheckBox).Equals (control.GetType ()));
 		}
 
-		private bool IsLabel (Control control)
+		protected bool IsLabel (Control control)
 		{
 			return (typeof (Label).Equals (control.GetType ()));
 		}
 
-		private bool IsListControl (Control control)
+		protected bool IsListControl (Control control)
 		{
 			bool isList = false;
 			Type type = control.GetType ();
@@ -205,12 +206,12 @@ namespace Nexus.Web.Helpers
 			return isList;
 		}
 
-		private bool IsRadioButton (Control control)
+		protected bool IsRadioButton (Control control)
 		{
 			return (typeof (RadioButton).Equals (control.GetType ()));
 		}
 
-		private bool IsTextBox (Control control)
+		protected bool IsTextBox (Control control)
 		{
 			return (typeof (TextBox).Equals (control.GetType ()));
 		}
@@ -361,5 +362,66 @@ namespace Nexus.Web.Helpers
 		}
 
 		#endregion 
+
+		#region Extra utilities (for GridViewHelper) 
+
+		protected void ReadGridControls (ICollection controls, IDictionary dictionary, string[] keys, bool nullIfEmpty)
+		{
+			int i = 0;
+			foreach (Control t in controls)
+			{
+				string key = keys [i];
+				if (IsTextBox (t))
+				{
+					TextBox x = (TextBox) t;
+					string value = (nullIfEmpty) ? DoNullIfEmpty (x.Text) : x.Text;
+					dictionary.Add (key, value);
+				}
+				if (IsLabel (t))
+				{
+					Label x = (Label) t;
+					string value = (nullIfEmpty) ? DoNullIfEmpty (x.Text) : x.Text;
+					dictionary.Add (key, value);
+				}
+				if (IsListControl (t))
+				{
+					ListControl x = (ListControl) t;
+					string value = (nullIfEmpty) ? DoNullIfEmpty (x.SelectedValue) : x.SelectedValue;
+					dictionary.Add (key, value);
+				}
+				if (IsCheckBox (t))
+				{
+					CheckBox x = (CheckBox) t;
+					string value = (x.Checked) ? key : null;
+					dictionary.Add (key, value);
+				}
+				if (IsRadioButton (t))
+				{
+					RadioButton x = (RadioButton) t;
+					string value = (x.Checked) ? key : null;
+					dictionary.Add (key, value);
+				}
+				i++;
+			}
+		}
+
+		protected int BindColumn (DataGrid grid, int pos, string headerText, string dataField, string sortExpression, string dataFormat)
+		{
+			BoundColumn column = new BoundColumn ();
+			column.HeaderText = headerText;
+			column.DataField = dataField;
+			column.SortExpression = sortExpression; // See DataGridColumn.SortExpression Property
+			column.DataFormatString = dataFormat; // See Formatting Types in .NET Dev Guide
+			grid.Columns.AddAt (pos, column);
+			return pos + 1;
+		}
+
+		protected int BindColumn (DataGrid grid, int pos, string headerText, string dataField)
+		{
+			return BindColumn (grid, pos, headerText, dataField, String.Empty, String.Empty);
+		}
+
+		#endregion
+
 	}
 }

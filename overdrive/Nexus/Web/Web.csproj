@@ -99,6 +99,16 @@
                     AssemblyName = "Agility.Core"
                     HintPath = "..\..\Agility\Core\bin\Debug\Agility.Core.dll"
                 />
+                <Reference
+                    Name = "Spring.Web"
+                    AssemblyName = "Spring.Web"
+                    HintPath = "..\..\SpringNet.bin\Spring.Web.dll"
+                />
+                <Reference
+                    Name = "Spring.Core"
+                    AssemblyName = "Spring.Core"
+                    HintPath = "..\..\SpringNet.bin\Spring.Core.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -107,6 +117,22 @@
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BaseGridPage.aspx"
+                    SubType = "Form"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "BaseGridPage.aspx.cs"
+                    DependentUpon = "BaseGridPage.aspx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BaseGridPage.aspx.resx"
+                    DependentUpon = "BaseGridPage.aspx.cs"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "Global.asax"
@@ -123,6 +149,16 @@
                     RelPath = "Global.asax.resx"
                     DependentUpon = "Global.asax.cs"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "GridViewHelper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IGridViewHelper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Web.config"
