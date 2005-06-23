@@ -9,6 +9,12 @@
 		<property name="RelatedIDs">
 			<list>
 				<value>filter</value>
+				<value>last_name</value>
+				<value>first_name</value>
+				<value>extension</value>
+				<value>user_name</value>
+				<value>hired</value>
+				<value>hours</value>
 			</list>
 		</property>
 	<property name="ID"><value>filter</value></property>

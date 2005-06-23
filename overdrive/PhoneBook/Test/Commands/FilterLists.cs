@@ -73,7 +73,7 @@ namespace PhoneBook.Core.Commands
 		{
 			IViewHelper helper = catalog.GetHelper ("directory_view_helper");
 			helper.Execute ();
-			IKeyValueList list = helper.Context.Criteria [key] as IKeyValueList;
+			IKeyValueList list = helper.Criteria [key] as IKeyValueList;
 			Assert.IsNotNull (list, "Expected KeyValueList");
 			return list;
 		}

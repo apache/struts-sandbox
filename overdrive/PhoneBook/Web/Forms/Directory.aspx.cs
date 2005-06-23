@@ -114,7 +114,7 @@ namespace PhoneBook.Web.Forms
 			string id = list.ID;
 			int v = id.LastIndexOf (FindHelper.ListSuffix);
 			string key = id.Substring (0, v);
-			FindHelper.Context [key] = list.SelectedValue;
+			FindHelper.Criteria [key] = list.SelectedValue;
 			Filter_Reset (list);
 			List_Load (FindHelper);
 		}
