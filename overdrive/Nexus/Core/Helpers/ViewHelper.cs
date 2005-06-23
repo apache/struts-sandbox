@@ -72,34 +72,24 @@ namespace Nexus.Core.Helpers
 
 		#region Read and Bind 
 
-		private IRequestContext _Context;
-		/// <remarks>
-		/// The Context is obtained through reference to the Catalog and Command.
-		/// All other properties and methods of the Helper refer to the Context, 
-		/// making Context the cornerstone property.
-		/// </remarks>
-		/// 
-		public IRequestContext Context
+		public IDictionary Criteria
 		{
 			get
 			{
-				if (_Context == null)
-					_Context = Catalog.GetRequest (Command);
-				return _Context;
+				return Context.Criteria;
 			}
 		}
-
 
 		public IList Outcome
 		{
 			get
 			{
 				IList result = null;
-				object o = Context.Criteria[Context.Command];
+				object o = Criteria[Context.Command];
 				if (o == null)
 				{
 					result = new ArrayList (1);
-					result.Add (Context.Criteria);
+					result.Add (Criteria);
 				}
 				else
 				{
@@ -234,6 +224,26 @@ namespace Nexus.Core.Helpers
 		{
 			get { return _Command; }
 			set { _Command = value; }
+		}
+
+		private IRequestContext _Context;
+		/// <summary>
+		/// Provide the all-important Context for this Helper.
+		/// </summary>
+		/// <remarks>
+		/// The Context is obtained through reference to the Catalog and Command.
+		/// All other properties and methods of the Helper refer to the Context, 
+		/// making Context the cornerstone property.
+		/// </remarks>
+		/// 
+		public IRequestContext Context
+		{
+			get
+			{
+				if (_Context == null)
+					_Context = Catalog.GetRequest (Command);
+				return _Context;
+			}
 		}
 
 		#endregion 

@@ -46,13 +46,13 @@ namespace Nexus.Web.Helpers
 		public override void Bind (ICollection controls)
 		{
 			ControlCollection cc = controls as ControlCollection;
-			BindControls (cc, Context.Criteria, Prefix, ListSuffix);
+			BindControls (cc, Criteria, Prefix, ListSuffix);
 		}
 
 		public override void Read (ICollection controls)
 		{
 			ControlCollection cc = controls as ControlCollection;
-			ReadControls (cc, Context.Criteria, Prefix, ListSuffix, NullIfEmpty);
+			ReadControls (cc, Criteria, Prefix, ListSuffix, NullIfEmpty);
 		}
 
 		public override string ErrorsText

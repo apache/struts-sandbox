@@ -90,7 +90,7 @@ namespace Nexus.Core.Helpers
 		/// Store input and output values.
 		/// </summary>
 		/// 
-		IRequestContext Context { get; }
+		IDictionary Criteria { get; }
 
 
 		/// <summary>
