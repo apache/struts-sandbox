@@ -8,6 +8,8 @@
 	<object id="BaseFilterList" type="PhoneBook.Core.Commands.BaseFilterList, PhoneBook.Core"/>
 	
 	<object id="BaseFieldContext" type="Nexus.Core.Tables.FieldContext"/>
+	
+	<object id="BaseKeyValueProcessor" type="Nexus.Core.Validators.KeyValueProcessor"/>
 
 	<!-- All child helpers must also specify singleton=false; otherwise, Context is shared. -->
 	<object id="BaseHelper" type="PhoneBook.Web.AppHelper, PhoneBook.Web" singleton="false">

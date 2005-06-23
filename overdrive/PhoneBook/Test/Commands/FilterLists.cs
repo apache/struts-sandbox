@@ -15,6 +15,7 @@
  */
 using System.Collections;
 using Nexus.Core;
+using Nexus.Core.Helpers;
 using NUnit.Framework;
 
 namespace PhoneBook.Core.Commands
@@ -39,14 +40,15 @@ namespace PhoneBook.Core.Commands
 			foreach (IKeyValue item in list)
 			{
 				Assert.IsNotNull (item, "Expected each item to be non-null");
-				string key = item.Value as string;
+				object key = item.Value;
 				Assert.IsNotNull (key, "Expected each key to be non-null");
-				Assert.IsTrue (key.Length > 0, "Expected each key to be non-empty");
+				string keystring = key.ToString ();
+				Assert.IsTrue (keystring.Length > 0, "Expected each key to be non-empty");
 			}
 			IDictionary keys = new Hashtable (list.Count);
 			foreach (IKeyValue item in list)
 			{
-				string key = item.Value as string;
+				string key = item.Value.ToString ();
 				if (keys.Contains (key)) Assert.Fail (key + ": Expected each item to be unique");
 				keys.Add (key, key);
 			}
@@ -67,5 +69,36 @@ namespace PhoneBook.Core.Commands
 			}
 		}
 
+		private IKeyValueList FilterList (string key)
+		{
+			IViewHelper helper = catalog.GetHelper ("directory_view_helper");
+			helper.Execute ();
+			IKeyValueList list = helper.Context.Criteria [key] as IKeyValueList;
+			Assert.IsNotNull (list, "Expected KeyValueList");
+			return list;
+		}
+
+		[Test]
+		public void TestFilterFormat_extension ()
+		{
+			IKeyValueList list = FilterList (App.EXTENSION_LIST);
+			foreach (IKeyValue item in list)
+			{
+				string key = item.Value as string;
+				Assert.IsTrue (key.Length > "1234567890".Length, "Expected formatted extension, not: " + key);
+			}
+		}
+
+		[Test]
+		public void TestFilterFormat_hired ()
+		{
+			IKeyValueList list = FilterList (App.HIRED_LIST);
+			foreach (IKeyValue item in list)
+			{
+				string key = item.Value as string;
+				bool okay = (key.Length > 0) && (key.Length < "##/##/#### ".Length);
+				Assert.IsTrue (okay, "Expected short date format, not: " + key);
+			}
+		}
 	}
 }

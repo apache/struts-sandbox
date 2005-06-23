@@ -10,7 +10,6 @@ namespace PhoneBook.Core
 	/// </summary>
 	public class AppProcessor : Processor
 	{
-
 		public override bool ConvertInput (IProcessorContext incoming)
 		{
 			incoming.Target = incoming.Source;

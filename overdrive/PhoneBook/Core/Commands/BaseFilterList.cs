@@ -30,9 +30,9 @@ namespace PhoneBook.Core.Commands
 		{
 			IList rows = Mapper ().QueryForList (QueryID, null);
 			IKeyValueList list = new KeyValueList ();
-			foreach (string key in rows)
+			foreach (object key in rows)
 			{
-				list.Add (new KeyValue (key, key));
+				list.Add (new KeyValue (key.ToString (), key));
 			}
 			context [ID] = list;
 			return CONTINUE;
