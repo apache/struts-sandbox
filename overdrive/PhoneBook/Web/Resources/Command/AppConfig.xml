@@ -9,36 +9,72 @@
 		<property name="AddFieldContexts">
 			<list>
 				<ref object="hired"/> 
+				<ref object="extension"/> 
 				<ref object="_filter"/> 
+				<ref object="_extension_list"/>
+				<ref object="_hired_list"/>
 			</list>
 		</property>
 		<property name="AddProcessors">
 			<list>
 				<ref object="DateTimeProcessor"/> 
+				<ref object="TelephoneProcessor"/> 
 				<ref object="AppProcessor"/> 
+				<ref object="ExtensionListProcessor"/>
+				<ref object="HiredListProcessor"/>
 			</list>
 		</property>
 	</object>
 	
-	<object id="hired" type="Nexus.Core.Tables.FieldContext">
+	<object id="hired" parent="BaseFieldContext">
 		<property name="ID"><value>hired</value></property>	
 		<property name="Alert"><value>{0} must be a valid date</value></property>
 		<property name="ProcessorID"><value>DateTimeProcessor</value></property>
 	</object>
+
+	<object id="extension" parent="BaseFieldContext">
+		<property name="ID"><value>extension</value></property>		
+		<property name="ProcessorID"><value>TelephoneProcessor</value></property>
+	</object>
 	
-	<object id="_filter" type="Nexus.Core.Tables.FieldContext">
+	<!-- We need to "hash" the name with "_" to avoid conflict with the filter Command -->
+	<object id="_filter" parent="BaseFieldContext">
 		<property name="ID"><value>filter</value></property>
 		<property name="ProcessorID"><value>AppProcessor</value></property>
 	</object>
 		
+	<object id="_extension_list" parent="BaseFieldContext">
+		<property name="ID"><value>extension_list</value></property>
+		<property name="ProcessorID"><value>ExtensionListProcessor</value></property>
+	</object>
+
+	<object id="_hired_list" parent="BaseFieldContext">
+		<property name="ID"><value>hired_list</value></property>
+		<property name="ProcessorID"><value>HiredListProcessor</value></property>
+	</object>
+
  		<!-- "d" is .NET for "short date" --> 
 	<object id="DateTimeProcessor" type="Nexus.Core.Validators.DateTimeProcessor">
 		<property name="ID"><value>DateTimeProcessor</value></property>
 		<property name="DataFormat"><value>d</value></property>
 	</object>
 	
+	<object id="TelephoneProcessor" type="PhoneBook.Core.TelephoneProcessor">
+		<property name="ID"><value>TelephoneProcessor</value></property>
+	</object>
+
 	<object id="AppProcessor" type="PhoneBook.Core.AppProcessor">
 		<property name="ID"><value>AppProcessor</value></property>
+	</object>
+	
+	<object id="ExtensionListProcessor" parent="BaseKeyValueProcessor">
+		<property name="ID"><value>ExtensionListProcessor</value></property>
+		<property name="Key"><value>extension</value></property>
+	</object>
+	
+	<object id="HiredListProcessor" parent="BaseKeyValueProcessor">
+		<property name="ID"><value>HiredListProcessor</value></property>
+		<property name="Key"><value>hired</value></property>
 	</object>
 
  <!-- Catalog -->

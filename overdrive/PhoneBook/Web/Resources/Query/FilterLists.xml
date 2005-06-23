@@ -35,14 +35,14 @@
 			ORDER BY user_name
 		</select>
 
-		<select id="hired_list" resultClass="string">
+		<select id="hired_list"  resultClass="date">
 			SELECT DISTINCT 
 				hired
 			FROM entry
 			ORDER BY hired
 		</select>
 
-		<select id="hours_list" resultClass="string">
+		<select id="hours_list"  resultClass="string">
 			SELECT DISTINCT 
 				hours
 			FROM entry
