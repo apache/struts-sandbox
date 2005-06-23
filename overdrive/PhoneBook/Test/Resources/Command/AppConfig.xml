@@ -3,42 +3,61 @@
   "http://www.springframework.net/dtd/spring-objects.dtd">
 <objects>
 
+ <!-- FieldTable -->
+ 				
+	<object id="FieldTable" type="Nexus.Core.Tables.FieldTable">
+		<property name="AddFieldContexts">
+			<list>
+				<ref object="hired"/> 
+				<ref object="_filter"/> 
+			</list>
+		</property>
+		<property name="AddProcessors">
+			<list>
+				<ref object="DateTimeProcessor"/> 
+				<ref object="AppProcessor"/> 
+			</list>
+		</property>
+	</object>
+	
+	<object id="hired" type="Nexus.Core.Tables.FieldContext">
+		<property name="ID"><value>hired</value></property>	
+		<property name="Alert"><value>{0} must be a valid date</value></property>
+		<property name="ProcessorID"><value>DateTimeProcessor</value></property>
+	</object>
+	
+	<object id="_filter" type="Nexus.Core.Tables.FieldContext">
+		<property name="ID"><value>filter</value></property>
+		<property name="ProcessorID"><value>AppProcessor</value></property>
+	</object>
+		
+ 		<!-- "d" is .NET for "short date" --> 
+	<object id="DateTimeProcessor" type="Nexus.Core.Validators.DateTimeProcessor">
+		<property name="ID"><value>DateTimeProcessor</value></property>
+		<property name="DataFormat"><value>d</value></property>
+	</object>
+	
+	<object id="AppProcessor" type="PhoneBook.Core.AppProcessor">
+		<property name="ID"><value>AppProcessor</value></property>
+	</object>
+
  <!-- Catalog -->
  
 	<object id="Catalog" type="Nexus.Extras.Spring.Catalog"/>
  
 
- <!-- FieldTable -->
- 				
-	<object id="FieldTable" type="Nexus.Core.Tables.FieldTable">
-		<property name="AddFields">
-			<list>
-				<ref object="hired"/> 
-			</list>
-		</property>
-	</object>
-	
- 		<!-- "d" is .NET for "short date" --> 
-	<object id="hired" type="Nexus.Core.Tables.FieldContext">
-		<property name="ID"><value>hired</value></property>	
-		<property name="Alert"><value>{0} must be a valid date</value></property>
-		<property name="DataFormat"><value>d</value></property>
-		<property name="DataTypeName"><value>System.DateTime</value></property>
-	</object>
-		
-<!-- Validators -->
+<!-- Request Processors -->
 	
   <object id="convert_input" type="Nexus.Core.Validators.ConvertInput">
     <property name="ID"><value>ConvertInput</value></property>
-    <property name="Template"><value>{0} is required.</value></property>
+    <property name="Required"><value>{0} is required.</value></property>
   </object>
 
   <object id="format_output" type="Nexus.Core.Validators.FormatOutput">
     <property name="ID"><value>FormatOutput</value></property>    
-    <property name="Template"><value>{0} is required.</value></property>
+    <property name="Required"><value>{0} is required.</value></property>
   </object>
   
-
 <!-- pre-op -->
 
   <object id="pre-op" parent="BaseChain">
@@ -60,4 +79,5 @@
     </property>           
   </object>
     		
+
 </objects>

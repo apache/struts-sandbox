@@ -53,14 +53,18 @@ namespace PhoneBook.Core.Commands
 		}
 
 		/// <summary>
-		/// Exercise the List Last Name command.
+		/// Exercise the filter commands.
 		/// </summary>
 		/// 
 		[Test]
-		public void TestLastNameFilterList ()
+		public void TestFilterLists ()
 		{
-			IRequestContext context = catalog.ExecuteRequest (App.LAST_NAME_LIST);
-			FilterList_Result (context);
+			string[] FILTERS = {App.LAST_NAME_LIST, App.FIRST_NAME_LIST, App.EXTENSION_LIST, App.USER_NAME_LIST, App.HIRED_LIST, App.HOURS_LIST};
+			foreach (string filter in FILTERS)
+			{
+				IRequestContext context = catalog.ExecuteRequest (filter);
+				FilterList_Result (context);
+			}
 		}
 
 	}

@@ -15,6 +15,7 @@
  */
 using System.Collections;
 using Nexus.Core;
+using Nexus.Core.Helpers;
 using NUnit.Framework;
 
 namespace PhoneBook.Core.Commands
@@ -35,6 +36,7 @@ namespace PhoneBook.Core.Commands
 		{
 			IList list = AssertListOutcome (context);
 			IDictionary row = list [0] as IDictionary;
+			Assert.IsNotNull (row, "Expected list entry to be an IDictionary.");
 			string[] KEYS = {App.FIRST_NAME, App.LAST_NAME, App.USER_NAME, App.EXTENSION, App.HIRED, App.HOURS, App.EDITOR};
 			bool valid = true;
 			foreach (string key in KEYS)
@@ -44,44 +46,36 @@ namespace PhoneBook.Core.Commands
 			Assert.IsTrue (valid, "Expected row to contain all keys.");
 		}
 
-		/// <summary>
-		/// SelectAll and succeed, without using Catalog.
-		/// </summary>
-		/// 
-		[Test]
-		public void SelectAll_Pass_Without_Catalog ()
-		{
-			BaseList command = new BaseList ();
-			command.ID = App.SELECT_ALL;
-			IRequestContext context = command.NewContext ();
-			command.Execute (context);
-			SelectAll_Result (context);
-		}
 
 		/// <summary>
-		/// SelectAll and succeed, using catalog.
+		/// Filter all and succeed, using catalog.
 		/// </summary>
 		/// 
 		[Test]
 		public void SelectAll_Pass ()
 		{
-			IRequestContext context = catalog.ExecuteRequest (App.SELECT_ALL);
+			IRequestContext context = catalog.ExecuteRequest (App.FILTER);
 			SelectAll_Result (context);
 		}
 
 		[Test]
-		public void SelectAll_Format()
+		public void FilterHelper_Format ()
 		{
-			IRequestContext context = catalog.ExecuteRequest (App.SELECT_ALL);
-			IList list = context.Outcome as IList;
+			IViewHelper helper = catalog.GetHelper ("directory_find_helper");
+			helper.Execute ();
+			AppContextList list = helper.Outcome as AppContextList;
+			// AppContextList list = helper.Context.Criteria["filter"] as AppContextList;
+			Assert.IsNotNull (list, "Expected list to be AppContextList");
 			AppContext row = list [0] as AppContext;
-			Assert.IsNotNull (row,"Expected rows to be AppContexts");
+			Assert.IsNotNull (row, "Expected rows to be AppContexts");
 
 			string hired = row.hired;
-			Assert.IsTrue (hired.Length<"##/##/#### ".Length,hired + ": Expected short date format.");	
+			Assert.IsNotNull (hired, "Expected each row to have a hired date.");
+			Assert.IsTrue (hired.Length < "##/##/#### ".Length, hired + ": Expected short date format.");
 
 			string extension = row.extension;
-			Assert.IsTrue (extension.Length>"1234567890".Length, extension + ": Expected formatted extension.");
+			Assert.IsNotNull (extension, "Expected each row to have an extension.");
+			Assert.IsTrue (extension.Length > "1234567890".Length, extension + ": Expected formatted extension.");
 
 		}
 	}

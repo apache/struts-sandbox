@@ -19,10 +19,10 @@ namespace PhoneBook.Core.Commands
 		public void ContainsFilters ()
 		{
 			IRequestContext context = catalog.ExecuteRequest (App.DIRECTORY_VIEW);
-			string[] keys = {App.LAST_NAME_LIST, App.FIRST_NAME_LIST, App.EXTENSION_LIST, App.USER_NAME_LIST, App.HIRED_LIST, App.HOURS_LIST};
-			foreach (string key in keys)
+			string[] FILTERS = {App.LAST_NAME_LIST, App.FIRST_NAME_LIST, App.EXTENSION_LIST, App.USER_NAME_LIST, App.HIRED_LIST, App.HOURS_LIST};
+			foreach (string filter in FILTERS)
 			{
-				Assert.IsTrue (context.Contains (key), key + ": Expected context to contain key.");
+				Assert.IsTrue (context.Contains (filter), filter + ": Expected context to contain key.");
 			}
 		}
 

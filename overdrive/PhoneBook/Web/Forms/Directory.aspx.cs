@@ -85,27 +85,27 @@ namespace PhoneBook.Web.Forms
 		private void Find_Init ()
 		{
 			cmdListAll.Text = msg_LIST_ALL_CMD;
-			cmdListAll.Click += new EventHandler(ListAll_Click);
+			cmdListAll.Click += new EventHandler (ListAll_Click);
 
 			cmdPrint.Text = msg_PRINT_CMD;
-			cmdPrint.Click +=new EventHandler(Print_Click);
+			cmdPrint.Click += new EventHandler (Print_Click);
 
 			foreach (DropDownList filter in FilterList ())
 			{
 				filter.AutoPostBack = true;
-				filter.SelectedIndexChanged += new EventHandler(Filter_Changed);
+				filter.SelectedIndexChanged += new EventHandler (Filter_Changed);
 			}
 		}
 
-		private void Filter_Reset(DropDownList except)
+		private void Filter_Reset (DropDownList except)
 		{
 			int exceptIndex = 0;
-			if (except!= null ) exceptIndex = except.SelectedIndex;
+			if (except != null) exceptIndex = except.SelectedIndex;
 			foreach (DropDownList filter in FilterList ())
 			{
 				filter.SelectedIndex = 0;
 			}
-			if (except!=null) except.SelectedIndex = exceptIndex;			
+			if (except != null) except.SelectedIndex = exceptIndex;
 		}
 
 		private void Filter_Changed (object sender, EventArgs e)
@@ -114,9 +114,9 @@ namespace PhoneBook.Web.Forms
 			string id = list.ID;
 			int v = id.LastIndexOf (FindHelper.ListSuffix);
 			string key = id.Substring (0, v);
-			FindHelper.Context[key] = list.SelectedValue;
-			Filter_Reset(list);
-			List_Load(FindHelper);
+			FindHelper.Context [key] = list.SelectedValue;
+			Filter_Reset (list);
+			List_Load (FindHelper);
 		}
 
 		private void Find_Load ()
@@ -124,7 +124,7 @@ namespace PhoneBook.Web.Forms
 			IViewHelper h = ViewHelper;
 			h.ExecuteBind (pnlFind.Controls);
 			bool ok = (h.IsNominal);
-			if (!ok) 
+			if (!ok)
 				Page_Error = h;
 		}
 
@@ -132,15 +132,14 @@ namespace PhoneBook.Web.Forms
 
 		private void ListAll_Click (object sender, EventArgs e)
 		{
-			Filter_Reset(null);
-			List_Load(FindHelper);
+			Filter_Reset (null);
+			List_Load (FindHelper);
 		}
 
 		private void Print_Click (object sender, EventArgs e)
 		{
 			throw new NotImplementedException ();
 		}
-
 
 		#endregion
 
@@ -160,7 +159,7 @@ namespace PhoneBook.Web.Forms
 
 		private void List_Load (IViewHelper helper)
 		{
-			helper.Execute();
+			helper.Execute ();
 			bool ok = helper.IsNominal;
 			if (!ok) Page_Error = helper;
 			else
@@ -215,6 +214,5 @@ namespace PhoneBook.Web.Forms
 		}
 
 		#endregion
-
 	}
 }
