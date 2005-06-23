@@ -9,24 +9,31 @@
 		<property name="AddFieldContexts">
 			<list>
 				<ref object="hired"/> 
+				<ref object="extension"/> 
 				<ref object="_filter"/> 
 			</list>
 		</property>
 		<property name="AddProcessors">
 			<list>
 				<ref object="DateTimeProcessor"/> 
+				<ref object="TelephoneProcessor"/> 
 				<ref object="AppProcessor"/> 
 			</list>
 		</property>
 	</object>
 	
-	<object id="hired" type="Nexus.Core.Tables.FieldContext">
+	<object id="hired" parent="BaseFieldContext">
 		<property name="ID"><value>hired</value></property>	
 		<property name="Alert"><value>{0} must be a valid date</value></property>
 		<property name="ProcessorID"><value>DateTimeProcessor</value></property>
 	</object>
+
+	<object id="extension" parent="BaseFieldContext">
+		<property name="ID"><value>extension</value></property>		
+		<property name="ProcessorID"><value>TelephoneProcessor</value></property>
+	</object>
 	
-	<object id="_filter" type="Nexus.Core.Tables.FieldContext">
+	<object id="_filter" parent="BaseFieldContext">
 		<property name="ID"><value>filter</value></property>
 		<property name="ProcessorID"><value>AppProcessor</value></property>
 	</object>
@@ -37,6 +44,10 @@
 		<property name="DataFormat"><value>d</value></property>
 	</object>
 	
+	<object id="TelephoneProcessor" type="PhoneBook.Core.TelephoneProcessor">
+		<property name="ID"><value>TelephoneProcessor</value></property>
+	</object>
+
 	<object id="AppProcessor" type="PhoneBook.Core.AppProcessor">
 		<property name="ID"><value>AppProcessor</value></property>
 	</object>

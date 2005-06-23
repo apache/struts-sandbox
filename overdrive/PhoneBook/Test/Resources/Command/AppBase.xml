@@ -6,6 +6,8 @@
 	<object id="BaseChain" type="Nexus.Core.RequestChain, Nexus.Core"/>
 	
 	<object id="BaseFilterList" type="PhoneBook.Core.Commands.BaseFilterList, PhoneBook.Core"/>
+	
+	<object id="BaseFieldContext" type="Nexus.Core.Tables.FieldContext"/>
 
 	<!-- All child helpers must also specify singleton=false; otherwise, Context is shared. -->
 	<object id="BaseHelper" type="PhoneBook.Web.AppHelper, PhoneBook.Web" singleton="false">

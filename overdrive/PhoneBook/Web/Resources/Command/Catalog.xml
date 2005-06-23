@@ -6,6 +6,11 @@
 	<!-- filter command -->
 
   <object id="filter" type="PhoneBook.Core.Commands.BaseList, PhoneBook.Core">
+		<property name="RelatedIDs">
+			<list>
+				<value>filter</value>
+			</list>
+		</property>
 	<property name="ID"><value>filter</value></property>
   </object>
 	
