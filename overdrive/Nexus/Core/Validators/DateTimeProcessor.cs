@@ -9,12 +9,6 @@ namespace Nexus.Core.Validators
 	{
 		#region IProcessor
 
-		public override bool IsEmpty (object source)
-		{
-			SByte dbNull = 0;
-			return ((null == source) || (DBNull.Value.Equals (source)) || (dbNull.Equals (source) || String.Empty.Equals (source)));
-		}
-
 		public override bool ConvertInput (IProcessorContext incoming)
 		{
 			bool okay = false;
@@ -63,6 +57,12 @@ namespace Nexus.Core.Validators
 		}
 
 		private DateTime DateTime_Empty = DateTime.MinValue;
+
+		private bool IsEmpty (object source)
+		{
+			SByte dbNull = 0;
+			return ((null == source) || (DBNull.Value.Equals (source)) || (dbNull.Equals (source) || String.Empty.Equals (source)));
+		}
 
 		private DateTime DateTime_Convert (string source)
 		{

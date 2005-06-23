@@ -6,11 +6,6 @@ namespace Nexus.Core.Validators
 	{
 		#region IProcessor 
 
-		public override bool IsEmpty (object v)
-		{
-			return ((v != null) && (!String_Empty.Equals (v)));
-		}
-
 		public override bool ConvertInput (IProcessorContext incoming)
 		{
 			string source = incoming.Source as string;

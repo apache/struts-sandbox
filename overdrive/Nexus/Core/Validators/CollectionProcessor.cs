@@ -1,14 +1,7 @@
-using System.Collections;
-
 namespace Nexus.Core.Validators
 {
 	public class CollectionProcessor : Processor
 	{
-		public override bool IsEmpty (object v)
-		{
-			ICollection c = v as ICollection;
-			return ((c != null) && (c.Count > 0));
-		}
 
 		public override bool ConvertInput (IProcessorContext incoming)
 		{

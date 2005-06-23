@@ -26,8 +26,6 @@ namespace Nexus.Core.Validators
 			set { _ID = value; }
 		}
 
-		public abstract bool IsEmpty (object source);
-
 		public abstract bool ConvertInput (IProcessorContext incoming);
 
 		public abstract bool FormatOutput (IProcessorContext outgoing);

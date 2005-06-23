@@ -9,7 +9,6 @@ namespace Nexus.Core.Validators
 		string DataFormat { get; set; }
 		string ID { get; set; }
 
-		bool IsEmpty (object source);
 		bool ConvertInput (IProcessorContext incoming);
 		bool FormatOutput (IProcessorContext outgoing);
 	}
