@@ -1,4 +1,6 @@
 using System.Collections;
+using Agility.Core;
+using Nexus.Core;
 
 namespace PhoneBook.Core
 {
@@ -6,37 +8,23 @@ namespace PhoneBook.Core
 	/// List AppContext objects.
 	/// </summary>
 	/// 
-	public class AppContextList : ArrayList
+	public class AppContextList : ArrayList, IContextList
 	{
-		/// <summary>
-		/// Create instance with zero parameters.
-		/// </summary>
-		/// 
-		public AppContextList ()
+
+		public IContext Insert (string key)
 		{
+			AppContext entry = new AppContext();
+			entry.last_name = key;
+			this.Insert (0,entry);
+			return entry;
 		}
 
-		/// <summary>
-		/// Create an AppContext object for each IDictionary on a IList.
-		/// </summary>
-		/// <param name="dictionaries">A IList of IDictionaries with data values.</param>
-		/// 
-		public AppContextList (IList dictionaries)
+		public void AddEntry(IDictionary row)
 		{
-			foreach (IDictionary item in dictionaries)
-			{
-				Add (new AppContext (item));
-			}
-		}
-
-		/// <summary>
-		/// Wrap an IDictionary in an AppContext object and add it to the list.
-		/// </summary>
-		/// <param name="value">IDictionary to add as new entry</param>
-		public void AddEntry (IDictionary value)
-		{
-			AppContext entry = new AppContext (value);
-			Add (entry);
+			AppContext entry = new AppContext();
+			foreach (DictionaryEntry col in row) 
+				entry.Add (col.Key,col.Value);
+			Add(entry);
 		}
 
 	}

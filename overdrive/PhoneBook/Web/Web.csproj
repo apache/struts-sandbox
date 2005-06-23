@@ -214,6 +214,22 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Forms\Directory2.aspx"
+                    SubType = "Form"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Forms\Directory2.aspx.cs"
+                    DependentUpon = "Directory2.aspx"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Forms\Directory2.aspx.resx"
+                    DependentUpon = "Directory2.aspx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Forms\Web.config"
                     BuildAction = "Content"
                 />

@@ -1,8 +1,8 @@
-<%@ Page language="c#" Codebehind="Directory.aspx.cs" AutoEventWireup="true" Inherits="PhoneBook.Web.Forms.Directory" %>
+<%@ Page language="c#" Codebehind="Directory2.aspx.cs" AutoEventWireup="true" Inherits="PhoneBook.Web.Forms.Directory2" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
 <HTML>
 	<HEAD>
-		<title>PhoneBook Directory</title>		
+		<title>PhoneBook Directory (2)</title>		
 		<meta name="GENERATOR" Content="Microsoft Visual Studio .NET 7.1">
 		<meta name="CODE_LANGUAGE" Content="C#">
 		<meta name="vs_defaultClientScript" content="JavaScript">
@@ -27,7 +27,7 @@
 			  <table><tr>
 			  <td colspan="6" >
 				  <asp:Button ID="cmdListAll" Runat="server"></asp:Button>
-				  <INPUT onclick="javascript:window.print();" type="button" value="PRINT" name="cmd_print" id="cmd_print"> </asp:Button>
+				  <INPUT onclick="javascript:window.print();" type="button" value="PRINT" name="cmd_print" id="cmd_print">
 			  </td>
 			  <tr>
 			  <td>Last Name</td>

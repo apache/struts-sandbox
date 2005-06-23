@@ -17,33 +17,39 @@
 				<value>hours</value>
 			</list>
 		</property>
-	<property name="ID"><value>filter</value></property>
+		<property name="ID"><value>filter</value></property>
   </object>
 	
 	<!-- filter list commands -->
 		
   <object id="last_name_list" parent="BaseFilterList">
 	<property name="ID"><value>last_name_list</value></property>
+	<property name="RelatedIDs"><list><value>last_name_list</value></list></property>
   </object>
 
   <object id="first_name_list" parent="BaseFilterList">
 	<property name="ID"><value>first_name_list</value></property>
+	<property name="RelatedIDs"><list><value>first_name_list</value></list></property>
   </object>
   
   <object id="extension_list" parent="BaseFilterList">
 	<property name="ID"><value>extension_list</value></property>
+	<property name="RelatedIDs"><list><value>extension_list</value></list></property>	
   </object>
 
   <object id="user_name_list" parent="BaseFilterList">
 	<property name="ID"><value>user_name_list</value></property>
+	<property name="RelatedIDs"><list><value>user_name_list</value></list></property>	
   </object>
 
   <object id="hired_list" parent="BaseFilterList">
 	<property name="ID"><value>hired_list</value></property>
+	<property name="RelatedIDs"><list><value>hired_list</value></list></property>	
   </object>
 
   <object id="hours_list" parent="BaseFilterList">
 	<property name="ID"><value>hours_list</value></property>
+	<property name="RelatedIDs"><list><value>hours_list</value></list></property>	
   </object>
   
   
@@ -52,16 +58,6 @@
     <object id="directory_view" parent="BaseChain">
 		<property name="ID">
 			<value>directory_view</value>
-		</property>
-		<property name="RelatedIDs">
-			<list>
-				<value>last_name_list</value>
-				<value>first_name_list</value>
-				<value>extension_list</value>
-				<value>user_name_list</value>
-				<value>hired_list</value>
-				<value>hours_list</value>
-			</list>
 		</property>
 		<property name="AddCommands">
 			<list>
@@ -75,7 +71,7 @@
 		</property>
 	</object>
 	
-	
+		
   <!-- helpers -->
 
   <object id="directory_view_helper" parent="BaseHelper" singleton="false">

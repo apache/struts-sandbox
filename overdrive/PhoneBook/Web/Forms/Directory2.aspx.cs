@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Web.UI.WebControls;
 using Nexus.Core.Helpers;
-using Spring.Web.UI;
+using Nexus.Web;
 
 namespace PhoneBook.Web.Forms
 {
@@ -10,7 +10,7 @@ namespace PhoneBook.Web.Forms
 	///  Maintain a list of employees with their telephone extension [OVR-5]. 
 	/// </summary>
 	/// 
-	public class Directory : Page
+	public class Directory2 : BaseGridPage
 	{
 		#region Messages
 

@@ -13,42 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using System.Collections;
+using Agility.Core;
 
 namespace PhoneBook.Core
 {
 	/// <summary>
-	/// Adapt a properties class to use an IDictionary for storage.
+	/// Expose field attributes as public properties.
 	/// </summary>
 	/// 
-	public class AppContext
+	public class AppContext : Context
 	{
-		#region Constructors
-
-		/// <summary>
-		/// Instantiate with zero parameters.
-		/// </summary>
-		public AppContext ()
-		{
-			_Value = new Hashtable ();
-		}
-
-		/// <summary>
-		/// Instantiate from a IDictionary.
-		/// </summary>
-		/// <param name="dictionary">New values for properties</param>
-		public AppContext (IDictionary dictionary)
-		{
-			_Value = dictionary;
-		}
-
-		#endregion
-
-		private IDictionary _Value;
-		public IDictionary Value
-		{
-			get { return _Value; }
-		}
 
 		/*
 		public string property
@@ -60,38 +34,38 @@ namespace PhoneBook.Core
 
 		public string first_name
 		{
-			get { return _Value [App.FIRST_NAME] as string; }
-			set { _Value [App.FIRST_NAME] = value; }
+			get { return this [App.FIRST_NAME] as string; }
+			set { this [App.FIRST_NAME] = value; }
 		}
 
 		public string last_name
 		{
-			get { return _Value [App.LAST_NAME] as string; }
-			set { _Value [App.LAST_NAME] = value; }
+			get { return this [App.LAST_NAME] as string; }
+			set { this [App.LAST_NAME] = value; }
 		}
 
 		public string extension
 		{
-			get { return _Value [App.EXTENSION] as string; }
-			set { _Value [App.EXTENSION] = value; }
+			get { return this [App.EXTENSION] as string; }
+			set { this [App.EXTENSION] = value; }
 		}
 
 		public string user_name
 		{
-			get { return _Value [App.USER_NAME] as string; }
-			set { _Value [App.USER_NAME] = value; }
+			get { return this [App.USER_NAME] as string; }
+			set { this [App.USER_NAME] = value; }
 		}
 
 		public string hired
 		{
-			get { return _Value [App.HIRED] as string; }
-			set { _Value [App.HIRED] = value; }
+			get { return this [App.HIRED] as string; }
+			set { this [App.HIRED] = value; }
 		}
 
 		public string hours
 		{
-			get { return _Value [App.HOURS] as string; }
-			set { _Value [App.HOURS] = value; }
+			get { return this [App.HOURS] as string; }
+			set { this [App.HOURS] = value; }
 		}
 
 	}
