@@ -42,7 +42,7 @@
 
 	<object id="user_name" parent="BaseFieldContext">
 		<property name="ID"><value>user_name</value></property>	
-		<property name="Label"><value>UserName</value></property>	
+		<property name="Label"><value>User ID</value></property>	
 	</object>
 	
 	<object id="extension" parent="BaseFieldContext">

@@ -102,11 +102,13 @@ namespace PhoneBook.Web.Forms
 
 		protected override void Find_Submit (object sender, EventArgs e)
 		{
+			IGridViewHelper h = GridHelper;
 			DropDownList list = sender as DropDownList;
 			string id = list.ID;
-			int v = id.LastIndexOf (GridHelper.FindHelper.ListSuffix);
+			int v = id.LastIndexOf (h.FindHelper.ListSuffix);
 			string key = id.Substring (0, v);
-			GridHelper.FindHelper.Criteria [key] = list.SelectedValue;
+			h.FindHelper.Criteria [key] = list.SelectedValue;
+			List_Criteria = h.FindHelper.Criteria;
 			Filter_Reset (list);
 			List_Load ();
 		}
