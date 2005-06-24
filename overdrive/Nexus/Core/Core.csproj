@@ -229,12 +229,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Validators\IValidator.cs"
+                    RelPath = "Validators\IProcessorCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Validators\IValidatorContext.cs"
+                    RelPath = "Validators\IProcessorContext.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -249,17 +249,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Validators\ProcessorCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Validators\ProcessorContext.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Validators\StringProcessor.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Validators\Validator.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Validators\ValidatorContext.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
