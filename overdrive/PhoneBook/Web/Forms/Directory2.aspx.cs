@@ -14,6 +14,7 @@ namespace PhoneBook.Web.Forms
 
 		#region Messages
 
+		private const string msg_FILTER = "Select a filter to display fewer entries";
 		private const string msg_LIST_ALL_CMD = "SHOW ALL";
 
 		#endregion
@@ -35,6 +36,19 @@ namespace PhoneBook.Web.Forms
 			}
 		}
 
+		protected Panel pnlPrompt;
+		protected Label lblPrompt;
+
+		/// <summary>
+		/// Display a Prompt mesasges.
+		/// </summary>
+		protected override string Page_Prompt
+		{
+			set
+			{
+				lblPrompt.Text = value;
+			}
+		}
 		#endregion
 
 		#region Find -- Display Find controls
@@ -84,6 +98,9 @@ namespace PhoneBook.Web.Forms
 				filter.SelectedIndex = 0;
 			}
 			if (except != null) except.SelectedIndex = exceptIndex;
+			// Update other members
+			List_ResetIndex();
+			Page_Prompt = msg_FILTER;
 		}
 
 		protected override void Find_Submit (object sender, EventArgs e)
@@ -115,6 +132,10 @@ namespace PhoneBook.Web.Forms
 			base.Page_Init ();
 			pnlList.Visible = true;
 			pnlError.Visible = false;
+			if (!IsPostBack)
+			{
+				Page_Prompt = msg_FILTER;
+			}
 		}
 
 		#endregion

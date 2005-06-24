@@ -20,8 +20,11 @@
 			</asp:Panel>
 			
 			<!-- PROMPT -->
-			<p>Select a filter to display fewer entries.</p>	
-
+			<asp:Panel ID="pnlPrompt" Runat="server">
+			<p><asp:Label ID="lblPrompt" Runat="server"></asp:Label></p>
+			<hr>
+			</asp:Panel>
+						
 			<!-- FIND -->
 			<asp:Panel ID="pnlFind" Runat="server">
 			  <table><tr>
