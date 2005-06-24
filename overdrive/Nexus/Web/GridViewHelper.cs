@@ -15,6 +15,18 @@ namespace Nexus
 	/// </summary>
 	public abstract class GridViewHelper : WebViewHelper, IGridViewHelper
 	{
+		#region IViewHelper 
+
+		/// <remarks><p>
+		/// Check to see if the Helpers are all good; 
+		/// though, most often an individual Helper is checked instead. 
+		/// </p></remarks>
+		public override bool IsNominal
+		{
+			get { return FindHelper.IsNominal && ListHelper.IsNominal && SaveHelper.IsNominal;  }
+		}
+
+		#endregion
 
 		#region IListViewHelper
 
@@ -117,7 +129,7 @@ namespace Nexus
 				ExecuteList (grid, criteria);
 			else
 				ExecuteList (grid);
-			return IsNominal;
+			return ListHelper.IsNominal;
 		}
 
 		public virtual bool Find (ICollection controls)
@@ -136,7 +148,7 @@ namespace Nexus
 		public virtual bool List (DataGrid grid)
 		{
 			ListHelper.Execute();
-			bool okay = IsNominal ;
+			bool okay = ListHelper.IsNominal ;
 			if (okay)
 			{
 				DataSource (grid);
@@ -165,8 +177,9 @@ namespace Nexus
 				}
 
 				ReadGridControls (controls, SaveHelper.Criteria, keys, SaveHelper.NullIfEmpty);
+				SaveHelper.Execute();
 			}
-			return IsNominal ;
+			return SaveHelper.IsNominal ;
 		}
 
 		public virtual int BindItemColumn (DataGrid grid, int i)
@@ -223,7 +236,7 @@ namespace Nexus
 			grid.CurrentPageIndex = 0;
 			grid.EditItemIndex = 0;
 			DataBind (grid);
-			return IsNominal ;
+			return ListHelper.IsNominal ;
 		}
 
 		public virtual void DataBind (DataGrid grid)
@@ -260,10 +273,12 @@ namespace Nexus
 
 		public virtual bool ExecuteList (DataGrid grid, IDictionary criteria)
 		{
-			ListHelper.ReadExecute(criteria);
-			bool okay = ListHelper.IsNominal ;
-			if (okay) BindGrid (grid);
-			return okay;
+			IDictionary target = ListHelper.Criteria;
+			foreach (DictionaryEntry e in criteria)
+			{
+				target[e.Key] = e.Value;
+			}
+			return ExecuteList(grid);
 		}
 
 		public string GetDataKey (DataGridCommandEventArgs e, DataGrid grid)

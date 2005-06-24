@@ -11,15 +11,50 @@ namespace Nexus.Web
 	{
 		#region IListViewHelper
 
+		/// <summary>
+		/// Collect search criteria to use with List command. 
+		/// </summary>
+		/// 
 		IViewHelper FindHelper { get; set; }
+
+		/// <summary>
+		/// Filter matching entries for display.
+		/// </summary>
+		/// 
 		IViewHelper ListHelper { get; set; }
+
+		/// <summary>
+		/// Update persistent store.
+		/// </summary>
+		/// 
 		IViewHelper SaveHelper { get; set; }
 
+		/// <summary>
+		/// Label the EDIT control.
+		/// </summary>
+		/// 
 		string EditText { get; set; }
+
+		/// <summary>
+		/// Label the QUIT control.
+		/// </summary>
+		/// 
 		string QuitText { get; set; }
+
+		/// <summary>
+		/// Label the SAVE control.
+		/// </summary>
+		/// 
 		string SaveText { get; set; }
 
+		/// <summary>
+		/// Label the custom ITEM control
+		/// </summary>
 		string ItemText { get; set; }
+
+		/// <summary>
+		/// Identify the command for the custom ITEM control.
+		/// </summary>
 		string ItemCommandName { get; set; }
 
 		/// <summary>
@@ -61,7 +96,7 @@ namespace Nexus.Web
 		bool Load (DataGrid grid, IDictionary criteria);
 
 		/// <summary>
-		/// Execute find command (enter search criteria).
+		/// Execute find (what?) command (enter search criteria).
 		/// </summary>
 		/// <param name="controls">The list of controls to which to bind values.</param>
 		bool Find (ICollection controls);
@@ -120,17 +155,17 @@ namespace Nexus.Web
 		void DataSource (DataGrid grid);
 
 		/// <summary>
-		/// Use the DataFields property to create a blank row.
+		/// Ccreate a blank row in the datagrid.
 		/// </summary>
 		/// <param name="grid">Our datagrid instance</param>
 		bool DataInsert (DataGrid grid);
 
 		/// <summary>
-		/// Convenience method to bind our datagrid.
+		/// Bind our datagrid to the datasource.
 		/// </summary>
-		/// <comment>
+		/// <remarks><p>
 		/// Usually called just after DataSource.
-		/// </comment>
+		/// </p></remarks>
 		/// <param name="grid">Our datagrid instance</param>
 		void DataBind (DataGrid grid);
 
@@ -141,14 +176,14 @@ namespace Nexus.Web
 		void BindGrid (DataGrid grid);
 
 		/// <summary>
-		/// Run ExecuteContext using the ListCommand and bind the result.
+		/// Run ExecuteContext using the ListHelper, and bind the result.
 		/// </summary>
 		/// <param name="grid">A DataGrid instance</param>
 		/// <returns>True if the Context is nominal.</returns>
 		bool ExecuteList (DataGrid grid);
 
 		/// <summary>
-		/// Run Execute using the ListCommand and supplied criteria and bind the result.
+		/// Run Execute using the ListHelper and supplied criteria, and bind the result.
 		/// </summary>
 		/// <param name="grid">A DataGrid instance</param>
 		/// <param name="criteria">Criteria values</param>
@@ -164,7 +199,7 @@ namespace Nexus.Web
 		string GetDataKey (DataGridCommandEventArgs e, DataGrid grid);
 
 		/// <summary>
-		/// Create a collection of the controls in the current DataGrid cell.
+		/// Create a collection of the controls based on the current DataGrid cell.
 		/// </summary>
 		/// <param name="e">Current event</param>
 		/// <param name="grid">The DataGrid</param>

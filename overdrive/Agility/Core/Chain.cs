@@ -87,7 +87,7 @@ namespace Agility.Core
 		public void AddCommand (ICommand command)
 		{
 			if (command == null)
-				throw new ArgumentNullException ("context", "Chain.AddCommand");
+				throw new ArgumentNullException ("command==null", "Chain.AddCommand");
 			if (frozen)
 				throw new ApplicationException ("Chain.AddCommand: frozen==true");
 			ICommand[] results = new ICommand[commands.Length + 1];
@@ -102,7 +102,7 @@ namespace Agility.Core
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException ("context", "Chain.AddCommands");
+					throw new ArgumentNullException ("value==null", "Chain.AddCommands");
 				IEnumerator elements = value.GetEnumerator ();
 				while (elements.MoveNext ()) AddCommand (elements.Current as ICommand);
 			}
@@ -114,7 +114,7 @@ namespace Agility.Core
 		{
 			// Verify our parameters
 			if (context == null)
-				throw new ArgumentNullException ("context", "Chain.Execute");
+				throw new ArgumentNullException ("context==null", "Chain.Execute");
 
 			// Freeze the configuration of the command list
 			frozen = true;

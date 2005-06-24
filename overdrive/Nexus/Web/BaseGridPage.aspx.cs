@@ -8,22 +8,57 @@ using Spring.Web.UI;
 namespace Nexus.Web
 {
 	/// <summary>
-	/// Base page for using a IGridViewHelper.
+	/// Provide common functionality for page that is configured to use a IGridViewHelper.
 	/// </summary>
+	/// <remarks><p>
+	/// The implementing code-benhind needs to 
+	/// * extend BaseGridPage, 
+	/// * inject a instance of IGridViewHelper, and
+	/// * override Page_Error and Page_Prompt (optional). 
+	/// GridViewHelper is abstract, and you need to implement your own NewEntryList method. 
+	/// </p><p>
+	/// The ASPX page needs to provide 
+	/// * pnlError
+	/// * pnlList
+	/// * repList
+	/// * cmdAddList
+	/// </p>
+	/// <p>
+	/// If a Find dialog is provided, the implementing code behind can override 
+	/// * Find_Init, 
+	/// * Find_Load, and 
+	/// * Find_Submit.
+	/// The ListHelper will use the criteria setup by Find_Submit to consumate the search.
+	/// </p><p>
+	/// The BasePage and Helper provide all the routine functionality need to display a 
+	/// datagrid with an arbitrary set of columns for inline editing. 
+	/// The remaining functionality is provided by configuring the GridViewHelper instance
+	/// with the FindHelper, ListHelper, and SaveHelper needed for each respective task. 
+	/// The Helpers do not have to be written specially, and may even be used elsewhere. 
+	/// The GridViewHelper and BasePage manage the Helpers, which provide the custom 
+	/// functionalty for the specified columns. 
+	/// </p><p>
+	/// The columns to edit are configured through the Helper's FieldSet. 
+	/// Each column must be a FieldContext. 
+	/// The FieldContext Label is used for the column heading.
+	/// </p><p>
+	/// For a working example, see Directory2 in the PhoneBook application.
+	/// </p></remarks>
 	public class BaseGridPage : Page
 	{
 
 		#region Helper
 
-		private IGridViewHelper _Helper;
+		private IGridViewHelper _GridHelper;
 		/// <summary>
-		/// Obtain dynamic data for the default view.
+		/// Encapsulate three Helpers that work together
+		/// to Find, List, and Save DataGrid entries.
 		/// </summary>
 		///
-		public virtual IGridViewHelper Helper
+		public virtual IGridViewHelper GridHelper
 		{
-			get { return _Helper; }
-			set { _Helper = value; }
+			get { return _GridHelper; }
+			set { _GridHelper = value; }
 		}
 
 		#endregion
@@ -31,9 +66,13 @@ namespace Nexus.Web
 		#region Page Properties 
 
 		private IViewHelper _Page_Error;
-		/// <summary>
-		/// Set is called when an error occurs; override to provide functionality.
-		/// </summary>		
+		///<summary>
+		///Handle error messages.
+		///</summary>
+		/// <remarks><p>
+		/// Set is called when an error occurs. 
+		/// Override to provide functionality.
+		/// </p></remarks>		
 		protected virtual IViewHelper Page_Error
 		{
 			set {_Page_Error = value;}
@@ -41,9 +80,12 @@ namespace Nexus.Web
 		}
 
 		private string _Page_Prompt;
-		/// <summary>
+		///<summary>
+		///Handle page prompts.
+		///</summary>
+		/// <remarks><p>
 		/// Set is called when the prompt changes; override to provide functionality.
-		/// </summary>		
+		/// </p></remarks>		
 		protected virtual string Page_Prompt
 		{
 			set {_Page_Prompt = value;}
@@ -68,32 +110,14 @@ namespace Nexus.Web
 		#region Page Properties
 
 		/// <summary>
-		/// Attribute token for List_Criteria.
-		/// </summary>
-		private string LIST_CRITERIA_KEY = "__LIST_CRITERIA_KEY";
-
-		/// <summary>
-		/// Values to use with a query statement.
-		/// </summary>
-		public virtual IDictionary List_Criteria
-		{
-			get
-			{
-				IDictionary criteria = ViewState [LIST_CRITERIA_KEY] as IDictionary;
-				return criteria;
-			}
-			set { ViewState [LIST_CRITERIA_KEY] = value; }
-		}
-
-		/// <summary>
-		/// Attribute token for List_ItemIndex
+		/// Identify the attribute token for List_ItemIndex
 		/// </summary>
 		private const string LIST_ITEM_INDEX = "__LIST_ITEM_INDEX";
 
 		/// <summary>
-		/// Current item index, used mainly to signal editing. 
+		/// Store the current item index, mainly to signal edit mode. 
 		/// </summary>
-		public virtual int List_ItemIndex
+		protected virtual int List_ItemIndex
 		{
 			get
 			{
@@ -109,28 +133,28 @@ namespace Nexus.Web
 		}
 
 		/// <summary>
-		/// Attribute token for List_ItemKey.
+		/// Identify the attribute token for List_ItemKey.
 		/// </summary>
 		private const string LIST_ITEM_KEY = "__LIST_ITEM_KEY";
 
 		/// <summary>
-		/// The data key for the selected item.
+		/// Store the data key for the selected item.
 		/// </summary>
-		public virtual string List_ItemKey
+		protected virtual string List_ItemKey
 		{
 			get { return ViewState [LIST_ITEM_KEY] as string; }
 			set { ViewState [LIST_ITEM_KEY] = value; }
 		}
 
 		/// <summary>
-		/// Attribute token for List_Insert.
+		/// Identify the attribute token for List_Insert.
 		/// </summary>
 		private const string LIST_INSERT_KEY = "__LIST_INSERT_KEY";
 
 		/// <summary>
-		/// Insert mode - are we adding or modifying?
+		/// Store insert mode (are we adding or modifying?).
 		/// </summary>
-		public virtual bool List_Insert
+		protected virtual bool List_Insert
 		{
 			get
 			{
@@ -151,12 +175,21 @@ namespace Nexus.Web
 
 		protected Panel pnlFind;
 
-		protected virtual bool Find_Submit (string prefix)
+		protected virtual void Find_Init ()
 		{
-			IViewHelper h = Helper;
+			// override to provide functionality
+		}
+
+		protected virtual void Find_Load () 
+		{
+			// override to provide functionality
+		}
+
+		protected virtual void Find_Submit (object sender, EventArgs e)
+		{
+			IViewHelper h = GridHelper;
 			h.Read (pnlFind.Controls);
-			List_Criteria = h.Criteria;
-			return List_Load ();
+			List_Load ();
 		}
 
 		#endregion
@@ -175,8 +208,8 @@ namespace Nexus.Web
 
 		protected virtual bool List_Load ()
 		{
-			IGridViewHelper h = Helper;
-			bool okay = h.Load (repList, List_Criteria);
+			IGridViewHelper h = GridHelper;
+			bool okay = h.Load (repList, h.FindHelper.Criteria);
 			if (okay)
 			{
 				// Template_Load(h.TitleText,h.HeadingText,h.PromptText);
@@ -186,7 +219,7 @@ namespace Nexus.Web
 			else
 			{
 				pnlList.Visible = false;
-				Page_Error = h;
+				Page_Error = h.ListHelper;
 			}
 			return okay;
 		}
@@ -227,7 +260,7 @@ namespace Nexus.Web
 
 		protected virtual void List_Save (string key, ICollection controls)
 		{
-			IGridViewHelper h = Helper;
+			IGridViewHelper h = GridHelper; 
 			bool okay = h.Save (key, controls);
 			if (okay)
 			{
@@ -237,19 +270,19 @@ namespace Nexus.Web
 				List_ItemIndex = -1;
 				List_Refresh ();
 			}
-			if (!okay) Page_Error = h;
+			if (!okay) Page_Error = h.SaveHelper; 
 		}
 
 		protected virtual void List_Refresh ()
 		{
-			IGridViewHelper h = Helper;
+			IGridViewHelper h = GridHelper;
 			h.DataBind (repList);
 			pnlList.Visible = true;
 		}
 
 		protected virtual void List_Add_Load ()
 		{
-			IGridViewHelper h = Helper;
+			IGridViewHelper h = GridHelper;
 			bool okay = h.DataInsert (repList);
 			if (okay)
 			{
@@ -258,7 +291,7 @@ namespace Nexus.Web
 				List_ItemIndex = 0;
 				pnlList.Visible = true;
 			}
-			else Page_Error = h;
+			else Page_Error = h.ListHelper;
 		}
 
 		#endregion
@@ -288,7 +321,7 @@ namespace Nexus.Web
 
 		protected void List_Save (object source, DataGridCommandEventArgs e)
 		{
-			IGridViewHelper h = Helper;
+			IGridViewHelper h = GridHelper;
 			string key = (List_Insert) ? null : h.GetDataKey (e, repList);
 			ICollection controls = h.GetControls (e, repList);
 			List_Save (key, controls);
@@ -322,21 +355,29 @@ namespace Nexus.Web
 
 		#region Page events
 
-		protected void Page_Init ()
+		protected virtual void Page_Init ()
 		{
+			Find_Init ();
 			List_Init ();
-			bool isFirstView = !IsPostBack;
-			if (isFirstView)
-				pnlList.Visible = false;
+
+			if (!IsPostBack)
+			{
+				pnlList.Visible = false;				
+			}
 		}
 
-		protected void Page_Load (object sender, EventArgs e)
+		protected virtual void Page_Load (object sender, EventArgs e)
 		{
+
+			if (!IsPostBack)
+			{
+				Find_Load ();
+			}
+
 			if (pnlList.Visible)
 				List_Load ();
 		}
 
 		#endregion
-
 	}
 }

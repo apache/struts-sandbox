@@ -80,7 +80,7 @@ namespace Nexus.Core.Helpers
 			}
 		}
 
-		public IList Outcome
+		public virtual IList Outcome
 		{
 			get
 			{
@@ -128,7 +128,7 @@ namespace Nexus.Core.Helpers
 			get { return Context.HasFault; }
 		}
 
-		public bool IsNominal
+		public virtual bool IsNominal
 		{
 			get { return (!HasAlerts && !HasFault); }
 		}
@@ -154,7 +154,7 @@ namespace Nexus.Core.Helpers
 		}
 
 		private IList _FieldSet;
-		public IList FieldSet
+		public virtual IList FieldSet
 		{
 			get { return _FieldSet; }
 			set { _FieldSet = value; }
@@ -236,12 +236,16 @@ namespace Nexus.Core.Helpers
 		/// making Context the cornerstone property.
 		/// </remarks>
 		/// 
-		public IRequestContext Context
+		public virtual IRequestContext Context
 		{
 			get
 			{
 				if (_Context == null)
-					_Context = Catalog.GetRequest (Command);
+				{
+					IRequestCommand rc = Command;
+					if (rc==null) throw new ArgumentNullException("Command==null","ViewHelper.Context");
+					_Context = Catalog.GetRequest (rc);
+				}
 				return _Context;
 			}
 		}
