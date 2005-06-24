@@ -109,6 +109,29 @@ namespace Nexus.Web
 		#region Page Properties
 
 		/// <summary>
+		/// Attribute token for List_Criteria.
+		/// </summary>
+		private string LIST_CRITERIA_KEY = "__LIST_CRITERIA_KEY";
+
+		/// <summary>
+		/// Values to use with a query statement.
+		/// </summary>
+		public virtual IDictionary List_Criteria
+		{
+			get
+			{
+				IDictionary criteria = ViewState [LIST_CRITERIA_KEY] as IDictionary;
+				if (criteria==null)
+				{
+					criteria = new Hashtable();
+					ViewState [LIST_CRITERIA_KEY] = criteria;
+				}
+				return criteria;
+			}
+			set { ViewState [LIST_CRITERIA_KEY] = value; }
+		}
+
+		/// <summary>
 		/// Identify the attribute token for List_ItemIndex
 		/// </summary>
 		private const string LIST_ITEM_INDEX = "__LIST_ITEM_INDEX";
@@ -200,8 +223,9 @@ namespace Nexus.Web
 		/// <param name="e">Event</param>
 		protected virtual void Find_Submit (object sender, EventArgs e)
 		{
-			IViewHelper h = GridHelper;
+			IGridViewHelper h = GridHelper;
 			h.Read (pnlFind.Controls);
+			List_Criteria = h.FindHelper.Criteria;
 			List_Load ();
 		}
 
@@ -237,7 +261,7 @@ namespace Nexus.Web
 		protected virtual bool List_Load ()
 		{
 			IGridViewHelper h = GridHelper;
-			bool okay = h.Load (repList, h.FindHelper.Criteria);
+			bool okay = h.Load (repList, List_Criteria);
 			if (okay)
 			{
 				// Template_Load(h.TitleText,h.HeadingText,h.PromptText);
