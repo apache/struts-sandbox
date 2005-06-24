@@ -124,9 +124,15 @@ namespace PhoneBook.Core
 		public const string DIRECTORY_VIEW = "directory_view";
 
 		/// <summary>
-		/// Token for Directory View helpere.
+		/// Token for Directory Find helper.
 		/// </summary>
 		/// 
-		public const string DIRECTORY_VIEW_HELPER = "directory_view_helper";
+		public const string DIRECTORY_FIND_HELPER = "directory_find_helper";
+
+		/// <summary>
+		/// Token for Directory list helper.
+		/// </summary>
+		/// 
+		public const string DIRECTORY_LIST_HELPER = "directory_list_helper";
 	}
 }

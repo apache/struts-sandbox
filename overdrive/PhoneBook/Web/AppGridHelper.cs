@@ -4,12 +4,11 @@ using PhoneBook.Core;
 
 namespace PhoneBook.Web
 {
-
 	public class AppGridHelper : GridViewHelper
 	{
 		public override IEntryList NewEntryList ()
 		{
-			return new AppEntryList();
+			return new AppEntryList ();
 		}
 	}
 }

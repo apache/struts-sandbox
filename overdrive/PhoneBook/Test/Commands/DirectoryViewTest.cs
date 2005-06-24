@@ -32,7 +32,7 @@ namespace PhoneBook.Core.Commands
 		[Test]
 		public void HelperContains ()
 		{
-			IViewHelper helper = catalog.GetHelper (App.DIRECTORY_VIEW_HELPER);
+			IViewHelper helper = catalog.GetHelper (App.DIRECTORY_FIND_HELPER);
 			IRequestCommand command = helper.Command;
 			Assert.IsNotNull (command, "Expected Helper to have a Command");
 			Assert.AreEqual (App.DIRECTORY_VIEW, command.ID, "Expected Helper to have View Command.");

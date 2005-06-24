@@ -53,10 +53,10 @@ namespace PhoneBook.Core.Commands
 			if (insert)
 			{
 				context [fieldID] = GuidString ();
-				Mapper().Insert (insertID, context);
+				Mapper ().Insert (insertID, context);
 			}
 			else
-				Mapper().Update (updateID, context);
+				Mapper ().Update (updateID, context);
 
 			return CONTINUE;
 		}

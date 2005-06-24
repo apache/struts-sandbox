@@ -23,22 +23,21 @@ namespace PhoneBook.Core
 	/// 
 	public class AppEntry
 	{
-
-		public void Add(string key, string value)
+		public void Add (string key, string value)
 		{
-			_Value.Add (key,value);
+			_Value.Add (key, value);
 		}
 
-		private IDictionary _Value = new Hashtable(5);
+		private IDictionary _Value = new Hashtable (5);
 
-		private string Get(string key)
+		private string Get (string key)
 		{
-			return _Value[key] as string;
+			return _Value [key] as string;
 		}
 
-		private void Set(string key, string value)
+		private void Set (string key, string value)
 		{
-			_Value[key] = value;
+			_Value [key] = value;
 		}
 
 
@@ -52,44 +51,44 @@ namespace PhoneBook.Core
 
 		public string entry_key
 		{
-			get { return Get(App.ENTRY_KEY); }
-			set { Set(App.ENTRY_KEY, value); }
+			get { return Get (App.ENTRY_KEY); }
+			set { Set (App.ENTRY_KEY, value); }
 		}
 
 		public string first_name
 		{
-			get { return Get(App.FIRST_NAME); }
-			set { Set(App.FIRST_NAME, value); }
+			get { return Get (App.FIRST_NAME); }
+			set { Set (App.FIRST_NAME, value); }
 		}
 
 		public string last_name
 		{
-			get { return Get(App.LAST_NAME); }
-			set { Set(App.LAST_NAME, value); }
+			get { return Get (App.LAST_NAME); }
+			set { Set (App.LAST_NAME, value); }
 		}
 
 		public string extension
 		{
-			get { return Get(App.EXTENSION); }
-			set { Set(App.EXTENSION, value); }
+			get { return Get (App.EXTENSION); }
+			set { Set (App.EXTENSION, value); }
 		}
 
 		public string user_name
 		{
-			get { return Get(App.USER_NAME); }
-			set { Set(App.USER_NAME, value); }
+			get { return Get (App.USER_NAME); }
+			set { Set (App.USER_NAME, value); }
 		}
 
 		public string hired
 		{
-			get { return Get(App.HIRED); }
-			set { Set(App.HIRED, value); }
+			get { return Get (App.HIRED); }
+			set { Set (App.HIRED, value); }
 		}
 
 		public string hours
 		{
-			get { return Get(App.HOURS); }
-			set { Set(App.HOURS, value); }
+			get { return Get (App.HOURS); }
+			set { Set (App.HOURS, value); }
 		}
 
 	}

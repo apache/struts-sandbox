@@ -149,11 +149,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AppHelper.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -256,10 +251,6 @@
                 />
                 <File
                     RelPath = "Resources\Query\FilterLists.xml"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "Resources\Query\properties.xml"
                     BuildAction = "Content"
                 />
                 <File

@@ -196,10 +196,6 @@
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "Resources\Query\properties.xml"
-                    BuildAction = "Content"
-                />
-                <File
                     RelPath = "Resources\Query\SelectAll.xml"
                     BuildAction = "Content"
                 />

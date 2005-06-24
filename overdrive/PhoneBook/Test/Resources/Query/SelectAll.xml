@@ -23,14 +23,14 @@
 	<statements>
 		<select id="filter" paramClass="Hashtable" resultClass="Hashtable">
 			SELECT 
-				pk_entry AS entry_key,
 				last_name,
 				first_name,
 				extension,
 				user_name,
 				hired,
 				hours,
-				editor
+				editor,
+				pk_entry AS entry_key				
 			FROM entry
 			<dynamic prepend="WHERE">			
 				<isNotNull property="last_name" prepend="AND">
@@ -51,6 +51,12 @@
 				<isNotNull property="hours" prepend="AND">
 					hours=#hours#
 				</isNotNull>
+				<isNotNull property="editor" prepend="AND">
+					hours=#editor#
+				</isNotNull>
+				<isNotNull property="entry_key" prepend="AND">
+					pk_entry=#entry_key#
+				</isNotNull>
 			</dynamic>			
 		</select>
 
@@ -62,10 +68,9 @@
 				user_name,
 				hired,
 				hours,
-				editor,
 				pk_entry
 				)
-			VALUES (?,?,?,?, ?,?,?,?)
+			VALUES (?,?,?,?, ?,?,?)
 		</insert>		
 
 		<update id="entry_update" parameterMap="entry_save_param">
@@ -75,8 +80,7 @@
 				extension=?,
 				user_name=?,
 				hired=?,
-				hours=?,
-				editor=?
+				hours=?
 			WHERE 
 				pk_entry=?
 		</update>

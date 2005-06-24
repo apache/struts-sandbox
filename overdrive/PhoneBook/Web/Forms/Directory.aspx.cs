@@ -1,8 +1,8 @@
 using System;
 using System.Collections;
+using System.Web.UI;
 using System.Web.UI.WebControls;
 using Nexus.Core.Helpers;
-using System.Web.UI;
 
 namespace PhoneBook.Web.Forms
 {
@@ -12,7 +12,6 @@ namespace PhoneBook.Web.Forms
 	/// 
 	public class Directory : Page
 	{
-
 		#region Messages
 
 		private const string msg_LIST_ALL_CMD = "SHOW ALL";

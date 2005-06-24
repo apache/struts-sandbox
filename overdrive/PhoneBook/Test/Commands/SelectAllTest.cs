@@ -61,13 +61,12 @@ namespace PhoneBook.Core.Commands
 		[Test]
 		public void FilterHelper_Format ()
 		{
-			IViewHelper helper = catalog.GetHelper ("directory_find_helper");
+			IViewHelper helper = catalog.GetHelper (App.DIRECTORY_LIST_HELPER);
 			helper.Execute ();
 			AppEntryList list = helper.Outcome as AppEntryList;
-			// AppContextList list = helper.Context.Criteria["filter"] as AppContextList;
-			Assert.IsNotNull (list, "Expected list to be AppContextList");
+			Assert.IsNotNull (list, "Expected list to be AppEntryList");
 			AppEntry row = list [0] as AppEntry;
-			Assert.IsNotNull (row, "Expected rows to be AppContexts");
+			Assert.IsNotNull (row, "Expected rows to be AppEntries");
 
 			string hired = row.hired;
 			Assert.IsNotNull (hired, "Expected each row to have a hired date.");

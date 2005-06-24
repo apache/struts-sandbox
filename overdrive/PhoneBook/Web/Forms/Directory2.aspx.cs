@@ -11,7 +11,6 @@ namespace PhoneBook.Web.Forms
 	/// 
 	public class Directory2 : BaseGridPage
 	{
-
 		#region Messages
 
 		private const string msg_FILTER = "Select a filter to display fewer entries";
@@ -44,11 +43,9 @@ namespace PhoneBook.Web.Forms
 		/// </summary>
 		protected override string Page_Prompt
 		{
-			set
-			{
-				lblPrompt.Text = value;
-			}
+			set { lblPrompt.Text = value; }
 		}
+
 		#endregion
 
 		#region Find -- Display Find controls
@@ -99,7 +96,7 @@ namespace PhoneBook.Web.Forms
 			}
 			if (except != null) except.SelectedIndex = exceptIndex;
 			// Update other members
-			List_ResetIndex();
+			List_ResetIndex ();
 			Page_Prompt = msg_FILTER;
 		}
 
@@ -133,12 +130,9 @@ namespace PhoneBook.Web.Forms
 			pnlList.Visible = true;
 			pnlError.Visible = false;
 			if (!IsPostBack)
-			{
 				Page_Prompt = msg_FILTER;
-			}
 		}
 
 		#endregion
-
 	}
 }
