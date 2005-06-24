@@ -1,31 +1,29 @@
 using System.Collections;
-using Agility.Core;
 using Nexus.Core;
 
 namespace PhoneBook.Core
 {
 	/// <summary>
-	/// List AppContext objects.
+	/// Implement IEntryList for AppEntry objects.
 	/// </summary>
 	/// 
-	public class AppContextList : ArrayList, IContextList
+	public class AppEntryList : ArrayList, IEntryList
 	{
 
-		public IContext Insert (string key)
+		public object Insert (string key)
 		{
-			AppContext entry = new AppContext();
-			entry.last_name = key;
+			AppEntry entry = new AppEntry();
+			entry.entry_key = key;
 			this.Insert (0,entry);
 			return entry;
 		}
 
 		public void AddEntry(IDictionary row)
 		{
-			AppContext entry = new AppContext();
+			AppEntry entry = new AppEntry();
 			foreach (DictionaryEntry col in row) 
-				entry.Add (col.Key,col.Value);
+				entry.Add (col.Key.ToString (),col.Value.ToString ());
 			Add(entry);
 		}
-
 	}
 }

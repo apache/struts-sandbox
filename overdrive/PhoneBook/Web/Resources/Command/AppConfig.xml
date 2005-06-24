@@ -8,8 +8,12 @@
 	<object id="FieldTable" type="Nexus.Core.Tables.FieldTable">
 		<property name="AddFieldContexts">
 			<list>
-				<ref object="hired"/> 
+				<ref object="last_name"/> 
+				<ref object="first_name"/> 
 				<ref object="extension"/> 
+				<ref object="user_name"/> 
+				<ref object="hired"/> 
+				<ref object="hours"/> 				
 				<ref object="_filter"/> 
 				<ref object="_extension_list"/>
 				<ref object="_hired_list"/>
@@ -19,28 +23,51 @@
 			<list>
 				<ref object="DateTimeProcessor"/> 
 				<ref object="TelephoneProcessor"/> 
-				<ref object="AppProcessor"/> 
+				<ref object="EntryListProcessor"/> 
 				<ref object="ExtensionListProcessor"/>
 				<ref object="HiredListProcessor"/>
 			</list>
 		</property>
 	</object>
+
+	<object id="last_name" parent="BaseFieldContext">
+		<property name="ID"><value>last_name</value></property>	
+		<property name="Label"><value>Last Name</value></property>	
+	</object>
+
+	<object id="first_name" parent="BaseFieldContext">
+		<property name="ID"><value>first_name</value></property>	
+		<property name="Label"><value>First Name</value></property>	
+	</object>
+
+	<object id="user_name" parent="BaseFieldContext">
+		<property name="ID"><value>user_name</value></property>	
+		<property name="Label"><value>UserName</value></property>	
+	</object>
 	
+	<object id="extension" parent="BaseFieldContext">
+		<property name="ID"><value>extension</value></property>		
+		<property name="ProcessorID"><value>TelephoneProcessor</value></property>
+		<property name="Label"><value>Extension</value></property>	
+	</object>
+
 	<object id="hired" parent="BaseFieldContext">
 		<property name="ID"><value>hired</value></property>	
 		<property name="Alert"><value>{0} must be a valid date</value></property>
 		<property name="ProcessorID"><value>DateTimeProcessor</value></property>
-	</object>
-
-	<object id="extension" parent="BaseFieldContext">
-		<property name="ID"><value>extension</value></property>		
-		<property name="ProcessorID"><value>TelephoneProcessor</value></property>
+		<property name="Label"><value>Hired</value></property>	
 	</object>
 	
+	<object id="hours" parent="BaseFieldContext">
+		<property name="ID"><value>hours</value></property>	
+		<property name="Label"><value>Hours</value></property>	
+	</object>
+	
+
 	<!-- We need to "hash" the name with "_" to avoid conflict with the filter Command -->
 	<object id="_filter" parent="BaseFieldContext">
 		<property name="ID"><value>filter</value></property>
-		<property name="ProcessorID"><value>AppProcessor</value></property>
+		<property name="ProcessorID"><value>EntryListProcessor</value></property>
 	</object>
 		
 	<object id="_extension_list" parent="BaseFieldContext">
@@ -63,8 +90,8 @@
 		<property name="ID"><value>TelephoneProcessor</value></property>
 	</object>
 
-	<object id="AppProcessor" type="PhoneBook.Core.AppProcessor">
-		<property name="ID"><value>AppProcessor</value></property>
+	<object id="EntryListProcessor" type="PhoneBook.Core.AppEntryListProcessor">
+		<property name="ID"><value>EntryListProcessor</value></property>
 	</object>
 	
 	<object id="ExtensionListProcessor" parent="BaseKeyValueProcessor">

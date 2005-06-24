@@ -28,6 +28,12 @@ namespace PhoneBook.Core
 		}
 
 		/// <summary>
+		/// Token for entry_key property.
+		/// </summary>
+		/// 
+		public const string ENTRY_KEY = "entry_key";
+
+		/// <summary>
 		/// Token for first_name property.
 		/// </summary>
 		/// 

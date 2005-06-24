@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+using System.Net;
 using NUnit.Extensions.Asp;
 using NUnit.Extensions.Asp.AspTester;
 using NUnit.Framework;
@@ -35,7 +36,6 @@ namespace WNE.Core.Forms
 		private DropDownListTester hours_list;
 		// TODO: private DropDownListTester editor_list;
 		private ButtonTester cmdListAll;
-		private ButtonTester cmdPrint;
 
 		private PanelTester pnlList;
 		private DataGridTester repList;
@@ -59,6 +59,9 @@ namespace WNE.Core.Forms
 		protected override void SetUp ()
 		{
 			base.SetUp ();
+			string[] userLanguages = {"en-us"};
+			Browser.UserLanguages = userLanguages;
+			Browser.Credentials = CredentialCache.DefaultCredentials;
 
 			pnlFind = new PanelTester ("pnlFind", CurrentWebForm);
 			last_name_list = new DropDownListTester (App.LAST_NAME_LIST, CurrentWebForm);
@@ -69,7 +72,6 @@ namespace WNE.Core.Forms
 			hours_list = new DropDownListTester (App.HOURS_LIST, CurrentWebForm);
 			// TODO: editor_list = new DropDownListTester (App.EDITOR_LIST, CurrentWebForm);
 			cmdListAll = new ButtonTester ("cmdListAll", CurrentWebForm);
-			cmdPrint = new ButtonTester ("cmdPrint", CurrentWebForm);
 
 			pnlList = new PanelTester ("pnlList", CurrentWebForm);
 			repList = new DataGridTester ("repList", CurrentWebForm);
@@ -92,7 +94,6 @@ namespace WNE.Core.Forms
 				WebAssert.Visible (list);
 			}
 			WebAssert.Visible (cmdListAll);
-			WebAssert.Visible (cmdPrint);
 			WebAssert.Visible (pnlList);
 			WebAssert.Visible (repList);
 			WebAssert.NotVisible (cmdAdd); // Visible if Editor

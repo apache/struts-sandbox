@@ -49,18 +49,10 @@
 			<!-- LIST -->			
 			<asp:Panel ID="pnlList" Runat="server">
             	<asp:DataGrid id="repList" Runat="server" 
-					PagerStyle-Mode="NumericPages" AllowPaging="true" PageSize="10" AutoGenerateColumns=False>
+					PagerStyle-Mode="NumericPages" AllowPaging="true" PageSize="10" >
 					<HeaderStyle CssClass="HeaderStyle" BackColor="#CCCC99"></HeaderStyle>
 					<AlternatingItemStyle CssClass="AlternatingItemStyle" BackColor="#CCCC99"></AlternatingItemStyle>
 					<EditItemStyle CssClass="EditItemStyle"></EditItemStyle>
-					<Columns>
-						<asp:BoundColumn DataField="last_name" HeaderText="LAST NAME"></asp:BoundColumn>
-						<asp:BoundColumn DataField="first_name" HeaderText="FIRST NAME"></asp:BoundColumn>
-						<asp:BoundColumn DataField="extension" HeaderText="EXTENSION"></asp:BoundColumn>
-						<asp:BoundColumn DataField="user_name" HeaderText="USER"></asp:BoundColumn>
-						<asp:BoundColumn DataField="hired" HeaderText="HIRE DATE"></asp:BoundColumn>
-						<asp:BoundColumn DataField="hours" HeaderText="HOURS"></asp:BoundColumn>
-					</Columns>
             	</asp:DataGrid>
         		<p><asp:Button ID="cmdAdd" Runat="server"></asp:Button></p>
 			</asp:Panel>

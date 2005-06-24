@@ -63,10 +63,10 @@ namespace PhoneBook.Core.Commands
 		{
 			IViewHelper helper = catalog.GetHelper ("directory_find_helper");
 			helper.Execute ();
-			AppContextList list = helper.Outcome as AppContextList;
+			AppEntryList list = helper.Outcome as AppEntryList;
 			// AppContextList list = helper.Context.Criteria["filter"] as AppContextList;
 			Assert.IsNotNull (list, "Expected list to be AppContextList");
-			AppContext row = list [0] as AppContext;
+			AppEntry row = list [0] as AppEntry;
 			Assert.IsNotNull (row, "Expected rows to be AppContexts");
 
 			string hired = row.hired;

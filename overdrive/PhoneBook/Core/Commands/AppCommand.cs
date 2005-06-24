@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+using System;
 using IBatisNet.DataMapper;
 using Nexus.Core;
 
@@ -29,5 +30,18 @@ namespace PhoneBook.Core.Commands
 			// return IBatisNet.DataMapper.Mapper.Instance();
 			return IBatisNet.DataMapper.Mapper.Instance ();
 		}
+
+		public bool IsEmpty (string input)
+		{
+			return ((input == null) || (input.Equals (String.Empty)));
+		}
+
+		public string GuidString ()
+		{
+			Guid guid = Guid.NewGuid ();
+			string gs = guid.ToString ();
+			return gs;
+		}
+
 	}
 }

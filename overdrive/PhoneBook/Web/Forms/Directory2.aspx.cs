@@ -12,6 +12,7 @@ namespace PhoneBook.Web.Forms
 	/// 
 	public class Directory2 : BaseGridPage
 	{
+
 		#region Messages
 
 		private const string msg_ADD_CMD = "ADD NEW";
@@ -27,7 +28,7 @@ namespace PhoneBook.Web.Forms
 		/// <summary>
 		/// Display a list of error mesasges.
 		/// </summary>
-		public IViewHelper Page_Error
+		protected override IViewHelper Page_Error
 		{
 			set
 			{
@@ -204,5 +205,6 @@ namespace PhoneBook.Web.Forms
 		}
 
 		#endregion
+
 	}
 }

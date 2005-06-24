@@ -9,6 +9,7 @@
 		<property name="RelatedIDs">
 			<list>
 				<value>filter</value>
+				<value>entry_key</value>
 				<value>last_name</value>
 				<value>first_name</value>
 				<value>extension</value>
@@ -72,7 +73,7 @@
 	</object>
 	
 		
-  <!-- helpers -->
+  <!-- directory1 helpers -->
 
   <object id="directory_view_helper" parent="BaseHelper" singleton="false">
 		<property name="Command">
@@ -85,5 +86,75 @@
 			<ref object="filter" />
 		</property>
   </object>
+  
+  <!-- directory2 helpers -->
+  
+  	<object id="BaseGridHelper" type="PhoneBook.Web.AppGridHelper, PhoneBook.Web" singleton="false">
+		<property name="Catalog">
+			<ref object="Catalog" />
+		</property>
+	</object>
 
+  <object id="directory_grid_helper" parent="BaseGridHelper" singleton="false">
+		<property name="ListHelper">
+			<ref object="directory_find_helper" />
+		</property>
+		<property name="SaveHelper">
+			<ref object="entry_save_helper" />
+		</property>
+		<property name="HasCriteria">
+			<value>true</value>
+		</property>
+		<property name="DataKeyField">
+			<value>entry_key</value>
+		</property>
+		<property name="FieldSet">
+			<list>
+				<ref object="first_name"/>
+				<ref object="last_name"/>
+				<ref object="extension"/> 
+				<ref object="user_name"/>
+				<ref object="hired"/> 
+				<ref object="hours"/>
+			</list>
+		</property>
+	</object>  
+
+  <object id="entry_save_helper" parent="BaseHelper" singleton="false">
+		<property name="Command">
+			<ref object="entry_save" />
+		</property>
+  </object>
+
+  <object id="entry_save" type="PhoneBook.Core.Commands.BaseSave, PhoneBook.Core">
+		<property name="ID">
+			<value>entry_save</value>
+		</property>
+		<property name="KeyID">
+			<value>entry_key</value>
+		</property>
+		<property name="InsertID">
+			<value>entry_insert</value>
+		</property>
+		<property name="UpdateID">
+			<value>entry_update</value>
+		</property>
+		<property name="RelatedIDs">
+			<list>
+				<value>entry_key</value>
+			</list>
+		</property>
+		<property name="RequiredIDs">
+			<list>
+				<value>first_name</value>
+				<value>last_name</value>
+				<value>extension</value>
+				<value>user_name</value>
+				<value>hours</value>
+				<value>hired</value>
+				<value>editor</value>
+			</list>
+		</property>
+	</object>
+  
 </objects>

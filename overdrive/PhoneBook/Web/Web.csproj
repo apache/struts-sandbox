@@ -144,6 +144,11 @@
         <Files>
             <Include>
                 <File
+                    RelPath = "AppGridHelper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AppHelper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -221,7 +226,7 @@
                 <File
                     RelPath = "Forms\Directory2.aspx.cs"
                     DependentUpon = "Directory2.aspx"
-                    SubType = "Code"
+                    SubType = "ASPXCodeBehind"
                     BuildAction = "Compile"
                 />
                 <File

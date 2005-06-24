@@ -5,10 +5,25 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:noNamespaceSchemaLocation="SqlMap.xsd" >
 	
+    <parameterMaps>
+		
+   		<parameterMap id="entry_save_param">
+			<parameter property="last_name"/>
+			<parameter property="first_name"/>
+			<parameter property="extension"/>
+			<parameter property="user_name"/>
+			<parameter property="hired"/>
+			<parameter property="hours"/>
+			<parameter property="editor"/>
+   			<parameter property="entry_key"/>   		
+        </parameterMap>    		
+  	
+  	</parameterMaps>
+		
 	<statements>
 		<select id="filter" paramClass="Hashtable" resultClass="Hashtable">
 			SELECT 
-				pk_entry,
+				pk_entry AS entry_key,
 				last_name,
 				first_name,
 				extension,
@@ -38,8 +53,34 @@
 				</isNotNull>
 			</dynamic>			
 		</select>
-				
+
+		<insert id="entry_insert" parameterMap="entry_save_param">
+    		INSERT INTO entry (    			
+				last_name,
+				first_name,
+				extension,
+				user_name,
+				hired,
+				hours,
+				editor,
+				pk_entry
+				)
+			VALUES (?,?,?,?, ?,?,?,?)
+		</insert>		
+
+		<update id="entry_update" parameterMap="entry_save_param">
+			UPDATE entry SET
+				last_name=?,
+				first_name=?,
+				extension=?,
+				user_name=?,
+				hired=?,
+				hours=?,
+				editor=?
+			WHERE 
+				pk_entry=?
+		</update>
+						
 	</statements>
 	
-
 </sqlMap>

@@ -27,7 +27,7 @@
 			  <table><tr>
 			  <td colspan="6" >
 				  <asp:Button ID="cmdListAll" Runat="server"></asp:Button>
-				  <INPUT onclick="javascript:window.print();" type="button" value="PRINT" name="cmd_print" id="cmd_print"> </asp:Button>
+				  <INPUT onclick="javascript:window.print();" type="button" value="PRINT" name="cmd_print" id="cmd_print">
 			  </td>
 			  <tr>
 			  <td>Last Name</td>
