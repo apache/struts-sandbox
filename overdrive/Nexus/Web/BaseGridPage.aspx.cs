@@ -100,10 +100,9 @@ namespace Nexus.Web
 
 		protected const string msg_ADD_COMMAND = "ADD ITEM";
 		protected const string msg_ADD_SUCCESS = "Item added.";
-		protected const string msg_EDIT_HINT = "Edit description, press update. ";
+		protected const string msg_EDIT_HINT = "Edit entry, press SAVE. ";
 		protected const string msg_QUIT_SUCCESS = "Change cancelled. ";
 		protected const string msg_SAVE_SUCCESS = "Changes saved.";
-		protected const string msg_TITLE = "NPDES Enforcement";
 
 		#endregion
 
@@ -115,7 +114,7 @@ namespace Nexus.Web
 		private const string LIST_ITEM_INDEX = "__LIST_ITEM_INDEX";
 
 		/// <summary>
-		/// Store the current item index, mainly to signal edit mode. 
+		/// Store the current item index, mainly to signal edit mode.
 		/// </summary>
 		protected virtual int List_ItemIndex
 		{
@@ -173,18 +172,32 @@ namespace Nexus.Web
 
 		#region Find methods
 
+		/// <summary>
+		/// Group find controls.
+		/// </summary>
 		protected Panel pnlFind;
 
+		/// <summary>
+		/// Initialize controls within Find panel.
+		/// </summary>
 		protected virtual void Find_Init ()
 		{
 			// override to provide functionality
 		}
 
+		/// <summary>
+		/// Load controls within Find panel.
+		/// </summary>
 		protected virtual void Find_Load () 
 		{
 			// override to provide functionality
 		}
 
+		/// <summary>
+		/// Read current value of Find controls for load List.
+		/// </summary>
+		/// <param name="sender">Event source</param>
+		/// <param name="e">Event</param>
 		protected virtual void Find_Submit (object sender, EventArgs e)
 		{
 			IViewHelper h = GridHelper;
@@ -198,14 +211,29 @@ namespace Nexus.Web
 
 		#region List controls
 
+		/// <summary>
+		/// Group List controls.
+		/// </summary>
 		protected Panel pnlList;
+
+		/// <summary>
+		/// Render the list as a DataGrid.
+		/// </summary>
 		protected DataGrid repList;
+
+		/// <summary>
+		/// Invoke display for adding a new entry.
+		/// </summary>
 		protected Button cmdListAdd;
 
 		#endregion
 
 		#region List methods
 
+		/// <summary>
+		/// Filter entries and update display.
+		/// </summary>
+		/// <returns>True if nominal</returns>
 		protected virtual bool List_Load ()
 		{
 			IGridViewHelper h = GridHelper;
@@ -224,12 +252,22 @@ namespace Nexus.Web
 			return okay;
 		}
 
+		/// <summary>
+		/// Handle custom Item events, such as adding a new entry.
+		/// </summary>
+		/// <remarks><p>
+		/// The logic here, which seems kludgy, invokes our "insert" event, 
+		/// if there are no other takers.
+		/// </p></remarks>
+		/// <remarks></remarks>
+		/// <param name="commandName">Name of command for the Item event</param>
+		/// <param name="index">Index of DataGrid entry causing the event</param>
 		protected virtual void List_Item (string commandName, int index)
 		{
 			switch (commandName)
 			{
 				case "Page":
-					// Handled by StepList_PageIndexChanged
+					// Handled by List_PageIndexChanged
 					break;
 				default:
 				{
@@ -243,6 +281,10 @@ namespace Nexus.Web
 			}
 		}
 
+		/// <summary>
+		/// Invoke edit mode for the selected entry.
+		/// </summary>
+		/// <param name="index">Index of selected entry</param>
 		protected virtual void List_Edit (int index)
 		{
 			Page_Prompt = msg_EDIT_HINT;
@@ -250,6 +292,9 @@ namespace Nexus.Web
 			List_Refresh ();
 		}
 
+		/// <summary>
+		/// Exit edit mode without changing the entry.
+		/// </summary>
 		protected virtual void List_Quit ()
 		{
 			Page_Prompt = msg_QUIT_SUCCESS;
@@ -258,6 +303,12 @@ namespace Nexus.Web
 			List_Refresh ();
 		}
 
+		/// <summary>
+		/// Invoke the SaveHelper to update the persistent store
+		/// for the entry being edited.
+		/// </summary>
+		/// <param name="key">Entry key</param>
+		/// <param name="controls">Controls in the selected cell</param>
 		protected virtual void List_Save (string key, ICollection controls)
 		{
 			IGridViewHelper h = GridHelper; 
@@ -273,6 +324,9 @@ namespace Nexus.Web
 			if (!okay) Page_Error = h.SaveHelper; 
 		}
 
+		/// <summary>
+		/// Rebind the datasource to the grid.
+		/// </summary>
 		protected virtual void List_Refresh ()
 		{
 			IGridViewHelper h = GridHelper;
@@ -280,6 +334,10 @@ namespace Nexus.Web
 			pnlList.Visible = true;
 		}
 
+		/// <summary>
+		/// Insert a blank entry in the datagrid 
+		/// so that a new entry can be added inline.
+		/// </summary>
 		protected virtual void List_Add_Load ()
 		{
 			IGridViewHelper h = GridHelper;
@@ -294,12 +352,29 @@ namespace Nexus.Web
 			else Page_Error = h.ListHelper;
 		}
 
+		/// <summary>
+		/// Set the selected index to 0. 
+		/// </summary>
+		/// <remarks><p>
+		/// When changing the find set, also call List_ResetIndex;
+		/// otherwise, the DataGrid may try to select an item 
+		/// that is outside the new found set.
+		/// </p></remarks>
+		protected void List_ResetIndex ()
+		{
+			repList.SelectedIndex = 0;
+			repList.CurrentPageIndex = 0; // sic
+		}
+
 		#endregion
 
 		#region List events
 
 		// init events
 
+		/// <summary>
+		/// Initialize controls in the List panel.
+		/// </summary>
 		private void List_Init ()
 		{
 			repList.AutoGenerateColumns = false;
@@ -314,11 +389,21 @@ namespace Nexus.Web
 
 		// postback events
 
+		/// <summary>
+		/// Edit the selected entry (by invoking List_Edit(int)).
+		/// </summary>
+		/// <param name="source">Event source</param>
+		/// <param name="e">Event</param>
 		protected void List_Edit (object source, DataGridCommandEventArgs e)
 		{
 			List_Edit (e.Item.ItemIndex);
 		}
 
+		/// <summary>
+		/// Save the selected entry (by invoking List_Save(string,ICollection)).
+		/// </summary>
+		/// <param name="source">Event</param>
+		/// <param name="e"></param>
 		protected void List_Save (object source, DataGridCommandEventArgs e)
 		{
 			IGridViewHelper h = GridHelper;
@@ -327,22 +412,42 @@ namespace Nexus.Web
 			List_Save (key, controls);
 		}
 
+		/// <summary>
+		/// Exit edit mode (by invoking List_Quit()).
+		/// </summary>
+		/// <param name="source"></param>
+		/// <param name="e"></param>
 		protected void List_Quit (object source, DataGridCommandEventArgs e)
 		{
 			List_Quit ();
 		}
 
+		/// <summary>
+		/// Invoke insert mode (by invoking List_Add_Load()).
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		protected virtual void List_Add (object sender, EventArgs e)
 		{
 			List_Add_Load ();
 		}
 
+		/// <summary>
+		/// Handle the custom Item event (by invoking List_Item(string,int)).
+		/// </summary>
+		/// <param name="source"></param>
+		/// <param name="e"></param>
 		protected void List_Item (object source, DataGridCommandEventArgs e)
 		{
 			int index = e.Item.ItemIndex;
 			List_Item (e.CommandName, index);
 		}
 
+		/// <summary>
+		/// Change the page index and refresh the display.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		protected void List_PageIndexChanged (object sender, DataGridPageChangedEventArgs e)
 		{
 			repList.CurrentPageIndex = e.NewPageIndex;
@@ -355,6 +460,12 @@ namespace Nexus.Web
 
 		#region Page events
 
+		/// <summary>
+		/// Invoke other Init methods.
+		/// </summary>
+		/// <remarks><p>
+		/// Call if overridden.
+		/// </p></remarks>
 		protected virtual void Page_Init ()
 		{
 			Find_Init ();
@@ -366,6 +477,12 @@ namespace Nexus.Web
 			}
 		}
 
+		/// <summary>
+		/// Invoke other Load methods.
+		/// </summary>
+		/// <remarks><p>
+		/// Call if overridden.
+		/// </p></remarks>
 		protected virtual void Page_Load (object sender, EventArgs e)
 		{
 
