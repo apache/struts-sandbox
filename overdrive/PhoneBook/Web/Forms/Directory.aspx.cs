@@ -7,14 +7,14 @@ using System.Web.UI;
 namespace PhoneBook.Web.Forms
 {
 	/// <summary>
-	///  Maintain a list of employees with their telephone extension [OVR-5]. 
+	///  Display a list of employees with their telephone extension [OVR-5]. 
 	/// </summary>
 	/// 
 	public class Directory : Page
 	{
+
 		#region Messages
 
-		private const string msg_ADD_CMD = "ADD NEW";
 		private const string msg_LIST_ALL_CMD = "SHOW ALL";
 
 		#endregion
@@ -42,7 +42,7 @@ namespace PhoneBook.Web.Forms
 
 		private IViewHelper _FindHelper;
 		/// <summary>
-		/// Obtain dynamic data for the default view.
+		/// Display the filter lists.
 		/// </summary>
 		///
 		public virtual IViewHelper FindHelper
@@ -51,6 +51,10 @@ namespace PhoneBook.Web.Forms
 			set { _FindHelper = value; }
 		}
 
+		/// <summary>
+		/// Apply filter and display matching entries.
+		/// </summary>
+		///
 		private IViewHelper _ListHelper;
 		public virtual IViewHelper ListHelper
 		{
@@ -69,10 +73,7 @@ namespace PhoneBook.Web.Forms
 		protected DropDownList user_name_list;
 		protected DropDownList hired_list;
 		protected DropDownList hours_list;
-		// TODO: protected DropDownList editor_list;
 		protected Button cmdListAll;
-
-		// pageload events - These methods populate controls to display
 
 		private DropDownList[] FilterList ()
 		{
@@ -123,8 +124,6 @@ namespace PhoneBook.Web.Forms
 				Page_Error = h;
 		}
 
-		// postback events - These events respond to user input (to controls displayed by pageload methods)
-
 		private void ListAll_Click (object sender, EventArgs e)
 		{
 			Filter_Reset (null);
@@ -137,15 +136,6 @@ namespace PhoneBook.Web.Forms
 
 		protected Panel pnlList;
 		protected DataGrid repList;
-		protected Button cmdAdd;
-
-		// pageload events
-
-		private void List_Init ()
-		{
-			this.cmdAdd.Text = msg_ADD_CMD;
-			this.cmdAdd.Visible = false; // TODO: True if user is editor
-		}
 
 		private void List_Load (IViewHelper helper)
 		{
@@ -160,29 +150,6 @@ namespace PhoneBook.Web.Forms
 			}
 		}
 
-		// postback events 
-
-		protected void List_ItemCommand (object source, DataGridCommandEventArgs e)
-		{
-			bool okay = false;
-			switch (e.CommandName)
-			{
-				case "Page":
-					// Handled by List_PageIndexChanged
-					break;
-				default:
-					throw new NotImplementedException ();
-			}
-
-			if (okay) pnlList.Visible = false;
-		}
-
-		protected void List_PageIndexChanged (object sender, DataGridPageChangedEventArgs e)
-		{
-			repList.CurrentPageIndex = e.NewPageIndex;
-			repList.DataBind ();
-		}
-
 		#endregion
 
 		#region Page Events
@@ -191,7 +158,6 @@ namespace PhoneBook.Web.Forms
 		{
 			pnlError.Visible = false;
 			Find_Init ();
-			List_Init ();
 		}
 
 		protected void Page_Load (object sender, EventArgs e)

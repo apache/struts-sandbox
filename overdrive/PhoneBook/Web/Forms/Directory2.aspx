@@ -49,7 +49,7 @@
 			<!-- LIST -->			
 			<asp:Panel ID="pnlList" Runat="server">
             	<asp:DataGrid id="repList" Runat="server" 
-					PagerStyle-Mode="NumericPages" AllowPaging="true" PageSize="10" >
+					PagerStyle-Mode="NumericPages" AllowPaging="true" PageSize="2" >
 					<HeaderStyle CssClass="HeaderStyle" BackColor="#CCCC99"></HeaderStyle>
 					<AlternatingItemStyle CssClass="AlternatingItemStyle" BackColor="#CCCC99"></AlternatingItemStyle>
 					<EditItemStyle CssClass="EditItemStyle"></EditItemStyle>

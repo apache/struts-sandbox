@@ -48,11 +48,9 @@
 			
 			<!-- LIST -->			
 			<asp:Panel ID="pnlList" Runat="server">
-            	<asp:DataGrid id="repList" Runat="server" 
-					PagerStyle-Mode="NumericPages" AllowPaging="true" PageSize="10" AutoGenerateColumns=False>
+            	<asp:DataGrid id="repList" Runat="server" AutoGenerateColumns=False>
 					<HeaderStyle CssClass="HeaderStyle" BackColor="#CCCC99"></HeaderStyle>
 					<AlternatingItemStyle CssClass="AlternatingItemStyle" BackColor="#CCCC99"></AlternatingItemStyle>
-					<EditItemStyle CssClass="EditItemStyle"></EditItemStyle>
 					<Columns>
 						<asp:BoundColumn DataField="last_name" HeaderText="Last Name"></asp:BoundColumn>
 						<asp:BoundColumn DataField="first_name" HeaderText="First Name"></asp:BoundColumn>
@@ -62,7 +60,6 @@
 						<asp:BoundColumn DataField="hours" HeaderText="Hours"></asp:BoundColumn>
 					</Columns>
             	</asp:DataGrid>
-        		<p><asp:Button ID="cmdAdd" Runat="server"></asp:Button></p>
 			</asp:Panel>
 
 		</form>
