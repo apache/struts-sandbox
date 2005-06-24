@@ -37,7 +37,7 @@ namespace Nexus.Core.Tables
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException ("value is null or wrong type", "Nexus.Core.Tables.FieldTable.AddFieldContext");
+					throw new ArgumentNullException ("(value==null) || (Type!=IFieldContext)", "Nexus.Core.Tables.FieldTable.AddFieldContext");
 				Field [value.ID] = value;
 			}
 		}
@@ -47,7 +47,7 @@ namespace Nexus.Core.Tables
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException ("value is null or wrong type", "Nexus.Core.Tables.FieldTable.AddFieldContexts");
+					throw new ArgumentNullException ("(value==null) || (Type!=IFieldContext)", "Nexus.Core.Tables.FieldTable.AddFieldContexts");
 				IEnumerator elements = value.GetEnumerator ();
 				while (elements.MoveNext ()) AddFieldContext = elements.Current as IFieldContext;
 			}
@@ -55,10 +55,11 @@ namespace Nexus.Core.Tables
 
 		public virtual IFieldContext GetFieldContext (string id)
 		{
+			if (id==null) throw new ArgumentNullException ("id==null", "Nexus.Core.Tables.FieldTable.GetFieldContext");			
 			IFieldContext fieldContext = Field [id] as IFieldContext;
 			bool problem = ((fieldContext == null) && (Strict));
 			if (problem)
-				throw new ArgumentNullException ("Nexus.Core.Tables.FieldTable", "GetFieldContext");
+				throw new ArgumentNullException (id, "Nexus.Core.Tables.FieldTable.GetFieldContext");
 			return fieldContext;
 		}
 
@@ -71,7 +72,7 @@ namespace Nexus.Core.Tables
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException ("value", "Nexus.Core.Tables.FieldTable.AddProcessor");
+					throw new ArgumentNullException ("value==null", "Nexus.Core.Tables.FieldTable.AddProcessor");
 				Processor [value.ID] = value;
 			}
 		}
@@ -81,7 +82,7 @@ namespace Nexus.Core.Tables
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException ("value", "Nexus.Core.Tables.FieldTable.AddProcessors");
+					throw new ArgumentNullException ("value==null", "Nexus.Core.Tables.FieldTable.AddProcessors");
 				IEnumerator elements = value.GetEnumerator ();
 				while (elements.MoveNext ()) AddProcessor = elements.Current as IProcessor;
 			}
@@ -89,6 +90,8 @@ namespace Nexus.Core.Tables
 
 		public virtual IProcessor GetProcessor (string id)
 		{
+			if (id == null)
+				throw new ArgumentNullException ("id==null", "Nexus.Core.Tables.FieldTable.GetProcessor");
 			IProcessor processor = Processor [id] as IProcessor;
 			if (processor == null)
 				throw new ArgumentNullException (id, "Nexus.Core.Tables.FieldTable.GetProcessor");

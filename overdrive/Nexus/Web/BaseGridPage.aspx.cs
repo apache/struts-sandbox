@@ -30,9 +30,6 @@ namespace Nexus.Web
 
 		#region Page Properties 
 
-		protected Panel pnlError;
-		protected Label lblError;
-
 		private IViewHelper _Page_Error;
 		/// <summary>
 		/// Set is called when an error occurs; override to provide functionality.
@@ -53,7 +50,6 @@ namespace Nexus.Web
 			get {return _Page_Prompt;}
 		}
 		#endregion
-
 
 		#region Messages
 

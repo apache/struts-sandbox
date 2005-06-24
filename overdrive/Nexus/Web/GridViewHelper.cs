@@ -211,12 +211,12 @@ namespace Nexus
 			grid.DataSource = list;
 		}
 
-		public abstract IContextList NewContextList ();
+		public abstract IEntryList NewEntryList ();
 
 		public virtual bool DataInsert (DataGrid grid)
 		{
 			// Fake a blank row
-			IContextList list = NewContextList ();
+			IEntryList list = NewEntryList ();
 			list.Insert (String.Empty);
 			ListHelper.Criteria [ListHelper.Command.ID] = list;
 			grid.DataSource = list;
