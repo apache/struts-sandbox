@@ -33,6 +33,19 @@ namespace Nexus.Core.Validators
 			set { _Template = value; }
 		}
 
+		/// <summary>
+		/// Convert input for fields that do not have a Processor.
+		/// </summary>
+		/// <remarks>
+		/// The default behavior is to pass through the objects, verbatim.
+		/// </remarks>
+		/// <param name="context">The IProcessorContext</param>
+		public virtual bool ConvertInput (IProcessorContext context)
+		{
+			context.Target = context.Source;
+			return true;
+		}
+
 		public virtual bool ExecuteConvert (IProcessorContext context)
 		{
 			bool okay = false;
@@ -42,13 +55,35 @@ namespace Nexus.Core.Validators
 
 			if ((fieldContext == null))
 			{
-				context.Target = context.Source;
+				ConvertInput (context);
 				return true;
 			}
 
-			IProcessor processor = table.GetProcessor (fieldContext.ProcessorID);
-			okay = processor.ConvertInput (context);
+			string processorID = fieldContext.ProcessorID;
+			if (processorID == null)
+				okay = ConvertInput (context);
+			else
+			{
+				IProcessor processor = table.GetProcessor (fieldContext.ProcessorID);
+				okay = processor.ConvertInput (context);
+			}
 			return okay;
+		}
+
+		/// <summary>
+		/// Format output for fields that do not have a Processor.
+		/// </summary>
+		/// <remarks>
+		/// The default behavior is to pass through ICollection types 
+		/// and call ToString on everything else.
+		/// </remarks>
+		/// <param name="context">The IProcessorContext</param>
+		public virtual bool FormatOutput (IProcessorContext context)
+		{
+			Type sourceType = context.Source.GetType ();
+			if (IsCollectionType (sourceType)) context.Target = context.Source;
+			else context.Target = context.Source.ToString ();
+			return true;
 		}
 
 		public virtual bool ExecuteFormat (IProcessorContext context)
@@ -63,18 +98,18 @@ namespace Nexus.Core.Validators
 			{
 				if (source == null)
 					context.Target = null;
-				else
-				{
-					// TODO: Remove exception code and replace with Collection processors
-					Type sourceType = source.GetType ();
-					if (IsCollectionType (sourceType)) context.Target = source;
-					else context.Target = source.ToString ();
-				}
+				else okay = FormatOutput (context);
 				return true;
 			}
 
-			IProcessor processor = table.GetProcessor (fieldContext.ProcessorID);
-			okay = processor.FormatOutput (context);
+			string processorID = fieldContext.ProcessorID;
+			if (processorID == null)
+				okay = FormatOutput (context);
+			else
+			{
+				IProcessor processor = table.GetProcessor (fieldContext.ProcessorID);
+				okay = processor.FormatOutput (context);
+			}
 			return okay;
 		}
 
@@ -94,7 +129,7 @@ namespace Nexus.Core.Validators
 		{
 			IDictionary criteria = context.Criteria;
 			if (null == criteria)
-				throw new ArgumentNullException ("Criteria", "BaseValidator.NexusExecute.AssertProcessRequired");
+				throw new ArgumentNullException ("Criteria==null", "BaseValidator.NexusExecute.AssertProcessRequired");
 		}
 
 		private void ProcessRequired (IRequestContext context)
@@ -136,7 +171,7 @@ namespace Nexus.Core.Validators
 
 			IFieldTable table = context.FieldTable;
 			if (null == table)
-				throw new ArgumentNullException ("FieldTable", "BaseValidator.NexusExecute.AssertProcessRelated");
+				throw new ArgumentNullException ("FieldTable==null", "BaseValidator.NexusExecute.AssertProcessRelated");
 		}
 
 		private void ProcessRelated (IRequestContext context)
@@ -162,6 +197,5 @@ namespace Nexus.Core.Validators
 		}
 
 		#endregion
-
 	}
 }
