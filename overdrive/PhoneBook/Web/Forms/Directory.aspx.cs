@@ -40,22 +40,22 @@ namespace PhoneBook.Web.Forms
 
 		#region Helpers
 
-		private IViewHelper _ViewHelper;
+		private IViewHelper _FindHelper;
 		/// <summary>
 		/// Obtain dynamic data for the default view.
 		/// </summary>
 		///
-		public virtual IViewHelper ViewHelper
-		{
-			get { return _ViewHelper; }
-			set { _ViewHelper = value; }
-		}
-
-		private IViewHelper _FindHelper;
 		public virtual IViewHelper FindHelper
 		{
 			get { return _FindHelper; }
 			set { _FindHelper = value; }
+		}
+
+		private IViewHelper _ListHelper;
+		public virtual IViewHelper ListHelper
+		{
+			get { return _ListHelper; }
+			set { _ListHelper = value; }
 		}
 
 		#endregion
@@ -107,16 +107,16 @@ namespace PhoneBook.Web.Forms
 		{
 			DropDownList list = sender as DropDownList;
 			string id = list.ID;
-			int v = id.LastIndexOf (FindHelper.ListSuffix);
+			int v = id.LastIndexOf (ListHelper.ListSuffix);
 			string key = id.Substring (0, v);
-			FindHelper.Criteria [key] = list.SelectedValue;
+			ListHelper.Criteria [key] = list.SelectedValue;
 			Filter_Reset (list);
-			List_Load (FindHelper);
+			List_Load (ListHelper);
 		}
 
 		private void Find_Load ()
 		{
-			IViewHelper h = ViewHelper;
+			IViewHelper h = FindHelper;
 			h.ExecuteBind (pnlFind.Controls);
 			bool ok = (h.IsNominal);
 			if (!ok)
@@ -128,7 +128,7 @@ namespace PhoneBook.Web.Forms
 		private void ListAll_Click (object sender, EventArgs e)
 		{
 			Filter_Reset (null);
-			List_Load (FindHelper);
+			List_Load (ListHelper);
 		}
 
 		#endregion
@@ -199,7 +199,7 @@ namespace PhoneBook.Web.Forms
 			if (!IsPostBack)
 			{
 				Find_Load ();
-				List_Load (FindHelper);
+				List_Load (ListHelper);
 			}
 		}
 

@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Web.UI.WebControls;
 using Nexus.Core.Helpers;
 using Nexus.Web;
@@ -15,7 +14,6 @@ namespace PhoneBook.Web.Forms
 
 		#region Messages
 
-		private const string msg_ADD_CMD = "ADD NEW";
 		private const string msg_LIST_ALL_CMD = "SHOW ALL";
 
 		#endregion
@@ -39,29 +37,7 @@ namespace PhoneBook.Web.Forms
 
 		#endregion
 
-		#region Helpers
-
-		private IViewHelper _ViewHelper;
-		/// <summary>
-		/// Obtain dynamic data for the default view.
-		/// </summary>
-		///
-		public virtual IViewHelper ViewHelper
-		{
-			get { return _ViewHelper; }
-			set { _ViewHelper = value; }
-		}
-
-		private IViewHelper _FindHelper;
-		public virtual IViewHelper FindHelper
-		{
-			get { return _FindHelper; }
-			set { _FindHelper = value; }
-		}
-
-		#endregion
-
-		#region Find
+		#region Find -- Display Find controls
 
 		protected Panel pnlFind;
 		protected DropDownList last_name_list;
@@ -81,7 +57,13 @@ namespace PhoneBook.Web.Forms
 			return lists;
 		}
 
-		private void Find_Init ()
+		private void ListAll_Click (object sender, EventArgs e)
+		{
+			Filter_Reset (null);
+			List_Load ();
+		}
+
+		protected override void Find_Init ()
 		{
 			cmdListAll.Text = msg_LIST_ALL_CMD;
 			cmdListAll.Click += new EventHandler (ListAll_Click);
@@ -89,7 +71,7 @@ namespace PhoneBook.Web.Forms
 			foreach (DropDownList filter in FilterList ())
 			{
 				filter.AutoPostBack = true;
-				filter.SelectedIndexChanged += new EventHandler (Filter_Changed);
+				filter.SelectedIndexChanged += new EventHandler (Find_Submit);
 			}
 		}
 
@@ -104,104 +86,35 @@ namespace PhoneBook.Web.Forms
 			if (except != null) except.SelectedIndex = exceptIndex;
 		}
 
-		private void Filter_Changed (object sender, EventArgs e)
+		protected override void Find_Submit (object sender, EventArgs e)
 		{
 			DropDownList list = sender as DropDownList;
 			string id = list.ID;
-			int v = id.LastIndexOf (FindHelper.ListSuffix);
+			int v = id.LastIndexOf (GridHelper.FindHelper.ListSuffix);
 			string key = id.Substring (0, v);
-			FindHelper.Criteria [key] = list.SelectedValue;
+			GridHelper.FindHelper.Criteria [key] = list.SelectedValue;
 			Filter_Reset (list);
-			List_Load (FindHelper);
+			List_Load ();
 		}
 
-		private void Find_Load ()
+		protected override void Find_Load ()
 		{
-			IViewHelper h = ViewHelper;
+			IViewHelper h = GridHelper.FindHelper;
 			h.ExecuteBind (pnlFind.Controls);
 			bool ok = (h.IsNominal);
 			if (!ok)
 				Page_Error = h;
 		}
 
-		// postback events - These events respond to user input (to controls displayed by pageload methods)
-
-		private void ListAll_Click (object sender, EventArgs e)
-		{
-			Filter_Reset (null);
-			List_Load (FindHelper);
-		}
-
-		#endregion
-
-		#region List
-
-		protected Panel pnlList;
-		protected DataGrid repList;
-		protected Button cmdAdd;
-
-		// pageload events
-
-		private void List_Init ()
-		{
-			this.cmdAdd.Text = msg_ADD_CMD;
-			this.cmdAdd.Visible = false; // TODO: True if user is editor
-		}
-
-		private void List_Load (IViewHelper helper)
-		{
-			helper.Execute ();
-			bool ok = helper.IsNominal;
-			if (!ok) Page_Error = helper;
-			else
-			{
-				IList result = helper.Outcome;
-				repList.DataSource = result;
-				repList.DataBind ();
-			}
-		}
-
-		// postback events 
-
-		protected void List_ItemCommand (object source, DataGridCommandEventArgs e)
-		{
-			bool okay = false;
-			switch (e.CommandName)
-			{
-				case "Page":
-					// Handled by List_PageIndexChanged
-					break;
-				default:
-					throw new NotImplementedException ();
-			}
-
-			if (okay) pnlList.Visible = false;
-		}
-
-		protected void List_PageIndexChanged (object sender, DataGridPageChangedEventArgs e)
-		{
-			repList.CurrentPageIndex = e.NewPageIndex;
-			repList.DataBind ();
-		}
-
 		#endregion
 
 		#region Page Events
 
-		protected void Page_Init ()
+		protected override void Page_Init ()
 		{
+			base.Page_Init ();
+			pnlList.Visible = true;
 			pnlError.Visible = false;
-			Find_Init ();
-			List_Init ();
-		}
-
-		protected void Page_Load (object sender, EventArgs e)
-		{
-			if (!IsPostBack)
-			{
-				Find_Load ();
-				List_Load (FindHelper);
-			}
 		}
 
 		#endregion

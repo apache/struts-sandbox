@@ -33,7 +33,7 @@
 			  <td>Last Name</td>
 			  <td>First Name</td>
 			  <td>Extension</td>
-			  <td>User</td>
+			  <td>User ID</td>
 			  <td>Hire Date</td>
 			  <td>Hours</td>			  
 			  </tr><tr>
@@ -54,7 +54,7 @@
 					<AlternatingItemStyle CssClass="AlternatingItemStyle" BackColor="#CCCC99"></AlternatingItemStyle>
 					<EditItemStyle CssClass="EditItemStyle"></EditItemStyle>
             	</asp:DataGrid>
-        		<p><asp:Button ID="cmdAdd" Runat="server"></asp:Button></p>
+        		<p><asp:Button ID="cmdListAdd" Runat="server"></asp:Button></p>
 			</asp:Panel>
 
 		</form>

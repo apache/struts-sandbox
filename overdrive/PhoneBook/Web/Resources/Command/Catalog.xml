@@ -75,13 +75,13 @@
 		
   <!-- directory1 helpers -->
 
-  <object id="directory_view_helper" parent="BaseHelper" singleton="false">
+  <object id="directory_find_helper" parent="BaseHelper" singleton="false">
 		<property name="Command">
 			<ref object="directory_view" />
 		</property>
   </object>
 
-  <object id="directory_find_helper" parent="BaseHelper" singleton="false">
+  <object id="directory_list_helper" parent="BaseHelper" singleton="false">
 		<property name="Command">
 			<ref object="filter" />
 		</property>
@@ -96,8 +96,11 @@
 	</object>
 
   <object id="directory_grid_helper" parent="BaseGridHelper" singleton="false">
+   		<property name="FindHelper">
+   			<ref object="directory_find_helper"/>
+   		</property>		
 		<property name="ListHelper">
-			<ref object="directory_find_helper" />
+			<ref object="directory_list_helper" />
 		</property>
 		<property name="SaveHelper">
 			<ref object="entry_save_helper" />
@@ -152,7 +155,6 @@
 				<value>user_name</value>
 				<value>hours</value>
 				<value>hired</value>
-				<value>editor</value>
 			</list>
 		</property>
 	</object>

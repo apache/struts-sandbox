@@ -54,12 +54,12 @@
 					<AlternatingItemStyle CssClass="AlternatingItemStyle" BackColor="#CCCC99"></AlternatingItemStyle>
 					<EditItemStyle CssClass="EditItemStyle"></EditItemStyle>
 					<Columns>
-						<asp:BoundColumn DataField="last_name" HeaderText="LAST NAME"></asp:BoundColumn>
-						<asp:BoundColumn DataField="first_name" HeaderText="FIRST NAME"></asp:BoundColumn>
-						<asp:BoundColumn DataField="extension" HeaderText="EXTENSION"></asp:BoundColumn>
-						<asp:BoundColumn DataField="user_name" HeaderText="USER"></asp:BoundColumn>
-						<asp:BoundColumn DataField="hired" HeaderText="HIRE DATE"></asp:BoundColumn>
-						<asp:BoundColumn DataField="hours" HeaderText="HOURS"></asp:BoundColumn>
+						<asp:BoundColumn DataField="last_name" HeaderText="Last Name"></asp:BoundColumn>
+						<asp:BoundColumn DataField="first_name" HeaderText="First Name"></asp:BoundColumn>
+						<asp:BoundColumn DataField="extension" HeaderText="Extension"></asp:BoundColumn>
+						<asp:BoundColumn DataField="user_name" HeaderText="User"></asp:BoundColumn>
+						<asp:BoundColumn DataField="hired" HeaderText="Hire Date"></asp:BoundColumn>
+						<asp:BoundColumn DataField="hours" HeaderText="Hours"></asp:BoundColumn>
 					</Columns>
             	</asp:DataGrid>
         		<p><asp:Button ID="cmdAdd" Runat="server"></asp:Button></p>
