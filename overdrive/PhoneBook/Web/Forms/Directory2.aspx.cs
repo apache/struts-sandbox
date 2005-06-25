@@ -1,7 +1,10 @@
 using System;
+using System.Security.Principal;
 using System.Web.UI.WebControls;
 using Nexus.Core.Helpers;
+using Nexus.Core.Profile;
 using Nexus.Web;
+using PhoneBook.Core;
 
 namespace PhoneBook.Web.Forms
 {
@@ -18,10 +21,62 @@ namespace PhoneBook.Web.Forms
 
 		#endregion
 
+		#region Helpers 
+
+		private IViewHelper _UserHelper;
+		/// <summary>
+		/// Obtain entry for a user.
+		/// </summary>
+		///
+		public virtual IViewHelper UserHelper
+		{
+			get { return _UserHelper; }
+			set { _UserHelper = value; }
+		}
+
+		#endregion
+
 		#region Page Properties 
+
+		protected Label lblUser;
 
 		protected Panel pnlError;
 		protected Label lblError;
+
+		private AppUserProfile _Profile;
+		protected AppUserProfile Profile
+		{
+			set
+			{
+				if (value==null) 
+					_Profile = NewProfile();
+				else 
+					_Profile = value;
+
+			}
+			get
+			{
+				return _Profile;
+			}
+		}
+
+		protected AppUserProfile NewProfile()	{
+			
+			WindowsIdentity id = WindowsIdentity.GetCurrent ();
+			AppUserProfile profile = new AppUserProfile (id);
+			Session [UserProfile.USER_PROFILE] = profile;
+
+			UserHelper.Criteria[App.USER_NAME] = profile.UserId;
+			UserHelper.Execute();
+			if (UserHelper.IsNominal)
+			{
+				string editor = UserHelper.Criteria[App.EDITOR] as string;
+				bool isEditor = ((editor!=null) && (editor=="1"));
+				profile.IsEditor = isEditor;				
+			}
+
+			return profile;
+		}
 
 		/// <summary>
 		/// Display a list of error mesasges.
@@ -131,8 +186,12 @@ namespace PhoneBook.Web.Forms
 			base.Page_Init ();
 			pnlList.Visible = true;
 			pnlError.Visible = false;
-			if (!IsPostBack)
+			if (!IsPostBack) 
+			{
 				Page_Prompt = msg_FILTER;
+				Profile = Session [UserProfile.USER_PROFILE] as AppUserProfile;
+				lblUser.Text = Profile.UserId;
+			}
 		}
 
 		#endregion

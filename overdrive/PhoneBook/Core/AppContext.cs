@@ -91,5 +91,10 @@ namespace PhoneBook.Core
 			set { Set (App.HOURS, value); }
 		}
 
+		public string editor
+		{
+			get { return Get (App.EDITOR); }
+			set { Set (App.EDITOR, value); }
+		}
 	}
 }

@@ -16,6 +16,7 @@
 				<value>user_name</value>
 				<value>hired</value>
 				<value>hours</value>
+				<value>editor</value>
 			</list>
 		</property>
 		<property name="ID"><value>filter</value></property>
@@ -119,6 +120,7 @@
 				<ref object="user_name"/>
 				<ref object="hired"/> 
 				<ref object="hours"/>
+				<ref object="editor"/>
 			</list>
 		</property>
 	</object>  
@@ -155,8 +157,9 @@
 				<value>user_name</value>
 				<value>hours</value>
 				<value>hired</value>
+				<value>editor</value>
 			</list>
 		</property>
 	</object>
-  
+	  
 </objects>

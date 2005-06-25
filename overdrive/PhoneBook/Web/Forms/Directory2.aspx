@@ -12,6 +12,7 @@
 	<body>
 		<h1>PhoneBook Directory</h1>
 			<form id="frmDirectory" method="post" runat="server">
+			<p>Welcome, <asp:Label ID="lblUser" Runat="server"></asp:Label></p>
 			
 			<!-- ERROR -->
 			<asp:Panel ID="pnlError" Runat="server">

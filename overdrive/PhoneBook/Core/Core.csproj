@@ -119,6 +119,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AppUserProfile.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
