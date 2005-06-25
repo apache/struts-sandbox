@@ -179,6 +179,26 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Profile\IProfile.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Profile\UserIdentity.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Profile\UserPrincipal.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Profile\UserProfile.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Tables\FieldContext.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
