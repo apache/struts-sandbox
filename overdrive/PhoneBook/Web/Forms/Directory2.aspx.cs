@@ -48,31 +48,28 @@ namespace PhoneBook.Web.Forms
 		{
 			set
 			{
-				if (value==null) 
-					_Profile = NewProfile();
-				else 
+				if (value == null)
+					_Profile = NewProfile ();
+				else
 					_Profile = value;
 
 			}
-			get
-			{
-				return _Profile;
-			}
+			get { return _Profile; }
 		}
 
-		protected AppUserProfile NewProfile()	{
-			
+		protected AppUserProfile NewProfile ()
+		{
 			WindowsIdentity id = WindowsIdentity.GetCurrent ();
 			AppUserProfile profile = new AppUserProfile (id);
 			Session [UserProfile.USER_PROFILE] = profile;
 
-			UserHelper.Criteria[App.USER_NAME] = profile.UserId;
-			UserHelper.Execute();
+			UserHelper.Criteria [App.USER_NAME] = profile.UserId;
+			UserHelper.Execute ();
 			if (UserHelper.IsNominal)
 			{
-				string editor = UserHelper.Criteria[App.EDITOR] as string;
-				bool isEditor = ((editor!=null) && (editor=="1"));
-				profile.IsEditor = isEditor;				
+				string editor = UserHelper.Criteria [App.EDITOR] as string;
+				bool isEditor = ((editor != null) && (editor.Equals ("1")));
+				profile.IsEditor = isEditor;
 			}
 
 			return profile;
@@ -186,10 +183,11 @@ namespace PhoneBook.Web.Forms
 			base.Page_Init ();
 			pnlList.Visible = true;
 			pnlError.Visible = false;
-			if (!IsPostBack) 
+			Profile = Session [UserProfile.USER_PROFILE] as AppUserProfile;
+			GridHelper.HasEditColumn = Profile.IsEditor;
+			if (!IsPostBack)
 			{
 				Page_Prompt = msg_FILTER;
-				Profile = Session [UserProfile.USER_PROFILE] as AppUserProfile;
 				lblUser.Text = Profile.UserId;
 			}
 		}

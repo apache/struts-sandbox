@@ -79,7 +79,7 @@ namespace PhoneBook.Core
 		/// Token for select all command.
 		/// </summary>
 		/// 
-		public const string FILTER = "filter";
+		public const string ENTRY_LIST = "entry_list";
 
 		/// <summary>
 		/// Token for List Last Names command.

@@ -21,7 +21,7 @@
   	</parameterMaps>
 		
 	<statements>
-		<select id="filter" paramClass="Hashtable" resultClass="Hashtable">
+		<select id="entry" paramClass="Hashtable" resultClass="Hashtable">
 			SELECT 
 				last_name,
 				first_name,

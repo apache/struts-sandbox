@@ -14,7 +14,7 @@
 				<ref object="user_name"/> 
 				<ref object="hired"/> 
 				<ref object="hours"/> 				
-				<ref object="_filter"/> 
+				<ref object="_entry_list"/> 
 				<ref object="_extension_list"/>
 				<ref object="_hired_list"/>
 			</list>
@@ -69,8 +69,8 @@
 	</object>
 
 	<!-- We need to "hash" the name with "_" to avoid conflict with the filter Command -->
-	<object id="_filter" parent="BaseFieldContext">
-		<property name="ID"><value>filter</value></property>
+	<object id="_entry_list" parent="BaseFieldContext">
+		<property name="ID"><value>entry_list</value></property>
 		<property name="ProcessorID"><value>EntryListProcessor</value></property>
 	</object>
 		
