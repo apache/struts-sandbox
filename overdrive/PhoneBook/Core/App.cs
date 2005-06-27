@@ -149,7 +149,20 @@ namespace PhoneBook.Core
 
 		#region Messages
 
-		public const string PAGE_PROMPT_TEXT = "PagePrompt.Text";
+		/// <summary>
+		/// Token for Directory page title.
+		/// </summary>
+		public const string DIRECTORY_TITLE = "directory_title";
+
+		/// <summary>
+		/// Token for Directory directory page heading.
+		/// </summary>
+		public const string DIRECTORY_HEADING = "directory_heading";
+
+		/// <summary>
+		/// Token for Directory page prompt.
+		/// </summary>
+		public const string DIRECTORY_PROMPT = "directory_prompt";
 
 		#endregion 
 	}

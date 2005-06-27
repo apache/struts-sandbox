@@ -43,40 +43,32 @@
 
 	<object id="last_name" parent="BaseFieldContext">
 		<property name="ID"><value>last_name</value></property>	
-		<property name="Label"><value>Last Name</value></property>	
 	</object>
 
 	<object id="first_name" parent="BaseFieldContext">
 		<property name="ID"><value>first_name</value></property>	
-		<property name="Label"><value>First Name</value></property>	
 	</object>
 
 	<object id="user_name" parent="BaseFieldContext">
 		<property name="ID"><value>user_name</value></property>	
-		<property name="Label"><value>User ID</value></property>	
 	</object>
 	
 	<object id="extension" parent="BaseFieldContext">
 		<property name="ID"><value>extension</value></property>		
 		<property name="ProcessorID"><value>TelephoneProcessor</value></property>
-		<property name="Label"><value>Extension</value></property>	
 	</object>
 
 	<object id="hired" parent="BaseFieldContext">
 		<property name="ID"><value>hired</value></property>	
-		<property name="Alert"><value>{0} must be a valid date</value></property>
 		<property name="ProcessorID"><value>DateTimeProcessor</value></property>
-		<property name="Label"><value>Hired</value></property>	
 	</object>
 	
 	<object id="hours" parent="BaseFieldContext">
 		<property name="ID"><value>hours</value></property>	
-		<property name="Label"><value>Hours</value></property>	
 	</object>
 	
 	<object id="editor" parent="BaseFieldContext">
 		<property name="ID"><value>editor</value></property>	
-		<property name="Label"><value>Editor?</value></property>	
 	</object>
 
 	<!-- We need to "hash" the name with "_" to avoid conflict with the filter Command -->

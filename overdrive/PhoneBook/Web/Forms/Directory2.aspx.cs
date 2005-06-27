@@ -1,5 +1,6 @@
 using System;
 using System.Security.Principal;
+using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using Nexus.Core.Helpers;
 using Nexus.Core.Profile;
@@ -32,10 +33,11 @@ namespace PhoneBook.Web.Forms
 
 		#region Page Properties 
 
-		protected Label lblUser;
-
-		protected Panel pnlError;
-		protected Label lblError;
+		public HtmlGenericControl title;
+		public HtmlGenericControl heading;
+		protected Label profile_label;
+		protected Panel error_panel;
+		protected Label error_label;
 
 		private AppUserProfile _Profile;
 		protected AppUserProfile Profile
@@ -76,27 +78,33 @@ namespace PhoneBook.Web.Forms
 		{
 			set
 			{
-				lblError.Text = value.ErrorsText;
-				pnlError.Visible = true;
+				error_label.Text = value.ErrorsText;
+				error_panel.Visible = true;
 			}
 		}
 
-		protected Panel pnlPrompt;
-		protected Label lblPrompt;
+		protected Panel prompt_panel;
+		protected Label prompt_label;
 
 		/// <summary>
 		/// Display a Prompt mesasges.
 		/// </summary>
 		protected override string Page_Prompt
 		{
-			set { lblPrompt.Text = value; }
+			set { prompt_label.Text = value; }
 		}
 
 		#endregion
 
 		#region Find -- Display Find controls
 
-		protected Panel pnlFind;
+		protected Panel find_panel;
+		public Label last_name_label;
+		public Label first_name_label;
+		public Label extension_label;
+		public Label user_name_label;
+		public Label hired_label;
+		public Label hours_label;
 		protected DropDownList last_name_list;
 		protected DropDownList first_name_list;
 		protected DropDownList extension_list;
@@ -104,9 +112,15 @@ namespace PhoneBook.Web.Forms
 		protected DropDownList hired_list;
 		protected DropDownList hours_list;
 		// TODO: protected DropDownList editor_list;
-		protected Button cmdListAll;
+		protected Button list_all_command;
 
 		// pageload events - These methods populate controls to display
+
+		private Label[] FilterLabels ()
+		{
+			Label[] labels = {last_name_label,first_name_label,extension_label,user_name_label,hired_label,hours_label};
+			return labels;
+		}
 
 		private DropDownList[] FilterList ()
 		{
@@ -122,8 +136,13 @@ namespace PhoneBook.Web.Forms
 
 		protected override void Find_Init ()
 		{
-			cmdListAll.Click += new EventHandler (ListAll_Click);
-			// cmdListAll.Text = msg_LIST_ALL_CMD;
+			list_all_command.Click += new EventHandler (ListAll_Click);
+			list_all_command.Text = GetMessage(list_all_command.ID);
+
+			foreach (Label label in FilterLabels())
+			{ 
+				label.Text = GetMessage(label.ID);
+			}
 
 			foreach (DropDownList filter in FilterList ())
 			{
@@ -143,7 +162,7 @@ namespace PhoneBook.Web.Forms
 			if (except != null) except.SelectedIndex = exceptIndex;
 			// Update other members
 			List_ResetIndex ();
-			Page_Prompt = GetMessage(App.PAGE_PROMPT_TEXT);
+			Page_Prompt = GetMessage(App.DIRECTORY_PROMPT);
 		}
 
 		protected override void Find_Submit (object sender, EventArgs e)
@@ -162,7 +181,7 @@ namespace PhoneBook.Web.Forms
 		protected override void Find_Load ()
 		{
 			IViewHelper h = GridHelper.FindHelper;
-			h.ExecuteBind (pnlFind.Controls);
+			h.ExecuteBind (find_panel.Controls);
 			bool ok = (h.IsNominal);
 			if (!ok)
 				Page_Error = h;
@@ -175,14 +194,14 @@ namespace PhoneBook.Web.Forms
 		protected override void Page_Init ()
 		{
 			base.Page_Init ();
-			pnlList.Visible = true;
-			pnlError.Visible = false;
+			list_panel.Visible = true;
+			error_panel.Visible = false;
 			Profile = Session [UserProfile.USER_PROFILE] as AppUserProfile;
 			GridHelper.HasEditColumn = Profile.IsEditor;
 			if (!IsPostBack)
 			{
-				Page_Prompt = GetMessage("PagePrompt.Text");
-				lblUser.Text = Profile.UserId;
+				Page_Prompt = GetMessage(App.DIRECTORY_PROMPT);
+				profile_label.Text = Profile.UserId;
 				// UserLocale = Profile.Locale;
 			}
 		}
@@ -190,7 +209,8 @@ namespace PhoneBook.Web.Forms
 		protected override void Page_PreRender(object sender, EventArgs e)
 		{
 			base.Page_PreRender(sender,e);
-			cmdListAll.Text = GetMessage("cmdListAll.Text");
+			title.InnerText = GetMessage(App.DIRECTORY_TITLE);
+			heading.InnerText = GetMessage(App.DIRECTORY_HEADING);
 		}
 
 		#endregion

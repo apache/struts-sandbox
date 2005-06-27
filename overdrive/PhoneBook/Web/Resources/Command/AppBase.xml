@@ -7,7 +7,11 @@
 	
 	<object id="BaseFilterList" type="PhoneBook.Core.Commands.BaseFilterList, PhoneBook.Core"/>
 	
-	<object id="BaseFieldContext" type="Nexus.Core.Tables.FieldContext"/>
+	<object id="BaseFieldContext" type="Nexus.Extras.Spring.FieldContext">
+		<property name="MessageSource">
+			<ref object="messageSource" />
+		</property>		
+	</object>
 	
 	<object id="BaseKeyValueProcessor" type="Nexus.Core.Validators.KeyValueProcessor"/>
 
