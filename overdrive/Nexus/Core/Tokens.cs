@@ -193,19 +193,19 @@ namespace Nexus.Core
 		/// Token for the pre-op command element.
 		/// </summary>
 		/// 
-		public const string PRE_OP_ID = "pre-op";
+		public const string ID_PRE_OP = "pre-op";
 
 		/// <summary>
 		/// Token for the post-op command element.
 		/// </summary>
 		/// 
-		public const string POST_OP_ID = "post-op";
+		public const string ID_POST_OP = "post-op";
 
 		/// <summary>
 		/// Token for FieldTable command element.
 		/// </summary>
 		/// 
-		public const string FIELD_TABLE_ID = "FieldTable";
+		public const string ID_FIELD_TABLE = "FieldTable";
 
 		#endregion
 
@@ -214,13 +214,19 @@ namespace Nexus.Core
 		/// <summary>
 		/// Token for input Control Type Name.
 		/// </summary>
-		public const string INPUT_CONTROL = "input";
+		public const string CONTROL_INPUT = "input";
 
-		/// <summary>
-		/// Token for select Control Type Name.
-		/// </summary>
-		public const string SELECT_CONTROL = "select";
+		#endregion
 
+		#region Hint IDs
+
+		public const string HINT_EDIT = "Hint_Edit";
+
+		public const string HINT_SUCCESS_ADD = "Hint_Success_Add";
+
+		public const string HINT_SUCCESS_EDIT = "Hint_Success_Edit";
+
+		public const string HINT_SUCCESS_QUIT = "Hint_Success_Quit";
 		#endregion
 	}
 }

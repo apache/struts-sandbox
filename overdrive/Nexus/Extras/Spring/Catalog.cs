@@ -163,7 +163,7 @@ namespace Nexus.Extras.Spring
 		private IFieldTable GetFieldTable ()
 		{
 			if (_FieldTable == null)
-				_FieldTable = GetObject (Tokens.FIELD_TABLE_ID) as IFieldTable;
+				_FieldTable = GetObject (Tokens.ID_FIELD_TABLE) as IFieldTable;
 			return _FieldTable;
 		}
 
@@ -267,9 +267,9 @@ namespace Nexus.Extras.Spring
 			if (context.IsNominal)
 			{
 				IChain chain = new Chain ();
-				chain.AddCommand (GetCommand (Tokens.PRE_OP_ID));
+				chain.AddCommand (GetCommand (Tokens.ID_PRE_OP));
 				chain.AddCommand (command);
-				chain.AddCommand (GetCommand (Tokens.POST_OP_ID));
+				chain.AddCommand (GetCommand (Tokens.ID_POST_OP));
 				try
 				{
 					chain.Execute (context);

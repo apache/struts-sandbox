@@ -18,7 +18,7 @@
                 OutputType = "Library"
                 PreBuildEvent = ""
                 PostBuildEvent = ""
-                RootNamespace = "Nexus"
+                RootNamespace = "Nexus.Web"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >
@@ -159,6 +159,10 @@
                     RelPath = "IGridViewHelper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Messages.resx"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "Web.config"

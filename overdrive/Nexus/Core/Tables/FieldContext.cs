@@ -11,7 +11,7 @@ namespace Nexus.Core.Tables
 	{
 		public FieldContext () : base ()
 		{
-			ControlTypeName = Tokens.INPUT_CONTROL; // Default
+			ControlTypeName = Tokens.CONTROL_INPUT; // Default
 		}
 
 		public string Alert

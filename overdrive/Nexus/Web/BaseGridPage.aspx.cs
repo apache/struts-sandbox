@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Web.UI.WebControls;
+using Nexus.Core;
 using Nexus.Core.Helpers;
 using Nexus.Web;
 using Spring.Web.UI;
@@ -91,19 +92,6 @@ namespace Nexus.Web
 			set {_Page_Prompt = value;}
 			get {return _Page_Prompt;}
 		}
-		#endregion
-
-		#region Messages
-
-		// ISSUE: Move messages to a default store (when available). [WNE-60]
-		// FIXME: Make these text properties on DataGridHelper.
-
-		protected const string msg_ADD_COMMAND = "ADD ITEM";
-		protected const string msg_ADD_SUCCESS = "Item added.";
-		protected const string msg_EDIT_HINT = "Edit entry, press SAVE. ";
-		protected const string msg_QUIT_SUCCESS = "Change cancelled. ";
-		protected const string msg_SAVE_SUCCESS = "Changes saved.";
-
 		#endregion
 
 		#region Page Properties
@@ -265,7 +253,7 @@ namespace Nexus.Web
 			if (okay)
 			{
 				// Template_Load(h.TitleText,h.HeadingText,h.PromptText);
-				cmdListAdd.Text = msg_ADD_COMMAND;
+				// cmdListAdd.Text = msg_ADD_COMMAND;
 				pnlList.Visible = true;
 			}
 			else
@@ -311,7 +299,7 @@ namespace Nexus.Web
 		/// <param name="index">Index of selected entry</param>
 		protected virtual void List_Edit (int index)
 		{
-			Page_Prompt = msg_EDIT_HINT;
+			Page_Prompt = GetMessage(Tokens.HINT_EDIT);
 			List_ItemIndex = index;
 			List_Refresh ();
 		}
@@ -321,7 +309,7 @@ namespace Nexus.Web
 		/// </summary>
 		protected virtual void List_Quit ()
 		{
-			Page_Prompt = msg_QUIT_SUCCESS;
+			Page_Prompt = GetMessage(Tokens.HINT_SUCCESS_QUIT);
 			List_Insert = false;
 			List_ItemIndex = -1;
 			List_Refresh ();
@@ -340,7 +328,7 @@ namespace Nexus.Web
 			if (okay)
 			{
 				okay = h.List (repList);
-				Page_Prompt = (List_Insert) ? msg_ADD_SUCCESS : msg_SAVE_SUCCESS;
+				Page_Prompt = (List_Insert) ? GetMessage(Tokens.HINT_SUCCESS_ADD) : GetMessage(Tokens.HINT_SUCCESS_EDIT);
 				List_Insert = false;
 				List_ItemIndex = -1;
 				List_Refresh ();
@@ -368,7 +356,7 @@ namespace Nexus.Web
 			bool okay = h.DataInsert (repList);
 			if (okay)
 			{
-				Page_Prompt = msg_EDIT_HINT;
+				Page_Prompt = GetMessage(Tokens.HINT_EDIT);
 				List_Insert = true;
 				List_ItemIndex = 0;
 				pnlList.Visible = true;
@@ -517,6 +505,16 @@ namespace Nexus.Web
 
 			if (pnlList.Visible)
 				List_Load ();
+		}
+
+		/// <summary>
+		/// Set text messages.
+		/// </summary>
+		/// <param name="sender">Source</param>
+		/// <param name="e">Event</param>
+		protected virtual void Page_PreRender(object sender, EventArgs e)
+		{
+			cmdListAdd.Text = GetMessage("cmdListAdd.Text");
 		}
 
 		#endregion
