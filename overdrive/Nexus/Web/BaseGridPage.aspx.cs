@@ -19,10 +19,10 @@ namespace Nexus.Web
 	/// GridViewHelper is abstract, and you need to implement your own NewEntryList method. 
 	/// </p><p>
 	/// The ASPX page needs to provide 
-	/// * pnlError
-	/// * pnlList
-	/// * repList
-	/// * cmdAddList
+	/// * error_panel
+	/// * list_panel
+	/// * list_report
+	/// * list_add_Command
 	/// </p>
 	/// <p>
 	/// If a Find dialog is provided, the implementing code behind can override 
@@ -138,7 +138,7 @@ namespace Nexus.Web
 			set
 			{
 				ViewState [LIST_ITEM_INDEX] = value;
-				if (repList != null) repList.EditItemIndex = value;
+				if (list_report != null) list_report.EditItemIndex = value;
 			}
 		}
 
@@ -175,7 +175,7 @@ namespace Nexus.Web
 			set
 			{
 				ViewState [LIST_INSERT_KEY] = value;
-				cmdListAdd.Visible = !value;
+				list_add_command.Visible = !value;
 			}
 		}
 
@@ -226,17 +226,17 @@ namespace Nexus.Web
 		/// <summary>
 		/// Group List controls.
 		/// </summary>
-		protected Panel pnlList;
+		protected Panel list_panel;
 
 		/// <summary>
 		/// Render the list as a DataGrid.
 		/// </summary>
-		protected DataGrid repList;
+		protected DataGrid list_report;
 
 		/// <summary>
 		/// Invoke display for adding a new entry.
 		/// </summary>
-		protected Button cmdListAdd;
+		protected Button list_add_command;
 
 		#endregion
 
@@ -249,16 +249,16 @@ namespace Nexus.Web
 		protected virtual bool List_Load ()
 		{
 			IGridViewHelper h = GridHelper;
-			bool okay = h.Load (repList, List_Criteria);
+			bool okay = h.Load (list_report, List_Criteria);
 			if (okay)
 			{
 				// Template_Load(h.TitleText,h.HeadingText,h.PromptText);
 				// cmdListAdd.Text = msg_ADD_COMMAND;
-				pnlList.Visible = true;
+				list_panel.Visible = true;
 			}
 			else
 			{
-				pnlList.Visible = false;
+				list_panel.Visible = false;
 				Page_Error = h.ListHelper;
 			}
 			return okay;
@@ -327,7 +327,7 @@ namespace Nexus.Web
 			bool okay = h.Save (key, controls);
 			if (okay)
 			{
-				okay = h.List (repList);
+				okay = h.List (list_report);
 				Page_Prompt = (List_Insert) ? GetMessage(Tokens.HINT_SUCCESS_ADD) : GetMessage(Tokens.HINT_SUCCESS_EDIT);
 				List_Insert = false;
 				List_ItemIndex = -1;
@@ -342,8 +342,8 @@ namespace Nexus.Web
 		protected virtual void List_Refresh ()
 		{
 			IGridViewHelper h = GridHelper;
-			h.DataBind (repList);
-			pnlList.Visible = true;
+			h.DataBind (list_report);
+			list_panel.Visible = true;
 		}
 
 		/// <summary>
@@ -353,13 +353,13 @@ namespace Nexus.Web
 		protected virtual void List_Add_Load ()
 		{
 			IGridViewHelper h = GridHelper;
-			bool okay = h.DataInsert (repList);
+			bool okay = h.DataInsert (list_report);
 			if (okay)
 			{
 				Page_Prompt = GetMessage(Tokens.HINT_EDIT);
 				List_Insert = true;
 				List_ItemIndex = 0;
-				pnlList.Visible = true;
+				list_panel.Visible = true;
 			}
 			else Page_Error = h.ListHelper;
 		}
@@ -374,8 +374,8 @@ namespace Nexus.Web
 		/// </p></remarks>
 		protected void List_ResetIndex ()
 		{
-			repList.SelectedIndex = 0;
-			repList.CurrentPageIndex = 0; // sic
+			list_report.SelectedIndex = 0;
+			list_report.CurrentPageIndex = 0; // sic
 		}
 
 		#endregion
@@ -389,14 +389,14 @@ namespace Nexus.Web
 		/// </summary>
 		private void List_Init ()
 		{
-			repList.AutoGenerateColumns = false;
-			repList.EditItemIndex = List_ItemIndex;
-			repList.CancelCommand += new DataGridCommandEventHandler (this.List_Quit);
-			repList.EditCommand += new DataGridCommandEventHandler (this.List_Edit);
-			repList.UpdateCommand += new DataGridCommandEventHandler (this.List_Save);
-			repList.ItemCommand += new DataGridCommandEventHandler (this.List_Item);
-			repList.PageIndexChanged += new DataGridPageChangedEventHandler (this.List_PageIndexChanged);
-			cmdListAdd.Click += new EventHandler (this.List_Add);
+			list_report.AutoGenerateColumns = false;
+			list_report.EditItemIndex = List_ItemIndex;
+			list_report.CancelCommand += new DataGridCommandEventHandler (this.List_Quit);
+			list_report.EditCommand += new DataGridCommandEventHandler (this.List_Edit);
+			list_report.UpdateCommand += new DataGridCommandEventHandler (this.List_Save);
+			list_report.ItemCommand += new DataGridCommandEventHandler (this.List_Item);
+			list_report.PageIndexChanged += new DataGridPageChangedEventHandler (this.List_PageIndexChanged);
+			list_add_command.Click += new EventHandler (this.List_Add);
 		}
 
 		// postback events
@@ -419,8 +419,8 @@ namespace Nexus.Web
 		protected void List_Save (object source, DataGridCommandEventArgs e)
 		{
 			IGridViewHelper h = GridHelper;
-			string key = (List_Insert) ? null : h.GetDataKey (e, repList);
-			ICollection controls = h.GetControls (e, repList);
+			string key = (List_Insert) ? null : h.GetDataKey (e, list_report);
+			ICollection controls = h.GetControls (e, list_report);
 			List_Save (key, controls);
 		}
 
@@ -462,7 +462,7 @@ namespace Nexus.Web
 		/// <param name="e"></param>
 		protected void List_PageIndexChanged (object sender, DataGridPageChangedEventArgs e)
 		{
-			repList.CurrentPageIndex = e.NewPageIndex;
+			list_report.CurrentPageIndex = e.NewPageIndex;
 			List_Refresh ();
 		}
 
@@ -485,7 +485,7 @@ namespace Nexus.Web
 
 			if (!IsPostBack)
 			{
-				pnlList.Visible = false;				
+				list_panel.Visible = false;				
 			}
 		}
 
@@ -503,7 +503,7 @@ namespace Nexus.Web
 				Find_Load ();
 			}
 
-			if (pnlList.Visible)
+			if (list_panel.Visible)
 				List_Load ();
 		}
 
@@ -514,7 +514,7 @@ namespace Nexus.Web
 		/// <param name="e">Event</param>
 		protected virtual void Page_PreRender(object sender, EventArgs e)
 		{
-			cmdListAdd.Text = GetMessage("cmdListAdd.Text");
+			list_add_command.Text = GetMessage(list_add_command.ID);
 		}
 
 		#endregion

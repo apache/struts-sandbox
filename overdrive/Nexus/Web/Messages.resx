@@ -40,24 +40,24 @@
 		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
 	</resheader>
 	
-  <data name="Hint_Edit">
+  <data name="hint_edit">
 	<value>Edit entry, press SAVE. </value>
   </data>
   
-  <data name="Hint_Success_Add">
+  <data name="hint_success_add">
     <value>Item added. </value>
   </data>
 	
-  <data name="Hint_Success_Edit">
+  <data name="hint_success_edit">
     <value>Changes saved. </value>
   </data>
   
-  <data name="Hint_Success_Quit">
+  <data name="hint_success_quit">
 	<value>Change cancelled.  </value>
   </data>
 	
-  <data name="cmdListAdd.Text">
+  <data name="list_add_command">
     <value>ADD ITEM</value>
   </data>
-	
+  	
 </root>

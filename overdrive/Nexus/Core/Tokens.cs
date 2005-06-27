@@ -220,13 +220,26 @@ namespace Nexus.Core
 
 		#region Hint IDs
 
-		public const string HINT_EDIT = "Hint_Edit";
+		/// <summary>
+		///  Token for Edit hint.
+		/// </summary>
+		public const string HINT_EDIT = "hint_edit";
 
-		public const string HINT_SUCCESS_ADD = "Hint_Success_Add";
+		/// <summary>
+		///  Token for Add Succeess hint.
+		/// </summary>
+		public const string HINT_SUCCESS_ADD = "hint_success_add";
 
-		public const string HINT_SUCCESS_EDIT = "Hint_Success_Edit";
+		/// <summary>
+		///  Token for Edit Success hint.
+		/// </summary>
+		public const string HINT_SUCCESS_EDIT = "hint_success_edit";
 
-		public const string HINT_SUCCESS_QUIT = "Hint_Success_Quit";
+		/// <summary>
+		/// Token for Quit Success hint.
+		/// </summary>
+		public const string HINT_SUCCESS_QUIT = "hint_success_quit";
+
 		#endregion
 	}
 }
