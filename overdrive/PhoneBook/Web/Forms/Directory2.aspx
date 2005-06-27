@@ -12,7 +12,7 @@
 	<body>
 		<h1 id="heading" runat="server"></h1>
 			<form id="form" method="post" runat="server">
-			<p>Welcome, <asp:Label ID="profile_label" Runat="server"></asp:Label></p>
+			<p><asp:Label ID="greeting" Runat="server"></asp:Label> <asp:Label ID="profile_label" Runat="server"></asp:Label></p>
 			
 			<!-- ERROR -->
 			<asp:Panel ID="error_panel" Runat="server">

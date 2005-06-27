@@ -33,8 +33,9 @@ namespace PhoneBook.Web.Forms
 
 		#region Page Properties 
 
-		public HtmlGenericControl title;
-		public HtmlGenericControl heading;
+		protected HtmlGenericControl title;
+		protected HtmlGenericControl heading;
+		protected Label greeting;
 		protected Label profile_label;
 		protected Panel error_panel;
 		protected Label error_label;
@@ -209,6 +210,7 @@ namespace PhoneBook.Web.Forms
 		protected override void Page_PreRender(object sender, EventArgs e)
 		{
 			base.Page_PreRender(sender,e);
+			greeting.Text = GetMessage(greeting.ID);
 			title.InnerText = GetMessage(App.DIRECTORY_TITLE);
 			heading.InnerText = GetMessage(App.DIRECTORY_HEADING);
 		}
