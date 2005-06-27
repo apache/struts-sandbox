@@ -14,12 +14,6 @@ namespace PhoneBook.Web.Forms
 	/// 
 	public class Directory2 : BaseGridPage
 	{
-		#region Messages
-
-		private const string msg_FILTER = "Select a filter to display fewer entries";
-		private const string msg_LIST_ALL_CMD = "SHOW ALL";
-
-		#endregion
 
 		#region Helpers 
 
@@ -128,8 +122,8 @@ namespace PhoneBook.Web.Forms
 
 		protected override void Find_Init ()
 		{
-			cmdListAll.Text = msg_LIST_ALL_CMD;
 			cmdListAll.Click += new EventHandler (ListAll_Click);
+			// cmdListAll.Text = msg_LIST_ALL_CMD;
 
 			foreach (DropDownList filter in FilterList ())
 			{
@@ -149,7 +143,7 @@ namespace PhoneBook.Web.Forms
 			if (except != null) except.SelectedIndex = exceptIndex;
 			// Update other members
 			List_ResetIndex ();
-			Page_Prompt = msg_FILTER;
+			Page_Prompt = GetMessage(App.PAGE_PROMPT_TEXT);
 		}
 
 		protected override void Find_Submit (object sender, EventArgs e)
@@ -187,11 +181,19 @@ namespace PhoneBook.Web.Forms
 			GridHelper.HasEditColumn = Profile.IsEditor;
 			if (!IsPostBack)
 			{
-				Page_Prompt = msg_FILTER;
+				Page_Prompt = GetMessage("PagePrompt.Text");
 				lblUser.Text = Profile.UserId;
+				// UserLocale = Profile.Locale;
 			}
 		}
 
+		protected override void Page_PreRender(object sender, EventArgs e)
+		{
+			base.Page_PreRender(sender,e);
+			cmdListAll.Text = GetMessage("cmdListAll.Text");
+		}
+
 		#endregion
+
 	}
 }

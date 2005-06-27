@@ -3,12 +3,14 @@
   "http://www.springframework.net/dtd/spring-objects.dtd">
 <objects>
 
-	<!-- filter command -->
+	<!-- entry commands -->
 
-  <object id="filter" type="PhoneBook.Core.Commands.BaseList, PhoneBook.Core">
+  <object id="entry_list" type="PhoneBook.Core.Commands.BaseList, PhoneBook.Core">
+		<property name="ID"><value>entry_list</value></property>
+		<property name="QueryID"><value>entry</value></property>
 		<property name="RelatedIDs">
 			<list>
-				<value>filter</value>
+				<value>entry_list</value>
 				<value>entry_key</value>
 				<value>last_name</value>
 				<value>first_name</value>
@@ -16,10 +18,28 @@
 				<value>user_name</value>
 				<value>hired</value>
 				<value>hours</value>
+				<value>editor</value>
 			</list>
 		</property>
-		<property name="ID"><value>filter</value></property>
   </object>
+  
+  <object id="entry" type="PhoneBook.Core.Commands.BaseEntry, PhoneBook.Core">
+		<property name="ID"><value>entry</value></property>
+		<property name="RelatedIDs">
+			<list>
+				<value>entry</value>
+				<value>entry_key</value>
+				<value>last_name</value>
+				<value>first_name</value>
+				<value>extension</value>
+				<value>user_name</value>
+				<value>hired</value>
+				<value>hours</value>
+				<value>editor</value>
+			</list>
+		</property>
+  </object>
+  
 	
 	<!-- filter list commands -->
 		
@@ -73,7 +93,7 @@
 	</object>
 	
 		
-  <!-- directory-1 helpers -->
+  <!-- directory1 helpers -->
 
   <object id="directory_find_helper" parent="BaseHelper" singleton="false">
 		<property name="Command">
@@ -83,11 +103,11 @@
 
   <object id="directory_list_helper" parent="BaseHelper" singleton="false">
 		<property name="Command">
-			<ref object="filter" />
+			<ref object="entry_list" />
 		</property>
   </object>
   
-  <!-- directory-2 helpers -->
+  <!-- directory2 helpers -->
   
   	<object id="BaseGridHelper" type="PhoneBook.Web.AppGridHelper, PhoneBook.Web" singleton="false">
 		<property name="Catalog">
@@ -119,6 +139,7 @@
 				<ref object="user_name"/>
 				<ref object="hired"/> 
 				<ref object="hours"/>
+				<ref object="editor"/>
 			</list>
 		</property>
 	</object>  
@@ -155,8 +176,15 @@
 				<value>user_name</value>
 				<value>hours</value>
 				<value>hired</value>
+				<value>editor</value>
 			</list>
 		</property>
 	</object>
-  
+
+  <object id="directory_entry_helper" parent="BaseHelper" singleton="false">
+		<property name="Command">
+			<ref object="entry" />
+		</property>
+  </object>
+	  
 </objects>

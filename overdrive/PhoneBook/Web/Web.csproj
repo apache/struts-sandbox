@@ -234,6 +234,10 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "Resources\Messages.resx"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Resources\Command\AppBase.xml"
                     BuildAction = "Content"
                 />

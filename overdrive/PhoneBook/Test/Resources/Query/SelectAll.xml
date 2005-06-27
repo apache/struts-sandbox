@@ -21,7 +21,7 @@
   	</parameterMaps>
 		
 	<statements>
-		<select id="filter" paramClass="Hashtable" resultClass="Hashtable">
+		<select id="entry" paramClass="Hashtable" resultClass="Hashtable">
 			SELECT 
 				last_name,
 				first_name,
@@ -68,9 +68,10 @@
 				user_name,
 				hired,
 				hours,
+				editor
 				pk_entry
 				)
-			VALUES (?,?,?,?, ?,?,?)
+			VALUES (?,?,?,?, ?,?,?,?)
 		</insert>		
 
 		<update id="entry_update" parameterMap="entry_save_param">
@@ -80,7 +81,8 @@
 				extension=?,
 				user_name=?,
 				hired=?,
-				hours=?
+				hours=?,
+				editor=?
 			WHERE 
 				pk_entry=?
 		</update>

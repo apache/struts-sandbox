@@ -27,6 +27,8 @@ namespace PhoneBook.Core
 			// No need to construct static helper class
 		}
 
+		#region Properties
+
 		/// <summary>
 		/// Token for entry_key property.
 		/// </summary>
@@ -74,6 +76,10 @@ namespace PhoneBook.Core
 		/// </summary>
 		/// 
 		public const string EDITOR = "editor";
+
+		#endregion 
+
+		#region Commands
 
 		/// <summary>
 		/// Token for select all command.
@@ -123,6 +129,10 @@ namespace PhoneBook.Core
 		/// 
 		public const string DIRECTORY_VIEW = "directory_view";
 
+		#endregion
+
+		#region Helpers
+
 		/// <summary>
 		/// Token for Directory Find helper.
 		/// </summary>
@@ -134,5 +144,13 @@ namespace PhoneBook.Core
 		/// </summary>
 		/// 
 		public const string DIRECTORY_LIST_HELPER = "directory_list_helper";
+
+		#endregion
+
+		#region Messages
+
+		public const string PAGE_PROMPT_TEXT = "PagePrompt.Text";
+
+		#endregion 
 	}
 }
