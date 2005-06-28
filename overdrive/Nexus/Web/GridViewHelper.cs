@@ -7,6 +7,7 @@ using Nexus.Core.Helpers;
 using Nexus.Core.Tables;
 using Nexus.Web;
 using Nexus.Web.Helpers;
+using Spring.Context;
 
 namespace Nexus
 {
@@ -15,6 +16,7 @@ namespace Nexus
 	/// </summary>
 	public abstract class GridViewHelper : WebViewHelper, IGridViewHelper
 	{
+
 		#region IViewHelper 
 
 		/// <remarks><p>
@@ -30,11 +32,6 @@ namespace Nexus
 
 		#region IListViewHelper
 
-		public const string msg_EDIT_TEXT = "EDIT";
-		public const string msg_QUIT_TEXT = "CANCEL";
-		public const string msg_SAVE_TEXT = "SAVE";
-		public const string msg_ITEM_TEXT = "#";
-		public const string msg_ITEM_COMMAND = "cmdItem";
 
 		private IViewHelper _SaveHelper;
 		public virtual IViewHelper SaveHelper
@@ -77,47 +74,72 @@ namespace Nexus
 			set { _HasCriteria = value; }
 		}
 
-		private string _EditText = msg_EDIT_TEXT;
-		public virtual string EditText
-		{
-			get { return _EditText; }
-			set { _EditText = value; }
-		}
-
-		private string _QuitText = msg_QUIT_TEXT;
-		public virtual string QuitText
-		{
-			get { return _QuitText; }
-			set { _QuitText = value; }
-		}
-
-		private string _SaveText = msg_SAVE_TEXT;
-		public virtual string SaveText
-		{
-			get { return _SaveText; }
-			set { _SaveText = value; }
-		}
-
-		private string _ItemText = msg_ITEM_TEXT;
-		public virtual string ItemText
-		{
-			get { return _ItemText; }
-			set { _ItemText = value; }
-		}
-
-		private string _ItemCommandName = msg_ITEM_COMMAND;
-		public virtual string ItemCommandName
-		{
-			get { return _ItemCommandName as string; }
-			set { _ItemCommandName = value; }
-		}
-
 		private string _DataKeyField;
 		public virtual string DataKeyField
 		{
 			get { return _DataKeyField; }
 			set { _DataKeyField = value; }
 		}
+
+		#region text properties 
+
+		private IMessageSource _MessageSource;
+		/// <summary>
+		/// Identify the message source for this FieldContext.
+		/// </summary>
+		/// <exception cref="System.InvalidOperationException">
+		/// If the context has not been initialized yet.
+		/// </exception>
+		public IMessageSource MessageSource
+		{
+			get{ return _MessageSource; }
+			set{ _MessageSource = value; }
+		}
+
+		/// <summary>
+		/// Resolve the message.
+		/// </summary>
+		/// <param name="name">The name of the resource to get.</param>
+		/// <returns>
+		/// The resolved message if the lookup was successful. Otherwise, it either throws
+		/// an exception or returns the resource name, depending on the implementation.
+		/// </returns>
+		private string GetMessage(string name)
+		{
+			return MessageSource.GetMessage(name);
+		}
+
+		public virtual string EditText
+		{
+			get { return GetMessage(Tokens.ENTRY_EDIT_COMMAND); }
+			set { throw new NotSupportedException(); }
+		}
+
+		public virtual string QuitText
+		{
+			get { return GetMessage(Tokens.ENTRY_QUIT_COMMAND); }
+			set { throw new NotSupportedException(); }
+		}
+
+		public virtual string SaveText
+		{
+			get { return GetMessage(Tokens.ENTRY_SAVE_COMMAND); }
+			set { throw new NotSupportedException(); }
+		}
+
+		public virtual string ItemText
+		{
+			get { return GetMessage(Tokens.ENTRY_ITEM_COMMAND); }
+			set { throw new NotSupportedException(); }
+		}
+
+		public virtual string ItemCommandName
+		{
+			get { return GetMessage(Tokens.ENTRY_ITEM_COMMAND_NAME); }
+			set { throw new NotSupportedException(); }
+		}
+
+		#endregion 
 
 		#endregion 
 

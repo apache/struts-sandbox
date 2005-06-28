@@ -218,7 +218,7 @@ namespace Nexus.Core
 
 		#endregion
 
-		#region Hint IDs
+		#region Message keys (GridViewHelper)
 
 		/// <summary>
 		///  Token for Edit hint.
@@ -240,6 +240,33 @@ namespace Nexus.Core
 		/// </summary>
 		public const string HINT_SUCCESS_QUIT = "hint_success_quit";
 
+		/// <summary>
+		/// Token for Entry Edit command.
+		/// </summary>
+		public const string ENTRY_EDIT_COMMAND = "entry_edit_command";
+
+		/// <summary>
+		/// Token for Entry Quit command.
+		/// </summary>
+		public const string ENTRY_QUIT_COMMAND = "entry_quit_command";
+		
+		/// <summary>
+		/// Token for Entry Save command.
+		/// </summary>
+		public const string ENTRY_SAVE_COMMAND = "entry_save_command";
+		
+		/// <summary>
+		/// Token for Entry Item command.
+		/// </summary>
+		public const string ENTRY_ITEM_COMMAND = "entry_item_command";
+		
+		/// <summary>
+		/// Token for Entry Item command name.
+		/// </summary>
+		public const string ENTRY_ITEM_COMMAND_NAME = "entry_item_command_name";
+
 		#endregion
+
+
 	}
 }
