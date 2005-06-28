@@ -113,6 +113,9 @@
 		<property name="Catalog">
 			<ref object="Catalog" />
 		</property>
+		<property name="MessageSource">
+			<ref object="messageSource" />
+		</property>		
 	</object>
 
   <object id="directory_grid_helper" parent="BaseGridHelper" singleton="false">

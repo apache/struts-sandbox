@@ -8,8 +8,8 @@
 	<object id="messageSource" type="Spring.Context.Support.ResourceSetMessageSource, Spring.Core">
         <property name="ResourceManagers">
             <list>
-                <value>Nexus.Web.Messages, Nexus.Web</value>
                 <value>PhoneBook.Web.Resources.Messages, PhoneBook.Web</value>
+                <value>Nexus.Web.Messages, Nexus.Web</value>
             </list>
         </property>    
     </object>
