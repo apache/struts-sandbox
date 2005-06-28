@@ -22,6 +22,11 @@ namespace Nexus.Core.Profile
 		/// </summary>
 		public const string USER_PROFILE = "USER_PROFILE";
 
+		/// <summary>
+		/// Identify attribute key for storing a user ID;.
+		/// </summary>
+		public const string USER_ID = "USER_ID";
+
 		private IPrincipal _Principal;
 		/// <summary>
 		/// Provide the Principal object for this user.

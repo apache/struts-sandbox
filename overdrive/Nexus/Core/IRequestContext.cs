@@ -16,6 +16,7 @@
 using System;
 using System.Collections;
 using Agility.Core;
+using Nexus.Core.Profile;
 using Nexus.Core.Tables;
 
 namespace Nexus.Core
@@ -75,6 +76,10 @@ namespace Nexus.Core
 		/// 
 		IFieldTable FieldTable { get; set; }
 
+		/// <summary>
+		/// User profile, which includes user ID and Locale.
+		/// </summary>
+		IProfile Profile { get; set; }
 
 		/// <summary>
 		/// Return true if an Outcome object is present.

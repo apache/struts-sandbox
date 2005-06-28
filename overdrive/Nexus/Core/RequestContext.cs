@@ -17,6 +17,7 @@ using System;
 using System.Collections;
 using System.Text;
 using Agility.Core;
+using Nexus.Core.Profile;
 using Nexus.Core.Tables;
 
 namespace Nexus.Core
@@ -87,6 +88,18 @@ namespace Nexus.Core
 		{
 			get { return this [Tokens.FieldTable] as IFieldTable; }
 			set { this [Tokens.FieldTable] = value; }
+		}
+
+		public IProfile Profile
+		{
+			get { return this [UserProfile.USER_PROFILE] as IProfile; }
+			set
+			{
+				this [UserProfile.USER_PROFILE] = value;
+				IProfile profile = value as IProfile;
+				if (null != profile)
+					this [UserProfile.USER_ID] = profile.UserId;
+			}
 		}
 
 		public bool HasOutcome
