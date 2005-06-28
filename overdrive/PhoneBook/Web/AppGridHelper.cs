@@ -2,6 +2,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using Nexus;
 using Nexus.Core;
+using Nexus.Core.Tables;
 using PhoneBook.Core;
 
 namespace PhoneBook.Web
@@ -20,25 +21,55 @@ namespace PhoneBook.Web
 			set { _HasEditColumn = value; }
 		}
 
-		public virtual int BindEditorColumn (DataGrid grid, int i)
+		public override int BindColumns (DataGrid grid, int i)
 		{
-			TemplateColumn master = new TemplateColumn();
-			ColumnTemplate column = new ColumnTemplate();
-			master.ItemTemplate = column; 
-			grid.Columns.AddAt (i, master);
-			return ++i;
+			grid.DataKeyField = DataKeyField;
+			int colCount = FieldSet.Count;
+			for (int c = 0; c < colCount; c++)
+			{
+				IFieldContext fc = FieldSet [c] as IFieldContext;
+				string column = fc.ID;
+				string label = fc.Label;
+				if ((label==null) || (label.Length==0)) label = column;
+				
+				if (fc.ControlTypeName.Equals ("CheckBox"))
+					i = BindTemplateColumn (grid, GetCheckBoxColumn(), i, label);
+				else 
+					i = MyBindColumn (grid, i, label, column);
+			}
+			return i;
 		}
+
+		protected int MyBindColumn (DataGrid grid, int pos, string headerText, string dataField)
+		{
+			BoundColumn column = new BoundColumn ();
+			column.DataField = dataField;
+			column.HeaderText = headerText;
+			grid.Columns.AddAt (pos, column);
+			return pos + 1;
+		}
+
+		protected int BindTemplateColumn(DataGrid grid, DataGridColumn column, int pos, string headerText)
+		{
+				column.HeaderText = headerText;	
+				grid.Columns.AddAt (pos, column);
+				return pos + 1;
+		}
+
+		public TemplateColumn GetCheckBoxColumn()
+		{
+			TemplateColumn tm = new TemplateColumn();
+			tm.ItemTemplate = new CheckBoxTemplate();
+			return tm;
+		}
+
 	}
 
-	public class ColumnTemplate : ITemplate 
+	public class CheckBoxTemplate : ITemplate 
 	{ 
 		public void InstantiateIn(Control container) 
 		{ 
-			Label myLabel = new Label();
-			myLabel.Text="Check to delete";
-			CheckBox mycheckbox = new CheckBox();
-			container.Controls.Add(myLabel); 
-			container.Controls.Add(mycheckbox); 
+			container.Controls.Add(new CheckBox()); 
 		} 
-	}
+	}	
 }
