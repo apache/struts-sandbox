@@ -3,6 +3,14 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
 	
+<!-- Catalog -->    		
+  
+  <object id="Catalog" type="Nexus.Extras.Spring.Catalog">
+	  <property name="FieldTable"><ref object="FieldTable"/></property>
+	  <property name="PreOp"><ref object="PreOp"/></property>
+	  <property name="PostOp"><ref object="PostOp"/></property>
+  </object>
+  
 <!-- Request Processors -->
 	
   <object id="ConvertInput" type="Nexus.Core.Validators.ConvertInput">
@@ -31,13 +39,6 @@
     </property>           
   </object>
     	
-<!-- Catalog -->    		
-  
-  <object id="Catalog" type="Nexus.Extras.Spring.Catalog">
-	  <property name="PreOp"><ref object="PreOp"/></property>
-	  <property name="PostOp"><ref object="PostOp"/></property>
-  </object>
-  
  <!-- FieldTable -->
  
 	<object id="FieldTable" type="Nexus.Core.Tables.FieldTable">

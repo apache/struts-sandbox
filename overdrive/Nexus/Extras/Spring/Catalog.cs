@@ -141,18 +141,25 @@ namespace Nexus.Extras.Spring
 			return _Factory;
 		}
 
-
-		private IFieldTable _FieldTable = null;
-		/// <summary>
-		/// Access method for the Catalog's FieldTable.
-		/// </summary>
-		/// <returns>FieldTable for this Catalog</returns></returns>
-		/// 
-		private IFieldTable GetFieldTable ()
+		private IFieldTable _FieldTable;
+		public IFieldTable FieldTable
 		{
-			if (_FieldTable == null)
-				_FieldTable = GetObject (Tokens.ID_FIELD_TABLE) as IFieldTable;
-			return _FieldTable;
+			get { return _FieldTable; }
+			set { _FieldTable = value; }
+		}
+
+		private IRequestCommand _PreOp;
+		public IRequestCommand PreOp
+		{
+			get { return _PreOp; }
+			set { _PreOp = value; }
+		}
+
+		private IRequestCommand _PostOp;
+		public IRequestCommand PostOp
+		{
+			get { return _PostOp; }
+			set { _PostOp = value; }
 		}
 
 		public IViewHelper GetHelper (string name)
@@ -181,7 +188,7 @@ namespace Nexus.Extras.Spring
 			{
 				context = command.NewContext ();
 				context [Tokens.CommandBin] = command;
-				context [Tokens.FieldTable] = GetFieldTable ();
+				context [Tokens.FieldTable] = FieldTable;
 				// TODO: MessageTable
 			}
 			catch (Exception e)
@@ -267,20 +274,6 @@ namespace Nexus.Extras.Spring
 					context.Fault = e;
 				}
 			}
-		}
-
-		private IRequestCommand _PreOp;
-		public IRequestCommand PreOp
-		{
-			get { return _PreOp; }
-			set { _PreOp = value; }
-		}
-
-		private IRequestCommand _PostOp;
-		public IRequestCommand PostOp
-		{
-			get { return _PostOp; }
-			set { _PostOp = value; }
 		}
 
 		#endregion

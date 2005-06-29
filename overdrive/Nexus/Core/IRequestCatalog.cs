@@ -16,6 +16,7 @@
 using System.Collections;
 using Agility.Core;
 using Nexus.Core.Helpers;
+using Nexus.Core.Tables;
 
 namespace Nexus.Core
 {
@@ -26,6 +27,36 @@ namespace Nexus.Core
 	/// 
 	public interface IRequestCatalog : ICatalog
 	{
+
+		/// <summary>
+		/// Provide the FieldTable for this Catalog.
+		/// </summary>
+		/// <remarks><p>
+		/// The GetRequest methods "stamp" the Context 
+		/// with a reference to the FieldTable, 
+		/// among other things.
+		/// </p></remarks>
+		IFieldTable FieldTable {get;set;}
+		
+		/// <summary>
+		/// Execute before a Command called via ExecuteView. 
+		/// </summary>
+		/// <remarks><p>
+		/// Of course, a IRequestChain may be used here too.
+		/// </p></remarks>
+		/// 
+		IRequestCommand PreOp {get;set;}
+			
+		/// <summary>
+		/// Execute after a Command called via ExecuteView. 
+		/// </summary>
+		/// <remarks><p>
+		/// Of course, a IRequestChain may be used here too.
+		/// </p></remarks>
+		/// 
+		IRequestCommand PostOp {get;set;}
+
+
 		/// <summary>
 		/// Obtains an object for ID.
 		/// </summary>
@@ -42,7 +73,7 @@ namespace Nexus.Core
 
 		/// <summary>
 		/// Obtain a IRequestContext for command ID, 
-		/// including embedded resources.
+		/// including embedded resources like the FieldTable,
 		/// </summary>
 		/// <param name="name">Our command ID</param>
 		/// <returns>IRequestContext with embedded resources.</returns>
@@ -51,7 +82,7 @@ namespace Nexus.Core
 
 		/// <summary>
 		/// Obtain a IRequestContext for command ID, 
-		/// including embedded resources, 
+		/// including embedded resources like the FieldTable,
 		/// and process string-based input. 
 		/// </summary>
 		/// <param name="name">Our command ID</param>
@@ -102,24 +133,6 @@ namespace Nexus.Core
 		/// <param name="context">Context to execute</param>
 		/// 
 		void ExecuteView (IRequestContext context);
-
-		/// <summary>
-		/// Execute before a Command called via ExecuteView. 
-		/// </summary>
-		/// <remarks><p>
-		/// Of course, a IRequestChain may be used here too.
-		/// </p></remarks>
-		/// 
-		IRequestCommand PreOp {get;set;}
-			
-		/// <summary>
-		/// Execute after a Command called via ExecuteView. 
-		/// </summary>
-		/// <remarks><p>
-		/// Of course, a IRequestChain may be used here too.
-		/// </p></remarks>
-		/// 
-		IRequestCommand PostOp {get;set;}
 
 	}
 }
