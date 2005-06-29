@@ -113,8 +113,12 @@
 		<property name="Catalog">
 			<ref object="Catalog" />
 		</property>
+		<property name="MessageSource">
+			<ref object="messageSource" />
+		</property>		
 	</object>
 
+	<!-- Note that the FieldSet refers to FieldContext objects (AppField.xml) -->
   <object id="directory_grid_helper" parent="BaseGridHelper" singleton="false">
    		<property name="FindHelper">
    			<ref object="directory_find_helper"/>

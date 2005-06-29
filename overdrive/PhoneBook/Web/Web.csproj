@@ -29,7 +29,7 @@
                     CheckForOverflowUnderflow = "false"
                     ConfigurationOverrideFile = ""
                     DefineConstants = "DEBUG;TRACE"
-                    DocumentationFile = ""
+                    DocumentationFile = "PhoneBook.Web.xml"
                     DebugSymbols = "true"
                     FileAlignment = "4096"
                     IncrementalBuild = "false"
@@ -232,10 +232,6 @@
                 <File
                     RelPath = "Forms\Web.config"
                     BuildAction = "Content"
-                />
-                <File
-                    RelPath = "Resources\Messages.resx"
-                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "Resources\Command\AppBase.xml"
