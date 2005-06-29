@@ -153,6 +153,7 @@
  <!-- Catalog -->
  
   <object id="Catalog" type="Nexus.Extras.Spring.Catalog">
+	  <property name="FieldTable"><ref object="FieldTable"/></property>
 	  <property name="PreOp"><ref object="pre-op"/></property>
 	  <property name="PostOp"><ref object="post-op"/></property>
   </object>
