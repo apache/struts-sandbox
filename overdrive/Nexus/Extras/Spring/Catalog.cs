@@ -30,6 +30,7 @@ namespace Nexus.Extras.Spring
 	/// 
 	public class Catalog : IRequestCatalog, IApplicationContextAware
 	{
+
 		#region Messages 
 
 		private const string msg_ADD_COMMAND = "This catalog instance is created through dependency injection.";
@@ -52,15 +53,11 @@ namespace Nexus.Extras.Spring
 			set { _Factory = value; }
 		}
 
-		/// <summary>
-		/// Allow safe access to Factory.GetObject.
-		/// </summary>
-		/// <param name="name">ID for object</param>
-		/// <returns>Object instance</returns>
-		/// <exception cref="Exception">
-		/// Throws Exception if name is null or object is not in catalog.
-		/// </exception>
-		private object GetObject (string name)
+		#endregion
+
+		#region IRequestCatalog
+
+		public object GetObject (string name)
 		{
 			if (null == name)
 			{
@@ -75,10 +72,6 @@ namespace Nexus.Extras.Spring
 			}
 			return o;
 		}
-
-		#endregion
-
-		#region ICatalog
 
 		/// <summary>
 		/// Not implemented as Catalog is expected to be created by an IOC framework.
@@ -149,12 +142,7 @@ namespace Nexus.Extras.Spring
 		}
 
 
-		/// <summary>
-		/// Field for GetFieldTable method.
-		/// </summary>
-		/// 
 		private IFieldTable _FieldTable = null;
-
 		/// <summary>
 		/// Access method for the Catalog's FieldTable.
 		/// </summary>
@@ -267,9 +255,9 @@ namespace Nexus.Extras.Spring
 			if (context.IsNominal)
 			{
 				IChain chain = new Chain ();
-				chain.AddCommand (GetCommand (Tokens.ID_PRE_OP));
+				if (_PreOp!=null) chain.AddCommand (_PreOp);
 				chain.AddCommand (command);
-				chain.AddCommand (GetCommand (Tokens.ID_POST_OP));
+				if (_PostOp!=null) chain.AddCommand (_PostOp);
 				try
 				{
 					chain.Execute (context);
@@ -279,6 +267,20 @@ namespace Nexus.Extras.Spring
 					context.Fault = e;
 				}
 			}
+		}
+
+		private IRequestCommand _PreOp;
+		public IRequestCommand PreOp
+		{
+			get { return _PreOp; }
+			set { _PreOp = value; }
+		}
+
+		private IRequestCommand _PostOp;
+		public IRequestCommand PostOp
+		{
+			get { return _PostOp; }
+			set { _PostOp = value; }
 		}
 
 		#endregion

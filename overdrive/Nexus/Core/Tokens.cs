@@ -168,10 +168,16 @@ namespace Nexus.Core
 		public const string ID = "_ID";
 
 		/// <summary>
-		/// Token for Label Label.
+		/// Token for Label property.
 		/// </summary>
 		/// 
 		public const string Label = "_Label";
+
+		/// <summary>
+		/// Token for Required property.
+		/// </summary>
+		/// 
+		public const string Required = "_Required";
 
 		/// <summary>
 		/// Token for Source property.
@@ -188,18 +194,6 @@ namespace Nexus.Core
 		#endregion
 
 		#region Command elements
-
-		/// <summary>
-		/// Token for the pre-op command element.
-		/// </summary>
-		/// 
-		public const string ID_PRE_OP = "pre-op";
-
-		/// <summary>
-		/// Token for the post-op command element.
-		/// </summary>
-		/// 
-		public const string ID_POST_OP = "post-op";
 
 		/// <summary>
 		/// Token for FieldTable command element.

@@ -191,7 +191,13 @@ namespace Nexus.Core
 
 		public void AddAlertForField (string key)
 		{
-			string message = FormatTemplate (FieldTable.Alert (key), key);
+			string message = FormatTemplate (FieldTable.Alert (key), FieldTable.Label(key));
+			AddAlert (message, key);
+		}
+
+		public void AddAlertRequired (string key)
+		{
+			string message = FormatTemplate (FieldTable.Required (key), FieldTable.Label(key));
 			AddAlert (message, key);
 		}
 

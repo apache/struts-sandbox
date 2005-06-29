@@ -27,10 +27,17 @@ namespace Nexus.Core
 	public interface IRequestCatalog : ICatalog
 	{
 		/// <summary>
+		/// Obtains an object for ID.
+		/// </summary>
+		/// <param name="name">Our object ID</param>
+		/// <returns>object for name</returns>
+		object GetObject (string name);
+
+		/// <summary>
 		/// Obtains a IViewHelper for helper ID.
 		/// </summary>
 		/// <param name="name">Our helper ID</param>
-		/// <returns>IViewHelper or null</returns>
+		/// <returns>IViewHelper for name</returns>
 		IViewHelper GetHelper (string name);
 
 		/// <summary>
@@ -78,16 +85,41 @@ namespace Nexus.Core
 		void ExecuteRequest (IRequestContext context);
 
 		/// <summary>
-		/// Execute a IRequestContext as part of a View layer chain.
+		/// Execute a IRequestContext as part of a chain 
+		/// created with the PreOp and PostOp commands (if any).
 		/// </summary>
 		/// <remarks><p>
-		/// Among other things, the View layer chain may transfer 
-		/// data between the FieldState and the root Context. 
-		/// The View layer chain acts as a Front Controller.
+		/// Among other things, the PreOp/PostOp chain may transfer 
+		/// data between the Criteria and the root Context.
+		/// </p><p>
+		/// The PreOp/PostOp chain acts as a Front Controller 
+		/// in that it ensures certain tasks are perform 
+		/// upon every request. 
+		/// </p><p>
+		/// IViewHelper implementations are expected to 
+		/// call ExecuteView to "invoke the Helper's command".
 		/// </p></remarks>
 		/// <param name="context">Context to execute</param>
 		/// 
 		void ExecuteView (IRequestContext context);
+
+		/// <summary>
+		/// Execute before a Command called via ExecuteView. 
+		/// </summary>
+		/// <remarks><p>
+		/// Of course, a IRequestChain may be used here too.
+		/// </p></remarks>
+		/// 
+		IRequestCommand PreOp {get;set;}
+			
+		/// <summary>
+		/// Execute after a Command called via ExecuteView. 
+		/// </summary>
+		/// <remarks><p>
+		/// Of course, a IRequestChain may be used here too.
+		/// </p></remarks>
+		/// 
+		IRequestCommand PostOp {get;set;}
 
 	}
 }

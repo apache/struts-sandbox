@@ -21,7 +21,7 @@ using System.Web.UI.WebControls;
 using Nexus.Core;
 using Nexus.Core.Helpers;
 
-namespace Nexus.Web.Helpers
+namespace Nexus.Web
 {
 	/// <summary>
 	/// Implement IWebViewHelper [OVR-14].
@@ -410,8 +410,9 @@ namespace Nexus.Web.Helpers
 			BoundColumn column = new BoundColumn ();
 			column.HeaderText = headerText;
 			column.DataField = dataField;
-			column.SortExpression = sortExpression; // See DataGridColumn.SortExpression Property
-			column.DataFormatString = dataFormat; // See Formatting Types in .NET Dev Guide
+				// ISSUE: Not being used in example applications.
+				column.DataFormatString = dataFormat; // See Formatting Types in .NET Dev Guide
+				column.SortExpression = sortExpression; // See DataGridColumn.SortExpression Property
 			grid.Columns.AddAt (pos, column);
 			return pos + 1;
 		}

@@ -2,6 +2,7 @@ using System;
 using Agility.Core;
 using Nexus.Core;
 using Nexus.Core.Tables;
+using Nexus.Core.Validators;
 using Spring.Context;
 
 namespace Nexus.Extras.Spring
@@ -14,16 +15,29 @@ namespace Nexus.Extras.Spring
 	/// The simplest way to do that is by using a base FieldContext in the Spring configuration file. 
 	/// The MessageSource property can be set once in the base and inherited by the others. 
 	/// </p><p>
-	/// In this implementation, the text properties -- Alert, Hint, Help, and Label -- are read-only 
+	/// In this implementation, 
+	/// the text properties -- Alert, Hint, Help, Label, and Required -- are read-only 
 	/// and cannot be accessed with a MessageSource property. 
 	/// When the property is read, 
-	/// the method loods for a message resource that shares the same  ID as the FieldContext,
-	/// but with a "_property" suffix (_alert, _hint, _help, _label). 
+	/// the method looks for a message resource that shares the same  ID as the FieldContext,
+	/// but with a "_property" suffix (_alert, _hint, _help, _label, _required). 
 	/// So, if the FieldContext ID is LastName, then reading its Alert will look for a message 
 	/// resource named "LastName_alert". 
-	/// If the resource is not found, 
-	/// then the FieldContext ID (e.g. "LastName") is quietly returned instead. 
+	/// </p><p>
+	/// In the case of an Alert, a message may also be provided by the Processor. 
+	/// If so, then the Processor message supercedes the default message. 
+	/// In this way, you can set a default for all the controls, 
+	/// and then override the default for specific processors.
+	/// </p><p>
+	/// To provide a default Alert or Required to use when no other is provided, 
+	/// provide a Message Resource entry in the form: "_alert" or "_required".
+	/// </p><p>
+	/// If a Label mesasge is not found, the FieldContext ID is returned instead. 
+	/// Otherwise, if no message is found, 
+	/// then the FieldContext ID and property tag (e.g. "LastName_required") 
+	/// is returned. 
 	/// </p></remarks>
+	/// 
 	[Serializable]
 	public class FieldContext : Context, IFieldContext
 	{
@@ -38,21 +52,16 @@ namespace Nexus.Extras.Spring
 			set { this [Tokens.ControlTypeName] = value; }
 		}
 
-		public string DataFormat
-		{
-			get { return this [Tokens.DataFormat] as string; }
-			set { this [Tokens.DataFormat] = value; }
-		}
-
 		public string ID
 		{
 			get { return this [Tokens.ID] as string; }
 			set { this [Tokens.ID] = value; }
 		}
-		public string ProcessorID
+
+		public IProcessor Processor
 		{
-			get { return this [Tokens.DataTypeID] as string; }
-			set { this [Tokens.DataTypeID] = value; }
+			get { return this [Tokens.Processor] as IProcessor; }
+			set { this [Tokens.Processor] = value; }
 		}
 
 		#region text properties
@@ -87,9 +96,8 @@ namespace Nexus.Extras.Spring
 		/// Resolve the message or return null.
 		/// </summary>
 		/// <param name="name">The name of the resource to get.</param>
-		/// <param name="defaultValue">The value to return on error.</param>
-		/// <returns>A resolved message or the defaultValue if the message could not be located for any reason.</returns>
-		private string GetMessageOrDefault(string name, string defaultValue)
+		/// <returns>A resolved message or null if the message could not be located for any reason.</returns>
+		private string GetMessageOrNull(string name)
 		{
 			string _name = null;
 			try
@@ -99,14 +107,39 @@ namespace Nexus.Extras.Spring
 			catch (Exception e)
 			{
 				e = e; // silly assignment
-				_name = defaultValue;
+				_name = null;
 			}
 			return _name;
 		}
 
+		/// <summary>
+		/// Return the message for the Processor, 
+		/// or the message for the FieldContext, 
+		/// or the message for the suffix,
+		/// or the FieldContext ID and suffix verbatim, 
+		/// if all else fails.
+		/// </summary>
+		/// <param name="root">FieldContext ID</param>
+		/// <param name="suffix">Message type</param>
+		/// <returns>A message or the root+suffix</returns>
 		private string GetText(string root, string suffix)
 		{
-			return GetMessageOrDefault(root + suffix, root);
+			string text = null;
+			IProcessor processor = Processor;
+			string id = null;
+			if (processor!=null) id = processor.ID;
+			if (id!=null) text = GetMessageOrNull(id + suffix);
+			if (text==null) 
+			{
+				text = GetMessageOrNull(root + suffix);
+			}
+			if (text==null) 
+			{
+				text = GetMessageOrNull(suffix);
+			}
+			if (text==null) text = root + suffix;
+				
+			return text;
 		}
 
 		public string Alert
@@ -129,7 +162,18 @@ namespace Nexus.Extras.Spring
 
 		public string Label
 		{
-			get { return GetText(this.ID,"_label"); }
+			get
+			{
+				string label = GetMessageOrNull(this.ID + "_label");
+				if (label==null) label = ID;
+				return label;
+			}
+			set { throw new NotSupportedException(); }
+		}
+
+		public string Required
+		{
+			get { return GetText(this.ID,"_required"); }
 			set { throw new NotSupportedException(); }
 		}
 

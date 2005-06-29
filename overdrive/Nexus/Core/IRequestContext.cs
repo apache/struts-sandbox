@@ -204,11 +204,18 @@ namespace Nexus.Core
 		void AddAlert (string template, string message);
 
 		/// <summary>
-		/// Add a formatted Alert error message
+		/// Add a formatted "Alert" error message
 		/// for the given field key via the FieldTable.
 		/// </summary>
 		/// <param name="key">Key from the FieldTable</param>
 		void AddAlertForField (string key);
+
+		/// <summary>
+		/// Add a formatted "Required" error message
+		/// for the given field key via the FieldTable.
+		/// </summary>
+		/// <param name="key">Key from the FieldTable</param>
+		void AddAlertRequired (string key);
 
 		/// <summary>
 		/// Indicate whether alerts exist.

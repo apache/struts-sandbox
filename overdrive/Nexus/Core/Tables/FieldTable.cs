@@ -88,16 +88,6 @@ namespace Nexus.Core.Tables
 			}
 		}
 
-		public virtual IProcessor GetProcessor (string id)
-		{
-			if (id == null)
-				throw new ArgumentNullException ("id==null", "Nexus.Core.Tables.FieldTable.GetProcessor");
-			IProcessor processor = Processor [id] as IProcessor;
-			if (processor == null)
-				throw new ArgumentNullException (id, "Nexus.Core.Tables.FieldTable.GetProcessor");
-			return processor;
-		}
-
 		#endregion
 
 		#region Text 
@@ -105,6 +95,16 @@ namespace Nexus.Core.Tables
 		public virtual string Alert (string id)
 		{
 			return GetFieldContext (id).Alert;
+		}
+
+		public virtual string Label (string id)
+		{
+			return GetFieldContext (id).Label;
+		}
+
+		public virtual string Required (string id)
+		{
+			return GetFieldContext (id).Required;
 		}
 
 		#endregion

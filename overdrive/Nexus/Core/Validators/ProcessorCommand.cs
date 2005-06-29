@@ -59,12 +59,11 @@ namespace Nexus.Core.Validators
 				return true;
 			}
 
-			string processorID = fieldContext.ProcessorID;
-			if (processorID == null)
+			IProcessor processor = fieldContext.Processor;
+			if (processor == null)
 				okay = ConvertInput (context);
 			else
 			{
-				IProcessor processor = table.GetProcessor (fieldContext.ProcessorID);
 				okay = processor.ConvertInput (context);
 			}
 			return okay;
@@ -102,12 +101,11 @@ namespace Nexus.Core.Validators
 				return true;
 			}
 
-			string processorID = fieldContext.ProcessorID;
-			if (processorID == null)
+			IProcessor processor = fieldContext.Processor;
+			if (processor == null)
 				okay = FormatOutput (context);
 			else
 			{
-				IProcessor processor = table.GetProcessor (fieldContext.ProcessorID);
 				okay = processor.FormatOutput (context);
 			}
 			return okay;
@@ -155,8 +153,7 @@ namespace Nexus.Core.Validators
 				bool okay = (context.Contains (id) && (null != context [id]) && (!String.Empty.Equals (context [id].ToString ())));
 				if (!okay)
 				{
-					string message = context.FormatTemplate (Required, id);
-					context.AddAlert (message, id);
+					context.AddAlertRequired (id);
 				}
 			}
 		}

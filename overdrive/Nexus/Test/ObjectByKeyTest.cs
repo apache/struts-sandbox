@@ -9,7 +9,7 @@ namespace Nexus.Core
 	/// Prove that a single object can be returned by Execute, without error.
 	/// </summary>
 	[TestFixture]
-	public class ObjectByKeyTest : BaseNexusTest
+	public class ObjectByKeyTest : CatalogBaseTest
 	{
 		public const string OBJECT_BY_KEY = "ObjectByKey";
 		public const string OBJECT_BY_KEY_WITH_VALIDATE = "ObjectByKeyWithValidate";

@@ -1,5 +1,6 @@
 using System;
 using Agility.Core;
+using Nexus.Core.Validators;
 
 namespace Nexus.Core.Tables
 {
@@ -16,7 +17,15 @@ namespace Nexus.Core.Tables
 
 		public string Alert
 		{
-			get { return this [Tokens.Alert] as string; }
+			get
+			{
+				string alert = null;
+				IProcessor processor = Processor;
+				if (processor!=null) alert = processor.Alert;
+				if (alert==null) alert = this[Tokens.Alert] as string;
+				if (alert==null) alert = this[Tokens.Alert] as string;
+				return alert;
+			}
 			set { this [Tokens.Alert] = value; }
 		}
 
@@ -24,18 +33,6 @@ namespace Nexus.Core.Tables
 		{
 			get { return this [Tokens.ControlTypeName] as string; }
 			set { this [Tokens.ControlTypeName] = value; }
-		}
-
-		public string DataFormat
-		{
-			get { return this [Tokens.DataFormat] as string; }
-			set { this [Tokens.DataFormat] = value; }
-		}
-
-		public string ProcessorID
-		{
-			get { return this [Tokens.DataTypeID] as string; }
-			set { this [Tokens.DataTypeID] = value; }
 		}
 
 		public string Hint
@@ -56,11 +53,27 @@ namespace Nexus.Core.Tables
 			set { this [Tokens.ID] = value; }
 		}
 
-
 		public string Label
 		{
-			get { return this [Tokens.Label] as string; }
+			get
+			{
+				string label = this [Tokens.Label] as string;
+				if (label==null) label = ID;
+				return label;
+			}
 			set { this [Tokens.Label] = value; }
+		}
+
+		public IProcessor Processor
+		{
+			get { return this [Tokens.Processor] as IProcessor; }
+			set { this [Tokens.Processor] = value; }
+		}
+
+		public string Required
+		{
+			get { return this [Tokens.Required] as string; }
+			set { this [Tokens.Required] = value; }
 		}
 
 	}

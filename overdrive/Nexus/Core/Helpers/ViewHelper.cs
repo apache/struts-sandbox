@@ -15,6 +15,7 @@
  */
 using System;
 using System.Collections;
+using Nexus.Core.Profile;
 using Nexus.Core.Tables;
 
 namespace Nexus.Core.Helpers
@@ -248,6 +249,16 @@ namespace Nexus.Core.Helpers
 				}
 				return _Context;
 			}
+		}
+
+		/// <summary>
+		/// Provide the user Profile for this Helper, if any.
+		/// </summary>
+		/// 
+		public IProfile Profile
+		{
+			get { return Context.Profile; }
+			set { Context.Profile = value; }
 		}
 
 		#endregion 

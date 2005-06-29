@@ -7,16 +7,13 @@
 	
   <object id="ConvertInput" type="Nexus.Core.Validators.ConvertInput">
     <property name="ID"><value>ConvertInput</value></property>
-    <property name="Required"><value>{0} is required.</value></property>
   </object>
 
   <object id="FormatOutput" type="Nexus.Core.Validators.FormatOutput">
     <property name="ID"><value>FormatOutput</value></property>    
-    <property name="Required"><value>{0} is required.</value></property>
   </object>
 
-  <!-- pre-op -->
-  <object id="pre-op" type="Nexus.Core.RequestChain">
+  <object id="PreOp" type="Nexus.Core.RequestChain">
     <property name="ID"><value>pre-op</value></property>    
 	<property name="AddCommands">
 		<list>
@@ -25,8 +22,7 @@
     </property>           
   </object>  
 
-  <!-- post-op -->
-  <object id="post-op" type="Nexus.Core.RequestChain">
+  <object id="PostOp" type="Nexus.Core.RequestChain">
     <property name="ID"><value>post-op</value></property>    
 	<property name="AddCommands">
 		<list>
@@ -34,22 +30,18 @@
 		</list>   
     </property>           
   </object>
-    		
- <!-- Catalog 
-  <object id="Catalog" type="Nexus.Extras.Spring.Catalog"/>  
- -->  
+    	
+<!-- Catalog -->    		
+  
+  <object id="Catalog" type="Nexus.Extras.Spring.Catalog">
+	  <property name="PreOp"><ref object="PreOp"/></property>
+	  <property name="PostOp"><ref object="PostOp"/></property>
+  </object>
   
  <!-- FieldTable -->
  
 	<object id="FieldTable" type="Nexus.Core.Tables.FieldTable">
 		<property name="Strict"><value>true</value></property>
-		<property name="AddFieldContexts">
-			<list>
-				<ref object="pk_something"/> 
-				<ref object="SomeDate"/> 
-				<ref object="SomethingResult"/> 
-			</list>
-		</property>
 		<property name="AddProcessors">
 			<list>
 				<ref object="CollectionProcessor"/> 
@@ -57,24 +49,13 @@
 				<ref object="StringProcessor"/> 
 			</list>
 		</property>
-	</object>
-	
-<!-- Fields -->
-
-	<object id="pk_something" type="Nexus.Core.Tables.FieldContext">
-		<property name="ID"><value>pk_something</value></property>
-		<property name="ProcessorID"><value>StringProcessor</value></property>
-	</object>
-	
-	<object id="SomethingResult" type="Nexus.Core.Tables.FieldContext">
-		<property name="ID"><value>SomethingResult</value></property>
-		<property name="ProcessorID"><value>StringProcessor</value></property>
-	</object>
-
-	<object id="SomeDate" type="Nexus.Core.Tables.FieldContext">
-		<property name="ID"><value>SomeDate</value></property>
-		<property name="ProcessorID"><value>DateTimeProcessor</value></property>
-		<property name="Alert"><value>{0} must be a valid date</value></property>
+		<property name="AddFieldContexts">
+			<list>
+				<ref object="pk_something"/> 
+				<ref object="SomeDate"/> 
+				<ref object="SomethingResult"/> 
+			</list>
+		</property>
 	</object>
 	
 <!-- Field Processors -->
@@ -85,11 +66,37 @@
 
 	<object id="DateTimeProcessor" type="Nexus.Core.Validators.DateTimeProcessor">
 		<property name="ID"><value>DateTimeProcessor</value></property>
+		<property name="Alert"><value>{0} must be a valid date</value></property>
 		<property name="DataFormat"><value>d</value></property>
 	</object>
 
 	<object id="StringProcessor" type="Nexus.Core.Validators.StringProcessor">
 		<property name="ID"><value>StringProcessor</value></property>
 	</object>
-	       
+
+<!-- Fields -->
+
+	<object id="BaseFieldContext" type="Nexus.Core.Tables.FieldContext">
+	    <property name="Alert"><value>{0} is invalid.</value></property>
+	    <property name="Required"><value>{0} is required.</value></property>
+	</object>
+
+	<object id="pk_something" parent="BaseFieldContext">
+		<property name="ID"><value>pk_something</value></property>
+	    <property name="Label"><value>Something Key</value></property>
+		<property name="Processor"><ref object="StringProcessor"/></property>
+	</object>
+	
+	<object id="SomethingResult" parent="BaseFieldContext">
+		<property name="ID"><value>SomethingResult</value></property>
+	    <property name="Label"><value>Something Result</value></property>
+		<property name="Processor"><ref object="StringProcessor"/></property>
+	</object>
+
+	<object id="SomeDate" parent="BaseFieldContext">
+		<property name="ID"><value>SomeDate</value></property>
+	    <property name="Label"><value>Some Date</value></property>
+		<property name="Processor"><ref object="DateTimeProcessor"/></property>
+	</object>
+		       
 </objects>

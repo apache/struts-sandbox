@@ -15,6 +15,7 @@
  */
 using System;
 using System.Collections;
+using Nexus.Core.Profile;
 using Nexus.Core.Tables;
 
 namespace Nexus.Core.Helpers
@@ -91,6 +92,12 @@ namespace Nexus.Core.Helpers
 		/// </summary>
 		/// 
 		IDictionary Criteria { get; }
+
+
+		/// <summary>
+		/// User profile, which includes user ID and Locale.
+		/// </summary>
+		IProfile Profile { get; set; }
 
 
 		/// <summary>

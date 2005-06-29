@@ -6,10 +6,9 @@ using Nexus.Core;
 using Nexus.Core.Helpers;
 using Nexus.Core.Tables;
 using Nexus.Web;
-using Nexus.Web.Helpers;
 using Spring.Context;
 
-namespace Nexus
+namespace Nexus.Web
 {
 	/// <summary>
 	/// Summary description for GridViewHelper.

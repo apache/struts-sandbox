@@ -23,7 +23,7 @@ namespace Nexus.Core
 	/// </summary>
 	/// 
 	[TestFixture]
-	public class CatalogTest : BaseNexusTest
+	public class CatalogTest : CatalogBaseTest
 	{
 		/// <summary>
 		/// A simple "list all" command should return nominal with an outcome. 

@@ -45,7 +45,11 @@ namespace Nexus.Core.Validators
 			outgoing.Target = target;
 			return true;
 		}
-
+		
+		/// <summary>
+		/// Override to return an instance of the desired IEntryList type.
+		/// </summary>
+		/// <returns>An IEntryList instance</returns>
 		public abstract IEntryList NewEntryList();
 	}
 }

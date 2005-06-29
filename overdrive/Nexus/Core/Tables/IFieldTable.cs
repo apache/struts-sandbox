@@ -39,14 +39,6 @@ namespace Nexus.Core.Tables
 		IFieldContext GetFieldContext (string id);
 
 		/// <summary>
-		/// Provide the Alert message for a given field id.
-		/// </summary>
-		/// <param name="id">FieldContext ID</param>
-		/// <returns>Alert mesasge for FieldContext ID</returns>
-		/// 
-		string Alert (string id);
-
-		/// <summary>
 		/// Add a Processor to the set.
 		/// </summary>
 		IProcessor AddProcessor { set; }
@@ -57,13 +49,28 @@ namespace Nexus.Core.Tables
 		IList AddProcessors { set; }
 
 		/// <summary>
-		/// Obtain the Processor for the given ID; 
-		/// there must be a matching Processor for each 
-		/// ProcessorID specified by a FieldContext.
+		/// Provide the Alert message for a given field id.
 		/// </summary>
-		/// <param name="id"></param>
-		/// <returns></returns>
-		IProcessor GetProcessor (string id);
+		/// <param name="id">FieldContext ID</param>
+		/// <returns>Alert message for FieldContext ID</returns>
+		/// 
+		string Alert (string id);
+
+		/// <summary>
+		/// Provide the Label message for a given field id.
+		/// </summary>
+		/// <param name="id">FieldContext ID</param>
+		/// <returns>Alert message for FieldContext ID</returns>
+		/// 
+		string Label (string id);
+
+		/// <summary>
+		/// Provide the Required message for a given field id.
+		/// </summary>
+		/// <param name="id">FieldContext ID</param>
+		/// <returns>Required message for FieldContext ID</returns>
+		/// 
+		string Required (string id);
 
 	}
 }

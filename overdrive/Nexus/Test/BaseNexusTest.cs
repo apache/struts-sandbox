@@ -13,22 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+using System;
 using System.Collections;
 using System.Text;
+using Agility.Core;
 using Agility.Extras.Spring;
-using Nexus.Extras.Spring;
+using Nexus.Core.Helpers;
 using NUnit.Framework;
 using Spring.Context;
 
 namespace Nexus.Core
 {
 	/// <summary>
-	/// Provide base SetUp method and convenience methods.
+	/// Provide base SetUp method and convenience methods 
+	/// for tests that use a IRequestCatalog.
 	/// </summary>
 	/// 
 	[TestFixture]
-	public class BaseNexusTest
+	public class CatalogBaseTest
 	{
+		/// <summary>
+		/// Catalog instance that tests can use.
+		/// </summary>
 		protected IRequestCatalog catalog;
 
 		/// <summary>
@@ -38,9 +44,8 @@ namespace Nexus.Core
 		[SetUp]
 		public virtual void SetUp ()
 		{
-			// TODO: Implement Objects.Factory [OVR-8]
 			IApplicationContext factory = Objects.Factory ();
-			catalog = new Catalog (factory); // sic
+			catalog = factory.GetObject ("Catalog") as IRequestCatalog;
 		}
 
 		/// <summary>
@@ -52,6 +57,44 @@ namespace Nexus.Core
 		{
 			Assert.IsTrue (catalog != null, "Expected non-null catalog.");
 		}
+
+		#region IRequestContext tests
+
+		/// <summary>
+		/// Determine if the context contains each key in keys.
+		/// </summary>
+		/// <param name="context">Context to process</param>
+		/// <param name="keys">Keys to verify</param>
+		/// <returns>True if contact contains each key in keys</returns>
+		protected bool ContainsKeys (IContext context, string[] keys)
+		{
+			bool found = true;
+			foreach (string key in keys)
+			{
+				found = found && context.Contains (key);
+			}
+			return found;
+		}
+
+		/// <summary>
+		/// Determine if the Criteria for context contains each key in keys.
+		/// </summary>
+		/// <param name="context">Context to process</param>
+		/// <param name="keys">Keys to verify</param>
+		/// <returns>True if Criteria for contact contains each key in keys</returns>
+		public bool ContainsCriteriaKeys (IRequestContext context, string[] keys)
+		{
+			if (!context.HasCriteria ()) return false;
+
+			IDictionary criteria = context.Criteria;
+			bool found = true;
+			foreach (string v in keys)
+			{
+				found = found && criteria.Contains (v);
+			}
+			return found;
+		}
+
 
 		/// <summary>
 		/// Convenience method to confirm that no Exception was caught.
@@ -98,5 +141,162 @@ namespace Nexus.Core
 				Assert.Fail (outer.ToString ());
 			}
 		}
+
+		/// <summary>
+		/// Convenience method to confirm 
+		/// that there are no alerts or fault.
+		/// </summary>
+		/// <param name="helper">Helper under test</param>
+		/// 
+		public void AssertNominal (IViewHelper helper)
+		{			
+			bool hasFault = helper.HasFault;
+			if (hasFault)
+				Assert.Fail (helper.Fault.Message);
+
+			bool hasAlerts = helper.HasAlerts;
+			if (hasAlerts)
+			{
+				Assert.Fail(helper.ErrorsText);
+			}
+		}
+
+		/// <summary>
+		/// Confirm that the value is stored in the context under the key.
+		/// </summary>
+		/// <param name="context">The context to check</param>
+		/// <param name="key">The key</param>
+		/// <param name="value">The value</param>
+		protected void AssertKey (IDictionary context, string key, string value)
+		{
+			Assert.IsNotNull (value, "Value is null");
+			Assert.IsNotNull (key, "Key is null");
+			Assert.IsTrue (value.Equals (context [key]), "Key:Value mismatch: " + key + ":" + value);
+		}
+
+		/// <summary>
+		/// Confirm that the given context contains the given keys.
+		/// </summary>
+		/// <param name="context">The context to check</param>
+		/// <param name="keys">The keys to check</param>
+		protected void AssertKeys (IRequestContext context, string[] keys)
+		{
+			Assert.IsTrue (ContainsKeys (context,keys), "Missing keys.");
+		}
+
+		/// <summary>
+		/// Confirm that the context contains the keys, 
+		/// that each key represents an non-null IList, 
+		/// and that each IList is not empty.
+		/// </summary>
+		/// <param name="context">The context to check</param>
+		/// <param name="keys">The list keys</param>
+		protected void AssertListKeys (IRequestContext context, string[] keys)
+		{
+			AssertKeys (context, keys);
+			foreach (string key in keys)
+			{
+				IList list = context [key] as IList;
+				Assert.IsNotNull (list, "List is null: " + key);
+				Assert.IsTrue (list.Count > 0, "List is empty");
+			}
+		}
+
+		/// <summary>
+		/// Call AssertList(string,int) with no minimum.
+		/// </summary>
+		/// <param name="id"></param>
+		protected IRequestContext AssertList (string id)
+		{
+			return AssertList (id, 0);
+		}
+
+		/// <summary>
+		/// Execute the Command for the given id, 
+		/// and confirm that the return state is Nominal, 
+		/// has an Outcome, 
+		/// that the Outcome is an non-null IList, 
+		/// and that the IList containes at list minCount items.
+		/// </summary>
+		/// <param name="id">The List Command to check</param>
+		protected IRequestContext AssertList (string id, int minCount)
+		{
+			IRequestContext context = catalog.GetRequest (id);
+			catalog.ExecuteRequest (context);
+			AssertNominal (context);
+			Assert.IsTrue (context.HasOutcome, "Expected outcome");
+			IList list = context.Outcome as IList;
+			Assert.IsNotNull (list, "Expected outcome as IList");
+			Assert.IsTrue (list.Count >= minCount, "Expected list entries");
+			return context;
+		}
+
+		#endregion
+
+		#region data access tests
+
+		/// <summary>
+		/// Virtual method for populating a context 
+		/// for use with other routine tests.
+		/// </summary>
+		/// <param name="context"></param>
+		protected virtual void Populate (IDictionary context)
+		{
+			// override to populate context
+			throw new NotImplementedException ("CatalogBaseTest.Populate must be overridden.");
+		}
+
+		/// <summary>
+		/// Insert and then delete a new record, 
+		/// calling the Populate method to fill the context with the appropriate values.
+		/// </summary>
+		/// <param name="insertId">The "save" command name</param>
+		/// <param name="keyId">The name of the primary key field</param>
+		/// <param name="keyValue">The primary key value initially set by Populate</param>
+		/// <param name="deleteId">The "delete" command name</param>
+		protected IRequestContext AssertInsertDelete (string insertId, string keyId, string keyValue, string deleteId)
+		{
+			IRequestContext context = catalog.GetRequest (insertId);
+			Populate (context);
+			context [keyId] = String.Empty;
+
+			catalog.ExecuteRequest (context);
+			AssertNominal (context);
+			Assert.IsFalse (keyValue.Equals (context [keyId]), "Expected new primary key");
+
+			ICommand delete = catalog.GetCommand (deleteId);
+			delete.Execute (context);
+			AssertNominal (context);
+			return context;
+		}
+
+		protected IRequestContext AssertEdit (string editId, string keyId, string keyValue, string[] keys)
+		{
+			IRequestContext context = catalog.GetRequest (editId);
+			context [keyId] = keyValue;
+			catalog.ExecuteRequest (context);
+			AssertNominal (context);
+			Assert.IsTrue (ContainsKeys (context,keys), "Missing fields");
+			return context;
+		}
+
+		/// <summary>
+		/// Update the given record (usually to the same values).
+		/// </summary>
+		/// <param name="updateId">The "save" command</param>
+		/// <param name="keyId">The name of the primary key</param>
+		/// <param name="keyValue">The value of the primary key</param>
+		protected IRequestContext AssertUpdate (string updateId, string keyId, string keyValue)
+		{
+			IRequestContext context = catalog.GetRequest (updateId);
+			Populate (context);
+			catalog.ExecuteRequest (context);
+			AssertNominal (context);
+			Assert.IsTrue (keyValue.Equals (context [keyId]));
+			return context;
+		}
+
+		#endregion
+
 	}
 }
