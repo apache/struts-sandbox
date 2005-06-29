@@ -1,8 +1,8 @@
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Nexus;
 using Nexus.Core;
 using Nexus.Core.Tables;
+using Nexus.Web;
 using PhoneBook.Core;
 
 namespace PhoneBook.Web

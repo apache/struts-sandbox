@@ -15,7 +15,15 @@
     </object>
 
  <!-- FieldTable -->
- 				
+
+		<!-- Strict is not enabled, so we only need to list fields that are 
+			(1) used by a GridViewHelper,
+			(2) need special formatting (via a Processor), 
+			(3) represent a list with fields that need a Processor (fields listed because of (2))).
+			The default processing will apply .ToString() to any unregistered fields, 
+			and pass through any unregistered lists verbatim 
+			(which is cool if all the fields on the list are strings that don't need formatting).
+		-->
 	<object id="FieldTable" type="Nexus.Core.Tables.FieldTable">
 		<property name="AddFieldContexts">
 			<list>
@@ -55,12 +63,12 @@
 	
 	<object id="extension" parent="BaseFieldContext">
 		<property name="ID"><value>extension</value></property>		
-		<property name="ProcessorID"><value>TelephoneProcessor</value></property>
+		<property name="Processor"><ref object="TelephoneProcessor"/></property>
 	</object>
 
 	<object id="hired" parent="BaseFieldContext">
 		<property name="ID"><value>hired</value></property>	
-		<property name="ProcessorID"><value>DateTimeProcessor</value></property>
+		<property name="Processor"><ref object="DateTimeProcessor"/></property>
 	</object>
 	
 	<object id="hours" parent="BaseFieldContext">
@@ -70,21 +78,22 @@
 	<object id="editor" parent="BaseFieldContext">
 		<property name="ID"><value>editor</value></property>	
 	</object>
+	<!-- property name="ControlTypeName"><value>CheckBox</value></property -->	
 
 	<!-- We need to "hash" the name with "_" to avoid conflict with the filter Command -->
 	<object id="_entry_list" parent="BaseFieldContext">
 		<property name="ID"><value>entry_list</value></property>
-		<property name="ProcessorID"><value>EntryListProcessor</value></property>
+		<property name="Processor"><ref object="EntryListProcessor"/></property>
 	</object>
 		
 	<object id="_extension_list" parent="BaseFieldContext">
 		<property name="ID"><value>extension_list</value></property>
-		<property name="ProcessorID"><value>ExtensionListProcessor</value></property>
+		<property name="Processor"><ref object="ExtensionListProcessor"/></property>
 	</object>
 
 	<object id="_hired_list" parent="BaseFieldContext">
 		<property name="ID"><value>hired_list</value></property>
-		<property name="ProcessorID"><value>HiredListProcessor</value></property>
+		<property name="Processor"><ref object="HiredListProcessor"/></property>
 	</object>
 
  		<!-- "d" is .NET for "short date" --> 
@@ -111,24 +120,17 @@
 		<property name="Key"><value>hired</value></property>
 	</object>
 
- <!-- Catalog -->
- 
-	<object id="Catalog" type="Nexus.Extras.Spring.Catalog"/>
- 
-
-<!-- Request Processors -->
+ <!-- Request Processors -->
 	
   <object id="convert_input" type="Nexus.Core.Validators.ConvertInput">
     <property name="ID"><value>ConvertInput</value></property>
-    <property name="Required"><value>{0} is required.</value></property>
   </object>
 
   <object id="format_output" type="Nexus.Core.Validators.FormatOutput">
     <property name="ID"><value>FormatOutput</value></property>    
-    <property name="Required"><value>{0} is required.</value></property>
   </object>
   
-<!-- pre-op -->
+ <!-- pre-op -->
 
   <object id="pre-op" parent="BaseChain">
 	<property name="AddCommands">
@@ -137,9 +139,8 @@
 		</list>   
     </property>           
   </object>  
-
   
-<!-- post-op -->
+ <!-- post-op -->
 
   <object id="post-op" parent="BaseChain">
 	<property name="AddCommands">
@@ -149,5 +150,12 @@
     </property>           
   </object>
     		
+ <!-- Catalog -->
+ 
+  <object id="Catalog" type="Nexus.Extras.Spring.Catalog">
+	  <property name="PreOp"><ref object="pre-op"/></property>
+	  <property name="PostOp"><ref object="post-op"/></property>
+  </object>
+ 
 
 </objects>

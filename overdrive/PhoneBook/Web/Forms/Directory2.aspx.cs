@@ -137,6 +137,7 @@ namespace PhoneBook.Web.Forms
 
 		protected override void Find_Init ()
 		{
+			base.Find_Init ();
 			list_all_command.Click += new EventHandler (ListAll_Click);
 			list_all_command.Text = GetMessage(list_all_command.ID);
 
@@ -168,6 +169,7 @@ namespace PhoneBook.Web.Forms
 
 		protected override void Find_Submit (object sender, EventArgs e)
 		{
+			// Don't call base: base.Find_Submit (); 
 			IGridViewHelper h = GridHelper;
 			DropDownList list = sender as DropDownList;
 			string id = list.ID;
@@ -181,6 +183,7 @@ namespace PhoneBook.Web.Forms
 
 		protected override void Find_Load ()
 		{
+			base.Find_Load ();
 			IViewHelper h = GridHelper.FindHelper;
 			h.ExecuteBind (find_panel.Controls);
 			bool ok = (h.IsNominal);
@@ -195,16 +198,24 @@ namespace PhoneBook.Web.Forms
 		protected override void Page_Init ()
 		{
 			base.Page_Init ();
-			list_panel.Visible = true;
-			error_panel.Visible = false;
+			list_panel.Visible = true; // base behavior hides
 			Profile = Session [UserProfile.USER_PROFILE] as AppUserProfile;
 			GridHelper.HasEditColumn = Profile.IsEditor;
+			GridHelper.FindHelper.Profile = Profile;
+			GridHelper.ListHelper.Profile = Profile;
+			GridHelper.SaveHelper.Profile = Profile;
 			if (!IsPostBack)
 			{
 				Page_Prompt = GetMessage(App.DIRECTORY_PROMPT);
 				profile_label.Text = Profile.UserId;
 				// UserLocale = Profile.Locale;
 			}
+		}
+
+		protected override void Page_Load (object sender, EventArgs e)
+		{
+			base.Page_Load(sender,e);
+			error_panel.Visible = false;
 		}
 
 		protected override void Page_PreRender(object sender, EventArgs e)

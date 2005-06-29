@@ -16,7 +16,7 @@
 	<object id="BaseKeyValueProcessor" type="Nexus.Core.Validators.KeyValueProcessor"/>
 
 	<!-- All child helpers must also specify singleton=false; otherwise, Context is shared. -->
-	<object id="BaseHelper" type="Nexus.Web.Helpers.WebViewHelper, Nexus.Web" singleton="false">
+	<object id="BaseHelper" type="Nexus.Web.WebViewHelper, Nexus.Web" singleton="false">
 		<property name="Catalog">
 			<ref object="Catalog" />
 		</property>

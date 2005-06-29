@@ -104,17 +104,17 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AppContext.cs"
+                    RelPath = "AppEntry.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AppContextList.cs"
+                    RelPath = "AppEntryList.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AppProcessor.cs"
+                    RelPath = "AppEntryListProcessor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

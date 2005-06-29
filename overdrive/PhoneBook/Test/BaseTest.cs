@@ -25,7 +25,7 @@ namespace PhoneBook.Core
 	/// </summary>
 	/// 
 	[TestFixture]
-	public class BaseTest : BaseNexusTest
+	public class BaseTest : CatalogBaseTest
 	{
 		/// <summary>
 		/// Confirm that the outcome is a non-null, non-empty list.
