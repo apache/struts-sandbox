@@ -231,7 +231,7 @@ namespace Nexus.Web
 		/// <summary>
 		/// Render the list as a DataGrid.
 		/// </summary>
-		protected DataGrid list_report;
+		protected NexusDataGrid list_report;
 
 		/// <summary>
 		/// Invoke display for adding a new entry.
