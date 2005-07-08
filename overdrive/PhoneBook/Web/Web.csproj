@@ -125,19 +125,9 @@
                     HintPath = "..\..\Nexus\Web\bin\Nexus.Web.dll"
                 />
                 <Reference
-                    Name = "IBatisNet.DataMapper"
-                    AssemblyName = "IBatisNet.DataMapper"
-                    HintPath = "..\..\iBatisNet.bin\IBatisNet.DataMapper.dll"
-                />
-                <Reference
                     Name = "ByteFX.MySqlClient"
                     AssemblyName = "ByteFX.MySqlClient"
                     HintPath = "..\..\iBatisNet.bin\ByteFX.MySqlClient.dll"
-                />
-                <Reference
-                    Name = "Castle.DynamicProxy"
-                    AssemblyName = "Castle.DynamicProxy"
-                    HintPath = "..\..\iBatisNet.bin\Castle.DynamicProxy.dll"
                 />
             </References>
         </Build>

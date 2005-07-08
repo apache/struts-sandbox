@@ -13,6 +13,7 @@
 		</property>		
 	</object>
 	
+	<!-- All child helpers must also specify singleton=false; otherwise, Context is shared. -->
   	<object id="BaseGridHelper" type="PhoneBook.Web.AppGridHelper, PhoneBook.Web" singleton="false">
 		<property name="Catalog">
 			<ref object="Catalog" />

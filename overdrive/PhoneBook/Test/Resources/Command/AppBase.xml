@@ -13,7 +13,14 @@
 		</property>		
 	</object>
 	
-	<object id="BaseKeyValueProcessor" type="Nexus.Core.Validators.KeyValueProcessor"/>
+  	<object id="BaseGridHelper" type="PhoneBook.Web.AppGridHelper, PhoneBook.Web" singleton="false">
+		<property name="Catalog">
+			<ref object="Catalog" />
+		</property>
+		<property name="MessageSource">
+			<ref object="messageSource" />
+		</property>		
+	</object>
 
 	<!-- All child helpers must also specify singleton=false; otherwise, Context is shared. -->
 	<object id="BaseHelper" type="Nexus.Web.WebViewHelper, Nexus.Web" singleton="false">
@@ -21,5 +28,7 @@
 			<ref object="Catalog" />
 		</property>
 	</object>
+
+	<object id="BaseKeyValueProcessor" type="Nexus.Core.Validators.KeyValueProcessor"/>
 
 </objects>

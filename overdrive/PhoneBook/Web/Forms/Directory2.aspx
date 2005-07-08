@@ -1,3 +1,4 @@
+<%@ Register TagPrefix="ovr" Namespace="Nexus.Web" Assembly="Nexus.Web" %>
 <%@ Page language="c#" Codebehind="Directory2.aspx.cs" AutoEventWireup="true" Inherits="PhoneBook.Web.Forms.Directory2" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
 <HTML>
@@ -52,12 +53,12 @@
 			
 			<!-- LIST -->			
 			<asp:Panel ID="list_panel" Runat="server">
-            	<asp:DataGrid id="list_report" Runat="server" 
+            	<ovr:NexusDataGrid id="list_report" Runat="server" 
 					PagerStyle-Mode="NumericPages" AllowPaging="true" PageSize="2" >
 					<HeaderStyle CssClass="HeaderStyle" BackColor="#CCCC99"></HeaderStyle>
 					<AlternatingItemStyle CssClass="AlternatingItemStyle" BackColor="#CCCC99"></AlternatingItemStyle>
 					<EditItemStyle CssClass="EditItemStyle"></EditItemStyle>
-            	</asp:DataGrid>
+            	</ovr:NexusDataGrid>
         		<p><asp:Button ID="list_add_command" Runat="server"></asp:Button></p>
 			</asp:Panel>
 
