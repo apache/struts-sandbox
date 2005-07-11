@@ -174,6 +174,13 @@
       </fileset>
     </copy>
 
+    <!-- Copy DTDs into appropriate resources directory -->
+    <mkdir         dir="${build.home}/classes/org/apache/tiles/resources"/>
+    <copy        todir="${build.home}/classes/org/apache/tiles/resources">
+      <fileset     dir="src/conf"
+              includes="*.dtd"/>
+    </copy>
+
     <!-- Copy license and notice files -->
     <copy       tofile="${build.home}/classes/META-INF/LICENSE.txt"
                   file="LICENSE.txt"/>
@@ -224,12 +231,13 @@
       <fileset dir="${basedir}" includes="*.txt build.*"
                                 excludes="build.properties"/>
     </copy>
-<!--
+
     <mkdir     dir="${dist.home}/conf"/>
     <copy    todir="${dist.home}/conf">
-      <fileset dir="${build.home}/conf" includes="*.tld"/>
+      <fileset dir="src/conf" includes="*.tld"/>
+      <fileset dir="src/conf" includes="*.dtd"/>
     </copy>
--->
+
     <mkdir     dir="${dist.home}/lib"/>
     <copy    todir="${dist.home}/lib">
       <fileset dir="${build.home}/lib" includes="*.jar"/>

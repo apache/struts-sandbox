@@ -53,6 +53,9 @@ public class XmlParser {
          // version 1.1
         "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN",
         "/org/apache/struts/resources/tiles-config_1_1.dtd",
+        // version 1.2
+        "-//Apache Software Foundation//DTD Tiles Configuration 1.2//EN",
+        "/org/apache/tiles/resources/tiles-config_1_2.dtd"
     };
 
      /**
