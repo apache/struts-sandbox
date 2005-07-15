@@ -123,13 +123,17 @@
  <!-- Request Processors -->
 	
   <object id="convert_input" type="Nexus.Core.Validators.ConvertInput">
-    <property name="ID"><value>ConvertInput</value></property>
+    <property name="ID"><value>convert_input</value></property>
   </object>
 
   <object id="format_output" type="Nexus.Core.Validators.FormatOutput">
-    <property name="ID"><value>FormatOutput</value></property>    
+    <property name="ID"><value>format_output</value></property>    
   </object>
   
+  <object id="clear_context" type="Nexus.Core.Validators.ClearContext">
+    <property name="ID"><value>clear_context</value></property>    
+  </object>
+
  <!-- pre-op -->
 
   <object id="pre-op" parent="BaseChain">
@@ -146,6 +150,7 @@
 	<property name="AddCommands">
 		<list>
 			<ref object="format_output"/>
+			<ref object="clear_context"/>
 		</list>   
     </property>           
   </object>

@@ -153,8 +153,16 @@ namespace PhoneBook.Web.Forms
 			}
 		}
 
+		private string GetRootID(string id)
+		{
+			int v = id.LastIndexOf (GridHelper.FindHelper.ListSuffix);
+			string key = id.Substring (0, v);
+			return key;			
+		}
+
 		private void Filter_Reset (DropDownList except)
 		{
+			// Reset filter controls
 			int exceptIndex = 0;
 			if (except != null) exceptIndex = except.SelectedIndex;
 			foreach (DropDownList filter in FilterList ())
@@ -162,22 +170,21 @@ namespace PhoneBook.Web.Forms
 				filter.SelectedIndex = 0;
 			}
 			if (except != null) except.SelectedIndex = exceptIndex;
-			// Update other members
-			List_ResetIndex ();
+			// Tell everyone that we are starting over
 			Page_Prompt = GetMessage(App.DIRECTORY_PROMPT);
+			List_ResetIndex ();
 		}
 
 		protected override void Find_Submit (object sender, EventArgs e)
 		{
 			// Don't call base: base.Find_Submit (); 
-			IGridViewHelper h = GridHelper;
 			DropDownList list = sender as DropDownList;
-			string id = list.ID;
-			int v = id.LastIndexOf (h.FindHelper.ListSuffix);
-			string key = id.Substring (0, v);
-			h.FindHelper.Criteria [key] = list.SelectedValue;
-			List_Criteria = h.FindHelper.Criteria;
 			Filter_Reset (list);
+			string key = GetRootID(list.ID);
+			IGridViewHelper h = GridHelper;
+			h.FindHelper.Criteria.Clear ();
+			h.FindHelper.Criteria [key] = list.SelectedValue;
+			List_Criteria = GridHelper.FindHelper.Criteria;
 			List_Load ();
 		}
 

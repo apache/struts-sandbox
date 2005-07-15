@@ -24,7 +24,7 @@ namespace PhoneBook.Web.Forms
 		protected Label lblError;
 
 		/// <summary>
-		/// Display a list of error mesasges.
+		/// Display a list of error messages.
 		/// </summary>
 		public IViewHelper Page_Error
 		{
