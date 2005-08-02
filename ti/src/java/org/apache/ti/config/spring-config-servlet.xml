@@ -1,0 +1,40 @@
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+  
+  <bean id="requestProcessor" class="org.apache.ti.processor.chain.ChainRequestProcessor">
+    <property name="sourceResolver"><ref bean="sourceResolver" /></property>
+    <property name="chainConfig"><value>org/apache/ti/processor/chain/chain-config-servlet.xml</value></property>
+    <property name="catalogName"><value>struts-ti</value></property>
+    <property name="startCommandName"><value>start</value></property>
+    <property name="initCommandName"><value>init</value></property>
+    <property name="chainRuleSet" ref="chainRuleSet" />
+  </bean>
+  
+  <bean id="chainRuleSet" class="org.apache.ti.processor.chain.SpringConfigRuleSet" />
+  
+  <bean id="sourceResolver" class="org.apache.ti.util.ServletSourceResolver" />
+  
+  <bean id="actionMapper" class="org.apache.ti.config.mapper.ServletActionMapper" />
+  
+  <bean id="controllerContext" class="org.apache.ti.processor.ControllerContext" />
+  
+  <bean id="objectFactory" class="org.apache.ti.processor.SpringObjectFactory" />
+  
+  <bean id="actionProxyFactory" class="org.apache.ti.processor.SpringActionProxyFactory" />
+  
+  <bean id="controllerAction" class="org.apache.ti.processor.ControllerAction" singleton="false" />
+  
+  <!-- Chain commands that need DI -->
+  <bean id="createActionMapping" class="org.apache.ti.processor.chain.CreateActionMapping">
+    <property name="actionMapper" ref="actionMapper" />
+  </bean>
+  <bean id="initXWork" class="org.apache.ti.processor.chain.InitXWork">
+    <property name="objectFactory" ref="objectFactory" />
+    <property name="actionProxyFactory" ref="actionProxyFactory" />
+  </bean>
+  <bean id="initControllerContext" class="org.apache.ti.processor.chain.InitControllerContext">
+    <property name="controllerContext" ref="controllerContext" />
+  </bean>
+  
+</beans>  

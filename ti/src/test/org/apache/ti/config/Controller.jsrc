@@ -1,0 +1,21 @@
+
+import com.opensymphony.xwork.Action;
+
+public class Controller {
+
+    /** @ti.action */
+    public String index() {
+        return Action.SUCCESS;
+    }
+    
+    /**
+     * @ti.action
+     * @ti.forward name="success" type="redirect" location="index"
+     * @ti.forward name="lost" type="dispatch" location="lostPassword.jsp"
+     * @ti.forward name="error" type="action" location="login"
+     */
+    public String doLogin() {
+        return Action.SUCCESS;
+    }    
+
+}
