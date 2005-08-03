@@ -16,16 +16,14 @@
  * $Header:$
  */
 
-
 import com.opensymphony.xwork.Action;
 import com.opensymphony.xwork.ActionContext;
-import java.util.Map;
 
 public class Controller {
 
     /** @ti.action */
     public String index() {
-        System.out.println("sucess returned: "+ActionContext.getContext().get("webContext"));
+        System.out.println("success returned: "+ActionContext.getContext().get("webContext"));
         return Action.SUCCESS;
     }    
     
