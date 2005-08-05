@@ -35,7 +35,7 @@ import xjavadoc.XJavaDoc;
 import xjavadoc.filesystem.ReaderFile;
 
 /**
- *  Processes xdoclet-style tags and uses a velocity template to generate 
+ *  Processes xdoclet-style tags and uses a velocity template to generate
  *  content.
  */
 public class XDocletParser {
@@ -44,10 +44,10 @@ public class XDocletParser {
     private Template template;
     private Map parameters;
     private static final Log log = LogFactory.getLog(XDocletParser.class);
-    
+
     public void init() {
         VelocityEngine velocity = new VelocityEngine();
-        
+
         Properties props = new Properties();
         try {
             props.load(getClass().getResourceAsStream("velocity.properties"));
@@ -57,46 +57,46 @@ public class XDocletParser {
             log.error("Unable to locate template to process javadoc tags", ex);
         }catch (Exception ex) {
             log.error("Unable to intialize velocity", ex);
-        }    
-        
+        }
+
     }
-    
+
     public void setParameters(Map map) {
         this.parameters = map;
     }
-    
+
     public Map getParameters() {
         return parameters;
     }
-        
+
     public void setTemplateName(String name) {
         this.templateName = name;
     }
-    
+
     public void generate(String name, Reader reader, Writer writer) {
         XJavaDoc jdoc = new XJavaDoc();
         ReaderFile file = new ReaderFile(reader);
-        
-        
+
+
         String className = name.replace('/', '.');
         className = className.replace('\\', '.');
         className = className.substring(0, className.indexOf(".java"));
-        
+
         jdoc.addAbstractFile(className, file);
         XClass xclass = jdoc.getXClass(className);
-        
+
         Map contextMap = new HashMap();
         if (parameters != null) {
             contextMap.putAll(parameters);
-        }    
+        }
         VelocityContext context = new VelocityContext(contextMap);
         context.put("xclass", xclass);
         context.put("javaFile", name);
-        
+
         try {
             template.merge(context, writer);
         } catch (Exception ex) {
             log.error("Unable to generate javadoc output", ex);
-        }    
+        }
     }
-}   
+}

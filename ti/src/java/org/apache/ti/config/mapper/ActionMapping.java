@@ -51,7 +51,7 @@ public class ActionMapping {
     public Map getParams() {
         return params;
     }
-    
+
     public String getExternalMapping() {
         return externalMapping;
     }

@@ -22,11 +22,11 @@ public class SpringActionProxyFactory extends DefaultActionProxyFactory implemen
     public static final String ACTION_INVOCATION = "actionInvocation";
 
     protected BeanFactory beanFactory;
-    
+
     public void setBeanFactory(BeanFactory factory) {
         this.beanFactory = factory;
     }
-    
+
     public ActionInvocation createActionInvocation(ActionProxy actionProxy) throws Exception {
         return new ControllerActionInvocation(beanFactory, actionProxy);
     }

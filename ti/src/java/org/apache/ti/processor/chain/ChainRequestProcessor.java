@@ -47,12 +47,12 @@ public class ChainRequestProcessor implements RequestProcessor {
      * contain the configuration for the default commons-chain catalog(s).</p>
      */
     protected String chainConfig = "org/apache/ti/processor/chain/chain-config-servlet.xml";
-    
+
     /**
      * <p>Commons Logging instance.</p>
      */
     protected static Log log = LogFactory.getLog(ChainRequestProcessor.class);
-    
+
     /**
      * <p>The {@link CatalogFactory} from which catalog containing the the
      * base request-processing {@link Command} will be retrieved.</p>
@@ -71,64 +71,64 @@ public class ChainRequestProcessor implements RequestProcessor {
      * <p>The {@link Command} to be executed for each request.</p>
      */
     protected Command startCmd = null;
-    
+
     protected String catalogName = "struts-ti";
     protected String startCmdName = "start";
     protected String initCmdName = "init";
-    
+
     protected SourceResolver resolver = null;
-    
+
     protected RuleSet ruleSet = null;
-    
+
     protected Map initParameters = null;
-    
+
     public void setSourceResolver(SourceResolver resolver) {
         this.resolver = resolver;
     }
-    
+
     public void setStartCommandName(String name) {
         this.startCmdName = name;
     }
-    
+
     public void setInitCommandName(String name) {
         this.initCmdName = name;
     }
-    
+
     public void setCatalogName(String name) {
         this.catalogName = name;
     }
-    
+
     public void setChainConfig(String name) {
         this.chainConfig = name;
     }
-    
+
     public void setChainRuleSet(RuleSet ruleset) {
         this.ruleSet = ruleset;
     }
-    
-    
+
+
     public void init(Map initParameters, WebContext webContext) {
         this.initParameters = initParameters;
-        
+
         String chain = (String)initParameters.get("chainConfig");
         try {
             initChain(chain, webContext);
-            
+
             initCatalogFactory();
-            
+
             catalog = this.catalogFactory.getCatalog(catalogName);
             if (catalog == null) {
                 throw new ProcessorException("Cannot find catalog '" +
                                            catalogName + "'");
             }
-    
+
             Command initCmd = catalog.getCommand(initCmdName);
             if (initCmd == null) {
                 throw new ProcessorException("Cannot find init command '" +
                                            startCmdName + "'");
             }
             initCmd.execute(webContext);
-            
+
             startCmd = catalog.getCommand(startCmdName);
             if (startCmd == null) {
                 throw new ProcessorException("Cannot find command '" +
@@ -147,16 +147,16 @@ public class ChainRequestProcessor implements RequestProcessor {
             throw new ProcessorException(t);
         }
     }
-    
-    
+
+
     public void process(WebContext ctx) {
         // Create and execute the command.
         try {
             if (log.isDebugEnabled()) {
                 log.debug("Using processing chain for this request");
             }
-            
-            // Add initialization parameters directly to context.  
+
+            // Add initialization parameters directly to context.
             ctx.putAll(initParameters);
             startCmd.execute(ctx);
         } catch (Exception e) {
@@ -164,7 +164,7 @@ public class ChainRequestProcessor implements RequestProcessor {
             throw new ProcessorException(e);
         }
     }
-    
+
     public void destroy() {
         // Release our LogFactory and Log instances (if any)
         ClassLoader classLoader =
@@ -188,12 +188,12 @@ public class ChainRequestProcessor implements RequestProcessor {
             */
         }
 
-        CatalogFactory.clear();   
+        CatalogFactory.clear();
         catalogFactory = null;
         catalog = null;
         startCmd = null;
     }
-    
+
     /**
      * <p>Parse the configuration documents specified by the
      * <code>chainConfig</code> init-param to configure the default
@@ -232,5 +232,5 @@ public class ChainRequestProcessor implements RequestProcessor {
         this.catalogFactory = CatalogFactory.getInstance();
 
     }
-    
+
 }

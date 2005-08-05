@@ -22,13 +22,13 @@ import com.opensymphony.xwork.config.entities.ActionConfig;
 
 /**
  * Adds code to handle ControllerActions if detected
- * 
+ *
  * @see com.opensymphony.xwork.DefaultActionInvocation
  */
 public class ControllerActionInvocation extends DefaultActionInvocation {
 
     private static final Log log = LogFactory.getLog(ControllerActionInvocation.class);
-    
+
     protected static final Map methodsCache = Collections.synchronizedMap(new HashMap());
 
     protected BeanFactory beanFactory;
@@ -46,18 +46,18 @@ public class ControllerActionInvocation extends DefaultActionInvocation {
     protected ControllerActionInvocation(BeanFactory factory, ActionProxy proxy, Map extraContext, boolean pushAction) throws Exception {
         super(proxy, extraContext, pushAction);
     }
-    
+
     protected Object getController() {
         return ((ControllerAction)action).getController();
     }
-    
+
     public Method getActionMethod() {
         return actionMethod;
     }
 
     protected void createAction() {
         super.createAction();
-        
+
         if (action instanceof ControllerAction) {
             ctrAction = (ControllerAction)action;
             createActionMethod();
@@ -88,11 +88,11 @@ public class ControllerActionInvocation extends DefaultActionInvocation {
             return super.invokeAction(action, actionConfig);
         }
     }
-    
-    
+
+
     protected void createActionMethod() {
         //String methodName = proxy.getMethod();
-        
+
         //if (methodName == null && actionConfig.getMethodName() == null) {
         //    return null;
         //}
@@ -102,15 +102,15 @@ public class ControllerActionInvocation extends DefaultActionInvocation {
         String methodName = getProxy().getConfig().getMethodName();
         Method method = null;
         Class ctrClass = getController().getClass();
-        
-        
-        
+
+
+
         Method[] methods = (Method[])methodsCache.get(ctrClass);
         if (methods == null) {
             methods = ctrClass.getMethods();
             methodsCache.put(ctrClass, methods);
         }
-        
+
         Method m;
         for (int x=0; x < methods.length; x++) {
             m = methods[x];
@@ -119,11 +119,11 @@ public class ControllerActionInvocation extends DefaultActionInvocation {
                 break;
             }
         }
-        
+
         if (method == null) {
             throw new IllegalArgumentException("Method '" + methodName + "()' is not defined in controller '" + ctrClass + "'");
         }
-        
+
         actionMethod = method;
     }
 }

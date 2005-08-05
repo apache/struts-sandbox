@@ -31,27 +31,27 @@ public class ProcessTagsTask {
     private ProcessTags processTags;
     private File srcdir;
     private File destdir;
-    
+
     private static final Log log = LogFactory.getLog(ProcessTagsTask.class);
-    
+
     public void setSrcdir(File file) {
         this.srcdir = file;
     }
-    
+
     public void setDestdir(File file) {
         this.destdir = file;
     }
-    
+
     public void execute() {
         XDocletParser parser = new XDocletParser();
         parser.init();
         ProcessTags pt = new ProcessTags();
         pt.setXDocletParser(parser);
-        
+
         try {
             pt.process(srcdir, "Controller.java", destdir, "xwork.xml");
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
-}    
+}

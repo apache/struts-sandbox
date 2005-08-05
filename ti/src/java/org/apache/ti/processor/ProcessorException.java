@@ -23,17 +23,17 @@ package org.apache.ti.processor;
  *  Wraps any exception thrown during request processing
  */
 public class ProcessorException extends RuntimeException {
-    
+
     public ProcessorException(String msg) {
         super(msg);
     }
-    
+
     public ProcessorException(String msg, Throwable e) {
         super(msg, e);
     }
-    
+
     public ProcessorException(Throwable e) {
         super(e);
     }
-    
+
 }

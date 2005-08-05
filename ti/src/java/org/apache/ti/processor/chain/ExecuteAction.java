@@ -28,16 +28,16 @@ import com.opensymphony.xwork.ActionProxy;
  *  Initializes XWork by replacing default factories
  */
 public class ExecuteAction implements Command {
-    
+
     public boolean execute(Context origctx) throws Exception {
         ActionContext ctx = ActionContext.getContext();
         ActionProxy proxy = ctx.getActionInvocation().getProxy();
-        
+
         String ret = proxy.execute();
-    
+
         origctx.put("result", ret);
         return false;
     }
-    
-    
+
+
 }

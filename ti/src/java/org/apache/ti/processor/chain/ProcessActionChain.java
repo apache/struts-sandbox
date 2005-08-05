@@ -29,11 +29,11 @@ import com.opensymphony.xwork.ActionProxy;
  *  Initializes XWork by replacing default factories
  */
 public class ProcessActionChain extends ChainBase {
-    
+
     public boolean execute(Context context) throws Exception {
-        
+
         ActionContext nestedContext = ActionContext.getContext();
-        
+
         ActionProxy proxy = (ActionProxy) context.get("actionProxy");
         ActionContext.setContext(proxy.getInvocation().getInvocationContext());
 
@@ -47,6 +47,6 @@ public class ProcessActionChain extends ChainBase {
 
         return retCode;
     }
-    
-    
+
+
 }

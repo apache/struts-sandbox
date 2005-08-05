@@ -18,13 +18,13 @@ import com.opensymphony.xwork.config.entities.ActionConfig;
 public class SpringObjectFactory extends ObjectFactory implements BeanFactoryAware {
 
     public static final String CONTROLLER_ACTION = "controllerAction";
-    
+
     protected BeanFactory beanFactory;
-    
+
     public void setBeanFactory(BeanFactory factory) {
         this.beanFactory = factory;
     }
-    
+
     /**
      * Build an Action of the given type
      */
@@ -33,7 +33,7 @@ public class SpringObjectFactory extends ObjectFactory implements BeanFactoryAwa
         if (obj instanceof Action) {
             return (Action) obj;
         } else {
-            ControllerAction action = (ControllerAction) beanFactory.getBean(CONTROLLER_ACTION); 
+            ControllerAction action = (ControllerAction) beanFactory.getBean(CONTROLLER_ACTION);
             Object controller = buildBean(config.getClassName());
             action.setController(controller);
             return action;

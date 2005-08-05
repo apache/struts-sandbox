@@ -55,7 +55,7 @@ public class ServletDispatcherResult extends BaseResult {
         if (log.isDebugEnabled()) {
             log.debug("Forwarding to location " + finalLocation);
         }
-        
+
         ServletWebContext ctx = (ServletWebContext) ControllerContext.getContext().getWebContext();
 
         //PageContext pageContext = ServletActionContext.getPageContext();
@@ -75,8 +75,8 @@ public class ServletDispatcherResult extends BaseResult {
             }
 
             // If we're included, then include the view
-            // Otherwise do forward 
-            // This allow the page to, for example, set content type 
+            // Otherwise do forward
+            // This allow the page to, for example, set content type
             if (!response.isCommitted() && (request.getAttribute("javax.servlet.include.servlet_path") == null)) {
                 request.setAttribute("ti.view_uri", finalLocation);
                 request.setAttribute("ti.request_uri", request.getRequestURI());

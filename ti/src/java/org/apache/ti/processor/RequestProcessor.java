@@ -29,9 +29,9 @@ import org.apache.commons.chain.web.WebContext;
 public interface RequestProcessor {
 
     public void init(Map initParameters, WebContext ctx);
-    
+
     public void process(WebContext ctx);
-    
+
     public void destroy();
-    
+
 }

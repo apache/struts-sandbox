@@ -26,13 +26,13 @@ import com.opensymphony.xwork.ActionContext;
  *  Context that adds Controller methods, using ActionContext for storage.
  */
 public class ControllerContext {
-    
+
     public static final String CONTROLLER_CONTEXT = "controllerContext";
 
     public static void setControllerContext(ControllerContext ctx) {
         ActionContext.getContext().put(CONTROLLER_CONTEXT, ctx);
     }
-    
+
     public static ControllerContext getContext() {
         return (ControllerContext) ActionContext.getContext().get(CONTROLLER_CONTEXT);
     }
@@ -51,5 +51,5 @@ public class ControllerContext {
 
     protected Object get(String key) {
         return getWebContext().get(key);
-    }    
+    }
 }

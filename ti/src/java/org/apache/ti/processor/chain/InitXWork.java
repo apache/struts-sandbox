@@ -29,26 +29,26 @@ import com.opensymphony.xwork.ObjectFactory;
  *  Initializes XWork by replacing default factories
  */
 public class InitXWork implements Command {
-    
+
     protected ObjectFactory objectFactory;
     protected ActionProxyFactory actionProxyFactory;
-    
+
     public void setObjectFactory(ObjectFactory factory) {
         this.objectFactory = factory;
     }
-    
+
     public void setActionProxyFactory(ActionProxyFactory factory) {
         this.actionProxyFactory = factory;
     }
-    
+
     public boolean execute(Context origctx) {
         WebContext ctx = (WebContext)origctx;
-    
+
         ObjectFactory.setObjectFactory(objectFactory);
         ActionProxyFactory.setFactory(actionProxyFactory);
-    
+
         return false;
     }
-    
-    
+
+
 }

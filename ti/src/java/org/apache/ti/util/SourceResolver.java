@@ -31,9 +31,9 @@ import org.apache.commons.chain.web.WebContext;
 public interface SourceResolver {
 
     public URL resolve(String path, WebContext context) throws IOException, MalformedURLException;
-    
+
     public List resolveList(String path, WebContext context) throws IOException, MalformedURLException;
-    
+
     public List resolveFromList(String paths, WebContext context) throws IOException, MalformedURLException;
 
 }

@@ -28,14 +28,14 @@ import org.apache.ti.processor.ControllerContext;
  *  Intializes the ControllerContext for this request
  */
 public class InitControllerContext implements Command {
-    
+
     protected ControllerContext context;
     protected static final Log log = LogFactory.getLog(InitControllerContext.class);
-   
+
     public void setControllerContext(ControllerContext ctx) {
         this.context = ctx;
     }
-    
+
     public boolean execute(Context origctx) {
         ControllerContext.setControllerContext(context);
         return false;

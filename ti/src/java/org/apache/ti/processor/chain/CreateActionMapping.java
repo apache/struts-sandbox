@@ -27,20 +27,20 @@ import org.apache.ti.config.mapper.ActionMapping;
  *  Creates an ActionMapping and stores it in the context.
  */
 public class CreateActionMapping implements Command {
-    
+
     protected ActionMapper actionMapper;
-    
+
     public void setActionMapper(ActionMapper mapper) {
         this.actionMapper = mapper;
     }
-    
+
     public boolean execute(Context origctx) {
         WebContext ctx = (WebContext)origctx;
-        
+
         ActionMapping mapping = actionMapper.getMapping(ctx);
-        ctx.put("actionMapping", mapping); 
+        ctx.put("actionMapping", mapping);
         return false;
     }
-    
-    
+
+
 }

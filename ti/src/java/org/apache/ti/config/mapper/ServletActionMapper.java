@@ -33,23 +33,23 @@ import org.apache.ti.servlet.StrutsTiServlet;
  * original servlet mapping to determine action mapping and reconstructed uri.
  */
 public class ServletActionMapper implements ActionMapper {
-    
+
     protected static final Log log = LogFactory.getLog(ServletActionMapper.class);
-    
+
     public ActionMapping getMapping(WebContext ctx) {
-        
+
         HttpServletRequest request = ((ServletWebContext)ctx).getRequest();
         List mappings = (List) ctx.get(StrutsTiServlet.SERVLET_MAPPINGS_KEY);
         String servletPath = request.getServletPath();
         return getMapping(servletPath, mappings);
     }
-    
+
     protected ActionMapping getMapping(String servletPath, List mappings) {
         String uri = null;
         String mapping = null;
         for (Iterator i = mappings.iterator(); i.hasNext(); ) {
             mapping = (String)i.next();
-            
+
             // Try to match prefix-based mapping
             if (mapping.charAt(mapping.length() - 1) == '*') {
                 String prefix = mapping.substring(0, mapping.length() - 1);
@@ -58,7 +58,7 @@ public class ServletActionMapper implements ActionMapper {
                     log.debug("matched prefix:"+prefix);
                     break;
                 }
-            
+
             // Try to match extension mapping
             } else if (mapping.charAt(0) == '*') {
                 String ext = mapping.substring(1);
@@ -69,7 +69,7 @@ public class ServletActionMapper implements ActionMapper {
                 }
             }
         }
-        
+
         if (uri != null) {
             log.debug("uri:"+uri);
             int div = uri.lastIndexOf('/');
@@ -78,7 +78,7 @@ public class ServletActionMapper implements ActionMapper {
             if (div > 0) {
                 namespace = uri.substring(0, div);
             }
-            
+
             return new ActionMapping(action, namespace, mapping, null);
         } else {
             // Couldn't find any action mapping
@@ -87,10 +87,10 @@ public class ServletActionMapper implements ActionMapper {
     }
 
     public String getUriFromActionMapping(ActionMapping mapping) {
-        
+
         String ext = mapping.getExternalMapping();
         int star = ext.indexOf('*');
-        
+
         StringBuffer sb = new StringBuffer();
         if (star > 0) {
             sb.append(ext.substring(0, star));

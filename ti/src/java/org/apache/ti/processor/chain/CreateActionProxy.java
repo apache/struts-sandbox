@@ -38,21 +38,21 @@ import com.opensymphony.xwork.config.ConfigurationException;
  *  Creates an ActionProxy instance
  */
 public class CreateActionProxy implements Command {
-    
+
     protected static final Log log = LogFactory.getLog(CreateActionProxy.class);
-   
+
     public boolean execute(Context origctx) {
         WebContext ctx = (WebContext)origctx;
-        
+
         ActionMapping mapping = (ActionMapping)ctx.get("actionMapping");
         ActionProxy proxy = getActionProxy(ctx, mapping);
 
         ctx.put("actionProxy", proxy);
         return false;
     }
- 
+
     protected ActionProxy getActionProxy(WebContext ctx, ActionMapping mapping) {
-        
+
         // request map wrapping the http request objects
         Map requestMap = ctx.getRequestScope();
 
@@ -84,7 +84,7 @@ public class CreateActionProxy implements Command {
             throw new ProcessorException(e);
         }
     }
-        
+
     /**
      * Merges all application and servlet attributes into a single <tt>HashMap</tt> to represent the entire
      * <tt>Action</tt> context.
@@ -117,6 +117,6 @@ public class CreateActionProxy implements Command {
         return extraContext;
     }
 
-   
-    
+
+
 }

@@ -41,10 +41,10 @@ public class ServletSourceResolver implements SourceResolver {
      * <p>Commons Logging instance.</p>
      */
     protected static Log log = LogFactory.getLog(ServletSourceResolver.class);
-    
-    public URL resolve(String path, WebContext context) 
+
+    public URL resolve(String path, WebContext context)
             throws IOException, MalformedURLException {
-                
+
         List list = resolveList(path, context);
         if (list.size() > 0) {
             return (URL) list.get(0);
@@ -52,10 +52,10 @@ public class ServletSourceResolver implements SourceResolver {
             return null;
         }
     }
-    
-    public List resolveList(String path, WebContext context) 
+
+    public List resolveList(String path, WebContext context)
             throws IOException, MalformedURLException {
-        
+
         ServletContext servletContext = ((ServletWebContext)context).getContext();
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         if (loader == null) {
@@ -90,12 +90,12 @@ public class ServletSourceResolver implements SourceResolver {
                 resolvedUrls.add(resource);
             }
         }
-        return resolvedUrls;  
+        return resolvedUrls;
     }
-    
-    public List resolveFromList(String paths, WebContext context) 
+
+    public List resolveFromList(String paths, WebContext context)
             throws IOException, MalformedURLException {
-        
+
         ServletContext servletContext = ((ServletWebContext)context).getContext();
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         if (loader == null) {
@@ -144,7 +144,7 @@ public class ServletSourceResolver implements SourceResolver {
                 resolvedUrls.add(resource);
             }
         }
-        return resolvedUrls;   
+        return resolvedUrls;
     }
 
 }

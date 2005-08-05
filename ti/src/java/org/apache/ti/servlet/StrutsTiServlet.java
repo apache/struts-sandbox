@@ -47,19 +47,19 @@ import org.xml.sax.SAXException;
  * @version $Rev$ $Date$
  */
 public class StrutsTiServlet extends HttpServlet {
-    
+
     public static final String SERVLET_MAPPINGS_KEY = "servletMappings";
-    
+
     protected String springConfig = "org/apache/ti/config/spring-config-servlet.xml";
-    
+
     protected static Log log = LogFactory.getLog(StrutsTiServlet.class);
-    
+
     protected BeanFactory beanFactory = null;
     protected List servletMappings = new ArrayList();
     protected RequestProcessor processor = null;
-    
+
     public void destroy() {
-        
+
         processor.destroy();
         beanFactory = null;
         processor = null;
@@ -76,10 +76,10 @@ public class StrutsTiServlet extends HttpServlet {
      */
     public void init() throws ServletException {
         super.init();
-        
+
         initSpring();
         initServlet();
-        
+
         Map initParameters = new HashMap();
         String key;
         for (Enumeration e = getInitParameterNames(); e.hasMoreElements(); ) {
@@ -87,11 +87,11 @@ public class StrutsTiServlet extends HttpServlet {
             initParameters.put(key, getInitParameter(key));
         }
         initParameters.put(SERVLET_MAPPINGS_KEY, servletMappings);
-        
+
         processor = (RequestProcessor) beanFactory.getBean("requestProcessor");
         processor.init(initParameters, new ServletWebContext(getServletContext(), null, null));
     }
-    
+
     protected void initSpring() throws ServletException {
         // Parse the configuration file specified by path or resource
         try {
@@ -107,9 +107,9 @@ public class StrutsTiServlet extends HttpServlet {
             String msg = "Exception loading spring configuration";
             log.error(msg, e);
             throw new UnavailableException(msg);
-        }   
+        }
     }
-    
+
 
     /**
      * <p>Perform the standard request processing for this request, and create
@@ -126,20 +126,20 @@ public class StrutsTiServlet extends HttpServlet {
 
         processor.process(new ServletWebContext(getServletContext(), request, response));
     }
-    
-    
+
+
     protected URL resolve(String path) throws ServletException {
         URL resource = null;
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         if (loader == null) {
             loader = this.getClass().getClassLoader();
         }
-        
+
         try {
             if (path.charAt(0) == '/') {
                 resource = getServletContext().getResource(path);
             }
-    
+
             if (resource == null) {
                 if (log.isDebugEnabled()) {
                     log.debug("Unable to locate " + path
@@ -163,10 +163,10 @@ public class StrutsTiServlet extends HttpServlet {
             log.error(e);
             throw new UnavailableException("Unable to load resource at "+path);
         }
-        
+
         return resource;
     }
-    
+
     /**
      * <p>Remember a servlet mapping from our web application deployment
      * descriptor, if it is for this servlet.</p>
@@ -181,13 +181,13 @@ public class StrutsTiServlet extends HttpServlet {
                     + ", urlPattern=" + urlPattern);
         }
         String myServletName = getServletConfig().getServletName();
-        
+
         if (servletName != null && servletName.equals(myServletName)) {
             servletMappings.add(urlPattern);
         }
 
     }
-    
+
     /**
      * <p>Initialize the servlet mapping under which our controller servlet
      * is being accessed.  This will be used in the <code>&html:form&gt;</code>
@@ -217,7 +217,7 @@ public class StrutsTiServlet extends HttpServlet {
         InputStream input =
             getServletContext().getResourceAsStream("/WEB-INF/web.xml");
 
-        String err = "Unable to process web.xml";    
+        String err = "Unable to process web.xml";
         if (input == null) {
             throw new ServletException(err);
         }

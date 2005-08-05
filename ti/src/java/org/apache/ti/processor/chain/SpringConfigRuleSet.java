@@ -36,11 +36,11 @@ import org.xml.sax.Attributes;
 public class SpringConfigRuleSet extends ConfigRuleSet implements BeanFactoryAware {
 
     protected BeanFactory factory;
-    
+
     public void setBeanFactory(BeanFactory factory) {
         this.factory = factory;
     }
-    
+
     /**
      * <p>Add the set of Rule instances defined in this RuleSet to the
      * specified <code>Digester</code> instance, associating them with
@@ -54,7 +54,7 @@ public class SpringConfigRuleSet extends ConfigRuleSet implements BeanFactoryAwa
 
         super.addRuleInstances(digester);
         String pattern = "*/" + getCommandElement();
-        
+
         // Add rules for a command element
         Rule rule = new ObjectCreateRule(digester, null, getClassAttribute()) {
             public void begin(Attributes attrs) throws Exception {
@@ -72,7 +72,7 @@ public class SpringConfigRuleSet extends ConfigRuleSet implements BeanFactoryAwa
             }
         };
         rule.setDigester(digester);
-        
+
         List list = digester.getRules().match(null, pattern);
         list.set(0, rule);
     }
