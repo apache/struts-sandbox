@@ -44,7 +44,7 @@ import org.xml.sax.SAXException;
 
 /**
  * <p><strong>StrutsTiServlet</strong> is the entry point into Struts Ti.</p>
- * @version $Rev: 170184 $ $Date: 2005-05-14 16:54:24 -0700 (Sat, 14 May 2005) $
+ * @version $Rev$ $Date$
  */
 public class StrutsTiServlet extends HttpServlet {
     

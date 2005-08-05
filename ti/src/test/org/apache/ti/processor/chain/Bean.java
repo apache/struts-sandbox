@@ -1,5 +1,5 @@
 /*
- * $Id: TestSpringConfigRuleSet.java 171041 2005-05-20 03:50:06Z jmitchell $ 
+ * $Id$ 
  *
  * Copyright 2002-2004 The Apache Software Foundation.
  * 

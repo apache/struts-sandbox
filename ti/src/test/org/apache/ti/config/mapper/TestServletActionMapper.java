@@ -1,5 +1,5 @@
 /*
- * $Id: TestServletActionMapper.java 171041 2005-05-20 03:50:06Z jmitchell $ 
+ * $Id$ 
  *
  * Copyright 2002-2004 The Apache Software Foundation.
  * 
@@ -28,7 +28,7 @@ import junit.framework.TestSuite;
 /**
  * Unit tests for the <code>org.apache.ti.config.ServletActionMapper</code> class.
  *
- * @version $Rev: 171041 $ $Date: 2005-05-19 20:50:06 -0700 (Thu, 19 May 2005) $
+ * @version $Rev$ $Date$
  */
 public class TestServletActionMapper extends TestCase {
     
