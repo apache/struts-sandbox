@@ -34,18 +34,18 @@ import org.apache.commons.logging.LogFactory;
 public class ProcessTags {
 
     private XDocletParser xdocletParser;
-    
+
     private static final Log log = LogFactory.getLog(ProcessTags.class);
     private static final String SEP = File.separator;
-    
+
     public void setXDocletParser(XDocletParser parser) {
         this.xdocletParser = parser;
     }
-    
+
     public void process(File src, String srcName, File dest, String destName) throws IOException {
-        crawl(src, srcName, dest, destName, new ArrayList());   
+        crawl(src, srcName, dest, destName, new ArrayList());
     }
-    
+
     protected void crawl(File src, String srcName, File dest, String destName, List stack) throws IOException {
         File[] kids = src.listFiles();
         boolean controllerFound = false;
@@ -63,7 +63,7 @@ public class ProcessTags {
                 destDir.mkdirs();
                 File destFile = new File(destDir, destName);
                 String filePath = path.toString() + kids[x].getName();
-                
+
                 log.info("Generating "+destFile);
                 FileWriter writer =  new FileWriter(destFile);
                 try {
@@ -77,4 +77,4 @@ public class ProcessTags {
             }
         }
     }
-}    
+}
