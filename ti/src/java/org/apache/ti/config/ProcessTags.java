@@ -17,11 +17,16 @@
  */
 package org.apache.ti.config;
 
-import org.apache.commons.logging.*;
-import java.util.*;
-import java.io.*;
-import xjavadoc.*;
-import xjavadoc.filesystem.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  *  Crawls a directory, processing all found Java source files.

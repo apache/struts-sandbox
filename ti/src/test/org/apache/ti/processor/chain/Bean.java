@@ -18,7 +18,8 @@
 
 package org.apache.ti.processor.chain;
 
-import org.apache.commons.chain.*;
+import org.apache.commons.chain.Command;
+import org.apache.commons.chain.Context;
 
 public class Bean implements Command {
     public boolean execute(Context ctx) {return true;}

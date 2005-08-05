@@ -4,18 +4,17 @@
  */
 package org.apache.ti.servlet;
 
-import com.opensymphony.xwork.*;
-import org.apache.ti.processor.*;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.chain.*;
-import org.apache.commons.chain.web.*;
-import org.apache.commons.chain.web.servlet.*;
+import org.apache.commons.chain.web.servlet.ServletWebContext;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.ti.processor.BaseResult;
+import org.apache.ti.processor.ControllerContext;
+
+import com.opensymphony.xwork.ActionInvocation;
 
 /**
  * Includes or forwards a view. There are three possible ways the result can be executed: <ul>

@@ -17,10 +17,11 @@
  */
 package org.apache.ti.config;
 
-import org.apache.commons.logging.*;
-import org.apache.tools.ant.*;
-import java.util.*;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  *  Ant task that wraps ProcessTags

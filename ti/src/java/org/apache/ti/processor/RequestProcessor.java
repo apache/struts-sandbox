@@ -18,8 +18,9 @@
 
 package org.apache.ti.processor;
 
-import org.apache.commons.chain.web.*;
 import java.util.Map;
+
+import org.apache.commons.chain.web.WebContext;
 
 
 /**

@@ -19,32 +19,18 @@
 package org.apache.ti.util;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.MissingResourceException;
-
-import org.apache.commons.chain.*;
-import org.apache.commons.chain.web.*;
-import org.apache.commons.chain.web.servlet.*;
+import java.util.List;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.UnavailableException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.chain.CatalogFactory;
-import org.apache.commons.chain.config.ConfigParser;
+import org.apache.commons.chain.web.WebContext;
+import org.apache.commons.chain.web.servlet.ServletWebContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 
 /**

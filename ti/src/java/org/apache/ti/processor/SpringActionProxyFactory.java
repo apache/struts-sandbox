@@ -4,11 +4,14 @@
  */
 package org.apache.ti.processor;
 
-import com.opensymphony.xwork.*;
-import com.opensymphony.xwork.config.entities.ActionConfig;
-import org.springframework.beans.factory.*;
-
 import java.util.Map;
+
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
+
+import com.opensymphony.xwork.ActionInvocation;
+import com.opensymphony.xwork.ActionProxy;
+import com.opensymphony.xwork.DefaultActionProxyFactory;
 
 
 /**

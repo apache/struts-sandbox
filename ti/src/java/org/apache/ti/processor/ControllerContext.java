@@ -18,9 +18,10 @@
 
 package org.apache.ti.processor;
 
-import org.apache.commons.chain.web.*;
-import com.opensymphony.xwork.*;
-import org.apache.ti.config.mapper.*;
+import org.apache.commons.chain.web.WebContext;
+import org.apache.ti.config.mapper.ActionMapping;
+
+import com.opensymphony.xwork.ActionContext;
 
 /**
  *  Context that adds Controller methods, using ActionContext for storage.

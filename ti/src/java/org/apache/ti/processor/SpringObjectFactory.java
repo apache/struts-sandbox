@@ -4,11 +4,12 @@
  */
 package org.apache.ti.processor;
 
-import com.opensymphony.xwork.config.entities.ActionConfig;
-import com.opensymphony.xwork.ObjectFactory;
-import com.opensymphony.xwork.Action;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
 
-import org.springframework.beans.factory.*;
+import com.opensymphony.xwork.Action;
+import com.opensymphony.xwork.ObjectFactory;
+import com.opensymphony.xwork.config.entities.ActionConfig;
 
 
 /**

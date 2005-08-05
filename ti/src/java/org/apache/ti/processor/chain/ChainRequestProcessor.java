@@ -18,19 +18,24 @@
 
 package org.apache.ti.processor.chain;
 
-import org.apache.commons.chain.*;
-import org.apache.commons.chain.web.*;
-import org.apache.commons.chain.config.*;
+import java.net.URL;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+
+import org.apache.commons.chain.Catalog;
+import org.apache.commons.chain.CatalogFactory;
+import org.apache.commons.chain.Command;
+import org.apache.commons.chain.config.ConfigParser;
+import org.apache.commons.chain.web.WebContext;
+import org.apache.commons.digester.RuleSet;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.commons.digester.*;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import java.util.*;
-import java.net.*;
-import java.io.*;
-import org.apache.ti.processor.*;
-import org.apache.ti.util.*;
+import org.apache.ti.processor.ProcessorException;
+import org.apache.ti.processor.RequestProcessor;
+import org.apache.ti.util.SourceResolver;
 
 
 /**

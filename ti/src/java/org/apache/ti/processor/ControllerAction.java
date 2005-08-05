@@ -4,8 +4,7 @@
  */
 package org.apache.ti.processor;
 
-import com.opensymphony.xwork.*;
-import com.opensymphony.xwork.config.entities.*;
+import com.opensymphony.xwork.Action;
 
 /**
  *  Wraps a controller

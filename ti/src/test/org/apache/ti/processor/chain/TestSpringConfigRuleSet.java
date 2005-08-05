@@ -22,14 +22,11 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import java.io.*;
-import java.util.*;
-
-import org.apache.commons.chain.config.*;
-import org.apache.commons.chain.*;
-import org.apache.commons.chain.impl.*;
-import org.springframework.beans.factory.*;
-import org.springframework.beans.factory.support.*;
+import org.apache.commons.chain.Catalog;
+import org.apache.commons.chain.CatalogFactory;
+import org.apache.commons.chain.config.ConfigParser;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.beans.factory.support.RootBeanDefinition;
 
 /**
  * Unit tests for the <code>org.apache.ti.config.SpringConfigRuleSet</code> class.

@@ -18,15 +18,18 @@
 
 package org.apache.ti.config;
 
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import java.io.*;
-
-import org.jdom.*;
+import org.jdom.Document;
+import org.jdom.input.SAXBuilder;
 import org.jdom.xpath.XPath;
-import org.jdom.input.*;
 
 /**
  * Unit tests for the <code>org.apache.ti.config.XDocletParser</code> class.

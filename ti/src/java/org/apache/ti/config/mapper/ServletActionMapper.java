@@ -1,12 +1,15 @@
 package org.apache.ti.config.mapper;
 
-import java.util.*;
-import javax.servlet.http.*;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.chain.web.WebContext;
 import org.apache.commons.chain.web.servlet.ServletWebContext;
-import org.apache.ti.servlet.*;
-
-import org.apache.commons.logging.*;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.ti.servlet.StrutsTiServlet;
 
 /**
  * Handles creation of ActionMapping and reconstruction of URI's from one.  Uses

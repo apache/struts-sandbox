@@ -18,9 +18,11 @@
 
 package org.apache.ti.util;
 
-import java.net.*;
-import java.io.*;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
+
 import org.apache.commons.chain.web.WebContext;
 
 

@@ -18,10 +18,11 @@
 
 package org.apache.ti.processor.chain;
 
-import org.apache.commons.chain.web.*;
-import org.apache.commons.chain.*;
-import org.apache.ti.config.mapper.*;
-import com.opensymphony.xwork.*;
+import org.apache.commons.chain.Command;
+import org.apache.commons.chain.Context;
+
+import com.opensymphony.xwork.ActionContext;
+import com.opensymphony.xwork.ActionProxy;
 
 
 /**

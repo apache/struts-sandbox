@@ -4,24 +4,20 @@
  */
 package org.apache.ti.processor;
 
-import com.opensymphony.xwork.config.entities.ActionConfig;
-import com.opensymphony.xwork.config.entities.ResultConfig;
-import com.opensymphony.xwork.interceptor.Interceptor;
-import com.opensymphony.xwork.interceptor.PreResultListener;
-import com.opensymphony.xwork.util.OgnlValueStack;
-import com.opensymphony.xwork.*;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.beans.factory.*;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.BeanFactory;
+
+import com.opensymphony.xwork.Action;
+import com.opensymphony.xwork.ActionProxy;
+import com.opensymphony.xwork.DefaultActionInvocation;
+import com.opensymphony.xwork.config.entities.ActionConfig;
 
 
 /**

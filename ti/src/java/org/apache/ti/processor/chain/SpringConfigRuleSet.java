@@ -16,11 +16,15 @@
 package org.apache.ti.processor.chain;
 
 
-import org.apache.commons.digester.*;
-import org.apache.commons.chain.config.*;
-import org.springframework.beans.factory.*;
+import java.util.List;
+
+import org.apache.commons.chain.config.ConfigRuleSet;
+import org.apache.commons.digester.Digester;
+import org.apache.commons.digester.ObjectCreateRule;
+import org.apache.commons.digester.Rule;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
 import org.xml.sax.Attributes;
-import java.util.*;
 
 
 /**

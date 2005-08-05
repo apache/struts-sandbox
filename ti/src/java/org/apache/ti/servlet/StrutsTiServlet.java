@@ -20,39 +20,28 @@ package org.apache.ti.servlet;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.*;
 import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.MissingResourceException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import org.apache.commons.chain.*;
-import org.apache.commons.chain.web.*;
-import org.apache.commons.chain.web.servlet.*;
-
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.chain.CatalogFactory;
-import org.apache.commons.chain.config.ConfigParser;
+import org.apache.commons.chain.web.servlet.ServletWebContext;
+import org.apache.commons.digester.Digester;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-
-import org.springframework.beans.factory.xml.*;
-import org.springframework.beans.factory.*;
-import org.springframework.core.io.*;
-
-import org.apache.commons.digester.*;
-
 import org.apache.ti.processor.RequestProcessor;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.xml.XmlBeanFactory;
+import org.springframework.core.io.UrlResource;
+import org.xml.sax.SAXException;
 
 /**
  * <p><strong>StrutsTiServlet</strong> is the entry point into Struts Ti.</p>

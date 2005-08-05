@@ -17,14 +17,22 @@
  */
 package org.apache.ti.config;
 
-import org.apache.velocity.*;
-import org.apache.velocity.app.*;
-import org.apache.velocity.exception.*;
-import org.apache.commons.logging.*;
-import java.util.*;
-import java.io.*;
-import xjavadoc.*;
-import xjavadoc.filesystem.*;
+import java.io.Reader;
+import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.exception.ResourceNotFoundException;
+
+import xjavadoc.XClass;
+import xjavadoc.XJavaDoc;
+import xjavadoc.filesystem.ReaderFile;
 
 /**
  *  Processes xdoclet-style tags and uses a velocity template to generate 

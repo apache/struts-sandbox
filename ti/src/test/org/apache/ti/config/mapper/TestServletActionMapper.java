@@ -18,12 +18,12 @@
 
 package org.apache.ti.config.mapper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
-import java.io.*;
-import java.util.*;
 
 /**
  * Unit tests for the <code>org.apache.ti.config.ServletActionMapper</code> class.
