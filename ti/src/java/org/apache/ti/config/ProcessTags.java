@@ -49,14 +49,14 @@ public class ProcessTags {
     protected void crawl(File src, String srcName, File dest, String destName, List stack) throws IOException {
         File[] kids = src.listFiles();
         boolean controllerFound = false;
-        for (int x=0; x<kids.length; x++) {
+        for (int x = 0; x < kids.length; x++) {
             if (kids[x].isDirectory()) {
                 stack.add(kids[x].getName());
                 crawl(kids[x], srcName, dest, destName, stack);
                 stack.remove(stack.size() - 1);
             } else if (!controllerFound && srcName.equals(kids[x].getName())) {
                 StringBuffer path = new StringBuffer();
-                for (Iterator i = stack.iterator(); i.hasNext(); ) {
+                for (Iterator i = stack.iterator(); i.hasNext();) {
                     path.append(i.next()).append(SEP);
                 }
                 File destDir = new File(dest, path.toString());
@@ -64,14 +64,15 @@ public class ProcessTags {
                 File destFile = new File(destDir, destName);
                 String filePath = path.toString() + kids[x].getName();
 
-                log.info("Generating "+destFile);
+                log.info("Generating " + destFile);
                 FileWriter writer =  new FileWriter(destFile);
                 try {
                     xdocletParser.generate(filePath, new FileReader(kids[x]), writer);
                 } finally {
                     try {
                         writer.close();
-                    } catch (IOException ex) {}
+                    } catch (IOException ex) {
+                    }
                 }
                 controllerFound = true;
             }

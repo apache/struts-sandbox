@@ -59,7 +59,7 @@ public class SpringConfigRuleSet extends ConfigRuleSet implements BeanFactoryAwa
         Rule rule = new ObjectCreateRule(digester, null, getClassAttribute()) {
             public void begin(Attributes attrs) throws Exception {
                 String name = attrs.getValue(getNameAttribute());
-                System.out.println("looking up "+name);
+                System.out.println("looking up " + name);
                 if (name != null) {
                     if (factory.containsBean(name)) {
                         getDigester().push(factory.getBean(name));

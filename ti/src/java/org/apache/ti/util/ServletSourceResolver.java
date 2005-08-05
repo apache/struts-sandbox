@@ -56,7 +56,7 @@ public class ServletSourceResolver implements SourceResolver {
     public List resolveList(String path, WebContext context)
             throws IOException, MalformedURLException {
 
-        ServletContext servletContext = ((ServletWebContext)context).getContext();
+        ServletContext servletContext = ((ServletWebContext) context).getContext();
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         if (loader == null) {
             loader = this.getClass().getClassLoader();
@@ -78,7 +78,7 @@ public class ServletSourceResolver implements SourceResolver {
                 }
                 Enumeration e = loader.getResources(path);
                 if (!e.hasMoreElements()) {
-                    String msg = "Resource not found: "+path;
+                    String msg = "Resource not found: " + path;
                     log.error(msg);
                     throw new IOException(msg);
                 } else {
@@ -96,7 +96,7 @@ public class ServletSourceResolver implements SourceResolver {
     public List resolveFromList(String paths, WebContext context)
             throws IOException, MalformedURLException {
 
-        ServletContext servletContext = ((ServletWebContext)context).getContext();
+        ServletContext servletContext = ((ServletWebContext) context).getContext();
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         if (loader == null) {
             loader = this.getClass().getClassLoader();
@@ -132,7 +132,7 @@ public class ServletSourceResolver implements SourceResolver {
                 }
                 Enumeration e = loader.getResources(path);
                 if (!e.hasMoreElements()) {
-                    String msg = "Resource not found: "+path;
+                    String msg = "Resource not found: " + path;
                     log.error(msg);
                     throw new IOException(msg);
                 } else {

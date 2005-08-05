@@ -35,7 +35,7 @@ public class CreateActionMapping implements Command {
     }
 
     public boolean execute(Context origctx) {
-        WebContext ctx = (WebContext)origctx;
+        WebContext ctx = (WebContext) origctx;
 
         ActionMapping mapping = actionMapper.getMapping(ctx);
         ctx.put("actionMapping", mapping);

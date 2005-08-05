@@ -38,7 +38,7 @@ public class ControllerContext {
     }
 
     public WebContext getWebContext() {
-        return (WebContext)getFromStore("webContext");
+        return (WebContext) getFromStore("webContext");
     }
 
     public ActionMapping getActionMapping() {

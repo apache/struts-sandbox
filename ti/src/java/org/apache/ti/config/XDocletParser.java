@@ -55,7 +55,7 @@ public class XDocletParser {
             template = velocity.getTemplate(templateName);
         } catch (ResourceNotFoundException ex) {
             log.error("Unable to locate template to process javadoc tags", ex);
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             log.error("Unable to intialize velocity", ex);
         }
 

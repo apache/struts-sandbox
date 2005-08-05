@@ -21,7 +21,7 @@ import com.opensymphony.xwork.config.entities.ActionConfig;
 
 
 /**
- * Adds code to handle ControllerActions if detected
+ * Adds code to handle ControllerActions if detected.
  *
  * @see com.opensymphony.xwork.DefaultActionInvocation
  */
@@ -48,7 +48,7 @@ public class ControllerActionInvocation extends DefaultActionInvocation {
     }
 
     protected Object getController() {
-        return ((ControllerAction)action).getController();
+        return ((ControllerAction) action).getController();
     }
 
     public Method getActionMethod() {
@@ -59,7 +59,7 @@ public class ControllerActionInvocation extends DefaultActionInvocation {
         super.createAction();
 
         if (action instanceof ControllerAction) {
-            ctrAction = (ControllerAction)action;
+            ctrAction = (ControllerAction) action;
             createActionMethod();
         }
     }
@@ -105,14 +105,14 @@ public class ControllerActionInvocation extends DefaultActionInvocation {
 
 
 
-        Method[] methods = (Method[])methodsCache.get(ctrClass);
+        Method[] methods = (Method[]) methodsCache.get(ctrClass);
         if (methods == null) {
             methods = ctrClass.getMethods();
             methodsCache.put(ctrClass, methods);
         }
 
         Method m;
-        for (int x=0; x < methods.length; x++) {
+        for (int x = 0; x < methods.length; x++) {
             m = methods[x];
             if (m.getName().equals(methodName) && m.getParameterTypes().length < 2) {
                 method = m;

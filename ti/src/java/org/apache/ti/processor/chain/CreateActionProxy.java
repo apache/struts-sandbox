@@ -42,9 +42,9 @@ public class CreateActionProxy implements Command {
     protected static final Log log = LogFactory.getLog(CreateActionProxy.class);
 
     public boolean execute(Context origctx) {
-        WebContext ctx = (WebContext)origctx;
+        WebContext ctx = (WebContext) origctx;
 
-        ActionMapping mapping = (ActionMapping)ctx.get("actionMapping");
+        ActionMapping mapping = (ActionMapping) ctx.get("actionMapping");
         ActionProxy proxy = getActionProxy(ctx, mapping);
 
         ctx.put("actionProxy", proxy);

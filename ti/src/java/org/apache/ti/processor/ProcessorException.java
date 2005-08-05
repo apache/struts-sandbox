@@ -20,7 +20,7 @@ package org.apache.ti.processor;
 
 
 /**
- *  Wraps any exception thrown during request processing
+ *  Wraps any exception thrown during request processing.
  */
 public class ProcessorException extends RuntimeException {
 

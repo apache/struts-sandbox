@@ -26,7 +26,7 @@ import com.opensymphony.xwork.ActionProxy;
 
 
 /**
- *  Initializes XWork by replacing default factories
+ *  Initializes XWork by replacing default factories.
  */
 public class ProcessActionChain extends ChainBase {
 

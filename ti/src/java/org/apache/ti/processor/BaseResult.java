@@ -8,7 +8,7 @@ import com.opensymphony.xwork.ActionInvocation;
 import com.opensymphony.xwork.Result;
 
 /**
- *  Wraps a controller
+ *  Wraps a controller.
  */
 public abstract class BaseResult implements Result {
 

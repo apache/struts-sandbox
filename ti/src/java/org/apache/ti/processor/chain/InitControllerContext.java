@@ -25,7 +25,7 @@ import org.apache.ti.processor.ControllerContext;
 
 
 /**
- *  Intializes the ControllerContext for this request
+ *  Intializes the ControllerContext for this request.
  */
 public class InitControllerContext implements Command {
 

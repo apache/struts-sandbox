@@ -38,7 +38,7 @@ import org.apache.ti.util.SourceResolver;
 
 
 /**
- *  Request processor that uses commons-chain
+ *  Request processor that uses commons-chain.
  */
 public class ChainRequestProcessor implements RequestProcessor {
 
@@ -110,7 +110,7 @@ public class ChainRequestProcessor implements RequestProcessor {
     public void init(Map initParameters, WebContext webContext) {
         this.initParameters = initParameters;
 
-        String chain = (String)initParameters.get("chainConfig");
+        String chain = (String) initParameters.get("chainConfig");
         try {
             initChain(chain, webContext);
 
@@ -118,21 +118,21 @@ public class ChainRequestProcessor implements RequestProcessor {
 
             catalog = this.catalogFactory.getCatalog(catalogName);
             if (catalog == null) {
-                throw new ProcessorException("Cannot find catalog '" +
-                                           catalogName + "'");
+                throw new ProcessorException("Cannot find catalog '"
+                        + catalogName + "'");
             }
 
             Command initCmd = catalog.getCommand(initCmdName);
             if (initCmd == null) {
-                throw new ProcessorException("Cannot find init command '" +
-                                           startCmdName + "'");
+                throw new ProcessorException("Cannot find init command '"
+                        + startCmdName + "'");
             }
             initCmd.execute(webContext);
 
             startCmd = catalog.getCommand(startCmdName);
             if (startCmd == null) {
-                throw new ProcessorException("Cannot find command '" +
-                                           startCmdName + "'");
+                throw new ProcessorException("Cannot find command '"
+                        + startCmdName + "'");
             }
 
         } catch (Throwable t) {

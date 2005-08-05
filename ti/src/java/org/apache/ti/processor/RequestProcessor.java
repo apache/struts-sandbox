@@ -24,14 +24,14 @@ import org.apache.commons.chain.web.WebContext;
 
 
 /**
- *  Defines a class that processes requests
+ *  Defines a class that processes requests.
  */
 public interface RequestProcessor {
 
-    public void init(Map initParameters, WebContext ctx);
+    void init(Map initParameters, WebContext ctx);
 
-    public void process(WebContext ctx);
+    void process(WebContext ctx);
 
-    public void destroy();
+    void destroy();
 
 }

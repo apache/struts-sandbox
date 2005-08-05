@@ -38,7 +38,7 @@ public class ServletActionMapper implements ActionMapper {
 
     public ActionMapping getMapping(WebContext ctx) {
 
-        HttpServletRequest request = ((ServletWebContext)ctx).getRequest();
+        HttpServletRequest request = ((ServletWebContext) ctx).getRequest();
         List mappings = (List) ctx.get(StrutsTiServlet.SERVLET_MAPPINGS_KEY);
         String servletPath = request.getServletPath();
         return getMapping(servletPath, mappings);
@@ -47,15 +47,15 @@ public class ServletActionMapper implements ActionMapper {
     protected ActionMapping getMapping(String servletPath, List mappings) {
         String uri = null;
         String mapping = null;
-        for (Iterator i = mappings.iterator(); i.hasNext(); ) {
-            mapping = (String)i.next();
+        for (Iterator i = mappings.iterator(); i.hasNext();) {
+            mapping = (String) i.next();
 
             // Try to match prefix-based mapping
             if (mapping.charAt(mapping.length() - 1) == '*') {
                 String prefix = mapping.substring(0, mapping.length() - 1);
                 if (servletPath.startsWith(prefix)) {
                     uri = servletPath.substring(prefix.length());
-                    log.debug("matched prefix:"+prefix);
+                    log.debug("matched prefix:" + prefix);
                     break;
                 }
 
@@ -64,14 +64,14 @@ public class ServletActionMapper implements ActionMapper {
                 String ext = mapping.substring(1);
                 if (servletPath.endsWith(ext)) {
                     uri = servletPath.substring(1, (servletPath.length() - ext.length()));
-                    log.debug("matched ext:"+ext);
+                    log.debug("matched ext:" + ext);
                     break;
                 }
             }
         }
 
         if (uri != null) {
-            log.debug("uri:"+uri);
+            log.debug("uri:" + uri);
             int div = uri.lastIndexOf('/');
             String action = uri.substring(div + 1);
             String namespace = "";

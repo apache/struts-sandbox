@@ -42,7 +42,7 @@ public class InitXWork implements Command {
     }
 
     public boolean execute(Context origctx) {
-        WebContext ctx = (WebContext)origctx;
+        WebContext ctx = (WebContext) origctx;
 
         ObjectFactory.setObjectFactory(objectFactory);
         ActionProxyFactory.setFactory(actionProxyFactory);

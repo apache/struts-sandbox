@@ -82,7 +82,7 @@ public class StrutsTiServlet extends HttpServlet {
 
         Map initParameters = new HashMap();
         String key;
-        for (Enumeration e = getInitParameterNames(); e.hasMoreElements(); ) {
+        for (Enumeration e = getInitParameterNames(); e.hasMoreElements();) {
             key = (String) e.nextElement();
             initParameters.put(key, getInitParameter(key));
         }
@@ -148,20 +148,20 @@ public class StrutsTiServlet extends HttpServlet {
                 }
                 Enumeration e = loader.getResources(path);
                 if (!e.hasMoreElements()) {
-                    String msg = "Resource not found: "+path;
+                    String msg = "Resource not found: " + path;
                     log.error(msg);
                     throw new UnavailableException(msg);
                 } else {
                     resource = (URL) e.nextElement();
                     if (e.hasMoreElements()) {
-                        log.warn("Found more than one resource at "+path
-                            +", only using the first");
+                        log.warn("Found more than one resource at " + path
+                            + ", only using the first");
                     }
                 }
             }
         } catch (Exception e) {
             log.error(e);
-            throw new UnavailableException("Unable to load resource at "+path);
+            throw new UnavailableException("Unable to load resource at " + path);
         }
 
         return resource;
