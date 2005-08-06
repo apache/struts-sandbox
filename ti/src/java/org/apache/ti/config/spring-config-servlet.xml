@@ -19,8 +19,6 @@
   
   <bean id="controllerContext" class="org.apache.ti.processor.ControllerContext" />
   
-  <bean id="objectFactory" class="org.apache.ti.processor.ControllerObjectFactory" />
-  
   <bean id="actionProxyFactory" class="org.apache.ti.processor.ControllerActionProxyFactory" />
   
   <!-- Chain commands that need DI -->
@@ -28,7 +26,6 @@
     <property name="actionMapper" ref="actionMapper" />
   </bean>
   <bean id="initXWork" class="org.apache.ti.processor.chain.InitXWork">
-    <property name="objectFactory" ref="objectFactory" />
     <property name="actionProxyFactory" ref="actionProxyFactory" />
   </bean>
   <bean id="initControllerContext" class="org.apache.ti.processor.chain.InitControllerContext">

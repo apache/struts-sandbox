@@ -17,6 +17,8 @@
  */
 package org.apache.ti.processor.chain;
 
+import java.util.Map;
+
 import org.apache.ti.config.mapper.ActionMapping;
 import org.apache.ti.processor.ProcessorException;
 
@@ -49,11 +51,11 @@ public class CreateActionProxy implements Command {
         return false;
     }
     
-    protected ActionProxy getActionProxy(WebContext ctx, ActionMapping mapping) {
+    protected ActionProxy getActionProxy(Map extraCtx, ActionMapping mapping) {
 
         try {
             log.debug("Trying to get proxy");
-            ActionProxy proxy = ActionProxyFactory.getFactory().createActionProxy(mapping.getNamespace(), mapping.getName(), ctx);
+            ActionProxy proxy = ActionProxyFactory.getFactory().createActionProxy(mapping.getNamespace(), mapping.getName(), extraCtx);
             return proxy;
         } catch (ConfigurationException e) {
             log.error("Could not find action", e);

@@ -17,6 +17,9 @@
  */
 package org.apache.ti.processor.chain.webwork;
 
+import java.util.Map;
+import java.util.HashMap;
+
 import org.apache.commons.chain.Context;
 import org.apache.commons.chain.Filter;
 import org.apache.commons.chain.web.WebContext;
@@ -51,7 +54,11 @@ public class CreateWebWorkActionProxy extends CreateActionProxy implements Filte
         ctx.put("origStack", stack);
         
         ActionMapping mapping = (ActionMapping) ctx.get("actionMapping");
-        ActionProxy proxy = getActionProxy(ctx, mapping);
+
+        HashMap map = new HashMap();
+        map.putAll(ctx);
+        map.remove("context");
+        ActionProxy proxy = getActionProxy(map, mapping);
         ctx.getRequestScope().put(ServletActionContext.WEBWORK_VALUESTACK_KEY, proxy.getInvocation().getStack());
         ctx.put("actionProxy", proxy);
         

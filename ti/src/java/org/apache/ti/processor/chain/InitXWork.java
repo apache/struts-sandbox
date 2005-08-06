@@ -34,12 +34,7 @@ public class InitXWork implements Command {
 
     private static final Log log = LogFactory.getLog(InitXWork.class);
 
-    protected ObjectFactory objectFactory;
     protected ActionProxyFactory actionProxyFactory;
-
-    public void setObjectFactory(ObjectFactory factory) {
-        this.objectFactory = factory;
-    }
 
     public void setActionProxyFactory(ActionProxyFactory factory) {
         this.actionProxyFactory = factory;
@@ -49,7 +44,6 @@ public class InitXWork implements Command {
         log.debug("Initializing XWork");
         WebContext ctx = (WebContext) origctx;
 
-        ObjectFactory.setObjectFactory(objectFactory);
         ActionProxyFactory.setFactory(actionProxyFactory);
 
         return false;

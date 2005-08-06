@@ -18,6 +18,7 @@
 package org.apache.ti.processor.chain;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.chain.Command;
@@ -64,8 +65,14 @@ public class PopulateContextForRequest implements Command {
 
         HashMap extraContext = createContextMap(requestMap, params, ctx.getSessionScope(), ctx.getApplicationScope(), ctx);
 
-        ctx.putAll(extraContext);
-        
+        Map.Entry entry;
+        for (Iterator i = extraContext.entrySet().iterator(); i.hasNext(); ) {
+            entry = (Map.Entry)i.next();
+            if (!ctx.containsKey(entry.getKey())) {
+                ctx.put(entry.getKey(), entry.getValue());
+            }
+        }    
+    
         return false;
     }
 
