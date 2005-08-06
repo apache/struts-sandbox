@@ -19,11 +19,9 @@
   
   <bean id="controllerContext" class="org.apache.ti.processor.ControllerContext" />
   
-  <bean id="objectFactory" class="org.apache.ti.processor.SpringObjectFactory" />
+  <bean id="objectFactory" class="org.apache.ti.processor.ControllerObjectFactory" />
   
-  <bean id="actionProxyFactory" class="org.apache.ti.processor.SpringActionProxyFactory" />
-  
-  <bean id="controllerAction" class="org.apache.ti.processor.ControllerAction" singleton="false" />
+  <bean id="actionProxyFactory" class="org.apache.ti.processor.ControllerActionProxyFactory" />
   
   <!-- Chain commands that need DI -->
   <bean id="createActionMapping" class="org.apache.ti.processor.chain.CreateActionMapping">

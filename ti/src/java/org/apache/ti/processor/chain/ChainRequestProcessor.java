@@ -153,7 +153,7 @@ public class ChainRequestProcessor implements RequestProcessor {
         // Create and execute the command.
         try {
             if (log.isDebugEnabled()) {
-                log.debug("Using processing chain for this request");
+                log.debug("Using the processing chain for this request");
             }
 
             // Add initialization parameters directly to context.

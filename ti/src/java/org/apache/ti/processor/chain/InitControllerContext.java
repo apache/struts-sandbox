@@ -37,6 +37,7 @@ public class InitControllerContext implements Command {
     }
 
     public boolean execute(Context origctx) {
+        log.debug("Initializing controller context");
         ControllerContext.setControllerContext(context);
         return false;
     }

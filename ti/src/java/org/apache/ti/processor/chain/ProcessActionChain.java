@@ -23,14 +23,18 @@ import org.apache.commons.chain.impl.ChainBase;
 import com.opensymphony.xwork.ActionContext;
 import com.opensymphony.xwork.ActionProxy;
 
-
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  *  Initializes XWork by replacing default factories.
  */
 public class ProcessActionChain extends ChainBase {
 
+    private static final Log log = LogFactory.getLog(ProcessActionChain.class);
+
     public boolean execute(Context context) throws Exception {
+        log.debug("Processing action chain");
 
         ActionContext nestedContext = ActionContext.getContext();
 

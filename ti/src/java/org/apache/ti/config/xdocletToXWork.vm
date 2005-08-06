@@ -35,6 +35,7 @@
              </result>
              #end
            #end  
+           <interceptor-ref name="defaultStack"/>
         </action>
         #end
       #end  

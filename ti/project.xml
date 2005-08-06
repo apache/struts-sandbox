@@ -43,26 +43,7 @@
   <gumpRepositoryId>struts-ti-svn</gumpRepositoryId>
 
   <description>
-      The core of the Struts framework is a flexible control layer based on 
-      standard technologies like Java Servlets, JavaBeans, ResourceBundles, 
-      and Extensible Markup Language (XML), as well as various Jakarta Commons 
-      packages. 
-      
-      Struts encourages application architectures based on the Model 
-      2 approach, a variation of the classic Model-View-Controller (MVC) design 
-      paradigm. Struts provides its own Controller component and integrates with 
-      other technologies to provide the Model and the View. 
-      
-      For the Model, Struts can interact with any standard data access technology, 
-      including Enterprise Java Beans, JDBC, and Object Relational Bridge. 
-      
-      For the View, Struts works well with JavaServer Pages, including JSTL and 
-      JSF, as well as Velocity Templates, XSLT, and other presentation systems. 
-      
-      The Struts framework provides the invisible underpinnings every professional 
-      web application needs to survive. Struts helps you create an extensible 
-      development environment for your application, based on published standards 
-      and proven design patterns.
+    Struts Ti 2.0 is a simplified Model 2 framework for developing webapps which allows the developer better access to the underlying servlet/portlet environment. It serves a niche of web applications that don.t want the additional complexity of server-side components and verbose configuration, yet want the structure and controller features of a modern web framework. Struts Ti 2.0 builds on the directions of Struts 1.x, yet re-implements the framework to provide a clean slate for the next generation of Struts Ti. It aims to combine the simplicity of Ruby on Rails and NanoWeb, the refinement of WebWork 2, the tool-friendly authoring of Beehive, and the history of Struts 1.x.
       
   </description>
       
@@ -91,31 +72,11 @@
   </mailingLists>
 
   <developers>
-    <developer>
-      <name>Craig R. McClanahan</name>
-      <id>craigmcc</id>
-      <email>craigmcc at apache.org</email>
-      <organization></organization>
-    </developer>
-    
+   
     <developer>
       <name>Ted Husted</name>
       <id>husted</id>
       <email>husted at apache.org</email>
-      <organization></organization>
-    </developer>
-    
-    <developer>
-      <name>Rob Leland</name>
-      <id>rleland</id>
-      <email>rleland at apache.org</email>
-      <organization></organization>
-    </developer>
-    
-    <developer>
-      <name>Cedric Dumoulin</name>
-      <id>cedric</id>
-      <email>cedric.dumoulin at lifl.fr</email>
       <organization></organization>
     </developer>
     
@@ -127,97 +88,13 @@
     </developer>
     
     <developer>
-      <name>Arron Bates</name>
-      <id>arron</id>
-      <email>arron at apache.org</email>
-      <organization></organization>
-    </developer>
-    
-    <developer>
-      <name>James Holmes</name>
-      <id>jholmes</id>
-      <email>jholmes at apache.org</email>
-      <organization></organization>
-    </developer>
-    
-    <developer>
-      <name>David M. Karr</name>
-      <id>dmkarr</id>
-      <email>dmkarr at apache.org</email>
-      <organization></organization>
-    </developer>
-
-    <developer>
-      <name>Eddie Bush</name>
-      <id>ekbush</id>
-      <email>ekbush at apache.org</email>
-      <organization></organization>
-    </developer>
-
-    <developer>
-      <name>David Graham</name>
-      <id>dgraham</id>
-      <email>dgraham at apache.org</email>
-      <organization></organization>
-    </developer>
-
-    <developer>
-      <name>James Mitchell</name>
-      <id>jmitchell</id>
-      <email>jmitchell at apache.org</email>
-      <organization></organization>
-    </developer>
-
-    <developer>
-      <name>James Turner</name>
-      <id>turner</id>
-      <email>turner at blackbear.com</email>
-      <organization></organization>
-    </developer>
-
-    <developer>
-      <name>Steve Raeburn</name>
-      <id>sraeburn</id>
-      <email>sraeburn at apache.org</email>
-      <organization></organization>
-    </developer>
-
-    <developer>
       <name>Don Brown</name>
       <id>mrdon</id>
       <email>mrdon at apache.org</email>
       <organization></organization>
     </developer>
 
-    <developer>
-      <name>Joe Germuska</name>
-      <id>germuska</id>
-      <email>germuska at apache.org</email>
-      <organization></organization>
-    </developer>
-
-    <developer>
-      <name>Niall Pemberton</name>
-      <id>niallp</id>
-      <email>niallp at apache.org</email>
-      <organization></organization>
-    </developer>
-    
-    <developer>
-      <name>Hubert Rabago</name>
-      <id>hrabago</id>
-      <email>hrabago at apache.org</email>
-      <organization></organization>
-    </developer>
-    
-    <developer>
-      <name>David Geary</name>
-      <id>dgeary</id>
-      <email>dgeary at apache.org</email>
-      <organization></organization>
-    </developer>
-    
-  </developers>
+ </developers>
 
   <contributors/>
   
@@ -299,7 +176,7 @@
     <dependency>
       <groupId>opensymphony</groupId>
       <artifactId>xwork</artifactId>
-      <version>1.0.5</version>
+      <version>SNAPSHOT</version>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>

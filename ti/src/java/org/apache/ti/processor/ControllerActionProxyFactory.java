@@ -17,26 +17,18 @@ import com.opensymphony.xwork.DefaultActionProxyFactory;
 /**
  *  Creates special action invocation instances that handle ControllerActions
  */
-public class SpringActionProxyFactory extends DefaultActionProxyFactory implements BeanFactoryAware {
-
-    public static final String ACTION_INVOCATION = "actionInvocation";
-
-    protected BeanFactory beanFactory;
-
-    public void setBeanFactory(BeanFactory factory) {
-        this.beanFactory = factory;
-    }
+public class ControllerActionProxyFactory extends DefaultActionProxyFactory {
 
     public ActionInvocation createActionInvocation(ActionProxy actionProxy) throws Exception {
-        return new ControllerActionInvocation(beanFactory, actionProxy);
+        return new ControllerActionInvocation(actionProxy);
     }
 
     public ActionInvocation createActionInvocation(ActionProxy actionProxy, Map extraContext) throws Exception {
-        return new ControllerActionInvocation(beanFactory, actionProxy, extraContext);
+        return new ControllerActionInvocation(actionProxy, extraContext);
     }
 
     public ActionInvocation createActionInvocation(ActionProxy actionProxy, Map extraContext, boolean pushAction) throws Exception {
-        return new ControllerActionInvocation(beanFactory, actionProxy, extraContext, pushAction);
+        return new ControllerActionInvocation(actionProxy, extraContext, pushAction);
     }
 
 }

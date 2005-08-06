@@ -22,11 +22,15 @@ import org.apache.commons.chain.Context;
 import org.apache.commons.chain.web.WebContext;
 import org.apache.ti.config.mapper.ActionMapper;
 import org.apache.ti.config.mapper.ActionMapping;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  *  Creates an ActionMapping and stores it in the context.
  */
 public class CreateActionMapping implements Command {
+
+    private static final Log log = LogFactory.getLog(CreateActionMapping.class);
 
     protected ActionMapper actionMapper;
 
@@ -35,6 +39,7 @@ public class CreateActionMapping implements Command {
     }
 
     public boolean execute(Context origctx) {
+        log.debug("Executing create action mapping");
         WebContext ctx = (WebContext) origctx;
 
         ActionMapping mapping = actionMapper.getMapping(ctx);

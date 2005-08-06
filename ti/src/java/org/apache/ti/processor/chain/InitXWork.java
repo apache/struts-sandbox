@@ -24,11 +24,15 @@ import org.apache.commons.chain.web.WebContext;
 import com.opensymphony.xwork.ActionProxyFactory;
 import com.opensymphony.xwork.ObjectFactory;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  *  Initializes XWork by replacing default factories
  */
 public class InitXWork implements Command {
+
+    private static final Log log = LogFactory.getLog(InitXWork.class);
 
     protected ObjectFactory objectFactory;
     protected ActionProxyFactory actionProxyFactory;
@@ -42,6 +46,7 @@ public class InitXWork implements Command {
     }
 
     public boolean execute(Context origctx) {
+        log.debug("Initializing XWork");
         WebContext ctx = (WebContext) origctx;
 
         ObjectFactory.setObjectFactory(objectFactory);

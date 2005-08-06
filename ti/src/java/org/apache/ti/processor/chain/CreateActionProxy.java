@@ -42,6 +42,8 @@ public class CreateActionProxy implements Command {
     protected static final Log log = LogFactory.getLog(CreateActionProxy.class);
 
     public boolean execute(Context origctx) {
+        log.debug("Creating action proxy");
+        
         WebContext ctx = (WebContext) origctx;
 
         ActionMapping mapping = (ActionMapping) ctx.get("actionMapping");
@@ -73,6 +75,7 @@ public class CreateActionProxy implements Command {
         //    extraContext.put(ActionContext.VALUE_STACK, new OgnlValueStack(stack));
         //}
         try {
+            log.debug("Trying to get proxy");
             ActionProxy proxy = ActionProxyFactory.getFactory().createActionProxy(mapping.getNamespace(), mapping.getName(), extraContext);
             //request.setAttribute(ServletActionContext.WEBWORK_VALUESTACK_KEY, proxy.getInvocation().getStack());
             return proxy;

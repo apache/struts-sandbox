@@ -23,13 +23,18 @@ import org.apache.commons.chain.Context;
 import com.opensymphony.xwork.ActionContext;
 import com.opensymphony.xwork.ActionProxy;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  *  Initializes XWork by replacing default factories.
  */
 public class ExecuteAction implements Command {
 
+    private static final Log log = LogFactory.getLog(ExecuteAction.class);
+
     public boolean execute(Context origctx) throws Exception {
+        log.debug("Executing action");
         ActionContext ctx = ActionContext.getContext();
         ActionProxy proxy = ctx.getActionInvocation().getProxy();
 
