@@ -18,6 +18,7 @@
 package org.apache.ti.processor.chain;
 
 import org.apache.commons.chain.Context;
+import org.apache.commons.chain.web.WebContext;
 import org.apache.commons.chain.impl.ChainBase;
 
 import com.opensymphony.xwork.ActionContext;
@@ -33,24 +34,26 @@ public class ProcessActionChain extends ChainBase {
 
     private static final Log log = LogFactory.getLog(ProcessActionChain.class);
 
-    public boolean execute(Context context) throws Exception {
+    public boolean execute(Context origctx) throws Exception {
+        WebContext ctx = (WebContext)origctx;
+        
         log.debug("Processing action chain");
 
+        ActionProxy proxy = (ActionProxy) ctx.get("actionProxy");
+        
         ActionContext nestedContext = ActionContext.getContext();
-
-        ActionProxy proxy = (ActionProxy) context.get("actionProxy");
         ActionContext.setContext(proxy.getInvocation().getInvocationContext());
 
         boolean retCode = false;
 
         try {
-            retCode = super.execute(context);
+            retCode = super.execute(origctx);
         } finally {
             ActionContext.setContext(nestedContext);
         }
-
+        
         return retCode;
     }
-
+    
 
 }

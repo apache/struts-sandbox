@@ -46,12 +46,12 @@ public class ControllerActionInvocation extends DefaultActionInvocation {
 
     public Method getActionMethod() {
         if (actionMethod == null) {
-            if (getPOJOAction() != null) {
+            if (getAction() != null) {
                 try {
-                    actionMethod = proxy.getConfig().getMethod(getPOJOAction().getClass());
+                    actionMethod = proxy.getConfig().getMethod(getAction().getClass());
                 } catch (NoSuchMethodException ex) {
                     throw new IllegalStateException("Cannot location method '"+proxy.getConfig().getMethodName()
-                        + "' in action '"+getPOJOAction().getClass()+"'");
+                        + "' in action '"+getAction().getClass()+"'");
                 }
             }    
         }    

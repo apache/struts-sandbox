@@ -38,8 +38,9 @@
 
     <chain     name="start" >
       <command name="createActionMapping"  />
-      <command name="initXWork" />
-      <command name="createActionProxy" className="org.apache.ti.processor.chain.CreateActionProxy" />
+      <command name="populateContextForRequest" className="org.apache.ti.processor.chain.PopulateContextForRequest"/>
+      <command name="populateContextForWebWork" className="org.apache.ti.processor.chain.webwork.PopulateContextForWebWork" />
+      <command name="createWebWorkActionProxy" className="org.apache.ti.processor.chain.webwork.CreateWebWorkActionProxy"/>
       <lookup
         catalogName="struts-ti"
                name="process-action"
@@ -49,10 +50,14 @@
     <!-- ========== Initialization chain ========================= -->
 
     <chain     name="init" >
+      <command name="initXWork" />
+      <command name="initWebWork" className="org.apache.ti.processor.chain.webwork.InitWebWork"/>
     </chain>
     
     <chain     name="process-action" className="org.apache.ti.processor.chain.ProcessActionChain">
+      
       <command name="initControllerContext"  />
+      <command name="selectLocale" className="org.apache.ti.processor.chain.servlet.SelectLocale" />
       <command name="executeAction" className="org.apache.ti.processor.chain.ExecuteAction" />
     </chain>
     
