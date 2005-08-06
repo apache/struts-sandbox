@@ -16,17 +16,29 @@
  * $Header:$
  */
 
+
 import com.opensymphony.xwork.Action;
 import com.opensymphony.xwork.ActionContext;
+import java.util.Map;
+import ttt.Game;
 
 public class Controller {
 
+    private String name;
+
+    public void setName(String name) {
+        this.name = name;
+    }    
+
     /** @ti.action */
     public String index() {
-        System.out.println("success returned: "+ActionContext.getContext().get("webContext"));
+        System.out.println("index called");
+        System.out.println("hello "+name);
+        
         return Action.SUCCESS;
-    }    
-    
+    }   
+
+   
     //    /** @ti.action */
     //    public String login() {
     //        return Action.SUCCESS;
@@ -100,5 +112,6 @@ public class Controller {
     //            return (username.equals("test") && password.equals("test"));
     //        }
     //    }    
-    //        
+    //       
+         
 }   
