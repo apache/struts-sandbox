@@ -19,7 +19,27 @@
   
   <bean id="controllerContext" class="org.apache.ti.processor.ControllerContext" />
   
+  <bean id="javaCompiler" class="org.apache.commons.jci.compilers.eclipse.EclipseJavaCompiler" />
+
+  <bean id="compilingObjectFactory" class="org.apache.ti.processor.CompilingObjectFactory">
+    <property name="javaCompiler" ref="javaCompiler" />
+    <property name="srcPath"><value>${ti.srcPath}</value></property>
+  </bean>
+  
+  <bean id="processTagsInDevMode" class="org.apache.ti.processor.chain.ProcessTagsInDevMode">
+    <property name="processTags" ref="processTags" />
+    <property name="devMode"><value>${ti.devMode}</value></property>
+    <property name="srcPath"><value>${ti.srcPath}</value></property>
+    <property name="classesPath"><value>${ti.classesPath}</value></property>
+  </bean>
+  
   <bean id="actionProxyFactory" class="org.apache.ti.processor.ControllerActionProxyFactory" />
+  
+  <bean id="processTags" class="org.apache.ti.config.ProcessTags">
+    <property name="xdocletParser" ref="xdocletParser" />
+  </bean>
+
+  <bean id="xdocletParser" class="org.apache.ti.config.XDocletParser" init-method="init" />
   
   <!-- Chain commands that need DI -->
   <bean id="createActionMapping" class="org.apache.ti.processor.chain.CreateActionMapping">
@@ -27,6 +47,8 @@
   </bean>
   <bean id="initXWork" class="org.apache.ti.processor.chain.InitXWork">
     <property name="actionProxyFactory" ref="actionProxyFactory" />
+    <property name="compilingObjectFactory" ref="compilingObjectFactory" />
+    <property name="devMode"><value>${ti.devMode}</value></property>
   </bean>
   <bean id="initControllerContext" class="org.apache.ti.processor.chain.InitControllerContext">
     <property name="controllerContext" ref="controllerContext" />

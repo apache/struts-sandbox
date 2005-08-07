@@ -49,7 +49,7 @@ public class ProcessTagsTask {
         XDocletParser parser = new XDocletParser();
         parser.init();
         ProcessTags pt = new ProcessTags();
-        pt.setXDocletParser(parser);
+        pt.setXdocletParser(parser);
 
         List outputs = new ArrayList();
         outputs.add(new OutputType("org/apache/ti/config/xdocletToXWork.vm", "xwork.xml", false));

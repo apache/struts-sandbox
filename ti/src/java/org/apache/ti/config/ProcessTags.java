@@ -38,7 +38,7 @@ public class ProcessTags {
     private static final Log log = LogFactory.getLog(ProcessTags.class);
     private static final String SEP = File.separator;
 
-    public void setXDocletParser(XDocletParser parser) {
+    public void setXdocletParser(XDocletParser parser) {
         this.xdocletParser = parser;
     }
 

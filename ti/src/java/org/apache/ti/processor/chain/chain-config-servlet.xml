@@ -38,6 +38,7 @@
 
     <chain     name="start" >
       <command name="createActionMapping"  />
+      <command name="processTagsInDevMode"  />
       <command name="populateContextForRequest" className="org.apache.ti.processor.chain.PopulateContextForRequest"/>
       <command name="populateContextForWebWork" className="org.apache.ti.processor.chain.webwork.PopulateContextForWebWork" />
       <command name="createWebWorkActionProxy" className="org.apache.ti.processor.chain.webwork.CreateWebWorkActionProxy"/>

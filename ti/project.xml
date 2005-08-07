@@ -255,6 +255,52 @@
     </dependency>
     
     <dependency>
+      <groupId>commons-jci</groupId>
+      <artifactId>commons-jci</artifactId>
+      <version>SNAPSHOT</version>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
+
+<!--
+    <dependency>
+      <groupId>janino</groupId>
+      <artifactId>janino</artifactId>
+      <version>2.3.7</version>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
+-->
+    <dependency>
+      <groupId>eclipse</groupId>
+      <artifactId>jdtcore</artifactId>
+      <version>3.1.0</version>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>1.0</version>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
+
+  <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>2.1</version>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
+
+   <dependency>
       <groupId>ant</groupId>
       <artifactId>ant</artifactId>
       <version>1.6.5</version>

@@ -17,6 +17,8 @@
  */
 package org.apache.ti.processor.chain;
 
+import org.apache.ti.processor.CompilingObjectFactory;
+
 import org.apache.commons.chain.Command;
 import org.apache.commons.chain.Context;
 import org.apache.commons.chain.web.WebContext;
@@ -34,17 +36,32 @@ public class InitXWork implements Command {
 
     private static final Log log = LogFactory.getLog(InitXWork.class);
 
+    protected CompilingObjectFactory clObjectFactory;
     protected ActionProxyFactory actionProxyFactory;
+    protected boolean devMode = false;
 
     public void setActionProxyFactory(ActionProxyFactory factory) {
         this.actionProxyFactory = factory;
     }
+
+    public void setCompilingObjectFactory(CompilingObjectFactory fac) {
+        this.clObjectFactory = fac;
+    }
+
+    public void setDevMode(boolean mode) {
+        this.devMode = mode;
+    }    
 
     public boolean execute(Context origctx) {
         log.debug("Initializing XWork");
         WebContext ctx = (WebContext) origctx;
 
         ActionProxyFactory.setFactory(actionProxyFactory);
+
+        if (devMode) {
+            log.info("Dev mode enabled, using compiling classloader");
+            ObjectFactory.setObjectFactory(clObjectFactory);
+        }
 
         return false;
     }
