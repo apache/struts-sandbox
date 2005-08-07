@@ -52,7 +52,7 @@
 
     <chain     name="init" >
       <command name="initXWork" />
-      <command name="initWebWork" className="org.apache.ti.processor.chain.webwork.InitWebWork"/>
+      <command name="initWebWork" />
     </chain>
     
     <chain     name="process-action" className="org.apache.ti.processor.chain.ProcessActionChain">

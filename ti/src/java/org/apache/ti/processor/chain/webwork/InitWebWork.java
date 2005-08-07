@@ -38,8 +38,21 @@ public class InitWebWork implements Command {
 
     private static final Log log = LogFactory.getLog(InitWebWork.class);
 
+    private boolean devMode = false;
+    
+    public void setDevMode(boolean devMode) {
+        this.devMode = devMode;
+    }
+    
     public boolean execute(Context origctx) {
-        log.debug("Initializing webwork");
+        log.warn("Initializing webwork");
+        
+        Configuration c = new TiConfiguration(origctx);
+        Configuration.setConfiguration(c);
+    
+        if (devMode) {
+            c.set("webwork.configuration.xml.reload", "true");
+        }    
         
         LocalizedTextUtil.addDefaultResourceBundle("com/opensymphony/webwork/webwork-messages");
 

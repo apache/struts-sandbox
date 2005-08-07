@@ -50,6 +50,11 @@
     <property name="compilingObjectFactory" ref="compilingObjectFactory" />
     <property name="devMode"><value>${ti.devMode}</value></property>
   </bean>
+  
+  <bean id="initWebWork" class="org.apache.ti.processor.chain.webwork.InitWebWork">
+    <property name="devMode"><value>${ti.devMode}</value></property>
+  </bean>
+  
   <bean id="initControllerContext" class="org.apache.ti.processor.chain.InitControllerContext">
     <property name="controllerContext" ref="controllerContext" />
   </bean>
