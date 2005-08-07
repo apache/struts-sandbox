@@ -3,6 +3,12 @@ import com.opensymphony.xwork.Action;
 
 public class Controller {
 
+    private String name;
+
+    public void setName(String name) {
+        this.name = name;
+    }    
+
     /** @ti.action */
     public String index() {
         return Action.SUCCESS;
@@ -13,6 +19,7 @@ public class Controller {
      * @ti.forward name="success" type="redirect" location="index"
      * @ti.forward name="lost" type="dispatch" location="lostPassword.jsp"
      * @ti.forward name="error" type="action" location="login"
+     * @ti.validateRequired field="name" msg="Name is required"
      */
     public String doLogin() {
         return Action.SUCCESS;

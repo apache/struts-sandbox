@@ -1,5 +1,5 @@
 /*
- * $Id$ 
+ * $Id: TestXDocletXWork.java 230394 2005-08-05 04:13:44Z martinc $ 
  *
  * Copyright 2002-2004 The Apache Software Foundation.
  * 
@@ -30,6 +30,7 @@ import java.io.*;
 import java.util.*;
 import org.apache.velocity.*;
 
+
 import org.jdom.Document;
 import org.jdom.input.SAXBuilder;
 import org.jdom.xpath.XPath;
@@ -37,16 +38,16 @@ import org.jdom.xpath.XPath;
 /**
  * Unit tests for the <code>org.apache.ti.config.XDocletParser</code> class.
  *
- * @version $Rev$ $Date$
+ * @version $Rev: 230394 $ $Date: 2005-08-04 21:13:44 -0700 (Thu, 04 Aug 2005) $
  */
-public class TestXDocletParser extends TestCase {
+public class TestXDocletXWork extends XDocletTestBase {
     
     /**
      * Defines the testcase name for JUnit.
      *
      * @param theName the testcase's name.
      */
-    public TestXDocletParser(String theName) {
+    public TestXDocletXWork(String theName) {
         super(theName);
     }
 
@@ -57,7 +58,7 @@ public class TestXDocletParser extends TestCase {
      */
     public static void main(String[] theArgs) {
         junit.awtui.TestRunner.main(
-            new String[] { TestXDocletParser.class.getName()});
+            new String[] { TestXDocletXWork.class.getName()});
     }
 
     /**
@@ -66,41 +67,33 @@ public class TestXDocletParser extends TestCase {
      */
     public static Test suite() {
         // All methods starting with "test" will be executed in the test suite.
-        return new TestSuite(TestXDocletParser.class);
+        return new TestSuite(TestXDocletXWork.class);
     }
-
-    public void testGenerateSimple() throws Exception {
-        XDocletParser p = new XDocletParser();
-        p.init();
+   
+    public void testForwards() throws Exception {
+        Document doc = runTemplate("Controller.jsrc");
+        assertXPath(doc, "/xwork/package[@name='default']");
         
-        StringOutputType out = new StringOutputType("org/apache/ti/config/test.vm", "foo.xml", false);
-        List outputs = new ArrayList();
-        outputs.add(out);
-
-        String src = "public class Test {}";
-        StringReader reader = new StringReader(src);
+        // Test simple forward
+        assertXPath(doc, "/xwork/package/action[@name='index']");
+        assertXPath(doc, "/xwork/package/action[@name='index']/result[param = 'index.jsp']");
         
-        p.generate("Test.java", reader, outputs, new File("foo"));
+        // Test declared forwards
+        assertXPath(doc, "/xwork/package/action[@name='doLogin']");
+        assertXPath(doc, "/xwork/package/action[@name='doLogin']/result[@name='success' and param='index']");
+        assertXPath(doc, "/xwork/package/action[@name='doLogin']/result[@name='lost' and param='lostPassword.jsp']");
+        assertXPath(doc, "/xwork/package/action[@name='doLogin']/result[@name='error' and param='login']");
         
-        String ut = out.getString();
-        assertNotNull(ut);
-        assertTrue("incorrect output: '"+ut+"'", "File is 'Test.java'".equals(ut));
     }
+   
+    public void testInPackage() throws Exception {
+        Document doc = runTemplate("foo/Controller.jsrc");
+        assertXPath(doc, "/xwork/package[@name='foo' and @namespace='/foo']");
+    }
+        
     
-    public void testGenerateTag() throws Exception {
-        XDocletParser p = new XDocletParser();
-        p.init();
-        
-        StringOutputType out = new StringOutputType("org/apache/ti/config/testTag.vm", "foo.xml", false);
-        List outputs = new ArrayList();
-        outputs.add(out);
-
-        String src = "package foo;\n/** \n * things\n *  @foo bar\n */\npublic class Test{}";
-        StringReader reader = new StringReader(src);
-        p.generate("Test.java", reader, outputs, new File("foo"));
-        
-        String ut = out.getString();
-        assertNotNull(ut);
-        assertTrue("incorrect output: '"+ut+"'", "Tag is 'bar'".equals(ut));
+    protected Document runTemplate(String path) throws Exception {
+        return runTemplate(path, "org/apache/ti/config/xdocletToXWork.vm");
     }
+
 }

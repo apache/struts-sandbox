@@ -17,6 +17,9 @@
  */
 package org.apache.ti.config;
 
+import java.util.List;
+import java.util.ArrayList;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -48,8 +51,12 @@ public class ProcessTagsTask {
         ProcessTags pt = new ProcessTags();
         pt.setXDocletParser(parser);
 
+        List outputs = new ArrayList();
+        outputs.add(new OutputType("org/apache/ti/config/xdocletToXWork.vm", "xwork.xml", false));
+        outputs.add(new OutputType("org/apache/ti/config/xdocletToValidation.vm", "$c-$a-validation.xml", true));
+        
         try {
-            pt.process(srcdir, "Controller.java", destdir, "xwork.xml");
+            pt.process(srcdir, "Controller.java", destdir, outputs);
         } catch (IOException ex) {
             ex.printStackTrace();
         }

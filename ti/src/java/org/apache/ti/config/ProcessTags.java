@@ -42,17 +42,17 @@ public class ProcessTags {
         this.xdocletParser = parser;
     }
 
-    public void process(File src, String srcName, File dest, String destName) throws IOException {
-        crawl(src, srcName, dest, destName, new ArrayList());
+    public void process(File src, String srcName, File dest, List outputs) throws IOException {
+        crawl(src, srcName, dest, outputs, new ArrayList());
     }
 
-    protected void crawl(File src, String srcName, File dest, String destName, List stack) throws IOException {
+    protected void crawl(File src, String srcName, File dest, List outputs, List stack) throws IOException {
         File[] kids = src.listFiles();
         boolean controllerFound = false;
         for (int x = 0; x < kids.length; x++) {
             if (kids[x].isDirectory()) {
                 stack.add(kids[x].getName());
-                crawl(kids[x], srcName, dest, destName, stack);
+                crawl(kids[x], srcName, dest, outputs, stack);
                 stack.remove(stack.size() - 1);
             } else if (!controllerFound && srcName.equals(kids[x].getName())) {
                 StringBuffer path = new StringBuffer();
@@ -61,19 +61,10 @@ public class ProcessTags {
                 }
                 File destDir = new File(dest, path.toString());
                 destDir.mkdirs();
-                File destFile = new File(destDir, destName);
                 String filePath = path.toString() + kids[x].getName();
 
-                log.info("Generating " + destFile);
-                FileWriter writer =  new FileWriter(destFile);
-                try {
-                    xdocletParser.generate(filePath, new FileReader(kids[x]), writer);
-                } finally {
-                    try {
-                        writer.close();
-                    } catch (IOException ex) {
-                    }
-                }
+                log.info("Generating to " + destDir);
+                xdocletParser.generate(filePath, new FileReader(kids[x]), outputs, destDir);
                 controllerFound = true;
             }
         }

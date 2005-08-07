@@ -14,11 +14,6 @@
 <package name="$pkg.name" namespace="/${pkg.name}" extends="xwork-default">
 #end
 
-<!--    <result-types>
-        <result-type name="chain" class="com.opensymphony.xwork.ActionChainResult"/>
-        <result-type name="dispatcher" class="org.apache.ti.servlet.ServletDispatcherResult" default="true"/>
-    </result-types>
--->    
     #foreach( $method in $xclass.getMethods(true) )
       #if( $method.returnType.type.type == "java.lang.String.class" && $method.doc.hasTag("ti.action"))
         #if( $method.parameters.size() == 0 || $method.parameters.size() == 1) 
@@ -36,7 +31,7 @@
              </result>
              #end
            #end  
-           <interceptor-ref name="defaultStack"/>
+           <interceptor-ref name="validationWorkflowStack"/>
         </action>
         #end
       #end  
