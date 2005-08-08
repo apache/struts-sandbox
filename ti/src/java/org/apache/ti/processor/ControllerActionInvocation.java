@@ -31,7 +31,8 @@ public class ControllerActionInvocation extends DefaultActionInvocation {
 
     protected BeanFactory beanFactory;
     protected Method actionMethod;
-
+    protected Object form;
+    
     protected ControllerActionInvocation(ActionProxy proxy) throws Exception {
         this(proxy, null);
     }
@@ -45,16 +46,66 @@ public class ControllerActionInvocation extends DefaultActionInvocation {
     }
 
     public Method getActionMethod() {
+        // TODO: this should be optimized 
         if (actionMethod == null) {
             if (getAction() != null) {
                 try {
                     actionMethod = proxy.getConfig().getMethod(getAction().getClass());
                 } catch (NoSuchMethodException ex) {
+                    Class cls = getAction().getClass();
+                    String methodName = proxy.getConfig().getMethodName();
+
+                    Method[] methods = cls.getMethods();
+                    Class[] args;
+                    for (int x=0; x<methods.length; x++) {
+                        if (methods[x].getName().equals(methodName) &&
+                            methods[x].getParameterTypes().length == 1) {
+                            actionMethod = methods[x];
+                            break;
+                        }
+                    }
+                }
+                
+                if (actionMethod == null) {
                     throw new IllegalStateException("Cannot location method '"+proxy.getConfig().getMethodName()
                         + "' in action '"+getAction().getClass()+"'");
                 }
             }    
         }    
         return actionMethod;
+    }
+    
+    public Object getForm() {
+        return form;
+    }
+    
+    public void setForm(Object o) {
+        this.form = o;
+    }
+
+    /**
+     *  Invokes action.  If the action method contains one parameter, this method
+     *  handles its execution.  Otherwise, it is delegated to the super class.
+     */
+    protected String invokeAction(Object action, ActionConfig actionConfig) throws Exception {
+        
+        Method method = getActionMethod();
+                
+        if (method.getParameterTypes().length == 1) {
+            try {
+                return (String) method.invoke(action, new Object[] {form});
+            } catch (InvocationTargetException e) {
+                // We try to return the source exception.
+                Throwable t = e.getTargetException();
+    
+                if (t instanceof Exception) {
+                    throw (Exception) t;
+                } else {
+                    throw e;
+                }
+            }
+        } else {
+            return super.invokeAction(action, actionConfig);
+        }
     }
 }

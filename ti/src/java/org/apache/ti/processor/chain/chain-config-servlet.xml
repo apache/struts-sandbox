@@ -58,9 +58,13 @@
     <chain     name="process-action" className="org.apache.ti.processor.chain.ProcessActionChain">
       
       <command name="initControllerContext"  />
+      <lookup catalogName="struts-ti" name="createForm" optional="true" />
       <command name="selectLocale" className="org.apache.ti.processor.chain.servlet.SelectLocale" />
       <command name="executeAction" className="org.apache.ti.processor.chain.ExecuteAction" />
     </chain>
     
+    <chain name="createForm" className="org.apache.ti.processor.chain.CreateFormChain">
+      <command name="createJavaBeanForm" className="org.apache.ti.processor.chain.CreateJavaBeanForm" />
+    </chain>
 
 </catalog>
