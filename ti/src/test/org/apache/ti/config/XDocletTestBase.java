@@ -82,6 +82,7 @@ public class XDocletTestBase extends TestCase {
             //System.out.println("output:"+out); 
         } else {
             out = output.getString();
+            //System.out.println("output:"+out);
         }    
         
         Document doc = new SAXBuilder().build(new StringReader(out));

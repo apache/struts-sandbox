@@ -90,6 +90,12 @@ public class TestXDocletXWork extends XDocletTestBase {
         Document doc = runTemplate("foo/Controller.jsrc");
         assertXPath(doc, "/xwork/package[@name='foo' and @namespace='/foo']");
     }
+ 
+    public void testForm() throws Exception {
+        Document doc = runTemplate("Controller.jsrc");
+        assertXPath(doc, "/xwork/package/action[@name='formAction']/param[@name='formScope' and text()='request']");
+        assertXPath(doc, "/xwork/package/action[@name='formAction']/param[@name='formName' and text()='bob']");
+    }
         
     
     protected Document runTemplate(String path) throws Exception {

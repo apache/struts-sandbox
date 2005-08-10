@@ -39,7 +39,7 @@ public class ManageFormScope implements Filter {
     private static final Log log = LogFactory.getLog(ManageFormScope.class);
 
     public boolean execute(Context origctx) throws Exception {
-        log.debug("Managing form scope");
+        log.info("Managing form scope");
         
         WebContext webCtx = (WebContext)origctx;
         String formName = getFormName();
@@ -47,7 +47,8 @@ public class ManageFormScope implements Filter {
         
         if (scope != null) {
             Object form = scope.get(formName);
-            if (form == null) {
+            if (form != null) {
+                log.info("returning from scope");
                 origctx.put(CreateFormChain.FORM_OBJECT, form);
                 return true;
             }
@@ -57,11 +58,13 @@ public class ManageFormScope implements Filter {
     
     public boolean postprocess(Context origctx, Exception ex) {
         WebContext webCtx = (WebContext)origctx;
+        log.info("Managing form scope - post");
         
         Map scope = getFormScope(webCtx);
         if (scope != null) {
             Object form = webCtx.get(CreateFormChain.FORM_OBJECT);
             if (form != null) {
+                log.info("putting in scope");
                 String formName = getFormName();
                 scope.put(formName, form);
             }
@@ -86,9 +89,11 @@ public class ManageFormScope implements Filter {
         String scopeType = (String)inv.getProxy().getConfig().getParams().get("formScope");
         Map map = null;
         if ("request".equals(scopeType)) {
+            log.info("found request scope");
             map = webCtx.getRequestScope();
         } else if ("session".equals(scopeType)) {
             map = webCtx.getSessionScope();
+            log.info("found session scope");
         }
         return map;
     }

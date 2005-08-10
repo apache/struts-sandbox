@@ -94,7 +94,7 @@ public class ControllerActionInvocation extends DefaultActionInvocation {
      */
     protected String invokeAction(Object action, ActionConfig actionConfig) throws Exception {
         
-        return invokeAction(action, actionConfig);
+        return invokeAction.invokeAction(action, actionConfig);
     }
     
     public String invokeXWorkAction(Object action, ActionConfig actionConfig)

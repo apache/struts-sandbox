@@ -25,4 +25,13 @@ public class Controller {
         return Action.SUCCESS;
     }    
 
+    /**
+     * @ti.action
+     * @ti.form scope="request" name="bob"
+     */
+    public String formAction(Bean bean) {
+        return Action.SUCCESS;
+    }    
+
+
 }

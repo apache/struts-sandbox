@@ -49,7 +49,7 @@ public class ControllerActionProxyFactory extends DefaultActionProxyFactory impl
         ((ControllerActionInvocation)o).setInvokeAction((InvokeAction)beanFactory.getBean("invokeAction"));
         if (beanFactory instanceof AutowireCapableBeanFactory) {
             AutowireCapableBeanFactory f = (AutowireCapableBeanFactory)beanFactory;
-            f.autowireBeanProperties(o, f.AUTOWIRE_BY_TYPE, false);
+            f.autowireBeanProperties(o, f.AUTOWIRE_BY_NAME, false);
         }
     }
 

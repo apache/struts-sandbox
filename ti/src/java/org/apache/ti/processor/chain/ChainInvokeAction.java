@@ -35,7 +35,7 @@ public class ChainInvokeAction implements InvokeAction {
     private static final Log log = LogFactory.getLog(ChainInvokeAction.class);
 
     protected String catalogName = "struts-ti";
-    protected String executeCmdName = "execute-action";
+    protected String executeCmdName = "executeAction";
     public static final String RESULT = "actionResult";
 
     public void setExecuteActionCommandName(String name) {

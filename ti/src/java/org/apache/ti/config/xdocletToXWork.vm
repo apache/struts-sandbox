@@ -22,10 +22,10 @@
            #set( $form = $method.doc.getTag("ti.form"))
            #if( $form)
             #if( $form.getAttributeValue("scope"))
-              <param name="formScope">${form.getAttributeScope("scope")}</param>
+              <param name="formScope">${form.getAttributeValue("scope")}</param>
             #end
             #if ($form.getAttributeValue("name"))
-              <param name="formName">${form.getAttributeScope("name")}</param>
+              <param name="formName">${form.getAttributeValue("name")}</param>
             #end
            #end
            #set( $forwards = $method.doc.getTags("ti.forward"))
