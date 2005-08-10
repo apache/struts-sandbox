@@ -20,11 +20,11 @@
         <action name="$method.name" method="$method.name" class="$xclass.qualifiedName">
            
            #set( $form = $method.doc.getTag("ti.form"))
-           #if ($form != null)
-            #if ($form.getAttributeValue("scope") != null)
+           #if( $form)
+            #if( $form.getAttributeValue("scope"))
               <param name="formScope">${form.getAttributeScope("scope")}</param>
             #end
-            #if ($form.getAttributeValue("name") != null)
+            #if ($form.getAttributeValue("name"))
               <param name="formName">${form.getAttributeScope("name")}</param>
             #end
            #end

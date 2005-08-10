@@ -31,14 +31,9 @@ public class ControllerActionInvocation extends DefaultActionInvocation {
 
     protected BeanFactory beanFactory;
     protected Method actionMethod;
-<<<<<<< .mine
     protected Object form;
     protected InvokeAction invokeAction;
     
-=======
-    protected Object form;
-    
->>>>>>> .r231157
     protected ControllerActionInvocation(ActionProxy proxy) throws Exception {
         this(proxy, null);
     }
@@ -84,7 +79,6 @@ public class ControllerActionInvocation extends DefaultActionInvocation {
         }    
         return actionMethod;
     }
-<<<<<<< .mine
     
     public Object getForm() {
         return form;
@@ -107,41 +101,4 @@ public class ControllerActionInvocation extends DefaultActionInvocation {
             throws Exception {
         return super.invokeAction(action, actionConfig);
     }    
-        
-=======
-    
-    public Object getForm() {
-        return form;
-    }
-    
-    public void setForm(Object o) {
-        this.form = o;
-    }
-
-    /**
-     *  Invokes action.  If the action method contains one parameter, this method
-     *  handles its execution.  Otherwise, it is delegated to the super class.
-     */
-    protected String invokeAction(Object action, ActionConfig actionConfig) throws Exception {
-        
-        Method method = getActionMethod();
-                
-        if (method.getParameterTypes().length == 1) {
-            try {
-                return (String) method.invoke(action, new Object[] {form});
-            } catch (InvocationTargetException e) {
-                // We try to return the source exception.
-                Throwable t = e.getTargetException();
-    
-                if (t instanceof Exception) {
-                    throw (Exception) t;
-                } else {
-                    throw e;
-                }
-            }
-        } else {
-            return super.invokeAction(action, actionConfig);
-        }
-    }
->>>>>>> .r231157
 }
