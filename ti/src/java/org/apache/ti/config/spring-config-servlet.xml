@@ -59,4 +59,6 @@
     <property name="controllerContext" ref="controllerContext" />
   </bean>
   
+  <bean id="invokeAction" class="org.apache.ti.processor.chain.ChainInvokeAction" />
+  
 </beans>  

@@ -1,5 +1,5 @@
 /*
- * $Id: CreateFormChain.java 230569 2005-08-06 19:41:10Z mrdon $
+ * $Id: ExecuteFormAction.java 230535 2005-08-06 07:56:40Z mrdon $
  *
  * Copyright 2005 The Apache Software Foundation.
  *
@@ -17,11 +17,8 @@
  */
 package org.apache.ti.processor.chain;
 
-import org.apache.ti.processor.*;
-import java.lang.reflect.Method;
+import org.apache.commons.chain.Command;
 import org.apache.commons.chain.Context;
-import org.apache.commons.chain.web.WebContext;
-import org.apache.commons.chain.impl.ChainBase;
 
 import com.opensymphony.xwork.ActionContext;
 import com.opensymphony.xwork.ActionProxy;
@@ -29,40 +26,45 @@ import com.opensymphony.xwork.ActionProxy;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
+
+import org.apache.ti.processor.ControllerActionInvocation;
+
 /**
  *  Initializes XWork by replacing default factories.
  */
-public class CreateFormChain extends ChainBase {
+public class ExecuteFormAction implements Command {
 
-    private static final Log log = LogFactory.getLog(CreateFormChain.class);
+    private static final Log log = LogFactory.getLog(ExecuteFormAction.class);
 
-    public static final String FORM_CLASS = "formClass";
-    public static final String FORM_OBJECT = "formObject";
-    
     public boolean execute(Context origctx) throws Exception {
-        //WebContext ctx = (WebContext)origctx;
+        log.debug("Executing form action");
+        boolean result = false;
         
-        log.info("Processing create form chain");
-
         ActionContext ctx = ActionContext.getContext();
         ControllerActionInvocation inv = (ControllerActionInvocation)ctx.getActionInvocation();
-            
         Method method = inv.getActionMethod();
-        Class[] params = method.getParameterTypes();
-        if (params.length == 1) {
-            origctx.put(FORM_CLASS, params[0]);
-
-            boolean retCode = super.execute(origctx);
-            if (retCode) {
-                Object o = origctx.get(FORM_OBJECT);
-                log.info("Created form: "+o);
-                inv.setForm(o);
-                ctx.getValueStack().push(o);
-            } else {
-                throw new IllegalStateException("Form "+params[0]+" unable to "
-                    + "be created.");
+        Object form = inv.getForm();
+        if (method.getParameterTypes().length == 1) {
+            try {
+                String res = (String) method.invoke(inv.getAction(), new Object[] {form});
+                origctx.put(ChainInvokeAction.RESULT, res);
+                result = true;
+            } catch (InvocationTargetException e) {
+                // We try to return the source exception.
+                Throwable t = e.getTargetException();
+    
+                if (t instanceof Exception) {
+                    throw (Exception) t;
+                } else {
+                    throw e;
+                }
             }
         }
-        return false;
+
+        return result;
     }
+
+
 }

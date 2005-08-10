@@ -18,6 +18,16 @@
       #if( $method.returnType.type.type == "java.lang.String.class" && $method.doc.hasTag("ti.action"))
         #if( $method.parameters.size() == 0 || $method.parameters.size() == 1) 
         <action name="$method.name" method="$method.name" class="$xclass.qualifiedName">
+           
+           #set( $form = $method.doc.getTag("ti.form"))
+           #if ($form != null)
+            #if ($form.getAttributeValue("scope") != null)
+              <param name="formScope">${form.getAttributeScope("scope")}</param>
+            #end
+            #if ($form.getAttributeValue("name") != null)
+              <param name="formName">${form.getAttributeScope("name")}</param>
+            #end
+           #end
            #set( $forwards = $method.doc.getTags("ti.forward"))
            #if( $forwards.size() == 0) 
            <result name="success">

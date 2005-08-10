@@ -31,8 +31,14 @@ public class ControllerActionInvocation extends DefaultActionInvocation {
 
     protected BeanFactory beanFactory;
     protected Method actionMethod;
+<<<<<<< .mine
+    protected Object form;
+    protected InvokeAction invokeAction;
+    
+=======
     protected Object form;
     
+>>>>>>> .r231157
     protected ControllerActionInvocation(ActionProxy proxy) throws Exception {
         this(proxy, null);
     }
@@ -43,6 +49,10 @@ public class ControllerActionInvocation extends DefaultActionInvocation {
 
     protected ControllerActionInvocation(ActionProxy proxy, Map extraContext, boolean pushAction) throws Exception {
         super(proxy, extraContext, pushAction);
+    }
+    
+    public void setInvokeAction(InvokeAction inv) {
+        this.invokeAction = inv;
     }
 
     public Method getActionMethod() {
@@ -74,6 +84,31 @@ public class ControllerActionInvocation extends DefaultActionInvocation {
         }    
         return actionMethod;
     }
+<<<<<<< .mine
+    
+    public Object getForm() {
+        return form;
+    }
+    
+    public void setForm(Object o) {
+        this.form = o;
+    }
+
+    /**
+     *  Invokes action.  If the action method contains one parameter, this method
+     *  handles its execution.  Otherwise, it is delegated to the super class.
+     */
+    protected String invokeAction(Object action, ActionConfig actionConfig) throws Exception {
+        
+        return invokeAction(action, actionConfig);
+    }
+    
+    public String invokeXWorkAction(Object action, ActionConfig actionConfig)
+            throws Exception {
+        return super.invokeAction(action, actionConfig);
+    }    
+        
+=======
     
     public Object getForm() {
         return form;
@@ -108,4 +143,5 @@ public class ControllerActionInvocation extends DefaultActionInvocation {
             return super.invokeAction(action, actionConfig);
         }
     }
+>>>>>>> .r231157
 }

@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: ExecuteActionChain.java 230569 2005-08-06 19:41:10Z mrdon $
  *
  * Copyright 2005 The Apache Software Foundation.
  *
@@ -17,6 +17,8 @@
  */
 package org.apache.ti.processor.chain;
 
+import org.apache.ti.processor.*;
+import java.lang.reflect.Method;
 import org.apache.commons.chain.Context;
 import org.apache.commons.chain.web.WebContext;
 import org.apache.commons.chain.impl.ChainBase;
@@ -30,28 +32,19 @@ import org.apache.commons.logging.LogFactory;
 /**
  *  Initializes XWork by replacing default factories.
  */
-public class ProcessActionChain extends ChainBase {
+public class ExecuteActionChain extends ChainBase {
 
-    private static final Log log = LogFactory.getLog(ProcessActionChain.class);
+    private static final Log log = LogFactory.getLog(ExecuteActionChain.class);
 
+    
     public boolean execute(Context origctx) throws Exception {
-        WebContext ctx = (WebContext)origctx;
+        log.info("Processing execute action chain");
         
-        log.debug("Processing action chain");
-
-        ActionProxy proxy = (ActionProxy) ctx.get("actionProxy");
-        
-        ActionContext nestedContext = ActionContext.getContext();
-        ActionContext.setContext(proxy.getInvocation().getInvocationContext());
-
-        boolean retCode = false;
-
-        try {
-            retCode = super.execute(origctx);
-        } finally {
-            ActionContext.setContext(nestedContext);
+        boolean retCode = super.execute(origctx);
+        if (!retCode) {
+            throw new IllegalStateException("Unable to execute action "+
+                ActionContext.getContext().getActionInvocation().getAction());
         }
-        
-        return retCode;
+        return false;
     }
 }

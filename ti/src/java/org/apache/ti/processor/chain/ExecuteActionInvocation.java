@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Id: ExecuteAction.java 230535 2005-08-06 07:56:40Z mrdon $
  *
  * Copyright 2005 The Apache Software Foundation.
  *
@@ -29,12 +29,13 @@ import org.apache.commons.logging.LogFactory;
 /**
  *  Initializes XWork by replacing default factories.
  */
-public class ExecuteAction implements Command {
+public class ExecuteActionInvocation implements Command {
 
-    private static final Log log = LogFactory.getLog(ExecuteAction.class);
+    private static final Log log = LogFactory.getLog(ExecuteActionInvocation.class);
 
     public boolean execute(Context origctx) throws Exception {
-        log.debug("Executing action");
+        log.debug("Executing action invocation");
+
         ActionContext ctx = ActionContext.getContext();
         ActionProxy proxy = ctx.getActionInvocation().getProxy();
 

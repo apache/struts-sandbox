@@ -125,7 +125,7 @@ public class ChainRequestProcessor implements RequestProcessor {
             Command initCmd = catalog.getCommand(initCmdName);
             if (initCmd == null) {
                 throw new ProcessorException("Cannot find init command '"
-                        + startCmdName + "'");
+                        + initCmdName + "'");
             }
             initCmd.execute(webContext);
 

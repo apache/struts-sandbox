@@ -60,11 +60,17 @@
       <command name="initControllerContext"  />
       <lookup catalogName="struts-ti" name="createForm" optional="true" />
       <command name="selectLocale" className="org.apache.ti.processor.chain.servlet.SelectLocale" />
-      <command name="executeAction" className="org.apache.ti.processor.chain.ExecuteAction" />
+      <command name="executeActionInvocation" className="org.apache.ti.processor.chain.ExecuteActionInvocation" />
     </chain>
     
     <chain name="createForm" className="org.apache.ti.processor.chain.CreateFormChain">
+      <command name="manageFormScope" className="org.apache.ti.processor.chain.ManageFormScope" />
       <command name="createJavaBeanForm" className="org.apache.ti.processor.chain.CreateJavaBeanForm" />
+    </chain>
+    
+    <chain name="executeAction" className="org.apache.ti.processor.chain.ExecuteActionChain">
+      <command name="executeFormAction" className="org.apache.ti.processor.chain.ExecuteFormAction" />
+      <command name="executeXWorkAction" className="org.apache.ti.processor.chain.ExecuteXWorkAction" />
     </chain>
 
 </catalog>
