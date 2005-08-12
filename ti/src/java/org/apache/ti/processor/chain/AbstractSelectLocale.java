@@ -46,7 +46,7 @@ public abstract class AbstractSelectLocale implements Command {
      *
      * @param context The <code>Context</code> for the current request
      *
-     * @return <code>false</code> let's processing continue
+     * @return <code>false</code> lets processing continue
      * @throws Exception When something bad happens
      */
     public boolean execute(Context context) throws Exception {
