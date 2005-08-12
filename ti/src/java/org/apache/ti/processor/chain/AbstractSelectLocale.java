@@ -44,9 +44,10 @@ public abstract class AbstractSelectLocale implements Command {
     /**
      * <p>Select the <code>Locale</code> to be used for this request.</p>
      *
-     * @param actionCtx The <code>Context</code> for the current request
+     * @param context The <code>Context</code> for the current request
      *
-     * @return <code>false</code> so that processing continues
+     * @return <code>false</code> let's processing continue
+     * @throws Exception When something bad happens
      */
     public boolean execute(Context context) throws Exception {
 
@@ -70,6 +71,7 @@ public abstract class AbstractSelectLocale implements Command {
      * <p>Return the <code>Locale</code> to be used for this request.</p>
      *
      * @param context The <code>Context</code> for this request
+     * @return  The <code>Locale</code> from WebContext.
      */
     protected abstract Locale getLocale(WebContext context);
 

@@ -124,6 +124,13 @@
     </dependency>
     
     <dependency>
+      <groupId>jspapi</groupId>
+      <artifactId>jsp-api</artifactId>
+      <version>2.0</version>
+      <url>http://java.sun.com/products/jsp/</url>
+    </dependency>
+    
+    <dependency>
       <groupId>commons-chain</groupId>
       <artifactId>commons-chain</artifactId>
       <version>1.0</version>
@@ -174,12 +181,42 @@
       </properties>
     </dependency>
     
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>1.0</version>
+      <url>http://jakarta.apache.org/commons/io/</url>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>2.1</version>
+      <url>http://jakarta.apache.org/commons/lang/</url>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-jci</groupId>
+      <artifactId>commons-jci</artifactId>
+      <version>SNAPSHOT</version>
+      <url>http://jakarta.apache.org/commons/sandbox/jci/</url>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
 
  
     <dependency>
       <groupId>opensymphony</groupId>
       <artifactId>xwork</artifactId>
       <version>SNAPSHOT</version>
+      <url>http://www.opensymphony.com/xwork/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -189,6 +226,7 @@
       <groupId>opensymphony</groupId>
       <artifactId>webwork</artifactId>
       <version>SNAPSHOT</version>
+      <url>http://www.opensymphony.com/webwork/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -198,6 +236,7 @@
       <groupId>opensymphony</groupId>
       <artifactId>oscore</artifactId>
       <version>2.2.4</version>
+      <url>http://www.opensymphony.com/oscore/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -207,6 +246,7 @@
       <groupId>ognl</groupId>
       <artifactId>ognl</artifactId>
       <version>2.6.7</version>
+      <url>http://www.ognl.org/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -216,6 +256,7 @@
       <groupId>velocity</groupId>
       <artifactId>velocity</artifactId>
       <version>1.4</version>
+      <url>http://jakarta.apache.org/velocity/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -225,6 +266,7 @@
       <groupId>velocity</groupId>
       <artifactId>velocity-dep</artifactId>
       <version>1.4</version>
+      <url>http://jakarta.apache.org/velocity/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -234,6 +276,7 @@
       <groupId>xjavadoc</groupId>
       <artifactId>xjavadoc</artifactId>
       <version>1.1</version>
+      <url>http://xdoclet.sourceforge.net/xjavadoc/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -243,6 +286,7 @@
       <groupId>springframework</groupId>
       <artifactId>spring-core</artifactId>
       <version>1.2.1</version>
+      <url>http://www.springframework.org/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -252,20 +296,12 @@
       <groupId>springframework</groupId>
       <artifactId>spring-beans</artifactId>
       <version>1.2.1</version>
+      <url>http://www.springframework.org/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
     </dependency>
     
-    <dependency>
-      <groupId>commons-jci</groupId>
-      <artifactId>commons-jci</artifactId>
-      <version>SNAPSHOT</version>
-      <properties>
-        <war.bundle>true</war.bundle>
-      </properties>
-    </dependency>
-
 <!--
     <dependency>
       <groupId>janino</groupId>
@@ -280,24 +316,7 @@
       <groupId>eclipse</groupId>
       <artifactId>jdtcore</artifactId>
       <version>3.0.1</version>
-      <properties>
-        <war.bundle>true</war.bundle>
-      </properties>
-    </dependency>
-
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>1.0</version>
-      <properties>
-        <war.bundle>true</war.bundle>
-      </properties>
-    </dependency>
-
-  <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
-      <version>2.1</version>
+      <url>http://www.eclipse.org/jdt/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>

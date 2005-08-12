@@ -20,7 +20,7 @@ import com.opensymphony.xwork.ActionInvocation;
  * Includes or forwards a view. There are three possible ways the result can be executed: <ul>
  * <p/>
  * <li>If we are in the scope of a JSP (a PageContext is available), PageContext's
- * {@link PageContext#include(String) include} method is called.</li>
+ * {@link javax.servlet.jsp.PageContext#include(String)} method is called.</li>
  * <p/>
  * <li>If there is no PageContext and we're not in any sort of include (there is no
  * "javax.servlet.include.servlet_path" in the request attributes), then a call to
@@ -30,7 +30,7 @@ import com.opensymphony.xwork.ActionInvocation;
  * <li>Otherwise, {@link RequestDispatcher#include(javax.servlet.ServletRequest, javax.servlet.ServletResponse) include}
  * is called.</li></ul>
  * <p/>
- * This result follows the same rules from {@link WebWorkResultSupport}.
+ * This result follows the same rules from {@link com.opensymphony.webwork.dispatcher.WebWorkResultSupport}.
  *
  * @author Patrick Lightbody
  * @see javax.servlet.RequestDispatcher
