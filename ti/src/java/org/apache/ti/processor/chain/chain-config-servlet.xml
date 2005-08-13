@@ -60,6 +60,7 @@
       <command name="initControllerContext"  />
       <lookup catalogName="struts-ti" name="createForm" optional="true" />
       <command name="selectLocale" className="org.apache.ti.processor.chain.servlet.SelectLocale" />
+      <command name="createValidatorContext" className="org.apache.ti.processor.chain.CreateValidatorContext" />
       <command name="executeActionInvocation" className="org.apache.ti.processor.chain.ExecuteActionInvocation" />
     </chain>
     

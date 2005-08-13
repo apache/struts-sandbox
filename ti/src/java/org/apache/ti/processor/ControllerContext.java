@@ -21,6 +21,7 @@ import org.apache.commons.chain.web.WebContext;
 import org.apache.ti.config.mapper.ActionMapping;
 
 import com.opensymphony.xwork.ActionContext;
+import com.opensymphony.xwork.validator.ValidatorContext;
 
 /**
  *  Context that adds Controller methods, using ActionContext for storage.
@@ -44,9 +45,21 @@ public class ControllerContext {
     public ActionMapping getActionMapping() {
         return (ActionMapping) get("actionMapping");
     }
+    
+    public ValidatorContext getValidatorContext() {
+        return (ValidatorContext) getFromStore("validatorContext");
+    }
+    
+    public void setValidatorContext(ValidatorContext ctx) {
+        putInStore("validatorContext", ctx);
+    }
 
     protected Object getFromStore(String key) {
         return ActionContext.getContext().get(key);
+    }
+    
+    protected void putInStore(String key, Object val) {
+        ActionContext.getContext().put(key, val);
     }
 
     protected Object get(String key) {

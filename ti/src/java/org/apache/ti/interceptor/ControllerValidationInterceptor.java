@@ -8,6 +8,7 @@ import com.opensymphony.xwork.ActionInvocation;
 import com.opensymphony.xwork.interceptor.AroundInterceptor;
 import com.opensymphony.xwork.validator.*;
 import org.apache.ti.processor.ControllerActionInvocation;
+import org.apache.ti.processor.ControllerContext;
 
 
 
@@ -19,7 +20,7 @@ import org.apache.ti.processor.ControllerActionInvocation;
  *
  * @author Jason Carreira
  */
-public class FormValidationInterceptor extends AroundInterceptor {
+public class ControllerValidationInterceptor extends AroundInterceptor {
 
     /**
      * Does nothing in this implementation.
@@ -35,17 +36,23 @@ public class FormValidationInterceptor extends AroundInterceptor {
      * @throws Exception if an error occurs validating the action form.
      */
     protected void before(ActionInvocation invocation) throws Exception {
+        
         ControllerActionInvocation inv = (ControllerActionInvocation)invocation;
         Object form = inv.getForm();
+        Object action = inv.getAction();
+        
+        ValidatorContext val = ControllerContext.getContext().getValidatorContext();
+        String context = invocation.getProxy().getActionName();
+        if (log.isDebugEnabled()) {
+            log.debug("Validating "
+                    + invocation.getProxy().getNamespace() + "/" + invocation.getProxy().getActionName() + ".");
+        }
+        
         if (form != null) {
-            String context = invocation.getProxy().getActionName();
-            
-            if (log.isDebugEnabled()) {
-                log.debug("Validating form from "
-                        + invocation.getProxy().getNamespace() + "/" + invocation.getProxy().getActionName() + ".");
-            }
-    
-            ActionValidatorManager.validate(form, context);
+            ActionValidatorManager.validate(form, context, val);
+        }
+        if (!val.hasErrors()) {
+            ActionValidatorManager.validate(action, context, val);
         }
     }
 }

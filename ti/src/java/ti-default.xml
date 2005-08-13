@@ -25,7 +25,8 @@
             <interceptor name="component" class="com.opensymphony.xwork.interceptor.component.ComponentInterceptor"/>
             <interceptor name="token" class="com.opensymphony.webwork.interceptor.TokenInterceptor"/>
             <interceptor name="token-session" class="com.opensymphony.webwork.interceptor.TokenSessionStoreInterceptor"/>
-            <interceptor name="validation" class="com.opensymphony.xwork.validator.ValidationInterceptor"/>
+            <interceptor name="validation" class="org.apache.ti.interceptor.ControllerValidationInterceptor" />
+            <interceptor name="controllerValidation" class="com.opensymphony.xwork.validator.ValidationInterceptor"/>
             <interceptor name="workflow" class="com.opensymphony.xwork.interceptor.DefaultWorkflowInterceptor"/>
             <interceptor name="servlet-config" class="com.opensymphony.webwork.interceptor.ServletConfigInterceptor"/>
             <interceptor name="prepare" class="com.opensymphony.xwork.interceptor.PrepareInterceptor"/>
@@ -33,8 +34,6 @@
             <interceptor name="fileUpload" class="com.opensymphony.webwork.interceptor.FileUploadInterceptor"/>
             <interceptor name="execAndWait" class="com.opensymphony.webwork.interceptor.ExecuteAndWaitInterceptor"/>
 
-            <intereceptor name="formValidation" class="org.apache.ti.interceptor.FormValidationInterceptor" />
-            
             <!-- Basic stack -->
             <interceptor-stack name="defaultStack">
                 <interceptor-ref name="servlet-config"/>
@@ -47,8 +46,7 @@
             <!-- Sample validation and workflow stack -->
             <interceptor-stack name="validationWorkflowStack">
                 <interceptor-ref name="defaultStack"/>
-                <interceptor-ref name="validation"/>
-                <interceptor-ref name="formValidation"/>
+                <interceptor-ref name="controllerValidation"/>
                 <interceptor-ref name="workflow"/>
             </interceptor-stack>
 
