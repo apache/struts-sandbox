@@ -42,6 +42,8 @@ import org.apache.ti.util.SourceResolver;
  */
 public class ChainRequestProcessor implements RequestProcessor {
 
+    public static final String WEB_CONTEXT = "webContext";
+
     /**
      * <p>Comma-separated list of context or classloader-relative path(s) that
      * contain the configuration for the default commons-chain catalog(s).</p>
@@ -72,8 +74,11 @@ public class ChainRequestProcessor implements RequestProcessor {
      */
     protected Command startCmd = null;
 
+    protected Command ctxCmd = null;
+
     protected String catalogName = "struts-ti";
     protected String startCmdName = "start";
+    protected String ctxCmdName = "create-context";
     protected String initCmdName = "init";
 
     protected SourceResolver resolver = null;
@@ -89,6 +94,10 @@ public class ChainRequestProcessor implements RequestProcessor {
     public void setStartCommandName(String name) {
         this.startCmdName = name;
     }
+
+    public void setCreateContextCommandName(String name) {
+        this.ctxCmdName = name;
+    }    
 
     public void setInitCommandName(String name) {
         this.initCmdName = name;
@@ -135,6 +144,12 @@ public class ChainRequestProcessor implements RequestProcessor {
                         + startCmdName + "'");
             }
 
+            ctxCmd = catalog.getCommand(ctxCmdName);
+            if (ctxCmd == null) {
+                log.debug("Cannot find '" + ctxCmdName + "', skipping "
+                        + "context creation step");
+            }
+
         } catch (Throwable t) {
 
             // The follow error message is not retrieved from internal message
@@ -158,6 +173,15 @@ public class ChainRequestProcessor implements RequestProcessor {
 
             // Add initialization parameters directly to context.
             ctx.putAll(initParameters);
+
+            // Allow the chain to replace the context if needed
+            if (ctxCmd != null) {
+                log.debug("Executing create context chain");
+                ctx.put(WEB_CONTEXT, ctx);
+                ctxCmd.execute(ctx);
+                ctx = (WebContext)ctx.get(WEB_CONTEXT);
+            }    
+            
             startCmd.execute(ctx);
         } catch (Exception e) {
             // Execute the exception processing chain??

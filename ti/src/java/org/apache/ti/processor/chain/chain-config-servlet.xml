@@ -54,6 +54,10 @@
       <command name="initXWork" />
       <command name="initWebWork" />
     </chain>
+ 
+    <chain     name="create-context" >
+      <command name="makeContextStackAware" className="org.apache.ti.processor.chain.servlet.MakeContextStackAware" />
+    </chain>
     
     <chain     name="process-action" className="org.apache.ti.processor.chain.ProcessActionChain">
       

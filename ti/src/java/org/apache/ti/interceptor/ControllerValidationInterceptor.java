@@ -4,6 +4,7 @@
  */
 package org.apache.ti.interceptor;
 
+import com.opensymphony.xwork.ActionContext;
 import com.opensymphony.xwork.ActionInvocation;
 import com.opensymphony.xwork.interceptor.AroundInterceptor;
 import com.opensymphony.xwork.validator.*;
@@ -44,6 +45,10 @@ public class ControllerValidationInterceptor extends AroundInterceptor {
         Object action = inv.getAction();
         
         ValidatorContext val = ControllerContext.getContext().getValidatorContext();
+        
+        // Add to the value stack
+        ActionContext.getContext().getValueStack().push(val);
+
         String context = invocation.getProxy().getActionName();
         if (log.isDebugEnabled()) {
             log.debug("Validating "
