@@ -50,7 +50,7 @@ public class ChainInvokeAction implements InvokeAction {
      *  Invokes action.  If the action method contains one parameter, this method
      *  handles its execution.  Otherwise, it is delegated to the super class.
      */
-    public String invokeAction(Object action, ActionConfig actionConfig) throws Exception {
+    public String invoke(Object action, ActionConfig actionConfig) throws Exception {
         
         CatalogFactory factory = CatalogFactory.getInstance();
         Catalog cat = factory.getCatalog(catalogName);

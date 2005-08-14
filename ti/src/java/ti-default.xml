@@ -28,6 +28,8 @@
             <interceptor name="validation" class="org.apache.ti.interceptor.ControllerValidationInterceptor" />
             <interceptor name="controllerValidation" class="com.opensymphony.xwork.validator.ValidationInterceptor"/>
             <interceptor name="workflow" class="com.opensymphony.xwork.interceptor.DefaultWorkflowInterceptor"/>
+            <interceptor name="controllerWorkflow" class="com.opensymphony.xwork.interceptor.ControllerWorkflowInterceptor"/>
+            
             <interceptor name="servlet-config" class="com.opensymphony.webwork.interceptor.ServletConfigInterceptor"/>
             <interceptor name="prepare" class="com.opensymphony.xwork.interceptor.PrepareInterceptor"/>
             <interceptor name="conversionError" class="com.opensymphony.webwork.interceptor.WebWorkConversionErrorInterceptor"/>
@@ -47,7 +49,7 @@
             <interceptor-stack name="validationWorkflowStack">
                 <interceptor-ref name="defaultStack"/>
                 <interceptor-ref name="controllerValidation"/>
-                <interceptor-ref name="workflow"/>
+                <interceptor-ref name="controllerWorkflow"/>
             </interceptor-stack>
 
             <!-- Sample file upload stack -->

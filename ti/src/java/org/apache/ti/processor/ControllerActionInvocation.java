@@ -50,6 +50,62 @@ public class ControllerActionInvocation extends DefaultActionInvocation {
         this.invokeAction = inv;
     }
 
+    public Object invokeActionEvent(String eventName, boolean optional) throws Exception {
+        return invokeActionEvent(eventName, null, null, optional);
+    }
+    
+    public Object invokeActionEvent(String eventName, Class[] otherArgs, 
+            Object[] otherParams, boolean optional) throws Exception {
+    
+        // TODO: this should be optimized
+        Object result = null;
+        Method method = null;
+        Class[] args = otherArgs;
+        Object[] params = otherParams;
+        if (form != null) {
+            if (otherArgs == null) {
+                args = new Class[] {form.getClass()};
+                params = new Object[] {form};
+            } else {
+                args = new Class[otherArgs.length + 1];
+                args[0] = form.getClass();
+                System.arraycopy(otherArgs, 0, args, 1, otherArgs.length);
+                
+                params = new Object[otherParams.length + 1];
+                params[0] = form;
+                System.arraycopy(otherParams, 0, params, 1, otherParams.length);
+            }
+        }
+        
+        String methodName = getActionMethod().getName();
+        methodName += "_" + eventName;
+        Class cls = getAction().getClass();
+        try {
+            method = cls.getMethod(methodName, args);
+        } catch (NoSuchMethodException ex) {
+            log.debug("Unable to locate action event method "+methodName);
+            if (!optional) {
+                throw ex;
+            } 
+        }
+        
+        if (method != null) {
+            try {
+                result = method.invoke(action, params);
+            } catch (InvocationTargetException e) {
+                // We try to return the source exception.
+                Throwable t = e.getTargetException();
+    
+                if (t instanceof Exception) {
+                    throw (Exception) t;
+                } else {
+                    throw e;
+                }
+            }
+        }
+        return result;
+    }
+    
     public Method getActionMethod() {
         // TODO: this should be optimized 
         if (actionMethod == null) {
@@ -80,6 +136,7 @@ public class ControllerActionInvocation extends DefaultActionInvocation {
         return actionMethod;
     }
     
+    
     public Object getForm() {
         return form;
     }
@@ -94,7 +151,7 @@ public class ControllerActionInvocation extends DefaultActionInvocation {
      */
     protected String invokeAction(Object action, ActionConfig actionConfig) throws Exception {
         
-        return invokeAction.invokeAction(action, actionConfig);
+        return invokeAction.invoke(action, actionConfig);
     }
     
     public String invokeXWorkAction(Object action, ActionConfig actionConfig)
