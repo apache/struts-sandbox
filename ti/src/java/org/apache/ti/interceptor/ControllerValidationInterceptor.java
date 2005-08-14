@@ -9,7 +9,7 @@ import com.opensymphony.xwork.interceptor.AroundInterceptor;
 import com.opensymphony.xwork.validator.*;
 import org.apache.ti.processor.ControllerActionInvocation;
 import org.apache.ti.processor.ControllerContext;
-
+import org.apache.commons.logging.*;
 
 
 /**
@@ -21,6 +21,8 @@ import org.apache.ti.processor.ControllerContext;
  * @author Jason Carreira
  */
 public class ControllerValidationInterceptor extends AroundInterceptor {
+
+    private static final Log log = LogFactory.getLog(ControllerValidationInterceptor.class);
 
     /**
      * Does nothing in this implementation.
@@ -36,7 +38,7 @@ public class ControllerValidationInterceptor extends AroundInterceptor {
      * @throws Exception if an error occurs validating the action form.
      */
     protected void before(ActionInvocation invocation) throws Exception {
-        
+        log.debug("Validating action and/or form"); 
         ControllerActionInvocation inv = (ControllerActionInvocation)invocation;
         Object form = inv.getForm();
         Object action = inv.getAction();

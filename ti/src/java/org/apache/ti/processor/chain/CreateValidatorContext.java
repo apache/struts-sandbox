@@ -1,5 +1,5 @@
 /*
- * $Id: CreateValidationContext.java 230578 2005-08-06 20:21:45Z mrdon $
+ * $Id: CreateValidatorContext.java 230578 2005-08-06 20:21:45Z mrdon $
  *
  * Copyright 2005 The Apache Software Foundation.
  *
@@ -41,9 +41,9 @@ import com.opensymphony.xwork.*;
 /**
  *  Initializes XWork by replacing default factories.
  */
-public class CreateValidationContext implements Command {
+public class CreateValidatorContext implements Command {
 
-    private static final Log log = LogFactory.getLog(CreateValidationContext.class);
+    private static final Log log = LogFactory.getLog(CreateValidatorContext.class);
 
     public boolean execute(Context origctx) throws Exception {
         

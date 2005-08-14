@@ -44,6 +44,7 @@ public class ControllerWorkflowInterceptor implements Interceptor {
     }
 
     public String intercept(ActionInvocation invocation) throws Exception {
+        log.debug("Executing controller validation workflow");
         ControllerActionInvocation inv = (ControllerActionInvocation)invocation;
         Object action = invocation.getAction();
         
