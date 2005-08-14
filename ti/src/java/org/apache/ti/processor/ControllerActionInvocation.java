@@ -33,6 +33,7 @@ public class ControllerActionInvocation extends DefaultActionInvocation {
     protected Method actionMethod;
     protected Object form;
     protected InvokeAction invokeAction;
+    protected boolean devMode;
     
     protected ControllerActionInvocation(ActionProxy proxy) throws Exception {
         this(proxy, null);
@@ -49,6 +50,10 @@ public class ControllerActionInvocation extends DefaultActionInvocation {
     public void setInvokeAction(InvokeAction inv) {
         this.invokeAction = inv;
     }
+
+    public void setDevMode(boolean devMode) {
+        this.devMode = devMode;
+    }    
 
     public Object invokeActionEvent(String eventName, boolean optional) throws Exception {
         return invokeActionEvent(eventName, null, null, optional);
@@ -107,11 +112,13 @@ public class ControllerActionInvocation extends DefaultActionInvocation {
     }
     
     public Method getActionMethod() {
+        Method method = null;
+        
         // TODO: this should be optimized 
         if (actionMethod == null) {
             if (getAction() != null) {
                 try {
-                    actionMethod = proxy.getConfig().getMethod(getAction().getClass());
+                    method = proxy.getConfig().getMethod(getAction().getClass());
                 } catch (NoSuchMethodException ex) {
                     Class cls = getAction().getClass();
                     String methodName = proxy.getConfig().getMethodName();
@@ -121,19 +128,26 @@ public class ControllerActionInvocation extends DefaultActionInvocation {
                     for (int x=0; x<methods.length; x++) {
                         if (methods[x].getName().equals(methodName) &&
                             methods[x].getParameterTypes().length == 1) {
-                            actionMethod = methods[x];
+                            method = methods[x];
                             break;
                         }
                     }
                 }
                 
-                if (actionMethod == null) {
+                if (method == null) {
                     throw new IllegalStateException("Cannot location method '"+proxy.getConfig().getMethodName()
                         + "' in action '"+getAction().getClass()+"'");
                 }
             }    
+        } else {
+            method = actionMethod;
+         }   
+        
+        if (!devMode) {
+            actionMethod = method;
         }    
-        return actionMethod;
+        
+        return method;
     }
     
     
