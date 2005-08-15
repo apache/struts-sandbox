@@ -20,9 +20,7 @@
 
 <project>
   <pomVersion>3</pomVersion>
-  <id>struts</id>
-  <name>Struts TI</name>
-  <groupId>ti</groupId>
+  <groupId>struts-ti</groupId>
   <currentVersion>0.1-dev</currentVersion>
 
 
