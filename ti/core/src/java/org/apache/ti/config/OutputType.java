@@ -82,7 +82,7 @@ public class OutputType {
         }
         FileWriter writer = null;
         try {
-            writer = new FileWriter(new File(dest, rootPath + name));
+            writer = new FileWriter(new File(dest, name));
         } catch (IOException ex) {
             log.error("Unable to create output file "+name, ex);
         }
