@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.net.URI;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -43,28 +44,27 @@ public class ProcessTags {
     }
 
     public void process(File src, String srcName, File dest, List outputs) throws IOException {
-        crawl(src, srcName, dest, outputs, new ArrayList());
+        ArrayList sources = new ArrayList();
+        crawl(src, srcName, src, outputs, sources);
+        xdocletParser.generate(sources, src, dest, outputs);
     }
 
-    protected void crawl(File src, String srcName, File dest, List outputs, List stack) throws IOException {
+    protected void crawl(File src, String srcName, File srcRoot, List outputs, List sources) throws IOException {
         File[] kids = src.listFiles();
         boolean controllerFound = false;
         for (int x = 0; x < kids.length; x++) {
             if (kids[x].isDirectory()) {
-                stack.add(kids[x].getName());
-                crawl(kids[x], srcName, dest, outputs, stack);
-                stack.remove(stack.size() - 1);
+                //stack.add(kids[x].getName());
+                crawl(kids[x], srcName, srcRoot, outputs, sources);
+                //stack.remove(stack.size() - 1);
             } else if (!controllerFound && srcName.equals(kids[x].getName())) {
-                StringBuffer path = new StringBuffer();
-                for (Iterator i = stack.iterator(); i.hasNext();) {
-                    path.append(i.next()).append(SEP);
-                }
-                File destDir = new File(dest, path.toString());
-                destDir.mkdirs();
-                String filePath = path.toString() + kids[x].getName();
-
-                log.info("Generating to " + destDir);
-                xdocletParser.generate(filePath, new FileReader(kids[x]), outputs, destDir);
+                URI srcUri = kids[x].toURI();
+                URI fileUri = srcRoot.toURI();
+                URI result = fileUri.relativize(srcUri);
+                log.info("Adding source "+result);
+                sources.add(result.toString());
+                
+                //xdocletParser.generate(filePath, new FileReader(kids[x]), outputs, destDir);
                 controllerFound = true;
             }
         }

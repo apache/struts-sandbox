@@ -54,7 +54,7 @@ public class ServletActionMapper implements ActionMapper {
             if (mapping.charAt(mapping.length() - 1) == '*') {
                 String prefix = mapping.substring(0, mapping.length() - 1);
                 if (servletPath.startsWith(prefix)) {
-                    uri = servletPath.substring(prefix.length());
+                    uri = servletPath.substring(prefix.length() - 1);
                     log.debug("matched prefix:" + prefix);
                     break;
                 }
@@ -63,7 +63,7 @@ public class ServletActionMapper implements ActionMapper {
             } else if (mapping.charAt(0) == '*') {
                 String ext = mapping.substring(1);
                 if (servletPath.endsWith(ext)) {
-                    uri = servletPath.substring(1, (servletPath.length() - ext.length()));
+                    uri = servletPath.substring(0, (servletPath.length() - ext.length()));
                     log.debug("matched ext:" + ext);
                     break;
                 }

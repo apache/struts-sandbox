@@ -52,8 +52,8 @@ public class ProcessTagsTask {
         pt.setXdocletParser(parser);
 
         List outputs = new ArrayList();
-        outputs.add(new OutputType("org/apache/ti/config/xdocletToXWork.vm", "xwork.xml", false));
-        outputs.add(new OutputType("org/apache/ti/config/xdocletToValidation.vm", "$c-$a-validation.xml", true));
+        outputs.add(new OutputType("org/apache/ti/config/xdocletToXWork.vm", "xwork.xml", OutputType.ONCE));
+        outputs.add(new OutputType("org/apache/ti/config/xdocletToValidation.vm", "$c-$a-validation.xml", OutputType.PER_ACTION));
         
         try {
             pt.process(srcdir, "Controller.java", destdir, outputs);

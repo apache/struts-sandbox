@@ -79,7 +79,7 @@ public class TestXDocletValidation extends XDocletTestBase {
    
     
     protected Document runTemplate(String path, String action) throws Exception {
-        return runTemplate(path, "org/apache/ti/config/xdocletToValidation.vm", true, action);
+        return runTemplate(path, "org/apache/ti/config/xdocletToValidation.vm", OutputType.PER_ACTION, action);
     }
 
 }

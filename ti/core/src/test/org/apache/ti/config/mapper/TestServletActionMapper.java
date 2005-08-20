@@ -75,7 +75,7 @@ public class TestServletActionMapper extends TestCase {
         ActionMapping am = mapper.getMapping("/foo/ns/bar", mappings);
         assertNotNull(am);
         assertTrue("action:"+am.getName(), "bar".equals(am.getName()));
-        assertTrue("ns".equals(am.getNamespace()));
+        assertTrue("/ns".equals(am.getNamespace()));
         assertTrue("/foo/*".equals(am.getExternalMapping()));
     }
     
@@ -83,7 +83,7 @@ public class TestServletActionMapper extends TestCase {
         ActionMapping am = mapper.getMapping("/ns/bar.do", mappings);
         assertNotNull(am);
         assertTrue("bar".equals(am.getName()));
-        assertTrue("ns".equals(am.getNamespace()));
+        assertTrue("/ns".equals(am.getNamespace()));
         assertTrue("*.do".equals(am.getExternalMapping()));
     }
     

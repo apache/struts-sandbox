@@ -39,7 +39,7 @@ import org.jdom.xpath.XPath;
  *
  * @version $Rev$ $Date$
  */
-public class TestXDocletParser extends TestCase {
+public class TestXDocletParser extends XDocletTestBase {
     
     /**
      * Defines the testcase name for JUnit.
@@ -49,7 +49,7 @@ public class TestXDocletParser extends TestCase {
     public TestXDocletParser(String theName) {
         super(theName);
     }
-
+    
     /**
      * Start the tests.
      *
@@ -73,14 +73,15 @@ public class TestXDocletParser extends TestCase {
         XDocletParser p = new XDocletParser();
         p.init();
         
-        StringOutputType out = new StringOutputType("org/apache/ti/config/test.vm", "foo.xml", false);
+        StringOutputType out = new StringOutputType("org/apache/ti/config/test.vm");
         List outputs = new ArrayList();
         outputs.add(out);
 
-        String src = "public class Test {}";
-        StringReader reader = new StringReader(src);
-        
-        p.generate("Test.java", reader, outputs, new File("foo"));
+        String txt = "public class Test {}";
+        setText(new File(src, "Test.java"), txt);
+        ArrayList sources = new ArrayList();
+        sources.add("Test.java");
+        p.generate(sources, src, null, outputs);
         
         String ut = out.getString();
         assertNotNull(ut);
@@ -91,13 +92,15 @@ public class TestXDocletParser extends TestCase {
         XDocletParser p = new XDocletParser();
         p.init();
         
-        StringOutputType out = new StringOutputType("org/apache/ti/config/testTag.vm", "foo.xml", false);
+        StringOutputType out = new StringOutputType("org/apache/ti/config/testTag.vm");
         List outputs = new ArrayList();
         outputs.add(out);
 
-        String src = "package foo;\n/** \n * things\n *  @foo bar\n */\npublic class Test{}";
-        StringReader reader = new StringReader(src);
-        p.generate("Test.java", reader, outputs, new File("foo"));
+        String srctxt = "package foo;\n/** \n * things\n *  @foo bar\n */\npublic class Test{}";
+        setText(new File(src, "Test.java"), srctxt);
+        ArrayList sources = new ArrayList();
+        sources.add("Test.java");
+        p.generate(sources, src, null, outputs);
         
         String ut = out.getString();
         assertNotNull(ut);

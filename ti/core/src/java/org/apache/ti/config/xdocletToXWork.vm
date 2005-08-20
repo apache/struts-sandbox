@@ -6,46 +6,48 @@
 
 <xwork>
 <include file="ti-default.xml"/>
-#set( $pkg=$xclass.containingPackage)
-
-#if( $pkg.name=="")
-<package name="default" extends="ti-default">
-#else
-<package name="$pkg.name" namespace="/${pkg.name}" extends="xwork-default">
-#end
-
-    #foreach( $method in $xclass.getMethods(true) )
-      #if( $method.returnType.type.type == "java.lang.String.class" && $method.doc.hasTag("ti.action"))
-        #if( $method.parameters.size() == 0 || $method.parameters.size() == 1) 
-        <action name="$method.name" method="$method.name" class="$xclass.qualifiedName">
-           
-           #set( $form = $method.doc.getTag("ti.form"))
-           #if( $form)
-            #if( $form.getAttributeValue("scope"))
-              <param name="formScope">${form.getAttributeValue("scope")}</param>
-            #end
-            #if ($form.getAttributeValue("name"))
-              <param name="formName">${form.getAttributeValue("name")}</param>
-            #end
-           #end
-           #set( $forwards = $method.doc.getTags("ti.forward"))
-           #if( $forwards.size() == 0) 
-           <result name="success">
-                <param name="location">${method.name}.jsp</param>
-           </result>
-           #else
-             #foreach( $fwd in $forwards )
-             <result name="${fwd.getAttributeValue("name")}"
-                     type="${fwd.getAttributeValue("type")}">
-                <param name="location">${fwd.getAttributeValue("location")}</param>
-             </result>
+#foreach( $xclass in $xclasses)
+  #set( $pkg=$xclass.containingPackage)
+  
+  #if( $pkg.name=="")
+  <package name="default" extends="ti-default">
+  #else
+  <package name="$pkg.name" namespace="/${pkg.name}" extends="ti-default">
+  #end
+  
+      #foreach( $method in $xclass.getMethods(true) )
+        #if( $method.returnType.type.type == "java.lang.String.class" && $method.doc.hasTag("ti.action"))
+          #if( $method.parameters.size() == 0 || $method.parameters.size() == 1) 
+          <action name="$method.name" method="$method.name" class="$xclass.qualifiedName">
+             
+             #set( $form = $method.doc.getTag("ti.form"))
+             #if( $form)
+              #if( $form.getAttributeValue("scope"))
+                <param name="formScope">${form.getAttributeValue("scope")}</param>
+              #end
+              #if ($form.getAttributeValue("name"))
+                <param name="formName">${form.getAttributeValue("name")}</param>
+              #end
              #end
-           #end  
-           <interceptor-ref name="validationWorkflowStack"/>
-        </action>
-        #end
-      #end  
-    #end
-
-</package>
+             #set( $forwards = $method.doc.getTags("ti.forward"))
+             #if( $forwards.size() == 0) 
+             <result name="success">
+                  <param name="location">${method.name}.jsp</param>
+             </result>
+             #else
+               #foreach( $fwd in $forwards )
+               <result name="${fwd.getAttributeValue("name")}"
+                       type="${fwd.getAttributeValue("type")}">
+                  <param name="location">${fwd.getAttributeValue("location")}</param>
+               </result>
+               #end
+             #end  
+             <interceptor-ref name="validationWorkflowStack"/>
+          </action>
+          #end
+        #end  
+      #end
+  
+  </package>
+  #end
 </xwork>

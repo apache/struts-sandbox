@@ -27,6 +27,8 @@ import java.io.*;
 import java.util.*;
 import org.apache.velocity.*;
 
+import org.apache.ti.*;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -36,9 +38,9 @@ import junit.framework.TestSuite;
  *
  * @version $Rev$ $Date$
  */
-public class TestProcessTags extends TestCase {
+public class TestProcessTags extends BaseTest {
     
-    File src, dest;
+    File src;
     
     /**
      * Defines the testcase name for JUnit.
@@ -69,16 +71,11 @@ public class TestProcessTags extends TestCase {
     }
     
     public void setUp() throws Exception {
-        File root = File.createTempFile("strutsti", "").getParentFile();
-        src = new File(root, "strutsti-src");
-        src.mkdirs();
-        dest = new File(root, "strutsti-dest");
-        dest.mkdirs();
+        src = makeDir("strutsti-src");
     }
     
     public void tearDown() {
         deleteDir(src);
-        deleteDir(dest);
     }
         
 
@@ -86,17 +83,9 @@ public class TestProcessTags extends TestCase {
         final HashSet shouldFind = new HashSet();
         shouldFind.add("Controller.java");
         shouldFind.add("foo/Controller.java");
-        shouldFind.add("foo\\Controller.java");
         
-        XDocletParser mock = new XDocletParser() {
-            public void generate(String name, Reader reader, File dest, List outputs) {
-                if (!shouldFind.contains(name)) {
-                    fail("Invalid controller file "+name);
-                }
-            }
-        };
        
-        /*
+        
         File rootCtr = new File(src, "Controller.java");
         rootCtr.createNewFile();
         File sub = new File(src, "foo");
@@ -104,34 +93,10 @@ public class TestProcessTags extends TestCase {
         File subCtr = new File(sub, "Controller.java");
         subCtr.createNewFile();
         
-        ProcessTags processer = new ProcessTags();
-        processer.setXDocletParser(mock);
-        
-        processer.process(src, "Controller.java", dest, "xwork.xml");
-        assertTrue(new File(dest, "xwork.xml").exists());
-        assertTrue(new File(dest, "foo/xwork.xml").exists());
-        */
+        ProcessTags processor = new ProcessTags();
+        ArrayList sources = new ArrayList();
+        processor.crawl(src, "Controller.java", src, null, sources);
+        assertTrue("Not all files found:"+sources, new HashSet(sources).equals(shouldFind));
     }
     
-    
-    
-    
-    // Deletes all files and subdirectories under dir.
-    // Returns true if all deletions were successful.
-    // If a deletion fails, the method stops attempting to delete and returns false.
-    private static boolean deleteDir(File dir) {
-        if (dir.isDirectory()) {
-            String[] children = dir.list();
-            for (int i=0; i<children.length; i++) {
-                boolean success = deleteDir(new File(dir, children[i]));
-                if (!success) {
-                    return false;
-                }
-            }
-        }
-    
-        // The directory is now empty so delete it
-        return dir.delete();
-    }
-
 }

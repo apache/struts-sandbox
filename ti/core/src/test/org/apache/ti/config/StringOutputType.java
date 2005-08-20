@@ -41,8 +41,12 @@ public class StringOutputType extends OutputType {
 
     private Map writers = new HashMap();
 
-    public StringOutputType(String template, String filePattern, boolean perAction) {
-        super(template, filePattern, perAction);
+    public StringOutputType(String template) {
+        this(template, PER_CONTROLLER);
+    }
+    
+    public StringOutputType(String template, int perAction) {
+        super(template, "ASDF", perAction);
     }
 
     public Writer getWriter(File dest, String path, String actionName) {

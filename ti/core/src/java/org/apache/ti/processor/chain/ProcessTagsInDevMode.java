@@ -50,8 +50,8 @@ public class ProcessTagsInDevMode implements Command {
     public void setProcessTags(ProcessTags pt) {
         this.processTags = pt;
         outputs = new ArrayList();
-        outputs.add(new OutputType("org/apache/ti/config/xdocletToXWork.vm", "xwork.xml", false));
-        outputs.add(new OutputType("org/apache/ti/config/xdocletToValidation.vm", "$c-$a-validation.xml", true));
+        outputs.add(new OutputType("org/apache/ti/config/xdocletToXWork.vm", "xwork.xml", OutputType.ONCE));
+        outputs.add(new OutputType("org/apache/ti/config/xdocletToValidation.vm", "$c-$a-validation.xml", OutputType.PER_ACTION));
     }    
 
     public void setControllerSourceName(String name) {

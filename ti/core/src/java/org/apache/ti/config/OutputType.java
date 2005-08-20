@@ -39,20 +39,24 @@ import xjavadoc.filesystem.ReaderFile;
  */
 public class OutputType {
 
+    public static final int PER_ACTION = 0;
+    public static final int PER_CONTROLLER = 1;
+    public static final int ONCE = 3;
+
     private String filePattern;
-    private boolean perAction;
+    private int frequency;
     private String template;
 
     private static final Log log = LogFactory.getLog(OutputType.class);
 
-    public OutputType(String template, String filePattern, boolean perAction) {
+    public OutputType(String template, String filePattern, int frequency) {
         this.template = template;
         this.filePattern = filePattern;
-        this.perAction = perAction;
+        this.frequency = frequency;
     }
 
-    public boolean getPerAction() {
-        return perAction;
+    public int getFrequency() {
+        return frequency;
     }
 
     public String getTemplate() {
@@ -60,27 +64,31 @@ public class OutputType {
     }    
 
     public Writer getWriter(File dest, String path, String actionName) {
-        String name = filePattern;
         
-        // Strip the extension
-        path = path.substring(0, path.lastIndexOf('.'));
-        
-        // Determine the root path w/o the class name
-        String rootPath = path.substring(0, path.lastIndexOf('/') + 1);
-        
-        // Replace the class name
-        int i = filePattern.indexOf("$c");
-        if (i > -1) {
-            String className = path.substring(path.lastIndexOf('/') + 1);
-            name = name.substring(0, i) + className + name.substring(i+2);
-        }
-
-        // Replace the action name
-        i = name.indexOf("$a");
-        if (i > -1) {
-            name = name.substring(0, i) + actionName + name.substring(i+2);
-        }
         FileWriter writer = null;
+        String name = filePattern;
+        if (frequency != ONCE) {
+        
+            // Strip the extension
+            path = path.substring(0, path.lastIndexOf('.'));
+            
+            // Determine the root path w/o the class name
+            String rootPath = path.substring(0, path.lastIndexOf('/') + 1);
+            
+            // Replace the class name
+            int i = filePattern.indexOf("$c");
+            if (i > -1) {
+                String className = path.substring(path.lastIndexOf('/') + 1);
+                name = name.substring(0, i) + className + name.substring(i+2);
+            }
+    
+            // Replace the action name
+            i = name.indexOf("$a");
+            if (i > -1) {
+                name = name.substring(0, i) + actionName + name.substring(i+2);
+            }
+            dest = new File(dest, rootPath);
+        }    
         try {
             writer = new FileWriter(new File(dest, name));
         } catch (IOException ex) {

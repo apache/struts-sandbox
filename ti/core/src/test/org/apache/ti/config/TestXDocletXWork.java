@@ -71,7 +71,7 @@ public class TestXDocletXWork extends XDocletTestBase {
     }
    
     public void testForwards() throws Exception {
-        Document doc = runTemplate("Controller.jsrc");
+        Document doc = runTemplate(new String[] {"Controller.jsrc"});
         assertXPath(doc, "/xwork/package[@name='default']");
         
         // Test simple forward
@@ -87,8 +87,13 @@ public class TestXDocletXWork extends XDocletTestBase {
     }
    
     public void testInPackage() throws Exception {
-        Document doc = runTemplate("foo/Controller.jsrc");
+        Document doc = runTemplate("Controller2.jsrc");
         assertXPath(doc, "/xwork/package[@name='foo' and @namespace='/foo']");
+    }
+    
+    public void testMultiplePackages() throws Exception {
+        Document doc = runTemplate(new String[] {"Controller2.jsrc", "Controller.jsrc"});
+        assertXPath(doc, "/xwork/package[@name='foo'] and /xwork/package[@name='default']");
     }
  
     public void testForm() throws Exception {
@@ -99,7 +104,11 @@ public class TestXDocletXWork extends XDocletTestBase {
         
     
     protected Document runTemplate(String path) throws Exception {
-        return runTemplate(path, "org/apache/ti/config/xdocletToXWork.vm");
+        return runTemplate(path, "org/apache/ti/config/xdocletToXWork.vm", OutputType.ONCE, null);
+    }
+    
+    protected Document runTemplate(String[] path) throws Exception {
+        return runTemplate(path, "org/apache/ti/config/xdocletToXWork.vm", OutputType.ONCE, null);
     }
 
 }

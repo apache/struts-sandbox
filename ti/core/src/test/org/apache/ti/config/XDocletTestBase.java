@@ -24,6 +24,7 @@ import java.util.*;
 import org.apache.velocity.*;
 import java.io.StringReader;
 import java.io.StringWriter;
+import org.xml.sax.*;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -33,19 +34,28 @@ import org.jdom.Document;
 import org.jdom.input.SAXBuilder;
 import org.jdom.xpath.XPath;
 
+import org.apache.ti.*;
+
 /**
  * Unit tests for the <code>org.apache.ti.config.XDocletvalidations</code> class.
  *
  * @version $Rev: 230394 $ $Date: 2005-08-04 21:13:44 -0700 (Thu, 04 Aug 2005) $
  */
-public class XDocletTestBase extends TestCase {
+public class XDocletTestBase extends BaseTest {
         
     private XDocletParser p; 
+    protected File src;
     
-    public void setUp() {
+    public void setUp()  throws Exception {
         p = new XDocletParser();
         p.init();
+        src = makeDir("strutsti-src");
     }
+    
+    public void tearDown() throws Exception {
+        deleteDir(src);
+    }
+
 
 
     /**
@@ -56,6 +66,8 @@ public class XDocletTestBase extends TestCase {
     public XDocletTestBase(String theName) {
         super(theName);
     }
+    
+    
       
     
     protected void assertXPath(Document doc, String xpath) throws Exception {
@@ -64,20 +76,30 @@ public class XDocletTestBase extends TestCase {
     }
     
     protected Document runTemplate(String path, String template) throws Exception {
-        return runTemplate(path, template, false, null);
+        return runTemplate(path, template, OutputType.PER_CONTROLLER, null);
     }    
     
-    protected Document runTemplate(String path, String template, boolean perAction, String actionName) throws Exception {
-        StringOutputType output = new StringOutputType(template, "foo", perAction);
+    protected Document runTemplate(String path, String template, int frequency, String actionName) throws Exception {
+        return runTemplate(new String[]{path}, template, frequency, actionName);
+    }
+    
+    protected Document runTemplate(String[] paths, String template, int frequency, String actionName) throws Exception {
+        StringOutputType output = new StringOutputType(template, frequency);
         ArrayList list = new ArrayList();
         list.add(output);
         
-        Reader reader = new InputStreamReader(getClass().getResourceAsStream(path));
-        path = path.replaceAll("jsrc", "java");
-        p.generate(path, reader, list, null);
+        ArrayList sources = new ArrayList();
+        for (int x=0; x<paths.length; x++) {
+            String name = "Test"+x+".java";
+            setText(new File(src, name), getClass().getResourceAsStream(paths[x]));
+            sources.add(name);
+        }
+        
+        
+        p.generate(sources, src, null, list);
         
         String out = null;
-        if (perAction) {
+        if (frequency==output.PER_ACTION) {
             out = output.getString(actionName);
             //System.out.println("output:"+out); 
         } else {
@@ -85,7 +107,13 @@ public class XDocletTestBase extends TestCase {
             //System.out.println("output:"+out);
         }    
         
-        Document doc = new SAXBuilder().build(new StringReader(out));
+        SAXBuilder builder = new SAXBuilder(false);
+        builder.setEntityResolver(new EntityResolver() {
+           public InputSource resolveEntity (String publicId, String systemId) {
+               return null;
+           }
+        });
+        Document doc = builder.build(new StringReader(out));
         return doc;
     }
 
