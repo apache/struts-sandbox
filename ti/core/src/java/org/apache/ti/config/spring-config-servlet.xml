@@ -23,6 +23,7 @@
 
   <bean id="compilingObjectFactory" class="org.apache.ti.processor.CompilingObjectFactory">
     <property name="javaCompiler" ref="javaCompiler" />
+    <property name="compilationProblemHandler" ref="compilationProblemHandler" />
     <property name="srcPath"><value>${ti.srcPath}</value></property>
   </bean>
   
@@ -33,13 +34,21 @@
     <property name="classesPath"><value>${ti.classesPath}</value></property>
   </bean>
   
+  <bean id="templateProcessor" class="org.apache.ti.util.VelocityTemplateProcessor" init-method="init" />
+  
+  <bean id="compilationProblemHandler" class="org.apache.ti.devmode.TemplateCompilationProblemHandler">
+    <property name="templateProcessor" ref="templateProcessor" />
+  </bean> 
+  
   <bean id="actionProxyFactory" class="org.apache.ti.processor.ControllerActionProxyFactory" />
   
   <bean id="processTags" class="org.apache.ti.config.ProcessTags">
     <property name="xdocletParser" ref="xdocletParser" />
   </bean>
 
-  <bean id="xdocletParser" class="org.apache.ti.config.XDocletParser" init-method="init" />
+  <bean id="xdocletParser" class="org.apache.ti.config.XDocletParser">
+    <property name="templateProcessor" ref="templateProcessor" />
+  </bean>
   
   <!-- Chain commands that need DI -->
   <bean id="createActionMapping" class="org.apache.ti.processor.chain.CreateActionMapping">

@@ -29,6 +29,7 @@ import junit.framework.TestSuite;
 import java.io.*;
 import java.util.*;
 import org.apache.velocity.*;
+import org.apache.ti.util.*;
 
 import org.jdom.Document;
 import org.jdom.input.SAXBuilder;
@@ -71,7 +72,9 @@ public class TestXDocletParser extends XDocletTestBase {
 
     public void testGenerateSimple() throws Exception {
         XDocletParser p = new XDocletParser();
-        p.init();
+        VelocityTemplateProcessor proc = new VelocityTemplateProcessor();
+        proc.init();
+        p.setTemplateProcessor(proc);
         
         StringOutputType out = new StringOutputType("org/apache/ti/config/test.vm");
         List outputs = new ArrayList();
@@ -90,7 +93,9 @@ public class TestXDocletParser extends XDocletTestBase {
     
     public void testGenerateTag() throws Exception {
         XDocletParser p = new XDocletParser();
-        p.init();
+        VelocityTemplateProcessor proc = new VelocityTemplateProcessor();
+        proc.init();
+        p.setTemplateProcessor(proc);
         
         StringOutputType out = new StringOutputType("org/apache/ti/config/testTag.vm");
         List outputs = new ArrayList();

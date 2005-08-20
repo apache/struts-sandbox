@@ -17,6 +17,8 @@
  */
 package org.apache.ti.config;
 
+import org.apache.ti.util.*;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -46,8 +48,12 @@ public class ProcessTagsTask {
     }
 
     public void execute() {
+        VelocityTemplateProcessor proc = new VelocityTemplateProcessor();
+        proc.init();
+        
         XDocletParser parser = new XDocletParser();
-        parser.init();
+        parser.setTemplateProcessor(proc);
+        
         ProcessTags pt = new ProcessTags();
         pt.setXdocletParser(parser);
 

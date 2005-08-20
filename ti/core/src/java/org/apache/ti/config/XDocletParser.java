@@ -30,11 +30,6 @@ import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.VelocityEngine;
-import org.apache.velocity.exception.ResourceNotFoundException;
-import org.apache.velocity.exception.ParseErrorException;
 
 import xjavadoc.XClass;
 import xjavadoc.XMethod;
@@ -42,30 +37,22 @@ import xjavadoc.XJavaDoc;
 import xjavadoc.filesystem.ReaderFile;
 import xjavadoc.filesystem.XJavadocFile;
 
+import org.apache.ti.util.*;
+
 /**
  *  Processes xdoclet-style tags and uses a velocity template to generate
  *  content.  This class is not thread-safe.
  */
 public class XDocletParser {
 
-    private VelocityEngine velocity = null;
-    private Map templateCache = new HashMap();
     private Map parameters;
+    private TemplateProcessor processor;
     private static final Log log = LogFactory.getLog(XDocletParser.class);
 
-    public void init() {
-        velocity = new VelocityEngine();
-
-        Properties props = new Properties();
-        try {
-            props.load(getClass().getResourceAsStream("velocity.properties"));
-            velocity.init(props);
-        } catch (Exception ex) {
-            log.error("Unable to intialize velocity", ex);
-        }
-
+    public void setTemplateProcessor(TemplateProcessor p) {
+        this.processor = p;
     }
-
+    
     public void setParameters(Map map) {
         this.parameters = map;
     }
@@ -93,34 +80,26 @@ public class XDocletParser {
             jdoc.addAbstractFile(className, file);
         }  
  
-        Map contextMap = new HashMap();
+        Map context = new HashMap();
         if (parameters != null) {
-            contextMap.putAll(parameters);
+            context.putAll(parameters);
         }
-        VelocityContext context = new VelocityContext(contextMap);
         
         OutputType output;
         XClass xclass;
-        Template template;
         for (Iterator o = outputs.iterator(); o.hasNext(); ) {
             output = (OutputType)o.next();
-            try {
-                template = velocity.getTemplate(output.getTemplate());
-            } catch (Exception ex) {
-                log.error("Unable to locate or parse template: "+output.getTemplate(), ex);
-                continue;
-            }
             if (output.getFrequency() == output.ONCE) {
-                generateOnce(sources, destRoot, jdoc, output, template, context);
+                generateOnce(sources, destRoot, jdoc, output, context);
             } else {
                 for (Iterator i = sources.iterator(); i.hasNext(); ) {
                     source = (String)i.next();
                     xclass = jdoc.getXClass(getClassName(source));
                    
                     if (output.getFrequency() == output.PER_CONTROLLER) {
-                        generatePerController(source, destRoot, xclass, output, template, context);
+                        generatePerController(source, destRoot, xclass, output, context);
                     } else if (output.getFrequency() == output.PER_ACTION) {
-                        generatePerAction(source, destRoot, xclass, output, template, context);
+                        generatePerAction(source, destRoot, xclass, output, context);
                     }
                 }    
             }
@@ -128,7 +107,7 @@ public class XDocletParser {
     }
 
     protected void generateOnce(List sources, File destRoot, XJavaDoc jdoc, 
-                                OutputType output, Template template, VelocityContext context) {
+                                OutputType output, Map context) {
         String source, className;
         XClass xclass;
         Map xclasses = new HashMap();
@@ -140,22 +119,22 @@ public class XDocletParser {
         }    
         Writer writer = output.getWriter(destRoot, null, null);
         context.put("xclasses", xclasses);
-        writeOutput(template, writer, context);
+        processor.process(output.getTemplate(), context, writer);
     }
 
 
 
     protected void generatePerController(String source, File destRoot, XClass xclass, 
-                                         OutputType output, Template template, VelocityContext context) {
+                                         OutputType output, Map context) {
         Writer writer = output.getWriter(destRoot, source, null);
         context.put("xclass", xclass);
         context.put("javaFile", source);
-        writeOutput(template, writer, context);
+        processor.process(output.getTemplate(), context, writer);
     }
 
 
     protected void generatePerAction(String source, File destRoot, XClass xclass, 
-                                     OutputType output, Template template, VelocityContext context) {
+                                     OutputType output, Map context) {
         List methods = xclass.getMethods();
         XMethod m;
         Writer writer;
@@ -167,22 +146,8 @@ public class XDocletParser {
                 context.put("xmethod", m);
                 context.put("javaFile", source);
 
-                writeOutput(template, writer, context);
+                processor.process(output.getTemplate(), context, writer);
             }    
         }
-    }
-
-    protected void writeOutput(Template template, Writer writer, VelocityContext ctx) {
-        try {
-            template.merge(ctx, writer);
-        } catch (Exception ex) {
-            log.error("Unable to generate output", ex);
-        } finally {
-            if (writer != null) {
-                try {
-                    writer.close(); 
-                } catch (IOException ex) {}
-            }
-        }    
     }
 }

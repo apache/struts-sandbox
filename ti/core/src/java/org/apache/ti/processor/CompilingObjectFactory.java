@@ -26,7 +26,9 @@ import com.opensymphony.xwork.Action;
 
 import java.io.File;
 
-import org.apache.commons.jci.CompilingClassLoader;
+import org.apache.commons.jci.*;
+import org.apache.commons.jci.stores.*;
+import org.apache.commons.jci.problems.*;
 import org.apache.commons.jci.compilers.JavaCompiler;
 
 import org.apache.commons.logging.*;
@@ -40,20 +42,36 @@ public class CompilingObjectFactory extends ObjectFactory {
     private static final Log log = LogFactory.getLog(CompilingObjectFactory.class);
     private CompilingClassLoader cl;
     private JavaCompiler compiler;
+    private CompilationProblemHandler problemHandler;
 
     public void setJavaCompiler(JavaCompiler jc) {
         this.compiler = jc;
-    }    
+    }   
+    
+    public void setCompilationProblemHandler(CompilationProblemHandler handler) {
+        this.problemHandler = handler;
+    }
     
 
     public void setSrcPath(String src) {
         if (src != null && src.length() > 0) {
             File file = new File(src);
             if (file.exists()) {
+                TransactionalResourceStore store = new TransactionalResourceStore(
+                        new MemoryResourceStore()) {
+                            public void onStart() {
+                                };
+                            public void onStop() {
+                                };
+                        }
+                ;
                 cl = new CompilingClassLoader(
                         Thread.currentThread().getContextClassLoader(), 
                         file,
-                        compiler);
+                        store,
+                        compiler,
+                        problemHandler);
+                cl.start();        
             } else {
                 log.error("Specified source directory, "+src+" doesn't exist");
             }

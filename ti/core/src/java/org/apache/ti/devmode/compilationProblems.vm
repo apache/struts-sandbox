@@ -1,0 +1,34 @@
+<h2>Compilation problems</h2>
+<ul>
+ <li>Errors - $errorCount</li>
+ <li>Warnings - $warningCount</li>
+</ul>
+
+<h3>Errors</h3>
+#foreach ($err in $problems)
+  #if ($err.isError())
+  <p>
+  <code>${err.fileName}:${err.getStartLine}</code> - $err.message
+  <br />
+  Start line:$err.startLine column:${err.startColumn}
+  <br />
+  End line:$err.endLine column:${err.endColumn}
+  </p>
+  <hr />
+  #end
+#end
+
+<h3>Warnings</h3>
+#foreach ($err in $problems)
+  #if (!$err.isError())
+  <p>
+  <code>${err.fileName}:${err.startLine}</code> - $err.message
+  <br />
+  Start line:$err.startLine column:${err.startColumn}
+  <br />
+  End line:$err.endLine column:${err.endColumn}
+  </p>
+  <hr />
+  #end
+#end
+

@@ -35,6 +35,7 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.xpath.XPath;
 
 import org.apache.ti.*;
+import org.apache.ti.util.*;
 
 /**
  * Unit tests for the <code>org.apache.ti.config.XDocletvalidations</code> class.
@@ -48,7 +49,9 @@ public class XDocletTestBase extends BaseTest {
     
     public void setUp()  throws Exception {
         p = new XDocletParser();
-        p.init();
+        VelocityTemplateProcessor proc = new VelocityTemplateProcessor();
+        proc.init();
+        p.setTemplateProcessor(proc);
         src = makeDir("strutsti-src");
     }
     
@@ -112,6 +115,10 @@ public class XDocletTestBase extends BaseTest {
            public InputSource resolveEntity (String publicId, String systemId) {
                return null;
            }
+        });
+        builder.setDTDHandler(new DTDHandler() {
+            public void notationDecl(String name, String publicId, String systemId) {}
+            public void unparsedEntityDecl(String name, String publicId, String systemId, String notationName) {}
         });
         Document doc = builder.build(new StringReader(out));
         return doc;
