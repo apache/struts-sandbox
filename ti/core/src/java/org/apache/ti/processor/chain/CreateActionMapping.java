@@ -44,6 +44,7 @@ public class CreateActionMapping implements Command {
 
         ActionMapping mapping = actionMapper.getMapping(ctx);
         ctx.put("actionMapping", mapping);
+        ctx.put("actionMapper", actionMapper);
         return false;
     }
 

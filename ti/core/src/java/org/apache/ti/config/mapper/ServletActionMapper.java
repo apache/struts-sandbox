@@ -92,9 +92,10 @@ public class ServletActionMapper implements ActionMapper {
         int star = ext.indexOf('*');
 
         StringBuffer sb = new StringBuffer();
+        String namespace = mapping.getNamespace();
         if (star > 0) {
             sb.append(ext.substring(0, star));
-        } else {
+        } else if (namespace.charAt(0) != '/') {
             sb.append('/');
         }
         sb.append(mapping.getNamespace());

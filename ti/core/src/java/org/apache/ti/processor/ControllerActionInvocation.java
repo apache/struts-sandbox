@@ -6,17 +6,17 @@ package org.apache.ti.processor;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.ti.pageflow.xwork.PageFlowActionContext;
 import org.springframework.beans.factory.BeanFactory;
 
-import com.opensymphony.xwork.Action;
 import com.opensymphony.xwork.ActionProxy;
 import com.opensymphony.xwork.DefaultActionInvocation;
+import com.opensymphony.xwork.ActionContext;
+import com.opensymphony.xwork.util.OgnlUtil;
 import com.opensymphony.xwork.config.entities.ActionConfig;
 
 
@@ -45,6 +45,11 @@ public class ControllerActionInvocation extends DefaultActionInvocation {
 
     protected ControllerActionInvocation(ActionProxy proxy, Map extraContext, boolean pushAction) throws Exception {
         super(proxy, extraContext, pushAction);
+        
+        // TODO: DefaultActionInvocation should make the context-creation (currently in private init()) overridable.
+        PageFlowActionContext actionContext = PageFlowActionContext.get();
+        invocationContext = new PageFlowActionContext(createContextMap(), actionContext.getWebContext());
+        invocationContext.setName(proxy.getActionName());
     }
     
     public void setInvokeAction(InvokeAction inv) {
@@ -149,7 +154,14 @@ public class ControllerActionInvocation extends DefaultActionInvocation {
         
         return method;
     }
-    
+
+    protected void createAction() {
+        super.createAction();
+        
+        // TODO: have to find out why this is necessary; shouldn't it be part of the base createAction()?
+        OgnlUtil.setProperties(proxy.getConfig().getParams(), action, ActionContext.getContext().getContextMap());
+    }
+
     
     public Object getForm() {
         return form;

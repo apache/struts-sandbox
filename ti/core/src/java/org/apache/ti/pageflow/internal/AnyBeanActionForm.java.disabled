@@ -1,0 +1,204 @@
+/*
+ * Copyright 2004 The Apache Software Foundation.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * $Header:$
+ */
+package org.apache.ti.pageflow.internal;
+
+import org.apache.ti.pageflow.FormData;
+import org.apache.ti.pageflow.Validatable;
+import org.apache.ti.pageflow.xwork.PageFlowAction;
+import org.apache.ti.pageflow.handler.ReloadableClassHandler;
+import org.apache.ti.pageflow.handler.Handlers;
+import org.apache.ti.pageflow.xwork.PageFlowAction;
+import org.apache.ti.util.logging.Logger;
+
+import javax.servlet.http.HttpServletRequest;
+
+
+public class AnyBeanActionForm extends FormData
+{
+    private static final Logger _log = Logger.getInstance( AnyBeanActionForm.class );
+    
+    private Object _bean;
+
+    
+    public AnyBeanActionForm()
+    {
+    }
+    
+    public AnyBeanActionForm( Object bean )
+    {
+        _bean = bean;
+    }
+    
+    public Object getBean()
+    {
+        return _bean;
+    }
+
+    public void setBean( Object bean )
+    {
+        _bean = bean;
+    }
+    
+    public ActionErrors validate( ActionMapping mapping, HttpServletRequest request )
+    {
+        assert _bean != null;
+        String beanName = mapping.getAttribute();
+        return validateBean( _bean, beanName, mapping, request );
+    }    
+    
+    public String toString()
+    {
+        return "[AnyBeanActionForm wrapper for " + _bean + ']';
+    }
+}
+/*
+ * Copyright 2004 The Apache Software Foundation.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * $Header:$
+ */
+package org.apache.ti.pageflow.internal;
+
+import org.apache.ti.pageflow.FormData;
+import org.apache.ti.pageflow.Validatable;
+import org.apache.ti.pageflow.xwork.PageFlowAction;
+import org.apache.ti.pageflow.handler.ReloadableClassHandler;
+import org.apache.ti.pageflow.handler.Handlers;
+import org.apache.ti.pageflow.xwork.PageFlowAction;
+import org.apache.ti.util.logging.Logger;
+
+import javax.servlet.http.HttpServletRequest;
+
+
+public class AnyBeanActionForm extends FormData
+{
+    private static final Logger _log = Logger.getInstance( AnyBeanActionForm.class );
+    
+    private Object _bean;
+
+    
+    public AnyBeanActionForm()
+    {
+    }
+    
+    public AnyBeanActionForm( Object bean )
+    {
+        _bean = bean;
+    }
+    
+    public Object getBean()
+    {
+        return _bean;
+    }
+
+    public void setBean( Object bean )
+    {
+        _bean = bean;
+    }
+    
+    public ActionErrors validate( ActionMapping mapping, HttpServletRequest request )
+    {
+        assert _bean != null;
+        String beanName = mapping.getAttribute();
+        return validateBean( _bean, beanName, mapping, request );
+    }    
+    
+    public String toString()
+    {
+        return "[AnyBeanActionForm wrapper for " + _bean + ']';
+    }
+}
+/*
+ * Copyright 2004 The Apache Software Foundation.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * $Header:$
+ */
+package org.apache.ti.pageflow.internal;
+
+import org.apache.ti.pageflow.FormData;
+import org.apache.ti.pageflow.Validatable;
+import org.apache.ti.pageflow.xwork.PageFlowAction;
+import org.apache.ti.pageflow.handler.ReloadableClassHandler;
+import org.apache.ti.pageflow.handler.Handlers;
+import org.apache.ti.pageflow.xwork.PageFlowAction;
+import org.apache.ti.util.logging.Logger;
+
+import javax.servlet.http.HttpServletRequest;
+
+
+public class AnyBeanActionForm extends FormData
+{
+    private static final Logger _log = Logger.getInstance( AnyBeanActionForm.class );
+    
+    private Object _bean;
+
+    
+    public AnyBeanActionForm()
+    {
+    }
+    
+    public AnyBeanActionForm( Object bean )
+    {
+        _bean = bean;
+    }
+    
+    public Object getBean()
+    {
+        return _bean;
+    }
+
+    public void setBean( Object bean )
+    {
+        _bean = bean;
+    }
+    
+    public ActionErrors validate( ActionMapping mapping, HttpServletRequest request )
+    {
+        assert _bean != null;
+        String beanName = mapping.getAttribute();
+        return validateBean( _bean, beanName, mapping, request );
+    }    
+    
+    public String toString()
+    {
+        return "[AnyBeanActionForm wrapper for " + _bean + ']';
+    }
+}

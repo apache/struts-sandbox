@@ -81,7 +81,11 @@ public class StrutsTiServlet extends HttpServlet {
         initProperties();
         initSpring();
         initServlet();
-
+        Map params = new HashMap();
+        params.put(SERVLET_MAPPINGS_KEY, servletMappings);
+        ServletConfiguration servletConfiguration = ServletConfiguration.init(getServletContext());
+        processor = servletConfiguration.createRequestProcessor(getServletContext(), "actionRequestProcessor", params);
+ 
         Map initParameters = new HashMap();
         initParameters.putAll(tiProps);
         initParameters.put(SERVLET_MAPPINGS_KEY, servletMappings);

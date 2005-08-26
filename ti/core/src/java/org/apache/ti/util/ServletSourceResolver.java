@@ -17,6 +17,12 @@
  */
 package org.apache.ti.util;
 
+import org.apache.commons.chain.web.WebContext;
+import org.apache.commons.chain.web.servlet.ServletWebContext;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -24,16 +30,9 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
-import javax.servlet.ServletContext;
-
-import org.apache.commons.chain.web.WebContext;
-import org.apache.commons.chain.web.servlet.ServletWebContext;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 
 /**
- *  Source resolver that uses the servlet resource locator
+ * Source resolver that uses the servlet resource locator
  */
 public class ServletSourceResolver implements SourceResolver {
 
@@ -57,9 +56,26 @@ public class ServletSourceResolver implements SourceResolver {
             throws IOException, MalformedURLException {
 
         ServletContext servletContext = ((ServletWebContext) context).getContext();
+        return resolveList(path, false, servletContext);
+    }
+
+    public static URL resolve(String path, boolean force, ServletContext servletContext)
+            throws IOException, MalformedURLException {
+
+        List list = resolveList(path, force, servletContext);
+        if (list.size() > 0) {
+            return (URL) list.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    public static List resolveList(String path, boolean force, ServletContext servletContext)
+            throws IOException, MalformedURLException {
+
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         if (loader == null) {
-            loader = this.getClass().getClassLoader();
+            loader = ServletSourceResolver.class.getClassLoader();
         }
         ArrayList resolvedUrls = new ArrayList();
 
@@ -77,7 +93,7 @@ public class ServletSourceResolver implements SourceResolver {
                             + "trying classloader.");
                 }
                 Enumeration e = loader.getResources(path);
-                if (!e.hasMoreElements()) {
+                if (force && !e.hasMoreElements()) {
                     String msg = "Resource not found: " + path;
                     log.error(msg);
                     throw new IOException(msg);

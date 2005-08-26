@@ -2,12 +2,21 @@
 
 <beans>
   
-  <bean id="requestProcessor" class="org.apache.ti.processor.chain.ChainRequestProcessor">
+  <bean id="actionRequestProcessor" class="org.apache.ti.processor.chain.ChainRequestProcessor">
     <property name="sourceResolver"><ref bean="sourceResolver" /></property>
     <property name="chainConfig"><value>org/apache/ti/processor/chain/chain-config-servlet.xml</value></property>
     <property name="catalogName"><value>struts-ti</value></property>
-    <property name="startCommandName"><value>start</value></property>
-    <property name="initCommandName"><value>init</value></property>
+    <property name="startCommandName"><value>start-action</value></property>
+    <property name="initCommandName"><value>init-action</value></property>
+    <property name="chainRuleSet" ref="chainRuleSet" />
+  </bean>
+  
+  <bean id="viewRequestProcessor" class="org.apache.ti.processor.chain.ChainRequestProcessor">
+    <property name="sourceResolver"><ref bean="sourceResolver" /></property>
+    <property name="chainConfig"><value>org/apache/ti/processor/chain/chain-config-servlet.xml</value></property>
+    <property name="catalogName"><value>struts-ti</value></property>
+    <property name="startCommandName"><value>start-view</value></property>
+    <property name="initCommandName"><value>init-view</value></property>
     <property name="chainRuleSet" ref="chainRuleSet" />
   </bean>
   
@@ -15,7 +24,7 @@
   
   <bean id="sourceResolver" class="org.apache.ti.util.ServletSourceResolver" />
   
-  <bean id="actionMapper" class="org.apache.ti.config.mapper.ServletActionMapper" />
+  <bean id="actionMapper" class="org.apache.ti.pageflow.httpservlet.internal.PageFlowActionMapper" />
   
   <bean id="controllerContext" class="org.apache.ti.processor.ControllerContext" />
   
@@ -49,8 +58,10 @@
   <bean id="xdocletParser" class="org.apache.ti.config.XDocletParser">
     <property name="templateProcessor" ref="templateProcessor" />
   </bean>
-  
+
   <!-- Chain commands that need DI -->
+  <bean id="populateActionContext" class="org.apache.ti.processor.chain.PopulateActionContext" />
+ 
   <bean id="createActionMapping" class="org.apache.ti.processor.chain.CreateActionMapping">
     <property name="actionMapper" ref="actionMapper" />
   </bean>
@@ -63,11 +74,41 @@
   <bean id="initWebWork" class="org.apache.ti.processor.chain.webwork.InitWebWork">
     <property name="devMode"><value>${ti.devMode}</value></property>
   </bean>
+
+  <bean id="initPageFlow" class="org.apache.ti.processor.chain.pageflow.InitPageFlow">
+    <property name="sourceResolver" ref="sourceResolver" />
+    <property name="handlers" ref="handlers" />
+  </bean>
+
+  <bean id="handlers" class="org.apache.ti.pageflow.handler.Handlers">
+    <property name="defaultExceptionsHandler" ref="defaultExceptionsHandler"/>
+    <property name="defaultForwardRedirectHandler" ref="defaultForwardRedirectHandler"/>
+    <property name="defaultLoginHandler" ref="defaultLoginHandler"/>
+    <property name="defaultStorageHandler" ref="defaultStorageHandler"/>
+    <property name="defaultReloadableClassHandler" ref="defaultReloadableClassHandler"/>
+    <property name="defaultModuleRegistrationHandler" ref="defaultModuleRegistrationHandler"/>
+    <property name="defaultAnnotationHandler" ref="defaultAnnotationHandler"/>
+  </bean>
+
+  <bean id="defaultExceptionsHandler" class="org.apache.ti.pageflow.internal.DefaultExceptionsHandler" />
+  <bean id="defaultForwardRedirectHandler" class="org.apache.ti.pageflow.httpservlet.internal.DefaultServletForwardRedirectHandler" />
+  <bean id="defaultLoginHandler" class="org.apache.ti.pageflow.httpservlet.internal.DefaultServletLoginHandler" />
+  <bean id="defaultStorageHandler" class="org.apache.ti.pageflow.httpservlet.internal.ServletDeferredSessionStorageHandler" />
+  <bean id="defaultReloadableClassHandler" class="org.apache.ti.pageflow.internal.DefaultReloadableClassHandler" />
+  <bean id="defaultModuleRegistrationHandler" class="org.apache.ti.pageflow.internal.DefaultModuleRegistrationHandler">
+    <property name="sourceResolver" ref="sourceResolver" />
+  </bean>
+  <bean id="defaultAnnotationHandler" class="org.apache.ti.pageflow.internal.DefaultAnnotationHandler">
+    <property name="sourceResolver" ref="sourceResolver" />
+  </bean>
   
+  <bean id="setupPageFlowModule" class="org.apache.ti.processor.chain.pageflow.SetupPageFlowModule"/>
+
   <bean id="initControllerContext" class="org.apache.ti.processor.chain.InitControllerContext">
     <property name="controllerContext" ref="controllerContext" />
   </bean>
   
+  <bean id="populatePageFlowContext" class="org.apache.ti.pageflow.httpservlet.internal.PopulatePageFlowContext" />
   <bean id="invokeAction" class="org.apache.ti.processor.chain.ChainInvokeAction" />
   
 </beans>  

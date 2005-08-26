@@ -34,11 +34,14 @@
             className= "org.apache.commons.chain.generic.LookupCommand" />
             
             
-    <!-- ========== Start of chain ========================= -->
+    <!-- ========== Start of action chain ========================= -->
 
-    <chain     name="start" >
+    <chain     name="start-action" >
+      <command name="populateActionContext"  />
       <command name="createActionMapping"  />
       <command name="processTagsInDevMode"  />
+      <command name="createPageFlowContext" className="org.apache.ti.processor.chain.pageflow.CreatePageFlowContext" />
+      <command name="setupPageFlowModule" />
       <command name="populateContextForRequest" className="org.apache.ti.processor.chain.PopulateContextForRequest"/>
       <command name="populateContextForWebWork" className="org.apache.ti.processor.chain.webwork.PopulateContextForWebWork" />
       <command name="createWebWorkActionProxy" className="org.apache.ti.processor.chain.webwork.CreateWebWorkActionProxy"/>
@@ -48,20 +51,41 @@
            optional="false"/>
     </chain>
     
-    <!-- ========== Initialization chain ========================= -->
+    <!-- ========== Start of page/view chain ========================= -->
 
-    <chain     name="init" >
+    <chain     name="start-view" >
+      <command name="populateActionContext" />
+      <command name="createPageFlowViewContext" className="org.apache.ti.processor.chain.pageflow.CreatePageFlowViewContext" />
+      <command name="populatePageFlowContext" />
+      <!-- "showView" will be split up into a sub-chain -->
+      <command name="showView" className="org.apache.ti.processor.chain.pageflow.ShowView"/>
+    </chain>
+    
+    <!-- ========== Action Initialization chain ========================= -->
+
+    <chain     name="init-action" >
       <command name="initXWork" />
       <command name="initWebWork" />
+      <command name="initPageFlow" />
     </chain>
  
     <chain     name="create-context" >
       <command name="makeContextStackAware" className="org.apache.ti.processor.chain.servlet.MakeContextStackAware" />
     </chain>
     
+    <!-- ========== View Initialization chain ========================= -->
+    
+    <chain name="init-view" >
+    </chain>
+
     <chain     name="process-action" className="org.apache.ti.processor.chain.ProcessActionChain">
       
       <command name="initControllerContext"  />
+      <command name="populatePageFlowContext"  />
+      <command name="createSharedFlows" className="org.apache.ti.processor.chain.pageflow.CreateSharedFlows" />
+      <command name="chooseFlowController" className="org.apache.ti.processor.chain.pageflow.ChooseFlowController" />
+      <command name="chooseFormBean" className="org.apache.ti.processor.chain.pageflow.ChooseFormBean" />
+      <command name="populateData" className="org.apache.ti.processor.chain.pageflow.PopulateData" />
       <lookup catalogName="struts-ti" name="createForm" optional="true" />
       <command name="selectLocale" className="org.apache.ti.processor.chain.servlet.SelectLocale" />
       <command name="createValidatorContext" className="org.apache.ti.processor.chain.CreateValidatorContext" />

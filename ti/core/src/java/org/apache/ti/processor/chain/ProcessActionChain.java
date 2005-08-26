@@ -26,6 +26,8 @@ import com.opensymphony.xwork.ActionProxy;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.ti.pageflow.xwork.PageFlowActionContext;
+import org.apache.ti.pageflow.handler.Handlers;
 
 /**
  *  Initializes XWork by replacing default factories.
@@ -45,10 +47,18 @@ public class ProcessActionChain extends ChainBase {
         ActionContext.setContext(proxy.getInvocation().getInvocationContext());
 
         boolean retCode = false;
+        PageFlowActionContext actionContext = PageFlowActionContext.get();        
+        boolean isNestedRequest = actionContext.isNestedRequest();
+        
 
         try {
             retCode = super.execute(origctx);
         } finally {
+            // If this is not a nested request, then commit any changes made by the storage handler.
+            if ( ! isNestedRequest ) {
+                Handlers.get().getStorageHandler().applyChanges();
+            }
+            
             ActionContext.setContext(nestedContext);
         }
         

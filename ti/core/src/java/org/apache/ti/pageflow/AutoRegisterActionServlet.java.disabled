@@ -1,0 +1,380 @@
+/*
+ * Copyright 2004 The Apache Software Foundation.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * $Header:$
+ */
+package org.apache.ti.pageflow;
+
+import org.apache.ti.util.internal.InternalStringBuilder;
+
+import org.apache.ti.pageflow.internal.InternalConstants;
+import org.apache.ti.pageflow.internal.InternalUtils;
+import org.apache.ti.pageflow.internal.AdapterManager;
+import org.apache.ti.pageflow.xwork.ModuleConfig;
+import org.apache.ti.util.Bundle;
+import org.apache.ti.util.internal.DiscoveryUtils;
+import org.apache.ti.util.config.ConfigUtil;
+import org.apache.ti.util.config.bean.ModuleConfigLocators;
+import org.apache.ti.util.config.bean.PageflowConfig;
+import org.apache.ti.util.logging.Logger;
+import org.apache.commons.digester.Digester;
+import org.apache.struts.Globals;
+import org.apache.struts.action.ActionServlet;
+import org.apache.struts.action.DynaActionFormClass;
+import org.apache.struts.action.RequestProcessor;
+import org.apache.struts.config.ControllerConfig;
+import org.apache.struts.config.FormBeanConfig;
+import org.apache.struts.config.MessageResourcesConfig;
+import org.apache.struts.config.ModuleConfig;
+import org.apache.struts.config.ModuleConfigFactory;
+import org.apache.struts.config.impl.ModuleConfigImpl;
+import org.apache.struts.util.RequestUtils;
+import org.xml.sax.InputSource;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.UnavailableException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Iterator;
+
+import org.apache.ti.util.internal.concurrent.InternalConcurrentHashMap;
+
+
+/**
+ * ActionServlet that automatically registers requested Struts modules based on a set of module configuration file
+ * locators.  The user may specify {@link ModuleConfigLocator} classes in /WEB-INF/beehive-netui-config.xml using the
+ * <code>&lt;module-config-locators&gt;</code> element.
+ */
+public class AutoRegisterActionServlet extends ActionServlet
+{
+
+    public void init()
+        throws ServletException
+    {
+    }
+    
+    /**
+     * This override of the base class process() registers a Struts module on the fly if the
+     * config file can be found in our standard place (named in our standard way), regardless
+     * of whether the module is configured in web.xml.
+     */
+    protected void process( HttpServletRequest request, HttpServletResponse response )
+        throws IOException, ServletException
+    {
+        //
+        // First wrap the request with an object that contains request-scoped values that our runtime uses.  This
+        // is faster than sticking everything into attributes on the request (then basically reading from a HashMap).
+        //
+        PageFlowRequestWrapper requestWrapper = PageFlowRequestWrapper.wrapRequest( request );
+        request = requestWrapper;
+        
+        ServletContext servletContext = getServletContext();
+        String modulePath = PageFlowUtils.getModulePathForRequestPath( InternalUtils.getRequestPath( request ) );
+        ModuleConfig registeredApp;
+        
+        //
+        // Get the registered Struts module for the request.
+        //
+        registeredApp = getModuleConfig( modulePath, request, response );
+        
+        //
+        // If we've dynamically registered a module, then we need to override the base process() behavior to select the
+        // module.  Note that we don't want to synchronize the call to process().
+        //
+        if ( registeredApp != null )
+        {
+            //
+            // Try to select the appropriate Struts module and delegate to its RequestProcessor.
+            //
+            ModuleConfig moduleConfig = InternalUtils.selectModule( modulePath, request, servletContext );
+            RequestProcessor requestProcessor = getRequestProcessor( moduleConfig );
+            requestProcessor.process( request, response );
+        }
+        else
+        {
+            
+            //
+            // This is the same as the base process() behavior, but it checks for a missing module-configuration.
+            //
+            ModuleConfig moduleConfig = null;
+            
+            if ( InternalUtils.getModuleConfig( RequestUtils.getModuleName( request, servletContext ), servletContext ) != null )
+            {
+                String modulePrefix = RequestUtils.getModuleName( request, servletContext );
+                moduleConfig = InternalUtils.selectModule( modulePrefix, request, servletContext );
+            }
+            
+            String servletPath = InternalUtils.getRequestPath( request );
+            RequestProcessor rp = moduleConfig != null ? getRequestProcessor( moduleConfig ) : null;
+            
+            if ( rp != null && moduleCanHandlePath( moduleConfig, rp, servletPath ) )
+            {
+                rp.process( request, response );
+            }
+            else
+            {
+                //
+                // Initialize the ServletContext in the request.  Often, we need access to the ServletContext when we only
+                // have a ServletRequest.
+                //
+                InternalUtils.setServletContext( request, getServletContext() );
+                
+                if ( processUnhandledAction( request, response, servletPath ) ) return;
+                
+                String originalServletPath = requestWrapper.getOriginalServletPath();
+                if ( originalServletPath != null )
+                {
+                    servletPath = originalServletPath;
+                    modulePath = PageFlowUtils.getModulePathForRequestPath( originalServletPath );
+                }
+                
+                if ( _log.isErrorEnabled() )
+                {
+                    InternalStringBuilder msg = new InternalStringBuilder( "No module configuration registered for " );
+                    msg.append( servletPath ).append( " (module path " ).append( modulePath ).append( ")." );
+                    _log.error( msg.toString() );
+                }
+
+                //
+                // If we're not in production mode, send a diagnostic on the response; otherwise, simply send a 404.
+                //
+                if ( modulePath.length() == 0 ) modulePath = "/";
+                InternalUtils.sendDevTimeError( "PageFlow_NoModuleConf", null, HttpServletResponse.SC_NOT_FOUND, 
+                                                request, response, servletContext,
+                                                new Object[]{ servletPath, modulePath } );
+            }
+        }
+    }
+ 
+    public void destroy()
+    {
+        super.destroy();
+    }
+
+    /**
+     * Last chance to handle an unhandled action URI.
+     * @return <code>true</code> if this method handled it (by forwarding somewhere or writing to the response).
+     */ 
+    protected boolean processUnhandledAction( HttpServletRequest request, HttpServletResponse response, String uri )
+            throws IOException, ServletException
+    {
+        return false;
+    }
+}
+/*
+ * Copyright 2004 The Apache Software Foundation.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * $Header:$
+ */
+package org.apache.ti.pageflow;
+
+import org.apache.ti.util.internal.InternalStringBuilder;
+
+import org.apache.ti.pageflow.internal.InternalConstants;
+import org.apache.ti.pageflow.internal.InternalUtils;
+import org.apache.ti.pageflow.internal.AdapterManager;
+import org.apache.ti.pageflow.xwork.ModuleConfig;
+import org.apache.ti.util.Bundle;
+import org.apache.ti.util.internal.DiscoveryUtils;
+import org.apache.ti.util.config.ConfigUtil;
+import org.apache.ti.util.config.bean.ModuleConfigLocators;
+import org.apache.ti.util.config.bean.PageflowConfig;
+import org.apache.ti.util.logging.Logger;
+import org.apache.commons.digester.Digester;
+import org.apache.struts.Globals;
+import org.apache.struts.action.ActionServlet;
+import org.apache.struts.action.DynaActionFormClass;
+import org.apache.struts.action.RequestProcessor;
+import org.apache.struts.config.ControllerConfig;
+import org.apache.struts.config.FormBeanConfig;
+import org.apache.struts.config.MessageResourcesConfig;
+import org.apache.struts.config.ModuleConfig;
+import org.apache.struts.config.ModuleConfigFactory;
+import org.apache.struts.config.impl.ModuleConfigImpl;
+import org.apache.struts.util.RequestUtils;
+import org.xml.sax.InputSource;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.UnavailableException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Iterator;
+
+import org.apache.ti.util.internal.concurrent.InternalConcurrentHashMap;
+
+
+/**
+ * ActionServlet that automatically registers requested Struts modules based on a set of module configuration file
+ * locators.  The user may specify {@link ModuleConfigLocator} classes in /WEB-INF/beehive-netui-config.xml using the
+ * <code>&lt;module-config-locators&gt;</code> element.
+ */
+public class AutoRegisterActionServlet extends ActionServlet
+{
+
+    public void init()
+        throws ServletException
+    {
+    }
+    
+    /**
+     * This override of the base class process() registers a Struts module on the fly if the
+     * config file can be found in our standard place (named in our standard way), regardless
+     * of whether the module is configured in web.xml.
+     */
+    protected void process( HttpServletRequest request, HttpServletResponse response )
+        throws IOException, ServletException
+    {
+        //
+        // First wrap the request with an object that contains request-scoped values that our runtime uses.  This
+        // is faster than sticking everything into attributes on the request (then basically reading from a HashMap).
+        //
+        PageFlowRequestWrapper requestWrapper = PageFlowRequestWrapper.wrapRequest( request );
+        request = requestWrapper;
+        
+        ServletContext servletContext = getServletContext();
+        String modulePath = PageFlowUtils.getModulePathForRequestPath( InternalUtils.getRequestPath( request ) );
+        ModuleConfig registeredApp;
+        
+        //
+        // Get the registered Struts module for the request.
+        //
+        registeredApp = getModuleConfig( modulePath, request, response );
+        
+        //
+        // If we've dynamically registered a module, then we need to override the base process() behavior to select the
+        // module.  Note that we don't want to synchronize the call to process().
+        //
+        if ( registeredApp != null )
+        {
+            //
+            // Try to select the appropriate Struts module and delegate to its RequestProcessor.
+            //
+            ModuleConfig moduleConfig = InternalUtils.selectModule( modulePath, request, servletContext );
+            RequestProcessor requestProcessor = getRequestProcessor( moduleConfig );
+            requestProcessor.process( request, response );
+        }
+        else
+        {
+            
+            //
+            // This is the same as the base process() behavior, but it checks for a missing module-configuration.
+            //
+            ModuleConfig moduleConfig = null;
+            
+            if ( InternalUtils.getModuleConfig( RequestUtils.getModuleName( request, servletContext ), servletContext ) != null )
+            {
+                String modulePrefix = RequestUtils.getModuleName( request, servletContext );
+                moduleConfig = InternalUtils.selectModule( modulePrefix, request, servletContext );
+            }
+            
+            String servletPath = InternalUtils.getRequestPath( request );
+            RequestProcessor rp = moduleConfig != null ? getRequestProcessor( moduleConfig ) : null;
+            
+            if ( rp != null && moduleCanHandlePath( moduleConfig, rp, servletPath ) )
+            {
+                rp.process( request, response );
+            }
+            else
+            {
+                //
+                // Initialize the ServletContext in the request.  Often, we need access to the ServletContext when we only
+                // have a ServletRequest.
+                //
+                InternalUtils.setServletContext( request, getServletContext() );
+                
+                if ( processUnhandledAction( request, response, servletPath ) ) return;
+                
+                String originalServletPath = requestWrapper.getOriginalServletPath();
+                if ( originalServletPath != null )
+                {
+                    servletPath = originalServletPath;
+                    modulePath = PageFlowUtils.getModulePathForRequestPath( originalServletPath );
+                }
+                
+                if ( _log.isErrorEnabled() )
+                {
+                    InternalStringBuilder msg = new InternalStringBuilder( "No module configuration registered for " );
+                    msg.append( servletPath ).append( " (module path " ).append( modulePath ).append( ")." );
+                    _log.error( msg.toString() );
+                }
+
+                //
+                // If we're not in production mode, send a diagnostic on the response; otherwise, simply send a 404.
+                //
+                if ( modulePath.length() == 0 ) modulePath = "/";
+                InternalUtils.sendDevTimeError( "PageFlow_NoModuleConf", null, HttpServletResponse.SC_NOT_FOUND, 
+                                                request, response, servletContext,
+                                                new Object[]{ servletPath, modulePath } );
+            }
+        }
+    }
+ 
+    public void destroy()
+    {
+        super.destroy();
+    }
+
+    /**
+     * Last chance to handle an unhandled action URI.
+     * @return <code>true</code> if this method handled it (by forwarding somewhere or writing to the response).
+     */ 
+    protected boolean processUnhandledAction( HttpServletRequest request, HttpServletResponse response, String uri )
+            throws IOException, ServletException
+    {
+        return false;
+    }
+}

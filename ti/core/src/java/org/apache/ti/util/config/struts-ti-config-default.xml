@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<netui-config xmlns="http://struts.apache.org/ti/2004/server/config">
+
+    <expression-languages>
+        <default-language>netuiel</default-language>
+        <expression-language>
+            <name>netuiel</name>
+            <factory-class>org.apache.ti.script.el.ExpressionEvaluatorImpl$NetUIELEngineFactory</factory-class>
+        </expression-language>
+    </expression-languages>
+
+</netui-config>
