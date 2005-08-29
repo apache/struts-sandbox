@@ -67,6 +67,14 @@ Existing project collaboration
 tag libraries
     * Beehive using the Page Flow and annotations
 
+BUILDING FROM SOURCE
+To build Struts Ti from source, you must have Maven 1.x installed.
+Execute 'maven dist' from 'core' directory of your local copy of Struts Ti.
+
+ $ cd ti    <- your local copy
+ $ cd core
+ $ maven dist
+
 STATUS
 
 A working, if feature sparce, framework is in place.  
