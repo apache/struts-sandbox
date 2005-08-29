@@ -17,28 +17,23 @@
  */
 package org.apache.ti.servlet;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.*;
-
-import javax.servlet.ServletException;
-import javax.servlet.UnavailableException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletContext;
-
 import org.apache.commons.chain.web.servlet.ServletWebContext;
 import org.apache.commons.digester.Digester;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.ti.processor.RequestProcessor;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.xml.XmlBeanFactory;
-import org.springframework.beans.factory.config.*;
-import org.springframework.core.io.UrlResource;
 import org.xml.sax.SAXException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p><strong>StrutsTiServlet</strong> is the entry point into Struts Ti.</p>
@@ -48,21 +43,15 @@ public class StrutsTiServlet extends HttpServlet {
 
     public static final String SERVLET_MAPPINGS_KEY = "servletMappings";
 
-    protected String springConfig = "org/apache/ti/config/spring-config-servlet.xml";
-    protected String tiConfig = "ti.properties";
-    protected String tiDefaultsConfig = "ti-defaults.properties";
 
     protected static Log log = LogFactory.getLog(StrutsTiServlet.class);
 
-    protected BeanFactory beanFactory = null;
     protected List servletMappings = new ArrayList();
     protected RequestProcessor processor = null;
-    protected Properties tiProps = new Properties();
 
     public void destroy() {
 
         processor.destroy();
-        beanFactory = null;
         processor = null;
     }
 
@@ -78,99 +67,12 @@ public class StrutsTiServlet extends HttpServlet {
     public void init() throws ServletException {
         super.init();
 
-        initProperties();
-        initSpring();
         initServlet();
         Map params = new HashMap();
         params.put(SERVLET_MAPPINGS_KEY, servletMappings);
         ServletConfiguration servletConfiguration = ServletConfiguration.init(getServletContext());
         processor = servletConfiguration.createRequestProcessor(getServletContext(), "actionRequestProcessor", params);
- 
-        Map initParameters = new HashMap();
-        initParameters.putAll(tiProps);
-        initParameters.put(SERVLET_MAPPINGS_KEY, servletMappings);
-
-        processor = (RequestProcessor) beanFactory.getBean("requestProcessor");
-        processor.init(initParameters, new ServletWebContext(getServletContext(), null, null));
     }
-
-    protected void initProperties() throws ServletException {
-        String s = getInitParameter("tiConfig");
-        if (s != null) {
-            tiConfig = s;
-        }    
-        try {
-            // First, load defaults
-            tiProps.load(resolve(tiDefaultsConfig).openStream());
-
-            // Next, load from web.xml
-            String key;
-            for (Enumeration e = getInitParameterNames(); e.hasMoreElements();) {
-                key = (String) e.nextElement();
-                tiProps.put("ti."+key, getInitParameter(key));
-            }
-            
-            // Finally, load from user's properties file 
-            URL resource = resolve(tiConfig, false);
-            if (resource != null) {
-                tiProps.load(resource.openStream());
-             }
-        } catch(IOException ex) {
-            log.error("Unable to load properties", ex);
-            throw new UnavailableException("Unable to load properties:"+ex.getMessage());
-        }
-
-        // Resolve all properties ending with Path against the servlet context, if possibile
-        String key, value;
-        String realPath;
-        ServletContext ctx = getServletContext();
-        for (Iterator i = tiProps.keySet().iterator(); i.hasNext(); ) {
-            key = (String) i.next();
-            if (key.startsWith("ti.") && key.endsWith("Path")) {
-                value = tiProps.getProperty(key);
-                if (value != null && value.length() > 0) {
-                    realPath = ctx.getRealPath(value);
-                    if (realPath != null) {
-                        if (log.isDebugEnabled()) {
-                            log.debug("Resolved "+value+" as "+realPath+" for key "+key);
-                        }    
-                        tiProps.setProperty(key, realPath);
-                    } else {
-                        log.info("Unable to resolve path "+value+" for key "+key);
-                    }
-                }    
-            }
-        }    
-    }    
-                
-        
-
-    protected void initSpring() throws ServletException {
-        // Parse the configuration file specified by path or resource
-        try {
-            String paths = getInitParameter("springConfig");
-            if (paths != null) {
-                springConfig = paths;
-            }
-
-            URL resource = resolve(springConfig);
-            log.info("Loading spring configuration from " + resource);
-            beanFactory = new XmlBeanFactory(new UrlResource(resource));
-
-            // create placeholderconfigurer to bring in some property
-            // values from a Properties file
-            PropertyPlaceholderConfigurer cfg = new PropertyPlaceholderConfigurer();
-            cfg.setProperties(tiProps);
-            // now actually do the replacement
-            cfg.postProcessBeanFactory((XmlBeanFactory)beanFactory);
-            
-        } catch (Exception e) {
-            String msg = "Exception loading spring configuration";
-            log.error(msg, e);
-            throw new UnavailableException(msg);
-        }
-    }
-
 
     /**
      * <p>Perform the standard request processing for this request, and create
@@ -179,7 +81,6 @@ public class StrutsTiServlet extends HttpServlet {
      * @param request The servlet request we are processing
      * @param response The servlet response we are creating
      *
-     * @exception IOException if an input/output error occurs
      * @exception ServletException if a servlet exception is thrown
      */
     public void service(HttpServletRequest request,
@@ -188,53 +89,6 @@ public class StrutsTiServlet extends HttpServlet {
         processor.process(new ServletWebContext(getServletContext(), request, response));
     }
 
-
-    protected URL resolve(String path) throws ServletException {
-        return resolve(path, true);
-    }    
-    
-    protected URL resolve(String path, boolean force) throws ServletException {
-        URL resource = null;
-        ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        if (loader == null) {
-            loader = this.getClass().getClassLoader();
-        }
-
-        try {
-            if (path.charAt(0) == '/') {
-                resource = getServletContext().getResource(path);
-            }
-
-            if (resource == null) {
-                if (log.isDebugEnabled()) {
-                    log.debug("Unable to locate " + path
-                            + " in the servlet context, "
-                            + "trying classloader.");
-                }
-                Enumeration e = loader.getResources(path);
-                if (!e.hasMoreElements()) {
-                    if (force) {
-                        String msg = "Resource not found: " + path;
-                        log.error(msg);
-                        throw new UnavailableException(msg);
-                    }    
-                } else {
-                    resource = (URL) e.nextElement();
-                    if (e.hasMoreElements()) {
-                        log.warn("Found more than one resource at " + path
-                            + ", only using the first");
-                    }
-                }
-            }
-        } catch (Exception e) {
-            if (force) {
-                log.error("Unable to load resource at " + path, e);
-                throw new UnavailableException("Unable to load resource at " + path);
-            }    
-        }
-
-        return resource;
-    }
 
     /**
      * <p>Remember a servlet mapping from our web application deployment
@@ -311,5 +165,4 @@ public class StrutsTiServlet extends HttpServlet {
             }
         }
     }
-
 }
