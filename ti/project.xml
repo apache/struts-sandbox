@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- 
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
@@ -19,27 +19,22 @@
 
 
 <project>
+
   <pomVersion>3</pomVersion>
-  <groupId>struts-ti</groupId>
-  <currentVersion>0.1-dev</currentVersion>
-
-
-    <!-- ################################################################ -->
-    <!--        Project management section                                -->
-    <!-- ################################################################ -->
-
-  
+  <id>struts-ti</id>
+  <name>Struts Ti</name>
+  <currentVersion>1.0-SNAPSHOT</currentVersion>
   <organization>
-    <name>The Apache Software Foundation</name>
+    <name>Apache Software Foundation</name>
     <url>http://www.apache.org/</url>
     <logo>http://www.apache.org/images/asf-logo.gif</logo>
   </organization>
-  <logo>http://struts.apache.org/images/struts.gif</logo>
-  <inceptionYear>2000</inceptionYear>
+
+  <inceptionYear>2005</inceptionYear>
   <package>org.apache.ti</package>
   <logo>http://struts.apache.org/images/struts.gif</logo>
   <gumpRepositoryId>struts-ti-svn</gumpRepositoryId>
-
+  
   <description>
     Struts Ti is a simplified Model 2 framework for developing webapps which allows the developer better access to the
     underlying servlet/portlet environment. It serves a niche of web applications that don.t want the additional
@@ -47,7 +42,7 @@
     modern web framework. Struts Ti builds on the directions of Struts 1.x, yet re-implements the framework to provide a
     clean slate for the next generation of Struts Ti. It aims to combine the simplicity of Ruby on Rails and NanoWeb,
     the refinement of WebWork 2, the tool-friendly authoring of Beehive, and the history of Struts 1.x.</description>
-      
+
   <shortDescription>MVC Web Application Framework</shortDescription>
   <url>http://struts.apache.org/index.html</url>
   <issueTrackingUrl>http://issues.apache.org/bugzilla/</issueTrackingUrl>
@@ -56,6 +51,12 @@
   <distributionSite>struts.apache.org</distributionSite>
   <distributionDirectory>/www/www.apache.org/builds/</distributionDirectory>
 <!--  <distributionDirectory>/www/www.apache.org/dist/java-repository/</distributionDirectory>-->
+
+  <repository>
+    <connection>scm|svn|http|//svn.apache.org/repos/asf/struts/sandbox/trunk/ti</connection>
+    <developerConnection>scm|svn|https|//svn.apache.org/repos/asf/struts/sandbox/trunk/ti</developerConnection>
+    <url>http://svn.apache.org/repos/asf/struts/sandbox/trunk/ti</url>
+  </repository>
   
   <mailingLists>
     <mailingList>
@@ -108,6 +109,53 @@
   </licenses>
 
   <!-- ################################################################ -->
+  <!--        Project build and reports section                         -->
+  <!-- ################################################################ -->
+
+  <build>
+    <nagEmailAddress>struts-dev@struts.apache.org</nagEmailAddress>
+    <sourceDirectory>core/src/java</sourceDirectory>
+    <unitTestSourceDirectory>core/src/test</unitTestSourceDirectory>
+    
+    <unitTest>
+      <includes>
+        <include>**/Test*.java</include>
+      </includes>
+      <resources>
+        <resource>
+          <directory>${basedir}/src/test</directory>
+          <includes>
+            <exclude>**/*.java</exclude>
+          </includes>
+        </resource>
+      </resources>
+    </unitTest>
+    <resources>
+      <resource>
+        <directory>${basedir}/src/java</directory>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
+      </resource>
+    </resources>
+ 
+    <!-- J A R  R E S O U R C E S -->
+    <!-- Resources that are packaged up inside the JAR file -->
+<!--
+    <resources>
+      <resource>
+        <directory>${basedir}/src/share</directory>
+        <includes>
+          <include>**/*.properties</include>
+        </includes>
+      </resource>
+    </resources>
+-->
+
+  </build>
+  
+  
+  <!-- ################################################################ -->
   <!--        Project dependency section                                -->
   <!-- ################################################################ -->
 
@@ -126,6 +174,17 @@
       <artifactId>jsp-api</artifactId>
       <version>2.0</version>
       <url>http://java.sun.com/products/jsp/</url>
+    </dependency>
+
+    <!--  commons-*  -->
+    <dependency>
+      <groupId>commons-beanutils</groupId>
+      <artifactId>commons-beanutils</artifactId>
+      <version>1.7.0</version>
+      <url>http://jakarta.apache.org/commons/beanutils/</url>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
     </dependency>
     
     <dependency>
@@ -149,31 +208,10 @@
     </dependency>
  
     <dependency>
-      <groupId>commons-beanutils</groupId>
-      <artifactId>commons-beanutils</artifactId>
-      <version>1.7.0</version>
-      <url>http://jakarta.apache.org/commons/beanutils/</url>
-      <properties>
-        <war.bundle>true</war.bundle>
-      </properties>
-    </dependency>
-    
-    <dependency>
       <groupId>commons-digester</groupId>
       <artifactId>commons-digester</artifactId>
       <version>1.7</version>
       <url>http://jakarta.apache.org/commons/digester/</url>
-      <properties>
-        <war.bundle>true</war.bundle>
-      </properties>
-    </dependency>
-    
-
-    <dependency>
-      <groupId>commons-logging</groupId>
-      <artifactId>commons-logging</artifactId>
-      <version>1.0.4</version>
-      <url>http://jakarta.apache.org/commons/logging/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -200,6 +238,16 @@
     </dependency>
 
     <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>1.0.4</version>
+      <url>http://jakarta.apache.org/commons/logging/</url>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
+    
+    <dependency>
       <groupId>commons-jci</groupId>
       <artifactId>commons-jci</artifactId>
       <version>SNAPSHOT</version>
@@ -209,7 +257,34 @@
       </properties>
     </dependency>
 
- 
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>1.3</version>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-el</groupId>
+      <artifactId>commons-el</artifactId>
+      <version>1.0</version>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-validator</groupId>
+      <artifactId>commons-validator</artifactId>
+      <version>1.1.4</version>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
+
+    <!-- OpenSymphony -->
     <dependency>
       <groupId>opensymphony</groupId>
       <artifactId>xwork</artifactId>
@@ -240,6 +315,7 @@
       </properties>
     </dependency>
 
+    <!-- ognl -->
     <dependency>
       <groupId>ognl</groupId>
       <artifactId>ognl</artifactId>
@@ -250,6 +326,7 @@
       </properties>
     </dependency>
     
+    <!-- Velocity -->
     <dependency>
       <groupId>velocity</groupId>
       <artifactId>velocity</artifactId>
@@ -384,42 +461,6 @@
     </dependency>
 
     <dependency>
-      <groupId>commons-codec</groupId>
-      <artifactId>commons-codec</artifactId>
-      <version>1.3</version>
-      <properties>
-        <war.bundle>true</war.bundle>
-      </properties>
-    </dependency>
-
-    <dependency>
-      <groupId>commons-el</groupId>
-      <artifactId>commons-el</artifactId>
-      <version>1.0</version>
-      <properties>
-        <war.bundle>true</war.bundle>
-      </properties>
-    </dependency>
-
-    <dependency>
-      <groupId>jspapi</groupId>
-      <artifactId>jsp-api</artifactId>
-      <version>2.0</version>
-      <properties>
-        <war.bundle>true</war.bundle>
-      </properties>
-    </dependency>
-
-    <dependency>
-      <groupId>commons-validator</groupId>
-      <artifactId>commons-validator</artifactId>
-      <version>1.1.4</version>
-      <properties>
-        <war.bundle>true</war.bundle>
-      </properties>
-    </dependency>
-
-    <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
       <version>1.2.8</version>
@@ -458,63 +499,8 @@
   </dependencies>
 
 
-  <!-- ################################################################ -->
-  <!--        Project build and reports section                         -->
-  <!-- ################################################################ -->
-
-  <build>
-    <nagEmailAddress>struts-dev@struts.apache.org</nagEmailAddress>
-    <sourceDirectory>src/java</sourceDirectory>
-    <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
-    
-    <unitTest>
-      <includes>
-        <include>**/Test*.java</include>
-      </includes>
-      <resources>
-        <resource>
-          <directory>${basedir}/src/test</directory>
-          <includes>
-            <exclude>**/*.java</exclude>
-          </includes>
-        </resource>
-      </resources>
-    </unitTest>
-    <resources>
-      <resource>
-        <directory>${basedir}/src/java</directory>
-        <excludes>
-          <exclude>**/*.java</exclude>
-        </excludes>
-      </resource>
-    </resources>
- 
-    <!-- J A R  R E S O U R C E S -->
-    <!-- Resources that are packaged up inside the JAR file -->
-<!--
-    <resources>
-      <resource>
-        <directory>${basedir}/src/share</directory>
-        <includes>
-          <include>**/*.properties</include>
-        </includes>
-      </resource>
-    </resources>
--->
-
-  </build>
 
   <reports>
-    <!--
-     |
-     | These should all be completely self contained. You should be able
-     | to generate each of them individually without needing the final
-     | xdoc transformation.
-     |
-     | Each report plugin with it's POM and plugin.jelly logic should
-     | contain everything needed to produced the report.
-     |
-    -->
 
     <report>maven-checkstyle-plugin</report>
     <report>maven-changelog-plugin</report>

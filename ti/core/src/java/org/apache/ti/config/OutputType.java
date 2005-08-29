@@ -17,21 +17,13 @@
  */
 package org.apache.ti.config;
 
-import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.VelocityEngine;
-import org.apache.velocity.exception.ResourceNotFoundException;
-
-import xjavadoc.XClass;
-import xjavadoc.XJavaDoc;
-import xjavadoc.filesystem.ReaderFile;
 
 /**
  *  Processes xdoclet-style tags and uses a velocity template to generate
@@ -39,8 +31,19 @@ import xjavadoc.filesystem.ReaderFile;
  */
 public class OutputType {
 
+	/**
+	 * FIX ME
+	 */
     public static final int PER_ACTION = 0;
+    
+    /**
+     * FIX ME
+     */
     public static final int PER_CONTROLLER = 1;
+    
+    /**
+     * FIX ME
+     */
     public static final int ONCE = 3;
 
     private String filePattern;
@@ -49,20 +52,41 @@ public class OutputType {
 
     private static final Log log = LogFactory.getLog(OutputType.class);
 
+    /**
+     * FIX ME
+     * @param template
+     * @param filePattern
+     * @param frequency
+     */
     public OutputType(String template, String filePattern, int frequency) {
         this.template = template;
         this.filePattern = filePattern;
         this.frequency = frequency;
     }
 
+    /**
+     * Get the frequency
+     * @return Return the frequency
+     */
     public int getFrequency() {
         return frequency;
     }
 
+    /**
+     * Get the template
+     * @return Return the template
+     */
     public String getTemplate() {
         return template;
     }    
 
+    /**
+     * FIX ME
+     * @param dest
+     * @param path
+     * @param actionName
+     * @return FIX ME
+     */
     public Writer getWriter(File dest, String path, String actionName) {
         
         FileWriter writer = null;

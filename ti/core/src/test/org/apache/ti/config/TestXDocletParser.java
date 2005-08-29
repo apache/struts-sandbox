@@ -18,22 +18,14 @@
 
 package org.apache.ti.config;
 
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import java.io.*;
-import java.util.*;
-import org.apache.velocity.*;
-import org.apache.ti.util.*;
 
-import org.jdom.Document;
-import org.jdom.input.SAXBuilder;
-import org.jdom.xpath.XPath;
+import org.apache.ti.util.VelocityTemplateProcessor;
 
 /**
  * Unit tests for the <code>org.apache.ti.config.XDocletParser</code> class.

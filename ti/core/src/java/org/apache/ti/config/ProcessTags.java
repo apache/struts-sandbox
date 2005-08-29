@@ -18,13 +18,10 @@
 package org.apache.ti.config;
 
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -37,12 +34,26 @@ public class ProcessTags {
     private XDocletParser xdocletParser;
 
     private static final Log log = LogFactory.getLog(ProcessTags.class);
+    
+    // TODO where is this used?
     private static final String SEP = File.separator;
 
+    /**
+     * Set the parser
+     * @param parser
+     */
     public void setXdocletParser(XDocletParser parser) {
         this.xdocletParser = parser;
     }
 
+    /**
+     * Process tags
+     * @param src
+     * @param srcName
+     * @param dest
+     * @param outputs
+     * @throws IOException
+     */
     public void process(File src, String srcName, File dest, List outputs) throws IOException {
         ArrayList sources = new ArrayList();
         crawl(src, srcName, src, outputs, sources);

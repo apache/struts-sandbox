@@ -18,7 +18,6 @@
 
 package org.apache.ti;
 
-import org.apache.ti.pageflow.internal.InternalConstants;
 
 import java.io.Serializable;
 
