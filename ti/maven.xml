@@ -1,27 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
 
+    The build plan:
+    
+
+      
+NIGHTLY
+  What should be available for nightly?
+  1.4
+    maven jar-all
+    maven war-all
+  1.5
+    maven jar-all
+    maven war-all
+    maven multiproject:site
+
+-->
 <project 
-	xmlns:j="jelly:core" 
-	xmlns:ant="jelly:ant" 
-	xmlns:maven="jelly:maven" 
-	default="multiproject:build">
+    xmlns:j="jelly:core" 
+    xmlns:ant="jelly:ant" 
+    xmlns:maven="jelly:maven" 
+    default="jar">
 
-  <goal name="dist">
-    <attainGoal name="usage"/>
-  </goal>
-  
   <goal name="usage">
-     <echo> Usage: (this is specific to the ti build)</echo>
-     <echo>  maven [-option] [target] </echo>
-     <echo>   [see README.txt for a list of valid targets]</echo>
+     <echo> 
+     
+     Usage: (this is specific to the ti build)
+     
+     $ maven [-option] [target] 
+      
+      for [option] see Maven help
+      for [target] see below
+     
+             Target    Artifact(s)             Description
+             ______    ___________             ___________
+             dist      target/                 creates a full distribution of core and example apps
+                         struts-ti-core{jdk}-{ver}.jar
+                         struts-ti-sample{jdk}.war
+             
+             clean-all (nothing)               cleans all subprojects
+                          
+             jar-all   target/                 creates core and java5 archives
+                          struts-ti-core{jdk}-{ver}.jar
+                          struts-ti-java5-{ver}.jar
+                          
+             war-all   target/                 creates all web application archives
+                          struts-ti-sample{jdk}-{ver}.war
+              
+             test-all  (nothing)               run full set of (1.5 based) junit tests
+            
+             cactus-all(nothing)               run full set of (1.5 based) junit and cactus tests
+              
+             site      target/docs/            create struts-ti web site (includes build reports)
+                         **/*.html
+                       
+             nightly   target/                 creates nightly distribution that gets uploaded to 
+                                               http://svn.apache.org/builds/struts/maven/trunk/nightly/struts-sandbox/ti/
+                         struts-ti-core{jdk}-{YYYYMMDD}.jar
+                         struts-ti-java5-{YYYYMMDD}.jar
+                         struts-ti-sample{jdk}-{ver}-{YYYYMMDD}.war
+
+
+
+           In the table above, the following substitutions apply
+           {jdk}      - this will be either 1.4 or 1.5
+           {ver}      - current version 1.0-dev, or SNAPSHOT
+           {YYYYMMDD} - year, month, and day (for nightly distributions)
+          
+      
+     </echo>
   </goal>
-  
-  <goal name="dist-all">
+    
+  <goal name="dist">
     <attainGoal name="jar-all"/>
     <attainGoal name="war-all"/>
-  
+    <attainGoal name="multiproject-site"/>
   </goal>
   
+
+  <goal name="site">
+    <attainGoal name="multiproject:site"/>
+  </goal>
+
+
+
+  <goal name="clean-all">
+    <maven:reactor
+      basedir="."
+      banner="Creating Source and Binary Distribution"
+      includes="${maven.multiproject.includes}"
+      excludes="${maven.multiproject.excludes}"
+      postProcessing="true"
+      goals="clean"
+      ignoreFailures="false"/>
+  </goal>
+    
   <goal name="jar-all">
     <maven:reactor
       basedir="."
@@ -41,6 +114,28 @@
       excludes="${maven.multiproject.war.excludes}"
       postProcessing="true"
       goals="war:install"
+      ignoreFailures="false"/>
+  </goal>
+    
+  <goal name="test-all">
+    <maven:reactor
+      basedir="."
+      banner="Creating Source and Binary Distribution"
+      includes="${maven.multiproject.includes}"
+      excludes="${maven.multiproject.excludes}"
+      postProcessing="true"
+      goals="test:test"
+      ignoreFailures="false"/>
+  </goal>
+  
+  <goal name="cactus-all">
+    <maven:reactor
+      basedir="."
+      banner="Creating Source and Binary Distribution"
+      includes="${maven.multiproject.war.includes}"
+      excludes="${maven.multiproject.war.excludes}"
+      postProcessing="true"
+      goals="cactus"
       ignoreFailures="false"/>
   </goal>
     

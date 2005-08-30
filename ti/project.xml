@@ -176,6 +176,14 @@
       <url>http://java.sun.com/products/jsp/</url>
     </dependency>
 
+	<!-- Ant -->
+    <dependency>
+      <groupId>ant</groupId>
+      <artifactId>ant</artifactId>
+      <version>1.6.5</version>
+      <url>http://ant.apache.org</url>
+    </dependency>
+
     <!--  commons-*  -->
     <dependency>
       <groupId>commons-beanutils</groupId>
@@ -347,6 +355,7 @@
       </properties>
     </dependency>
     
+    <!-- xjavadoc -->
     <dependency>
       <groupId>xjavadoc</groupId>
       <artifactId>xjavadoc</artifactId>
@@ -357,6 +366,7 @@
       </properties>
     </dependency>
     
+    <!-- Spring -->
     <dependency>
       <groupId>springframework</groupId>
       <artifactId>spring-core</artifactId>
@@ -387,6 +397,7 @@
       </properties>
     </dependency>
 -->
+	<!-- Eclipse -->
     <dependency>
       <groupId>eclipse</groupId>
       <artifactId>jdtcore</artifactId>
@@ -397,21 +408,6 @@
       </properties>
     </dependency>
 
-   <dependency>
-      <groupId>ant</groupId>
-      <artifactId>ant</artifactId>
-      <version>1.6.5</version>
-      <url>http://ant.apache.org</url>
-    </dependency>
-
-    <!-- for unit tests -->
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <url>http://www.junit.org/</url>
-    </dependency>
-    
     <dependency>
       <groupId>jdom</groupId>
       <artifactId>jdom</artifactId>
@@ -495,6 +491,16 @@
         <war.bundle>true</war.bundle>
       </properties>
     </dependency>
+
+
+    <!-- for unit tests -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <url>http://www.junit.org/</url>
+    </dependency>
+    
 
   </dependencies>
 
