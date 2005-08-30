@@ -20,9 +20,10 @@
 
 <project>
 
-  <extend>../project.xml</extend>
-  <id>struts-ti-samples</id>
-  <name>Struts Ti Samples</name>
+  <extend>../../project.xml</extend>
+  <groupId>struts</groupId>
+  <artifactId>struts-ti</artifactId>
+  <name>Struts Ti Sample Application</name>
 
   <build>
     <resources>
@@ -37,7 +38,7 @@
   </build>
   <dependencies>
     <dependency>
-      <groupId>struts-ti</groupId>
+      <groupId>struts</groupId>
       <artifactId>struts-ti-core</artifactId>
       <version>${pom.currentVersion}</version>
       <properties>
@@ -45,7 +46,7 @@
       </properties>
     </dependency>
     <dependency>
-      <groupId>struts-ti</groupId>
+      <groupId>struts</groupId>
       <artifactId>struts-ti-java5</artifactId>
       <version>${pom.currentVersion}</version>
       <properties>

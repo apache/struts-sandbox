@@ -20,8 +20,9 @@
 
 <project>
 
-  <extend>../project.xml</extend>
-  <id>struts-ti-java5</id>
+  <extend>../../project.xml</extend>
+  <groupId>struts</groupId>
+  <artifactId>struts-ti-java5</artifactId>
   <name>Struts Ti Java5 Support</name>
 
 </project>

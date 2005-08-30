@@ -75,6 +75,36 @@ Execute 'maven dist' from 'core' directory of your local copy of Struts Ti.
  $ cd core
  $ maven dist
 
+
+
+	The build plan:
+	
+	  ${jdk} - replace this with either 1.4 or 1.5
+	  ${ver} - replace with current version 1.0-dev (or YYYYMMDD for nightly)
+	 
+	    Target   Artifact(s)             Description
+	    ______   ___________             ___________
+	    dist     target/                 creates a full distribution of core and example apps
+	               ti-core${jdk}-${ver}.jar
+	               ti-sample${jdk}.war
+	               
+	    jar      target/                 creates only core archive
+	                ti-core15.jar
+	                
+	    test     (nothing)               run full set of (1.5 based) junit tests
+	  
+	    cactus   (nothing)               run full set of (1.5 based) junit and cactus tests
+	  
+	    site     target/docs/            create ti web site (includes build reports)
+	               **/*.html
+	             
+	    nightly  target/                 creates nightly distribution that gets uploaded to 
+	               ti-core${jdk}         http://svn.apache.org/builds/struts/maven/trunk/nightly/struts-sandbox/ti/
+	               ti-sample${jdk}-${ver}.war	    
+	  
+	  
+
+
 STATUS
 
 A working, if feature sparce, framework is in place.  

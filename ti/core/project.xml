@@ -20,13 +20,9 @@
 
 <project>
 
-  <extend>../project.xml</extend>
-  <id>struts-ti-core</id>
+  <extend>../../project.xml</extend>
+  <groupId>struts</groupId>
+  <artifactId>struts-ti-core</artifactId>
   <name>Struts Ti Core</name>
-
-  <build>
-    <sourceDirectory>src/java</sourceDirectory>
-    <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
-  </build>
 
 </project>

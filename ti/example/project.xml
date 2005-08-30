@@ -20,7 +20,7 @@
 
 <project>
 
-  <extend>../project.xml</extend>
+  <extend>../../project.xml</extend>
   <id>struts-ti-example</id>
   <name>Struts Ti Example</name>
 

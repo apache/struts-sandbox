@@ -21,7 +21,7 @@
 <project>
 
   <pomVersion>3</pomVersion>
-  <id>struts-ti</id>
+  <id>struts</id>
   <name>Struts Ti</name>
   <currentVersion>1.0-SNAPSHOT</currentVersion>
   <organization>
@@ -114,8 +114,8 @@
 
   <build>
     <nagEmailAddress>struts-dev@struts.apache.org</nagEmailAddress>
-    <sourceDirectory>core/src/java</sourceDirectory>
-    <unitTestSourceDirectory>core/src/test</unitTestSourceDirectory>
+    <sourceDirectory>src/java</sourceDirectory>
+    <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
     
     <unitTest>
       <includes>

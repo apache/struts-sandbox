@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project 
+	xmlns:j="jelly:core" 
+	xmlns:ant="jelly:ant" 
+	xmlns:maven="jelly:maven" 
+	default="multiproject:build">
+
+  <goal name="dist">
+    <attainGoal name="usage"/>
+  </goal>
+  
+  <goal name="usage">
+     <echo> Usage: (this is specific to the ti build)</echo>
+     <echo>  maven [-option] [target] </echo>
+     <echo>   [see README.txt for a list of valid targets]</echo>
+  </goal>
+  
+  <goal name="dist-all">
+    <attainGoal name="jar-all"/>
+    <attainGoal name="war-all"/>
+  
+  </goal>
+  
+  <goal name="jar-all">
+    <maven:reactor
+      basedir="."
+      banner="Creating Source and Binary Distribution"
+      includes="${maven.multiproject.jar.includes}"
+      excludes="${maven.multiproject.jar.excludes}"
+      postProcessing="true"
+      goals="jar:install"
+      ignoreFailures="false"/>
+  </goal>
+    
+  <goal name="war-all">
+    <maven:reactor
+      basedir="."
+      banner="Creating Source and Binary Distribution"
+      includes="${maven.multiproject.war.includes}"
+      excludes="${maven.multiproject.war.excludes}"
+      postProcessing="true"
+      goals="war:install"
+      ignoreFailures="false"/>
+  </goal>
+    
+  
+</project>

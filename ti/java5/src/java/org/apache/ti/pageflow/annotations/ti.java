@@ -40,7 +40,7 @@ public interface ti {
     public enum MultipartHandler {
 
         /**
-         * Indicates that multipart handling is disabled in this controller. *
+         * Indicates that multipart handling is disabled in this controller.
          */
         disabled,
         
@@ -105,8 +105,8 @@ public interface ti {
      * ({@link org.apache.ti.pageflow.SharedFlowController}-derived) classes.
      */
     @Target(TYPE)
-            @Retention(RUNTIME)
-            public @interface controller {
+    @Retention(RUNTIME)
+    public @interface controller {
 
         //-----------------------
         // Optional attributes...
@@ -258,7 +258,9 @@ public interface ti {
          */
         ValidatorVersion validatorVersion() default ValidatorVersion.oneZero;
         
-        // TODO: doc
+        /**
+         * @todo doc
+         */
         boolean inheritLocalPaths() default false;
     }
 
