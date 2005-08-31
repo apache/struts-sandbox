@@ -1,21 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-
-    The build plan:
-    
-
-      
-NIGHTLY
-  What should be available for nightly?
-  1.4
-    maven jar-all
-    maven war-all
-  1.5
-    maven jar-all
-    maven war-all
-    maven multiproject:site
-
--->
 <project 
     xmlns:j="jelly:core" 
     xmlns:ant="jelly:ant" 
@@ -76,13 +59,6 @@ NIGHTLY
     <attainGoal name="war-all"/>
   </goal>
   
-
-  <goal name="site">
-    <attainGoal name="multiproject:site"/>
-  </goal>
-
-
-
   <goal name="clean-all">
     <maven:reactor
       basedir="."
