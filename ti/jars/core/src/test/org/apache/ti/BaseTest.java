@@ -19,17 +19,12 @@
 package org.apache.ti;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
-import java.util.HashSet;
-import java.io.*;
-import java.util.*;
-import org.apache.velocity.*;
+import java.io.InputStream;
 
-import junit.framework.Test;
 import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 /**
  * Unit tests for the <code>org.apache.ti.config.ProcessTags</code> class.

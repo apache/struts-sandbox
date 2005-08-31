@@ -18,21 +18,10 @@
 
 package org.apache.ti.config;
 
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.StringWriter;
-
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.jdom.Document;
-import org.jdom.input.SAXBuilder;
-import org.jdom.xpath.XPath;
-import java.io.*;
-import java.util.*;
-import org.apache.velocity.*;
 
 
 /**
