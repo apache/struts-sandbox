@@ -74,7 +74,6 @@ NIGHTLY
   <goal name="dist">
     <attainGoal name="jar-all"/>
     <attainGoal name="war-all"/>
-    <attainGoal name="multiproject-site"/>
   </goal>
   
 
