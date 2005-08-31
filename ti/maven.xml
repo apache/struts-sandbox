@@ -34,7 +34,8 @@
             
              cactus-all(nothing)               run full set of (1.5 based) junit and cactus tests
               
-             site      target/docs/            create struts-ti web site (includes build reports)
+             multiproject:site      
+                         target/docs/            create struts-ti web site (includes build reports)
                          **/*.html
                        
              nightly   target/                 creates nightly distribution that gets uploaded to 
