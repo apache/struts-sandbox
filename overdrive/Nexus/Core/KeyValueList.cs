@@ -10,7 +10,7 @@ namespace Nexus.Core
 		/// <summary>
 		/// Construct instance without parameters.
 		/// </summary>
-		public KeyValueList ()
+		public KeyValueList()
 		{
 		}
 
@@ -23,7 +23,7 @@ namespace Nexus.Core
 			{
 				foreach (object o in value)
 				{
-					this.Add (o);
+					this.Add(o);
 				}
 			}
 		}

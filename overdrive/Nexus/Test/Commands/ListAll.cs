@@ -35,12 +35,12 @@ namespace Nexus.Core.Commands
 		/// 
 		private const string DATA = "data";
 
-		public override bool RequestExecute (IRequestContext context)
+		public override bool RequestExecute(IRequestContext context)
 		{
 			// IList list = Mapper.Get ().QueryForList (ID, context);
 			// Fake it:
-			IList list = new ArrayList ();
-			list.Add (DATA);
+			IList list = new ArrayList();
+			list.Add(DATA);
 			context.Outcome = list;
 			return CONTINUE;
 		}

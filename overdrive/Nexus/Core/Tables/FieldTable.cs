@@ -26,6 +26,7 @@ namespace Nexus.Core.Tables
 		#region Field
 
 		private bool _Strict = false;
+
 		public virtual bool Strict
 		{
 			get { return _Strict; }
@@ -37,8 +38,8 @@ namespace Nexus.Core.Tables
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException ("(value==null) || (Type!=IFieldContext)", "Nexus.Core.Tables.FieldTable.AddFieldContext");
-				Field [value.ID] = value;
+					throw new ArgumentNullException("(value==null) || (Type!=IFieldContext)", "Nexus.Core.Tables.FieldTable.AddFieldContext");
+				Field[value.ID] = value;
 			}
 		}
 
@@ -47,19 +48,19 @@ namespace Nexus.Core.Tables
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException ("(value==null) || (Type!=IFieldContext)", "Nexus.Core.Tables.FieldTable.AddFieldContexts");
-				IEnumerator elements = value.GetEnumerator ();
-				while (elements.MoveNext ()) AddFieldContext = elements.Current as IFieldContext;
+					throw new ArgumentNullException("(value==null) || (Type!=IFieldContext)", "Nexus.Core.Tables.FieldTable.AddFieldContexts");
+				IEnumerator elements = value.GetEnumerator();
+				while (elements.MoveNext()) AddFieldContext = elements.Current as IFieldContext;
 			}
 		}
 
-		public virtual IFieldContext GetFieldContext (string id)
+		public virtual IFieldContext GetFieldContext(string id)
 		{
-			if (id==null) throw new ArgumentNullException ("id==null", "Nexus.Core.Tables.FieldTable.GetFieldContext");			
-			IFieldContext fieldContext = Field [id] as IFieldContext;
+			if (id == null) throw new ArgumentNullException("id==null", "Nexus.Core.Tables.FieldTable.GetFieldContext");
+			IFieldContext fieldContext = Field[id] as IFieldContext;
 			bool problem = ((fieldContext == null) && (Strict));
 			if (problem)
-				throw new ArgumentNullException (id, "Nexus.Core.Tables.FieldTable.GetFieldContext");
+				throw new ArgumentNullException(id, "Nexus.Core.Tables.FieldTable.GetFieldContext");
 			return fieldContext;
 		}
 
@@ -72,8 +73,8 @@ namespace Nexus.Core.Tables
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException ("value==null", "Nexus.Core.Tables.FieldTable.AddProcessor");
-				Processor [value.ID] = value;
+					throw new ArgumentNullException("value==null", "Nexus.Core.Tables.FieldTable.AddProcessor");
+				Processor[value.ID] = value;
 			}
 		}
 
@@ -82,9 +83,9 @@ namespace Nexus.Core.Tables
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException ("value==null", "Nexus.Core.Tables.FieldTable.AddProcessors");
-				IEnumerator elements = value.GetEnumerator ();
-				while (elements.MoveNext ()) AddProcessor = elements.Current as IProcessor;
+					throw new ArgumentNullException("value==null", "Nexus.Core.Tables.FieldTable.AddProcessors");
+				IEnumerator elements = value.GetEnumerator();
+				while (elements.MoveNext()) AddProcessor = elements.Current as IProcessor;
 			}
 		}
 
@@ -92,19 +93,19 @@ namespace Nexus.Core.Tables
 
 		#region Text 
 
-		public virtual string Alert (string id)
+		public virtual string Alert(string id)
 		{
-			return GetFieldContext (id).Alert;
+			return GetFieldContext(id).Alert;
 		}
 
-		public virtual string Label (string id)
+		public virtual string Label(string id)
 		{
-			return GetFieldContext (id).Label;
+			return GetFieldContext(id).Label;
 		}
 
-		public virtual string Required (string id)
+		public virtual string Required(string id)
 		{
-			return GetFieldContext (id).Required;
+			return GetFieldContext(id).Required;
 		}
 
 		#endregion
@@ -114,10 +115,10 @@ namespace Nexus.Core.Tables
 		/// <summary>
 		/// Create instance with zero paramters.
 		/// </summary>
-		public FieldTable ()
+		public FieldTable()
 		{
-			this [Tokens.Field] = new Hashtable ();
-			this [Tokens.Processor] = new Hashtable ();
+			this[Tokens.Field] = new Hashtable();
+			this[Tokens.Processor] = new Hashtable();
 		}
 
 		/// <summary>
@@ -125,7 +126,7 @@ namespace Nexus.Core.Tables
 		/// </summary>
 		private IDictionary Field
 		{
-			get { return this [Tokens.Field] as IDictionary; }
+			get { return this[Tokens.Field] as IDictionary; }
 		}
 
 		/// <summary>
@@ -133,7 +134,7 @@ namespace Nexus.Core.Tables
 		/// </summary>
 		private IDictionary Processor
 		{
-			get { return this [Tokens.Processor] as IDictionary; }
+			get { return this[Tokens.Processor] as IDictionary; }
 		}
 
 	}

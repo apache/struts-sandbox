@@ -32,9 +32,9 @@ namespace Nexus.Core
 		/// </summary>
 		/// 
 		[SetUp]
-		public void SetUp ()
+		public void SetUp()
 		{
-			command = new ListAll ();
+			command = new ListAll();
 		}
 
 		/// <summary>
@@ -42,21 +42,21 @@ namespace Nexus.Core
 		/// </summary>
 		/// 
 		[Test]
-		public void NewRequestContext ()
+		public void NewRequestContext()
 		{
-			IRequestContext context = command.NewContext ();
-			Assert.IsNotNull (context, "Expected default context instance.");
+			IRequestContext context = command.NewContext();
+			Assert.IsNotNull(context, "Expected default context instance.");
 		}
 
 		/// <summary>
 		///  A successful command returns a nominal result.
 		/// </summary>
 		/// 
-		public void RequestExecute ()
+		public void RequestExecute()
 		{
-			IRequestContext context = command.NewContext ();
-			command.Execute (context);
-			Assert.IsTrue (context.IsNominal, "Expected nominal result.");
+			IRequestContext context = command.NewContext();
+			command.Execute(context);
+			Assert.IsTrue(context.IsNominal, "Expected nominal result.");
 		}
 
 	}

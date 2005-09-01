@@ -39,6 +39,7 @@ namespace Nexus.Core
 		public const bool CONTINUE = false;
 
 		private string _ID = null;
+
 		public virtual string ID
 		{
 			get { return _ID; }
@@ -46,6 +47,7 @@ namespace Nexus.Core
 		}
 
 		private string _QueryID = null;
+
 		public virtual string QueryID
 		{
 			get
@@ -56,14 +58,15 @@ namespace Nexus.Core
 			set { _QueryID = value; }
 		}
 
-		public virtual IRequestContext NewContext ()
+		public virtual IRequestContext NewContext()
 		{
 			// Return a new instance on each call.
 			// ISSUE: Spring?
-			return new RequestContext (ID);
+			return new RequestContext(ID);
 		}
 
 		private IList _RequiredIDs = null;
+
 		public virtual IList RequiredIDs
 		{
 			get { return _RequiredIDs; }
@@ -75,24 +78,25 @@ namespace Nexus.Core
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException ("BaseNexusCommand.AddRequiredIDs", "value");
+					throw new ArgumentNullException("BaseNexusCommand.AddRequiredIDs", "value");
 				IList list = RequiredIDs;
 				if (null == list)
 					RequiredIDs = value;
 				else
 				{
-					IEnumerator elements = value.GetEnumerator ();
-					while (elements.MoveNext ())
+					IEnumerator elements = value.GetEnumerator();
+					while (elements.MoveNext())
 					{
 						string i = elements.Current as string;
-						bool need = (list.IndexOf (i) < 0);
-						if (need) list.Add (i);
+						bool need = (list.IndexOf(i) < 0);
+						if (need) list.Add(i);
 					}
 				}
 			}
 		}
 
 		private IList _RelatedIDs = null;
+
 		public virtual IList RelatedIDs
 		{
 			get { return _RelatedIDs; }
@@ -104,24 +108,25 @@ namespace Nexus.Core
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException ("BaseNexusCommand.AddRelatedIDs", "value");
+					throw new ArgumentNullException("BaseNexusCommand.AddRelatedIDs", "value");
 				IList list = RelatedIDs;
 				if (null == list)
 					RelatedIDs = value;
 				else
 				{
-					IEnumerator elements = value.GetEnumerator ();
-					while (elements.MoveNext ())
+					IEnumerator elements = value.GetEnumerator();
+					while (elements.MoveNext())
 					{
 						string i = elements.Current as string;
-						bool need = (list.IndexOf (i) < 0);
-						if (need) list.Add (i);
+						bool need = (list.IndexOf(i) < 0);
+						if (need) list.Add(i);
 					}
 				}
 			}
 		}
 
 		private IList _RuntimeIDs = null;
+
 		public virtual IList RuntimeIDs
 		{
 			get { return _RuntimeIDs; }
@@ -133,29 +138,29 @@ namespace Nexus.Core
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException ("BaseNexusCommand.AddRuntimeIDs", "value");
+					throw new ArgumentNullException("BaseNexusCommand.AddRuntimeIDs", "value");
 				IList list = RuntimeIDs;
 				if (null == list)
 					RuntimeIDs = value;
 				else
 				{
-					IEnumerator elements = value.GetEnumerator ();
-					while (elements.MoveNext ())
+					IEnumerator elements = value.GetEnumerator();
+					while (elements.MoveNext())
 					{
 						string i = elements.Current as string;
-						bool need = (list.IndexOf (i) < 0);
-						if (need) list.Add (i);
+						bool need = (list.IndexOf(i) < 0);
+						if (need) list.Add(i);
 					}
 				}
 			}
 		}
 
-		public abstract bool RequestExecute (IRequestContext context);
+		public abstract bool RequestExecute(IRequestContext context);
 
-		public virtual bool Execute (IContext _context)
+		public virtual bool Execute(IContext _context)
 		{
 			IRequestContext context = _context as IRequestContext;
-			return RequestExecute (context);
+			return RequestExecute(context);
 		}
 	}
 }

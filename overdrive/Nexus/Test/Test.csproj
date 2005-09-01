@@ -12,7 +12,7 @@
                 AssemblyName = "Nexus.Test"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
-                DefaultHTMLPageLayout = "Grid"
+                DefaultHTMLPageLayout = "Flow"
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
                 OutputType = "Library"

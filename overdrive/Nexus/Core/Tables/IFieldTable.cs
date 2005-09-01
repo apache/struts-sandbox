@@ -36,7 +36,7 @@ namespace Nexus.Core.Tables
 		/// <param name="id">FieldContext ID</param>
 		/// <returns>FieldContext for ID</returns>
 		/// 
-		IFieldContext GetFieldContext (string id);
+		IFieldContext GetFieldContext(string id);
 
 		/// <summary>
 		/// Add a Processor to the set.
@@ -54,7 +54,7 @@ namespace Nexus.Core.Tables
 		/// <param name="id">FieldContext ID</param>
 		/// <returns>Alert message for FieldContext ID</returns>
 		/// 
-		string Alert (string id);
+		string Alert(string id);
 
 		/// <summary>
 		/// Provide the Label message for a given field id.
@@ -62,7 +62,7 @@ namespace Nexus.Core.Tables
 		/// <param name="id">FieldContext ID</param>
 		/// <returns>Alert message for FieldContext ID</returns>
 		/// 
-		string Label (string id);
+		string Label(string id);
 
 		/// <summary>
 		/// Provide the Required message for a given field id.
@@ -70,7 +70,7 @@ namespace Nexus.Core.Tables
 		/// <param name="id">FieldContext ID</param>
 		/// <returns>Required message for FieldContext ID</returns>
 		/// 
-		string Required (string id);
+		string Required(string id);
 
 	}
 }

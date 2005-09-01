@@ -6,6 +6,7 @@ namespace Nexus.Core.Validators
 	public abstract class Processor : IProcessor
 	{
 		private string _Alert;
+
 		public string Alert
 		{
 			get { return _Alert; }
@@ -13,6 +14,7 @@ namespace Nexus.Core.Validators
 		}
 
 		private string _DataFormat;
+
 		public string DataFormat
 		{
 			get { return _DataFormat; }
@@ -20,14 +22,15 @@ namespace Nexus.Core.Validators
 		}
 
 		private string _ID;
+
 		public string ID
 		{
 			get { return _ID; }
 			set { _ID = value; }
 		}
 
-		public abstract bool ConvertInput (IProcessorContext incoming);
+		public abstract bool ConvertInput(IProcessorContext incoming);
 
-		public abstract bool FormatOutput (IProcessorContext outgoing);
+		public abstract bool FormatOutput(IProcessorContext outgoing);
 	}
 }

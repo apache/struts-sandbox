@@ -36,17 +36,17 @@ namespace Nexus.Core
 		/// </summary>
 		/// 
 		[SetUp]
-		public void SetUp ()
+		public void SetUp()
 		{
-			context = new RequestContext ();
+			context = new RequestContext();
 			context.Command = "list_all";
-			context.CommandBin = new ListAll ();
-			Assert.IsTrue (context.IsNominal, "Expected nominal state for a new IRequestContext.");
-			Assert.IsFalse (context.HasOutcome, "Expected no Outcome for a new IRequestContext.");
+			context.CommandBin = new ListAll();
+			Assert.IsTrue(context.IsNominal, "Expected nominal state for a new IRequestContext.");
+			Assert.IsFalse(context.HasOutcome, "Expected no Outcome for a new IRequestContext.");
 
-			fault = new ApplicationException ("RequestContextTest");
-			list = new ArrayList ();
-			list.Add ("data");
+			fault = new ApplicationException("RequestContextTest");
+			list = new ArrayList();
+			list.Add("data");
 		}
 
 		/// <summary>
@@ -54,10 +54,10 @@ namespace Nexus.Core
 		/// </summary>
 		/// 
 		[Test]
-		public void IsNominal_Alert ()
+		public void IsNominal_Alert()
 		{
-			context.AddAlert ("Business logic alert");
-			Assert.IsFalse (context.IsNominal, "Expected non-nominal state after adding alert message.");
+			context.AddAlert("Business logic alert");
+			Assert.IsFalse(context.IsNominal, "Expected non-nominal state after adding alert message.");
 		}
 
 		/// <summary>
@@ -65,11 +65,11 @@ namespace Nexus.Core
 		/// </summary>
 		/// 
 		[Test]
-		public void IsNominal_Fault ()
+		public void IsNominal_Fault()
 		{
 			context.Fault = fault;
-			Assert.IsFalse (context.IsNominal,
-			                "Expected non-nominal state after setting Exception.");
+			Assert.IsFalse(context.IsNominal,
+			               "Expected non-nominal state after setting Exception.");
 		}
 
 		/// <summary>
@@ -78,13 +78,13 @@ namespace Nexus.Core
 		/// </summary>
 		/// 
 		[Test]
-		public void IsNominal_Errors_and_Fault ()
+		public void IsNominal_Errors_and_Fault()
 		{
-			context.AddAlert ("Business logic error");
-			context.AddAlert ("Business logic error 2");
+			context.AddAlert("Business logic error");
+			context.AddAlert("Business logic error 2");
 			context.Fault = fault;
-			Assert.IsFalse (context.IsNominal,
-			                "Expected non-nominal state after adding errors and Exception.");
+			Assert.IsFalse(context.IsNominal,
+			               "Expected non-nominal state after adding errors and Exception.");
 		}
 
 		/// <summary>
@@ -92,10 +92,10 @@ namespace Nexus.Core
 		/// </summary>
 		/// 
 		[Test]
-		public void HasOutcome ()
+		public void HasOutcome()
 		{
 			context.Outcome = list;
-			Assert.IsTrue (context.HasOutcome);
+			Assert.IsTrue(context.HasOutcome);
 		}
 
 	}

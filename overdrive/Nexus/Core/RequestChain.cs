@@ -9,15 +9,15 @@ namespace Nexus.Core
 	/// </summary>
 	public class RequestChain : RequestCommand, IRequestChain
 	{
-		private Chain chain = new Chain ();
+		private Chain chain = new Chain();
 
-		public void AddCommand (ICommand _command)
+		public void AddCommand(ICommand _command)
 		{
 			IRequestCommand command = _command as IRequestCommand;
 			if (null == command)
-				throw new ArgumentNullException ("RequestChain.AddCommand", "_command");
+				throw new ArgumentNullException("RequestChain.AddCommand", "_command");
 
-			chain.AddCommand (command);
+			chain.AddCommand(command);
 
 			// Composite Required and Related
 			IList _RequiredIDs = command.RequiredIDs;
@@ -33,25 +33,25 @@ namespace Nexus.Core
 			{
 				foreach (ICommand command in value)
 				{
-					AddCommand (command);
+					AddCommand(command);
 				}
 			}
 		}
 
-		public override bool Execute (IContext context)
+		public override bool Execute(IContext context)
 		{
-			return chain.Execute (context);
+			return chain.Execute(context);
 		}
 
-		public ICommand[] GetCommands ()
+		public ICommand[] GetCommands()
 		{
-			return (chain.GetCommands ());
+			return (chain.GetCommands());
 
 		}
 
-		public override bool RequestExecute (IRequestContext context)
+		public override bool RequestExecute(IRequestContext context)
 		{
-			return Execute (context);
+			return Execute(context);
 		}
 
 	}

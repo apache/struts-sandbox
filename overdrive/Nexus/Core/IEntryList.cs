@@ -10,7 +10,7 @@ namespace Nexus.Core
 		/// <summary>
 		/// Create and Insert a new entry object at index 0.
 		/// </summary>
-		object Insert (string key);
+		object Insert(string key);
 
 		/// <summary>
 		/// Add a entry object based on an IDictionary.

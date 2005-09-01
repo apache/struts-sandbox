@@ -3,7 +3,6 @@ using System.Collections;
 using System.Web.UI.WebControls;
 using Nexus.Core;
 using Nexus.Core.Helpers;
-using Nexus.Web;
 using Spring.Web.UI;
 
 namespace Nexus.Web
@@ -47,10 +46,10 @@ namespace Nexus.Web
 	/// </p></remarks>
 	public class BaseGridPage : Page
 	{
-
 		#region Helper
 
 		private IGridViewHelper _GridHelper;
+
 		/// <summary>
 		/// Encapsulate three Helpers that work together
 		/// to Find, List, and Save DataGrid entries.
@@ -67,6 +66,7 @@ namespace Nexus.Web
 		#region Page Properties 
 
 		private IViewHelper _Page_Error;
+
 		///<summary>
 		///Handle error messages.
 		///</summary>
@@ -76,11 +76,12 @@ namespace Nexus.Web
 		/// </p></remarks>		
 		protected virtual IViewHelper Page_Error
 		{
-			set {_Page_Error = value;}
-			get {return _Page_Error;}
+			set { _Page_Error = value; }
+			get { return _Page_Error; }
 		}
 
 		private string _Page_Prompt;
+
 		///<summary>
 		///Handle page prompts.
 		///</summary>
@@ -89,9 +90,10 @@ namespace Nexus.Web
 		/// </p></remarks>		
 		protected virtual string Page_Prompt
 		{
-			set {_Page_Prompt = value;}
-			get {return _Page_Prompt;}
+			set { _Page_Prompt = value; }
+			get { return _Page_Prompt; }
 		}
+
 		#endregion
 
 		#region Page Properties
@@ -108,15 +110,15 @@ namespace Nexus.Web
 		{
 			get
 			{
-				IDictionary criteria = ViewState [LIST_CRITERIA_KEY] as IDictionary;
-				if (criteria==null)
+				IDictionary criteria = ViewState[LIST_CRITERIA_KEY] as IDictionary;
+				if (criteria == null)
 				{
 					criteria = new Hashtable();
-					ViewState [LIST_CRITERIA_KEY] = criteria;
+					ViewState[LIST_CRITERIA_KEY] = criteria;
 				}
 				return criteria;
 			}
-			set { ViewState [LIST_CRITERIA_KEY] = value; }
+			set { ViewState[LIST_CRITERIA_KEY] = value; }
 		}
 
 		/// <summary>
@@ -131,13 +133,13 @@ namespace Nexus.Web
 		{
 			get
 			{
-				object value = ViewState [LIST_ITEM_INDEX];
+				object value = ViewState[LIST_ITEM_INDEX];
 				if (value == null) return -1;
 				return (int) value;
 			}
 			set
 			{
-				ViewState [LIST_ITEM_INDEX] = value;
+				ViewState[LIST_ITEM_INDEX] = value;
 				if (list_report != null) list_report.EditItemIndex = value;
 			}
 		}
@@ -152,8 +154,8 @@ namespace Nexus.Web
 		/// </summary>
 		protected virtual string List_ItemKey
 		{
-			get { return ViewState [LIST_ITEM_KEY] as string; }
-			set { ViewState [LIST_ITEM_KEY] = value; }
+			get { return ViewState[LIST_ITEM_KEY] as string; }
+			set { ViewState[LIST_ITEM_KEY] = value; }
 		}
 
 		/// <summary>
@@ -168,13 +170,13 @@ namespace Nexus.Web
 		{
 			get
 			{
-				object value = ViewState [LIST_INSERT_KEY];
+				object value = ViewState[LIST_INSERT_KEY];
 				if (value == null) return false;
 				return (bool) value;
 			}
 			set
 			{
-				ViewState [LIST_INSERT_KEY] = value;
+				ViewState[LIST_INSERT_KEY] = value;
 				list_add_command.Visible = !value;
 			}
 		}
@@ -191,7 +193,7 @@ namespace Nexus.Web
 		/// <summary>
 		/// Initialize controls within Find panel.
 		/// </summary>
-		protected virtual void Find_Init ()
+		protected virtual void Find_Init()
 		{
 			// override to provide functionality
 		}
@@ -199,7 +201,7 @@ namespace Nexus.Web
 		/// <summary>
 		/// Load controls within Find panel.
 		/// </summary>
-		protected virtual void Find_Load () 
+		protected virtual void Find_Load()
 		{
 			// override to provide functionality
 		}
@@ -209,12 +211,12 @@ namespace Nexus.Web
 		/// </summary>
 		/// <param name="sender">Event source</param>
 		/// <param name="e">Event</param>
-		protected virtual void Find_Submit (object sender, EventArgs e)
+		protected virtual void Find_Submit(object sender, EventArgs e)
 		{
 			IGridViewHelper h = GridHelper;
-			h.Read (pnlFind.Controls);
+			h.Read(pnlFind.Controls);
 			List_Criteria = h.FindHelper.Criteria;
-			List_Load ();
+			List_Load();
 		}
 
 		#endregion
@@ -246,10 +248,10 @@ namespace Nexus.Web
 		/// Filter entries and update display.
 		/// </summary>
 		/// <returns>True if nominal</returns>
-		protected virtual bool List_Load ()
+		protected virtual bool List_Load()
 		{
 			IGridViewHelper h = GridHelper;
-			bool okay = h.Load (list_report, List_Criteria);
+			bool okay = h.Load(list_report, List_Criteria);
 			if (okay)
 			{
 				// Template_Load(h.TitleText,h.HeadingText,h.PromptText);
@@ -274,7 +276,7 @@ namespace Nexus.Web
 		/// <remarks></remarks>
 		/// <param name="commandName">Name of command for the Item event</param>
 		/// <param name="index">Index of DataGrid entry causing the event</param>
-		protected virtual void List_Item (string commandName, int index)
+		protected virtual void List_Item(string commandName, int index)
 		{
 			switch (commandName)
 			{
@@ -282,14 +284,14 @@ namespace Nexus.Web
 					// Handled by List_PageIndexChanged
 					break;
 				default:
-				{
-					if (List_Insert)
-						// ISSUE: If insert fails, old input is not retained. [WNE-67]
-						List_Add_Load ();
-					else
-						List_Refresh ();
-					break;
-				}
+					{
+						if (List_Insert)
+							// ISSUE: If insert fails, old input is not retained. [WNE-67]
+							List_Add_Load();
+						else
+							List_Refresh();
+						break;
+					}
 			}
 		}
 
@@ -297,22 +299,22 @@ namespace Nexus.Web
 		/// Invoke edit mode for the selected entry.
 		/// </summary>
 		/// <param name="index">Index of selected entry</param>
-		protected virtual void List_Edit (int index)
+		protected virtual void List_Edit(int index)
 		{
 			Page_Prompt = GetMessage(Tokens.HINT_EDIT);
 			List_ItemIndex = index;
-			List_Refresh ();
+			List_Refresh();
 		}
 
 		/// <summary>
 		/// Exit edit mode without changing the entry.
 		/// </summary>
-		protected virtual void List_Quit ()
+		protected virtual void List_Quit()
 		{
 			Page_Prompt = GetMessage(Tokens.HINT_SUCCESS_QUIT);
 			List_Insert = false;
 			List_ItemIndex = -1;
-			List_Refresh ();
+			List_Refresh();
 		}
 
 		/// <summary>
@@ -321,28 +323,28 @@ namespace Nexus.Web
 		/// </summary>
 		/// <param name="key">Entry key</param>
 		/// <param name="controls">Controls in the selected cell</param>
-		protected virtual void List_Save (string key, ICollection controls)
+		protected virtual void List_Save(string key, ICollection controls)
 		{
-			IGridViewHelper h = GridHelper; 
-			bool okay = h.Save (key, controls);
+			IGridViewHelper h = GridHelper;
+			bool okay = h.Save(key, controls);
 			if (okay)
 			{
-				okay = h.List (list_report);
+				okay = h.List(list_report);
 				Page_Prompt = (List_Insert) ? GetMessage(Tokens.HINT_SUCCESS_ADD) : GetMessage(Tokens.HINT_SUCCESS_EDIT);
 				List_Insert = false;
 				List_ItemIndex = -1;
-				List_Refresh ();
+				List_Refresh();
 			}
-			if (!okay) Page_Error = h.SaveHelper; 
+			if (!okay) Page_Error = h.SaveHelper;
 		}
 
 		/// <summary>
 		/// Rebind the datasource to the grid.
 		/// </summary>
-		protected virtual void List_Refresh ()
+		protected virtual void List_Refresh()
 		{
 			IGridViewHelper h = GridHelper;
-			h.DataBind (list_report);
+			h.DataBind(list_report);
 			list_panel.Visible = true;
 		}
 
@@ -350,10 +352,10 @@ namespace Nexus.Web
 		/// Insert a blank entry in the datagrid 
 		/// so that a new entry can be added inline.
 		/// </summary>
-		protected virtual void List_Add_Load ()
+		protected virtual void List_Add_Load()
 		{
 			IGridViewHelper h = GridHelper;
-			bool okay = h.DataInsert (list_report);
+			bool okay = h.DataInsert(list_report);
 			if (okay)
 			{
 				Page_Prompt = GetMessage(Tokens.HINT_EDIT);
@@ -372,7 +374,7 @@ namespace Nexus.Web
 		/// otherwise, the DataGrid may try to select an item 
 		/// that is outside the new found set.
 		/// </p></remarks>
-		protected void List_ResetIndex ()
+		protected void List_ResetIndex()
 		{
 			list_report.SelectedIndex = 0;
 			list_report.CurrentPageIndex = 0; // sic
@@ -387,16 +389,16 @@ namespace Nexus.Web
 		/// <summary>
 		/// Initialize controls in the List panel.
 		/// </summary>
-		private void List_Init ()
+		private void List_Init()
 		{
 			list_report.AutoGenerateColumns = false;
 			list_report.EditItemIndex = List_ItemIndex;
-			list_report.CancelCommand += new DataGridCommandEventHandler (this.List_Quit);
-			list_report.EditCommand += new DataGridCommandEventHandler (this.List_Edit);
-			list_report.UpdateCommand += new DataGridCommandEventHandler (this.List_Save);
-			list_report.ItemCommand += new DataGridCommandEventHandler (this.List_Item);
-			list_report.PageIndexChanged += new DataGridPageChangedEventHandler (this.List_PageIndexChanged);
-			list_add_command.Click += new EventHandler (this.List_Add);
+			list_report.CancelCommand += new DataGridCommandEventHandler(this.List_Quit);
+			list_report.EditCommand += new DataGridCommandEventHandler(this.List_Edit);
+			list_report.UpdateCommand += new DataGridCommandEventHandler(this.List_Save);
+			list_report.ItemCommand += new DataGridCommandEventHandler(this.List_Item);
+			list_report.PageIndexChanged += new DataGridPageChangedEventHandler(this.List_PageIndexChanged);
+			list_add_command.Click += new EventHandler(this.List_Add);
 		}
 
 		// postback events
@@ -406,9 +408,9 @@ namespace Nexus.Web
 		/// </summary>
 		/// <param name="source">Event source</param>
 		/// <param name="e">Event</param>
-		protected void List_Edit (object source, DataGridCommandEventArgs e)
+		protected void List_Edit(object source, DataGridCommandEventArgs e)
 		{
-			List_Edit (e.Item.ItemIndex);
+			List_Edit(e.Item.ItemIndex);
 		}
 
 		/// <summary>
@@ -416,12 +418,12 @@ namespace Nexus.Web
 		/// </summary>
 		/// <param name="source">Event</param>
 		/// <param name="e"></param>
-		protected void List_Save (object source, DataGridCommandEventArgs e)
+		protected void List_Save(object source, DataGridCommandEventArgs e)
 		{
 			IGridViewHelper h = GridHelper;
-			string key = (List_Insert) ? null : h.GetDataKey (e, list_report);
-			ICollection controls = h.GetControls (e, list_report);
-			List_Save (key, controls);
+			string key = (List_Insert) ? null : h.GetDataKey(e, list_report);
+			ICollection controls = h.GetControls(e, list_report);
+			List_Save(key, controls);
 		}
 
 		/// <summary>
@@ -429,9 +431,9 @@ namespace Nexus.Web
 		/// </summary>
 		/// <param name="source"></param>
 		/// <param name="e"></param>
-		protected void List_Quit (object source, DataGridCommandEventArgs e)
+		protected void List_Quit(object source, DataGridCommandEventArgs e)
 		{
-			List_Quit ();
+			List_Quit();
 		}
 
 		/// <summary>
@@ -439,9 +441,9 @@ namespace Nexus.Web
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		protected virtual void List_Add (object sender, EventArgs e)
+		protected virtual void List_Add(object sender, EventArgs e)
 		{
-			List_Add_Load ();
+			List_Add_Load();
 		}
 
 		/// <summary>
@@ -449,10 +451,10 @@ namespace Nexus.Web
 		/// </summary>
 		/// <param name="source"></param>
 		/// <param name="e"></param>
-		protected void List_Item (object source, DataGridCommandEventArgs e)
+		protected void List_Item(object source, DataGridCommandEventArgs e)
 		{
 			int index = e.Item.ItemIndex;
-			List_Item (e.CommandName, index);
+			List_Item(e.CommandName, index);
 		}
 
 		/// <summary>
@@ -460,10 +462,10 @@ namespace Nexus.Web
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		protected void List_PageIndexChanged (object sender, DataGridPageChangedEventArgs e)
+		protected void List_PageIndexChanged(object sender, DataGridPageChangedEventArgs e)
 		{
 			list_report.CurrentPageIndex = e.NewPageIndex;
-			List_Refresh ();
+			List_Refresh();
 		}
 
 		#endregion
@@ -478,14 +480,14 @@ namespace Nexus.Web
 		/// <remarks><p>
 		/// Call if overridden.
 		/// </p></remarks>
-		protected virtual void Page_Init ()
+		protected virtual void Page_Init()
 		{
-			Find_Init ();
-			List_Init ();
+			Find_Init();
+			List_Init();
 
 			if (!IsPostBack)
 			{
-				list_panel.Visible = false;				
+				list_panel.Visible = false;
 			}
 		}
 
@@ -495,16 +497,15 @@ namespace Nexus.Web
 		/// <remarks><p>
 		/// Call if overridden.
 		/// </p></remarks>
-		protected virtual void Page_Load (object sender, EventArgs e)
+		protected virtual void Page_Load(object sender, EventArgs e)
 		{
-
 			if (!IsPostBack)
 			{
-				Find_Load ();
+				Find_Load();
 			}
 
 			if (list_panel.Visible)
-				List_Load ();
+				List_Load();
 		}
 
 		/// <summary>

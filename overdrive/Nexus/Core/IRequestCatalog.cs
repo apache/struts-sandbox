@@ -27,7 +27,6 @@ namespace Nexus.Core
 	/// 
 	public interface IRequestCatalog : ICatalog
 	{
-
 		/// <summary>
 		/// Provide the FieldTable for this Catalog.
 		/// </summary>
@@ -36,8 +35,8 @@ namespace Nexus.Core
 		/// with a reference to the FieldTable, 
 		/// among other things.
 		/// </p></remarks>
-		IFieldTable FieldTable {get;set;}
-		
+		IFieldTable FieldTable { get; set; }
+
 		/// <summary>
 		/// Execute before a Command called via ExecuteView. 
 		/// </summary>
@@ -45,8 +44,8 @@ namespace Nexus.Core
 		/// Of course, a IRequestChain may be used here too.
 		/// </p></remarks>
 		/// 
-		IRequestCommand PreOp {get;set;}
-			
+		IRequestCommand PreOp { get; set; }
+
 		/// <summary>
 		/// Execute after a Command called via ExecuteView. 
 		/// </summary>
@@ -54,7 +53,7 @@ namespace Nexus.Core
 		/// Of course, a IRequestChain may be used here too.
 		/// </p></remarks>
 		/// 
-		IRequestCommand PostOp {get;set;}
+		IRequestCommand PostOp { get; set; }
 
 
 		/// <summary>
@@ -62,14 +61,14 @@ namespace Nexus.Core
 		/// </summary>
 		/// <param name="name">Our object ID</param>
 		/// <returns>object for name</returns>
-		object GetObject (string name);
+		object GetObject(string name);
 
 		/// <summary>
 		/// Obtains a IViewHelper for helper ID.
 		/// </summary>
 		/// <param name="name">Our helper ID</param>
 		/// <returns>IViewHelper for name</returns>
-		IViewHelper GetHelper (string name);
+		IViewHelper GetHelper(string name);
 
 		/// <summary>
 		/// Obtain a IRequestContext for command ID, 
@@ -78,7 +77,7 @@ namespace Nexus.Core
 		/// <param name="name">Our command ID</param>
 		/// <returns>IRequestContext with embedded resources.</returns>
 		/// 
-		IRequestContext GetRequest (string name);
+		IRequestContext GetRequest(string name);
 
 		/// <summary>
 		/// Obtain a IRequestContext for command ID, 
@@ -89,7 +88,7 @@ namespace Nexus.Core
 		/// <param name="input">Our input values</param>
 		/// <returns>IRequestContext with embedded resources.</returns>
 		/// 
-		IRequestContext GetRequest (string name, IDictionary input);
+		IRequestContext GetRequest(string name, IDictionary input);
 
 		/// <summary>
 		/// Obtain a IRequestContext for the command, 
@@ -98,7 +97,7 @@ namespace Nexus.Core
 		/// <param name="command">Our command</param>
 		/// <returns>IRequestContext with embedded resources.</returns>
 		/// 
-		IRequestContext GetRequest (IRequestCommand command);
+		IRequestContext GetRequest(IRequestCommand command);
 
 		/// <summary>
 		/// Obtain and execute a IRequestContext.
@@ -106,14 +105,14 @@ namespace Nexus.Core
 		/// <param name="name">Our command ID</param>
 		/// <returns>Context after execution</returns>
 		/// 
-		IRequestContext ExecuteRequest (string name);
+		IRequestContext ExecuteRequest(string name);
 
 		/// <summary>
 		/// Execute a IRequestContext.
 		/// </summary>
 		/// <param name="context">Context to execute</param>
 		/// 
-		void ExecuteRequest (IRequestContext context);
+		void ExecuteRequest(IRequestContext context);
 
 		/// <summary>
 		/// Execute a IRequestContext as part of a chain 
@@ -132,7 +131,7 @@ namespace Nexus.Core
 		/// </p></remarks>
 		/// <param name="context">Context to execute</param>
 		/// 
-		void ExecuteView (IRequestContext context);
+		void ExecuteView(IRequestContext context);
 
 	}
 }

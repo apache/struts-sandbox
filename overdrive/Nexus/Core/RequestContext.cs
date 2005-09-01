@@ -32,18 +32,18 @@ namespace Nexus.Core
 		/// Express state as a key=value list.
 		/// </summary>
 		/// <returns>Formatted string representing state.</returns>
-		public override string ToString ()
+		public override string ToString()
 		{
-			StringBuilder sb = new StringBuilder ();
+			StringBuilder sb = new StringBuilder();
 			foreach (DictionaryEntry e in this)
 			{
-				sb.Append ("[");
-				sb.Append (e.Key);
-				sb.Append ("=");
-				sb.Append (e.Value.ToString ());
-				sb.Append ("], ");
+				sb.Append("[");
+				sb.Append(e.Key);
+				sb.Append("=");
+				sb.Append(e.Value.ToString());
+				sb.Append("], ");
 			}
-			return sb.ToString ();
+			return sb.ToString();
 		}
 
 		/// <summary>
@@ -51,7 +51,7 @@ namespace Nexus.Core
 		/// </summary>
 		/// <param name="command">Name of Command processing this Context.</param>
 		/// 
-		public RequestContext (string command)
+		public RequestContext(string command)
 		{
 			Command = command;
 		}
@@ -60,7 +60,7 @@ namespace Nexus.Core
 		{
 			foreach (DictionaryEntry entry in entries)
 			{
-				Add(entry.Key,entry.Value);
+				Add(entry.Key, entry.Value);
 			}
 		}
 
@@ -68,74 +68,74 @@ namespace Nexus.Core
 		/// Default, no argument constructor.
 		/// </summary>
 		/// 
-		public RequestContext ()
+		public RequestContext()
 		{
 		}
 
 		public string Command
 		{
-			get { return this [Tokens.Command] as string; }
-			set { this [Tokens.Command] = value; }
+			get { return this[Tokens.Command] as string; }
+			set { this[Tokens.Command] = value; }
 		}
 
 		public IRequestCommand CommandBin
 		{
-			get { return this [Tokens.CommandBin] as IRequestCommand; }
-			set { this [Tokens.CommandBin] = value; }
+			get { return this[Tokens.CommandBin] as IRequestCommand; }
+			set { this[Tokens.CommandBin] = value; }
 		}
 
 		public IFieldTable FieldTable
 		{
-			get { return this [Tokens.FieldTable] as IFieldTable; }
-			set { this [Tokens.FieldTable] = value; }
+			get { return this[Tokens.FieldTable] as IFieldTable; }
+			set { this[Tokens.FieldTable] = value; }
 		}
 
 		public IProfile Profile
 		{
-			get { return this [UserProfile.USER_PROFILE] as IProfile; }
+			get { return this[UserProfile.USER_PROFILE] as IProfile; }
 			set
 			{
-				this [UserProfile.USER_PROFILE] = value;
+				this[UserProfile.USER_PROFILE] = value;
 				IProfile profile = value as IProfile;
 				if (null != profile)
-					this [UserProfile.USER_ID] = profile.UserId;
+					this[UserProfile.USER_ID] = profile.UserId;
 			}
 		}
 
 		public bool HasOutcome
 		{
-			get { return Contains (Command); }
+			get { return Contains(Command); }
 		}
 
 		public object Outcome
 		{
-			get { return this [Command]; }
-			set { this [Command] = value; }
+			get { return this[Command]; }
+			set { this[Command] = value; }
 		}
 
 		/// <summary>
 		/// Instantiate Criteria, if needed.
 		/// </summary>
-		private void LazyCriteria ()
+		private void LazyCriteria()
 		{
 			// Naive, but we expect a Context instance to be single-threaded.
-			if (this [Tokens.Criteria] == null)
-				this [Tokens.Criteria] = new Hashtable (); // TODO: Spring?
+			if (this[Tokens.Criteria] == null)
+				this[Tokens.Criteria] = new Hashtable(); // TODO: Spring?
 		}
 
 		public IDictionary Criteria
 		{
 			get
 			{
-				LazyCriteria ();
-				return this [Tokens.Criteria] as IDictionary;
+				LazyCriteria();
+				return this[Tokens.Criteria] as IDictionary;
 			}
-			set { this [Tokens.Criteria] = value; }
+			set { this[Tokens.Criteria] = value; }
 		}
 
-		public bool HasCriteria ()
+		public bool HasCriteria()
 		{
-			return ContainsKey (Tokens.Criteria);
+			return ContainsKey(Tokens.Criteria);
 		}
 
 
@@ -147,79 +147,79 @@ namespace Nexus.Core
 		/// store.</param>
 		/// <param name="key">Token for message store.</param>
 		/// 
-		private void AddStore (string template, string queue, string key)
+		private void AddStore(string template, string queue, string key)
 		{
-			IDictionary store = this [key] as IDictionary;
+			IDictionary store = this[key] as IDictionary;
 			if (null == store)
 			{
-				store = new Hashtable (); // ISSUE: Spring?
-				this [key] = store;
+				store = new Hashtable(); // ISSUE: Spring?
+				this[key] = store;
 			}
 			IList list;
-			if (store.Contains (queue))
-				list = store [queue] as IList;
+			if (store.Contains(queue))
+				list = store[queue] as IList;
 			else
 			{
-				list = new ArrayList (); // ISSUE: Spring?
-				store [queue] = list;
+				list = new ArrayList(); // ISSUE: Spring?
+				store[queue] = list;
 			}
-			list.Add (template);
+			list.Add(template);
 		}
 
-		public string FormatTemplate (string template, string value)
+		public string FormatTemplate(string template, string value)
 		{
-			StringBuilder sb = new StringBuilder ();
-			sb.AppendFormat (template, value);
-			return sb.ToString ();
+			StringBuilder sb = new StringBuilder();
+			sb.AppendFormat(template, value);
+			return sb.ToString();
 		}
 
 		public IDictionary Alerts
 		{
-			get { return this [Tokens.Alerts] as IDictionary; }
-			set { this [Tokens.Alerts] = value; }
+			get { return this[Tokens.Alerts] as IDictionary; }
+			set { this[Tokens.Alerts] = value; }
 		}
 
-		public void AddAlert (string template)
+		public void AddAlert(string template)
 		{
-			AddStore (template, Tokens.GenericMessage, Tokens.Alerts);
+			AddStore(template, Tokens.GenericMessage, Tokens.Alerts);
 		}
 
-		public void AddAlert (string template, string queue)
+		public void AddAlert(string template, string queue)
 		{
-			AddStore (template, queue, Tokens.Alerts);
+			AddStore(template, queue, Tokens.Alerts);
 		}
 
-		public void AddAlertForField (string key)
+		public void AddAlertForField(string key)
 		{
-			string message = FormatTemplate (FieldTable.Alert (key), FieldTable.Label(key));
-			AddAlert (message, key);
+			string message = FormatTemplate(FieldTable.Alert(key), FieldTable.Label(key));
+			AddAlert(message, key);
 		}
 
-		public void AddAlertRequired (string key)
+		public void AddAlertRequired(string key)
 		{
-			string message = FormatTemplate (FieldTable.Required (key), FieldTable.Label(key));
-			AddAlert (message, key);
+			string message = FormatTemplate(FieldTable.Required(key), FieldTable.Label(key));
+			AddAlert(message, key);
 		}
 
 		public bool HasAlerts
 		{
-			get { return this.ContainsKey (Tokens.Alerts); }
+			get { return this.ContainsKey(Tokens.Alerts); }
 		}
 
 		public Exception Fault
 		{
-			get { return this [Tokens.Fault] as Exception; }
+			get { return this[Tokens.Fault] as Exception; }
 			set
 			{
 				Exception e = value as Exception;
-				this [Tokens.Fault] = e;
-				AddAlert (e.Message);
+				this[Tokens.Fault] = e;
+				AddAlert(e.Message);
 			}
 		}
 
 		public bool HasFault
 		{
-			get { return this.ContainsKey (Tokens.Fault); }
+			get { return this.ContainsKey(Tokens.Fault); }
 		}
 
 		public bool IsNominal
@@ -229,23 +229,23 @@ namespace Nexus.Core
 
 		public IDictionary Hints
 		{
-			get { return this [Tokens.Hints] as IDictionary; }
-			set { this [Tokens.Hints] = value; }
+			get { return this[Tokens.Hints] as IDictionary; }
+			set { this[Tokens.Hints] = value; }
 		}
 
-		public void AddHint (string template)
+		public void AddHint(string template)
 		{
-			AddStore (template, Tokens.GenericMessage, Tokens.Hints);
+			AddStore(template, Tokens.GenericMessage, Tokens.Hints);
 		}
 
-		public void AddHint (string template, string queue)
+		public void AddHint(string template, string queue)
 		{
-			AddStore (template, queue, Tokens.Hints);
+			AddStore(template, queue, Tokens.Hints);
 		}
 
 		public bool HasHints
 		{
-			get { return this.ContainsKey (Tokens.Hints); }
+			get { return this.ContainsKey(Tokens.Hints); }
 		}
 
 	}

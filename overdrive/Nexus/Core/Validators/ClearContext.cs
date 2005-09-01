@@ -15,18 +15,17 @@ namespace Nexus.Core.Validators
 	/// </p></remarks>
 	public class ClearContext : RequestCommand
 	{
-
 		/// <summary>
 		/// Clear from the Context any keys present in the Criteria.
 		/// </summary>
 		/// <param name="context">Context after attributes have been output to Criteria</param>
 		/// <returns>CONTINUE</returns>
-		public override bool RequestExecute (IRequestContext context)
+		public override bool RequestExecute(IRequestContext context)
 		{
 			ICollection keys = context.Criteria.Keys;
 			foreach (string key in keys)
 			{
-				context.Remove (key);
+				context.Remove(key);
 			}
 
 			return CONTINUE;

@@ -11,43 +11,43 @@ namespace Agility.Nexus.Validators
 	/// </summary>
 	public class ProcessorContext : Context, IProcessorContext
 	{
-		public ProcessorContext ()
+		public ProcessorContext()
 		{
 		}
 
-		public ProcessorContext (string key, object source)
+		public ProcessorContext(string key, object source)
 		{
 			FieldKey = key;
 			Source = source;
 		}
 
-		public ProcessorContext (string key, IRequestContext context)
+		public ProcessorContext(string key, IRequestContext context)
 		{
 			FieldKey = key;
-			this [Tokens.Context] = context;
+			this[Tokens.Context] = context;
 		}
 
 		public string FieldKey
 		{
-			get { return this [Tokens.FieldKey] as string; }
-			set { this [Tokens.FieldKey] = value; }
+			get { return this[Tokens.FieldKey] as string; }
+			set { this[Tokens.FieldKey] = value; }
 		}
 
 		public object Source
 		{
-			get { return this [Tokens.Source]; }
-			set { this [Tokens.Source] = value; }
+			get { return this[Tokens.Source]; }
+			set { this[Tokens.Source] = value; }
 		}
 
 		public object Target
 		{
-			get { return this [Tokens.Target]; }
-			set { this [Tokens.Target] = value; }
+			get { return this[Tokens.Target]; }
+			set { this[Tokens.Target] = value; }
 		}
 
 		public IRequestContext Context
 		{
-			get { return this [Tokens.Context] as IRequestContext; }
+			get { return this[Tokens.Context] as IRequestContext; }
 		}
 
 		public IDictionary Criteria

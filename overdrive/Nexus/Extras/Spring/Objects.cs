@@ -23,18 +23,18 @@ namespace Agility.Extras.Spring
 	{
 		private static string FILE = "/Objects.xml";
 
-		private Objects ()
+		private Objects()
 		{
 			// private constructor prevents instantiation. 
 		}
 
 		// ISSUE: Remove this kludge and adopt latest iBATIS approach.
 		private static string _rootDirectory =
-			AppDomain.CurrentDomain.BaseDirectory.Replace (@"\bin", "").Replace (@"\Debug", "").Replace (@"\Release", "");
+			AppDomain.CurrentDomain.BaseDirectory.Replace(@"\bin", "").Replace(@"\Debug", "").Replace(@"\Release", "");
 
 		private static volatile IApplicationContext _Factory = null;
 
-		public static IApplicationContext Factory ()
+		public static IApplicationContext Factory()
 		{
 			if (_Factory == null)
 			{
@@ -42,7 +42,7 @@ namespace Agility.Extras.Spring
 				{
 					string foo = "file://" + _rootDirectory + FILE;
 					if (_Factory == null) // double-check 
-						_Factory = new XmlApplicationContext (foo);
+						_Factory = new XmlApplicationContext(foo);
 				}
 			}
 			return _Factory;

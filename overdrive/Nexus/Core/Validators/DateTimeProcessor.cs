@@ -9,15 +9,15 @@ namespace Nexus.Core.Validators
 	{
 		#region IProcessor
 
-		public override bool ConvertInput (IProcessorContext incoming)
+		public override bool ConvertInput(IProcessorContext incoming)
 		{
 			bool okay = false;
 			string source = incoming.Source as string;
 
-			if (IsStringEmpty (source))
+			if (IsStringEmpty(source))
 			{
-				DateTime t = DateTime_Convert (source);
-				bool isDateTimeEmpty = DateTime_Empty.Equals (t);
+				DateTime t = DateTime_Convert(source);
+				bool isDateTimeEmpty = DateTime_Empty.Equals(t);
 				okay = !isDateTimeEmpty;
 				incoming.Target = t;
 			}
@@ -30,46 +30,46 @@ namespace Nexus.Core.Validators
 			return okay;
 		}
 
-		public override bool FormatOutput (IProcessorContext outgoing)
+		public override bool FormatOutput(IProcessorContext outgoing)
 		{
 			bool okay = false;
 			object source = outgoing.Source;
 
-			if (IsEmpty (source))
+			if (IsEmpty(source))
 			{
 				outgoing.Target = String.Empty;
 				okay = true;
 			}
 			else
 			{
-				string target = DateTime_Format (source);
+				string target = DateTime_Format(source);
 				outgoing.Target = target;
-				okay = IsStringEmpty (target);
+				okay = IsStringEmpty(target);
 			}
 			return okay;
 		}
 
 		#endregion
 
-		private bool IsStringEmpty (string v)
+		private bool IsStringEmpty(string v)
 		{
-			return ((v != null) && (!String.Empty.Equals (v)));
+			return ((v != null) && (!String.Empty.Equals(v)));
 		}
 
 		private DateTime DateTime_Empty = DateTime.MinValue;
 
-		private bool IsEmpty (object source)
+		private bool IsEmpty(object source)
 		{
 			SByte dbNull = 0;
-			return ((null == source) || (DBNull.Value.Equals (source)) || (dbNull.Equals (source) || String.Empty.Equals (source)));
+			return ((null == source) || (DBNull.Value.Equals(source)) || (dbNull.Equals(source) || String.Empty.Equals(source)));
 		}
 
-		private DateTime DateTime_Convert (string source)
+		private DateTime DateTime_Convert(string source)
 		{
 			DateTime t = DateTime_Empty;
 			try
 			{
-				t = Convert.ToDateTime (source);
+				t = Convert.ToDateTime(source);
 			}
 			catch (InvalidCastException e)
 			{
@@ -83,7 +83,7 @@ namespace Nexus.Core.Validators
 
 		}
 
-		private string DateTime_Format (object source)
+		private string DateTime_Format(object source)
 		{
 			DateTime t = DateTime_Empty;
 			try
@@ -94,8 +94,8 @@ namespace Nexus.Core.Validators
 			{
 				e = e;
 			}
-			if (DateTime_Empty.Equals (t)) return String.Empty;
-			else return t.ToString (DataFormat);
+			if (DateTime_Empty.Equals(t)) return String.Empty;
+			else return t.ToString(DataFormat);
 		}
 
 

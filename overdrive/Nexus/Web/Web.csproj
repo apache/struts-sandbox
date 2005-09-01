@@ -3,7 +3,7 @@
         ProjectType = "Web"
         ProductVersion = "7.10.3077"
         SchemaVersion = "2.0"
-        ProjectGuid = "{0CEB9BDE-7AA3-4239-8898-EFFB88CDDD93}"
+        ProjectGuid = "{2BD7CDE0-01F7-4CC5-9AE9-2F9470FB7007}"
     >
         <Build>
             <Settings
@@ -29,12 +29,12 @@
                     CheckForOverflowUnderflow = "false"
                     ConfigurationOverrideFile = ""
                     DefineConstants = "DEBUG;TRACE"
-                    DocumentationFile = "Nexus.Web.xml"
+                    DocumentationFile = ""
                     DebugSymbols = "true"
                     FileAlignment = "4096"
                     IncrementalBuild = "false"
                     NoStdLib = "false"
-                    NoWarn = "1591"
+                    NoWarn = ""
                     Optimize = "false"
                     OutputPath = "bin\"
                     RegisterForComInterop = "false"
@@ -67,37 +67,42 @@
                 <Reference
                     Name = "System"
                     AssemblyName = "System"
-                    HintPath = "..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
                 />
                 <Reference
                     Name = "System.Drawing"
                     AssemblyName = "System.Drawing"
-                    HintPath = "..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
                 />
                 <Reference
                     Name = "System.Data"
                     AssemblyName = "System.Data"
-                    HintPath = "..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
                 />
                 <Reference
                     Name = "System.Web"
                     AssemblyName = "System.Web"
-                    HintPath = "..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
                 />
                 <Reference
                     Name = "System.XML"
                     AssemblyName = "System.Xml"
-                    HintPath = "..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "Nexus.Core"
-                    AssemblyName = "Nexus.Core"
-                    HintPath = "..\Core\bin\Debug\Nexus.Core.dll"
+                    Name = "Core"
+                    Project = "{7C8CAFD4-1E45-41B4-9963-F51199B12EA7}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "Agility.Core"
-                    AssemblyName = "Agility.Core"
-                    HintPath = "..\..\Agility\Core\bin\Debug\Agility.Core.dll"
+                    Name = "Extras"
+                    Project = "{7931CACD-0E73-4DD2-A373-FF6A01CE6186}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "Spring.Core"
+                    AssemblyName = "Spring.Core"
+                    HintPath = "..\..\SpringNet.bin\Spring.Core.dll"
                 />
                 <Reference
                     Name = "Spring.Web"
@@ -105,9 +110,9 @@
                     HintPath = "..\..\SpringNet.bin\Spring.Web.dll"
                 />
                 <Reference
-                    Name = "Spring.Core"
-                    AssemblyName = "Spring.Core"
-                    HintPath = "..\..\SpringNet.bin\Spring.Core.dll"
+                    Name = "Agility.Core"
+                    AssemblyName = "Agility.Core"
+                    HintPath = "..\..\Agility\Core\bin\Debug\Agility.Core.dll"
                 />
             </References>
         </Build>
@@ -120,7 +125,6 @@
                 />
                 <File
                     RelPath = "BaseGridPage.aspx"
-                    SubType = "Form"
                     BuildAction = "Content"
                 />
                 <File

@@ -13,14 +13,14 @@ namespace Nexus.Core.Commands
 		public const string PK_SOMETHING_RESULT = "SomethingResult";
 		public const string PK_SOME_DATE = "SomeDate";
 
-		public override bool RequestExecute (IRequestContext context)
+		public override bool RequestExecute(IRequestContext context)
 		{
-			string value = context [PK_SOMETHING] as string;
+			string value = context[PK_SOMETHING] as string;
 			// IList list = Mapper.Get ().QueryForObject (ID, key);
-			if (PK_SOMETHING_VALUE.Equals (value))
+			if (PK_SOMETHING_VALUE.Equals(value))
 			{
-				context [PK_SOMETHING_RESULT] = PK_SOMETHING_RESULT;
-				context [PK_SOME_DATE] = DateTime.Now;
+				context[PK_SOMETHING_RESULT] = PK_SOMETHING_RESULT;
+				context[PK_SOME_DATE] = DateTime.Now;
 			}
 			return CONTINUE;
 		}

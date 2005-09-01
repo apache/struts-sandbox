@@ -2,14 +2,13 @@ namespace Nexus.Core.Validators
 {
 	public class CollectionProcessor : Processor
 	{
-
-		public override bool ConvertInput (IProcessorContext incoming)
+		public override bool ConvertInput(IProcessorContext incoming)
 		{
 			incoming.Target = incoming.Source;
 			return true;
 		}
 
-		public override bool FormatOutput (IProcessorContext outgoing)
+		public override bool FormatOutput(IProcessorContext outgoing)
 		{
 			outgoing.Target = outgoing.Source;
 			return true;

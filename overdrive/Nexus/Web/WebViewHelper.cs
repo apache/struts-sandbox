@@ -31,91 +31,91 @@ namespace Nexus.Web
 	{
 		#region IViewHelper
 
-		public override void ExecuteBind (ICollection controls)
+		public override void ExecuteBind(ICollection controls)
 		{
-			Execute ();
-			if (IsNominal) Bind (controls);
+			Execute();
+			if (IsNominal) Bind(controls);
 		}
 
-		public override void ReadExecute (ICollection controls)
+		public override void ReadExecute(ICollection controls)
 		{
-			Read (controls);
-			Execute ();
+			Read(controls);
+			Execute();
 		}
 
-		public override void Bind (ICollection controls)
+		public override void Bind(ICollection controls)
 		{
 			ControlCollection cc = controls as ControlCollection;
-			BindControls (cc, Criteria, Prefix, ListSuffix);
+			BindControls(cc, Criteria, Prefix, ListSuffix);
 		}
 
-		public override void Read (ICollection controls)
+		public override void Read(ICollection controls)
 		{
 			ControlCollection cc = controls as ControlCollection;
-			ReadControls (cc, Criteria, Prefix, ListSuffix, NullIfEmpty);
+			ReadControls(cc, Criteria, Prefix, ListSuffix, NullIfEmpty);
 		}
 
 		public override string ErrorsText
 		{
-			get { return HtmlMessageBuilder (Alerts); }
+			get { return HtmlMessageBuilder(Alerts); }
 		}
 
 		public override string HintsText
 		{
-			get { return HtmlMessageBuilder (Hints); }
+			get { return HtmlMessageBuilder(Hints); }
 		}
 
 		#endregion
 
 		#region Bind methods
 
-		public void BindControls (ControlCollection controls, IDictionary dictionary, string prefix, string list_suffix)
+		public void BindControls(ControlCollection controls, IDictionary dictionary, string prefix, string list_suffix)
 		{
 			foreach (Control t in controls)
 			{
-				if (IsCheckBox (t))
+				if (IsCheckBox(t))
 				{
 					CheckBox x = (CheckBox) t;
-					string v = dictionary [ToColumn (x.ID, prefix)] as string;
+					string v = dictionary[ToColumn(x.ID, prefix)] as string;
 					x.Checked = (v != null);
 				}
-				if (IsLabel (t))
+				if (IsLabel(t))
 				{
 					Label x = (Label) t;
-					object v = dictionary [ToColumn (x.ID, prefix)];
-					if (v != null) x.Text = v.ToString ();
+					object v = dictionary[ToColumn(x.ID, prefix)];
+					if (v != null) x.Text = v.ToString();
 				}
-				if (IsListControl (t))
+				if (IsListControl(t))
 				{
 					ListControl x = (ListControl) t;
-					string root = RootId (x.ID, prefix, list_suffix);
-					IList s = dictionary [x.ID] as IList; // this_key_list
-					string r = dictionary [root] as string; // this_key
+					string root = RootId(x.ID, prefix, list_suffix);
+					IList s = dictionary[x.ID] as IList; // this_key_list
+					string r = dictionary[root] as string; // this_key
 					if ((null == r) || (0 == r.Length))
-						BindListControl (x, s);
+						BindListControl(x, s);
 					else
-						BindListControl (x, s, r);
+						BindListControl(x, s, r);
 				}
-				if (IsRadioButton (t))
+				if (IsRadioButton(t))
 				{
 					RadioButton x = (RadioButton) t;
-					string v = dictionary [ToColumn (x.ID, prefix)] as string;
+					string v = dictionary[ToColumn(x.ID, prefix)] as string;
 					x.Checked = (v != null);
 				}
-				if (IsTextBox (t))
+				if (IsTextBox(t))
 				{
 					TextBox x = (TextBox) t;
-					object v = dictionary [ToColumn (x.ID, prefix)];
-					if (v != null) x.Text = v.ToString ();
+					object v = dictionary[ToColumn(x.ID, prefix)];
+					if (v != null) x.Text = v.ToString();
 				}
 			}
 		}
 
-		protected void BindListControl (ListControl control, IList list)
+		protected void BindListControl(ListControl control, IList list)
 		{
-			bool insertKey = ((list != null) && (!list.Contains (String.Empty)) && (!list.Contains (SelectItemPrompt)));
-			if (insertKey) list.Insert (0, new KeyValue (String.Empty, SelectItemPrompt));
-			BindListControl (control, list, null);
+			bool insertKey = ((list != null) && (!list.Contains(String.Empty)) && (!list.Contains(SelectItemPrompt)));
+			if (insertKey) list.Insert(0, new KeyValue(String.Empty, SelectItemPrompt));
+			BindListControl(control, list, null);
 		}
 
 		/// <summary>
@@ -126,13 +126,13 @@ namespace Nexus.Web
 		/// <param name="list">List of TextKey objects.</param>
 		/// <param name="value">Value to select, or null if nothing is selected.</param>
 		/// 
-		protected void BindListControl (ListControl control, IList list, string value)
+		protected void BindListControl(ListControl control, IList list, string value)
 		{
 			control.DataTextField = "Value";
 			control.DataValueField = "Key";
 			control.DataSource = list;
-			control.DataBind ();
-			SelectListItem (control, value);
+			control.DataBind();
+			SelectListItem(control, value);
 		}
 
 		#endregion
@@ -140,42 +140,42 @@ namespace Nexus.Web
 		#region Read method
 
 		// See also ReadGridControls in Extra Utilities
-		public void ReadControls (ControlCollection controls, IDictionary dictionary, string prefix, string list_suffix, bool nullIfEmpty)
+		public void ReadControls(ControlCollection controls, IDictionary dictionary, string prefix, string list_suffix, bool nullIfEmpty)
 		{
 			foreach (Control t in controls)
 			{
-				if (IsCheckBox (t))
+				if (IsCheckBox(t))
 				{
 					CheckBox x = (CheckBox) t;
-					string key = ToColumn (x.ID, prefix);
+					string key = ToColumn(x.ID, prefix);
 					string value = (x.Checked) ? key : null;
-					dictionary.Add (key, value);
+					dictionary.Add(key, value);
 				}
-				if (IsLabel (t))
+				if (IsLabel(t))
 				{
 					Label x = (Label) t;
-					string value = (nullIfEmpty) ? DoNullIfEmpty (x.Text) : x.Text;
-					dictionary.Add (ToColumn (x.ID, prefix), value);
+					string value = (nullIfEmpty) ? DoNullIfEmpty(x.Text) : x.Text;
+					dictionary.Add(ToColumn(x.ID, prefix), value);
 				}
-				if (IsListControl (t))
+				if (IsListControl(t))
 				{
 					ListControl x = (ListControl) t;
-					string root = RootId (x.ID, prefix, list_suffix);
-					string value = (nullIfEmpty) ? DoNullIfEmpty (x.SelectedValue) : x.SelectedValue;
-					dictionary.Add (root, value);
+					string root = RootId(x.ID, prefix, list_suffix);
+					string value = (nullIfEmpty) ? DoNullIfEmpty(x.SelectedValue) : x.SelectedValue;
+					dictionary.Add(root, value);
 				}
-				if (IsRadioButton (t))
+				if (IsRadioButton(t))
 				{
 					RadioButton x = (RadioButton) t;
-					string key = ToColumn (x.ID, prefix);
+					string key = ToColumn(x.ID, prefix);
 					string value = (x.Checked) ? key : null;
-					dictionary.Add (key, value);
+					dictionary.Add(key, value);
 				}
-				if (IsTextBox (t))
+				if (IsTextBox(t))
 				{
 					TextBox x = (TextBox) t;
-					string value = (nullIfEmpty) ? DoNullIfEmpty (x.Text) : x.Text;
-					dictionary.Add (ToColumn (x.ID, prefix), value);
+					string value = (nullIfEmpty) ? DoNullIfEmpty(x.Text) : x.Text;
+					dictionary.Add(ToColumn(x.ID, prefix), value);
 				}
 			}
 		}
@@ -184,36 +184,36 @@ namespace Nexus.Web
 
 		#region Control utilities
 
-		protected bool IsCheckBox (Control control)
+		protected bool IsCheckBox(Control control)
 		{
-			return (typeof (CheckBox).Equals (control.GetType ()));
+			return (typeof (CheckBox).Equals(control.GetType()));
 		}
 
-		protected bool IsLabel (Control control)
+		protected bool IsLabel(Control control)
 		{
-			return (typeof (Label).Equals (control.GetType ()));
+			return (typeof (Label).Equals(control.GetType()));
 		}
 
-		protected bool IsListControl (Control control)
+		protected bool IsListControl(Control control)
 		{
 			bool isList = false;
-			Type type = control.GetType ();
-			isList = (isList) || typeof (ListControl).Equals (type);
-			isList = (isList) || typeof (CheckBoxList).Equals (type);
-			isList = (isList) || typeof (DropDownList).Equals (type);
-			isList = (isList) || typeof (ListBox).Equals (type);
-			isList = (isList) || typeof (RadioButtonList).Equals (type);
+			Type type = control.GetType();
+			isList = (isList) || typeof (ListControl).Equals(type);
+			isList = (isList) || typeof (CheckBoxList).Equals(type);
+			isList = (isList) || typeof (DropDownList).Equals(type);
+			isList = (isList) || typeof (ListBox).Equals(type);
+			isList = (isList) || typeof (RadioButtonList).Equals(type);
 			return isList;
 		}
 
-		protected bool IsRadioButton (Control control)
+		protected bool IsRadioButton(Control control)
 		{
-			return (typeof (RadioButton).Equals (control.GetType ()));
+			return (typeof (RadioButton).Equals(control.GetType()));
 		}
 
-		protected bool IsTextBox (Control control)
+		protected bool IsTextBox(Control control)
 		{
-			return (typeof (TextBox).Equals (control.GetType ()));
+			return (typeof (TextBox).Equals(control.GetType()));
 		}
 
 		#endregion
@@ -225,9 +225,9 @@ namespace Nexus.Web
 		/// </summary>
 		/// <param name="input">Value</param>
 		/// <returns>Null if value is empty, or the original value</returns>
-		private string DoNullIfEmpty (string input)
+		private string DoNullIfEmpty(string input)
 		{
-			return (string.Empty.Equals (input)) ? null : input;
+			return (string.Empty.Equals(input)) ? null : input;
 		}
 
 		/// <summary>
@@ -237,12 +237,12 @@ namespace Nexus.Web
 		/// <param name="prefix">The prefix to omit.</param>
 		/// <param name="suffix">The suffix to omit.</param>
 		/// <returns></returns>
-		private string RootId (string id, string prefix, string suffix)
+		private string RootId(string id, string prefix, string suffix)
 		{
-			int v = id.LastIndexOf (suffix);
+			int v = id.LastIndexOf(suffix);
 			if (v < 1) return id;
-			string fore = id.Substring (0, v);
-			string root = ToColumn (fore, prefix);
+			string fore = id.Substring(0, v);
+			string root = ToColumn(fore, prefix);
 			return root;
 		}
 
@@ -254,11 +254,11 @@ namespace Nexus.Web
 		/// <param name="prefix">Prefix to remove.</param>
 		/// <returns>id without prefix.</returns>
 		/// 
-		private string ToColumn (string id, string prefix)
+		private string ToColumn(string id, string prefix)
 		{
 			string trimmed;
 			if (null == prefix) trimmed = id;
-			else trimmed = id.Substring (prefix.Length);
+			else trimmed = id.Substring(prefix.Length);
 			return trimmed;
 		}
 
@@ -274,7 +274,7 @@ namespace Nexus.Web
 		/// <param name="control"></param>
 		/// <param name="value"></param>
 		/// 
-		private void SelectItem (ListControl control, string value)
+		private void SelectItem(ListControl control, string value)
 		{
 			if (value != null)
 			{
@@ -283,7 +283,7 @@ namespace Nexus.Web
 
 				foreach (ListItem i in control.Items)
 				{
-					if (value.Equals (i.Value))
+					if (value.Equals(i.Value))
 						i.Selected = true;
 				}
 			}
@@ -295,12 +295,12 @@ namespace Nexus.Web
 		/// <param name="control">Control to set</param>
 		/// <param name="value">Default value</param>
 		/// 
-		private void SelectListItem (ListControl control, string value)
+		private void SelectListItem(ListControl control, string value)
 		{
 			try
 			{
 				control.SelectedIndex = -1;
-				SelectItem (control, value);
+				SelectItem(control, value);
 			}
 			catch (NullReferenceException e1)
 			{
@@ -318,18 +318,18 @@ namespace Nexus.Web
 		/// <param name="messages">A list of messages</param>
 		/// <returns>HTML markup presenting the messages.</returns>
 		/// 
-		private string HtmlMessageList (IList messages)
+		private string HtmlMessageList(IList messages)
 		{
-			StringBuilder sb = new StringBuilder ("<ul>");
+			StringBuilder sb = new StringBuilder("<ul>");
 			foreach (object o in messages)
 			{
-				sb.Append ("<li>");
-				sb.Append (o.ToString ());
-				sb.Append ("</li>");
+				sb.Append("<li>");
+				sb.Append(o.ToString());
+				sb.Append("</li>");
 			}
-			sb.Append ("</ul>");
+			sb.Append("</ul>");
 
-			return sb.ToString ();
+			return sb.ToString();
 		}
 
 		/// <summary>
@@ -338,25 +338,25 @@ namespace Nexus.Web
 		/// <param name="store">A context listing errors, if any</param>
 		/// <returns>HTML markup presenting the errors.</returns>
 		/// 
-		private string HtmlMessageBuilder (IDictionary store)
+		private string HtmlMessageBuilder(IDictionary store)
 		{
 			string messageMarkup = null;
 			if (store != null)
 			{
-				IList messages = new ArrayList ();
+				IList messages = new ArrayList();
 				ICollection keys = store.Keys;
 				foreach (string key in keys)
 				{
-					IList sublist = store [key] as IList;
-					foreach (string message in sublist) messages.Add (message);
+					IList sublist = store[key] as IList;
+					foreach (string message in sublist) messages.Add(message);
 				}
-				messageMarkup = HtmlMessageList (messages);
+				messageMarkup = HtmlMessageList(messages);
 			}
 
 			if (messageMarkup != null)
 			{
-				StringBuilder sb = new StringBuilder (messageMarkup);
-				return sb.ToString ();
+				StringBuilder sb = new StringBuilder(messageMarkup);
+				return sb.ToString();
 			}
 			return null;
 		}
@@ -365,64 +365,63 @@ namespace Nexus.Web
 
 		#region Extra utilities (for GridViewHelper) 
 
-		protected void ReadGridControls (ICollection controls, IDictionary dictionary, string[] keys, bool nullIfEmpty)
+		protected void ReadGridControls(ICollection controls, IDictionary dictionary, string[] keys, bool nullIfEmpty)
 		{
 			int i = 0;
 			foreach (Control t in controls)
 			{
-				string key = keys [i];
-				if (IsTextBox (t))
+				string key = keys[i];
+				if (IsTextBox(t))
 				{
 					TextBox x = (TextBox) t;
-					string value = (nullIfEmpty) ? DoNullIfEmpty (x.Text) : x.Text;
-					dictionary.Add (key, value);
+					string value = (nullIfEmpty) ? DoNullIfEmpty(x.Text) : x.Text;
+					dictionary.Add(key, value);
 				}
-				if (IsLabel (t))
+				if (IsLabel(t))
 				{
 					Label x = (Label) t;
-					string value = (nullIfEmpty) ? DoNullIfEmpty (x.Text) : x.Text;
-					dictionary.Add (key, value);
+					string value = (nullIfEmpty) ? DoNullIfEmpty(x.Text) : x.Text;
+					dictionary.Add(key, value);
 				}
-				if (IsListControl (t))
+				if (IsListControl(t))
 				{
 					ListControl x = (ListControl) t;
-					string value = (nullIfEmpty) ? DoNullIfEmpty (x.SelectedValue) : x.SelectedValue;
-					dictionary.Add (key, value);
+					string value = (nullIfEmpty) ? DoNullIfEmpty(x.SelectedValue) : x.SelectedValue;
+					dictionary.Add(key, value);
 				}
-				if (IsCheckBox (t))
+				if (IsCheckBox(t))
 				{
 					CheckBox x = (CheckBox) t;
 					string value = (x.Checked) ? key : null;
-					dictionary.Add (key, value);
+					dictionary.Add(key, value);
 				}
-				if (IsRadioButton (t))
+				if (IsRadioButton(t))
 				{
 					RadioButton x = (RadioButton) t;
 					string value = (x.Checked) ? key : null;
-					dictionary.Add (key, value);
+					dictionary.Add(key, value);
 				}
 				i++;
 			}
 		}
 
-		protected int BindColumn (DataGrid grid, int pos, string headerText, string dataField, string sortExpression, string dataFormat)
+		protected int BindColumn(DataGrid grid, int pos, string headerText, string dataField, string sortExpression, string dataFormat)
 		{
-			BoundColumn column = new BoundColumn ();
+			BoundColumn column = new BoundColumn();
 			column.HeaderText = headerText;
 			column.DataField = dataField;
-				// ISSUE: Not being used in example applications.
-				column.DataFormatString = dataFormat; // See Formatting Types in .NET Dev Guide
-				column.SortExpression = sortExpression; // See DataGridColumn.SortExpression Property
-			grid.Columns.AddAt (pos, column);
+			// ISSUE: Not being used in example applications.
+			column.DataFormatString = dataFormat; // See Formatting Types in .NET Dev Guide
+			column.SortExpression = sortExpression; // See DataGridColumn.SortExpression Property
+			grid.Columns.AddAt(pos, column);
 			return pos + 1;
 		}
 
-		protected int BindColumn (DataGrid grid, int pos, string headerText, string dataField)
+		protected int BindColumn(DataGrid grid, int pos, string headerText, string dataField)
 		{
-			return BindColumn (grid, pos, headerText, dataField, String.Empty, String.Empty);
+			return BindColumn(grid, pos, headerText, dataField, String.Empty, String.Empty);
 		}
 
 		#endregion
-
 	}
 }

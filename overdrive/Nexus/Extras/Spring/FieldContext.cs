@@ -41,32 +41,33 @@ namespace Nexus.Extras.Spring
 	[Serializable]
 	public class FieldContext : Context, IFieldContext
 	{
-		public FieldContext () : base ()
+		public FieldContext() : base()
 		{
 			ControlTypeName = Tokens.CONTROL_INPUT; // Default
 		}
 
 		public string ControlTypeName
 		{
-			get { return this [Tokens.ControlTypeName] as string; }
-			set { this [Tokens.ControlTypeName] = value; }
+			get { return this[Tokens.ControlTypeName] as string; }
+			set { this[Tokens.ControlTypeName] = value; }
 		}
 
 		public string ID
 		{
-			get { return this [Tokens.ID] as string; }
-			set { this [Tokens.ID] = value; }
+			get { return this[Tokens.ID] as string; }
+			set { this[Tokens.ID] = value; }
 		}
 
 		public IProcessor Processor
 		{
-			get { return this [Tokens.Processor] as IProcessor; }
-			set { this [Tokens.Processor] = value; }
+			get { return this[Tokens.Processor] as IProcessor; }
+			set { this[Tokens.Processor] = value; }
 		}
 
 		#region text properties
 
 		private IMessageSource _MessageSource;
+
 		/// <summary>
 		/// Identify the message source for this FieldContext.
 		/// </summary>
@@ -75,8 +76,8 @@ namespace Nexus.Extras.Spring
 		/// </exception>
 		public IMessageSource MessageSource
 		{
-			get{ return _MessageSource; }
-			set{ _MessageSource = value; }
+			get { return _MessageSource; }
+			set { _MessageSource = value; }
 		}
 
 		/// <summary>
@@ -127,36 +128,36 @@ namespace Nexus.Extras.Spring
 			string text = null;
 			IProcessor processor = Processor;
 			string id = null;
-			if (processor!=null) id = processor.ID;
-			if (id!=null) text = GetMessageOrNull(id + suffix);
-			if (text==null) 
+			if (processor != null) id = processor.ID;
+			if (id != null) text = GetMessageOrNull(id + suffix);
+			if (text == null)
 			{
 				text = GetMessageOrNull(root + suffix);
 			}
-			if (text==null) 
+			if (text == null)
 			{
 				text = GetMessageOrNull(suffix);
 			}
-			if (text==null) text = root + suffix;
-				
+			if (text == null) text = root + suffix;
+
 			return text;
 		}
 
 		public string Alert
 		{
-			get { return GetText(this.ID,"_alert"); }
+			get { return GetText(this.ID, "_alert"); }
 			set { throw new NotSupportedException(); }
 		}
 
 		public string Hint
 		{
-			get { return GetText(this.ID,"_hint"); }
+			get { return GetText(this.ID, "_hint"); }
 			set { throw new NotSupportedException(); }
 		}
 
 		public string Help
 		{
-			get { return GetText(this.ID,"_help"); }
+			get { return GetText(this.ID, "_help"); }
 			set { throw new NotSupportedException(); }
 		}
 
@@ -165,7 +166,7 @@ namespace Nexus.Extras.Spring
 			get
 			{
 				string label = GetMessageOrNull(this.ID + "_label");
-				if (label==null) label = ID;
+				if (label == null) label = ID;
 				return label;
 			}
 			set { throw new NotSupportedException(); }
@@ -173,11 +174,10 @@ namespace Nexus.Extras.Spring
 
 		public string Required
 		{
-			get { return GetText(this.ID,"_required"); }
+			get { return GetText(this.ID, "_required"); }
 			set { throw new NotSupportedException(); }
 		}
 
 		#endregion
-
 	}
 }

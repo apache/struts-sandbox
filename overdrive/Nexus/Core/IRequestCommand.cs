@@ -55,7 +55,7 @@ namespace Nexus.Core
 		/// </summary>
 		/// <returns>Context instance with Command ID set.</returns>
 		/// 
-		IRequestContext NewContext ();
+		IRequestContext NewContext();
 
 		/// <summary>
 		/// Field IDs required by this Command.
@@ -140,7 +140,7 @@ namespace Nexus.Core
 		/// </p></remarks>
 		/// <param name="context">Context to process.</param>
 		/// 
-		bool RequestExecute (IRequestContext context);
+		bool RequestExecute(IRequestContext context);
 
 	}
 }

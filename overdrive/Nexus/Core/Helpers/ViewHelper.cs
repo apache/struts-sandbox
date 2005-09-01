@@ -48,17 +48,17 @@ namespace Nexus.Core.Helpers
 
 		#region Read and Bind (abstract)
 
-		public abstract void ExecuteBind (ICollection controls);
+		public abstract void ExecuteBind(ICollection controls);
 
-		public abstract void ReadExecute (ICollection controls);
+		public abstract void ReadExecute(ICollection controls);
 
-		public abstract void Bind (ICollection controls);
+		public abstract void Bind(ICollection controls);
 
-		public abstract void Read (ICollection controls);
+		public abstract void Read(ICollection controls);
 
-		public void Execute ()
+		public void Execute()
 		{
-			Catalog.ExecuteView (Context);
+			Catalog.ExecuteView(Context);
 		}
 
 		#endregion
@@ -75,10 +75,7 @@ namespace Nexus.Core.Helpers
 
 		public IDictionary Criteria
 		{
-			get
-			{
-				return Context.Criteria;
-			}
+			get { return Context.Criteria; }
 		}
 
 		public virtual IList Outcome
@@ -89,16 +86,16 @@ namespace Nexus.Core.Helpers
 				object o = Criteria[Context.Command];
 				if (o == null)
 				{
-					result = new ArrayList (1);
-					result.Add (Criteria);
+					result = new ArrayList(1);
+					result.Add(Criteria);
 				}
 				else
 				{
 					result = o as IList;
 					if (result == null)
 					{
-						result = new ArrayList (1);
-						result.Add (o);
+						result = new ArrayList(1);
+						result.Add(o);
 					}
 				}
 				return result;
@@ -155,6 +152,7 @@ namespace Nexus.Core.Helpers
 		}
 
 		private IList _FieldSet;
+
 		public virtual IList FieldSet
 		{
 			get { return _FieldSet; }
@@ -166,6 +164,7 @@ namespace Nexus.Core.Helpers
 		#region Options
 
 		private string _Prefix = PREFIX;
+
 		public string Prefix
 		{
 			get { return _Prefix; }
@@ -173,6 +172,7 @@ namespace Nexus.Core.Helpers
 		}
 
 		private string _ListSuffix = LIST_SUFFIX;
+
 		public string ListSuffix
 		{
 			get { return _ListSuffix; }
@@ -180,6 +180,7 @@ namespace Nexus.Core.Helpers
 		}
 
 		private bool _NullIfEmpty = NULL_IF_EMPTY;
+
 		public bool NullIfEmpty
 		{
 			get { return _NullIfEmpty; }
@@ -187,6 +188,7 @@ namespace Nexus.Core.Helpers
 		}
 
 		private string _SelectItemPrompt = SELECT_ITEM_PROMPT;
+
 		public string SelectItemPrompt
 		{
 			get { return _SelectItemPrompt; }
@@ -198,6 +200,7 @@ namespace Nexus.Core.Helpers
 		#region Properties
 
 		private IRequestCatalog _Catalog;
+
 		/// <summary>
 		/// Provide the application object catalog for this Helper.
 		/// </summary>
@@ -213,6 +216,7 @@ namespace Nexus.Core.Helpers
 		}
 
 		private IRequestCommand _Command;
+
 		/// <summary>
 		/// Provide the command for this Helper.
 		/// </summary>
@@ -228,6 +232,7 @@ namespace Nexus.Core.Helpers
 		}
 
 		private IRequestContext _Context;
+
 		/// <summary>
 		/// Provide the all-important Context for this Helper.
 		/// </summary>
@@ -244,8 +249,8 @@ namespace Nexus.Core.Helpers
 				if (_Context == null)
 				{
 					IRequestCommand rc = Command;
-					if (rc==null) throw new ArgumentNullException("Command==null","ViewHelper.Context");
-					_Context = Catalog.GetRequest (rc);
+					if (rc == null) throw new ArgumentNullException("Command==null", "ViewHelper.Context");
+					_Context = Catalog.GetRequest(rc);
 				}
 				return _Context;
 			}

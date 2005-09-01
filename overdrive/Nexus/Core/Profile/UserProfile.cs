@@ -28,6 +28,7 @@ namespace Nexus.Core.Profile
 		public const string USER_ID = "USER_ID";
 
 		private IPrincipal _Principal;
+
 		/// <summary>
 		/// Provide the Principal object for this user.
 		/// </summary>
@@ -53,15 +54,16 @@ namespace Nexus.Core.Profile
 		/// </summary>
 		/// <param name="name">A Identity Name that may contain a machine name reference</param>
 		/// <returns>Identity name with machine name removed</returns>
-		protected string TrimMachineName (string name)
+		protected string TrimMachineName(string name)
 		{
 			if (null == name) return String.Empty;
-			string[] logon = name.Split (USER_ID_SEPARATOR);
-			if (logon.Length > 1) return logon [1];
-			return logon [0];
+			string[] logon = name.Split(USER_ID_SEPARATOR);
+			if (logon.Length > 1) return logon[1];
+			return logon[0];
 		}
 
 		private string _UserId;
+
 		/// <summary>
 		/// Record the user id portion of the Identity Name.
 		/// </summary>
@@ -73,7 +75,7 @@ namespace Nexus.Core.Profile
 			get
 			{
 				if (null == _UserId)
-					_UserId = TrimMachineName (Principal.Identity.Name);
+					_UserId = TrimMachineName(Principal.Identity.Name);
 				return (null == _UserId) ? String.Empty : _UserId;
 			}
 			set { _UserId = value; }
@@ -84,6 +86,7 @@ namespace Nexus.Core.Profile
 		#region UserLocale 
 
 		private CultureInfo _UserLocale;
+
 		public CultureInfo UserLocale
 		{
 			get { return _UserLocale; }
@@ -97,16 +100,16 @@ namespace Nexus.Core.Profile
 		/// <summary>
 		/// Instantiate a default profile.
 		/// </summary>
-		public UserProfile ()
+		public UserProfile()
 		{
-			Principal = new UserPrincipal (); // FIXME: Spring?
+			Principal = new UserPrincipal(); // FIXME: Spring?
 		}
 
 		/// <summary>
 		/// Instantiate from an IPrincipal.
 		/// </summary>
 		/// <param name="principal">Principal for this profile.</param>
-		public UserProfile (IPrincipal principal)
+		public UserProfile(IPrincipal principal)
 		{
 			Principal = principal;
 		}
@@ -115,9 +118,9 @@ namespace Nexus.Core.Profile
 		/// Instantiate from an IIdentity.
 		/// </summary>
 		/// <param name="id">Identity to copy for this profile.</param>
-		public UserProfile (IIdentity id)
+		public UserProfile(IIdentity id)
 		{
-			Principal = new UserPrincipal (id);
+			Principal = new UserPrincipal(id);
 		}
 
 		#endregion

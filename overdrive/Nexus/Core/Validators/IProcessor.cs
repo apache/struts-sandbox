@@ -9,7 +9,7 @@ namespace Nexus.Core.Validators
 		string DataFormat { get; set; }
 		string ID { get; set; }
 
-		bool ConvertInput (IProcessorContext incoming);
-		bool FormatOutput (IProcessorContext outgoing);
+		bool ConvertInput(IProcessorContext incoming);
+		bool FormatOutput(IProcessorContext outgoing);
 	}
 }

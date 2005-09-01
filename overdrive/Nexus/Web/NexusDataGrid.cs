@@ -10,75 +10,75 @@ namespace Nexus.Web
 	{
 		#region Public Properties
 
-		[Bindable (true), Category ("Appearance"), TypeConverter (typeof (WebColorConverter)),
-		Description ("Specifies the color a row is highlighted when the mouse is over it.")]
+		[Bindable(true), Category("Appearance"), TypeConverter(typeof (WebColorConverter)),
+			Description("Specifies the color a row is highlighted when the mouse is over it.")]
 		public Color RowHighlightColor
 		{
 			get
 			{
-				object o = ViewState ["RowHighlightColor"];
+				object o = ViewState["RowHighlightColor"];
 				if (o == null)
 					return Color.Empty;
 				else
 					return (Color) o;
 			}
-			set { ViewState ["RowHighlightColor"] = value; }
+			set { ViewState["RowHighlightColor"] = value; }
 		}
 
-		[DefaultValue (""),
-		Description ("Specifies the CommandName used in the server-side DataGrid event when the row is clicked.")]
+		[DefaultValue(""),
+			Description("Specifies the CommandName used in the server-side DataGrid event when the row is clicked.")]
 		public string RowClickEventCommandName
 		{
 			get
 			{
-				object o = ViewState ["RowClickEventCommandName"];
+				object o = ViewState["RowClickEventCommandName"];
 				if (o == null)
 					return string.Empty;
 				else
 					return (string) o;
 			}
-			set { ViewState ["RowClickEventCommandName"] = value; }
+			set { ViewState["RowClickEventCommandName"] = value; }
 		}
 
-		[DefaultValue (true),
-		Description ("Indicates whether or not rows are highlighted/clickable.")]
+		[DefaultValue(true),
+			Description("Indicates whether or not rows are highlighted/clickable.")]
 		public bool RowSelectionEnabled
 		{
 			get
 			{
-				object o = ViewState ["RowSelectionEnabled"];
+				object o = ViewState["RowSelectionEnabled"];
 				if (o == null)
 					return true;
 				else
 					return (bool) o;
 			}
-			set { ViewState ["RowSelectionEnabled"] = value; }
+			set { ViewState["RowSelectionEnabled"] = value; }
 		}
 
 		#endregion
 
 		#region Overridden DataGrid Methods
 
-		protected override DataGridItem CreateItem (int itemIndex, int dataSourceIndex, ListItemType itemType)
+		protected override DataGridItem CreateItem(int itemIndex, int dataSourceIndex, ListItemType itemType)
 		{
 			// Create the NexusDataGridItem
-			NexusDataGridItem item = new NexusDataGridItem (itemIndex, dataSourceIndex, itemType);
+			NexusDataGridItem item = new NexusDataGridItem(itemIndex, dataSourceIndex, itemType);
 
 			// Set the client-side onmouseover and onmouseout if RowSelectionEnabled == true
 			if (RowSelectionEnabled && itemType != ListItemType.Header && itemType != ListItemType.Footer
 				&& itemType != ListItemType.Pager)
 			{
-				item.Attributes ["onmouseover"] = "javascript:nexusDG_changeBackColor(this, true);";
-				item.Attributes ["onmouseout"] = "javascript:nexusDG_changeBackColor(this, false);";
+				item.Attributes["onmouseover"] = "javascript:nexusDG_changeBackColor(this, true);";
+				item.Attributes["onmouseout"] = "javascript:nexusDG_changeBackColor(this, false);";
 			}
 
 			// return the NexusDataGridItem
 			return item;
 		}
 
-		protected override void OnPreRender (EventArgs e)
+		protected override void OnPreRender(EventArgs e)
 		{
-			base.OnPreRender (e);
+			base.OnPreRender(e);
 
 			if (!RowSelectionEnabled) return; // exit if not RowSelectionEnabled == true
 
@@ -103,8 +103,8 @@ function nexusDG_changeBackColor(row, highlight)
 // -->
 </script>";
 
-			if (RowHighlightColor != Color.Empty && !Page.IsClientScriptBlockRegistered (SCRIPT_KEY))
-				Page.RegisterClientScriptBlock (SCRIPT_KEY, SCRIPT);
+			if (RowHighlightColor != Color.Empty && !Page.IsClientScriptBlockRegistered(SCRIPT_KEY))
+				Page.RegisterClientScriptBlock(SCRIPT_KEY, SCRIPT);
 		}
 
 		#endregion
@@ -112,17 +112,17 @@ function nexusDG_changeBackColor(row, highlight)
 
 	public class NexusDataGridItem : DataGridItem, IPostBackEventHandler
 	{
-		public NexusDataGridItem (int itemIndex, int dataSetIndex, ListItemType itemType) : base (itemIndex, dataSetIndex, itemType)
+		public NexusDataGridItem(int itemIndex, int dataSetIndex, ListItemType itemType) : base(itemIndex, dataSetIndex, itemType)
 		{
 		}
 
 		#region IPostBackEventHandler Members
 
-		public void RaisePostBackEvent (string eventArgument)
+		public void RaisePostBackEvent(string eventArgument)
 		{
-			CommandEventArgs commandArgs = new CommandEventArgs (eventArgument, null);
-			DataGridCommandEventArgs args = new DataGridCommandEventArgs (this, this, commandArgs);
-			base.RaiseBubbleEvent (this, args);
+			CommandEventArgs commandArgs = new CommandEventArgs(eventArgument, null);
+			DataGridCommandEventArgs args = new DataGridCommandEventArgs(this, this, commandArgs);
+			base.RaiseBubbleEvent(this, args);
 		}
 
 		#endregion

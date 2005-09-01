@@ -131,7 +131,7 @@ namespace Nexus.Core
 		/// Indicate whether a Criteria is present.
 		/// </summary>
 		/// <returns>True if a Criteria is present.</returns>
-		bool HasCriteria ();
+		bool HasCriteria();
 
 		/// <summary>
 		/// Provide an optional subcontext containing input or output 
@@ -173,7 +173,7 @@ namespace Nexus.Core
 
 		#region Messaging
 
-		string FormatTemplate (string template, string value);
+		string FormatTemplate(string template, string value);
 
 		/// <summary>
 		/// Record a list of alert (or error) messages, 
@@ -191,7 +191,7 @@ namespace Nexus.Core
 		/// </summary>
 		/// <param name="template">Message template.</param>
 		/// 
-		void AddAlert (string template);
+		void AddAlert(string template);
 
 		/// <summary>
 		/// Add an alert message, creating the context if needed. 
@@ -201,21 +201,21 @@ namespace Nexus.Core
 		/// </remarks>
 		/// <param name="template">Message template.</param>
 		/// <param name="message">Message key.</param>
-		void AddAlert (string template, string message);
+		void AddAlert(string template, string message);
 
 		/// <summary>
 		/// Add a formatted "Alert" error message
 		/// for the given field key via the FieldTable.
 		/// </summary>
 		/// <param name="key">Key from the FieldTable</param>
-		void AddAlertForField (string key);
+		void AddAlertForField(string key);
 
 		/// <summary>
 		/// Add a formatted "Required" error message
 		/// for the given field key via the FieldTable.
 		/// </summary>
 		/// <param name="key">Key from the FieldTable</param>
-		void AddAlertRequired (string key);
+		void AddAlertRequired(string key);
 
 		/// <summary>
 		/// Indicate whether alerts exist.
@@ -262,14 +262,14 @@ namespace Nexus.Core
 		/// <param name="template">Message template.</param>
 		/// <param name="message">Message key.</param>
 		/// 
-		void AddHint (string template, string message);
+		void AddHint(string template, string message);
 
 		/// <summary>
 		/// Add a hint under the "global" key.
 		/// </summary>
 		/// <param name="template">Message template.</param>
 		/// 
-		void AddHint (string template);
+		void AddHint(string template);
 
 		/// <summary>
 		/// Indicate whether hints exist.

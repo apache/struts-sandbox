@@ -44,7 +44,7 @@ namespace Nexus.Core.Helpers
 		/// </p></remarks>
 		/// <param name="controls">Collection of controls to populate.</param>
 		/// 
-		void ExecuteBind (ICollection controls);
+		void ExecuteBind(ICollection controls);
 
 
 		/// <summary>
@@ -59,7 +59,7 @@ namespace Nexus.Core.Helpers
 		/// from a panel control. 
 		/// </p></remarks>
 		/// 
-		void ReadExecute (ICollection controls);
+		void ReadExecute(ICollection controls);
 
 
 		/// <summary>
@@ -69,14 +69,14 @@ namespace Nexus.Core.Helpers
 		/// <param name="controls">Collection of controls to 
 		/// populate.</param>
 		/// 
-		void Bind (ICollection controls);
+		void Bind(ICollection controls);
 
 
 		/// <summary>
 		/// Invoke the helper's command.
 		/// </summary>
 		/// 
-		void Execute ();
+		void Execute();
 
 
 		/// <summary>
@@ -84,7 +84,7 @@ namespace Nexus.Core.Helpers
 		/// </summary>
 		/// <param name="controls">Collection of controls to populate.</param>
 		/// 
-		void Read (ICollection controls);
+		void Read(ICollection controls);
 
 
 		/// <summary>

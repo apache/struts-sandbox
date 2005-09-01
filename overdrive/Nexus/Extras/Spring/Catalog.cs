@@ -30,7 +30,6 @@ namespace Nexus.Extras.Spring
 	/// 
 	public class Catalog : IRequestCatalog, IApplicationContextAware
 	{
-
 		#region Messages 
 
 		private const string msg_ADD_COMMAND = "This catalog instance is created through dependency injection.";
@@ -57,17 +56,17 @@ namespace Nexus.Extras.Spring
 
 		#region IRequestCatalog
 
-		public object GetObject (string name)
+		public object GetObject(string name)
 		{
 			if (null == name)
 			{
-				Exception e = new Exception (msg_NULL);
+				Exception e = new Exception(msg_NULL);
 				throw(e);
 			}
-			object o = Factory ().GetObject (name);
+			object o = Factory().GetObject(name);
 			if (o == null)
 			{
-				Exception e = new Exception (msg_MISSING);
+				Exception e = new Exception(msg_MISSING);
 				throw(e);
 			}
 			return o;
@@ -78,9 +77,9 @@ namespace Nexus.Extras.Spring
 		/// </summary>
 		/// <param name="name">ID for command</param>
 		/// <param name="command">Command instance</param>
-		public void AddCommand (string name, ICommand command)
+		public void AddCommand(string name, ICommand command)
 		{
-			throw new NotImplementedException (msg_ADD_COMMAND); // OK
+			throw new NotImplementedException(msg_ADD_COMMAND); // OK
 		}
 
 		/// <summary>
@@ -93,22 +92,22 @@ namespace Nexus.Extras.Spring
 		/// name is not in catalog, 
 		/// or if instance for name is not a IRequestCommand
 		/// </exception>
-		public ICommand GetCommand (string name)
+		public ICommand GetCommand(string name)
 		{
-			object o = GetObject (name);
+			object o = GetObject(name);
 			IRequestCommand command = o as IRequestCommand;
 			if (command == null)
 			{
-				Exception e = new Exception (msg_TYPE);
+				Exception e = new Exception(msg_TYPE);
 				throw(e);
 			}
 			return command;
 		}
 
-		public IEnumerator GetNames ()
+		public IEnumerator GetNames()
 		{
-			string[] names = _Factory.GetObjectDefinitionNames ();
-			IEnumerator enu = names.GetEnumerator ();
+			string[] names = _Factory.GetObjectDefinitionNames();
+			IEnumerator enu = names.GetEnumerator();
 			return enu;
 		}
 
@@ -119,7 +118,7 @@ namespace Nexus.Extras.Spring
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
-		public Catalog ()
+		public Catalog()
 		{
 		}
 
@@ -127,7 +126,7 @@ namespace Nexus.Extras.Spring
 		/// Construct object and set ApplicationContext.
 		/// </summary>
 		/// <param name="value">Our ApplicationContext</param>
-		public Catalog (IApplicationContext value)
+		public Catalog(IApplicationContext value)
 		{
 			ApplicationContext = value;
 		}
@@ -136,12 +135,13 @@ namespace Nexus.Extras.Spring
 		/// Provide the IApplicationContext instance.
 		/// </summary>
 		/// <returns>IApplicationContext instance</returns>
-		public IApplicationContext Factory ()
+		public IApplicationContext Factory()
 		{
 			return _Factory;
 		}
 
 		private IFieldTable _FieldTable;
+
 		public IFieldTable FieldTable
 		{
 			get { return _FieldTable; }
@@ -149,6 +149,7 @@ namespace Nexus.Extras.Spring
 		}
 
 		private IRequestCommand _PreOp;
+
 		public IRequestCommand PreOp
 		{
 			get { return _PreOp; }
@@ -156,44 +157,45 @@ namespace Nexus.Extras.Spring
 		}
 
 		private IRequestCommand _PostOp;
+
 		public IRequestCommand PostOp
 		{
 			get { return _PostOp; }
 			set { _PostOp = value; }
 		}
 
-		public IViewHelper GetHelper (string name)
+		public IViewHelper GetHelper(string name)
 		{
-			object o = GetObject (name);
+			object o = GetObject(name);
 			IViewHelper helper = o as IViewHelper;
 			if (helper == null)
 			{
-				Exception e = new Exception (msg_TYPE_HELPER);
+				Exception e = new Exception(msg_TYPE_HELPER);
 				throw(e);
 			}
 			return helper;
 		}
 
-		public IRequestContext GetRequest (string name)
+		public IRequestContext GetRequest(string name)
 		{
-			ICommand _command = GetCommand (name);
+			ICommand _command = GetCommand(name);
 			IRequestCommand _rc = _command as IRequestCommand;
-			return GetRequest (_rc);
+			return GetRequest(_rc);
 		}
 
-		public IRequestContext GetRequest (IRequestCommand command)
+		public IRequestContext GetRequest(IRequestCommand command)
 		{
 			IRequestContext context = null;
 			try
 			{
-				context = command.NewContext ();
-				context [Tokens.CommandBin] = command;
-				context [Tokens.FieldTable] = FieldTable;
+				context = command.NewContext();
+				context[Tokens.CommandBin] = command;
+				context[Tokens.FieldTable] = FieldTable;
 				// TODO: MessageTable
 			}
 			catch (Exception e)
 			{
-				context = new RequestContext ();
+				context = new RequestContext();
 				context.Fault = e;
 				// ISSUE: Log exception(faults) (Log all errors in verbose mode?)
 				// ISSUE: Provide an alternate location on fault? -- Declarative exception handing
@@ -202,9 +204,9 @@ namespace Nexus.Extras.Spring
 
 		}
 
-		public IRequestContext GetRequest (string name, IDictionary input)
+		public IRequestContext GetRequest(string name, IDictionary input)
 		{
-			IRequestContext context = GetRequest (name);
+			IRequestContext context = GetRequest(name);
 			context.Criteria = input;
 			return context;
 		}
@@ -214,37 +216,37 @@ namespace Nexus.Extras.Spring
 		/// </summary>
 		/// <param name="context">IRequestContext to verify</param>
 		/// <returns>The non-null Command for this Context</returns>
-		private IRequestCommand VerifyRequest (IRequestContext context)
+		private IRequestCommand VerifyRequest(IRequestContext context)
 		{
 			if (null == context)
 			{
-				context = new RequestContext ();
-				context.AddAlert (msg_CATALOG_CONTEXT_NULL);
+				context = new RequestContext();
+				context.AddAlert(msg_CATALOG_CONTEXT_NULL);
 			}
 
-			IRequestCommand command = context [Tokens.CommandBin] as IRequestCommand;
+			IRequestCommand command = context[Tokens.CommandBin] as IRequestCommand;
 
 			if (null == command)
-				context.AddAlert (msg_CATALOG_COMMAND_NULL);
+				context.AddAlert(msg_CATALOG_COMMAND_NULL);
 
 			return command;
 		}
 
-		public IRequestContext ExecuteRequest (string name)
+		public IRequestContext ExecuteRequest(string name)
 		{
-			IRequestContext context = GetRequest (name);
-			ExecuteRequest (context);
+			IRequestContext context = GetRequest(name);
+			ExecuteRequest(context);
 			return context;
 		}
 
-		public void ExecuteRequest (IRequestContext context)
+		public void ExecuteRequest(IRequestContext context)
 		{
-			IRequestCommand command = VerifyRequest (context);
+			IRequestCommand command = VerifyRequest(context);
 			if (context.IsNominal)
 			{
 				try
 				{
-					command.Execute (context);
+					command.Execute(context);
 				}
 				catch (Exception e)
 				{
@@ -256,18 +258,18 @@ namespace Nexus.Extras.Spring
 			// ISSUE: Provide an alternate location on fault? -- Declarative exception handing?
 		}
 
-		public void ExecuteView (IRequestContext context)
+		public void ExecuteView(IRequestContext context)
 		{
-			IRequestCommand command = VerifyRequest (context);
+			IRequestCommand command = VerifyRequest(context);
 			if (context.IsNominal)
 			{
-				IChain chain = new Chain ();
-				if (_PreOp!=null) chain.AddCommand (_PreOp);
-				chain.AddCommand (command);
-				if (_PostOp!=null) chain.AddCommand (_PostOp);
+				IChain chain = new Chain();
+				if (_PreOp != null) chain.AddCommand(_PreOp);
+				chain.AddCommand(command);
+				if (_PostOp != null) chain.AddCommand(_PostOp);
 				try
 				{
-					chain.Execute (context);
+					chain.Execute(context);
 				}
 				catch (Exception e)
 				{

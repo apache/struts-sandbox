@@ -15,21 +15,21 @@ namespace Nexus.Core.Validators
 		/// </summary>
 		/// <param name="context">The context we are processing</param>
 		/// <returns>True if nominal</returns>
-		bool ExecuteProcess (IProcessorContext context);
+		bool ExecuteProcess(IProcessorContext context);
 
 		/// <summary>
 		/// Convert a field value, utlitizing the field table and processor.
 		/// </summary>
 		/// <param name="context">The context we are processing</param>
 		/// <returns>True if nominal</returns>
-		bool ExecuteConvert (IProcessorContext context);
+		bool ExecuteConvert(IProcessorContext context);
 
 		/// <summary>
 		/// Format a field value, utlitizing the field table and processor.
 		/// </summary>
 		/// <param name="context">The context we are processing</param>
 		/// <returns>True if nominal</returns>
-		bool ExecuteFormat (IProcessorContext context);
+		bool ExecuteFormat(IProcessorContext context);
 
 	}
 }

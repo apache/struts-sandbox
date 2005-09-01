@@ -5,7 +5,6 @@ using System.Web.UI.WebControls;
 using Nexus.Core;
 using Nexus.Core.Helpers;
 using Nexus.Core.Tables;
-using Nexus.Web;
 using Spring.Context;
 
 namespace Nexus.Web
@@ -15,7 +14,6 @@ namespace Nexus.Web
 	/// </summary>
 	public abstract class GridViewHelper : WebViewHelper, IGridViewHelper
 	{
-
 		#region IViewHelper 
 
 		/// <remarks><p>
@@ -24,15 +22,15 @@ namespace Nexus.Web
 		/// </p></remarks>
 		public override bool IsNominal
 		{
-			get { return FindHelper.IsNominal && ListHelper.IsNominal && SaveHelper.IsNominal;  }
+			get { return FindHelper.IsNominal && ListHelper.IsNominal && SaveHelper.IsNominal; }
 		}
 
 		#endregion
 
 		#region IListViewHelper
 
-
 		private IViewHelper _SaveHelper;
+
 		public virtual IViewHelper SaveHelper
 		{
 			get { return _SaveHelper; }
@@ -40,6 +38,7 @@ namespace Nexus.Web
 		}
 
 		private IViewHelper _FindHelper;
+
 		public virtual IViewHelper FindHelper
 		{
 			get { return _FindHelper; }
@@ -47,6 +46,7 @@ namespace Nexus.Web
 		}
 
 		private IViewHelper _ListHelper;
+
 		public virtual IViewHelper ListHelper
 		{
 			get { return _ListHelper; }
@@ -54,6 +54,7 @@ namespace Nexus.Web
 		}
 
 		private bool _HasItemColumn = false;
+
 		public virtual bool HasItemColumn
 		{
 			get { return _HasItemColumn; }
@@ -63,10 +64,11 @@ namespace Nexus.Web
 		public virtual bool HasEditColumn
 		{
 			get { return (SaveHelper != null); }
-			set { throw new NotImplementedException (); }
+			set { throw new NotImplementedException(); }
 		}
 
 		private bool _HasCriteria = true;
+
 		public virtual bool HasCriteria
 		{
 			get { return _HasCriteria; }
@@ -74,6 +76,7 @@ namespace Nexus.Web
 		}
 
 		private string _DataKeyField;
+
 		public virtual string DataKeyField
 		{
 			get { return _DataKeyField; }
@@ -83,6 +86,7 @@ namespace Nexus.Web
 		#region text properties 
 
 		private IMessageSource _MessageSource;
+
 		/// <summary>
 		/// Identify the message source for this FieldContext.
 		/// </summary>
@@ -91,8 +95,8 @@ namespace Nexus.Web
 		/// </exception>
 		public IMessageSource MessageSource
 		{
-			get{ return _MessageSource; }
-			set{ _MessageSource = value; }
+			get { return _MessageSource; }
+			set { _MessageSource = value; }
 		}
 
 		/// <summary>
@@ -144,130 +148,130 @@ namespace Nexus.Web
 
 		#region IGridViewHelper 
 
-		public virtual bool Load (DataGrid grid, IDictionary criteria)
+		public virtual bool Load(DataGrid grid, IDictionary criteria)
 		{
 			if (HasCriteria)
-				ExecuteList (grid, criteria);
+				ExecuteList(grid, criteria);
 			else
-				ExecuteList (grid);
+				ExecuteList(grid);
 			return ListHelper.IsNominal;
 		}
 
-		public virtual bool Find (ICollection controls)
+		public virtual bool Find(ICollection controls)
 		{
-			FindHelper.Execute ();
+			FindHelper.Execute();
 			FindHelper.Bind(controls);
-			return FindHelper.IsNominal ;
+			return FindHelper.IsNominal;
 		}
 
-		public virtual bool List (ICollection controls)
+		public virtual bool List(ICollection controls)
 		{
-			ListHelper.ReadExecute (controls);
-			return ListHelper.IsNominal ;
+			ListHelper.ReadExecute(controls);
+			return ListHelper.IsNominal;
 		}
 
-		public virtual bool List (DataGrid grid)
+		public virtual bool List(DataGrid grid)
 		{
 			ListHelper.Execute();
-			bool okay = ListHelper.IsNominal ;
+			bool okay = ListHelper.IsNominal;
 			if (okay)
 			{
-				DataSource (grid);
-				DataBind (grid);
+				DataSource(grid);
+				DataBind(grid);
 			}
 			return okay;
 		}
 
-		public virtual bool Save (string key, ICollection controls)
+		public virtual bool Save(string key, ICollection controls)
 		{
 			if (SaveHelper.IsNominal)
 			{
-				SaveHelper.Criteria [DataKeyField] = key;
+				SaveHelper.Criteria[DataKeyField] = key;
 				int cols = FieldSet.Count;
 				string[] keys = new string[2 + cols];
 				// reconstruct the standard edit column keys
 				// just as placeholders, really
-				keys [0] = SaveText;
-				keys [1] = QuitText;
+				keys[0] = SaveText;
+				keys[1] = QuitText;
 				int index = 2;
 				// append our field names to the array of keys
 				for (int i = 0; i < cols; i++)
 				{
-					IFieldContext fc = FieldSet[i] as IFieldContext;	
-					keys [index++] = fc.ID;
+					IFieldContext fc = FieldSet[i] as IFieldContext;
+					keys[index++] = fc.ID;
 				}
 
-				ReadGridControls (controls, SaveHelper.Criteria, keys, SaveHelper.NullIfEmpty);
+				ReadGridControls(controls, SaveHelper.Criteria, keys, SaveHelper.NullIfEmpty);
 				SaveHelper.Execute();
 			}
-			return SaveHelper.IsNominal ;
+			return SaveHelper.IsNominal;
 		}
 
-		public virtual int BindItemColumn (DataGrid grid, int i)
+		public virtual int BindItemColumn(DataGrid grid, int i)
 		{
-			ButtonColumn column = new ButtonColumn ();
+			ButtonColumn column = new ButtonColumn();
 			column.ButtonType = ButtonColumnType.PushButton;
 			column.Text = ItemText;
 			column.CommandName = ItemCommandName;
-			grid.Columns.AddAt (i, column);
+			grid.Columns.AddAt(i, column);
 			return ++i;
 		}
 
-		public virtual int BindEditColumn (DataGrid grid, int i)
+		public virtual int BindEditColumn(DataGrid grid, int i)
 		{
-			EditCommandColumn column = new EditCommandColumn ();
+			EditCommandColumn column = new EditCommandColumn();
 			column.ButtonType = ButtonColumnType.PushButton;
 			column.EditText = EditText;
 			column.CancelText = QuitText;
 			column.UpdateText = SaveText;
-			grid.Columns.AddAt (i, column);
+			grid.Columns.AddAt(i, column);
 			return ++i;
 		}
 
-		public virtual int BindColumns (DataGrid grid, int i)
+		public virtual int BindColumns(DataGrid grid, int i)
 		{
 			grid.DataKeyField = DataKeyField;
 			int colCount = FieldSet.Count;
 			for (int c = 0; c < colCount; c++)
 			{
-				IFieldContext fc = FieldSet [c] as IFieldContext;
+				IFieldContext fc = FieldSet[c] as IFieldContext;
 				string column = fc.ID;
 				string label = fc.Label;
-				if ((label==null) || (label.Length==0)) label = column;
-				i = BindColumn (grid, i, label, column);
+				if ((label == null) || (label.Length == 0)) label = column;
+				i = BindColumn(grid, i, label, column);
 			}
 			return i;
 		}
 
-		public virtual void DataSource (DataGrid grid)
+		public virtual void DataSource(DataGrid grid)
 		{
 			IList list = ListHelper.Outcome;
 			grid.DataSource = list;
 		}
 
-		public abstract IEntryList NewEntryList ();
+		public abstract IEntryList NewEntryList();
 
-		public virtual bool DataInsert (DataGrid grid)
+		public virtual bool DataInsert(DataGrid grid)
 		{
 			// Fake a blank row
-			IEntryList list = NewEntryList ();
-			list.Insert (String.Empty);
-			ListHelper.Criteria [ListHelper.Command.ID] = list;
+			IEntryList list = NewEntryList();
+			list.Insert(String.Empty);
+			ListHelper.Criteria[ListHelper.Command.ID] = list;
 			grid.DataSource = list;
 			grid.CurrentPageIndex = 0;
 			grid.EditItemIndex = 0;
-			DataBind (grid);
-			return ListHelper.IsNominal ;
+			DataBind(grid);
+			return ListHelper.IsNominal;
 		}
 
-		public virtual void DataBind (DataGrid grid)
+		public virtual void DataBind(DataGrid grid)
 		{
-			grid.DataBind ();
+			grid.DataBind();
 		}
 
 		private bool bind = true;
 
-		public virtual void BindGrid (DataGrid grid)
+		public virtual void BindGrid(DataGrid grid)
 		{
 			// Only bind columns once
 			// WARNING: Won't work with a singleton
@@ -275,24 +279,24 @@ namespace Nexus.Web
 			{
 				bind = false;
 				int i = 0;
-				if (HasEditColumn) i = BindEditColumn (grid, i);
-				if (HasItemColumn) i = BindItemColumn (grid, i);
-				BindColumns (grid, i);
+				if (HasEditColumn) i = BindEditColumn(grid, i);
+				if (HasItemColumn) i = BindItemColumn(grid, i);
+				BindColumns(grid, i);
 
 			}
-			DataSource (grid);
-			DataBind (grid);
+			DataSource(grid);
+			DataBind(grid);
 		}
 
-		public virtual bool ExecuteList (DataGrid grid)
+		public virtual bool ExecuteList(DataGrid grid)
 		{
-			ListHelper.Execute(); 
-			bool okay = ListHelper.IsNominal ;
-			if (okay) BindGrid (grid);
+			ListHelper.Execute();
+			bool okay = ListHelper.IsNominal;
+			if (okay) BindGrid(grid);
 			return okay;
 		}
 
-		public virtual bool ExecuteList (DataGrid grid, IDictionary criteria)
+		public virtual bool ExecuteList(DataGrid grid, IDictionary criteria)
 		{
 			IDictionary target = ListHelper.Criteria;
 			foreach (DictionaryEntry e in criteria)
@@ -302,25 +306,24 @@ namespace Nexus.Web
 			return ExecuteList(grid);
 		}
 
-		public string GetDataKey (DataGridCommandEventArgs e, DataGrid grid)
+		public string GetDataKey(DataGridCommandEventArgs e, DataGrid grid)
 		{
 			int index = grid.EditItemIndex;
-			string key = grid.DataKeys [index] as string;
+			string key = grid.DataKeys[index] as string;
 			return key;
 		}
 
-		public ICollection GetControls (DataGridCommandEventArgs e, DataGrid grid)
+		public ICollection GetControls(DataGridCommandEventArgs e, DataGrid grid)
 		{
-			ControlCollection controls = new ControlCollection (grid);
+			ControlCollection controls = new ControlCollection(grid);
 			foreach (TableCell t in e.Item.Cells)
 			{
 				for (int i = 0; i < t.Controls.Count; i++)
-					controls.Add (t.Controls [i]);
+					controls.Add(t.Controls[i]);
 			}
 			return controls;
 		}
 
 		#endregion
-
 	}
 }

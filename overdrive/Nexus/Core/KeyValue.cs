@@ -23,12 +23,12 @@ namespace Nexus.Core
 	[Serializable]
 	public class KeyValue : IKeyValue
 	{
-		public KeyValue ()
+		public KeyValue()
 		{
 			;
 		}
 
-		public KeyValue (string aKey, object aValue)
+		public KeyValue(string aKey, object aValue)
 		{
 			_Key = aKey;
 			_Value = aValue;
@@ -56,7 +56,7 @@ namespace Nexus.Core
 			set { _Value = Text; }
 		}
 
-		public override string ToString ()
+		public override string ToString()
 		{
 			return Text;
 		}

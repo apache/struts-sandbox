@@ -1,4 +1,4 @@
-<%@ Page language="c#" Codebehind="BaseGridPage.aspx.cs" AutoEventWireup="true" Inherits="Nexus.Web.BaseGridPage" %>
+<%@ Page language="c#" Codebehind="BaseGridPage.aspx.cs" AutoEventWireup="false" Inherits="Nexus.Web.BaseGridPage" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" > 
 
 <html>

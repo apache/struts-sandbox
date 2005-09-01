@@ -19,12 +19,14 @@ namespace Nexus.Core.Profile
 	public class UserIdentity : IIdentity
 	{
 		private string _Name;
+
 		public string Name
 		{
 			get { return _Name; }
 		}
 
 		private string _AuthenticationType;
+
 		public string AuthenticationType
 		{
 			get { return _AuthenticationType; }
@@ -32,6 +34,7 @@ namespace Nexus.Core.Profile
 		}
 
 		private bool _IsAuthenticated = false;
+
 		public bool IsAuthenticated
 		{
 			get { return _IsAuthenticated; }
@@ -41,7 +44,7 @@ namespace Nexus.Core.Profile
 		/// <summary>
 		/// Instantiate with zero parameters.
 		/// </summary>
-		public UserIdentity ()
+		public UserIdentity()
 		{
 		}
 
@@ -52,7 +55,7 @@ namespace Nexus.Core.Profile
 		/// Essentially, create a shallow copy of the given Identity.
 		/// </remarks>
 		/// <param name="id">Identity to copy</param>
-		public UserIdentity (IIdentity id)
+		public UserIdentity(IIdentity id)
 		{
 			if (null != id)
 			{
@@ -68,7 +71,7 @@ namespace Nexus.Core.Profile
 		/// <param name="name">Value for user's name</param>
 		/// <param name="authenticationType">Value for AuthenticationType</param>
 		/// <param name="isAuthenticated">Value for IsAuthenticated</param>
-		public UserIdentity (string name, string authenticationType, bool isAuthenticated)
+		public UserIdentity(string name, string authenticationType, bool isAuthenticated)
 		{
 			_Name = name;
 			_AuthenticationType = authenticationType;

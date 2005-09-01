@@ -28,7 +28,7 @@ namespace Nexus.Core
 	/// 
 	public class Tokens
 	{
-		private Tokens ()
+		private Tokens()
 		{
 			// No need to construct static helper class
 		}
@@ -243,24 +243,22 @@ namespace Nexus.Core
 		/// Token for Entry Quit command.
 		/// </summary>
 		public const string ENTRY_QUIT_COMMAND = "entry_quit_command";
-		
+
 		/// <summary>
 		/// Token for Entry Save command.
 		/// </summary>
 		public const string ENTRY_SAVE_COMMAND = "entry_save_command";
-		
+
 		/// <summary>
 		/// Token for Entry Item command.
 		/// </summary>
 		public const string ENTRY_ITEM_COMMAND = "entry_item_command";
-		
+
 		/// <summary>
 		/// Token for Entry Item command name.
 		/// </summary>
 		public const string ENTRY_ITEM_COMMAND_NAME = "entry_item_command_name";
 
 		#endregion
-
-
 	}
 }
