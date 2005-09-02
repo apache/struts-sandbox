@@ -1,0 +1,76 @@
+
+
+body
+{
+background-color: #ffffff;
+background-repeat: no-repeat;
+font-family: Arial, Verdana;
+font-size: 14px;
+font-style: normal;
+font-weight: normal;
+/* color: #333333; */
+/* margin-top: 10px; */
+/* margin-left: 10px; */
+/* margin-right: 10px; */
+/* margin-bottom: 10px; */
+}
+
+/* Used for prompts in generated pages */
+.prompt
+{
+color: #993333;
+font-style: italic;
+}
+
+A:link, A:visited, A:active {
+color: #7777AA;
+text-decoration: underline;
+}
+
+A:hover {
+color: #9999FF;
+background: transparent;
+text-decoration: underline;
+}
+
+.resultsTable {
+	margin-right: auto;
+	margin-left: auto;
+    background-color: #EEF3FB;
+	border: solid 1px blue;
+}
+
+.oddRow {
+    background-color: #FFFFFF;
+}
+
+.evenRow {
+    background-color: #EEF3FB;
+}
+
+.widgetLabel {
+    font-size: 14px;
+    text-align: left;
+    font-weight: bold;
+}
+
+.validationMessage {
+    font-size: 12px;
+    text-align: left;
+    font-color: #ff0000;
+}
+
+.infoMessage {
+    font-size: 18px;
+    font-color: #ffffff;
+    font-weight: bold;
+}
+
+.selectMenu {
+    font-size: 14px;
+}
+
+.submitButton {
+	position: relative;
+	left: 50px;
+}

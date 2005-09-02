@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<processed-annotations>
+  <type-name>jsf.physiciansFlow.search</type-name>
+  <annotated-element>
+    <element-name>jsf.physiciansFlow.search</element-name>
+    <annotation>
+      <annotation-name>org.apache.ti.pageflow.annotations.ti.facesBacking</annotation-name>
+    </annotation>
+  </annotated-element>
+  <annotated-element>
+    <element-name>execute</element-name>
+    <annotation>
+      <annotation-name>org.apache.ti.pageflow.annotations.ti.commandHandler</annotation-name>
+      <annotation-attribute>
+        <attribute-name>raiseActions</attribute-name>
+        <annotation-value>
+          <annotation-name>org.apache.ti.pageflow.annotations.ti.raiseAction</annotation-name>
+          <annotation-attribute>
+            <attribute-name>outputFormBean</attribute-name>
+            <string-value>searchForm</string-value>
+          </annotation-attribute>
+          <annotation-attribute>
+            <attribute-name>action</attribute-name>
+            <string-value>displayPhysiciansWithDetail</string-value>
+          </annotation-attribute>
+        </annotation-value>
+        <annotation-value>
+          <annotation-name>org.apache.ti.pageflow.annotations.ti.raiseAction</annotation-name>
+          <annotation-attribute>
+            <attribute-name>outputFormBean</attribute-name>
+            <string-value>searchForm</string-value>
+          </annotation-attribute>
+          <annotation-attribute>
+            <attribute-name>action</attribute-name>
+            <string-value>displayPhysiciansAbbreviated</string-value>
+          </annotation-attribute>
+        </annotation-value>
+      </annotation-attribute>
+    </annotation>
+  </annotated-element>
+  <annotated-element>
+    <element-name>pageFlow</element-name>
+    <annotation>
+      <annotation-name>org.apache.ti.pageflow.annotations.ti.pageFlowField</annotation-name>
+    </annotation>
+  </annotated-element>
+</processed-annotations>

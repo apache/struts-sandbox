@@ -450,10 +450,7 @@
     <dependency>
       <groupId>myfaces</groupId>
       <artifactId>myfaces-jsf-api</artifactId>
-      <version>1.0.9rc3</version>
-      <properties>
-        <war.bundle>true</war.bundle>
-      </properties>
+      <version>1.0.9</version>
     </dependency>
 
     <dependency>

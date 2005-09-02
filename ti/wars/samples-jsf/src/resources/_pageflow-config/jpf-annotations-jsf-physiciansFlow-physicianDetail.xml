@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<processed-annotations>
+  <type-name>jsf.physiciansFlow.physicianDetail</type-name>
+  <annotated-element>
+    <element-name>jsf.physiciansFlow.physicianDetail</element-name>
+    <annotation>
+      <annotation-name>org.apache.ti.pageflow.annotations.ti.facesBacking</annotation-name>
+    </annotation>
+  </annotated-element>
+</processed-annotations>

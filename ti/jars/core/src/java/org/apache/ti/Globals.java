@@ -22,9 +22,7 @@ package org.apache.ti;
 import java.io.Serializable;
 
 /**
- * Global manifest constants for the entire Struts Framework.
- *
- * @version $Rev: 170121 $ $Date: 2005-05-13 23:09:32 -0600 (Fri, 13 May 2005) $
+ * @todo Should this class simply go away?  Do we want to expose public constants for these things (vs. APIs)?
  */
 public class Globals implements Serializable {
 

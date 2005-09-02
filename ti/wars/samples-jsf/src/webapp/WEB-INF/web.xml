@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+    version="2.4">
+
+    <display-name>Beehive NetUI Samples Web Application</display-name>
+
+    <!-- Filter to perform Page Flow operations when JSPs are hit directly. -->
+    <filter>
+        <filter-name>PageFlowJspFilter</filter-name>
+        <filter-class>org.apache.ti.servlet.PageFlowJspFilter</filter-class>
+    </filter>
+
+    <!-- Filter to perform Page Flow operations when JavaServer Faces pages are hit directly. -->
+    <filter>
+        <filter-name>PageFlowFacesFilter</filter-name>
+        <filter-class>org.apache.ti.servlet.PageFlowFacesFilter</filter-class>
+    </filter>
+
+    <!--
+        It is possible - but certainly not required - to keep source files such as page flows and
+        JavaServer Faces backing beans mixed in with web content.  In this case, and when the web
+        content directory itself is being deployed without being copied to some other build
+        location, it is important to prevent the source code from being URL-addressable.  This
+        filter returns a specified error code when source files are requested.
+    -->
+    <filter>
+        <filter-name>PageFlowForbiddenFilter</filter-name>
+        <filter-class>org.apache.ti.servlet.PageFlowForbiddenFilter</filter-class>
+        <init-param>
+            <param-name>response-code</param-name>
+            <param-value>404</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>PageFlowJspFilter</filter-name>
+        <url-pattern>*.jsp</url-pattern>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>PageFlowFacesFilter</filter-name>
+        <url-pattern>*.faces</url-pattern>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+    </filter-mapping>
+
+    <!-- Prevent URL access to Java source code. -->
+    <filter-mapping>
+        <filter-name>PageFlowForbiddenFilter</filter-name>
+        <url-pattern>*.java</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+    </filter-mapping>
+
+    <!-- Configuration/init listener for MyFaces -->
+    <listener>
+        <listener-class>org.apache.myfaces.webapp.StartupServletContextListener</listener-class>
+    </listener>
+
+    <!-- Action Servlet -->
+    <servlet>
+        <servlet-name>action</servlet-name>
+        <servlet-class>org.apache.ti.servlet.StrutsTiServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+
+    <!-- Faces Servlet -->
+    <servlet>
+        <servlet-name>Faces Servlet</servlet-name>
+        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+        <load-on-startup> 1 </load-on-startup>
+    </servlet>
+
+    <!-- Struts Action Servlet Mappings -->
+    <!-- Note that because Struts takes the *last* mapping here as the extension to add to
+         actions posted from forms, we must have *.do come after *.jpf (etc.). -->
+    <servlet-mapping>
+        <servlet-name>action</servlet-name>
+        <url-pattern>*.jpf</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>action</servlet-name>
+        <url-pattern>*.do</url-pattern>
+    </servlet-mapping>
+
+    <!-- Faces Servlet Mapping -->
+    <servlet-mapping>
+        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>*.faces</url-pattern>
+    </servlet-mapping>
+
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+</web-app>
+
