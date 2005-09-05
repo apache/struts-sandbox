@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="Struts Sandbox">
     <body>
+        <menu name="Sandbox Projects">
+        <item
+                    name="Standalone Tiles"
+                    href="tiles-core/index.html"/>
+        <item
+                    name="Struts Ti"
+                    href="struts-ti/index.html"/>
+        </menu>
         <menu name="Quick Links">
             <item
                     name="Struts"

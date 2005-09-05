@@ -21,7 +21,8 @@
 <project>
 
   <pomVersion>3</pomVersion>
-  <id>struts</id>
+  <id>struts-ti</id>
+  <groupId>struts</groupId>
   <name>Struts Ti</name>
   <currentVersion>1.0-SNAPSHOT</currentVersion>
   <organization>
