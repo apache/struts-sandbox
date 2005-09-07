@@ -19,6 +19,10 @@ package org.apache.ti.core;
 
 import java.io.Serializable;
 
+/**
+ * 
+ * @todo Finish documenting me!
+ */
 public class ActionMessage implements Serializable {
 
 
@@ -122,7 +126,9 @@ public class ActionMessage implements Serializable {
     
     
     /**
-     * <p>Get the message key for this message.</p>
+	 * <p>Get the message key for this message.</p>
+     * @return The message key for this message.
+     * 
      */
     public String getKey() {
 
@@ -133,6 +139,8 @@ public class ActionMessage implements Serializable {
 
     /**
      * <p>Get the replacement values for this message.</p>
+     * 
+     * @return Get the replacement values for this message.
      */
     public Object[] getValues() {
 

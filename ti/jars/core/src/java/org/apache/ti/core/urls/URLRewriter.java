@@ -30,10 +30,18 @@ public abstract class URLRewriter {
      */
     private boolean _allowOtherRewriters = true;
 
+    /**
+     * Set the switch to allow other rewriters
+     * @param allowOtherRewriters
+     */
     public void setAllowOtherRewriters(boolean allowOtherRewriters) {
         _allowOtherRewriters = allowOtherRewriters;
     }
 
+    /**
+     * Get the state of the allow other rewriters switch.
+     * @return true if allowed, false if not
+     */
     public boolean allowOtherRewriters() {
         return _allowOtherRewriters;
     }
@@ -61,9 +69,13 @@ public abstract class URLRewriter {
     public abstract void rewriteURL(MutableURI url, URLType type, boolean needsToBeSecure);
 
     /**
+	 * @todo Finish documenting me!
+	 * 
      * Tell whether rewritten form actions should be allowed to have query parameters.  If this returns
      * <code>false</code>, then a form-tag implementation should render query parameters into hidden
      * fields on the form instead of allowing them to remain in the URL.
+     * 
+     * @return Return true if allowed, false if not
      */
     public boolean allowParamsOnFormAction() {
         return false;

@@ -23,7 +23,21 @@ import org.apache.commons.chain.web.WebContext;
  * Handles creation of ActionMapping and reconstruction of URI's from one.
  */
 public interface ActionMapper {
+	
+	/**
+	 * @todo Finish documenting me!
+	 * 
+	 * @param ctx
+	 * @return Returns an ActionMapping
+	 */
     ActionMapping getMapping(WebContext ctx);
 
+    /**
+	 * @todo Finish documenting me!
+     * @todo Why does getUri*() return a String and not a Uri?
+     * 
+     * @param mapping
+     * @return Returns the (encoded?) Uri (String) from the ActionMapping
+     */
     String getUriFromActionMapping(ActionMapping mapping);
 }

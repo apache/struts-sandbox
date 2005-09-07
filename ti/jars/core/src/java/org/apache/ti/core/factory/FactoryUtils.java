@@ -29,6 +29,13 @@ public class FactoryUtils {
 
     private static final Logger _log = Logger.getInstance(FactoryUtils.class);
 
+    /**
+	 * @todo Finish documenting me!
+     * 
+     * @param factoryBean
+     * @param factoryType
+     * @return The factory specified
+     */
     public static Factory getFactory(PageflowFactory factoryBean, Class factoryType) {
         if (factoryBean == null) return null;
 
@@ -62,6 +69,13 @@ public class FactoryUtils {
         return null;
     }
 
+    /**
+	 * @todo Finish documenting me!
+     * 
+     * @param factoryType
+     * @param config
+     * @return FIX ME
+     */
     public static Factory getFactory(Class factoryType, FactoryConfig config) {
         assert Factory.class.isAssignableFrom(factoryType) : factoryType.getClass().getName();
 

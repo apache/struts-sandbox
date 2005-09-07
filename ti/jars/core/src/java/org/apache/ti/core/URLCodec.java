@@ -37,6 +37,7 @@ public final class URLCodec {
      * @param decoded the string to encode
      * @param charset the character set to use
      * @return the encoded string
+     * @throws UnsupportedEncodingException In the event of an error.
      */
     public static String encode(final String decoded, final String charset)
             throws UnsupportedEncodingException {
@@ -63,6 +64,7 @@ public final class URLCodec {
      * @param encoded the string to decode
      * @param charset the character set to use
      * @return the decoded string
+     * @throws UnsupportedEncodingException In the event of an error.
      */
     public static String decode(final String encoded, final String charset)
             throws UnsupportedEncodingException {

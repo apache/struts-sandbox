@@ -34,6 +34,13 @@ public class FactoryConfig
         _customProperties.put(name, value);
     }
 
+    /**
+     * 
+	 * @todo Finish documenting me!
+	 * 
+     * @param name The custom property name
+     * @return The value for the specified name
+     */
     public String getCustomProperty(String name) {
         return _customProperties != null ? (String) _customProperties.get(name) : null;
     }

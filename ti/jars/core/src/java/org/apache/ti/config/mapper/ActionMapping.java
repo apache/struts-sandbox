@@ -20,7 +20,7 @@ package org.apache.ti.config.mapper;
 import java.util.Map;
 
 /**
- * Simple class that holds the action mapping information used to invoke an
+ * Simple immutable class that holds the action mapping information used to invoke an
  * action. The name and namespace are required, but the params map
  * is optional, and as such may be null. If a params map is supplied,
  * it <b>must</b> be a mutable map, such as a HashMap.
@@ -33,6 +33,14 @@ public class ActionMapping {
     private String namespace;
     private Map params;
 
+    /**
+	 * @todo Finish documenting me!
+     * 
+     * @param name
+     * @param namespace
+     * @param extMapping
+     * @param params
+     */
     public ActionMapping(String name, String namespace, String extMapping, Map params) {
         this.name = name;
         this.namespace = namespace;
@@ -40,19 +48,32 @@ public class ActionMapping {
         this.externalMapping = extMapping;
     }
 
-    public String getName() {
-        return name;
-    }
+	/**
+	 * @return Returns the externalMapping.
+	 */
+	public String getExternalMapping() {
+		return externalMapping;
+	}
 
-    public String getNamespace() {
-        return namespace;
-    }
+	/**
+	 * @return Returns the name.
+	 */
+	public String getName() {
+		return name;
+	}
 
-    public Map getParams() {
-        return params;
-    }
+	/**
+	 * @return Returns the namespace.
+	 */
+	public String getNamespace() {
+		return namespace;
+	}
 
-    public String getExternalMapping() {
-        return externalMapping;
-    }
+	/**
+	 * @return Returns the params.
+	 */
+	public Map getParams() {
+		return params;
+	}
+
 }

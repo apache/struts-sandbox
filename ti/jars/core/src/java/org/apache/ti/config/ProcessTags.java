@@ -35,8 +35,10 @@ public class ProcessTags {
 
     private static final Log log = LogFactory.getLog(ProcessTags.class);
     
-    // TODO where is this used?
-    private static final String SEP = File.separator;
+    /**
+     * @todo Where is this being (or will it be) used?
+     */ 
+//    private static final String SEP = File.separator;
 
     /**
      * Set the parser

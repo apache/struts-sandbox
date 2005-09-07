@@ -33,21 +33,34 @@ import org.apache.commons.logging.LogFactory;
  */
 public class ProcessTagsTask {
 
-    private ProcessTags processTags;
     private File srcdir;
     private File destdir;
 
     private static final Log log = LogFactory.getLog(ProcessTagsTask.class);
 
-    public void setSrcdir(File file) {
-        this.srcdir = file;
-    }
 
-    public void setDestdir(File file) {
-        this.destdir = file;
-    }
+    /**
+	 * @param destdir The destdir to set.
+	 */
+	public void setDestdir(File destdir) {
+		this.destdir = destdir;
+	}
 
-    public void execute() {
+
+	/**
+	 * @param srcdir The srcdir to set.
+	 */
+	public void setSrcdir(File srcdir) {
+		this.srcdir = srcdir;
+	}
+
+
+	/**
+	 * 
+	 *
+	 */
+	public void execute() {
+		log.debug("ProcessTagsTask#execute()");
         VelocityTemplateProcessor proc = new VelocityTemplateProcessor();
         proc.init();
         

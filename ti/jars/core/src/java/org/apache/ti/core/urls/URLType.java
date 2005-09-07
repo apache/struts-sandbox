@@ -26,7 +26,14 @@ public class URLType {
     protected static final int INT_ACTION = 0;
     protected static final int INT_RESOURCE = 1;
 
+    /**
+	 * @todo Finish documenting me!
+     */
     public static final URLType ACTION = new URLType(INT_ACTION);
+    
+    /**
+	 * @todo Finish documenting me!
+     */
     public static final URLType RESOURCE = new URLType(INT_RESOURCE);
 
     private int _val;
@@ -35,6 +42,9 @@ public class URLType {
         _val = val;
     }
 
+    /**
+     * @see Object#toString()
+     */
     public String toString() {
         switch (_val) {
             case INT_ACTION:
@@ -46,7 +56,11 @@ public class URLType {
         assert false : _val;
         return "<unknown URLType>";
     }
+    
 
+    /**
+     * @see Object#equals(java.lang.Object)
+     */
     public boolean equals(Object o) {
         if (o == null) return false;
         if (o == this) return true;
@@ -54,6 +68,9 @@ public class URLType {
         return ((URLType) o)._val == _val;
     }
 
+    /**
+     * @see Object#hashCode()
+     */
     public int hashCode() {
         return _val;
     }

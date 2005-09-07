@@ -223,10 +223,12 @@ public class URLRewriterService {
     }
 
     /**
+	 * @todo Finish documenting me!
+	 * 
      * Unregister the URLRewriter (remove from the list) from the request.
      *
      * @param rewriter the URLRewriter to unregister
-     * @see #registerURLRewriter
+     * @todo fix this -- @ see #registerURLRewriter (ambiguous reference)
      */
     public static void unregisterURLRewriter(URLRewriter rewriter) {
         if (rewriter == null) {
@@ -257,6 +259,8 @@ public class URLRewriterService {
      * Tell whether rewritten form actions should be allowed to have query parameters.  If this returns
      * <code>false</code>, then a form-tag implementation should render query parameters into hidden
      * fields on the form instead of allowing them to remain in the URL.
+     * 
+     * @return Return true if allowed, false if not.
      */
     public static boolean allowParamsOnFormAction() {
         ArrayList/*< URLRewriter >*/ rewriters = getRewriters();

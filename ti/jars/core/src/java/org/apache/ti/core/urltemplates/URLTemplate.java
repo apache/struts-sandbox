@@ -98,6 +98,8 @@ public class URLTemplate {
     }
 
     /**
+	 * @todo Finish documenting me!
+	 * 
      * Verification will ensure the URL template conforms to a valid format
      * for known tokens and contains the required tokens. It will also parse
      * the tokens and literal data into a list to improve the replacement
@@ -114,6 +116,8 @@ public class URLTemplate {
      *
      * @param knownTokens    the collection of known tokens (Strings) for a valid template.
      * @param requiredTokens the collection of required tokens (Strings) in a valid template.
+     * 
+     * @throws IllegalStateException When ???
      */
     public void verify(Collection knownTokens, Collection requiredTokens) throws IllegalStateException {
         // For each known token, make sure there is a leading and trailing brace
@@ -185,6 +189,8 @@ public class URLTemplate {
     /**
      * Replace a single token in the template with a corresponding String value.
      * Tokens are expected to be qualified in braces. E.g. {url:path}
+     * @param token The token to use in the template
+     * @param value The replacement value
      */
     public void substitute(String token, String value) {
         _tokenValuesMap.put(token, value);
@@ -193,6 +199,8 @@ public class URLTemplate {
     /**
      * Replace a single token in the template with a corresponding int value.
      * Tokens are expected to be qualified in braces. E.g. {url:port}
+     * @param token The token to use in the template
+     * @param value The replacement value
      */
     public void substitute(String token, int value) {
         String valueStr = Integer.toString(value);

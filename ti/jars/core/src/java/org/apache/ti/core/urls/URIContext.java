@@ -32,6 +32,7 @@ public class URIContext {
      * Constructs a <code>URIContext</code>.
      */
     public URIContext() {
+    	// do nothing
     }
 
     /**

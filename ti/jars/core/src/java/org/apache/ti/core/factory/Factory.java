@@ -27,7 +27,7 @@ import java.io.Serializable;
 public abstract class Factory
         implements Serializable {
 
-    private static final Logger _log = Logger.getInstance(Factory.class);
+    private static final Logger log = Logger.getInstance(Factory.class);
 
     private FactoryConfig _config;
 
@@ -35,6 +35,7 @@ public abstract class Factory
      * Called after this factory has been created and initialized.
      */
     protected void onCreate() {
+    	log.debug("Factory#create()");
     }
 
     void init(FactoryConfig config) {
@@ -45,12 +46,17 @@ public abstract class Factory
      * Called to reinitialize this instance, most importantly after it has been serialized/deserialized.
      */
     protected void reinit() {
+    	log.debug("Factory#reinit()");
     }
 
     /**
+	 * @todo Finish documenting me!
+	 * 
      * Get the configuration object (containing custom properties) that is associated with this factory.
+     * @return A {@link FactoryConfig} or null
      */
     protected FactoryConfig getConfig() {
+    	log.debug("Factory#getConfig()");
         return _config;
     }
 }

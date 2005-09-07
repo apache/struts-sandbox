@@ -23,9 +23,12 @@ import java.net.URL;
 import java.util.Map;
 
 /**
+ * @todo Finish documenting me!
+ * 
  * A mutable class for creating URIs that can be set to "frozen" such
  * that it becomes immutable. After this class is frozen, any calls to
- * methods to set the data components of the URI will throw
+ * methods to set the data components of the URI will throw ???
+ * 
  */
 public class FreezableMutableURI extends MutableURI {
 
@@ -35,14 +38,18 @@ public class FreezableMutableURI extends MutableURI {
      * Constructs a <code>FreezableMutableURI</code>.
      */
     public FreezableMutableURI() {
+    	// @todo Fix me
     }
 
     /**
+	 * @todo Finish documenting me!
+	 * 
      * Constructs a <code>FreezableMutableURI</code>.
      *
      * @param uriString the string to be parsed into a URI
      * @param encoded   Flag indicating whether the string is
      *                  already encoded.
+     * @throws URISyntaxException 
      */
     public FreezableMutableURI(String uriString, boolean encoded) throws URISyntaxException {
         super(uriString, encoded);
@@ -93,6 +100,11 @@ public class FreezableMutableURI extends MutableURI {
         super(url);
     }
 
+    /**
+	 * @todo Finish documenting me!
+     * 
+     * @return Return the state of this URI
+     */
     public final boolean isFrozen() {
         return _frozen;
     }
@@ -113,6 +125,8 @@ public class FreezableMutableURI extends MutableURI {
     }
 
     /**
+	 * @todo Finish documenting me!
+	 * 
      * Reset the value of the <code>FreezableMutableURI</code>.
      * <p/>
      * <p> This method can also be used to clear the <code>FreezableMutableURI</code>.
@@ -120,6 +134,8 @@ public class FreezableMutableURI extends MutableURI {
      * @param uriString the string to be parsed into a URI
      * @param encoded   Flag indicating whether the string is
      *                  already encoded.
+     *                  
+     * @throws URISyntaxException When something bad happens
      */
 
     public void setURI(String uriString, boolean encoded) throws URISyntaxException {
@@ -269,6 +285,15 @@ public class FreezableMutableURI extends MutableURI {
         super.setFragment(fragment);
     }
 
+    /**
+	 * @todo Finish documenting me!
+     * 
+     * Custom equals implementation.
+     * 
+     * @param o The object to check against
+     * 
+     * @return Whether this object is logically equal to the parameter passed to it.
+     */
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -289,6 +314,11 @@ public class FreezableMutableURI extends MutableURI {
         return true;
     }
 
+    /**
+	 * @todo Finish documenting me!
+     * 
+     * @return Return 
+     */
     public int hashCode() {
         int result = super.hashCode();
         result = 29 * result + (_frozen ? 1 : 0);

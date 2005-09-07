@@ -97,6 +97,13 @@
       <organization></organization>
     </developer>
 
+    <developer>
+      <name>James Mitchell</name>
+      <id>jmitchell</id>
+      <email>jmitchell at apache.org</email>
+      <organization>EdgeTech, Inc.</organization>
+    </developer>
+
  </developers>
 
   <contributors/>

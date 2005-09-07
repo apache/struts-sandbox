@@ -17,16 +17,12 @@
  */
 package org.apache.ti.config;
 
-import java.io.Reader;
 import java.io.Writer;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -34,7 +30,6 @@ import org.apache.commons.logging.LogFactory;
 import xjavadoc.XClass;
 import xjavadoc.XMethod;
 import xjavadoc.XJavaDoc;
-import xjavadoc.filesystem.ReaderFile;
 import xjavadoc.filesystem.XJavadocFile;
 
 import org.apache.ti.util.*;
@@ -46,22 +41,45 @@ import org.apache.ti.util.*;
 public class XDocletParser {
 
     private Map parameters;
-    private TemplateProcessor processor;
+    private TemplateProcessor templateProcessor;
     private static final Log log = LogFactory.getLog(XDocletParser.class);
 
-    public void setTemplateProcessor(TemplateProcessor p) {
-        this.processor = p;
-    }
-    
-    public void setParameters(Map map) {
-        this.parameters = map;
-    }
 
-    public Map getParameters() {
-        return parameters;
-    }
+    /**
+	 * @return Returns the parameters.
+	 */
+	public Map getParameters() {
+		return parameters;
+	}
 
-    protected String getClassName(String uri) {
+
+	/**
+	 * @param parameters The parameters to set.
+	 */
+	public void setParameters(Map parameters) {
+		this.parameters = parameters;
+	}
+
+
+
+
+	/**
+	 * @return Returns the templateProcessor.
+	 */
+	public TemplateProcessor getTemplateProcessor() {
+		return templateProcessor;
+	}
+
+
+	/**
+	 * @param templateProcessor The templateProcessor to set.
+	 */
+	public void setTemplateProcessor(TemplateProcessor templateProcessor) {
+		this.templateProcessor = templateProcessor;
+	}
+
+
+	protected String getClassName(String uri) {
         String className = uri.replace('/', '.');
         className = className.replace('\\', '.');
         className = className.substring(0, className.indexOf(".java"));
@@ -69,7 +87,16 @@ public class XDocletParser {
     }    
 
 
+	/**
+	 * @todo Finish documenting me!
+	 * 
+	 * @param sources
+	 * @param srcRoot
+	 * @param destRoot
+	 * @param outputs
+	 */
     public void generate(List sources, File srcRoot, File destRoot, List outputs) {
+    	log.debug("XDocletParser#generate()");
         XJavaDoc jdoc = new XJavaDoc();
         String source, className;
         XJavadocFile file;
@@ -89,16 +116,16 @@ public class XDocletParser {
         XClass xclass;
         for (Iterator o = outputs.iterator(); o.hasNext(); ) {
             output = (OutputType)o.next();
-            if (output.getFrequency() == output.ONCE) {
+            if (output.getFrequency() == OutputType.ONCE) {
                 generateOnce(sources, destRoot, jdoc, output, context);
             } else {
                 for (Iterator i = sources.iterator(); i.hasNext(); ) {
                     source = (String)i.next();
                     xclass = jdoc.getXClass(getClassName(source));
                    
-                    if (output.getFrequency() == output.PER_CONTROLLER) {
+                    if (output.getFrequency() == OutputType.PER_CONTROLLER) {
                         generatePerController(source, destRoot, xclass, output, context);
-                    } else if (output.getFrequency() == output.PER_ACTION) {
+                    } else if (output.getFrequency() == OutputType.PER_ACTION) {
                         generatePerAction(source, destRoot, xclass, output, context);
                     }
                 }    
@@ -119,7 +146,7 @@ public class XDocletParser {
         }    
         Writer writer = output.getWriter(destRoot, null, null);
         context.put("xclasses", xclasses);
-        processor.process(output.getTemplate(), context, writer);
+        templateProcessor.process(output.getTemplate(), context, writer);
     }
 
 
@@ -129,7 +156,7 @@ public class XDocletParser {
         Writer writer = output.getWriter(destRoot, source, null);
         context.put("xclass", xclass);
         context.put("javaFile", source);
-        processor.process(output.getTemplate(), context, writer);
+        templateProcessor.process(output.getTemplate(), context, writer);
     }
 
 
@@ -146,7 +173,7 @@ public class XDocletParser {
                 context.put("xmethod", m);
                 context.put("javaFile", source);
 
-                processor.process(output.getTemplate(), context, writer);
+                templateProcessor.process(output.getTemplate(), context, writer);
             }    
         }
     }

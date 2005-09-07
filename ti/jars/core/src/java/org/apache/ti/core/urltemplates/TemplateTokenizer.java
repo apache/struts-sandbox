@@ -43,13 +43,20 @@ public class TemplateTokenizer implements Iterator {
     // returned at the next call to next()
     private String _literal;
 
+    /**
+	 * @todo Finish documenting me!
+     * 
+     * Constructor that takes a {@link CharSequence}
+     * @param template
+     */
     public TemplateTokenizer(CharSequence template) {
         _template = template;
         _matcher = pattern.matcher(_template);
     }
 
     /**
-     * Returns true if there are more literals or tokens/delimiters.
+     * @return Returns true if there are more literals or tokens/delimiters.
+     * @see Iterator#hasNext()
      */
     public boolean hasNext() {
         if (_matcher == null) {
@@ -75,6 +82,7 @@ public class TemplateTokenizer implements Iterator {
 
     /**
      * Returns the next literal string or token/delimiter.
+     * @see Iterator#next()
      */
     public Object next() {
         String result = null;
@@ -90,8 +98,11 @@ public class TemplateTokenizer implements Iterator {
     }
 
     /**
+	 * @todo Finish documenting me!
+	 * 
      * Returns true if the call to next() will return a token rather
      * than a literal.
+     * @return Fix me
      */
     public boolean isTokenNext() {
         return _literal == null && _token != null;

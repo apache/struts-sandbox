@@ -63,11 +63,34 @@ public abstract class TemplatedURLFormatter {
     public static final String DEFAULT_TEMPLATE_REF = "default-url-templates";
 
     // Base set of tokens
+    /**
+	 * @todo Finish documenting me!
+     */
     public static final String SCHEME_TOKEN = "{url:scheme}";
+    
+    /**
+	 * @todo Finish documenting me!
+     */
     public static final String DOMAIN_TOKEN = "{url:domain}";
+    
+    /**
+	 * @todo Finish documenting me!
+     */
     public static final String PORT_TOKEN = "{url:port}";
+    
+    /**
+	 * @todo Finish documenting me!
+     */
     public static final String PATH_TOKEN = "{url:path}";
+    
+    /**
+	 * @todo Finish documenting me!
+     */
     public static final String QUERY_STRING_TOKEN = "{url:queryString}";
+    
+    /**
+	 * @todo Finish documenting me!
+     */
     public static final String FRAGMENT_TOKEN = "{url:fragment}";
 
     private List _knownTokens =
@@ -85,6 +108,14 @@ public abstract class TemplatedURLFormatter {
         return (TemplatedURLFormatter) PageFlowActionContext.get().getApplication().get(TEMPLATED_URL_FORMATTER_ATTR);
     }
 
+    /**
+	 * @todo Finish documenting me!
+     * 
+     * @param applicationScope
+     * @param defaultFormatter
+     * 
+     * @return The {@link TemplatedURLFormatter} for this configuration.
+     */
     public static TemplatedURLFormatter initApplication(Map applicationScope, TemplatedURLFormatter defaultFormatter) {
         // get the default template formatter class name from the config file
         TemplatedURLFormatter formatter = createTemplatedURLFormatter();

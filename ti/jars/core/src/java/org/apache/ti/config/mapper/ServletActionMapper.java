@@ -36,6 +36,14 @@ public class ServletActionMapper implements ActionMapper {
 
     protected static final Log log = LogFactory.getLog(ServletActionMapper.class);
 
+    /**
+	 * @todo Finish documenting me!
+     * 
+     * @param ctx The {@link WebContext} for this request.
+     * 
+     * @return The current {@link ActionMapping} for this context or null if
+     * not found.
+     */
     public ActionMapping getMapping(WebContext ctx) {
 
         HttpServletRequest request = ((ServletWebContext) ctx).getRequest();
@@ -86,6 +94,12 @@ public class ServletActionMapper implements ActionMapper {
         }
     }
 
+    /**
+     * @todo Isn't this duplicate somewhere else?
+     * 
+     * @param mapping The mapping to check
+     * @return The uri for the specified action mapping
+     */
     public String getUriFromActionMapping(ActionMapping mapping) {
 
         String ext = mapping.getExternalMapping();

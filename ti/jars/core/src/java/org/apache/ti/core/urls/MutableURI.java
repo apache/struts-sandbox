@@ -120,17 +120,24 @@ public class MutableURI {
             Collections.unmodifiableMap(new HashMap/*< String, List< String > >*/());
 
     /**
+	 * @todo Finish documenting me!
+	 * 
      * Constructs a <code>MutableURI</code>.
      */
     public MutableURI() {
+    	// @todo fix me
     }
 
     /**
+	 * @todo Finish documenting me!
+	 * 
      * Constructs a <code>MutableURI</code>.
      *
      * @param uriString the string to be parsed into a URI
      * @param encoded   Flag indicating whether the string is
      *                  already encoded.
+     *
+     * @throws URISyntaxException When something bad happens
      */
     public MutableURI(String uriString, boolean encoded) throws URISyntaxException {
         assert uriString != null : "The uri cannot be null.";
@@ -217,6 +224,8 @@ public class MutableURI {
     }
 
     /**
+	 * @todo Finish documenting me!
+	 * 
      * Set the value of the <code>MutableURI</code>.
      * <p/>
      * <p> This method can also be used to clear the <code>MutableURI</code>. </p>
@@ -224,6 +233,8 @@ public class MutableURI {
      * @param uriString the string to be parsed into a URI
      * @param encoded   Flag indicating whether the string is
      *                  already encoded.
+     *
+     * @throws URISyntaxException When something bad happens.
      */
     public void setURI(String uriString, boolean encoded) throws URISyntaxException {
         if (uriString == null) {
@@ -804,6 +815,7 @@ public class MutableURI {
             try {
                 encodedURL = URLCodec.encode(url, DEFAULT_ENCODING);
             } catch (java.io.UnsupportedEncodingException ignore) {
+            	// ignore
             }
         }
         return encodedURL;
@@ -887,6 +899,7 @@ public class MutableURI {
      * its URI class.
      *
      * @param original the original character sequence
+     * @return A URI from the given (original) String
      * @throws URISyntaxException If an error occurs.
      */
     protected static URI encodeURI(String original) throws URISyntaxException {

@@ -99,13 +99,15 @@ public class StrutsTiServlet extends HttpServlet {
      */
     public void addServletMapping(String servletName, String urlPattern) {
 
-        if (log.isDebugEnabled()) {
-            log.debug("Process servletName=" + servletName
-                    + ", urlPattern=" + urlPattern);
-        }
         String myServletName = getServletConfig().getServletName();
 
-        if (servletName != null && servletName.equals(myServletName)) {
+        boolean matches = servletName != null && servletName.equals(myServletName);
+        if (log.isDebugEnabled()) {
+            log.debug("Process servletName=" + servletName
+                    + ", urlPattern=" + urlPattern 
+                    + (matches ? "(is a match)" : "(not a match)"));
+        }
+		if (matches) {
             servletMappings.add(urlPattern);
         }
 
