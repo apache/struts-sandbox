@@ -6,12 +6,12 @@ namespace Agility.Core
 	/// </summary>
 	public class TestRemoveCommand : ICommand
 	{
-		public bool Execute (IContext _context)
+		public bool Execute(IContext _context)
 		{
 			TestContext context = _context as TestContext;
-			string value = context [context.InputKey] as string;
-			context [context.InputKey] = null;
-			context [context.OutputKey] = value;
+			string value = context[context.InputKey] as string;
+			context[context.InputKey] = null;
+			context[context.OutputKey] = value;
 			return false;
 		}
 	}

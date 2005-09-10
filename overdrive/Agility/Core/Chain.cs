@@ -30,7 +30,7 @@ namespace Agility.Core
 		/// <summary>
 		/// Construct a {@link IChain} with no configured {@link ICommand}s.
 		/// </summary>
-		public Chain ()
+		public Chain()
 		{
 		}
 
@@ -38,20 +38,20 @@ namespace Agility.Core
 		/// Construct a {@link IChain} configured with the specified {@link ICommand}.
 		/// </summary>
 		/// <param name="command">The {@link ICommand} to be configured.</param>
-		public Chain (ICommand command)
+		public Chain(ICommand command)
 		{
-			AddCommand (command);
+			AddCommand(command);
 		}
 
 		/// <summary>
 		/// Construct a {@link IChain} configured with the specified {@link ICommand}s.
 		/// </summary>
 		/// <param name="commands">The {@link ICommand}s to be configured.</param>
-		public Chain (ICommand[] commands)
+		public Chain(ICommand[] commands)
 		{
 			if (commands == null) // FIXME: Illegal Argument
-				throw new Exception ();
-			for (int i = 0; i < commands.Length; i++) AddCommand (commands [i]);
+				throw new Exception();
+			for (int i = 0; i < commands.Length; i++) AddCommand(commands[i]);
 
 		}
 
@@ -60,7 +60,7 @@ namespace Agility.Core
 		/// Construct a {@link IChain} configured with the specified {@link ICommand}s.
 		/// </summary>
 		/// <param name="commands">The {@link ICommand}s to be configured</param>
-		public Chain (IList commands) : base ()
+		public Chain(IList commands) : base()
 		{
 			AddCommands = commands;
 		}
@@ -84,15 +84,15 @@ namespace Agility.Core
 		#region Chain Methods
 
 		// See interface
-		public void AddCommand (ICommand command)
+		public void AddCommand(ICommand command)
 		{
 			if (command == null)
-				throw new ArgumentNullException ("command==null", "Chain.AddCommand");
+				throw new ArgumentNullException("command==null", "Chain.AddCommand");
 			if (frozen)
-				throw new ApplicationException ("Chain.AddCommand: frozen==true");
+				throw new ApplicationException("Chain.AddCommand: frozen==true");
 			ICommand[] results = new ICommand[commands.Length + 1];
-			Array.Copy (commands, 0, results, 0, commands.Length);
-			results [commands.Length] = command;
+			Array.Copy(commands, 0, results, 0, commands.Length);
+			results[commands.Length] = command;
 			commands = results;
 
 		}
@@ -102,19 +102,19 @@ namespace Agility.Core
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException ("value==null", "Chain.AddCommands");
-				IEnumerator elements = value.GetEnumerator ();
-				while (elements.MoveNext ()) AddCommand (elements.Current as ICommand);
+					throw new ArgumentNullException("value==null", "Chain.AddCommands");
+				IEnumerator elements = value.GetEnumerator();
+				while (elements.MoveNext()) AddCommand(elements.Current as ICommand);
 			}
 		}
 
 
 		// See interface
-		public bool Execute (IContext context)
+		public bool Execute(IContext context)
 		{
 			// Verify our parameters
 			if (context == null)
-				throw new ArgumentNullException ("context==null", "Chain.Execute");
+				throw new ArgumentNullException("context==null", "Chain.Execute");
 
 			// Freeze the configuration of the command list
 			frozen = true;
@@ -130,7 +130,7 @@ namespace Agility.Core
 			{
 				try
 				{
-					saveResult = commands [i].Execute (context);
+					saveResult = commands[i].Execute(context);
 					if (saveResult) break;
 				}
 				catch (Exception e)
@@ -149,12 +149,12 @@ namespace Agility.Core
 			bool result = false;
 			for (int j = i; j >= 0; j--)
 			{
-				if (commands [j] is IFilter)
+				if (commands[j] is IFilter)
 				{
 					try
 					{
 						result =
-							((IFilter) commands [j]).PostProcess (context, saveException);
+							((IFilter) commands[j]).PostProcess(context, saveException);
 						if (result)
 							handled = true;
 					}
@@ -177,7 +177,7 @@ namespace Agility.Core
 		/// Return an array of the configured {@link ICommand}s for this {@link IChain}.  This method is internal to the assembly and is used only for the unit tests.
 		/// </summary>
 		/// <returns>An array of the configured {@link ICommand}s for this {@link IChain}</returns>
-		public ICommand[] GetCommands ()
+		public ICommand[] GetCommands()
 		{
 			return (commands);
 

@@ -62,7 +62,7 @@ namespace Agility.Core
 		/// at least once, it is no longer possible to add additional
 		/// {@link ICommand}s; instead, an Exception will be thrown.</p>
 		/// </remarks>
-		void AddCommand (ICommand command);
+		void AddCommand(ICommand command);
 
 		/// <summary>
 		/// Add a IList of {@link ICommand}s to the list of {@link ICommand}s.
@@ -109,7 +109,7 @@ namespace Agility.Core
 		///  is complete, or <code>false</code> if further processing
 		///  of this {@link IContext} can be delegated to a subsequent
 		///  {@link ICommand} in an enclosing {@link IChain}</returns>
-		new bool Execute (IContext context);
+		new bool Execute(IContext context);
 
 	}
 }

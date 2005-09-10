@@ -7,10 +7,10 @@ namespace Agility.Core
 	/// </summary>
 	public class TestNowCommand : ICommand
 	{
-		public bool Execute (IContext _context)
+		public bool Execute(IContext _context)
 		{
 			TestContext context = _context as TestContext;
-			context [context.OutputKey] = DateTime.Now;
+			context[context.OutputKey] = DateTime.Now;
 			return false;
 		}
 	}

@@ -36,7 +36,7 @@ namespace Agility.Core
 		/// </summary>
 		/// <param name="name">Name of the new command</param>
 		/// <param name="command">{@link ICommand} or {@link IChain} to be returned</param>
-		void AddCommand (String name, ICommand command);
+		void AddCommand(String name, ICommand command);
 
 		/// <summary>
 		/// Return the {@link ICommand} or {@link IChain} associated with the
@@ -44,7 +44,7 @@ namespace Agility.Core
 		/// </summary>
 		/// <param name="name">Name for which a {@link ICommand} or {@link IChain}
 		///  should be retrieved</param>
-		ICommand GetCommand (String name);
+		ICommand GetCommand(String name);
 
 		/// <summary>
 		/// Return an <code>IEnumerator</code> over the set of named commands
@@ -53,7 +53,7 @@ namespace Agility.Core
 		/// <remarks>
 		/// <p>If there are no known commands, an empty IEnumerator is returned.</p>
 		/// </remarks>
-		IEnumerator GetNames ();
+		IEnumerator GetNames();
 
 	}
 }

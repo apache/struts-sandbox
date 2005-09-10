@@ -91,7 +91,7 @@ namespace Agility.Core
 		///  of this {@link IContext} should be delegated to a subsequent
 		///  {@link ICommand} in an enclosing {@link IChain}
 		/// </returns>
-		bool Execute (IContext context);
+		bool Execute(IContext context);
 
 	}
 }

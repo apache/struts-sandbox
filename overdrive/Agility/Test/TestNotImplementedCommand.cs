@@ -7,9 +7,9 @@ namespace Agility.Core
 	/// </summary>
 	public class TestNotImplementedCommand : ICommand
 	{
-		public bool Execute (IContext context)
+		public bool Execute(IContext context)
 		{
-			throw new NotImplementedException ();
+			throw new NotImplementedException();
 		}
 	}
 }

@@ -36,6 +36,6 @@ namespace Agility.Core
 		/// <param name="context">The {@link Context} to be processed by this {@link Filter}</param>
 		/// <param name="exception">The <code>Exception</code> (if any) that was thrown  by the last {@link Command} that was executed; otherwise <code>null</code></param>
 		/// <returns>If a non-null <code>exception</code> was "handled" by this  method (and therefore need not be rethrown), return <code>true</code>;  otherwise return <code>false</code></returns>
-		bool PostProcess (IContext context, Exception exception);
+		bool PostProcess(IContext context, Exception exception);
 	}
 }

@@ -11,9 +11,9 @@ namespace Agility.Core
 
 		#region IFilter Members
 
-		public virtual bool PostProcess (IContext context, Exception exception)
+		public virtual bool PostProcess(IContext context, Exception exception)
 		{
-			context [FILTER_KEY] = null;
+			context[FILTER_KEY] = null;
 			return false; // == I took care of my business, but someone 
 			// still needs to handle the exception
 		}
@@ -22,9 +22,9 @@ namespace Agility.Core
 
 		#region ICommand Members
 
-		public bool Execute (IContext context)
+		public bool Execute(IContext context)
 		{
-			context.Add (FILTER_KEY, this);
+			context.Add(FILTER_KEY, this);
 			return false;
 		}
 

@@ -6,6 +6,7 @@ namespace Agility.Core
 	public class TestContext : Context
 	{
 		private string _InputKey = "input";
+
 		public string InputKey
 		{
 			get { return _InputKey; }
@@ -14,6 +15,7 @@ namespace Agility.Core
 		}
 
 		private string _OutputKey = "output";
+
 		public string OutputKey
 		{
 			get { return _OutputKey; }

@@ -5,7 +5,7 @@ namespace Agility.Core
 	/// </summary>
 	public class TestCommand : ICommand
 	{
-		public bool Execute (IContext context)
+		public bool Execute(IContext context)
 		{
 			; // do nothing
 			return false;

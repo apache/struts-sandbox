@@ -7,9 +7,9 @@ namespace Agility.Core
 	/// </summary>
 	public class TestFilterHandler : TestFilterCommand
 	{
-		public override bool PostProcess (IContext context, Exception exception)
+		public override bool PostProcess(IContext context, Exception exception)
 		{
-			context [FILTER_KEY] = exception;
+			context[FILTER_KEY] = exception;
 			return true; // == OK, I handled it!
 		}
 	}

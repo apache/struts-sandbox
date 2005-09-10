@@ -25,7 +25,7 @@ namespace Agility.Core
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
-		public Context ()
+		public Context()
 		{
 		}
 
@@ -35,9 +35,9 @@ namespace Agility.Core
 		/// </summary>
 		/// <param name="key">Index for entry</param>
 		/// <param name="_value">Value for entry</param>
-		public Context (string key, object _value)
+		public Context(string key, object _value)
 		{
-			this.Add (key, _value);
+			this.Add(key, _value);
 		}
 	}
 }

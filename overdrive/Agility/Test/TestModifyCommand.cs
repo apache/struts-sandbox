@@ -9,12 +9,12 @@ namespace Agility.Core
 	{
 		public const string SUFFIX = "_MODIFIED";
 
-		public bool Execute (IContext _context)
+		public bool Execute(IContext _context)
 		{
 			TestContext context = _context as TestContext;
-			string input = context [context.InputKey] as string;
+			string input = context[context.InputKey] as string;
 			string output = input + SUFFIX;
-			context [context.OutputKey] = output;
+			context[context.OutputKey] = output;
 			return false;
 		}
 	}
