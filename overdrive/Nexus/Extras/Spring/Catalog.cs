@@ -95,7 +95,8 @@ namespace Nexus.Extras.Spring
 			return o as ICommand;
 		}
 
-		public IRequestCommand GetRequestCommand(string name) {
+		public IRequestCommand GetRequestCommand(string name)
+		{
 			ICommand c = GetCommand(name);
 			IRequestCommand command = c as IRequestCommand;
 			if (command == null)

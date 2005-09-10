@@ -430,14 +430,14 @@ namespace Nexus.Web.Controls
 					list_Item_Click(index);
 					break;
 				default:
-				{
-					if (list_Insert)
-						// ISSUE: If insert fails, old input is not retained. [WNE-67]
-						list_Add_Load();
-					else
-						list_Refresh();
-					break;
-				}
+					{
+						if (list_Insert)
+							// ISSUE: If insert fails, old input is not retained. [WNE-67]
+							list_Add_Load();
+						else
+							list_Refresh();
+						break;
+					}
 			}
 		}
 
@@ -478,34 +478,34 @@ namespace Nexus.Web.Controls
 
 		#region List events
 
-		private string GetDataKey ()
+		private string GetDataKey()
 		{
 			DataGrid grid = Grid;
 			int index = grid.EditItemIndex;
-			string key = grid.DataKeys [index] as string;
+			string key = grid.DataKeys[index] as string;
 			return key;
 		}
 
-		private ControlCollection GetControls (DataGridCommandEventArgs e)
+		private ControlCollection GetControls(DataGridCommandEventArgs e)
 		{
 			DataGrid grid = Grid;
-			ControlCollection controls = new ControlCollection (grid);
+			ControlCollection controls = new ControlCollection(grid);
 			foreach (TableCell t in e.Item.Cells)
 			{
 				for (int i = 0; i < t.Controls.Count; i++)
-					controls.Add (t.Controls [i]);
+					controls.Add(t.Controls[i]);
 			}
 			return controls;
 		}
 
-		private  bool GetList ()
+		private bool GetList()
 		{
-			IViewHelper helper = Execute (ListCommand);
+			IViewHelper helper = Execute(ListCommand);
 			bool okay = helper.IsNominal;
 			if (okay)
 			{
-				DataSource (helper);
-				DataBind ();
+				DataSource(helper);
+				DataBind();
 			}
 			return okay;
 		}
@@ -518,7 +518,7 @@ namespace Nexus.Web.Controls
 		}
 
 		protected void list_Save(object source, DataGridCommandEventArgs e)
-		{			
+		{
 			string key = (list_Insert) ? null : GetDataKey();
 			ControlCollection controls = GetControls(e);
 			IViewHelper helper = Save(key, controls);

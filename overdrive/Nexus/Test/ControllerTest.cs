@@ -18,7 +18,6 @@ using NUnit.Framework;
 
 namespace Nexus.Core
 {
-
 	/// <summary>
 	/// Exercise IRequestCatalog per [OVR-8].
 	/// </summary>

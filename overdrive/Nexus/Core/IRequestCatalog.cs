@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using System;
 using System.Collections;
 using Agility.Core;
 using Nexus.Core.Helpers;
@@ -80,7 +79,7 @@ namespace Nexus.Core
 		/// </summary>
 		/// <param name="command">The Command ID</param>
 		/// <returns>Helper instance for command</returns>
-		IViewHelper GetHelperFor(string command); 
+		IViewHelper GetHelperFor(string command);
 
 		/// <summary>
 		/// Obtain Command and verify that instance is a IRequestCommand.

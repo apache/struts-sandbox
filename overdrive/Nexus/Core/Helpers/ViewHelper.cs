@@ -26,7 +26,6 @@ namespace Nexus.Core.Helpers
 	/// 
 	public abstract class ViewHelper : IViewHelper
 	{
-		
 		/// <summary>
 		/// Default setting for ListSuffix ["_list"].
 		/// </summary>
@@ -76,22 +75,22 @@ namespace Nexus.Core.Helpers
 
 		public void Read(IDictionary input, bool nullIfEmpty)
 		{
-			if (input==null) return;
+			if (input == null) return;
 			ICollection keys = input.Keys;
 			IDictionary criteria = Criteria;
 			if (nullIfEmpty)
 				foreach (string key in keys)
-			{
-				object value = input[key];
-				string s = value as string;
-				if ((s!=null) && (s.Length==0))
-					criteria.Add(key,null);
-				else 
-					criteria.Add(key,value);
-			}
+				{
+					object value = input[key];
+					string s = value as string;
+					if ((s != null) && (s.Length == 0))
+						criteria.Add(key, null);
+					else
+						criteria.Add(key, value);
+				}
 			else foreach (string key in keys)
 			{
-				criteria.Add(key,input[key]);				
+				criteria.Add(key, input[key]);
 			}
 		}
 

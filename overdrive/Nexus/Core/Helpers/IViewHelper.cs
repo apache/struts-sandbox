@@ -33,9 +33,8 @@ namespace Nexus.Core.Helpers
 	/// 
 	public interface IViewHelper
 	{
-
 		#region "Deprecated" in favor of new ViewControl methods
-				
+
 		/// <summary>
 		/// Invoke the helper's command and bind the output to 
 		/// controls in the given collection.
