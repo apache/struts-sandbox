@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = ""
+                PostBuildEvent = "$(SolutionDir)postbuild.bat    $(TargetDir)  $(TargetName)  $(SolutionName)  $(SolutionDir)"
                 RootNamespace = "Agility.Core"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
