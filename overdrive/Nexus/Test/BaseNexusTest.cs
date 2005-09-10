@@ -95,7 +95,6 @@ namespace Nexus.Core
 			return found;
 		}
 
-
 		/// <summary>
 		/// Convenience method to confirm that no Exception was caught.
 		/// </summary>
@@ -222,7 +221,7 @@ namespace Nexus.Core
 		/// <param name="minCount">The minimum number of items</param>
 		protected IRequestContext AssertList(string id, int minCount)
 		{
-			IRequestContext context = catalog.GetRequest(id);
+			IRequestContext context = catalog.GetRequestContext(id);
 			catalog.ExecuteRequest(context);
 			AssertNominal(context);
 			Assert.IsTrue(context.HasOutcome, "Expected outcome");
@@ -257,7 +256,7 @@ namespace Nexus.Core
 		/// <param name="deleteId">The "delete" command name</param>
 		protected IRequestContext AssertInsertDelete(string insertId, string keyId, string keyValue, string deleteId)
 		{
-			IRequestContext context = catalog.GetRequest(insertId);
+			IRequestContext context = catalog.GetRequestContext(insertId);
 			Populate(context);
 			context[keyId] = String.Empty;
 
@@ -273,7 +272,7 @@ namespace Nexus.Core
 
 		protected IRequestContext AssertEdit(string editId, string keyId, string keyValue, string[] keys)
 		{
-			IRequestContext context = catalog.GetRequest(editId);
+			IRequestContext context = catalog.GetRequestContext(editId);
 			context[keyId] = keyValue;
 			catalog.ExecuteRequest(context);
 			AssertNominal(context);
@@ -289,7 +288,7 @@ namespace Nexus.Core
 		/// <param name="keyValue">The value of the primary key</param>
 		protected IRequestContext AssertUpdate(string updateId, string keyId, string keyValue)
 		{
-			IRequestContext context = catalog.GetRequest(updateId);
+			IRequestContext context = catalog.GetRequestContext(updateId);
 			Populate(context);
 			catalog.ExecuteRequest(context);
 			AssertNominal(context);

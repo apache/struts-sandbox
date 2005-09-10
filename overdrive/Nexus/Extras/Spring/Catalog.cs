@@ -36,7 +36,6 @@ namespace Nexus.Extras.Spring
 		private const string msg_MISSING = "Object is not found in Factory.";
 		private const string msg_NULL = "Object ID cannot be null.";
 		private const string msg_TYPE = "Command is not a IRequestCommand or IRequestChain.";
-		private const string msg_TYPE_HELPER = "Object is not a IViewHelper.";
 		private const string msg_CATALOG_CONTEXT_NULL = "Catalog: Context cannot be null!";
 		private const string msg_CATALOG_COMMAND_NULL = "Catalog: Command within Context cannot be null! -- Was Context retrieved from Catalog?";
 
@@ -72,6 +71,14 @@ namespace Nexus.Extras.Spring
 			return o;
 		}
 
+		public IViewHelper GetHelperFor(string command)
+		{
+			IViewHelper helper = ViewHelper;
+			helper.Catalog = this;
+			helper.Command = GetRequestCommand(command);
+			return helper;
+		}
+
 		/// <summary>
 		/// Not implemented as Catalog is expected to be created by an IOC framework.
 		/// </summary>
@@ -82,20 +89,15 @@ namespace Nexus.Extras.Spring
 			throw new NotImplementedException(msg_ADD_COMMAND); // OK
 		}
 
-		/// <summary>
-		/// Obtain Command and verify that instance is a IRequestCommand.
-		/// </summary>
-		/// <param name="name">Command ID</param>
-		/// <returns>IRequestCommand instance for name</returns>
-		/// <exception cref="Exception">
-		/// Throws Exception if name is null, 
-		/// name is not in catalog, 
-		/// or if instance for name is not a IRequestCommand
-		/// </exception>
 		public ICommand GetCommand(string name)
 		{
 			object o = GetObject(name);
-			IRequestCommand command = o as IRequestCommand;
+			return o as ICommand;
+		}
+
+		public IRequestCommand GetRequestCommand(string name) {
+			ICommand c = GetCommand(name);
+			IRequestCommand command = c as IRequestCommand;
 			if (command == null)
 			{
 				Exception e = new Exception(msg_TYPE);
@@ -164,26 +166,22 @@ namespace Nexus.Extras.Spring
 			set { _PostOp = value; }
 		}
 
-		public IViewHelper GetHelper(string name)
+		private IViewHelper _ViewHelper;
+
+		public IViewHelper ViewHelper
 		{
-			object o = GetObject(name);
-			IViewHelper helper = o as IViewHelper;
-			if (helper == null)
-			{
-				Exception e = new Exception(msg_TYPE_HELPER);
-				throw(e);
-			}
-			return helper;
+			get { return _ViewHelper; }
+			set { _ViewHelper = value; }
 		}
 
-		public IRequestContext GetRequest(string name)
+		public IRequestContext GetRequestContext(string name)
 		{
 			ICommand _command = GetCommand(name);
 			IRequestCommand _rc = _command as IRequestCommand;
-			return GetRequest(_rc);
+			return GetRequestContext(_rc);
 		}
 
-		public IRequestContext GetRequest(IRequestCommand command)
+		public IRequestContext GetRequestContext(IRequestCommand command)
 		{
 			IRequestContext context = null;
 			try
@@ -204,9 +202,9 @@ namespace Nexus.Extras.Spring
 
 		}
 
-		public IRequestContext GetRequest(string name, IDictionary input)
+		public IRequestContext GetRequestContext(string name, IDictionary input)
 		{
-			IRequestContext context = GetRequest(name);
+			IRequestContext context = GetRequestContext(name);
 			context.Criteria = input;
 			return context;
 		}
@@ -234,7 +232,7 @@ namespace Nexus.Extras.Spring
 
 		public IRequestContext ExecuteRequest(string name)
 		{
-			IRequestContext context = GetRequest(name);
+			IRequestContext context = GetRequestContext(name);
 			ExecuteRequest(context);
 			return context;
 		}

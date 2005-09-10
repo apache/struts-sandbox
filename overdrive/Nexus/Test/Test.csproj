@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = ""
+                PostBuildEvent = "$(SolutionDir)postbuild.bat $(TargetDir)  $(TargetName)  $(SolutionName)  $(SolutionDir)"
                 RootNamespace = "Nexus.Core"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -86,19 +86,19 @@
                     AssemblyFolderKey = "hklm\dn\nunit.framework"
                 />
                 <Reference
-                    Name = "Nexus.Core"
-                    AssemblyName = "Nexus.Core"
-                    HintPath = "..\Core\bin\Debug\Nexus.Core.dll"
-                />
-                <Reference
                     Name = "Agility.Core"
                     AssemblyName = "Agility.Core"
-                    HintPath = "..\..\Agility\Core\bin\Debug\Agility.Core.dll"
+                    HintPath = "..\..\local-cache\Agility\Agility.Core.dll"
                 />
                 <Reference
                     Name = "Spring.Core"
                     AssemblyName = "Spring.Core"
-                    HintPath = "..\..\SpringNet.bin\Spring.Core.dll"
+                    HintPath = "..\..\local-cache\SpringNet\Spring.Core.dll"
+                />
+                <Reference
+                    Name = "Core"
+                    Project = "{7C8CAFD4-1E45-41B4-9963-F51199B12EA7}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
                     Name = "Extras"
@@ -143,6 +143,7 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
+                <Folder RelPath = "bin\Debug\" />
                 <File
                     RelPath = "Commands\ListAll.cs"
                     SubType = "Code"

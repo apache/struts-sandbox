@@ -38,7 +38,7 @@ namespace Nexus.Core
 		[Test]
 		public void ObjectByKey_Trusted()
 		{
-			IRequestContext context = catalog.GetRequest(OBJECT_BY_KEY);
+			IRequestContext context = catalog.GetRequestContext(OBJECT_BY_KEY);
 			context[PK_SOMETHING] = PK_SOMETHING_VALUE;
 
 			catalog.ExecuteRequest(context); // do the actual work
@@ -51,7 +51,7 @@ namespace Nexus.Core
 		{
 			IDictionary fields = new Hashtable();
 			fields[PK_SOMETHING] = PK_SOMETHING_VALUE;
-			IRequestContext context = catalog.GetRequest(OBJECT_BY_KEY_WITH_REQUIRED, fields);
+			IRequestContext context = catalog.GetRequestContext(OBJECT_BY_KEY_WITH_REQUIRED, fields);
 
 			catalog.ExecuteRequest(context); // do the actual work
 
@@ -62,7 +62,7 @@ namespace Nexus.Core
 		public void ObjectByKey_UnTrusted_Fail()
 		{
 			IDictionary fields = new Hashtable();
-			IRequestContext context = catalog.GetRequest(OBJECT_BY_KEY_WITH_REQUIRED, fields);
+			IRequestContext context = catalog.GetRequestContext(OBJECT_BY_KEY_WITH_REQUIRED, fields);
 
 			catalog.ExecuteRequest(context); // do the actual work
 
@@ -76,7 +76,7 @@ namespace Nexus.Core
 			IDictionary fields = new Hashtable();
 			fields[PK_SOMETHING] = PK_SOMETHING_VALUE;
 			// fields [PK_SOME_DATE] = DateTime.Now.ToShortDateString ();
-			IRequestContext context = catalog.GetRequest(OBJECT_BY_KEY_WITH_VALIDATE, fields);
+			IRequestContext context = catalog.GetRequestContext(OBJECT_BY_KEY_WITH_VALIDATE, fields);
 
 			catalog.ExecuteRequest(context); // do the actual work
 
@@ -109,7 +109,7 @@ namespace Nexus.Core
 			IDictionary fields = new Hashtable();
 			fields[PK_SOMETHING] = PK_SOMETHING_VALUE;
 			fields[PK_SOME_DATE] = DateTime.Now.ToShortDateString();
-			IRequestContext context = catalog.GetRequest(OBJECT_BY_KEY_WITH_VALIDATE, fields);
+			IRequestContext context = catalog.GetRequestContext(OBJECT_BY_KEY_WITH_VALIDATE, fields);
 
 			catalog.ExecuteRequest(context); // do the actual work
 

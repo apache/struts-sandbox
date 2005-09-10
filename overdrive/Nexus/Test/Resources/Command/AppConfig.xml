@@ -11,6 +11,12 @@
 	  <property name="PostOp"><ref object="PostOp"/></property>
   </object>
   
+<!-- View Helper-->
+
+  <object id="ViewHelper" type="Nexus.Core.Helpers.ViewHelper" singleton="false">
+    <property name="ID"><value>ViewHelper</value></property>
+  </object>
+  
 <!-- Request Processors -->
 	
   <object id="ConvertInput" type="Nexus.Core.Validators.ConvertInput">

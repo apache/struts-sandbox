@@ -18,6 +18,7 @@ using NUnit.Framework;
 
 namespace Nexus.Core
 {
+
 	/// <summary>
 	/// Exercise IRequestCatalog per [OVR-8].
 	/// </summary>
@@ -37,5 +38,6 @@ namespace Nexus.Core
 			Assert.IsTrue(context.IsNominal, "Expected nominal result.");
 			Assert.IsTrue(context.HasOutcome, "Expected outcome from command.");
 		}
+
 	}
 }

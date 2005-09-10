@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = ""
+                PostBuildEvent = "$(SolutionDir)postbuild.bat $(TargetDir) $(TargetName) $(SolutionName)  $(SolutionDir)"
                 RootNamespace = "Nexus.Core"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -80,11 +80,6 @@
                     HintPath = "..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "Agility.Core"
-                    AssemblyName = "Agility.Core"
-                    HintPath = "..\..\Agility\Core\bin\Debug\Agility.Core.dll"
-                />
-                <Reference
                     Name = "System.Drawing"
                     AssemblyName = "System.Drawing"
                     HintPath = "..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
@@ -93,6 +88,11 @@
                     Name = "System.Windows.Forms"
                     AssemblyName = "System.Windows.Forms"
                     HintPath = "..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Windows.Forms.dll"
+                />
+                <Reference
+                    Name = "Agility.Core"
+                    AssemblyName = "Agility.Core"
+                    HintPath = "..\..\local-cache\Agility\Agility.Core.dll"
                 />
             </References>
         </Build>
@@ -170,6 +170,11 @@
                 />
                 <File
                     RelPath = "Helpers\IViewHelper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Helpers\ViewArgs.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

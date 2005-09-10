@@ -33,6 +33,9 @@ namespace Nexus.Core.Helpers
 	/// 
 	public interface IViewHelper
 	{
+
+		#region "Deprecated" in favor of new ViewControl methods
+				
 		/// <summary>
 		/// Invoke the helper's command and bind the output to 
 		/// controls in the given collection.
@@ -86,6 +89,73 @@ namespace Nexus.Core.Helpers
 		/// 
 		void Read(ICollection controls);
 
+		/// <summary>
+		/// Provide a prefix to trim from the id of a control during Read and 
+		/// Bind.
+		/// </summary>
+		/// <remarks><p>
+		/// The Prefix is needed when a single page uses a control 
+		/// more than once often in separate panels.
+		/// </p></remarks>
+		/// 
+		string Prefix { get; set; }
+
+
+		/// <summary>
+		/// Provide a suffix to truncate from a list control id 
+		/// in order to set a corresponding value field ["_list"].
+		/// </summary>
+		/// <remark><p>
+		/// When processing a single-value list control, if the id ends with 
+		/// the list suffix, 
+		/// the suffix is removed, and a field with the remaining name is set 
+		/// to the selected item value.
+		/// </p><P>
+		/// So, the selected item from a list control with the id 
+		/// "facility_key_list" will be set to a field named "facility_key".
+		/// </P></remark>
+		/// 
+		string ListSuffix { get; set; }
+
+		/* 
+			// TODO: 
+			string AlertSuffix {get; set}
+			string HintSuffix {get; set}
+			string LabelSuffix {get; set}
+		*/
+
+
+		/// <summary>
+		/// Indicate whether to set the value read from control to null 
+		/// if it is an empty string [TRUE].
+		/// </summary>
+		/// <remarks><p>
+		/// If a control is blank, it may still return an empty string. 
+		/// In a IDictionary, an empty string is a valid value, 
+		/// so the entry for the control will still exist. 
+		/// </p></remarks>
+		/// 
+		bool NullIfEmpty { get; set; }
+
+
+		/// <summary>
+		/// Provide a string token to insert as item 0 to a list controls ["--v--"].
+		/// </summary>
+		/// <remarks><p>
+		/// To disable feature, set to a null string.
+		/// </p></remarks>
+		/// 
+		string SelectItemPrompt { get; set; }
+
+		#endregion 
+
+		/// <summary>
+		/// Read input into the Criteria from a given Dictionary.
+		/// </summary>
+		/// <param name="criteria">Attributes to add to Critiera</param>
+		/// <param name="nullIfEmpty">Set attributes for empty strings to null</param>
+		/// 
+		void Read(IDictionary criteria, bool nullIfEmpty);
 
 		/// <summary>
 		/// Store input and output values.
@@ -201,8 +271,6 @@ namespace Nexus.Core.Helpers
 		/// 
 		string HintsText { get; }
 
-		// ----
-
 		/// <summary>
 		/// Provide the Field Table for this Helper.
 		/// </summary>
@@ -216,6 +284,16 @@ namespace Nexus.Core.Helpers
 		/// 
 		IFieldTable FieldTable { get; }
 
+		// ----
+
+		/// <summary>
+		/// Provide the command (or chain of commands) for this helper
+		/// </summary>
+		/// <remarks><p>
+		/// Setting the Command also sets the internal Context for the command.
+		/// </p></remarks>
+		/// 
+		IRequestCommand Command { get; set; }
 
 		/// <summary>
 		/// Provide a set of IFieldContext definitions to be used with this helper. 
@@ -228,90 +306,12 @@ namespace Nexus.Core.Helpers
 		/// 
 		IList FieldSet { get; set; }
 
-		/* 
-			// TODO: Messengers
-			string Message(string key); 
-			string MessageIndex {get;}
-			IMessageTable MessageTable {get;}
-		*/
-
-		// ----
-
-		/// <summary>
-		/// Provide a prefix to trim from the id of a control during Read and 
-		/// Bind.
-		/// </summary>
-		/// <remarks><p>
-		/// The Prefix is needed when a single page uses a control 
-		/// more than once often in separate panels.
-		/// </p></remarks>
-		/// 
-		string Prefix { get; set; }
-
-
-		/// <summary>
-		/// Provide a suffix to truncate from a list control id 
-		/// in order to set a corresponding value field ["_list"].
-		/// </summary>
-		/// <remark><p>
-		/// When processing a single-value list control, if the id ends with 
-		/// the list suffix, 
-		/// the suffix is removed, and a field with the remaining name is set 
-		/// to the selected item value.
-		/// </p><P>
-		/// So, the selected item from a list control with the id 
-		/// "facility_key_list" will be set to a field named "facility_key".
-		/// </P></remark>
-		/// 
-		string ListSuffix { get; set; }
-
-		/* 
-			// TODO: 
-			string AlertSuffix {get; set}
-			string HintSuffix {get; set}
-			string LabelSuffix {get; set}
-		*/
-
-
-		/// <summary>
-		/// Indicate whether to set the value read from control to null 
-		/// if it is an empty string [TRUE].
-		/// </summary>
-		/// <remarks><p>
-		/// If a control is blank, it may still return an empty string. 
-		/// In a IDictionary, an empty string is a valid value, 
-		/// so the entry for the control will still exist. 
-		/// </p></remarks>
-		/// 
-		bool NullIfEmpty { get; set; }
-
-
-		/// <summary>
-		/// Provide a string token to insert as item 0 to a list controls ["--v--"].
-		/// </summary>
-		/// <remarks><p>
-		/// To disable feature, set to a null string.
-		/// </p></remarks>
-		/// 
-		string SelectItemPrompt { get; set; }
-
-
-		// ----
-
 		/// <summary>
 		/// Provide the catalog for this helper, 
 		/// usually set by dependency injection.
 		/// </summary>
 		/// 
 		IRequestCatalog Catalog { get; set; }
-
-
-		/// <summary>
-		/// Provide the command (or chain of commands) for this helper, 
-		/// usually set by dependency injection.
-		/// </summary>
-		/// 
-		IRequestCommand Command { get; set; }
 
 	}
 

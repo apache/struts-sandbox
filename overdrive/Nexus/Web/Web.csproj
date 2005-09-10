@@ -12,12 +12,12 @@
                 AssemblyName = "Nexus.Web"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
-                DefaultHTMLPageLayout = "Grid"
+                DefaultHTMLPageLayout = "Flow"
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = ""
+                PostBuildEvent = "$(SolutionDir)postbuild.bat $(TargetDir)  $(TargetName)  $(SolutionName)  $(SolutionDir)"
                 RootNamespace = "Nexus.Web"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -90,29 +90,24 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "Core"
-                    Project = "{7C8CAFD4-1E45-41B4-9963-F51199B12EA7}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
-                    Name = "Extras"
-                    Project = "{7931CACD-0E73-4DD2-A373-FF6A01CE6186}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                    Name = "Spring.Web"
+                    AssemblyName = "Spring.Web"
+                    HintPath = "..\..\local-cache\SpringNet\Spring.Web.dll"
                 />
                 <Reference
                     Name = "Spring.Core"
                     AssemblyName = "Spring.Core"
-                    HintPath = "..\..\SpringNet.bin\Spring.Core.dll"
-                />
-                <Reference
-                    Name = "Spring.Web"
-                    AssemblyName = "Spring.Web"
-                    HintPath = "..\..\SpringNet.bin\Spring.Web.dll"
+                    HintPath = "..\..\local-cache\SpringNet\Spring.Core.dll"
                 />
                 <Reference
                     Name = "Agility.Core"
                     AssemblyName = "Agility.Core"
-                    HintPath = "..\..\Agility\Core\bin\Debug\Agility.Core.dll"
+                    HintPath = "..\..\local-cache\Agility\Agility.Core.dll"
+                />
+                <Reference
+                    Name = "Core"
+                    Project = "{7C8CAFD4-1E45-41B4-9963-F51199B12EA7}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
         </Build>
@@ -155,6 +150,21 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "GridControl.ascx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "GridControl.ascx.cs"
+                    DependentUpon = "GridControl.ascx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "GridControl.ascx.resx"
+                    DependentUpon = "GridControl.ascx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "GridViewHelper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -174,8 +184,28 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ViewControl.ascx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "ViewControl.ascx.cs"
+                    DependentUpon = "ViewControl.ascx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ViewControl.ascx.resx"
+                    DependentUpon = "ViewControl.ascx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Web.config"
                     BuildAction = "Content"
+                />
+                <File
+                    RelPath = "WebHelper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "WebViewHelper.cs"

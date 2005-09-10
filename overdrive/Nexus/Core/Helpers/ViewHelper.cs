@@ -26,6 +26,7 @@ namespace Nexus.Core.Helpers
 	/// 
 	public abstract class ViewHelper : IViewHelper
 	{
+		
 		/// <summary>
 		/// Default setting for ListSuffix ["_list"].
 		/// </summary>
@@ -72,6 +73,27 @@ namespace Nexus.Core.Helpers
 		#endregion
 
 		#region Read and Bind 
+
+		public void Read(IDictionary input, bool nullIfEmpty)
+		{
+			if (input==null) return;
+			ICollection keys = input.Keys;
+			IDictionary criteria = Criteria;
+			if (nullIfEmpty)
+				foreach (string key in keys)
+			{
+				object value = input[key];
+				string s = value as string;
+				if ((s!=null) && (s.Length==0))
+					criteria.Add(key,null);
+				else 
+					criteria.Add(key,value);
+			}
+			else foreach (string key in keys)
+			{
+				criteria.Add(key,input[key]);				
+			}
+		}
 
 		public IDictionary Criteria
 		{
@@ -228,7 +250,11 @@ namespace Nexus.Core.Helpers
 		public IRequestCommand Command
 		{
 			get { return _Command; }
-			set { _Command = value; }
+			set
+			{
+				_Command = value;
+				_Context = Catalog.GetRequestContext(value);
+			}
 		}
 
 		private IRequestContext _Context;
@@ -250,7 +276,7 @@ namespace Nexus.Core.Helpers
 				{
 					IRequestCommand rc = Command;
 					if (rc == null) throw new ArgumentNullException("Command==null", "ViewHelper.Context");
-					_Context = Catalog.GetRequest(rc);
+					_Context = Catalog.GetRequestContext(rc);
 				}
 				return _Context;
 			}

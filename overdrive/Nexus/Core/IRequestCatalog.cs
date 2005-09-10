@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+using System;
 using System.Collections;
 using Agility.Core;
 using Nexus.Core.Helpers;
@@ -55,20 +56,43 @@ namespace Nexus.Core
 		/// 
 		IRequestCommand PostOp { get; set; }
 
+		/// <summary>
+		/// Default IViewHelper instance for this Catalog.
+		/// </summary>
+		/// <remarks><p>
+		/// Set in catalogs for applications that use ViewHelpers.
+		/// The object should be a non-singleton instance ("protype").
+		/// Used by GetHelperFor.
+		/// </p></remarks>
+		/// 
+		IViewHelper ViewHelper { get; set; }
 
 		/// <summary>
-		/// Obtains an object for ID.
+		/// Obtain an object for ID.
 		/// </summary>
 		/// <param name="name">Our object ID</param>
 		/// <returns>object for name</returns>
 		object GetObject(string name);
 
 		/// <summary>
-		/// Obtains a IViewHelper for helper ID.
+		/// Obtain a default IViewHelper instance, 
+		/// configured for the specified command.
 		/// </summary>
-		/// <param name="name">Our helper ID</param>
-		/// <returns>IViewHelper for name</returns>
-		IViewHelper GetHelper(string name);
+		/// <param name="command">The Command ID</param>
+		/// <returns>Helper instance for command</returns>
+		IViewHelper GetHelperFor(string command); 
+
+		/// <summary>
+		/// Obtain Command and verify that instance is a IRequestCommand.
+		/// </summary>
+		/// <param name="command">Command ID</param>
+		/// <returns>IRequestCommand instance for name</returns>
+		/// <exception cref="Exception">
+		/// Throws Exception if name is null, 
+		/// name is not in catalog, 
+		/// or if instance for name is not a IRequestCommand
+		/// </exception>
+		IRequestCommand GetRequestCommand(string command);
 
 		/// <summary>
 		/// Obtain a IRequestContext for command ID, 
@@ -77,7 +101,7 @@ namespace Nexus.Core
 		/// <param name="name">Our command ID</param>
 		/// <returns>IRequestContext with embedded resources.</returns>
 		/// 
-		IRequestContext GetRequest(string name);
+		IRequestContext GetRequestContext(string name);
 
 		/// <summary>
 		/// Obtain a IRequestContext for command ID, 
@@ -88,7 +112,7 @@ namespace Nexus.Core
 		/// <param name="input">Our input values</param>
 		/// <returns>IRequestContext with embedded resources.</returns>
 		/// 
-		IRequestContext GetRequest(string name, IDictionary input);
+		IRequestContext GetRequestContext(string name, IDictionary input);
 
 		/// <summary>
 		/// Obtain a IRequestContext for the command, 
@@ -97,7 +121,7 @@ namespace Nexus.Core
 		/// <param name="command">Our command</param>
 		/// <returns>IRequestContext with embedded resources.</returns>
 		/// 
-		IRequestContext GetRequest(IRequestCommand command);
+		IRequestContext GetRequestContext(IRequestCommand command);
 
 		/// <summary>
 		/// Obtain and execute a IRequestContext.

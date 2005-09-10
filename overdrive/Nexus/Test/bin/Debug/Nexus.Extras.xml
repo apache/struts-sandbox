@@ -1,0 +1,132 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Nexus.Extras</name>
+    </assembly>
+    <members>
+        <member name="T:Nexus.Extras.Spring.Catalog">
+            <summary>
+            Implement IRequestCatalog  
+            using Spring as an IOC container [OVR-8].
+            </summary>
+            
+        </member>
+        <member name="M:Nexus.Extras.Spring.Catalog.AddCommand(System.String,Agility.Core.ICommand)">
+            <summary>
+            Not implemented as Catalog is expected to be created by an IOC framework.
+            </summary>
+            <param name="name">ID for command</param>
+            <param name="command">Command instance</param>
+        </member>
+        <member name="M:Nexus.Extras.Spring.Catalog.#ctor">
+            <summary>
+            Default constructor.
+            </summary>
+        </member>
+        <member name="M:Nexus.Extras.Spring.Catalog.#ctor(Spring.Context.IApplicationContext)">
+            <summary>
+            Construct object and set ApplicationContext.
+            </summary>
+            <param name="value">Our ApplicationContext</param>
+        </member>
+        <member name="M:Nexus.Extras.Spring.Catalog.Factory">
+            <summary>
+            Provide the IApplicationContext instance.
+            </summary>
+            <returns>IApplicationContext instance</returns>
+        </member>
+        <member name="M:Nexus.Extras.Spring.Catalog.VerifyRequest(Nexus.Core.IRequestContext)">
+            <summary>
+            Confirm that the Context is not null, and the Context's Command is not null.
+            </summary>
+            <param name="context">IRequestContext to verify</param>
+            <returns>The non-null Command for this Context</returns>
+        </member>
+        <member name="T:Nexus.Extras.Spring.FieldContext">
+            <summary>
+            Concrete IFieldContext implementation that uses Spring MessageSource to resolve text .
+            </summary>
+            <remarks><p>
+            This implementation *requires* that a Spring MessageSource be exposed to each the FieldContext member. 
+            The simplest way to do that is by using a base FieldContext in the Spring configuration file. 
+            The MessageSource property can be set once in the base and inherited by the others. 
+            </p><p>
+            In this implementation, 
+            the text properties -- Alert, Hint, Help, Label, and Required -- are read-only 
+            and cannot be accessed with a MessageSource property. 
+            When the property is read, 
+            the method looks for a message resource that shares the same  ID as the FieldContext,
+            but with a "_property" suffix (_alert, _hint, _help, _label, _required). 
+            So, if the FieldContext ID is LastName, then reading its Alert will look for a message 
+            resource named "LastName_alert". 
+            </p><p>
+            In the case of an Alert, a message may also be provided by the Processor. 
+            If so, then the Processor message supercedes the default message. 
+            In this way, you can set a default for all the controls, 
+            and then override the default for specific processors.
+            </p><p>
+            To provide a default Alert or Required to use when no other is provided, 
+            provide a Message Resource entry in the form: "_alert" or "_required".
+            </p><p>
+            If a Label mesasge is not found, the FieldContext ID is returned instead. 
+            Otherwise, if no message is found, 
+            then the FieldContext ID and property tag (e.g. "LastName_required") 
+            is returned. 
+            </p></remarks>
+            
+        </member>
+        <member name="M:Nexus.Extras.Spring.FieldContext.GetMessage(System.String)">
+            <summary>
+            Resolve the message.
+            </summary>
+            <param name="name">The name of the resource to get.</param>
+            <returns>
+            The resolved message if the lookup was successful. Otherwise, it either throws
+            an exception or returns the resource name, depending on the implementation.
+            </returns>
+        </member>
+        <member name="M:Nexus.Extras.Spring.FieldContext.GetMessageOrNull(System.String)">
+            <summary>
+            Resolve the message or return null.
+            </summary>
+            <param name="name">The name of the resource to get.</param>
+            <returns>A resolved message or null if the message could not be located for any reason.</returns>
+        </member>
+        <member name="M:Nexus.Extras.Spring.FieldContext.GetText(System.String,System.String)">
+            <summary>
+            Return the message for the Processor, 
+            or the message for the FieldContext, 
+            or the message for the suffix,
+            or the FieldContext ID and suffix verbatim, 
+            if all else fails.
+            </summary>
+            <param name="root">FieldContext ID</param>
+            <param name="suffix">Message type</param>
+            <returns>A message or the root+suffix</returns>
+        </member>
+        <member name="P:Nexus.Extras.Spring.FieldContext.MessageSource">
+            <summary>
+            Identify the message source for this FieldContext.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">
+            If the context has not been initialized yet.
+            </exception>
+        </member>
+        <member name="T:Agility.Extras.Spring.Objects">
+            <summary>
+            A singleton implementation of the IHelper protocol, 
+            using static methods and the Spring object factory.
+            </summary>
+            <remarks><p>
+            Since static methods are used here, as a convenience, 
+            it is not possible to implement IHelper. 
+            However, the same method signatures are otherwise used.
+            </p><p>
+            Of course, an alternative is to provide the Factory
+            method a singlton, and then obtain the Helpers 
+            class from the Factory, but implementing the 
+            IHelpers interface as a singleton seems simpler.
+            </p></remarks>
+        </member>
+    </members>
+</doc>
