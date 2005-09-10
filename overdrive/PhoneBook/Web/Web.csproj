@@ -16,7 +16,7 @@
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
                 OutputType = "Library"
-                PreBuildEvent = ""
+                PreBuildEvent = "$(SolutionDir)prebuild $(SolutionDir)"
                 PostBuildEvent = ""
                 RootNamespace = "PhoneBook.Web"
                 RunPostBuildEvent = "OnBuildSuccess"
@@ -90,44 +90,44 @@
                     HintPath = "..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
+                    Name = "Nexus.Core"
+                    AssemblyName = "Nexus.Core"
+                    HintPath = "..\..\local-cache\Nexus\Nexus.Core.dll"
+                />
+                <Reference
                     Name = "Core"
                     Project = "{3150F3E8-9A04-4FED-B16F-CEA57756E934}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "Agility.Core"
-                    AssemblyName = "Agility.Core"
-                    HintPath = "..\..\Agility\Core\bin\Debug\Agility.Core.dll"
-                />
-                <Reference
-                    Name = "Nexus.Core"
-                    AssemblyName = "Nexus.Core"
-                    HintPath = "..\..\Nexus\Core\bin\Debug\Nexus.Core.dll"
+                    Name = "Nexus.Web"
+                    AssemblyName = "Nexus.Web"
+                    HintPath = "..\..\local-cache\Nexus\Nexus.Web.dll"
                 />
                 <Reference
                     Name = "Spring.Core"
                     AssemblyName = "Spring.Core"
-                    HintPath = "..\..\SpringNet.bin\Spring.Core.dll"
+                    HintPath = "..\..\local-cache\SpringNet\Spring.Core.dll"
                 />
                 <Reference
                     Name = "Spring.Web"
                     AssemblyName = "Spring.Web"
-                    HintPath = "..\..\SpringNet.bin\Spring.Web.dll"
-                />
-                <Reference
-                    Name = "Nexus.Extras"
-                    AssemblyName = "Nexus.Extras"
-                    HintPath = "..\..\Nexus\Extras\bin\Debug\Nexus.Extras.dll"
-                />
-                <Reference
-                    Name = "Nexus.Web"
-                    AssemblyName = "Nexus.Web"
-                    HintPath = "..\..\Nexus\Web\bin\Nexus.Web.dll"
+                    HintPath = "..\..\local-cache\SpringNet\Spring.Web.dll"
                 />
                 <Reference
                     Name = "ByteFX.MySqlClient"
                     AssemblyName = "ByteFX.MySqlClient"
-                    HintPath = "..\..\iBatisNet.bin\ByteFX.MySqlClient.dll"
+                    HintPath = "..\..\local-cache\iBatisNet\ByteFX.MySqlClient.dll"
+                />
+                <Reference
+                    Name = "Agility.Core"
+                    AssemblyName = "Agility.Core"
+                    HintPath = "..\..\local-cache\Agility\Agility.Core.dll"
+                />
+                <Reference
+                    Name = "Nexus.Extras"
+                    AssemblyName = "Nexus.Extras"
+                    HintPath = "..\..\local-cache\Nexus\Nexus.Extras.dll"
                 />
             </References>
         </Build>
@@ -182,6 +182,38 @@
                 <File
                     RelPath = "Web.config"
                     BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Controls\Finder.ascx"
+                    SubType = "UserControl"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Controls\Finder.ascx.cs"
+                    DependentUpon = "Finder.ascx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controls\Finder.ascx.resx"
+                    DependentUpon = "Finder.ascx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Controls\Lister.ascx"
+                    SubType = "UserControl"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Controls\Lister.ascx.cs"
+                    DependentUpon = "Lister.ascx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controls\Lister.ascx.resx"
+                    DependentUpon = "Lister.ascx.cs"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "Forms\default.css"

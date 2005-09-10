@@ -27,6 +27,7 @@ namespace PhoneBook.Core.Commands
 	[TestFixture]
 	public class SelectAllTest : BaseTest
 	{
+		
 		/// <summary>
 		/// Assert result of SelectAll, after another method runs the command.
 		/// </summary>
@@ -61,8 +62,9 @@ namespace PhoneBook.Core.Commands
 		[Test]
 		public void FilterHelper_Format ()
 		{
-			IViewHelper helper = catalog.GetHelper (App.DIRECTORY_LIST_HELPER);
+			IViewHelper helper = catalog.GetHelperFor (App.ENTRY_LIST);
 			helper.Execute ();
+			AssertNominal(helper);
 			AppEntryList list = helper.Outcome as AppEntryList;
 			Assert.IsNotNull (list, "Expected list to be AppEntryList");
 			AppEntry row = list [0] as AppEntry;

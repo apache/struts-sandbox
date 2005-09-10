@@ -1,8 +1,10 @@
 using System;
-using System.Collections;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Nexus.Core;
 using Nexus.Core.Helpers;
+using Nexus.Web.Controls;
+using PhoneBook.Web.Controls;
 
 namespace PhoneBook.Web.Forms
 {
@@ -14,7 +16,7 @@ namespace PhoneBook.Web.Forms
 	{
 		#region Messages
 
-		private const string msg_LIST_ALL_CMD = "SHOW ALL";
+		public const string msg_LIST_ALL_CMD = "SHOW ALL";
 
 		#endregion
 
@@ -35,137 +37,65 @@ namespace PhoneBook.Web.Forms
 			}
 		}
 
-		#endregion
-
-		#region Helpers
-
-		private IViewHelper _FindHelper;
-		/// <summary>
-		/// Display the filter lists.
-		/// </summary>
-		///
-		public virtual IViewHelper FindHelper
-		{
-			get { return _FindHelper; }
-			set { _FindHelper = value; }
-		}
+		private IRequestCatalog _Catalog;
 
 		/// <summary>
-		/// Apply filter and display matching entries.
+		/// Helper passed by an enclosing control (e.g. Page).
 		/// </summary>
-		///
-		private IViewHelper _ListHelper;
-		public virtual IViewHelper ListHelper
+		/// <remarks><p>
+		/// Subclasses adding EventHandlers 
+		/// should pass a reference to themselves with a ViewArgs instance, 
+		/// encapsulating the Helper.
+		/// </p></remarks>
+		public virtual IRequestCatalog Catalog
 		{
-			get { return _ListHelper; }
-			set { _ListHelper = value; }
+			get { return _Catalog; }
+			set { _Catalog = value; }
 		}
 
 		#endregion
 
-		#region Find
+		#region Control Events
 
-		protected Panel pnlFind;
-		protected DropDownList last_name_list;
-		protected DropDownList first_name_list;
-		protected DropDownList extension_list;
-		protected DropDownList user_name_list;
-		protected DropDownList hired_list;
-		protected DropDownList hours_list;
-		protected Button cmdListAll;
+		protected Lister lister;
+		protected Finder finder;
 
-		private DropDownList[] FilterList ()
+		protected void finder_Click(object sender, EventArgs e)
 		{
-			DropDownList[] lists = {last_name_list, first_name_list, extension_list, user_name_list, hired_list, hours_list};
-			return lists;
-		}
-
-		private void Find_Init ()
-		{
-			cmdListAll.Text = msg_LIST_ALL_CMD;
-			cmdListAll.Click += new EventHandler (ListAll_Click);
-
-			foreach (DropDownList filter in FilterList ())
-			{
-				filter.AutoPostBack = true;
-				filter.SelectedIndexChanged += new EventHandler (Filter_Changed);
-			}
-		}
-
-		private void Filter_Reset (DropDownList except)
-		{
-			int exceptIndex = 0;
-			if (except != null) exceptIndex = except.SelectedIndex;
-			foreach (DropDownList filter in FilterList ())
-			{
-				filter.SelectedIndex = 0;
-			}
-			if (except != null) except.SelectedIndex = exceptIndex;
-		}
-
-		private void Filter_Changed (object sender, EventArgs e)
-		{
-			DropDownList list = sender as DropDownList;
-			string id = list.ID;
-			int v = id.LastIndexOf (ListHelper.ListSuffix);
-			string key = id.Substring (0, v);
-			ListHelper.Criteria [key] = list.SelectedValue;
-			Filter_Reset (list);
-			List_Load (ListHelper);
-		}
-
-		private void Find_Load ()
-		{
-			IViewHelper h = FindHelper;
-			h.ExecuteBind (pnlFind.Controls);
-			bool ok = (h.IsNominal);
-			if (!ok)
-				Page_Error = h;
-		}
-
-		private void ListAll_Click (object sender, EventArgs e)
-		{
-			Filter_Reset (null);
-			List_Load (ListHelper);
-		}
-
-		#endregion
-
-		#region List
-
-		protected Panel pnlList;
-		protected DataGrid repList;
-
-		private void List_Load (IViewHelper helper)
-		{
-			helper.Execute ();
-			bool ok = helper.IsNominal;
-			if (!ok) Page_Error = helper;
-			else
-			{
-				IList result = helper.Outcome;
-				repList.DataSource = result;
-				repList.DataBind ();
-			}
+			ViewArgs a = e as ViewArgs;
+			IViewHelper helper = a.Helper;
+			lister.Open(helper.Criteria);
 		}
 
 		#endregion
 
 		#region Page Events
 
+		private void View_Error(object sender, EventArgs e)
+		{
+			ViewArgs v = e as ViewArgs;
+			if (v==null) throw new ArgumentException("View_Error: !(e is ViewArgs)");
+			IViewHelper helper = v.Helper;
+			if (helper != null) Page_Error = helper;
+			else throw new ArgumentException("View_Error: (e.helper==null)");
+		}
+
+		private void View_Init(ViewControl c)
+		{
+			c.View_Error += new EventHandler(View_Error);
+			c.Catalog = this.Catalog; // ISSUE: Why isn't control injection working?
+		}
+
 		protected void Page_Init ()
 		{
 			pnlError.Visible = false;
-			Find_Init ();
+			View_Init(finder);
+			View_Init(lister);
 		}
 
 		protected void Page_Load (object sender, EventArgs e)
 		{
-			if (!IsPostBack)
-			{
-				Find_Load ();
-				List_Load (ListHelper);
-			}
+			// Put user code to initialize the page here
 		}
 
 		#endregion

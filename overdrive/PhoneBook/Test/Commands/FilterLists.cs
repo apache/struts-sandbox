@@ -71,7 +71,7 @@ namespace PhoneBook.Core.Commands
 
 		private IKeyValueList FilterList (string key)
 		{
-			IViewHelper helper = catalog.GetHelper (App.DIRECTORY_FIND_HELPER);
+			IViewHelper helper = catalog.GetHelperFor (App.DIRECTORY_VIEW);
 			helper.Execute ();
 			IKeyValueList list = helper.Criteria [key] as IKeyValueList;
 			Assert.IsNotNull (list, "Expected KeyValueList");

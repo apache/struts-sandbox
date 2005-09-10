@@ -16,7 +16,7 @@
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
                 OutputType = "Library"
-                PreBuildEvent = ""
+                PreBuildEvent = "$(SolutionDir)prebuild $(SolutionDir)"
                 PostBuildEvent = ""
                 RootNamespace = "PhoneBook.Core"
                 RunPostBuildEvent = "OnBuildSuccess"
@@ -86,26 +86,6 @@
                     AssemblyFolderKey = "hklm\dn\nunit.framework"
                 />
                 <Reference
-                    Name = "Nexus.Core"
-                    AssemblyName = "Nexus.Core"
-                    HintPath = "..\..\Nexus\Core\bin\Debug\Nexus.Core.dll"
-                />
-                <Reference
-                    Name = "Nexus.Test"
-                    AssemblyName = "Nexus.Test"
-                    HintPath = "..\..\Nexus\Test\bin\Debug\Nexus.Test.dll"
-                />
-                <Reference
-                    Name = "Agility.Core"
-                    AssemblyName = "Agility.Core"
-                    HintPath = "..\..\Nexus\Core\bin\Debug\Agility.Core.dll"
-                />
-                <Reference
-                    Name = "ByteFX.MySqlClient"
-                    AssemblyName = "ByteFX.MySqlClient"
-                    HintPath = "..\..\iBatisNet.bin\ByteFX.MySqlClient.dll"
-                />
-                <Reference
                     Name = "Core"
                     Project = "{3150F3E8-9A04-4FED-B16F-CEA57756E934}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
@@ -113,17 +93,32 @@
                 <Reference
                     Name = "NUnitAspTest"
                     AssemblyName = "NUnitAspTest"
-                    HintPath = "..\..\NUnitAsp.bin\NUnitAspTest.dll"
+                    HintPath = "..\..\local-cache\NUnitAsp\NUnitAspTest.dll"
                 />
                 <Reference
                     Name = "NUnitAsp"
                     AssemblyName = "NUnitAsp"
-                    HintPath = "..\..\NUnitAsp.bin\NUnitAsp.dll"
+                    HintPath = "..\..\local-cache\NUnitAsp\NUnitAsp.dll"
                 />
                 <Reference
-                    Name = "Web"
-                    Project = "{948EE344-D033-4358-88E8-77FDE080D93C}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                    Name = "Nexus.Core"
+                    AssemblyName = "Nexus.Core"
+                    HintPath = "..\..\local-cache\Nexus\Nexus.Core.dll"
+                />
+                <Reference
+                    Name = "Nexus.Test"
+                    AssemblyName = "Nexus.Test"
+                    HintPath = "..\..\local-cache\Nexus\Nexus.Test.dll"
+                />
+                <Reference
+                    Name = "Agility.Core"
+                    AssemblyName = "Agility.Core"
+                    HintPath = "..\..\local-cache\Agility\Agility.Core.dll"
+                />
+                <Reference
+                    Name = "Nexus.Web"
+                    AssemblyName = "Nexus.Web"
+                    HintPath = "..\..\local-cache\Nexus\Nexus.Web.dll"
                 />
             </References>
         </Build>

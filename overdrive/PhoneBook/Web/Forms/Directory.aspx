@@ -1,4 +1,7 @@
 <%@ Page language="c#" Codebehind="Directory.aspx.cs" AutoEventWireup="true" Inherits="PhoneBook.Web.Forms.Directory" %>
+<%@ Register TagPrefix="my" TagName="Finder" Src="../Controls/Finder.ascx" %>
+<%@ Register TagPrefix="my" TagName="Lister" Src="../Controls/Lister.ascx" %>
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
 <HTML>
 	<HEAD>
@@ -22,45 +25,9 @@
 			<!-- PROMPT -->
 			<p>Select a filter to display fewer entries.</p>	
 
-			<!-- FIND -->
-			<asp:Panel ID="pnlFind" Runat="server">
-			  <table><tr>
-			  <td colspan="6" >
-				  <asp:Button ID="cmdListAll" Runat="server"></asp:Button>
-				  <INPUT onclick="javascript:window.print();" type="button" value="PRINT" name="cmd_print" id="cmd_print">
-			  </td>
-			  <tr>
-			  <td>Last Name</td>
-			  <td>First Name</td>
-			  <td>Extension</td>
-			  <td>User</td>
-			  <td>Hire Date</td>
-			  <td>Hours</td>			  
-			  </tr><tr>
-			  <td><asp:DropDownList ID="last_name_list" Runat=server></asp:DropDownList></td>
-			  <td><asp:DropDownList ID="first_name_list" Runat=server></asp:DropDownList></td>
-			  <td><asp:DropDownList ID="extension_list" Runat=server></asp:DropDownList></td>
-			  <td><asp:DropDownList ID="user_name_list" Runat=server></asp:DropDownList></td>
-			  <td><asp:DropDownList ID="hired_list" Runat=server></asp:DropDownList></td>
-			  <td><asp:DropDownList ID="hours_list" Runat=server></asp:DropDownList></td>
-			  </tr></table>
-			</asp:panel>
+			<my:Finder id="finder" Runat="server" OnClick="finder_Click"></my:Finder>
 			
-			<!-- LIST -->			
-			<asp:Panel ID="pnlList" Runat="server">
-            	<asp:DataGrid id="repList" Runat="server" AutoGenerateColumns=False>
-					<HeaderStyle CssClass="HeaderStyle" BackColor="#CCCC99"></HeaderStyle>
-					<AlternatingItemStyle CssClass="AlternatingItemStyle" BackColor="#CCCC99"></AlternatingItemStyle>
-					<Columns>
-						<asp:BoundColumn DataField="last_name" HeaderText="Last Name"></asp:BoundColumn>
-						<asp:BoundColumn DataField="first_name" HeaderText="First Name"></asp:BoundColumn>
-						<asp:BoundColumn DataField="extension" HeaderText="Extension"></asp:BoundColumn>
-						<asp:BoundColumn DataField="user_name" HeaderText="User"></asp:BoundColumn>
-						<asp:BoundColumn DataField="hired" HeaderText="Hire Date"></asp:BoundColumn>
-						<asp:BoundColumn DataField="hours" HeaderText="Hours"></asp:BoundColumn>
-					</Columns>
-            	</asp:DataGrid>
-			</asp:Panel>
+ 			<my:Lister id="lister" runat="server" OnClick="lister_Click"></my:Lister>
 
 		</form>
 	</body>
