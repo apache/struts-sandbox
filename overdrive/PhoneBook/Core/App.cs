@@ -22,7 +22,7 @@ namespace PhoneBook.Core
 	/// 
 	public class App
 	{
-		private App ()
+		private App()
 		{
 			// No need to construct static helper class
 		}

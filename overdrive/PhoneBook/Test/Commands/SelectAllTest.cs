@@ -27,24 +27,23 @@ namespace PhoneBook.Core.Commands
 	[TestFixture]
 	public class SelectAllTest : BaseTest
 	{
-		
 		/// <summary>
 		/// Assert result of SelectAll, after another method runs the command.
 		/// </summary>
 		/// <param name="context">Context with result to assert.</param>	
 		/// 	
-		private void SelectAll_Result (IRequestContext context)
+		private void SelectAll_Result(IRequestContext context)
 		{
-			IList list = AssertListOutcome (context);
-			IDictionary row = list [0] as IDictionary;
-			Assert.IsNotNull (row, "Expected list entry to be an IDictionary.");
+			IList list = AssertListOutcome(context);
+			IDictionary row = list[0] as IDictionary;
+			Assert.IsNotNull(row, "Expected list entry to be an IDictionary.");
 			string[] KEYS = {App.FIRST_NAME, App.LAST_NAME, App.USER_NAME, App.EXTENSION, App.HIRED, App.HOURS, App.EDITOR};
 			bool valid = true;
 			foreach (string key in KEYS)
 			{
-				valid = valid && row.Contains (key);
+				valid = valid && row.Contains(key);
 			}
-			Assert.IsTrue (valid, "Expected row to contain all keys.");
+			Assert.IsTrue(valid, "Expected row to contain all keys.");
 		}
 
 
@@ -53,30 +52,30 @@ namespace PhoneBook.Core.Commands
 		/// </summary>
 		/// 
 		[Test]
-		public void SelectAll_Pass ()
+		public void SelectAll_Pass()
 		{
-			IRequestContext context = catalog.ExecuteRequest (App.ENTRY_LIST);
-			SelectAll_Result (context);
+			IRequestContext context = catalog.ExecuteRequest(App.ENTRY_LIST);
+			SelectAll_Result(context);
 		}
 
 		[Test]
-		public void FilterHelper_Format ()
+		public void FilterHelper_Format()
 		{
-			IViewHelper helper = catalog.GetHelperFor (App.ENTRY_LIST);
-			helper.Execute ();
+			IViewHelper helper = catalog.GetHelperFor(App.ENTRY_LIST);
+			helper.Execute();
 			AssertNominal(helper);
 			AppEntryList list = helper.Outcome as AppEntryList;
-			Assert.IsNotNull (list, "Expected list to be AppEntryList");
-			AppEntry row = list [0] as AppEntry;
-			Assert.IsNotNull (row, "Expected rows to be AppEntries");
+			Assert.IsNotNull(list, "Expected list to be AppEntryList");
+			AppEntry row = list[0] as AppEntry;
+			Assert.IsNotNull(row, "Expected rows to be AppEntries");
 
 			string hired = row.hired;
-			Assert.IsNotNull (hired, "Expected each row to have a hired date.");
-			Assert.IsTrue (hired.Length < "##/##/#### ".Length, hired + ": Expected short date format.");
+			Assert.IsNotNull(hired, "Expected each row to have a hired date.");
+			Assert.IsTrue(hired.Length < "##/##/#### ".Length, hired + ": Expected short date format.");
 
 			string extension = row.extension;
-			Assert.IsNotNull (extension, "Expected each row to have an extension.");
-			Assert.IsTrue (extension.Length > "1234567890".Length, extension + ": Expected formatted extension.");
+			Assert.IsNotNull(extension, "Expected each row to have an extension.");
+			Assert.IsTrue(extension.Length > "1234567890".Length, extension + ": Expected formatted extension.");
 
 		}
 	}

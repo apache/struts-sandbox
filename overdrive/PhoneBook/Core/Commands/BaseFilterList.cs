@@ -26,15 +26,15 @@ namespace PhoneBook.Core.Commands
 	/// 
 	public class BaseFilterList : AppCommand
 	{
-		public override bool RequestExecute (IRequestContext context)
+		public override bool RequestExecute(IRequestContext context)
 		{
-			IList rows = Mapper ().QueryForList (QueryID, null);
-			IKeyValueList list = new KeyValueList ();
+			IList rows = Mapper().QueryForList(QueryID, null);
+			IKeyValueList list = new KeyValueList();
 			foreach (object key in rows)
 			{
-				list.Add (new KeyValue (key.ToString (), key));
+				list.Add(new KeyValue(key.ToString(), key));
 			}
-			context [ID] = list;
+			context[ID] = list;
 			return CONTINUE;
 		}
 	}

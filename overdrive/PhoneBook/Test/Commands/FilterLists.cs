@@ -34,23 +34,23 @@ namespace PhoneBook.Core.Commands
 		/// </summary>
 		/// <param name="context">Context returned by command</param>
 		/// 
-		private void FilterList_Result (IRequestContext context)
+		private void FilterList_Result(IRequestContext context)
 		{
-			IList list = AssertListOutcome (context);
+			IList list = AssertListOutcome(context);
 			foreach (IKeyValue item in list)
 			{
-				Assert.IsNotNull (item, "Expected each item to be non-null");
+				Assert.IsNotNull(item, "Expected each item to be non-null");
 				object key = item.Value;
-				Assert.IsNotNull (key, "Expected each key to be non-null");
-				string keystring = key.ToString ();
-				Assert.IsTrue (keystring.Length > 0, "Expected each key to be non-empty");
+				Assert.IsNotNull(key, "Expected each key to be non-null");
+				string keystring = key.ToString();
+				Assert.IsTrue(keystring.Length > 0, "Expected each key to be non-empty");
 			}
-			IDictionary keys = new Hashtable (list.Count);
+			IDictionary keys = new Hashtable(list.Count);
 			foreach (IKeyValue item in list)
 			{
-				string key = item.Value.ToString ();
-				if (keys.Contains (key)) Assert.Fail (key + ": Expected each item to be unique");
-				keys.Add (key, key);
+				string key = item.Value.ToString();
+				if (keys.Contains(key)) Assert.Fail(key + ": Expected each item to be unique");
+				keys.Add(key, key);
 			}
 		}
 
@@ -59,45 +59,45 @@ namespace PhoneBook.Core.Commands
 		/// </summary>
 		/// 
 		[Test]
-		public void TestFilterLists ()
+		public void TestFilterLists()
 		{
 			string[] FILTERS = {App.LAST_NAME_LIST, App.FIRST_NAME_LIST, App.EXTENSION_LIST, App.USER_NAME_LIST, App.HIRED_LIST, App.HOURS_LIST};
 			foreach (string filter in FILTERS)
 			{
-				IRequestContext context = catalog.ExecuteRequest (filter);
-				FilterList_Result (context);
+				IRequestContext context = catalog.ExecuteRequest(filter);
+				FilterList_Result(context);
 			}
 		}
 
-		private IKeyValueList FilterList (string key)
+		private IKeyValueList FilterList(string key)
 		{
-			IViewHelper helper = catalog.GetHelperFor (App.DIRECTORY_VIEW);
-			helper.Execute ();
-			IKeyValueList list = helper.Criteria [key] as IKeyValueList;
-			Assert.IsNotNull (list, "Expected KeyValueList");
+			IViewHelper helper = catalog.GetHelperFor(App.DIRECTORY_VIEW);
+			helper.Execute();
+			IKeyValueList list = helper.Criteria[key] as IKeyValueList;
+			Assert.IsNotNull(list, "Expected KeyValueList");
 			return list;
 		}
 
 		[Test]
-		public void TestFilterFormat_extension ()
+		public void TestFilterFormat_extension()
 		{
-			IKeyValueList list = FilterList (App.EXTENSION_LIST);
+			IKeyValueList list = FilterList(App.EXTENSION_LIST);
 			foreach (IKeyValue item in list)
 			{
 				string key = item.Value as string;
-				Assert.IsTrue (key.Length > "1234567890".Length, "Expected formatted extension, not: " + key);
+				Assert.IsTrue(key.Length > "1234567890".Length, "Expected formatted extension, not: " + key);
 			}
 		}
 
 		[Test]
-		public void TestFilterFormat_hired ()
+		public void TestFilterFormat_hired()
 		{
-			IKeyValueList list = FilterList (App.HIRED_LIST);
+			IKeyValueList list = FilterList(App.HIRED_LIST);
 			foreach (IKeyValue item in list)
 			{
 				string key = item.Value as string;
 				bool okay = (key.Length > 0) && (key.Length < "##/##/#### ".Length);
-				Assert.IsTrue (okay, "Expected short date format, not: " + key);
+				Assert.IsTrue(okay, "Expected short date format, not: " + key);
 			}
 		}
 	}

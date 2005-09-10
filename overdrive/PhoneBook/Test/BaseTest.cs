@@ -33,13 +33,13 @@ namespace PhoneBook.Core
 		/// <param name="context">Context to confirm</param>
 		/// <returns>The non-null, non-empty list</returns>
 		/// 
-		protected IList AssertListOutcome (IRequestContext context)
+		protected IList AssertListOutcome(IRequestContext context)
 		{
-			AssertNominal (context);
-			Assert.IsTrue (context.HasOutcome, "Expected command to set an Outcome.");
+			AssertNominal(context);
+			Assert.IsTrue(context.HasOutcome, "Expected command to set an Outcome.");
 			IList list = context.Outcome as IList;
 			bool notEmpty = ((list != null) && (list.Count > 0));
-			Assert.IsTrue (notEmpty, "Expected outcome to be a not-empty list");
+			Assert.IsTrue(notEmpty, "Expected outcome to be a not-empty list");
 			return list;
 		}
 
@@ -48,7 +48,7 @@ namespace PhoneBook.Core
 		/// </summary>
 		/// 
 		[Test]
-		public void Pass ()
+		public void Pass()
 		{
 		}
 
@@ -57,15 +57,15 @@ namespace PhoneBook.Core
 		/// </summary>
 		/// 
 		[Test]
-		public void GuidString ()
+		public void GuidString()
 		{
-			IDictionary test = new Hashtable ();
+			IDictionary test = new Hashtable();
 			for (int i = 0; i < 10; i++)
 			{
-				string key = Guid.NewGuid ().ToString ();
-				Assert.IsNotNull (key);
-				Assert.IsTrue (36 == key.Length);
-				test.Add (key, key); // Add throws an exception on duplicate keys
+				string key = Guid.NewGuid().ToString();
+				Assert.IsNotNull(key);
+				Assert.IsTrue(36 == key.Length);
+				test.Add(key, key); // Add throws an exception on duplicate keys
 			}
 		}
 	}

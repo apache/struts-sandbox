@@ -8,6 +8,7 @@ namespace PhoneBook.Core.Commands
 	public class BaseSave : AppCommand
 	{
 		private string _KeyID = null;
+
 		/// <summary>
 		/// The name of the key field.
 		/// </summary>
@@ -18,6 +19,7 @@ namespace PhoneBook.Core.Commands
 		}
 
 		private string _InsertID = null;
+
 		/// <summary>
 		/// The name of the "insert" mapping for the Entity.
 		/// </summary>
@@ -28,6 +30,7 @@ namespace PhoneBook.Core.Commands
 		}
 
 		private string _UpdateID = null;
+
 		/// <summary>
 		/// The name of the "update" mapping for the Entity.
 		/// </summary>
@@ -46,24 +49,24 @@ namespace PhoneBook.Core.Commands
 		/// <param name="insertID">The name of the "insert" mapping for the Entity.</param>
 		/// <param name="updateID">The name of the "update" mapping for the Entity.</param>
 		/// <returns>False</returns>
-		protected bool Save (IRequestContext context, string fieldID, string insertID, string updateID)
+		protected bool Save(IRequestContext context, string fieldID, string insertID, string updateID)
 		{
-			bool insert = IsEmpty (context [fieldID] as string);
+			bool insert = IsEmpty(context[fieldID] as string);
 
 			if (insert)
 			{
-				context [fieldID] = GuidString ();
-				Mapper ().Insert (insertID, context);
+				context[fieldID] = GuidString();
+				Mapper().Insert(insertID, context);
 			}
 			else
-				Mapper ().Update (updateID, context);
+				Mapper().Update(updateID, context);
 
 			return CONTINUE;
 		}
 
-		public override bool RequestExecute (IRequestContext context)
+		public override bool RequestExecute(IRequestContext context)
 		{
-			return Save (context, KeyID, InsertID, UpdateID);
+			return Save(context, KeyID, InsertID, UpdateID);
 		}
 
 	}

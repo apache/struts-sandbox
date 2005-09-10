@@ -9,6 +9,7 @@ namespace PhoneBook.Core
 	public class AppUserProfile : UserProfile
 	{
 		private bool _IsEditor = false;
+
 		public bool IsEditor
 		{
 			get { return _IsEditor; }
@@ -19,9 +20,9 @@ namespace PhoneBook.Core
 		/// Instantiate from an IIdentity.
 		/// </summary>
 		/// <param name="id">Identity to copy for this profile.</param>
-		public AppUserProfile (IIdentity id)
+		public AppUserProfile(IIdentity id)
 		{
-			Principal = new UserPrincipal (id);
+			Principal = new UserPrincipal(id);
 		}
 
 	}

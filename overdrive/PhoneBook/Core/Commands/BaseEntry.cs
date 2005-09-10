@@ -25,14 +25,14 @@ namespace PhoneBook.Core.Commands
 	/// 
 	public class BaseEntry : AppCommand
 	{
-		public override bool RequestExecute (IRequestContext context)
+		public override bool RequestExecute(IRequestContext context)
 		{
-			object o = Mapper ().QueryForObject (QueryID, context);
-			context [ID] = o;
+			object o = Mapper().QueryForObject(QueryID, context);
+			context[ID] = o;
 			IDictionary entry = o as IDictionary;
 			foreach (DictionaryEntry e in entry)
 			{
-				context [e.Key] = e.Value;
+				context[e.Key] = e.Value;
 			}
 			return CONTINUE;
 		}

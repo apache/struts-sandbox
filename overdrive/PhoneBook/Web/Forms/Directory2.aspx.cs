@@ -15,10 +15,10 @@ namespace PhoneBook.Web.Forms
 	/// 
 	public class Directory2 : BaseGridPage
 	{
-
 		#region Helpers 
 
 		private IViewHelper _UserHelper;
+
 		/// <summary>
 		/// Obtain entry for a user.
 		/// </summary>
@@ -41,12 +41,13 @@ namespace PhoneBook.Web.Forms
 		protected Label error_label;
 
 		private AppUserProfile _Profile;
+
 		protected AppUserProfile Profile
 		{
 			set
 			{
 				if (value == null)
-					_Profile = NewProfile ();
+					_Profile = NewProfile();
 				else
 					_Profile = value;
 
@@ -54,18 +55,18 @@ namespace PhoneBook.Web.Forms
 			get { return _Profile; }
 		}
 
-		protected AppUserProfile NewProfile ()
+		protected AppUserProfile NewProfile()
 		{
-			WindowsIdentity id = WindowsIdentity.GetCurrent ();
-			AppUserProfile profile = new AppUserProfile (id);
-			Session [UserProfile.USER_PROFILE] = profile;
+			WindowsIdentity id = WindowsIdentity.GetCurrent();
+			AppUserProfile profile = new AppUserProfile(id);
+			Session[UserProfile.USER_PROFILE] = profile;
 
-			UserHelper.Criteria [App.USER_NAME] = profile.UserId;
-			UserHelper.Execute ();
+			UserHelper.Criteria[App.USER_NAME] = profile.UserId;
+			UserHelper.Execute();
 			if (UserHelper.IsNominal)
 			{
-				string editor = UserHelper.Criteria [App.EDITOR] as string;
-				bool isEditor = ((editor != null) && (editor.Equals ("1")));
+				string editor = UserHelper.Criteria[App.EDITOR] as string;
+				bool isEditor = ((editor != null) && (editor.Equals("1")));
 				profile.IsEditor = isEditor;
 			}
 
@@ -117,82 +118,82 @@ namespace PhoneBook.Web.Forms
 
 		// pageload events - These methods populate controls to display
 
-		private Label[] FilterLabels ()
+		private Label[] FilterLabels()
 		{
-			Label[] labels = {last_name_label,first_name_label,extension_label,user_name_label,hired_label,hours_label};
+			Label[] labels = {last_name_label, first_name_label, extension_label, user_name_label, hired_label, hours_label};
 			return labels;
 		}
 
-		private DropDownList[] FilterList ()
+		private DropDownList[] FilterList()
 		{
 			DropDownList[] lists = {last_name_list, first_name_list, extension_list, user_name_list, hired_list, hours_list};
 			return lists;
 		}
 
-		private void ListAll_Click (object sender, EventArgs e)
+		private void ListAll_Click(object sender, EventArgs e)
 		{
-			Filter_Reset (null);
-			List_Load ();
+			Filter_Reset(null);
+			List_Load();
 		}
 
-		protected override void Find_Init ()
+		protected override void Find_Init()
 		{
-			base.Find_Init ();
-			list_all_command.Click += new EventHandler (ListAll_Click);
+			base.Find_Init();
+			list_all_command.Click += new EventHandler(ListAll_Click);
 			list_all_command.Text = GetMessage(list_all_command.ID);
 
 			foreach (Label label in FilterLabels())
-			{ 
+			{
 				label.Text = GetMessage(label.ID);
 			}
 
-			foreach (DropDownList filter in FilterList ())
+			foreach (DropDownList filter in FilterList())
 			{
 				filter.AutoPostBack = true;
-				filter.SelectedIndexChanged += new EventHandler (Find_Submit);
+				filter.SelectedIndexChanged += new EventHandler(Find_Submit);
 			}
 		}
 
 		private string GetRootID(string id)
 		{
-			int v = id.LastIndexOf (GridHelper.FindHelper.ListSuffix);
-			string key = id.Substring (0, v);
-			return key;			
+			int v = id.LastIndexOf(GridHelper.FindHelper.ListSuffix);
+			string key = id.Substring(0, v);
+			return key;
 		}
 
-		private void Filter_Reset (DropDownList except)
+		private void Filter_Reset(DropDownList except)
 		{
 			// Reset filter controls
 			int exceptIndex = 0;
 			if (except != null) exceptIndex = except.SelectedIndex;
-			foreach (DropDownList filter in FilterList ())
+			foreach (DropDownList filter in FilterList())
 			{
 				filter.SelectedIndex = 0;
 			}
 			if (except != null) except.SelectedIndex = exceptIndex;
 			// Tell everyone that we are starting over
 			Page_Prompt = GetMessage(App.DIRECTORY_PROMPT);
-			List_ResetIndex ();
+			List_ResetIndex();
 		}
 
-		protected override void Find_Submit (object sender, EventArgs e)
+		protected override void Find_Submit(object sender, EventArgs e)
 		{
 			// Don't call base: base.Find_Submit (); 
 			DropDownList list = sender as DropDownList;
-			Filter_Reset (list);
+			Filter_Reset(list);
 			string key = GetRootID(list.ID);
 			IGridViewHelper h = GridHelper;
-			h.FindHelper.Criteria.Clear ();
-			h.FindHelper.Criteria [key] = list.SelectedValue;
+			h.FindHelper.Criteria.Clear();
+			h.FindHelper.Criteria[key] = list.SelectedValue;
 			List_Criteria = GridHelper.FindHelper.Criteria;
-			List_Load ();
+			List_Load();
 		}
 
-		protected override void Find_Load ()
+		protected override void Find_Load()
 		{
-			base.Find_Load ();
+			base.Find_Load();
 			IViewHelper h = GridHelper.FindHelper;
-			h.ExecuteBind (find_panel.Controls);
+			h.ExecuteBind(find_panel.Controls);
 			bool ok = (h.IsNominal);
 			if (!ok)
 				Page_Error = h;
@@ -202,11 +203,11 @@ namespace PhoneBook.Web.Forms
 
 		#region Page Events
 
-		protected override void Page_Init ()
+		protected override void Page_Init()
 		{
-			base.Page_Init ();
+			base.Page_Init();
 			list_panel.Visible = true; // base behavior hides
-			Profile = Session [UserProfile.USER_PROFILE] as AppUserProfile;
+			Profile = Session[UserProfile.USER_PROFILE] as AppUserProfile;
 			GridHelper.HasEditColumn = Profile.IsEditor;
 			GridHelper.FindHelper.Profile = Profile;
 			GridHelper.ListHelper.Profile = Profile;
@@ -219,21 +220,20 @@ namespace PhoneBook.Web.Forms
 			}
 		}
 
-		protected override void Page_Load (object sender, EventArgs e)
+		protected override void Page_Load(object sender, EventArgs e)
 		{
-			base.Page_Load(sender,e);
+			base.Page_Load(sender, e);
 			error_panel.Visible = false;
 		}
 
 		protected override void Page_PreRender(object sender, EventArgs e)
 		{
-			base.Page_PreRender(sender,e);
+			base.Page_PreRender(sender, e);
 			greeting.Text = GetMessage(greeting.ID);
 			title.InnerText = GetMessage(App.DIRECTORY_TITLE);
 			heading.InnerText = GetMessage(App.DIRECTORY_HEADING);
 		}
 
 		#endregion
-
 	}
 }

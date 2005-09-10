@@ -26,10 +26,10 @@ namespace PhoneBook.Core.Commands
 	/// 
 	public class BaseList : AppCommand
 	{
-		public override bool RequestExecute (IRequestContext context)
+		public override bool RequestExecute(IRequestContext context)
 		{
-			IList rows = Mapper ().QueryForList (QueryID, context);
-			context [ID] = rows;
+			IList rows = Mapper().QueryForList(QueryID, context);
+			context[ID] = rows;
 			return CONTINUE;
 		}
 	}

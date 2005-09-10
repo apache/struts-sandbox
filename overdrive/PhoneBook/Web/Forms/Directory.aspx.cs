@@ -74,7 +74,7 @@ namespace PhoneBook.Web.Forms
 		private void View_Error(object sender, EventArgs e)
 		{
 			ViewArgs v = e as ViewArgs;
-			if (v==null) throw new ArgumentException("View_Error: !(e is ViewArgs)");
+			if (v == null) throw new ArgumentException("View_Error: !(e is ViewArgs)");
 			IViewHelper helper = v.Helper;
 			if (helper != null) Page_Error = helper;
 			else throw new ArgumentException("View_Error: (e.helper==null)");
@@ -86,14 +86,14 @@ namespace PhoneBook.Web.Forms
 			c.Catalog = this.Catalog; // ISSUE: Why isn't control injection working?
 		}
 
-		protected void Page_Init ()
+		protected void Page_Init()
 		{
 			pnlError.Visible = false;
 			View_Init(finder);
 			View_Init(lister);
 		}
 
-		protected void Page_Load (object sender, EventArgs e)
+		protected void Page_Load(object sender, EventArgs e)
 		{
 			// Put user code to initialize the page here
 		}

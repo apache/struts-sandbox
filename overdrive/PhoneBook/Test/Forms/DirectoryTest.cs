@@ -46,7 +46,7 @@ namespace WNE.Core.Forms
 		/// </summary>
 		/// <returns>An array of the DropDownListTesters</returns>
 		/// 
-		private DropDownListTester[] GetLists ()
+		private DropDownListTester[] GetLists()
 		{
 			DropDownListTester[] lists = {last_name_list, first_name_list, extension_list, user_name_list, hired_list, hours_list};
 			return lists;
@@ -56,28 +56,28 @@ namespace WNE.Core.Forms
 		/// Instantiate the control testers.
 		/// </summary>
 		/// 
-		protected override void SetUp ()
+		protected override void SetUp()
 		{
-			base.SetUp ();
+			base.SetUp();
 			string[] userLanguages = {"en-us"};
 			Browser.UserLanguages = userLanguages;
 			Browser.Credentials = CredentialCache.DefaultCredentials;
 
-			pnlFind = new PanelTester ("pnlFind", CurrentWebForm);
-			last_name_list = new DropDownListTester (App.LAST_NAME_LIST, CurrentWebForm);
-			first_name_list = new DropDownListTester (App.FIRST_NAME_LIST, CurrentWebForm);
-			extension_list = new DropDownListTester (App.EXTENSION_LIST, CurrentWebForm);
-			user_name_list = new DropDownListTester (App.USER_NAME_LIST, CurrentWebForm);
-			hired_list = new DropDownListTester (App.HIRED_LIST, CurrentWebForm);
-			hours_list = new DropDownListTester (App.HOURS_LIST, CurrentWebForm);
+			pnlFind = new PanelTester("pnlFind", CurrentWebForm);
+			last_name_list = new DropDownListTester(App.LAST_NAME_LIST, CurrentWebForm);
+			first_name_list = new DropDownListTester(App.FIRST_NAME_LIST, CurrentWebForm);
+			extension_list = new DropDownListTester(App.EXTENSION_LIST, CurrentWebForm);
+			user_name_list = new DropDownListTester(App.USER_NAME_LIST, CurrentWebForm);
+			hired_list = new DropDownListTester(App.HIRED_LIST, CurrentWebForm);
+			hours_list = new DropDownListTester(App.HOURS_LIST, CurrentWebForm);
 			// TODO: editor_list = new DropDownListTester (App.EDITOR_LIST, CurrentWebForm);
-			cmdListAll = new ButtonTester ("cmdListAll", CurrentWebForm);
+			cmdListAll = new ButtonTester("cmdListAll", CurrentWebForm);
 
-			pnlList = new PanelTester ("pnlList", CurrentWebForm);
-			repList = new DataGridTester ("repList", CurrentWebForm);
-			cmdAdd = new ButtonTester ("cmdAdd", CurrentWebForm);
+			pnlList = new PanelTester("pnlList", CurrentWebForm);
+			repList = new DataGridTester("repList", CurrentWebForm);
+			cmdAdd = new ButtonTester("cmdAdd", CurrentWebForm);
 
-			Browser.GetPage ("http://localhost/PhoneBook/Forms/Directory.aspx");
+			Browser.GetPage("http://localhost/PhoneBook/Forms/Directory.aspx");
 		}
 
 
@@ -86,17 +86,17 @@ namespace WNE.Core.Forms
 		/// </summary>
 		/// 
 		[Test]
-		public void FindControls ()
+		public void FindControls()
 		{
-			WebAssert.Visible (pnlFind);
-			foreach (DropDownListTester list in GetLists ())
+			WebAssert.Visible(pnlFind);
+			foreach (DropDownListTester list in GetLists())
 			{
-				WebAssert.Visible (list);
+				WebAssert.Visible(list);
 			}
-			WebAssert.Visible (cmdListAll);
-			WebAssert.Visible (pnlList);
-			WebAssert.Visible (repList);
-			WebAssert.NotVisible (cmdAdd); // Visible if Editor
+			WebAssert.Visible(cmdListAll);
+			WebAssert.Visible(pnlList);
+			WebAssert.Visible(repList);
+			WebAssert.NotVisible(cmdAdd); // Visible if Editor
 		}
 
 		/// <summary>
@@ -104,11 +104,11 @@ namespace WNE.Core.Forms
 		/// </summary>
 		/// 
 		[Test]
-		public void ListControls ()
+		public void ListControls()
 		{
-			foreach (DropDownListTester list in GetLists ())
+			foreach (DropDownListTester list in GetLists())
 			{
-				Assert.IsTrue (list.Items.Count > 0, list.HtmlId + ": Expected all filter lists to have items.");
+				Assert.IsTrue(list.Items.Count > 0, list.HtmlId + ": Expected all filter lists to have items.");
 			}
 		}
 

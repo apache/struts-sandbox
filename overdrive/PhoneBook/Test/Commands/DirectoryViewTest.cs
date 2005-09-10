@@ -11,20 +11,19 @@ namespace PhoneBook.Core.Commands
 	[TestFixture]
 	public class DirectoryViewTest : BaseTest
 	{
-
 		/// <summary>
 		/// Confirm that Context contains the expected attributes for the list filter-0ps.
 		/// </summary>
 		/// 
 		[Test]
-		public void ContainsFilters ()
+		public void ContainsFilters()
 		{
-			IRequestContext context = catalog.ExecuteRequest (App.DIRECTORY_VIEW);
+			IRequestContext context = catalog.ExecuteRequest(App.DIRECTORY_VIEW);
 			this.AssertNominal(context);
 			string[] FILTERS = {App.LAST_NAME_LIST, App.FIRST_NAME_LIST, App.EXTENSION_LIST, App.USER_NAME_LIST, App.HIRED_LIST, App.HOURS_LIST};
 			foreach (string filter in FILTERS)
 			{
-				Assert.IsTrue (context.Contains (filter), filter + ": Expected context to contain key.");
+				Assert.IsTrue(context.Contains(filter), filter + ": Expected context to contain key.");
 			}
 		}
 
@@ -32,12 +31,12 @@ namespace PhoneBook.Core.Commands
 		/// Confirm that Helper contains the expected command.
 		/// </summary>
 		[Test]
-		public void HelperContains ()
+		public void HelperContains()
 		{
-			IViewHelper helper = catalog.GetHelperFor (App.DIRECTORY_VIEW);
+			IViewHelper helper = catalog.GetHelperFor(App.DIRECTORY_VIEW);
 			IRequestCommand command = helper.Command;
-			Assert.IsNotNull (command, "Expected Helper to have a Command");
-			Assert.AreEqual (App.DIRECTORY_VIEW, command.ID, "Expected Helper to have View Command.");
+			Assert.IsNotNull(command, "Expected Helper to have a Command");
+			Assert.AreEqual(App.DIRECTORY_VIEW, command.ID, "Expected Helper to have View Command.");
 		}
 	}
 }
