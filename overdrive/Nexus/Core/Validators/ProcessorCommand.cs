@@ -74,15 +74,18 @@ namespace Nexus.Core.Validators
 		/// Format output for fields that do not have a Processor.
 		/// </summary>
 		/// <remarks>
-		/// The default behavior is to pass through ICollection types 
-		/// and call ToString on everything else.
+		/// The default behavior is to pass through nulls and ICollection types 
+		/// and to call ToString on everything else.
 		/// </remarks>
 		/// <param name="context">The IProcessorContext</param>
 		public virtual bool FormatOutput(IProcessorContext context)
 		{
-			Type sourceType = context.Source.GetType();
-			if (IsCollectionType(sourceType)) context.Target = context.Source;
-			else context.Target = context.Source.ToString();
+			if (context.Source != null)
+			{
+				Type sourceType = context.Source.GetType();
+				if (IsCollectionType(sourceType)) context.Target = context.Source;
+				else context.Target = context.Source.ToString();
+			}
 			return true;
 		}
 

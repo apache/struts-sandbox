@@ -925,8 +925,8 @@
             Format output for fields that do not have a Processor.
             </summary>
             <remarks>
-            The default behavior is to pass through ICollection types 
-            and call ToString on everything else.
+            The default behavior is to pass through nulls and ICollection types 
+            and to call ToString on everything else.
             </remarks>
             <param name="context">The IProcessorContext</param>
         </member>
@@ -1088,7 +1088,7 @@
             </summary>
             <param name="command">Command ID</param>
             <returns>IRequestCommand instance for name</returns>
-            <exception cref="T:System.Exception">
+            <exception cref="!:Exception">
             Throws Exception if name is null, 
             name is not in catalog, 
             or if instance for name is not a IRequestCommand
