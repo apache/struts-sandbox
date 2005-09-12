@@ -78,7 +78,7 @@ namespace PhoneBook.Web.Controls
 				filter.SelectedIndexChanged += new EventHandler(Filter_Changed);
 			}
 
-			Open();
+			if (!IsPostBack) Open();
 		}
 
 		#region Web Form Designer generated code

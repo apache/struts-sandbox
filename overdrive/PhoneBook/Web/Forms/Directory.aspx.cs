@@ -40,7 +40,7 @@ namespace PhoneBook.Web.Forms
 		private IRequestCatalog _Catalog;
 
 		/// <summary>
-		/// Helper passed by an enclosing control (e.g. Page).
+		/// Provide reference ot the Catalog (object factory) for this application. 
 		/// </summary>
 		/// <remarks><p>
 		/// Subclasses adding EventHandlers 
@@ -88,14 +88,13 @@ namespace PhoneBook.Web.Forms
 
 		protected void Page_Init()
 		{
-			pnlError.Visible = false;
 			View_Init(finder);
 			View_Init(lister);
 		}
 
 		protected void Page_Load(object sender, EventArgs e)
 		{
-			// Put user code to initialize the page here
+			pnlError.Visible = false;
 		}
 
 		#endregion
