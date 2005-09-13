@@ -23,12 +23,22 @@ namespace PhoneBook.Core
 	/// 
 	public class AppEntry
 	{
+
+		private IDictionary _Value = new Hashtable(5);
+
+		public void AddAll(IDictionary sources)
+		{
+			ICollection keys = sources.Keys;
+			foreach (string key in keys)
+			{
+				Add (key,sources[key] as string);
+			}
+		}
+		
 		public void Add(string key, string value)
 		{
 			_Value.Add(key, value);
 		}
-
-		private IDictionary _Value = new Hashtable(5);
 
 		private string Get(string key)
 		{

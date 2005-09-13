@@ -82,6 +82,12 @@ namespace PhoneBook.Core
 		#region Commands
 
 		/// <summary>
+		/// Token for select one command.
+		/// </summary>
+		/// 
+		public const string ENTRY = "entry";
+
+		/// <summary>
 		/// Token for select all command.
 		/// </summary>
 		/// 

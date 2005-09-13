@@ -56,7 +56,7 @@ namespace PhoneBook.Web.Forms
 			AppUserProfile profile = new AppUserProfile(id);
 			Session[UserProfile.USER_PROFILE] = profile;
 
-			IViewHelper helper = Catalog.GetHelperFor(App.ENTRY_LIST);
+			IViewHelper helper = Catalog.GetHelperFor(App.ENTRY);
 			helper.Criteria[App.USER_NAME] = profile.UserId;
 			helper.Execute();
 			if (helper.IsNominal)
@@ -65,8 +65,13 @@ namespace PhoneBook.Web.Forms
 				// ISSUE: Need constant for "1" (true)
 				bool isEditor = ((editor != null) && (editor.Equals("1")));
 				profile.IsEditor = isEditor;
+				if (editor!=null)
+				{
+					AppEntry entry = new AppEntry();
+					entry.AddAll(helper.Criteria);
+					profile.Entry = entry;
+				}
 			}
-
 			return profile;
 		}
 
@@ -155,7 +160,11 @@ namespace PhoneBook.Web.Forms
 			if (!IsPostBack)
 			{
 				Page_Prompt = GetMessage(App.DIRECTORY_PROMPT);
-				profile_label.Text = Profile.UserId;
+				string name = Profile.FullName;
+				if (name==null)			
+					profile_label.Text = Profile.UserId;					
+				else 
+					profile_label.Text = name;
 				// UserLocale = Profile.Locale;
 				finder.Open();
 			}
