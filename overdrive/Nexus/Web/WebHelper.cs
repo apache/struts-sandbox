@@ -6,7 +6,6 @@ namespace Nexus.Web
 {
 	public class WebHelper : ViewHelper
 	{
-	
 		public override string ErrorsText
 		{
 			get { return HtmlMessageBuilder(Alerts); }

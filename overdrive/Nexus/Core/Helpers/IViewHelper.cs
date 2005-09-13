@@ -33,7 +33,6 @@ namespace Nexus.Core.Helpers
 	/// 
 	public interface IViewHelper
 	{
-
 		/// <summary>
 		/// Perform the Command associated with this Helper.
 		/// </summary>

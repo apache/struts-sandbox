@@ -13,7 +13,6 @@ namespace Nexus.Web.Controls
 	/// </summary>
 	public class ViewControl : UserControl, IViewControl
 	{
-
 		private IRequestCatalog _Catalog;
 
 		/// <summary>
@@ -266,19 +265,19 @@ namespace Nexus.Web.Controls
 		public void ExecuteBind(ControlCollection controls, IViewHelper helper)
 		{
 			helper.Execute();
-			Bind(controls,helper.Criteria);
+			Bind(controls, helper.Criteria);
 		}
 
 		public IViewHelper ExecuteBind(ControlCollection controls, string command)
 		{
 			IViewHelper helper = GetHelperFor(command);
-			ExecuteBind(controls,helper);
+			ExecuteBind(controls, helper);
 			return helper;
 		}
 
 		public void ExecuteBind(IViewHelper helper)
 		{
-			ExecuteBind(this.Controls,helper);
+			ExecuteBind(this.Controls, helper);
 		}
 
 		public IViewHelper ExecuteBind(string command)
@@ -304,7 +303,8 @@ namespace Nexus.Web.Controls
 			return trimmed;
 		}
 
-		private void ReadControls(ControlCollection controls, IDictionary dictionary, string prefix, string list_suffix, bool nullIfEmpty) {
+		private void ReadControls(ControlCollection controls, IDictionary dictionary, string prefix, string list_suffix, bool nullIfEmpty)
+		{
 			foreach (Control t in controls)
 			{
 				if (IsTextBox(t))
@@ -346,22 +346,22 @@ namespace Nexus.Web.Controls
 		public IViewHelper Read(ControlCollection controls, string command, bool nullIfEmpty)
 		{
 			IViewHelper helper = GetHelperFor(command);
-			ReadControls(controls,helper.Criteria,null,ListSuffix,nullIfEmpty);
-			return helper;			
+			ReadControls(controls, helper.Criteria, null, ListSuffix, nullIfEmpty);
+			return helper;
 		}
 
 		public IViewHelper Read(string command, bool nullIfEmpty)
 		{
 			return Read(this.Controls, command, nullIfEmpty);
 		}
-		
+
 		public IViewHelper Read(string command)
 		{
-			return Read(this.Controls,  command, true);
+			return Read(this.Controls, command, true);
 		}
 
 		public IViewHelper ReadExecute(ControlCollection collection, string command, bool nullIfEmpty)
-		{			
+		{
 			IViewHelper helper = Read(collection, command, nullIfEmpty);
 			helper.Execute();
 			return helper;
@@ -402,6 +402,7 @@ namespace Nexus.Web.Controls
 			helper.Execute();
 			return helper;
 		}
+
 		#endregion
 
 		#region ListControl methods 

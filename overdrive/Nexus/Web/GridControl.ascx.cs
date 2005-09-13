@@ -401,7 +401,7 @@ namespace Nexus.Web.Controls
 				// append our field names to the array of keys
 				for (int i = 0; i < cols; i++)
 					keys[index++] = DataFields[i] as string;
-				ReadGridControls(controls,h.Criteria, keys, true);
+				ReadGridControls(controls, h.Criteria, keys, true);
 				h.Execute();
 			}
 			return h;

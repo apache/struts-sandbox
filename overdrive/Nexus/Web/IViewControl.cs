@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Web.UI;
 using Nexus.Core.Helpers;
@@ -7,14 +6,13 @@ namespace Nexus.Web
 {
 	public interface IViewControl
 	{
-
 		/// <summary>
 		/// Set Labels and TextBoxes to an empty string 
 		/// to ensure inappropriate values are not carried over.
 		/// </summary>
 		/// 
 		void ResetControls();
-		
+
 		IViewHelper GetHelperFor(string command);
 		IViewHelper Execute(string command);
 
@@ -26,10 +24,10 @@ namespace Nexus.Web
 
 		IViewHelper ExecuteBind(ControlCollection controls, string command);
 		IViewHelper ExecuteBind(string command);
-		
+
 		IViewHelper Read(string command, bool nullIfEmpty);
 		IViewHelper Read(string command);
-		
+
 		IViewHelper ReadExecute(string command, bool nullIfEmpty);
 		IViewHelper ReadExecute(string command);
 
