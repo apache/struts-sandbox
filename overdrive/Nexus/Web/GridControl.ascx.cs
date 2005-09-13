@@ -207,10 +207,12 @@ namespace Nexus.Web.Controls
 			set { _HasItemColumn = value; }
 		}
 
+		private bool _HasEditColumn = false;
+
 		public virtual bool HasEditColumn
 		{
-			get { return (SaveCommand != null); }
-			set { throw new NotImplementedException(); }
+			get { return _HasEditColumn; }
+			set { _HasEditColumn = value; }
 		}
 
 		#endregion		
@@ -306,6 +308,50 @@ namespace Nexus.Web.Controls
 
 		#endregion 
 
+		#region Special ReadControls method 
+
+		private void ReadGridControls(ControlCollection controls, IDictionary dictionary, string[] keys, bool nullIfEmpty)
+		{
+			int i = 0;
+			foreach (Control t in controls)
+			{
+				string key = keys[i];
+				if (IsTextBox(t))
+				{
+					TextBox x = (TextBox) t;
+					string value = (nullIfEmpty) ? NullIfEmpty(x.Text) : x.Text;
+					dictionary.Add(key, value);
+				}
+				if (IsLabel(t))
+				{
+					Label x = (Label) t;
+					string value = (nullIfEmpty) ? NullIfEmpty(x.Text) : x.Text;
+					dictionary.Add(key, value);
+				}
+				if (IsListControl(t))
+				{
+					ListControl x = (ListControl) t;
+					string value = (nullIfEmpty) ? NullIfEmpty(x.SelectedValue) : x.SelectedValue;
+					dictionary.Add(key, value);
+				}
+				if (IsCheckBox(t))
+				{
+					CheckBox x = (CheckBox) t;
+					string value = (x.Checked) ? key : null;
+					dictionary.Add(key, value);
+				}
+				if (IsRadioButton(t))
+				{
+					RadioButton x = (RadioButton) t;
+					string value = (x.Checked) ? key : null;
+					dictionary.Add(key, value);
+				}
+				i++;
+			}
+		}
+
+		#endregion
+
 		#region Command methods
 
 		/// <summary>
@@ -355,7 +401,7 @@ namespace Nexus.Web.Controls
 				// append our field names to the array of keys
 				for (int i = 0; i < cols; i++)
 					keys[index++] = DataFields[i] as string;
-				ReadControls(h.Criteria, keys, true);
+				ReadGridControls(controls,h.Criteria, keys, true);
 				h.Execute();
 			}
 			return h;
@@ -369,16 +415,15 @@ namespace Nexus.Web.Controls
 		{
 			IViewHelper helper = Execute(ListCommand);
 			bool okay = helper.IsNominal;
-			if (okay) BindGrid(helper);
+			if (okay) BindGrid(helper); // DoBindGrid = helper;
 			return helper;
 		}
 
 		public virtual IViewHelper ExecuteList(IDictionary criteria)
 		{
-			IViewHelper helper = GetHelperFor(ListCommand);
-			helper.ReadExecute(criteria);
+			IViewHelper helper = ReadExecute(ListCommand);
 			bool okay = helper.IsNominal;
-			if (okay) BindGrid(helper);
+			if (okay) BindGrid(helper); // DoBindGrid = helper;
 			return helper;
 		}
 
@@ -461,6 +506,20 @@ namespace Nexus.Web.Controls
 			DataBind();
 		}
 
+		/// <summary>
+		/// Set the selected index to 0. 
+		/// </summary>
+		/// <remarks><p>
+		/// When changing the find set, also call List_ResetIndex;
+		/// otherwise, the DataGrid may try to select an item 
+		/// that is outside the new found set.
+		/// </p></remarks>
+		protected void list_ResetIndex()
+		{
+			Grid.SelectedIndex = 0;
+			Grid.CurrentPageIndex = 0; // sic
+		}
+
 		protected virtual void list_Add_Load()
 		{
 			IViewHelper helper = DataInsert();
@@ -531,7 +590,7 @@ namespace Nexus.Web.Controls
 				list_ItemIndex = -1;
 				list_Refresh();
 			}
-			// ISSUE: Event? if (!okay) Page_Error = Helper;
+			if (!okay) Page_Error = helper;
 		}
 
 		protected void list_Quit(object source, DataGridCommandEventArgs e)

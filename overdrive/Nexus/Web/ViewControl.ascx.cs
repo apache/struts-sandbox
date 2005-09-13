@@ -11,31 +11,8 @@ namespace Nexus.Web.Controls
 	/// <summary>
 	/// Base class for view controls (sub forms).
 	/// </summary>
-	public class ViewControl : UserControl
+	public class ViewControl : UserControl, IViewControl
 	{
-		private string _TitleText;
-
-		public virtual string TitleText
-		{
-			get { return _TitleText; }
-			set { _TitleText = value; }
-		}
-
-		private string _HeadingText;
-
-		public virtual string HeadingText
-		{
-			get { return _HeadingText; }
-			set { _HeadingText = value; }
-		}
-
-		private string _PromptText;
-
-		public virtual string PromptText
-		{
-			get { return _PromptText; }
-			set { _PromptText = value; }
-		}
 
 		private IRequestCatalog _Catalog;
 
@@ -62,11 +39,10 @@ namespace Nexus.Web.Controls
 			set { View_Error_Send(this, new ViewArgs(value)); }
 		}
 
-		#region Control utilities
 
 		#region String utilities 
 
-		private string NullIfEmpty(string input)
+		protected string NullIfEmpty(string input)
 		{
 			return (string.Empty.Equals(input)) ? null : input;
 		}
@@ -120,6 +96,8 @@ namespace Nexus.Web.Controls
 		}
 
 		#endregion
+
+		#region Control utilities
 
 		/// <summary>
 		/// Return true if control is a Label.
@@ -206,12 +184,11 @@ namespace Nexus.Web.Controls
 			}
 		}
 
-		/// <summary>
-		/// Set Labels and TextBoxes to an empty string 
-		/// to ensure inappropriate values are not carried over.
-		/// </summary>
-		/// 
-		protected void ResetControls()
+		#endregion 
+
+		#region IViewControl methods
+
+		public void ResetControls()
 		{
 			ControlCollection controls = this.Controls;
 			foreach (Control control in controls)
@@ -234,22 +211,21 @@ namespace Nexus.Web.Controls
 			}
 		}
 
-		protected IViewHelper GetHelperFor(string command)
+		public IViewHelper GetHelperFor(string command)
 		{
 			IViewHelper helper = Catalog.GetHelperFor(command);
 			return helper;
 		}
 
-		protected IViewHelper Execute(string command)
+		public IViewHelper Execute(string command)
 		{
 			IViewHelper helper = GetHelperFor(command);
 			helper.Execute();
 			return helper;
 		}
 
-		protected void BindControls(IDictionary dictionary, string prefix, string list_suffix)
+		private void BindControls(ControlCollection controls, IDictionary dictionary, string prefix, string list_suffix)
 		{
-			ControlCollection controls = this.Controls;
 			foreach (Control t in controls)
 			{
 				if (IsTextBox(t))
@@ -278,29 +254,39 @@ namespace Nexus.Web.Controls
 			}
 		}
 
-		protected void BindControls(IDictionary dictionary, string prefix)
+		public void Bind(ControlCollection controls, IDictionary dictionary)
 		{
-			BindControls(dictionary, prefix, ListSuffix);
+			BindControls(controls, dictionary, null, ListSuffix);
 		}
 
-		protected void BindControls(IDictionary dictionary)
+		public void Bind(IDictionary dictionary)
 		{
-			BindControls(dictionary, null, ListSuffix);
+			BindControls(this.Controls, dictionary, null, ListSuffix);
 		}
 
-		protected IViewHelper ExecuteBind(string command)
+		public void ExecuteBind(ControlCollection controls, IViewHelper helper)
+		{
+			helper.Execute();
+			Bind(controls,helper.Criteria);
+		}
+
+		public IViewHelper ExecuteBind(ControlCollection controls, string command)
 		{
 			IViewHelper helper = GetHelperFor(command);
-			helper.Execute();
-			BindControls(helper.Criteria);
+			ExecuteBind(controls,helper);
 			return helper;
 		}
 
-		protected void ExecuteBind(IViewHelper helper)
+		public void ExecuteBind(IViewHelper helper)
 		{
-			helper.Execute();
-			BindControls(helper.Criteria);
-			if (helper.IsNominal) helper.Execute();
+			ExecuteBind(this.Controls,helper);
+		}
+
+		public IViewHelper ExecuteBind(string command)
+		{
+			IViewHelper helper = GetHelperFor(command);
+			ExecuteBind(helper);
+			return helper;
 		}
 
 		/// <summary>
@@ -319,51 +305,7 @@ namespace Nexus.Web.Controls
 			return trimmed;
 		}
 
-
-		protected void ReadControls(IDictionary dictionary, string[] keys, bool nullIfEmpty)
-		{
-			ControlCollection controls = this.Controls;
-			int i = 0;
-			foreach (Control t in controls)
-			{
-				string key = keys[i];
-				if (IsTextBox(t))
-				{
-					TextBox x = (TextBox) t;
-					string value = (nullIfEmpty) ? NullIfEmpty(x.Text) : x.Text;
-					dictionary.Add(key, value);
-				}
-				if (IsLabel(t))
-				{
-					Label x = (Label) t;
-					string value = (nullIfEmpty) ? NullIfEmpty(x.Text) : x.Text;
-					dictionary.Add(key, value);
-				}
-				if (IsListControl(t))
-				{
-					ListControl x = (ListControl) t;
-					string value = (nullIfEmpty) ? NullIfEmpty(x.SelectedValue) : x.SelectedValue;
-					dictionary.Add(key, value);
-				}
-				if (IsCheckBox(t))
-				{
-					CheckBox x = (CheckBox) t;
-					string value = (x.Checked) ? key : null;
-					dictionary.Add(key, value);
-				}
-				if (IsRadioButton(t))
-				{
-					RadioButton x = (RadioButton) t;
-					string value = (x.Checked) ? key : null;
-					dictionary.Add(key, value);
-				}
-				i++;
-			}
-		}
-
-		protected void ReadControls(IDictionary dictionary, string prefix, string list_suffix, bool nullIfEmpty)
-		{
-			ControlCollection controls = this.Controls;
+		private void ReadControls(ControlCollection controls, IDictionary dictionary, string prefix, string list_suffix, bool nullIfEmpty) {
 			foreach (Control t in controls)
 			{
 				if (IsTextBox(t))
@@ -402,53 +344,66 @@ namespace Nexus.Web.Controls
 			}
 		}
 
-		protected void ReadControls(IDictionary dictionary, bool nullIfEmpty)
-		{
-			ReadControls(dictionary, null, ListSuffix, nullIfEmpty);
-		}
-
-		protected IViewHelper Read(string command, bool nullIfEmpty)
+		public IViewHelper Read(ControlCollection controls, string command, bool nullIfEmpty)
 		{
 			IViewHelper helper = GetHelperFor(command);
-			ReadControls(helper.Criteria, nullIfEmpty);
-			return helper;
+			ReadControls(controls,helper.Criteria,null,ListSuffix,nullIfEmpty);
+			return helper;			
 		}
 
-		protected IViewHelper Read(string command)
+		public IViewHelper Read(string command, bool nullIfEmpty)
 		{
-			return Read(command, true);
+			return Read(this.Controls, command, nullIfEmpty);
+		}
+		
+		public IViewHelper Read(string command)
+		{
+			return Read(this.Controls,  command, true);
 		}
 
-		protected IViewHelper ReadExecute(string command, bool nullIfEmpty)
-		{
-			IViewHelper helper = Read(command, nullIfEmpty);
+		public IViewHelper ReadExecute(ControlCollection collection, string command, bool nullIfEmpty)
+		{			
+			IViewHelper helper = Read(collection, command, nullIfEmpty);
 			helper.Execute();
 			return helper;
 		}
 
-		protected IViewHelper ReadExecute(string command)
+		public IViewHelper ReadExecute(ControlCollection collection, string command)
 		{
-			return ReadExecute(command, true);
+			return ReadExecute(collection, command, true);
 		}
 
-		protected IViewHelper Read(string command, IDictionary criteria, bool nullIfEmpty)
+
+		public IViewHelper ReadExecute(string command, bool nullIfEmpty)
+		{
+			return ReadExecute(this.Controls, command, nullIfEmpty);
+		}
+
+		public IViewHelper ReadExecute(string command)
+		{
+			return ReadExecute(this.Controls, command, true);
+		}
+
+
+		public IViewHelper Read(string command, IDictionary criteria, bool nullIfEmpty)
 		{
 			IViewHelper helper = GetHelperFor(command);
 			helper.Read(criteria, nullIfEmpty);
 			return helper;
 		}
 
-		protected IViewHelper ReadExecute(string command, IDictionary criteria, bool nullIfEmpty)
+		public IViewHelper ReadExecute(string command, IDictionary criteria)
+		{
+			return ReadExecute(command, criteria, true);
+		}
+
+		public IViewHelper ReadExecute(string command, IDictionary criteria, bool nullIfEmpty)
 		{
 			IViewHelper helper = Read(command, criteria, nullIfEmpty);
 			helper.Execute();
 			return helper;
 		}
-
-		protected IViewHelper ReadExecute(string command, IDictionary criteria)
-		{
-			return ReadExecute(command, criteria, true);
-		}
+		#endregion
 
 		#region ListControl methods 
 
@@ -517,8 +472,6 @@ namespace Nexus.Web.Controls
 			if (insertKey) list.Insert(0, NullKey);
 			BindListControl(control, list, null);
 		}
-
-		#endregion
 
 		#endregion
 
