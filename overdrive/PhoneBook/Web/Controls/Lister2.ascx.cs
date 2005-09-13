@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Web.UI.WebControls;
 using Nexus.Core.Helpers;
@@ -6,11 +7,8 @@ using PhoneBook.Core;
 
 namespace PhoneBook.Web.Controls
 {
-	using System;
-
 	public class Lister2 : AppGridControl
 	{
-
 		protected DataGrid list;
 		protected Button add;
 
@@ -51,22 +49,22 @@ namespace PhoneBook.Web.Controls
 			DataFields = f;
 
 			IList k = new ArrayList(7);
-			k.Add(GetMessage(App.LAST_NAME  + LABEL));
+			k.Add(GetMessage(App.LAST_NAME + LABEL));
 			k.Add(GetMessage(App.FIRST_NAME + LABEL));
-			k.Add(GetMessage(App.EXTENSION  + LABEL));
-			k.Add(GetMessage(App.USER_NAME  + LABEL));
-			k.Add(GetMessage(App.HIRED      + LABEL));
-			k.Add(GetMessage(App.HOURS      + LABEL));
-			k.Add(GetMessage(App.EDITOR     + LABEL));
+			k.Add(GetMessage(App.EXTENSION + LABEL));
+			k.Add(GetMessage(App.USER_NAME + LABEL));
+			k.Add(GetMessage(App.HIRED + LABEL));
+			k.Add(GetMessage(App.HOURS + LABEL));
+			k.Add(GetMessage(App.EDITOR + LABEL));
 			DataLabels = k;
 		}
 
 		private void Page_Init()
 		{
-			Grid = list;			
+			Grid = list;
 		}
 
-		private void Page_Load(object sender, System.EventArgs e)
+		private void Page_Load(object sender, EventArgs e)
 		{
 			SetProperties();
 			add.Click += new EventHandler(list_Add);
@@ -74,7 +72,8 @@ namespace PhoneBook.Web.Controls
 		}
 
 		#region Web Form Designer generated code
-		override protected void OnInit(EventArgs e)
+
+		protected override void OnInit(EventArgs e)
 		{
 			//
 			// CODEGEN: This call is required by the ASP.NET Web Form Designer.
@@ -83,7 +82,7 @@ namespace PhoneBook.Web.Controls
 			base.OnInit(e);
 			Page_Init();
 		}
-		
+
 		/// <summary>
 		///		Required method for Designer support - do not modify
 		///		the contents of this method with the code editor.

@@ -17,10 +17,10 @@ namespace PhoneBook.Core
 		public override bool ConvertInput(IProcessorContext incoming)
 		{
 			object source = incoming.Source;
-			if (source==null) return true;
-			
+			if (source == null) return true;
+
 			string input = source as string;
-			if (input==null) return false;
+			if (input == null) return false;
 
 			char[] marks = {'-'};
 			string[] splits = input.Split(marks);
@@ -36,10 +36,10 @@ namespace PhoneBook.Core
 		public override bool FormatOutput(IProcessorContext outgoing)
 		{
 			object source = outgoing.Source;
-			if (source==null) return true;
+			if (source == null) return true;
 
 			string output = source as string;
-			if (output==null) return false;
+			if (output == null) return false;
 
 			string mark = "-";
 			if (output == null) return false;

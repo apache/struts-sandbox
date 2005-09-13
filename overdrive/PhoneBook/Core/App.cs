@@ -134,7 +134,7 @@ namespace PhoneBook.Core
 		/// </summary>
 		/// 
 		public const string ENTRY_SAVE = "entry_save";
-		
+
 		#endregion
 
 		#region Messages

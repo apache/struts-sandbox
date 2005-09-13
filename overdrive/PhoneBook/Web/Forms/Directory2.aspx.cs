@@ -18,7 +18,6 @@ namespace PhoneBook.Web.Forms
 	/// 
 	public class Directory2 : Page
 	{
-
 		#region Page Properties 
 
 		protected HtmlGenericControl title;
@@ -29,6 +28,7 @@ namespace PhoneBook.Web.Forms
 		protected Label error_label;
 
 		private AppUserProfile _Profile;
+
 		/// <summary>
 		///  Obtain a profile for a user.
 		/// </summary>
@@ -171,7 +171,8 @@ namespace PhoneBook.Web.Forms
 		#endregion
 
 		#region Web Form Designer generated code
-		override protected void OnInit(EventArgs e)
+
+		protected override void OnInit(EventArgs e)
 		{
 			//
 			// CODEGEN: This call is required by the ASP.NET Web Form Designer.
@@ -180,17 +181,17 @@ namespace PhoneBook.Web.Forms
 			base.OnInit(e);
 			Page_Init();
 		}
-		
+
 		/// <summary>
 		///		Required method for Designer support - do not modify
 		///		the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.Load += new System.EventHandler(this.Page_Load);
-			this.PreRender += new System.EventHandler(this.Page_PreRender);
+			this.Load += new EventHandler(this.Page_Load);
+			this.PreRender += new EventHandler(this.Page_PreRender);
 		}
+
 		#endregion
-	
 	}
 }

@@ -6,10 +6,8 @@ using PhoneBook.Core;
 
 namespace PhoneBook.Web.Controls
 {
-
 	public class Finder2 : ViewControl
 	{
-
 		public Label last_name_label;
 		public Label first_name_label;
 		public Label extension_label;
@@ -23,7 +21,7 @@ namespace PhoneBook.Web.Controls
 		protected DropDownList user_name_list;
 		protected DropDownList hired_list;
 		protected DropDownList hours_list;
-		
+
 		protected Button find;
 
 		/// <summary>
@@ -85,7 +83,7 @@ namespace PhoneBook.Web.Controls
 				Page_Error = h;
 		}
 
-		private void Page_Load(object sender, System.EventArgs e)
+		private void Page_Load(object sender, EventArgs e)
 		{
 			find.Click += new EventHandler(find_Click);
 			foreach (DropDownList filter in FilterList())
@@ -98,7 +96,7 @@ namespace PhoneBook.Web.Controls
 				foreach (Label label in FilterLabels())
 				{
 					label.Text = GetMessage(label.ID);
-				}				
+				}
 				foreach (DropDownList filter in FilterList())
 				{
 					filter.AutoPostBack = true;
@@ -107,7 +105,8 @@ namespace PhoneBook.Web.Controls
 		}
 
 		#region Web Form Designer generated code
-		override protected void OnInit(EventArgs e)
+
+		protected override void OnInit(EventArgs e)
 		{
 			//
 			// CODEGEN: This call is required by the ASP.NET Web Form Designer.
@@ -115,15 +114,16 @@ namespace PhoneBook.Web.Controls
 			InitializeComponent();
 			base.OnInit(e);
 		}
-		
+
 		/// <summary>
 		///		Required method for Designer support - do not modify
 		///		the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.Load += new System.EventHandler(this.Page_Load);
+			this.Load += new EventHandler(this.Page_Load);
 		}
+
 		#endregion
 	}
 }
