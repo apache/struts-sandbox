@@ -277,6 +277,7 @@
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
       <version>1.3</version>
+      <url>http://jakarta.apache.org/commons/codec/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -286,6 +287,7 @@
       <groupId>commons-el</groupId>
       <artifactId>commons-el</artifactId>
       <version>1.0</version>
+      <url>http://jakarta.apache.org/commons/el/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -295,6 +297,7 @@
       <groupId>commons-validator</groupId>
       <artifactId>commons-validator</artifactId>
       <version>1.1.4</version>
+      <url>http://jakarta.apache.org/commons/validator/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -400,6 +403,7 @@
       <groupId>janino</groupId>
       <artifactId>janino</artifactId>
       <version>2.3.7</version>
+      <url>http://www.janino.net/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -437,10 +441,12 @@
       <url>http://www.saxpath.org</url>
     </dependency>
 
+	<!-- XML Beans -->
     <dependency>
       <groupId>xmlbeans</groupId>
       <artifactId>xbean</artifactId>
       <version>2.0.0</version>
+      <url>http://xmlbeans.apache.org/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -450,21 +456,25 @@
       <groupId>xmlbeans</groupId>
       <artifactId>xmlbeans-jsr173-api</artifactId>
       <version>2.0-dev</version>
+      <url>http://xmlbeans.apache.org/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
     </dependency>
 
+	<!-- JavaServer Faces -->
     <dependency>
       <groupId>myfaces</groupId>
       <artifactId>myfaces-jsf-api</artifactId>
       <version>1.0.9</version>
+      <url>http://myfaces.apache.org/</url>
     </dependency>
 
     <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
       <version>1.2.8</version>
+      <url>http://logging.apache.org/log4j/docs/index.html</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -474,6 +484,7 @@
       <groupId>pageflow</groupId>
       <artifactId>schema-netui-config</artifactId>
       <version>1.0</version>
+      <url>http://beehive.apache.org/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -483,6 +494,7 @@
       <groupId>pageflow</groupId>
       <artifactId>schema-processed-annotations</artifactId>
       <version>1.0</version>
+      <url>http://beehive.apache.org/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -492,6 +504,7 @@
       <groupId>pageflow</groupId>
       <artifactId>schema-url-template</artifactId>
       <version>1.0</version>
+      <url>http://beehive.apache.org/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
