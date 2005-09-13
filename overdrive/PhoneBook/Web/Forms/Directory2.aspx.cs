@@ -125,7 +125,7 @@ namespace PhoneBook.Web.Forms
 		{
 			ViewArgs a = e as ViewArgs;
 			IViewHelper helper = a.Helper;
-			lister.Open(helper.Criteria);
+			lister.Reset(helper.Criteria);
 		}
 
 		#endregion

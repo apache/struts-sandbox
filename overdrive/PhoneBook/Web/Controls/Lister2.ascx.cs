@@ -14,7 +14,6 @@ namespace PhoneBook.Web.Controls
 
 		public void Open(IDictionary criteria)
 		{
-			// list_ResetIndex(); -- what about saving the criteria?
 			IViewHelper helper = ReadExecute(App.ENTRY_LIST, criteria);
 			bool ok = helper.IsNominal;
 			if (!ok) Page_Error = helper;
@@ -24,6 +23,12 @@ namespace PhoneBook.Web.Controls
 				list.DataSource = result;
 				list.DataBind();
 			}
+		}
+
+		public void Reset(IDictionary criteria)
+		{
+			list_ResetIndex();
+			Open(criteria);			
 		}
 
 		private static string LABEL = "_label";
