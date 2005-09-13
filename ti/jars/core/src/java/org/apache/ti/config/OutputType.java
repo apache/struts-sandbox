@@ -103,20 +103,20 @@ public class OutputType {
             int i = filePattern.indexOf("$c");
             if (i > -1) {
                 String className = path.substring(path.lastIndexOf('/') + 1);
-                name = name.substring(0, i) + className + name.substring(i+2);
+                name = name.substring(0, i) + className + name.substring(i + 2);
             }
     
             // Replace the action name
             i = name.indexOf("$a");
             if (i > -1) {
-                name = name.substring(0, i) + actionName + name.substring(i+2);
+                name = name.substring(0, i) + actionName + name.substring(i + 2);
             }
             dest = new File(dest, rootPath);
         }    
         try {
             writer = new FileWriter(new File(dest, name));
         } catch (IOException ex) {
-            log.error("Unable to create output file "+name, ex);
+            log.error("Unable to create output file " + name, ex);
         }
         return writer;
     }    

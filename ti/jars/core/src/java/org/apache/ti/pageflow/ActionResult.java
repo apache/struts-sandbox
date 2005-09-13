@@ -20,7 +20,8 @@ package org.apache.ti.pageflow;
 import java.io.PrintWriter;
 
 /**
- * Encapsulation of the results returned by {@link PageFlowUtils#strutsLookup}.
+ * Encapsulation of the results returned by {@link PageFlowUtils#}
+ * @TODO - no such method PageFlowUtils#strutsLookup}.
  */
 public interface ActionResult {
 
