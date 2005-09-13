@@ -39,7 +39,6 @@ namespace Nexus.Web.Controls
 			set { View_Error_Send(this, new ViewArgs(value)); }
 		}
 
-
 		#region String utilities 
 
 		protected string NullIfEmpty(string input)

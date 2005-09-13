@@ -1,35 +1,12 @@
-using System;
 using System.Collections;
 using System.Text;
 using Nexus.Core.Helpers;
 
 namespace Nexus.Web
 {
-	/// <summary>
-	/// Summary description for WebHelper.
-	/// </summary>
 	public class WebHelper : ViewHelper
 	{
-		public override void ExecuteBind(ICollection controls)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override void ReadExecute(ICollection controls)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override void Bind(ICollection controls)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override void Read(ICollection controls)
-		{
-			throw new NotImplementedException();
-		}
-
+	
 		public override string ErrorsText
 		{
 			get { return HtmlMessageBuilder(Alerts); }

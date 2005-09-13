@@ -17,111 +17,13 @@
             </p></remarks>
             
         </member>
-        <member name="M:Nexus.Core.Helpers.IViewHelper.ExecuteBind(System.Collections.ICollection)">
-            <summary>
-            Invoke the helper's command and bind the output to 
-            controls in the given collection.
-            </summary>
-            <remarks><p>
-            Most code behinds will call either ExecuteBind or 
-            ReadExecute by passing in the collection of controls 
-            from a panel control. 
-            </p></remarks>
-            <param name="controls">Collection of controls to populate.</param>
-            
-        </member>
-        <member name="M:Nexus.Core.Helpers.IViewHelper.ReadExecute(System.Collections.ICollection)">
-            <summary>
-            Read input from the controls in the given collection, 
-            and invoke the helper's command.
-            </summary>
-            <param name="controls">Collection of controls to 
-            populate.</param>
-            <remarks><p>
-            Most code behinds will call either ExecuteBind or 
-            ReadExecute by passing in the collection of controls 
-            from a panel control. 
-            </p></remarks>
-            
-        </member>
-        <member name="M:Nexus.Core.Helpers.IViewHelper.Bind(System.Collections.ICollection)">
-            <summary>
-            Bind the output of the helper's command to controls in the 
-            given collection.
-            </summary>
-            <param name="controls">Collection of controls to 
-            populate.</param>
-            
-        </member>
         <member name="M:Nexus.Core.Helpers.IViewHelper.Execute">
             <summary>
-            Invoke the helper's command.
+            Perform the Command associated with this Helper.
             </summary>
             
         </member>
-        <member name="M:Nexus.Core.Helpers.IViewHelper.Read(System.Collections.ICollection)">
-            <summary>
-            Read input from the controls in the given collection.
-            </summary>
-            <param name="controls">Collection of controls to populate.</param>
-            
-        </member>
-        <member name="M:Nexus.Core.Helpers.IViewHelper.Read(System.Collections.IDictionary,System.Boolean)">
-            <summary>
-            Read input into the Criteria from a given Dictionary.
-            </summary>
-            <param name="criteria">Attributes to add to Critiera</param>
-            <param name="nullIfEmpty">Set attributes for empty strings to null</param>
-            
-        </member>
-        <member name="P:Nexus.Core.Helpers.IViewHelper.Prefix">
-            <summary>
-            Provide a prefix to trim from the id of a control during Read and 
-            Bind.
-            </summary>
-            <remarks><p>
-            The Prefix is needed when a single page uses a control 
-            more than once often in separate panels.
-            </p></remarks>
-            
-        </member>
-        <member name="P:Nexus.Core.Helpers.IViewHelper.ListSuffix">
-            <summary>
-            Provide a suffix to truncate from a list control id 
-            in order to set a corresponding value field ["_list"].
-            </summary>
-            <remark><p>
-            When processing a single-value list control, if the id ends with 
-            the list suffix, 
-            the suffix is removed, and a field with the remaining name is set 
-            to the selected item value.
-            </p><P>
-            So, the selected item from a list control with the id 
-            "facility_key_list" will be set to a field named "facility_key".
-            </P></remark>
-            
-        </member>
-        <member name="P:Nexus.Core.Helpers.IViewHelper.NullIfEmpty">
-            <summary>
-            Indicate whether to set the value read from control to null 
-            if it is an empty string [TRUE].
-            </summary>
-            <remarks><p>
-            If a control is blank, it may still return an empty string. 
-            In a IDictionary, an empty string is a valid value, 
-            so the entry for the control will still exist. 
-            </p></remarks>
-            
-        </member>
-        <member name="P:Nexus.Core.Helpers.IViewHelper.SelectItemPrompt">
-            <summary>
-            Provide a string token to insert as item 0 to a list controls ["--v--"].
-            </summary>
-            <remarks><p>
-            To disable feature, set to a null string.
-            </p></remarks>
-            
-        </member>
+        <!-- Badly formed XML comment ignored for member "M:Nexus.Core.Helpers.IViewHelper.Read(System.Collections.IDictionary,System.Boolean)" -->
         <member name="P:Nexus.Core.Helpers.IViewHelper.Criteria">
             <summary>
             Store input and output values.

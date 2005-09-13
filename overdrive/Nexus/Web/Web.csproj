@@ -119,21 +119,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "BaseGridPage.aspx"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "BaseGridPage.aspx.cs"
-                    DependentUpon = "BaseGridPage.aspx"
-                    SubType = "ASPXCodeBehind"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "BaseGridPage.aspx.resx"
-                    DependentUpon = "BaseGridPage.aspx.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
                     RelPath = "Global.asax"
                     SubType = "Component"
                     BuildAction = "Content"
@@ -163,16 +148,6 @@
                     RelPath = "GridControl.ascx.resx"
                     DependentUpon = "GridControl.ascx.cs"
                     BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "GridViewHelper.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IGridViewHelper.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "IViewControl.cs"
@@ -209,11 +184,6 @@
                 />
                 <File
                     RelPath = "WebHelper.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebViewHelper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -46,32 +46,12 @@ namespace Nexus.Core.Helpers
 		/// </summary>
 		public const string SELECT_ITEM_PROMPT = "--v--";
 
-		#region Read and Bind (abstract)
-
-		public abstract void ExecuteBind(ICollection controls);
-
-		public abstract void ReadExecute(ICollection controls);
-
-		public abstract void Bind(ICollection controls);
-
-		public abstract void Read(ICollection controls);
+		#region Read and Bind 
 
 		public void Execute()
 		{
 			Catalog.ExecuteView(Context);
 		}
-
-		#endregion
-
-		#region Messages (abstract) 
-
-		public abstract string ErrorsText { get; }
-
-		public abstract string HintsText { get; }
-
-		#endregion
-
-		#region Read and Bind 
 
 		public void Read(IDictionary input, bool nullIfEmpty)
 		{
@@ -164,6 +144,14 @@ namespace Nexus.Core.Helpers
 		}
 
 		#endregion 
+
+		#region Messages (abstract) 
+
+		public abstract string ErrorsText { get; }
+
+		public abstract string HintsText { get; }
+
+		#endregion
 
 		#region Tables
 

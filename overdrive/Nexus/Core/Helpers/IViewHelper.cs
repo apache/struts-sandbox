@@ -33,122 +33,14 @@ namespace Nexus.Core.Helpers
 	/// 
 	public interface IViewHelper
 	{
-		#region "Deprecated" in favor of new ViewControl methods
 
 		/// <summary>
-		/// Invoke the helper's command and bind the output to 
-		/// controls in the given collection.
-		/// </summary>
-		/// <remarks><p>
-		/// Most code behinds will call either ExecuteBind or 
-		/// ReadExecute by passing in the collection of controls 
-		/// from a panel control. 
-		/// </p></remarks>
-		/// <param name="controls">Collection of controls to populate.</param>
-		/// 
-		void ExecuteBind(ICollection controls);
-
-
-		/// <summary>
-		/// Read input from the controls in the given collection, 
-		/// and invoke the helper's command.
-		/// </summary>
-		/// <param name="controls">Collection of controls to 
-		/// populate.</param>
-		/// <remarks><p>
-		/// Most code behinds will call either ExecuteBind or 
-		/// ReadExecute by passing in the collection of controls 
-		/// from a panel control. 
-		/// </p></remarks>
-		/// 
-		void ReadExecute(ICollection controls);
-
-
-		/// <summary>
-		/// Bind the output of the helper's command to controls in the 
-		/// given collection.
-		/// </summary>
-		/// <param name="controls">Collection of controls to 
-		/// populate.</param>
-		/// 
-		void Bind(ICollection controls);
-
-
-		/// <summary>
-		/// Invoke the helper's command.
+		/// Perform the Command associated with this Helper.
 		/// </summary>
 		/// 
 		void Execute();
 
-
-		/// <summary>
-		/// Read input from the controls in the given collection.
-		/// </summary>
-		/// <param name="controls">Collection of controls to populate.</param>
-		/// 
-		void Read(ICollection controls);
-
-		/// <summary>
-		/// Provide a prefix to trim from the id of a control during Read and 
-		/// Bind.
-		/// </summary>
-		/// <remarks><p>
-		/// The Prefix is needed when a single page uses a control 
-		/// more than once often in separate panels.
-		/// </p></remarks>
-		/// 
-		string Prefix { get; set; }
-
-
-		/// <summary>
-		/// Provide a suffix to truncate from a list control id 
-		/// in order to set a corresponding value field ["_list"].
-		/// </summary>
-		/// <remark><p>
-		/// When processing a single-value list control, if the id ends with 
-		/// the list suffix, 
-		/// the suffix is removed, and a field with the remaining name is set 
-		/// to the selected item value.
-		/// </p><P>
-		/// So, the selected item from a list control with the id 
-		/// "facility_key_list" will be set to a field named "facility_key".
-		/// </P></remark>
-		/// 
-		string ListSuffix { get; set; }
-
-		/* 
-			// TODO: 
-			string AlertSuffix {get; set}
-			string HintSuffix {get; set}
-			string LabelSuffix {get; set}
-		*/
-
-
-		/// <summary>
-		/// Indicate whether to set the value read from control to null 
-		/// if it is an empty string [TRUE].
-		/// </summary>
-		/// <remarks><p>
-		/// If a control is blank, it may still return an empty string. 
-		/// In a IDictionary, an empty string is a valid value, 
-		/// so the entry for the control will still exist. 
-		/// </p></remarks>
-		/// 
-		bool NullIfEmpty { get; set; }
-
-
-		/// <summary>
-		/// Provide a string token to insert as item 0 to a list controls ["--v--"].
-		/// </summary>
-		/// <remarks><p>
-		/// To disable feature, set to a null string.
-		/// </p></remarks>
-		/// 
-		string SelectItemPrompt { get; set; }
-
-		#endregion 
-
-		/// <summary>
+		// <summary>
 		/// Read input into the Criteria from a given Dictionary.
 		/// </summary>
 		/// <param name="criteria">Attributes to add to Critiera</param>
@@ -162,12 +54,10 @@ namespace Nexus.Core.Helpers
 		/// 
 		IDictionary Criteria { get; }
 
-
 		/// <summary>
 		/// User profile, which includes user ID and Locale.
 		/// </summary>
 		IProfile Profile { get; set; }
-
 
 		/// <summary>
 		/// Access result of operation as an IList.
@@ -198,14 +88,12 @@ namespace Nexus.Core.Helpers
 		/// 
 		IDictionary Alerts { get; }
 
-
 		/// <summary>
 		/// Indicate if alerts are queued.
 		/// </summary>
 		/// <returns>True if alerts are queued.</returns>
 		/// 
 		bool HasAlerts { get; }
-
 
 		/// <summary>
 		/// Record an Exception, if thrown.
@@ -222,7 +110,6 @@ namespace Nexus.Core.Helpers
 		/// <returns>True if an Exception is caught.</returns>
 		/// 
 		bool HasFault { get; }
-
 
 		/// <summary>
 		/// Indicate if there are no alerts or fault pending.
@@ -250,14 +137,12 @@ namespace Nexus.Core.Helpers
 		/// 
 		IDictionary Hints { get; }
 
-
 		/// <summary>
 		/// Indicate if Hints are queued.
 		/// </summary>
 		/// <returns>True if Hints are queued.</returns>
 		/// 
 		bool HasHints { get; }
-
 
 		/// <summary>
 		/// Return Hints formatted for display by a UI control.
