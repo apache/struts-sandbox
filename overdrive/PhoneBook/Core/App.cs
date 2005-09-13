@@ -124,27 +124,17 @@ namespace PhoneBook.Core
 		public const string HOURS_LIST = "hours_list";
 
 		/// <summary>
-		/// Token for Directory View command.
+		/// Token for Entry Find command.
 		/// </summary>
 		/// 
-		public const string DIRECTORY_VIEW = "directory_view";
-
-		#endregion
-
-		#region Helpers
+		public const string ENTRY_FIND = "entry_find";
 
 		/// <summary>
-		/// Token for Directory Find helper.
+		/// Token for Entry Save command.
 		/// </summary>
 		/// 
-		public const string DIRECTORY_FIND_HELPER = "directory_find_helper";
-
-		/// <summary>
-		/// Token for Directory list helper.
-		/// </summary>
-		/// 
-		public const string DIRECTORY_LIST_HELPER = "directory_list_helper";
-
+		public const string ENTRY_SAVE = "entry_save";
+		
 		#endregion
 
 		#region Messages

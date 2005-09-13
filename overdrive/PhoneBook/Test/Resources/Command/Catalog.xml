@@ -76,9 +76,9 @@
   
 	<!-- chains -->
 
-    <object id="directory_view" parent="BaseChain">
+    <object id="entry_find" parent="BaseChain">
 		<property name="ID">
-			<value>directory_view</value>
+			<value>entry_find</value>
 		</property>
 		<property name="AddCommands">
 			<list>
@@ -91,60 +91,7 @@
 			</list>
 		</property>
 	</object>
-	
-		
-  <!-- directory1 helpers -->
-
-  <object id="directory_find_helper" parent="BaseHelper" singleton="false">
-		<property name="Command">
-			<ref object="directory_view" />
-		</property>
-  </object>
-
-  <object id="directory_list_helper" parent="BaseHelper" singleton="false">
-		<property name="Command">
-			<ref object="entry_list" />
-		</property>
-  </object>
-  
-  <!-- directory2 helpers -->
-  
-	<!-- Note that the FieldSet refers to FieldContext objects (AppField.xml) -->
-  <object id="directory_grid_helper" parent="BaseGridHelper" singleton="false">
-   		<property name="FindHelper">
-   			<ref object="directory_find_helper"/>
-   		</property>		
-		<property name="ListHelper">
-			<ref object="directory_list_helper" />
-		</property>
-		<property name="SaveHelper">
-			<ref object="entry_save_helper" />
-		</property>
-		<property name="HasCriteria">
-			<value>true</value>
-		</property>
-		<property name="DataKeyField">
-			<value>entry_key</value>
-		</property>
-		<property name="FieldSet">
-			<list>
-				<ref object="first_name"/>
-				<ref object="last_name"/>
-				<ref object="extension"/> 
-				<ref object="user_name"/>
-				<ref object="hired"/> 
-				<ref object="hours"/>
-				<ref object="editor"/>
-			</list>
-		</property>
-	</object>  
-
-  <object id="entry_save_helper" parent="BaseHelper" singleton="false">
-		<property name="Command">
-			<ref object="entry_save" />
-		</property>
-  </object>
-
+			
   <object id="entry_save" type="PhoneBook.Core.Commands.BaseSave, PhoneBook.Core">
 		<property name="ID">
 			<value>entry_save</value>
@@ -176,10 +123,4 @@
 		</property>
 	</object>
 
-  <object id="directory_entry_helper" parent="BaseHelper" singleton="false">
-		<property name="Command">
-			<ref object="entry" />
-		</property>
-  </object>
-	  
 </objects>

@@ -1,6 +1,6 @@
-<%@ Page language="c#" Codebehind="Directory.aspx.cs" AutoEventWireup="true" Inherits="PhoneBook.Web.Forms.Directory" %>
-<%@ Register TagPrefix="my" TagName="Finder" Src="../Controls/Finder.ascx" %>
-<%@ Register TagPrefix="my" TagName="Lister" Src="../Controls/Lister.ascx" %>
+<%@ Page language="c#" Codebehind="Directory.aspx.cs" AutoEventWireup="false" Inherits="PhoneBook.Web.Forms.Directory" %>
+<%@ Register TagPrefix="app" TagName="Finder" Src="../Controls/Finder.ascx" %>
+<%@ Register TagPrefix="app" TagName="Lister" Src="../Controls/Lister.ascx" %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
 <HTML>
@@ -14,20 +14,20 @@
 	</HEAD>
 	<body>
 		<h1>PhoneBook Directory</h1>
-			<form id="frmDirectory" method="post" runat="server">
+			<form id="form" method="post" runat="server">
 			
 			<!-- ERROR -->
-			<asp:Panel ID="pnlError" Runat="server">
-			<p><asp:Label ID="lblError" Runat="server"></asp:Label></p>
+			<asp:Panel ID="error_panel" Runat="server">
+			<p><asp:Label ID="error_label" Runat="server"></asp:Label></p>
 			<hr>
 			</asp:Panel>
 			
 			<!-- PROMPT -->
 			<p>Select a filter to display fewer entries.</p>	
 
-			<my:Finder id="finder" Runat="server" OnClick="finder_Click"></my:Finder>
+			<app:Finder id="finder" Runat="server" OnClick="finder_Click"></app:Finder>
 			
- 			<my:Lister id="lister" runat="server" OnClick="lister_Click"></my:Lister>
+ 			<app:Lister id="lister" runat="server" OnClick="lister_Click"></app:Lister>
 
 		</form>
 	</body>

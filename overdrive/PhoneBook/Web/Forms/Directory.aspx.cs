@@ -22,8 +22,8 @@ namespace PhoneBook.Web.Forms
 
 		#region Page Properties 
 
-		protected Panel pnlError;
-		protected Label lblError;
+		protected Panel error_panel;
+		protected Label error_label;
 
 		/// <summary>
 		/// Display a list of error messages.
@@ -32,8 +32,8 @@ namespace PhoneBook.Web.Forms
 		{
 			set
 			{
-				lblError.Text = value.ErrorsText;
-				pnlError.Visible = true;
+				error_label.Text = value.ErrorsText;
+				error_panel.Visible = true;
 			}
 		}
 
@@ -55,7 +55,7 @@ namespace PhoneBook.Web.Forms
 
 		#endregion
 
-		#region Control Events
+		#region Event handlers
 
 		protected Lister lister;
 		protected Finder finder;
@@ -86,17 +86,38 @@ namespace PhoneBook.Web.Forms
 			c.Catalog = this.Catalog; // ISSUE: Why isn't control injection working?
 		}
 
-		protected void Page_Init()
+		private void Page_Init()
 		{
 			View_Init(finder);
 			View_Init(lister);
 		}
 
-		protected void Page_Load(object sender, EventArgs e)
+		private void Page_Load(object sender, EventArgs e)
 		{
-			pnlError.Visible = false;
+			error_panel.Visible = false;
 		}
 
 		#endregion
-	}
+
+		#region Web Form Designer generated code
+		override protected void OnInit(EventArgs e)
+		{
+			//
+			// CODEGEN: This call is required by the ASP.NET Web Form Designer.
+			//
+			InitializeComponent();
+			base.OnInit(e);
+			Page_Init();
+		}
+		
+		/// <summary>
+		///		Required method for Designer support - do not modify
+		///		the contents of this method with the code editor.
+		/// </summary>
+		private void InitializeComponent()
+		{
+			this.Load += new System.EventHandler(this.Page_Load);
+		}
+		#endregion
+	}	
 }

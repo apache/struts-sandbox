@@ -3,18 +3,27 @@ using System.Web.UI.WebControls;
 using Nexus.Core.Helpers;
 using Nexus.Web.Controls;
 using PhoneBook.Core;
-using PhoneBook.Web.Forms;
 
 namespace PhoneBook.Web.Controls
 {
-	public class Finder : ViewControl
+
+	public class Finder2 : ViewControl
 	{
+
+		public Label last_name_label;
+		public Label first_name_label;
+		public Label extension_label;
+		public Label user_name_label;
+		public Label hired_label;
+		public Label hours_label;
+
 		protected DropDownList last_name_list;
 		protected DropDownList first_name_list;
 		protected DropDownList extension_list;
 		protected DropDownList user_name_list;
 		protected DropDownList hired_list;
 		protected DropDownList hours_list;
+		
 		protected Button find;
 
 		/// <summary>
@@ -22,14 +31,29 @@ namespace PhoneBook.Web.Controls
 		/// </summary>
 		public event EventHandler Click;
 
+		private Label[] FilterLabels()
+		{
+			Label[] labels = {last_name_label, first_name_label, extension_label, user_name_label, hired_label, hours_label};
+			return labels;
+		}
+
 		private DropDownList[] FilterList()
 		{
 			DropDownList[] lists = {last_name_list, first_name_list, extension_list, user_name_list, hired_list, hours_list};
 			return lists;
 		}
 
+		private void find_Click(object sender, EventArgs e)
+		{
+			if (Click == null) return;
+			Filter_Reset(null);
+			IViewHelper helper = Read(App.ENTRY_FIND);
+			Click(this, new ViewArgs(helper));
+		}
+
 		private void Filter_Reset(DropDownList except)
 		{
+			// Reset filter controls
 			int exceptIndex = 0;
 			if (except != null) exceptIndex = except.SelectedIndex;
 			foreach (DropDownList filter in FilterList())
@@ -37,6 +61,7 @@ namespace PhoneBook.Web.Controls
 				filter.SelectedIndex = 0;
 			}
 			if (except != null) except.SelectedIndex = exceptIndex;
+			// Tell everyone that we are starting over
 		}
 
 		private void Filter_Changed(object sender, EventArgs e)
@@ -53,37 +78,36 @@ namespace PhoneBook.Web.Controls
 
 		public void Open()
 		{
-			IViewHelper h = this.ExecuteBind(App.ENTRY_FIND);
+			IViewHelper h = GetHelperFor(App.ENTRY_FIND);
+			ExecuteBind(h);
 			bool ok = (h.IsNominal);
 			if (!ok)
 				Page_Error = h;
 		}
 
-		private void find_Click(object sender, EventArgs e)
+		private void Page_Load(object sender, System.EventArgs e)
 		{
-			if (Click == null) return;
-			Filter_Reset(null);
-			IViewHelper helper = Read(App.ENTRY_FIND);
-			Click(this, new ViewArgs(helper));
-		}
-
-		private void Page_Load(object sender, EventArgs e)
-		{
-			find.Text = Directory.msg_LIST_ALL_CMD;
 			find.Click += new EventHandler(find_Click);
-
 			foreach (DropDownList filter in FilterList())
 			{
-				filter.AutoPostBack = true;
 				filter.SelectedIndexChanged += new EventHandler(Filter_Changed);
 			}
-
-			if (!IsPostBack) Open();
+			if (!IsPostBack)
+			{
+				find.Text = GetMessage(find.ID);
+				foreach (Label label in FilterLabels())
+				{
+					label.Text = GetMessage(label.ID);
+				}				
+				foreach (DropDownList filter in FilterList())
+				{
+					filter.AutoPostBack = true;
+				}
+			}
 		}
 
 		#region Web Form Designer generated code
-
-		protected override void OnInit(EventArgs e)
+		override protected void OnInit(EventArgs e)
 		{
 			//
 			// CODEGEN: This call is required by the ASP.NET Web Form Designer.
@@ -91,16 +115,15 @@ namespace PhoneBook.Web.Controls
 			InitializeComponent();
 			base.OnInit(e);
 		}
-
+		
 		/// <summary>
 		///		Required method for Designer support - do not modify
 		///		the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.Load += new EventHandler(this.Page_Load);
+			this.Load += new System.EventHandler(this.Page_Load);
 		}
-
 		#endregion
 	}
 }

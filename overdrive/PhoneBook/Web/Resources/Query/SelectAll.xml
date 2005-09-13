@@ -68,7 +68,7 @@
 				user_name,
 				hired,
 				hours,
-				editor
+				editor,
 				pk_entry
 				)
 			VALUES (?,?,?,?, ?,?,?,?)

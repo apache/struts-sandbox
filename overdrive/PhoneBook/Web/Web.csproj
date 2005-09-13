@@ -184,6 +184,22 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "Controls\AppGridControl.ascx"
+                    SubType = "UserControl"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Controls\AppGridControl.ascx.cs"
+                    DependentUpon = "AppGridControl.ascx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controls\AppGridControl.ascx.resx"
+                    DependentUpon = "AppGridControl.ascx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Controls\Finder.ascx"
                     SubType = "UserControl"
                     BuildAction = "Content"
@@ -200,6 +216,22 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Controls\Finder2.ascx"
+                    SubType = "UserControl"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Controls\Finder2.ascx.cs"
+                    DependentUpon = "Finder2.ascx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controls\Finder2.ascx.resx"
+                    DependentUpon = "Finder2.ascx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Controls\Lister.ascx"
                     SubType = "UserControl"
                     BuildAction = "Content"
@@ -213,6 +245,22 @@
                 <File
                     RelPath = "Controls\Lister.ascx.resx"
                     DependentUpon = "Lister.ascx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Controls\Lister2.ascx"
+                    SubType = "UserControl"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Controls\Lister2.ascx.cs"
+                    DependentUpon = "Lister2.ascx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controls\Lister2.ascx.resx"
+                    DependentUpon = "Lister2.ascx.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File

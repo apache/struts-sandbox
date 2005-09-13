@@ -2,10 +2,13 @@ using System;
 using System.Security.Principal;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
+using Nexus.Core;
 using Nexus.Core.Helpers;
 using Nexus.Core.Profile;
-using Nexus.Web;
+using Nexus.Web.Controls;
 using PhoneBook.Core;
+using PhoneBook.Web.Controls;
+using Spring.Web.UI;
 
 namespace PhoneBook.Web.Forms
 {
@@ -13,23 +16,8 @@ namespace PhoneBook.Web.Forms
 	///  Maintain a list of employees with their telephone extension [OVR-5]. 
 	/// </summary>
 	/// 
-	public class Directory2 : BaseGridPage
+	public class Directory2 : Page
 	{
-		#region Helpers 
-
-		private IViewHelper _UserHelper;
-
-		/// <summary>
-		/// Obtain entry for a user.
-		/// </summary>
-		///
-		public virtual IViewHelper UserHelper
-		{
-			get { return _UserHelper; }
-			set { _UserHelper = value; }
-		}
-
-		#endregion
 
 		#region Page Properties 
 
@@ -41,7 +29,9 @@ namespace PhoneBook.Web.Forms
 		protected Label error_label;
 
 		private AppUserProfile _Profile;
-
+		/// <summary>
+		///  Obtain a profile for a user.
+		/// </summary>
 		protected AppUserProfile Profile
 		{
 			set
@@ -55,17 +45,24 @@ namespace PhoneBook.Web.Forms
 			get { return _Profile; }
 		}
 
+		/// <summary>
+		/// Create or retrieve an AppUserProfile 
+		/// based on the client's WindowsIdentity.
+		/// </summary>
+		/// <returns>A new or prexisting AppUserProfile</returns>
 		protected AppUserProfile NewProfile()
 		{
 			WindowsIdentity id = WindowsIdentity.GetCurrent();
 			AppUserProfile profile = new AppUserProfile(id);
 			Session[UserProfile.USER_PROFILE] = profile;
 
-			UserHelper.Criteria[App.USER_NAME] = profile.UserId;
-			UserHelper.Execute();
-			if (UserHelper.IsNominal)
+			IViewHelper helper = Catalog.GetHelperFor(App.ENTRY_LIST);
+			helper.Criteria[App.USER_NAME] = profile.UserId;
+			helper.Execute();
+			if (helper.IsNominal)
 			{
-				string editor = UserHelper.Criteria[App.EDITOR] as string;
+				string editor = helper.Criteria[App.EDITOR] as string;
+				// ISSUE: Need constant for "1" (true)
 				bool isEditor = ((editor != null) && (editor.Equals("1")));
 				profile.IsEditor = isEditor;
 			}
@@ -74,9 +71,9 @@ namespace PhoneBook.Web.Forms
 		}
 
 		/// <summary>
-		/// Display a list of error mesasges.
+		/// Display a list of error messagess.
 		/// </summary>
-		protected override IViewHelper Page_Error
+		protected IViewHelper Page_Error
 		{
 			set
 			{
@@ -89,151 +86,111 @@ namespace PhoneBook.Web.Forms
 		protected Label prompt_label;
 
 		/// <summary>
-		/// Display a Prompt mesasges.
+		/// Display a Prompt message.
 		/// </summary>
-		protected override string Page_Prompt
+		protected string Page_Prompt
 		{
 			set { prompt_label.Text = value; }
 		}
 
+		private IRequestCatalog _Catalog;
+
+		/// <summary>
+		/// Provide reference ot the Catalog (object factory) for this application. 
+		/// </summary>
+		/// <remarks><p>
+		/// Subclasses adding EventHandlers 
+		/// should pass a reference to themselves with a ViewArgs instance, 
+		/// encapsulating the Helper.
+		/// </p></remarks>
+		public virtual IRequestCatalog Catalog
+		{
+			get { return _Catalog; }
+			set { _Catalog = value; }
+		}
+
 		#endregion
 
-		#region Find -- Display Find controls
+		#region Event handlers
 
-		protected Panel find_panel;
-		public Label last_name_label;
-		public Label first_name_label;
-		public Label extension_label;
-		public Label user_name_label;
-		public Label hired_label;
-		public Label hours_label;
-		protected DropDownList last_name_list;
-		protected DropDownList first_name_list;
-		protected DropDownList extension_list;
-		protected DropDownList user_name_list;
-		protected DropDownList hired_list;
-		protected DropDownList hours_list;
-		// TODO: protected DropDownList editor_list;
-		protected Button list_all_command;
+		protected Lister2 lister;
+		protected Finder2 finder;
 
-		// pageload events - These methods populate controls to display
-
-		private Label[] FilterLabels()
+		protected void finder_Click(object sender, EventArgs e)
 		{
-			Label[] labels = {last_name_label, first_name_label, extension_label, user_name_label, hired_label, hours_label};
-			return labels;
-		}
-
-		private DropDownList[] FilterList()
-		{
-			DropDownList[] lists = {last_name_list, first_name_list, extension_list, user_name_list, hired_list, hours_list};
-			return lists;
-		}
-
-		private void ListAll_Click(object sender, EventArgs e)
-		{
-			Filter_Reset(null);
-			List_Load();
-		}
-
-		protected override void Find_Init()
-		{
-			base.Find_Init();
-			list_all_command.Click += new EventHandler(ListAll_Click);
-			list_all_command.Text = GetMessage(list_all_command.ID);
-
-			foreach (Label label in FilterLabels())
-			{
-				label.Text = GetMessage(label.ID);
-			}
-
-			foreach (DropDownList filter in FilterList())
-			{
-				filter.AutoPostBack = true;
-				filter.SelectedIndexChanged += new EventHandler(Find_Submit);
-			}
-		}
-
-		private string GetRootID(string id)
-		{
-			int v = id.LastIndexOf(GridHelper.FindHelper.ListSuffix);
-			string key = id.Substring(0, v);
-			return key;
-		}
-
-		private void Filter_Reset(DropDownList except)
-		{
-			// Reset filter controls
-			int exceptIndex = 0;
-			if (except != null) exceptIndex = except.SelectedIndex;
-			foreach (DropDownList filter in FilterList())
-			{
-				filter.SelectedIndex = 0;
-			}
-			if (except != null) except.SelectedIndex = exceptIndex;
-			// Tell everyone that we are starting over
-			Page_Prompt = GetMessage(App.DIRECTORY_PROMPT);
-			List_ResetIndex();
-		}
-
-		protected override void Find_Submit(object sender, EventArgs e)
-		{
-			// Don't call base: base.Find_Submit (); 
-			DropDownList list = sender as DropDownList;
-			Filter_Reset(list);
-			string key = GetRootID(list.ID);
-			IGridViewHelper h = GridHelper;
-			h.FindHelper.Criteria.Clear();
-			h.FindHelper.Criteria[key] = list.SelectedValue;
-			List_Criteria = GridHelper.FindHelper.Criteria;
-			List_Load();
-		}
-
-		protected override void Find_Load()
-		{
-			base.Find_Load();
-			IViewHelper h = GridHelper.FindHelper;
-			h.ExecuteBind(find_panel.Controls);
-			bool ok = (h.IsNominal);
-			if (!ok)
-				Page_Error = h;
+			ViewArgs a = e as ViewArgs;
+			IViewHelper helper = a.Helper;
+			lister.Open(helper.Criteria);
 		}
 
 		#endregion
 
 		#region Page Events
 
-		protected override void Page_Init()
+		private void View_Error(object sender, EventArgs e)
 		{
-			base.Page_Init();
-			list_panel.Visible = true; // base behavior hides
+			ViewArgs v = e as ViewArgs;
+			if (v == null) throw new ArgumentException("View_Error: !(e is ViewArgs)");
+			IViewHelper helper = v.Helper;
+			if (helper != null) Page_Error = helper;
+			else throw new ArgumentException("View_Error: (e.helper==null)");
+		}
+
+		private void View_Init(ViewControl c)
+		{
+			c.View_Error += new EventHandler(View_Error);
+			c.Catalog = this.Catalog; // ISSUE: Why isn't control injection working?
+		}
+
+		private void Page_Init()
+		{
 			Profile = Session[UserProfile.USER_PROFILE] as AppUserProfile;
-			GridHelper.HasEditColumn = Profile.IsEditor;
-			GridHelper.FindHelper.Profile = Profile;
-			GridHelper.ListHelper.Profile = Profile;
-			GridHelper.SaveHelper.Profile = Profile;
+			View_Init(finder);
+			View_Init(lister);
+		}
+
+		private void Page_Load(object sender, EventArgs e)
+		{
+			error_panel.Visible = false;
 			if (!IsPostBack)
 			{
 				Page_Prompt = GetMessage(App.DIRECTORY_PROMPT);
 				profile_label.Text = Profile.UserId;
 				// UserLocale = Profile.Locale;
+				finder.Open();
 			}
 		}
 
-		protected override void Page_Load(object sender, EventArgs e)
+		private void Page_PreRender(object sender, EventArgs e)
 		{
-			base.Page_Load(sender, e);
-			error_panel.Visible = false;
-		}
-
-		protected override void Page_PreRender(object sender, EventArgs e)
-		{
-			base.Page_PreRender(sender, e);
 			greeting.Text = GetMessage(greeting.ID);
 			title.InnerText = GetMessage(App.DIRECTORY_TITLE);
 			heading.InnerText = GetMessage(App.DIRECTORY_HEADING);
 		}
 
 		#endregion
+
+		#region Web Form Designer generated code
+		override protected void OnInit(EventArgs e)
+		{
+			//
+			// CODEGEN: This call is required by the ASP.NET Web Form Designer.
+			//
+			InitializeComponent();
+			base.OnInit(e);
+			Page_Init();
+		}
+		
+		/// <summary>
+		///		Required method for Designer support - do not modify
+		///		the contents of this method with the code editor.
+		/// </summary>
+		private void InitializeComponent()
+		{
+			this.Load += new System.EventHandler(this.Page_Load);
+			this.PreRender += new System.EventHandler(this.Page_PreRender);
+		}
+		#endregion
+	
 	}
 }

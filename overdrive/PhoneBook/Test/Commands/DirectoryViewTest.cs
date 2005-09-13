@@ -9,7 +9,7 @@ namespace PhoneBook.Core.Commands
 	/// </summary>
 	/// 
 	[TestFixture]
-	public class DirectoryViewTest : BaseTest
+	public class EntryFindTest : BaseTest
 	{
 		/// <summary>
 		/// Confirm that Context contains the expected attributes for the list filter-0ps.
@@ -18,7 +18,7 @@ namespace PhoneBook.Core.Commands
 		[Test]
 		public void ContainsFilters()
 		{
-			IRequestContext context = catalog.ExecuteRequest(App.DIRECTORY_VIEW);
+			IRequestContext context = catalog.ExecuteRequest(App.ENTRY_FIND);
 			this.AssertNominal(context);
 			string[] FILTERS = {App.LAST_NAME_LIST, App.FIRST_NAME_LIST, App.EXTENSION_LIST, App.USER_NAME_LIST, App.HIRED_LIST, App.HOURS_LIST};
 			foreach (string filter in FILTERS)
@@ -33,10 +33,10 @@ namespace PhoneBook.Core.Commands
 		[Test]
 		public void HelperContains()
 		{
-			IViewHelper helper = catalog.GetHelperFor(App.DIRECTORY_VIEW);
+			IViewHelper helper = catalog.GetHelperFor(App.ENTRY_FIND);
 			IRequestCommand command = helper.Command;
 			Assert.IsNotNull(command, "Expected Helper to have a Command");
-			Assert.AreEqual(App.DIRECTORY_VIEW, command.ID, "Expected Helper to have View Command.");
+			Assert.AreEqual(App.ENTRY_FIND, command.ID, "Expected Helper to have View Command.");
 		}
 	}
 }
