@@ -22,18 +22,21 @@ package org.apache.ti;
 import java.io.Serializable;
 
 /**
- * @todo Should this class simply go away?  Do we want to expose public constants for these things (vs. APIs)?
+ * @todo Should this class simply go away?  Do we want to expose public 
+ * constants for these things (vs. APIs)?
  */
 public class Globals implements Serializable {
 
 
     /**
-     * The request attribute for a List of {@link org.apache.ti.core.ActionMessage} objects.
+     * The request attribute for a List of 
+     * {@link org.apache.ti.core.ActionMessage} objects.
      */
     public static final String ERROR_KEY = "org.apache.ti.ERROR";
 
     /**
-     * The request attribute for a Throwable that was raised during action processing.
+     * The request attribute for a Throwable that was raised during action 
+     * processing.
      */
     public static final String EXCEPTION_KEY = "org.apache.ti.EXCEPTION";
 
