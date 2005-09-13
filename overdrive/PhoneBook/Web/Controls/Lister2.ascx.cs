@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Web.UI.WebControls;
 using Nexus.Core.Helpers;
+using Nexus.Core.Profile;
 using PhoneBook.Core;
 
 namespace PhoneBook.Web.Controls
@@ -36,8 +37,8 @@ namespace PhoneBook.Web.Controls
 			SaveCommand = App.ENTRY_SAVE;
 			DataKeyField = App.ENTRY_KEY;
 			HasItemColumn = false;
-			// AppUserProfile profile = Session[UserProfile.USER_PROFILE] as AppUserProfile;
-			HasEditColumn = true; // profile.IsEditor;
+			AppUserProfile profile = Session[UserProfile.USER_PROFILE] as AppUserProfile;
+			HasEditColumn = profile.IsEditor;
 
 			IList f = new ArrayList(7);
 			f.Add(App.LAST_NAME);

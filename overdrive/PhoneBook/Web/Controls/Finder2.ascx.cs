@@ -69,7 +69,7 @@ namespace PhoneBook.Web.Controls
 			IViewHelper helper = Catalog.GetHelperFor(App.ENTRY_LIST);
 			DropDownList list = sender as DropDownList;
 			string id = list.ID;
-			int v = id.LastIndexOf(helper.ListSuffix);
+			int v = id.LastIndexOf(ListSuffix);
 			string key = id.Substring(0, v);
 			helper.Criteria[key] = list.SelectedValue;
 			Filter_Reset(list);
