@@ -54,7 +54,48 @@
       
      </echo>
   </goal>
+
+  <goal name="build-pageflows-apt">
+    <echo>build-pageflows-apt for ${maven.war.webapp.dir}</echo>
+
+    <property name="webinf.classes.dir" location="${maven.war.webapp.dir}/WEB-INF/classes"/>
+
+    <path id="webapp.classpath"> 
+      <pathelement location="${webinf.classes.dir}"/>
+      <fileset dir="${maven.war.webapp.dir}/WEB-INF/lib">
+        <include name="*.jar"/>
+      </fileset>
+    </path>
+
+    <taskdef
+      name="build-pageflows-apt-task"
+      classname="org.apache.ti.compiler.apt.PageFlowAptTask"
+      classpathref="maven.dependency.classpath"/>
+
+    <build-pageflows-apt-task
+        srcdir="${maven.src.dir}/java"
+        destdir="${webinf.classes.dir}"
+        webcontentdir="${maven.war.src}"
+        classpathref="webapp.classpath"
+        factorypathref="maven.dependency.classpath"/>
+  </goal>
     
+  <goal name="build-pageflows-xdoclet">
+    <echo>build-pageflows-xdoclet for ${maven.war.webapp.dir}</echo>
+
+    <taskdef
+        name="build-pageflows-xdoclet-task"
+        classname="org.apache.ti.compiler.xdoclet.PageFlowDocletTask"
+        classpathRef="maven.dependency.classpath"/>
+
+    <build-pageflows-xdoclet-task
+      excludedtags="@version,@author,@todo"
+      force="true"
+      srcdir="${maven.src.dir}/java"
+      destdir="${maven.war.webapp.dir}/WEB-INF/classes"
+      webcontentdir="${maven.war.src}"/>
+  </goal>
+
   <goal name="dist">
     <attainGoal name="jar-all"/>
     <attainGoal name="war-all"/>

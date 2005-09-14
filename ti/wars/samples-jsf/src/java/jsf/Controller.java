@@ -17,8 +17,6 @@
  */
 package jsf;
 
-import javax.servlet.http.HttpSession;
-
 import org.apache.ti.pageflow.Forward;
 import org.apache.ti.pageflow.PageFlowController;
 import org.apache.ti.pageflow.annotations.ti;
@@ -29,7 +27,7 @@ import org.apache.ti.pageflow.annotations.ti;
         @ti.simpleAction(name="locatePhysician", path="/jsf/physiciansFlow/Controller.jpf")
     },
     sharedFlowRefs={
-        @ti.sharedFlowRef(name="shared", type=org.apache.beehive.samples.netui.jsf.SharedFlow.class)
+        @ti.sharedFlowRef(name="shared", type=org.apache.ti.samples.jsf.SharedFlow.class)
     }
 )
 public class Controller 

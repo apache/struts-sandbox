@@ -59,12 +59,12 @@ public class PageFlowAction implements Action, Serializable {
     private static final long serialVersionUID = 1;
     private static final Logger _log = Logger.getInstance(PageFlowAction.class);
 
-    private String _unqualifiedActionPath;
+    private String _unqualifiedName;
     private boolean _loginRequired = false;
     private boolean _preventDoubleSubmit = false;
     private boolean _simpleAction = false;
     private boolean _isOverloaded = false;
-    private String _formMember;
+    private String _formBeanMember;
     private String _formBeanType;
     private String _formBeanAttribute;  // the attribute under which the form bean will be stored
     private boolean _readonly = false;
@@ -73,12 +73,12 @@ public class PageFlowAction implements Action, Serializable {
     private String _defaultForward;
     private String _validationErrorForward;
 
-    public String getUnqualifiedActionPath() {
-        return _unqualifiedActionPath;
+    public String getUnqualifiedName() {
+        return _unqualifiedName;
     }
 
-    public final void setUnqualifiedActionPath(String unqualifiedActionPath) {
-        _unqualifiedActionPath = unqualifiedActionPath;
+    public final void setUnqualifiedName(String unqualifiedName) {
+        _unqualifiedName = unqualifiedName;
     }
 
     public final boolean isLoginRequired() {
@@ -113,12 +113,12 @@ public class PageFlowAction implements Action, Serializable {
         _isOverloaded = overloaded;
     }
 
-    public String getFormMember() {
-        return _formMember;
+    public String getFormBeanMember() {
+        return _formBeanMember;
     }
 
-    public void setFormMember(String formMember) {
-        _formMember = formMember;
+    public void setFormBeanMember(String formBeanMember) {
+        _formBeanMember = formBeanMember;
     }
 
     public String getFormBeanType() {

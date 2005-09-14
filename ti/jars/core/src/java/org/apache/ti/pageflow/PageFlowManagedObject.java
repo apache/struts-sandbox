@@ -22,7 +22,6 @@ import org.apache.ti.pageflow.xwork.PageFlowAction;
 import org.apache.ti.pageflow.xwork.PageFlowActionContext;
 import org.apache.ti.util.logging.Logger;
 
-import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -32,7 +31,7 @@ import java.util.Map;
  * Base class for Page Flow managed objects (like page flows and JavaServer Faces backing beans).
  */
 public abstract class PageFlowManagedObject
-        implements Serializable, HttpSessionBindingListener {
+        implements Serializable /* TODO: re-enable through an abstraction: , HttpSessionBindingListener */ {
 
     private static final long serialVersionUID = 1;
     private static final Logger _log = Logger.getInstance(PageFlowManagedObject.class);
@@ -91,22 +90,26 @@ public abstract class PageFlowManagedObject
     /**
      * Callback when this object is added to the user session.
      */
+    /* TODO: re-enable this through an abstraction
     public void valueBound(HttpSessionBindingEvent event) {
     }
+    */
 
     /**
      * Callback when this object is removed from the user session.  Causes {@link #onDestroy} to be called.  This is a
      * framework-invoked method that should not normally be called indirectly.
      */
+    /* TODO: re-enable this through an abstraction
     public void valueUnbound(HttpSessionBindingEvent event) {
         if (Handlers.get().getStorageHandler().allowBindingEvent(event)) {
             destroy();
         }
     }
+    */
 
-    /**
-     * Remove this instance from the session.
-     */
+   /**
+    * Remove this instance from the session.
+    */
     protected abstract void removeFromSession();
 
     /**

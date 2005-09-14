@@ -54,6 +54,11 @@
       </properties>
     </dependency>
     <dependency>
+      <groupId>struts</groupId>
+      <artifactId>struts-ti-compiler-apt</artifactId>
+      <version>${pom.currentVersion}</version>
+    </dependency>
+    <dependency>
       <groupId>myfaces</groupId>
       <artifactId>myfaces</artifactId>
       <version>1.0.9</version>

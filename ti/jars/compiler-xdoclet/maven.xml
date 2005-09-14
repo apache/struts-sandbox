@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project 
+    xmlns:j="jelly:core" 
+    xmlns:ant="jelly:ant" 
+    xmlns:maven="jelly:maven" 
+    default="jar">
+
+  <!-- The XDoclet-based typesystem needs the source code for the annotation interface, which it parses. -->
+  <postGoal name="java:compile">
+    <property name="annotations.source.dir" location="${basedir}/../java5/src/java/org/apache/ti/pageflow/annotations"/>
+    <echo>Copying annotations source file(s) from ${annotations.source.dir}</echo>
+    <copy todir="${maven.build.dest}/org/apache/ti/pageflow/annotations">
+        <fileset dir="${annotations.source.dir}" includes="*.java"/>
+    </copy>
+  </postGoal>
+</project>
+

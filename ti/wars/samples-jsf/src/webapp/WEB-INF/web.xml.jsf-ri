@@ -5,7 +5,7 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
     version="2.4">
 
-    <display-name>Beehive NetUI Samples Web Application</display-name>
+    <display-name>Struts Ti / JSF Samples Web Application</display-name>
 
     <context-param>
         <param-name>com.sun.faces.validateXml</param-name>
@@ -33,13 +33,13 @@
     <!-- Filter to perform Page Flow operations when JSPs are hit directly. -->
     <filter>
         <filter-name>PageFlowJspFilter</filter-name>
-        <filter-class>org.apache.beehive.netui.pageflow.PageFlowJspFilter</filter-class>
+        <filter-class>org.apache.ti.servlet.PageFlowJspFilter</filter-class>
     </filter>
 
     <!-- Filter to perform Page Flow operations when JavaServer Faces pages are hit directly. -->
     <filter>
         <filter-name>PageFlowFacesFilter</filter-name>
-        <filter-class>org.apache.beehive.netui.pageflow.PageFlowFacesFilter</filter-class>
+        <filter-class>org.apache.ti.servlet.PageFlowFacesFilter</filter-class>
     </filter>
 
     <!--
@@ -51,7 +51,7 @@
     -->
     <filter>
         <filter-name>PageFlowForbiddenFilter</filter-name>
-        <filter-class>org.apache.beehive.netui.pageflow.PageFlowForbiddenFilter</filter-class>
+        <filter-class>org.apache.ti.servlet.PageFlowForbiddenFilter</filter-class>
         <init-param>
             <param-name>response-code</param-name>
             <param-value>404</param-value>
@@ -119,26 +119,8 @@
     <!-- Action Servlet Configuration (with debugging) -->
     <servlet>
         <servlet-name>action</servlet-name>
-        <servlet-class>org.apache.beehive.netui.pageflow.PageFlowActionServlet</servlet-class>
-        <init-param>
-            <param-name>config</param-name>
-            <param-value>/WEB-INF/.pageflow-struts-generated/jpf-struts-config.xml</param-value>
-        </init-param>
-        <init-param>
-            <param-name>debug</param-name>
-            <param-value>2</param-value>
-        </init-param>
-        <init-param>
-            <param-name>detail</param-name>
-            <param-value>2</param-value>
-        </init-param>
+        <servlet-class>org.apache.ti.servlet.StrutsTiServlet</servlet-class>
         <load-on-startup>2</load-on-startup>
-    </servlet>
-
-    <!-- The XmlHttpRequest handler Servlet -->
-    <servlet>
-      <servlet-name>XmlHttpRequestServlet</servlet-name>
-      <servlet-class>org.apache.beehive.netui.pageflow.xmlhttprequest.XmlHttpRequestServlet</servlet-class>
     </servlet>
 
     <!-- Faces Servlet -->

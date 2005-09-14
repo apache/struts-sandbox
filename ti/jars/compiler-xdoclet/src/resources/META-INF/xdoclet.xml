@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+<!DOCTYPE xdoclet-module PUBLIC "-//XDoclet Team//DTD XDoclet Module 1.0//EN" "http://xdoclet.sourceforge.net/dtd/xdoclet-module_1_0.dtd">
+-->
+
+<xdoclet-module>
+    <!--
+    org.apache.ti.compiler.xdoclet.PageFlowSubTask
+    -->
+
+<!--
+    <subtask
+        name="build-pageflows-subtask"
+        implementation-class="org.apache.ti.compiler.xdoclet.PageFlowDocletSubTask"
+        parent-task-class="org.apache.ti.compiler.xdoclet.PageFlowDocletTask"
+    />
+    -->
+</xdoclet-module>

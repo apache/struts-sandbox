@@ -52,6 +52,6 @@ public class NetUIReadVariableResolver
     }
 
     public String[] getAvailableVariables() {
-        return new String[]{"actionForm", "pageFlow", "globalApp", "request", "session", "application", "pageContext", "bundle", "container", "url", "pageInput"};
+        return new String[]{"actionForm", "pageFlow", "request", "session", "application", "pageContext", "bundle", "container", "url", "pageInput"};
     }
 }

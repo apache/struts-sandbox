@@ -25,6 +25,7 @@ import org.apache.ti.schema.annotations.AnnotationAttribute;
 import org.apache.ti.schema.annotations.ProcessedAnnotation;
 import org.apache.ti.schema.annotations.ProcessedAnnotationsDocument;
 import org.apache.ti.util.SourceResolver;
+import org.apache.ti.util.internal.InternalStringBuilder;
 import org.apache.ti.util.logging.Logger;
 import org.apache.xmlbeans.XmlException;
 
@@ -44,9 +45,17 @@ public class AnnotationReader
     private ProcessedAnnotationsDocument.ProcessedAnnotations _annotations;
 
     public AnnotationReader(Class type, SourceResolver sourceResolver) {
-        String annotationsXml =
-                PageFlowConstants.PAGEFLOW_MODULE_CONFIG_GEN_DIR + "/jpf-annotations-"
-                + type.getName().replace('.', '-') + ".xml";
+        String typeName = type.getName();
+        InternalStringBuilder buf = new InternalStringBuilder(PageFlowConstants.PAGEFLOW_MODULE_CONFIG_GEN_DIR);
+        buf.append('/');
+        int lastDot = typeName.lastIndexOf('.');
+        if (lastDot != -1) {
+            buf.append(typeName.substring(0, lastDot + 1).replace('.', '/'));
+        }
+        buf.append("annotations-");
+        buf.append(typeName.substring(lastDot + 1));
+        buf.append(".xml");
+        String annotationsXml = buf.toString();
 
         try {
             WebContext webContext = PageFlowActionContext.get().getWebContext();

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project 
+    xmlns:j="jelly:core" 
+    xmlns:ant="jelly:ant" 
+    xmlns:maven="jelly:maven" 
+    default="war">
+
+  <postGoal name="war:webapp">
+    <attainGoal name="build-pageflows-apt"/>
+  </postGoal>
+</project>
+

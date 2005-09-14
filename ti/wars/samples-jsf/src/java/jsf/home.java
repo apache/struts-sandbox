@@ -25,7 +25,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.faces.event.ValueChangeEvent;
 
-import org.apache.beehive.samples.netui.jsf.SharedFlow;
+import org.apache.ti.samples.jsf.SharedFlow;
 
 
 /**

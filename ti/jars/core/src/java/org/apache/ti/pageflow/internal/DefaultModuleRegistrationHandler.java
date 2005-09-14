@@ -25,6 +25,7 @@ import org.apache.commons.chain.web.WebContext;
 import org.apache.ti.pageflow.ModuleConfig;
 import org.apache.ti.pageflow.ModuleConfigLocator;
 import org.apache.ti.pageflow.PageFlowEventReporter;
+import org.apache.ti.pageflow.PageFlowConstants;
 import org.apache.ti.pageflow.handler.Handler;
 import org.apache.ti.pageflow.handler.HandlerConfig;
 import org.apache.ti.pageflow.handler.ModuleRegistrationHandler;
@@ -71,7 +72,7 @@ public class DefaultModuleRegistrationHandler extends DefaultHandler implements 
 
         public String getModuleResourcePath(String moduleName) {
             assert moduleName.startsWith("/") : moduleName;
-            return "_pageflow-config" + moduleName + "/xwork.xml";
+            return PageFlowConstants.PAGEFLOW_MODULE_CONFIG_GEN_DIR + moduleName + "/pageflow.xml";
         }
     }
 

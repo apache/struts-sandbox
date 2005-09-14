@@ -53,5 +53,10 @@
         <war.bundle>true</war.bundle>
       </properties>
     </dependency>
+    <dependency>
+      <groupId>struts</groupId>
+      <artifactId>struts-ti-compiler-apt</artifactId>
+      <version>${pom.currentVersion}</version>
+    </dependency>
   </dependencies>
 </project>

@@ -57,7 +57,6 @@ public abstract class PageFlowResult implements Result {
 
     private String _name;
     private String _location;
-    private boolean _isNestedReturn = false;
     private boolean _isReturnToPage = false;
     private boolean _isReturnToAction = false;
     private String _outputFormBeanType;
@@ -90,14 +89,6 @@ public abstract class PageFlowResult implements Result {
 
     public void setLocation(String location) {
         _location = location;
-    }
-
-    public boolean isNestedReturn() {
-        return _isNestedReturn;
-    }
-
-    public void setNestedReturn(boolean nestedReturn) {
-        _isNestedReturn = nestedReturn;
     }
 
     public boolean isReturnToPage() {

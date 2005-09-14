@@ -76,9 +76,9 @@ public class NetUIUpdateVariableResolver
 
     public String[] getAvailableVariables() {
         if (_requestParameter)
-            return new String[]{"actionForm", "pageFlow", "globalApp"};
+            return new String[]{"actionForm", "pageFlow"};
         else
-            return new String[]{"actionForm", "pageFlow", "globalApp", "request", "session", "application"};
+            return new String[]{"actionForm", "pageFlow", "request", "session", "application"};
     }
 
     private static final Map/*<String, SharedFlowController>*/ getSharedFlow() {

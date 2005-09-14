@@ -250,10 +250,6 @@ public class PageFlowActionServlet extends AutoRegisterActionServlet
                 throw new ServletException( e );
             }
         }
-        else
-        {
-            sharedFlowToTry = FlowControllerFactory.getGlobalApp( request, response, getServletContext() );
-        }
         
         //
         // If we couldn't find an appropriate module, try raising the action on the (deprecated) Global.app.
@@ -524,10 +520,6 @@ public class PageFlowActionServlet extends AutoRegisterActionServlet
             {
                 throw new ServletException( e );
             }
-        }
-        else
-        {
-            sharedFlowToTry = FlowControllerFactory.getGlobalApp( request, response, getServletContext() );
         }
         
         //

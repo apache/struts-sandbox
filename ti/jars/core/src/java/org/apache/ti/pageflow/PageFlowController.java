@@ -32,7 +32,6 @@ import org.apache.ti.util.internal.FileUtils;
 import org.apache.ti.util.internal.cache.ClassLevelCache;
 import org.apache.ti.util.logging.Logger;
 
-import javax.servlet.http.HttpSessionBindingEvent;
 import java.lang.reflect.Field;
 import java.util.Map;
 
@@ -681,6 +680,7 @@ public abstract class PageFlowController
      * Callback when this object is removed from the user session.  Causes {@link #onDestroy} to be called.  This is a
      * framework-invoked method that should not normally be called indirectly.
      */
+    /* TODO: re-enable this, through an abstraction
     public void valueUnbound(HttpSessionBindingEvent event) {
         //
         // Unless this pageflow has been pushed onto the nesting stack, do the onDestroy() callback.
@@ -689,6 +689,7 @@ public abstract class PageFlowController
             super.valueUnbound(event);
         }
     }
+    */
 
     void setIsOnNestingStack(boolean isOnNestingStack) {
         _isOnNestingStack = isOnNestingStack;

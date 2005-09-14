@@ -164,7 +164,7 @@ public class ChooseFormBean implements Command {
         
     private Field getPageFlowScopedFormMember(PageFlowAction action)
     {
-        String formMember = action.getFormMember();
+        String formMember = action.getFormBeanMember();
         
         try
         {

@@ -5,7 +5,7 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
     version="2.4">
 
-    <display-name>Beehive NetUI Samples Web Application</display-name>
+    <display-name>Struts Ti / JSF Samples Web Application</display-name>
 
     <!-- Filter to perform Page Flow operations when JSPs are hit directly. -->
     <filter>

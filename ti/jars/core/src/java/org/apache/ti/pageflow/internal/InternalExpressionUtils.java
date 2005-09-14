@@ -94,7 +94,7 @@ public class InternalExpressionUtils {
                 return buildInitParamMap();
             */
             // chain up the request > session (if exists) > application
-            // note, this should handle pageFlow, globalApp, sharedFlow, and bundle if they're in the request
+            // note, this should handle pageFlow, sharedFlow, and bundle if they're in the request
             // attribute map already
             else {
                 Object val;

@@ -20,8 +20,6 @@ package jsf.physiciansFlow;
 import java.io.Serializable;
 
 import javax.faces.model.DataModel;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.ti.pageflow.FormData;
 import org.apache.ti.pageflow.Forward;
@@ -41,7 +39,7 @@ import org.apache.beehive.samples.netui.jsf.physician.PhysicianSession;
         @ti.simpleAction(name="physicianSearch", path="search.faces")
     },
     sharedFlowRefs={
-        @ti.sharedFlowRef(name="shared", type=org.apache.beehive.samples.netui.jsf.SharedFlow.class)
+        @ti.sharedFlowRef(name="shared", type=org.apache.ti.samples.jsf.SharedFlow.class)
     }
 )
 public class Controller
@@ -101,13 +99,6 @@ public class Controller
         this.physicianSession = new PhysicianSession();
     }
 
-    /**
-     * Callback that is invoked when this controller instance is destroyed.
-     */
-    protected void onDestroy(HttpSession session)
-    {
-    }
-        
     //
     // Page Flow Actions
     //

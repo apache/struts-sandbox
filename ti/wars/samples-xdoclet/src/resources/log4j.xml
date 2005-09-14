@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+  <appender name="STRUTSTI_FILE_LOG" class="org.apache.log4j.RollingFileAppender">
+    <param name="File" value="STRUTSTI.log"/>
+    <param name="Append" value="true"/>
+    <param name="MaxFileSize" value="500000KB"/>
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d{DATE} %-5p %-15c{1} [%x]: %m%n"/>
+    </layout>
+  </appender>
+
+  <appender name="STRUTSTI_CONSOLE_LOG" class="org.apache.log4j.ConsoleAppender">
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d{DATE} %-5p %-15c{1} [%x]: %m%n"/>
+    </layout>
+  </appender>
+
+  <!-- STRUTSTI -->
+  <category name="org.apache.ti">
+    <priority value="warn"/>
+    <appender-ref ref="STRUTSTI_CONSOLE_LOG"/>
+  </category>
+
+  <!-- Jakarta Commons -->
+  <category name="org.apache.commons">
+    <priority value="warn"/>
+    <appender-ref ref="STRUTSTI_CONSOLE_LOG"/>
+  </category>
+
+</log4j:configuration>

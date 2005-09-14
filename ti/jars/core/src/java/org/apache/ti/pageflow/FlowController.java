@@ -819,7 +819,7 @@ public abstract class FlowController extends PageFlowManagedObject
      * method that should not normally be called directly.
      */
     public Object getFormBean(PageFlowAction action) {
-        String formMember = action.getFormMember();
+        String formMember = action.getFormBeanMember();
 
         try {
             if (formMember != null) {

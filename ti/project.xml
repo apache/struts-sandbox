@@ -365,12 +365,21 @@
       </properties>
     </dependency>
     
-    <!-- xjavadoc -->
+    <!-- xjavadoc and xdoclet -->
     <dependency>
       <groupId>xjavadoc</groupId>
       <artifactId>xjavadoc</artifactId>
       <version>1.1</version>
       <url>http://xdoclet.sourceforge.net/xjavadoc/</url>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
+    <dependency>
+      <groupId>xdoclet</groupId>
+      <artifactId>xdoclet</artifactId>
+      <version>1.2</version>
+      <url>http://xdoclet.sourceforge.net/xdoclet/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>
@@ -509,6 +518,28 @@
       </properties>
     </dependency>
 
+    <dependency>
+      <groupId>pageflow</groupId>
+      <artifactId>schema-commons-validator</artifactId>
+      <version>1.1</version>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
+
+   <dependency>
+        <groupId>sun</groupId>
+        <artifactId>tools</artifactId>
+        <version>1.5</version>
+        <type>jar</type>
+        <url>http://java.sun.com/j2se/1.5.0/download.html</url>
+        <properties>
+            <comment>
+                Needed to run Sun's annotation processing tool (apt). This is the tools.jar from the Sun JDK.
+                It's specified in project.properties.
+            </comment>
+        </properties>
+    </dependency>
 
     <!-- for unit tests -->
     <dependency>

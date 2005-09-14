@@ -55,7 +55,6 @@ public class ProcessPopulate {
 
     // these must be kept in sync with the context names specified in the scripting languages
     private static final String PAGE_FLOW_CONTEXT = "pageFlow";
-    private static final String GLOBAL_APP_CONTEXT = "globalApp";
 
     private static final String WLW_TAG_HANDLER_PREFIX = "wlw-";
     private static final String WLW_TAG_HANDLER_SUFFIX = ":";
@@ -217,11 +216,11 @@ public class ProcessPopulate {
                             // common case, make this fast
                             if (!requestHasPopulated)
                                 ee.update(expr, updateValue, variableResolver, true);
-                            // must check the expression to make sure pageFlow. and globalApp. don't get executed more than once
+                            // must check the expression to make sure pageFlow. doesn't get executed more than once
                             else {
                                 Expression pe = ee.parseExpression(expr);
                                 String contextName = pe.getContext();
-                                if (!contextName.equals(PAGE_FLOW_CONTEXT) && !contextName.equals(GLOBAL_APP_CONTEXT))
+                                if (!contextName.equals(PAGE_FLOW_CONTEXT))
                                     ee.update(expr, updateValue, variableResolver, true);
                             }
                         }

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<netui-config xmlns="http://struts.apache.org/ti/2004/server/config">
+
+    <expression-languages>
+        <default-language>netuiel</default-language>
+        <expression-language>
+            <name>netuiel</name>
+            <factory-class>org.apache.ti.script.el.ExpressionEvaluatorImpl$NetUIELEngineFactory</factory-class>
+        </expression-language>
+    </expression-languages>
+
+    <!-- This block is used by the "actioninterceptors" sample. -->
+    <pageflow-action-interceptors>
+        <per-pageflow>
+            <pageflow-uri>/actioninterceptors/interceptme/Controller.jpf</pageflow-uri>
+                <per-action>
+                    <action-name>begin</action-name>
+                    <simple-action-interceptor>
+                        <intercept-path>/actioninterceptors/nested/Controller.jpf</intercept-path>
+                    </simple-action-interceptor>
+                </per-action>
+                <per-action>
+                    <action-name>another</action-name>
+                    <action-interceptor>
+                        <interceptor-class>org.apache.ti.samples.pageflow.actioninterceptors.MyInterceptor</interceptor-class>
+                    </action-interceptor>
+                </per-action>
+        </per-pageflow>
+    </pageflow-action-interceptors>
+
+    <!-- This block is used by the "loginexample" sample. -->
+    <pageflow-handlers>
+        <login-handler>
+            <handler-class>org.apache.ti.samples.pageflow.loginexample.ExampleLoginHandler</handler-class>
+        </login-handler>
+    </pageflow-handlers>
+
+</netui-config>
