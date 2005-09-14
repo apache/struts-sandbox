@@ -1,4 +1,5 @@
 using System;
+using System.Web.UI;
 using System.Web.UI.WebControls;
 using Nexus.Core.Helpers;
 using Nexus.Web.Controls;
@@ -8,19 +9,6 @@ namespace PhoneBook.Web.Controls
 {
 	public class Finder2 : ViewControl
 	{
-		public Label last_name_label;
-		public Label first_name_label;
-		public Label extension_label;
-		public Label user_name_label;
-		public Label hired_label;
-		public Label hours_label;
-
-		protected DropDownList last_name_list;
-		protected DropDownList first_name_list;
-		protected DropDownList extension_list;
-		protected DropDownList user_name_list;
-		protected DropDownList hired_list;
-		protected DropDownList hours_list;
 
 		protected Button find;
 
@@ -28,18 +16,6 @@ namespace PhoneBook.Web.Controls
 		/// Fires when search criteria is input.
 		/// </summary>
 		public event EventHandler Click;
-
-		private Label[] FilterLabels()
-		{
-			Label[] labels = {last_name_label, first_name_label, extension_label, user_name_label, hired_label, hours_label};
-			return labels;
-		}
-
-		private DropDownList[] FilterList()
-		{
-			DropDownList[] lists = {last_name_list, first_name_list, extension_list, user_name_list, hired_list, hours_list};
-			return lists;
-		}
 
 		private void find_Click(object sender, EventArgs e)
 		{
@@ -54,12 +30,15 @@ namespace PhoneBook.Web.Controls
 			// Reset filter controls
 			int exceptIndex = 0;
 			if (except != null) exceptIndex = except.SelectedIndex;
-			foreach (DropDownList filter in FilterList())
+			foreach (Control c in Controls)
 			{
-				filter.SelectedIndex = 0;
+				if (IsListControl(c))
+				{
+					DropDownList x = (DropDownList) c;
+					x.SelectedIndex = 0;
+				}
 			}
 			if (except != null) except.SelectedIndex = exceptIndex;
-			// Tell everyone that we are starting over
 		}
 
 		private void Filter_Changed(object sender, EventArgs e)
@@ -86,22 +65,18 @@ namespace PhoneBook.Web.Controls
 		private void Page_Load(object sender, EventArgs e)
 		{
 			find.Click += new EventHandler(find_Click);
-			foreach (DropDownList filter in FilterList())
+			foreach (Control c in Controls)
 			{
-				filter.SelectedIndexChanged += new EventHandler(Filter_Changed);
-			}
-			if (!IsPostBack)
-			{
-				find.Text = GetMessage(find.ID);
-				foreach (Label label in FilterLabels())
+				if (IsListControl(c))
 				{
-					label.Text = GetMessage(label.ID);
-				}
-				foreach (DropDownList filter in FilterList())
-				{
-					filter.AutoPostBack = true;
+					DropDownList x = (DropDownList) c;
+					x.SelectedIndexChanged += new EventHandler(Filter_Changed);;
+					x.AutoPostBack = true;
 				}
 			}
+
+			if (IsPostBack) return;
+			GetMessages();
 		}
 
 		#region Web Form Designer generated code
