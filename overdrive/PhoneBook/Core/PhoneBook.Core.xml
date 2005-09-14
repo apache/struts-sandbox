@@ -1,0 +1,231 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PhoneBook.Core</name>
+    </assembly>
+    <members>
+        <member name="T:PhoneBook.Core.Commands.AppCommand">
+            <summary>
+            Add data access methods to RequestCommand.
+            </summary>
+            
+        </member>
+        <member name="T:PhoneBook.Core.Commands.BaseEntry">
+            <summary>
+            Execute database statement for QueryID for a single object, 
+            returning each attribute in the main context.
+            </summary>
+            
+        </member>
+        <member name="T:PhoneBook.Core.Commands.BaseFilterList">
+            <summary>
+            Execute database statement for QueryID 
+            and wrap result in KeyValue objects 
+            so that lists can be displayed by standard methods.
+            </summary>
+            
+        </member>
+        <member name="T:PhoneBook.Core.Commands.BaseList">
+            <summary>
+            Execute database statement for QueryID, 
+            convert list returned to an AppContextList,  
+            and place converted list in context under ID.
+            </summary>
+            
+        </member>
+        <member name="T:PhoneBook.Core.Commands.BaseSave">
+            <summary>
+            Base Command for saving an Entity to the persistant store (database).
+            </summary>
+        </member>
+        <member name="M:PhoneBook.Core.Commands.BaseSave.Save(Nexus.Core.IRequestContext,System.String,System.String,System.String)">
+            <summary>
+            If the "fieldID" is empty, use the insertID statement, 
+            otherwise, use the updateID statement.
+            </summary>
+            <param name="context">The INexusContext we are processing.</param>
+            <param name="fieldID">The name of the key field.</param>
+            <param name="insertID">The name of the "insert" mapping for the Entity.</param>
+            <param name="updateID">The name of the "update" mapping for the Entity.</param>
+            <returns>False</returns>
+        </member>
+        <member name="P:PhoneBook.Core.Commands.BaseSave.KeyID">
+            <summary>
+            The name of the key field.
+            </summary>
+        </member>
+        <member name="P:PhoneBook.Core.Commands.BaseSave.InsertID">
+            <summary>
+            The name of the "insert" mapping for the Entity.
+            </summary>
+        </member>
+        <member name="P:PhoneBook.Core.Commands.BaseSave.UpdateID">
+            <summary>
+            The name of the "update" mapping for the Entity.
+            </summary>
+        </member>
+        <member name="T:PhoneBook.Core.App">
+            <summary>
+            Tokens representing context keys.
+            </summary>
+            
+        </member>
+        <member name="F:PhoneBook.Core.App.ENTRY_KEY">
+            <summary>
+            Token for entry_key property.
+            </summary>
+            
+        </member>
+        <member name="F:PhoneBook.Core.App.FIRST_NAME">
+            <summary>
+            Token for first_name property.
+            </summary>
+            
+        </member>
+        <member name="F:PhoneBook.Core.App.LAST_NAME">
+            <summary>
+            Token for last_name property.
+            </summary>
+            
+        </member>
+        <member name="F:PhoneBook.Core.App.USER_NAME">
+            <summary>
+            Token for user_name property.
+            </summary>
+            
+        </member>
+        <member name="F:PhoneBook.Core.App.EXTENSION">
+            <summary>
+            Token for extension property.
+            </summary>
+            
+        </member>
+        <member name="F:PhoneBook.Core.App.HIRED">
+            <summary>
+            Token for hired property.
+            </summary>
+            
+        </member>
+        <member name="F:PhoneBook.Core.App.HOURS">
+            <summary>
+            Token for hours property.
+            </summary>
+            
+        </member>
+        <member name="F:PhoneBook.Core.App.EDITOR">
+            <summary>
+            Token for editor property.
+            </summary>
+            
+        </member>
+        <member name="F:PhoneBook.Core.App.ENTRY">
+            <summary>
+            Token for select one command.
+            </summary>
+            
+        </member>
+        <member name="F:PhoneBook.Core.App.ENTRY_LIST">
+            <summary>
+            Token for select all command.
+            </summary>
+            
+        </member>
+        <member name="F:PhoneBook.Core.App.LAST_NAME_LIST">
+            <summary>
+            Token for List Last Names command.
+            </summary>
+            
+        </member>
+        <member name="F:PhoneBook.Core.App.FIRST_NAME_LIST">
+            <summary>
+            Token for List Last Names command.
+            </summary>
+            
+        </member>
+        <member name="F:PhoneBook.Core.App.EXTENSION_LIST">
+            <summary>
+            Token for List Extensions command.
+            </summary>
+            
+        </member>
+        <member name="F:PhoneBook.Core.App.USER_NAME_LIST">
+            <summary>
+            Token for List UserNames command.
+            </summary>
+            
+        </member>
+        <member name="F:PhoneBook.Core.App.HIRED_LIST">
+            <summary>
+            Token for List Hire Dates command.
+            </summary>
+            
+        </member>
+        <member name="F:PhoneBook.Core.App.HOURS_LIST">
+            <summary>
+            Token for List Hours command.
+            </summary>
+            
+        </member>
+        <member name="F:PhoneBook.Core.App.ENTRY_FIND">
+            <summary>
+            Token for Entry Find command.
+            </summary>
+            
+        </member>
+        <member name="F:PhoneBook.Core.App.ENTRY_SAVE">
+            <summary>
+            Token for Entry Save command.
+            </summary>
+            
+        </member>
+        <member name="F:PhoneBook.Core.App.DIRECTORY_TITLE">
+            <summary>
+            Token for Directory page title.
+            </summary>
+        </member>
+        <member name="F:PhoneBook.Core.App.DIRECTORY_HEADING">
+            <summary>
+            Token for Directory directory page heading.
+            </summary>
+        </member>
+        <member name="F:PhoneBook.Core.App.DIRECTORY_PROMPT">
+            <summary>
+            Token for Directory page prompt.
+            </summary>
+        </member>
+        <member name="T:PhoneBook.Core.AppEntry">
+            <summary>
+            Expose field attributes as public properties.
+            </summary>
+            
+        </member>
+        <member name="T:PhoneBook.Core.AppEntryList">
+            <summary>
+            Implement IEntryList for AppEntry objects.
+            </summary>
+            
+        </member>
+        <member name="T:PhoneBook.Core.AppUserProfile">
+            <summary>
+            Extend UserProfile to include an IsEditor property.
+            </summary>
+        </member>
+        <member name="M:PhoneBook.Core.AppUserProfile.#ctor(System.Security.Principal.IIdentity)">
+            <summary>
+            Instantiate from an IIdentity.
+            </summary>
+            <param name="id">Identity to copy for this profile.</param>
+        </member>
+        <member name="T:PhoneBook.Core.TelephoneProcessor">
+            <summary>
+            Remove punctuation on input and insert punctuation on output.
+            </summary>
+            <remarks><p>
+            Null input or output is passed thorugh as null. 
+            Non-null input or output must be strings.
+            Output is formatted for local or long distane US telephone numbers. 
+            Output strings that are too short or too long are passed through.
+            </p></remarks>
+        </member>
+    </members>
+</doc>
