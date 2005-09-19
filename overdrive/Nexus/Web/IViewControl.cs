@@ -25,6 +25,9 @@ namespace Nexus.Web
 		IViewHelper ExecuteBind(ControlCollection controls, string command);
 		IViewHelper ExecuteBind(string command);
 
+		void ReadExecute(IViewHelper helper, bool nullIfEmpty);
+		void ReadExecute(IViewHelper helper);
+
 		IViewHelper Read(string command, bool nullIfEmpty);
 		IViewHelper Read(string command);
 

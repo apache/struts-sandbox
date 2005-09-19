@@ -225,8 +225,9 @@ namespace Nexus.Web.Controls
 			Grid.DataSource = list;
 		}
 
-		public virtual void DataBind()
+		public override void DataBind()
 		{
+			base.DataBind();
 			Grid.DataBind();
 		}
 
@@ -312,41 +313,46 @@ namespace Nexus.Web.Controls
 
 		private void ReadGridControls(ControlCollection controls, IDictionary dictionary, string[] keys, bool nullIfEmpty)
 		{
-			int i = 0;
+			int i = -1;
 			foreach (Control t in controls)
 			{
+				i++;
 				string key = keys[i];
 				if (IsTextBox(t))
 				{
 					TextBox x = (TextBox) t;
-					string value = (nullIfEmpty) ? NullIfEmpty(x.Text) : x.Text;
+					string value = (nullIfEmpty) ? NullOnEmpty(x.Text) : x.Text;
 					dictionary.Add(key, value);
+					continue;
 				}
 				if (IsLabel(t))
 				{
 					Label x = (Label) t;
-					string value = (nullIfEmpty) ? NullIfEmpty(x.Text) : x.Text;
+					string value = (nullIfEmpty) ? NullOnEmpty(x.Text) : x.Text;
 					dictionary.Add(key, value);
+					continue;
 				}
 				if (IsListControl(t))
 				{
 					ListControl x = (ListControl) t;
-					string value = (nullIfEmpty) ? NullIfEmpty(x.SelectedValue) : x.SelectedValue;
+					string value = (nullIfEmpty) ? NullOnEmpty(x.SelectedValue) : x.SelectedValue;
 					dictionary.Add(key, value);
+					continue;
 				}
 				if (IsCheckBox(t))
 				{
 					CheckBox x = (CheckBox) t;
 					string value = (x.Checked) ? key : null;
 					dictionary.Add(key, value);
+					continue;
 				}
 				if (IsRadioButton(t))
 				{
 					RadioButton x = (RadioButton) t;
 					string value = (x.Checked) ? key : null;
 					dictionary.Add(key, value);
+					continue;
 				}
-				i++;
 			}
 		}
 
@@ -421,7 +427,7 @@ namespace Nexus.Web.Controls
 
 		public virtual IViewHelper ExecuteList(IDictionary criteria)
 		{
-			IViewHelper helper = ReadExecute(ListCommand);
+			IViewHelper helper = ReadExecute(ListCommand, criteria);
 			bool okay = helper.IsNominal;
 			if (okay) BindGrid(helper); // DoBindGrid = helper;
 			return helper;
@@ -462,6 +468,19 @@ namespace Nexus.Web.Controls
 				Page_Error = helper;
 			}
 			return okay;
+		}
+
+		public virtual bool Open(IDictionary criteria)
+		{
+			Page_Reset();
+			list_Criteria = criteria;
+			return Open();
+		}
+
+		public void Reset(IDictionary criteria)
+		{
+			list_ResetIndex();
+			Open(criteria);			
 		}
 
 		protected virtual void list_Item(string commandName, int index)
@@ -617,9 +636,20 @@ namespace Nexus.Web.Controls
 
 		#endregion
 
-		public void list_Item_Click(int index)
+		public virtual void list_Item_Click(int index)
 		{
-			//
+			// Override to provide implementation
+		}
+
+		/// <summary>
+		/// Reset state for this control, including any ViewState attributes
+		/// and the page indexes (@see(list_ResetIndex)), 
+		/// usually on a new Open event or on a Quit event,
+		/// </summary>
+		public override void Page_Reset()
+		{
+			list_ResetIndex();
+			base.Page_Reset();
 		}
 
 		private void Page_Load(object sender, EventArgs e)

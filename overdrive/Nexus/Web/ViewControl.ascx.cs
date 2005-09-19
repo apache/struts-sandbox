@@ -40,7 +40,7 @@ namespace Nexus.Web.Controls
 
 		#region String utilities 
 
-		protected string NullIfEmpty(string input)
+		protected string NullOnEmpty(string input)
 		{
 			return (string.Empty.Equals(input)) ? null : input;
 		}
@@ -98,6 +98,39 @@ namespace Nexus.Web.Controls
 		#region Control utilities
 
 		/// <summary>
+		/// Return true if control is a button.
+		/// </summary>
+		/// <param name="control">Control to test.</param>
+		/// <returns>True if control is a Button</returns>
+		/// 
+		protected bool IsButton(Control control)
+		{
+			return (typeof (Button).Equals(control.GetType()));
+		}
+
+		/// <summary>
+		/// Return true if control is a Checkbox.
+		/// </summary>
+		/// <param name="control">Control to test.</param>
+		/// <returns>True if control is a Checkbox</returns>
+		/// 
+		protected bool IsCheckBox(Control control)
+		{
+			return (typeof (CheckBox).Equals(control.GetType()));
+		}
+
+		/// <summary>
+		/// Return true if control is a HyperLink.
+		/// </summary>
+		/// <param name="control">Control to test.</param>
+		/// <returns>True if control is a TextBox</returns>
+		/// 
+		protected bool IsHyperLink(Control control)
+		{
+			return (typeof (HyperLink).Equals(control.GetType()));
+		}
+
+		/// <summary>
 		/// Return true if control is a Label.
 		/// </summary>
 		/// <param name="control">Control to test.</param>
@@ -106,17 +139,6 @@ namespace Nexus.Web.Controls
 		protected bool IsLabel(Control control)
 		{
 			return (typeof (Label).Equals(control.GetType()));
-		}
-
-		/// <summary>
-		/// Return true if control is a TextBox.
-		/// </summary>
-		/// <param name="control">Control to test.</param>
-		/// <returns>True if control is a TextBox</returns>
-		/// 
-		protected bool IsTextBox(Control control)
-		{
-			return (typeof (TextBox).Equals(control.GetType()));
 		}
 
 		/// <summary>
@@ -138,17 +160,6 @@ namespace Nexus.Web.Controls
 		}
 
 		/// <summary>
-		/// Return true if control is a Checkbox.
-		/// </summary>
-		/// <param name="control">Control to test.</param>
-		/// <returns>True if control is a Checkbox</returns>
-		/// 
-		protected bool IsCheckBox(Control control)
-		{
-			return (typeof (CheckBox).Equals(control.GetType()));
-		}
-
-		/// <summary>
 		/// Return true if control is a RadioButton.
 		/// </summary>
 		/// <param name="control">Control to test.</param>
@@ -157,6 +168,17 @@ namespace Nexus.Web.Controls
 		protected bool IsRadioButton(Control control)
 		{
 			return (typeof (RadioButton).Equals(control.GetType()));
+		}
+
+		/// <summary>
+		/// Return true if control is a TextBox.
+		/// </summary>
+		/// <param name="control">Control to test.</param>
+		/// <returns>True if control is a TextBox</returns>
+		/// 
+		protected bool IsTextBox(Control control)
+		{
+			return (typeof (TextBox).Equals(control.GetType()));
 		}
 
 		/// <summary>
@@ -191,11 +213,6 @@ namespace Nexus.Web.Controls
 			ControlCollection controls = this.Controls;
 			foreach (Control control in controls)
 			{
-				if (IsLabel(control))
-				{
-					Label x = (Label) control;
-					x.Text = String.Empty;
-				}
 				if (IsTextBox(control))
 				{
 					TextBox x = (TextBox) control;
@@ -303,27 +320,27 @@ namespace Nexus.Web.Controls
 			return trimmed;
 		}
 
-		private void ReadControls(ControlCollection controls, IDictionary dictionary, string prefix, string list_suffix, bool nullIfEmpty)
+		private void ReadControls(ControlCollection controls, IDictionary dictionary, string prefix, string list_suffix, bool nullOnEmpty)
 		{
 			foreach (Control t in controls)
 			{
 				if (IsTextBox(t))
 				{
 					TextBox x = (TextBox) t;
-					string value = (nullIfEmpty) ? NullIfEmpty(x.Text) : x.Text;
+					string value = (nullOnEmpty) ? NullOnEmpty(x.Text) : x.Text;
 					dictionary.Add(ToColumn(x.ID, prefix), value);
 				}
 				if (IsLabel(t))
 				{
 					Label x = (Label) t;
-					string value = (nullIfEmpty) ? NullIfEmpty(x.Text) : x.Text;
+					string value = (nullOnEmpty) ? NullOnEmpty(x.Text) : x.Text;
 					dictionary.Add(ToColumn(x.ID, prefix), value);
 				}
 				if (IsListControl(t))
 				{
 					ListControl x = (ListControl) t;
 					string root = RootId(x.ID, prefix, list_suffix);
-					string value = (nullIfEmpty) ? NullIfEmpty(x.SelectedValue) : x.SelectedValue;
+					string value = (nullOnEmpty) ? NullOnEmpty(x.SelectedValue) : x.SelectedValue;
 					dictionary.Add(root, value);
 				}
 				if (IsCheckBox(t))
@@ -343,16 +360,37 @@ namespace Nexus.Web.Controls
 			}
 		}
 
-		public IViewHelper Read(ControlCollection controls, string command, bool nullIfEmpty)
+		public void Read(ControlCollection controls, IDictionary dictionary, bool nullIfEmpty)
+		{
+			ReadControls(controls, dictionary, null, ListSuffix, nullIfEmpty);
+		}
+
+		public void ReadExecute(ControlCollection controls, IViewHelper helper, bool nullIfEmpty)
+		{
+			Read(this.Controls, helper.Criteria, nullIfEmpty);
+			helper.Execute();
+		}
+		
+		public void ReadExecute(IViewHelper helper, bool nullIfEmpty)
+		{
+			ReadExecute(this.Controls, helper, nullIfEmpty);
+		}
+
+		public void ReadExecute(IViewHelper helper)
+		{
+			ReadExecute(helper, true);
+		}
+		
+		public IViewHelper Read(ControlCollection controls, string command, bool nullOnEmpty)
 		{
 			IViewHelper helper = GetHelperFor(command);
-			ReadControls(controls, helper.Criteria, null, ListSuffix, nullIfEmpty);
+			ReadControls(controls, helper.Criteria, null, ListSuffix, nullOnEmpty);
 			return helper;
 		}
 
-		public IViewHelper Read(string command, bool nullIfEmpty)
+		public IViewHelper Read(string command, bool nullOnEmpty)
 		{
-			return Read(this.Controls, command, nullIfEmpty);
+			return Read(this.Controls, command, nullOnEmpty);
 		}
 
 		public IViewHelper Read(string command)
@@ -360,9 +398,9 @@ namespace Nexus.Web.Controls
 			return Read(this.Controls, command, true);
 		}
 
-		public IViewHelper ReadExecute(ControlCollection collection, string command, bool nullIfEmpty)
+		public IViewHelper ReadExecute(ControlCollection collection, string command, bool nullOnEmpty)
 		{
-			IViewHelper helper = Read(collection, command, nullIfEmpty);
+			IViewHelper helper = Read(collection, command, nullOnEmpty);
 			helper.Execute();
 			return helper;
 		}
@@ -401,6 +439,38 @@ namespace Nexus.Web.Controls
 			IViewHelper helper = Read(command, criteria, nullIfEmpty);
 			helper.Execute();
 			return helper;
+		}
+
+		private static string TITLE = "_title";
+		private static string LINK = "_link";
+		
+		public virtual void GetMessages(ControlCollection controls)
+		{
+			foreach (Control t in controls)
+			{
+				if (IsButton(t))
+				{					
+					Button x = (Button) t;
+					x.Text = GetMessage(x.ID);
+				}
+				if (IsHyperLink(t))
+				{					
+					HyperLink x = (HyperLink) t;
+					x.Text = GetMessage(x.ID + TITLE);
+					x.NavigateUrl = GetMessage(x.ID + LINK);
+					continue;
+				}
+				if (IsLabel(t))
+				{					
+					Label x = (Label) t;
+					x.Text = GetMessage(x.ID);
+				}
+			}			
+		}
+
+		public virtual void GetMessages()
+		{
+			GetMessages(Controls);
 		}
 
 		#endregion
@@ -494,8 +564,20 @@ namespace Nexus.Web.Controls
 		}
 
 		/// <summary>
-		/// Reset controls to default state, usually after a Quit or Save event.
+		/// Reset state for this control, including any ViewState attributes, 
+		/// usually on a new Open event or on a Quit event.
 		/// </summary>
+		/// <remarks><p>
+		/// Subclasses can override to clear any attributes manages through ViewState, 
+		/// and to retain any default values that should survive a reset.
+		/// If overridden, the best practice is to call base.Page_Reset 
+		/// rather than call ResetControls directly.
+		/// </p><p>
+		/// Usually, Page_Reset should *not* be called on a Save event, 
+		/// since the state at Save might be needed by another component. 
+		/// The typical idiom is to call Page_Reset when an Open method is passed new parameters 
+		/// or on a Quit event.
+		/// </p></remarks>
 		public virtual void Page_Reset()
 		{
 			ResetControls();
