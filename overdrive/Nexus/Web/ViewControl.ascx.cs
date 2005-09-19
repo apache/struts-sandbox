@@ -370,7 +370,7 @@ namespace Nexus.Web.Controls
 			Read(this.Controls, helper.Criteria, nullIfEmpty);
 			helper.Execute();
 		}
-		
+
 		public void ReadExecute(IViewHelper helper, bool nullIfEmpty)
 		{
 			ReadExecute(this.Controls, helper, nullIfEmpty);
@@ -380,7 +380,7 @@ namespace Nexus.Web.Controls
 		{
 			ReadExecute(helper, true);
 		}
-		
+
 		public IViewHelper Read(ControlCollection controls, string command, bool nullOnEmpty)
 		{
 			IViewHelper helper = GetHelperFor(command);
@@ -443,29 +443,29 @@ namespace Nexus.Web.Controls
 
 		private static string TITLE = "_title";
 		private static string LINK = "_link";
-		
+
 		public virtual void GetMessages(ControlCollection controls)
 		{
 			foreach (Control t in controls)
 			{
 				if (IsButton(t))
-				{					
+				{
 					Button x = (Button) t;
 					x.Text = GetMessage(x.ID);
 				}
 				if (IsHyperLink(t))
-				{					
+				{
 					HyperLink x = (HyperLink) t;
 					x.Text = GetMessage(x.ID + TITLE);
 					x.NavigateUrl = GetMessage(x.ID + LINK);
 					continue;
 				}
 				if (IsLabel(t))
-				{					
+				{
 					Label x = (Label) t;
 					x.Text = GetMessage(x.ID);
 				}
-			}			
+			}
 		}
 
 		public virtual void GetMessages()

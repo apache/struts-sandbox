@@ -480,7 +480,7 @@ namespace Nexus.Web.Controls
 		public void Reset(IDictionary criteria)
 		{
 			list_ResetIndex();
-			Open(criteria);			
+			Open(criteria);
 		}
 
 		protected virtual void list_Item(string commandName, int index)
