@@ -29,13 +29,17 @@ namespace PhoneBook.Web.Controls
 
 		private void Grid_Load()
 		{
+			AppUserProfile profile = Session[UserProfile.USER_PROFILE] as AppUserProfile;
+			HasEditColumn = profile.IsEditor;			
+		}
+
+		private void Grid_Init()
+		{
 			FindCommand = App.ENTRY_FIND;
 			ListCommand = App.ENTRY_LIST;
 			SaveCommand = App.ENTRY_SAVE;
 			DataKeyField = App.ENTRY_KEY;
 			HasItemColumn = false;
-			AppUserProfile profile = Session[UserProfile.USER_PROFILE] as AppUserProfile;
-			HasEditColumn = profile.IsEditor;
 
 			IList f = new ArrayList(7);
 			f.Add(App.LAST_NAME);
@@ -61,13 +65,14 @@ namespace PhoneBook.Web.Controls
 		private void Page_Init()
 		{
 			Grid = list;
+			Grid_Init();
 		}
 
 		private void Page_Load(object sender, EventArgs e)
 		{
-			Grid_Load();
 			add.Click += new EventHandler(list_Add);
 			add.Text = GetMessage(add.ID);
+			Grid_Load();
 		}
 
 		#region Web Form Designer generated code
