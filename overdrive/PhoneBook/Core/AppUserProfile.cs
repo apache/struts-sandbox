@@ -25,7 +25,7 @@ namespace PhoneBook.Core
 			set
 			{
 				_Entry = value;
-				if (_Entry!=null)
+				if (_Entry != null)
 				{
 					StringBuilder sb = new StringBuilder();
 					sb.Append(_Entry.first_name);

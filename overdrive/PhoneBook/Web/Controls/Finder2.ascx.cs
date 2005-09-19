@@ -9,7 +9,6 @@ namespace PhoneBook.Web.Controls
 {
 	public class Finder2 : ViewControl
 	{
-
 		protected Button find;
 
 		/// <summary>
@@ -70,7 +69,8 @@ namespace PhoneBook.Web.Controls
 				if (IsListControl(c))
 				{
 					DropDownList x = (DropDownList) c;
-					x.SelectedIndexChanged += new EventHandler(Filter_Changed);;
+					x.SelectedIndexChanged += new EventHandler(Filter_Changed);
+					;
 					x.AutoPostBack = true;
 				}
 			}

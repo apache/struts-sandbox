@@ -25,15 +25,9 @@ namespace PhoneBook.Web.Controls
 			}
 		}
 
-		public void Reset(IDictionary criteria)
-		{
-			list_ResetIndex();
-			Open(criteria);			
-		}
-
 		private static string LABEL = "_label";
 
-		private void SetProperties()
+		private void Grid_Load()
 		{
 			FindCommand = App.ENTRY_FIND;
 			ListCommand = App.ENTRY_LIST;
@@ -71,7 +65,7 @@ namespace PhoneBook.Web.Controls
 
 		private void Page_Load(object sender, EventArgs e)
 		{
-			SetProperties();
+			Grid_Load();
 			add.Click += new EventHandler(list_Add);
 			add.Text = GetMessage(add.ID);
 		}

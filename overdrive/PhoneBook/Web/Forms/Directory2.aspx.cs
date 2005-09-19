@@ -18,14 +18,7 @@ namespace PhoneBook.Web.Forms
 	/// 
 	public class Directory2 : Page
 	{
-		#region Page Properties 
-
-		protected HtmlGenericControl title;
-		protected HtmlGenericControl heading;
-		protected Label greeting;
-		protected Label profile_label;
-		protected Panel error_panel;
-		protected Label error_label;
+		#region Base Page members
 
 		private AppUserProfile _Profile;
 
@@ -65,7 +58,7 @@ namespace PhoneBook.Web.Forms
 				// ISSUE: Need constant for "1" (true)
 				bool isEditor = ((editor != null) && (editor.Equals("1")));
 				profile.IsEditor = isEditor;
-				if (editor!=null)
+				if (editor != null)
 				{
 					AppEntry entry = new AppEntry();
 					entry.AddAll(helper.Criteria);
@@ -114,6 +107,39 @@ namespace PhoneBook.Web.Forms
 			set { _Catalog = value; }
 		}
 
+		private void View_Error(object sender, EventArgs e)
+		{
+			ViewArgs v = e as ViewArgs;
+			if (v == null) throw new ArgumentException("View_Error: !(e is ViewArgs)");
+			IViewHelper helper = v.Helper;
+			if (helper != null) Page_Error = helper;
+			else throw new ArgumentException("View_Error: (e.helper==null)");
+		}
+
+		private void View_Init(ViewControl c)
+		{
+			c.View_Error += new EventHandler(View_Error);
+			c.Catalog = this.Catalog; // ISSUE: Why isn't control injection working?
+		}
+
+		private void Page_PreRender(object sender, EventArgs e)
+		{
+			greeting.Text = GetMessage(greeting.ID);
+			title.InnerText = GetMessage(App.DIRECTORY_TITLE);
+			heading.InnerText = GetMessage(App.DIRECTORY_HEADING);
+		}
+
+		#endregion
+
+		#region Page Properties 
+
+		protected HtmlGenericControl title;
+		protected HtmlGenericControl heading;
+		protected Label greeting;
+		protected Label profile_label;
+		protected Panel error_panel;
+		protected Label error_label;
+
 		#endregion
 
 		#region Event handlers
@@ -132,26 +158,14 @@ namespace PhoneBook.Web.Forms
 
 		#region Page Events
 
-		private void View_Error(object sender, EventArgs e)
-		{
-			ViewArgs v = e as ViewArgs;
-			if (v == null) throw new ArgumentException("View_Error: !(e is ViewArgs)");
-			IViewHelper helper = v.Helper;
-			if (helper != null) Page_Error = helper;
-			else throw new ArgumentException("View_Error: (e.helper==null)");
-		}
-
-		private void View_Init(ViewControl c)
-		{
-			c.View_Error += new EventHandler(View_Error);
-			c.Catalog = this.Catalog; // ISSUE: Why isn't control injection working?
-		}
-
 		private void Page_Init()
 		{
 			Profile = Session[UserProfile.USER_PROFILE] as AppUserProfile;
+			this.PreRender += new EventHandler(this.Page_PreRender);
+
 			View_Init(finder);
 			View_Init(lister);
+			finder.Click += new EventHandler(finder_Click);
 		}
 
 		private void Page_Load(object sender, EventArgs e)
@@ -161,20 +175,13 @@ namespace PhoneBook.Web.Forms
 			{
 				Page_Prompt = GetMessage(App.DIRECTORY_PROMPT);
 				string name = Profile.FullName;
-				if (name==null)			
-					profile_label.Text = Profile.UserId;					
-				else 
+				if (name == null)
+					profile_label.Text = Profile.UserId;
+				else
 					profile_label.Text = name;
 				// UserLocale = Profile.Locale;
 				finder.Open();
 			}
-		}
-
-		private void Page_PreRender(object sender, EventArgs e)
-		{
-			greeting.Text = GetMessage(greeting.ID);
-			title.InnerText = GetMessage(App.DIRECTORY_TITLE);
-			heading.InnerText = GetMessage(App.DIRECTORY_HEADING);
 		}
 
 		#endregion
@@ -198,7 +205,6 @@ namespace PhoneBook.Web.Forms
 		private void InitializeComponent()
 		{
 			this.Load += new EventHandler(this.Page_Load);
-			this.PreRender += new EventHandler(this.Page_PreRender);
 		}
 
 		#endregion

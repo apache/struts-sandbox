@@ -31,9 +31,9 @@
 			<hr>
 			</asp:Panel>
 						
-			<app:Finder id="finder" Runat="server" OnClick="finder_Click"></app:Finder>
+			<app:Finder id="finder" Runat="server"></app:Finder>
 			
- 			<app:Lister id="lister" runat="server" OnClick="lister_Click"></app:Lister>
+ 			<app:Lister id="lister" runat="server"></app:Lister>
 			
 		</form>
 	</body>
