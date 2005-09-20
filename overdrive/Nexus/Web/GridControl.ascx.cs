@@ -491,6 +491,8 @@ namespace Nexus.Web.Controls
 					// Handled by StepList_PageIndexChanged
 					break;
 				case msg_ITEM_COMMAND:
+					string key = Grid.DataKeys[index] as string;
+					list_ItemKey = key;
 					list_Item_Click(index);
 					break;
 				default:
