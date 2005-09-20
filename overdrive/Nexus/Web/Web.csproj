@@ -119,6 +119,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "FindControl.ascx"
+                    SubType = "UserControl"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "FindControl.ascx.cs"
+                    DependentUpon = "FindControl.ascx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "FindControl.ascx.resx"
+                    DependentUpon = "FindControl.ascx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Global.asax"
                     SubType = "Component"
                     BuildAction = "Content"
