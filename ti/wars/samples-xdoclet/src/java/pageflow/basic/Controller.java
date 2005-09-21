@@ -1,6 +1,5 @@
 package pageflow.basic;
 
-import org.apache.ti.pageflow.annotations.ti;
 import org.apache.ti.pageflow.PageFlowController;
 import org.apache.ti.pageflow.Forward;
 import com.opensymphony.xwork.Action;
