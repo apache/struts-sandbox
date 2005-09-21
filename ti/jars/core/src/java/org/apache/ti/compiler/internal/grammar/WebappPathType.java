@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,6 +32,7 @@ import org.apache.ti.compiler.internal.typesystem.declaration.TypeDeclaration;
 import org.apache.ti.compiler.internal.typesystem.env.AnnotationProcessorEnvironment;
 
 import java.io.File;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -40,20 +41,9 @@ import java.net.URISyntaxException;
  */
 public class WebappPathType
         extends AnnotationMemberType {
-
-    private static final String[] CHECKABLE_EXTENSIONS =
-            {
-                    JSP_FILE_EXTENSION,
-                    XJSP_FILE_EXTENSION,
-                    JPF_FILE_EXTENSION,
-                    "xml",
-                    "htm",
-                    "html"
-            };
-
+    private static final String[] CHECKABLE_EXTENSIONS = { JSP_FILE_EXTENSION, XJSP_FILE_EXTENSION, JPF_FILE_EXTENSION, "xml", "htm", "html" };
     private boolean _pathMustBeRelative = false;
     private FlowControllerInfo _flowControllerInfo;
-
 
     public WebappPathType(boolean pathMustBeRelative, String requiredRuntimeVersion, AnnotationGrammar parentGrammar,
                           FlowControllerInfo fcInfo) {
@@ -64,15 +54,16 @@ public class WebappPathType
 
     private static boolean isCheckableExtension(String filePath) {
         for (int i = 0; i < CHECKABLE_EXTENSIONS.length; ++i) {
-            if (filePath.endsWith(CHECKABLE_EXTENSIONS[i])) return true;
+            if (filePath.endsWith(CHECKABLE_EXTENSIONS[i])) {
+                return true;
+            }
         }
 
         return false;
     }
 
     public Object onCheck(AnnotationTypeElementDeclaration valueDecl, AnnotationValue value,
-                          AnnotationInstance[] parentAnnotations, MemberDeclaration classMember,
-                          int annotationArrayIndex)
+                          AnnotationInstance[] parentAnnotations, MemberDeclaration classMember, int annotationArrayIndex)
             throws FatalCompileTimeException {
         String filePath = (String) value.getValue();
 
@@ -81,34 +72,40 @@ public class WebappPathType
         //
         try {
             URI uri = new URI(filePath);
-            filePath = uri.getPath();   // decodes the path
-        }
-        catch (URISyntaxException e) {
+            filePath = uri.getPath(); // decodes the path
+        } catch (URISyntaxException e) {
             addError(value, "error.invalid-uri", e.getLocalizedMessage());
+
             return null;
         }
 
         //
         // The path will be null for an 'opaque' URI, like "news:comp.lang.java".
         //
-        if (filePath == null || filePath.length() == 0) return null;
+        if ((filePath == null) || (filePath.length() == 0)) {
+            return null;
+        }
 
         //
         // Make sure it's a filetype that should exist on the filesystem.  If not, ignore it.
         //
-        if (! checkAnyExtension() && ! isCheckableExtension(filePath)) return null;
+        if (!checkAnyExtension() && !isCheckableExtension(filePath)) {
+            return null;
+        }
 
         boolean fileExists = true;
         TypeDeclaration outerClass = CompilerUtils.getOutermostClass(classMember);
         File fileToCheck = null;
 
-        if (filePath.charAt(0) == '/')  // relative to webapp root
-        {
-            if (_pathMustBeRelative) addError(value, "error.relative-uri");
+        if (filePath.charAt(0) == '/') // relative to webapp root
+         {
+            if (_pathMustBeRelative) {
+                addError(value, "error.relative-uri");
+            }
 
             if (filePath.endsWith(JPF_FILE_EXTENSION_DOT)) {
                 TypeDeclaration type = CompilerUtils.inferTypeFromPath(filePath, getEnv());
-                fileToCheck = type != null ? CompilerUtils.getSourceFile(type, false) : null;
+                fileToCheck = (type != null) ? CompilerUtils.getSourceFile(type, false) : null;
 
                 // Note that if we can't infer the file from the type, we'll fall through to the next case, where
                 // we actually look for the file in the webapp.
@@ -124,26 +121,27 @@ public class WebappPathType
                 if (jpfSourceFile != null) {
                     fileToCheck = CompilerUtils.getWebappRelativeFile(filePath, allowFileInPageFlowSourceDir(), getEnv());
 
-                    if (fileToCheck != null && ! fileToCheck.exists() && ! (ignoreDirectories() && fileToCheck.isDirectory())) {
+                    if ((fileToCheck != null) && !fileToCheck.exists() && !(ignoreDirectories() && fileToCheck.isDirectory())) {
                         fileExists = false;
                     }
                 }
             }
         }
-
         //
         // If the class being compiled is abstract, don't print warnings for relative-path files that aren't
         // found.  The derived class might have them.
         //
-        else if (filePath.indexOf('/') != 0 && ! outerClass.hasModifier(Modifier.ABSTRACT)) {
+        else if ((filePath.indexOf('/') != 0) && !outerClass.hasModifier(Modifier.ABSTRACT)) {
             CompilerUtils.Mutable retFileToCheck = new CompilerUtils.Mutable();
             fileExists = checkRelativePath(filePath, outerClass, retFileToCheck, ignoreDirectories(),
-                    allowFileInPageFlowSourceDir(), getEnv());
+                                           allowFileInPageFlowSourceDir(), getEnv());
             fileToCheck = (File) retFileToCheck.get();
         }
 
         if (fileExists) {
-            if (fileToCheck != null) runAdditionalChecks(fileToCheck, value);
+            if (fileToCheck != null) {
+                runAdditionalChecks(fileToCheck, value);
+            }
         } else {
             if (doFatalError()) {
                 addError(value, "error.file-not-found", filePath);
@@ -152,41 +150,50 @@ public class WebappPathType
             }
         }
 
-        if (fileToCheck != null) _flowControllerInfo.addReferencedFile(fileToCheck);
+        if (fileToCheck != null) {
+            _flowControllerInfo.addReferencedFile(fileToCheck);
+        }
 
         return null;
     }
 
-    public static boolean relativePathExists(String filePath, TypeDeclaration outerClass,
-                                             AnnotationProcessorEnvironment env)
+    public static boolean relativePathExists(String filePath, TypeDeclaration outerClass, AnnotationProcessorEnvironment env)
             throws FatalCompileTimeException {
         assert filePath.charAt(0) != '/' : filePath + " is not a relative path";
-        if (! isCheckableExtension(filePath)) return true;
+
+        if (!isCheckableExtension(filePath)) {
+            return true;
+        }
+
         return checkRelativePath(filePath, outerClass, null, true, false, env);
     }
 
-    private static boolean checkRelativePath(String filePath, TypeDeclaration outerClass,
-                                             CompilerUtils.Mutable retFileToCheck,
+    private static boolean checkRelativePath(String filePath, TypeDeclaration outerClass, CompilerUtils.Mutable retFileToCheck,
                                              boolean ignoreDirectories, boolean allowFileInPageFlowSourceDir,
                                              AnnotationProcessorEnvironment env)
-            throws FatalCompileTimeException
-
-    {
+            throws FatalCompileTimeException {
         File fileToCheck = null;
         boolean fileExists = true;
 
         if (filePath.endsWith(JPF_FILE_EXTENSION_DOT)) {
             String className = filePath.substring(0, filePath.length() - JPF_FILE_EXTENSION_DOT.length());
             String pkg = outerClass.getPackage().getQualifiedName();
-            while (className.startsWith("../") && className.length() > 3) {
+
+            while (className.startsWith("../") && (className.length() > 3)) {
                 className = className.substring(3);
+
                 int lastDot = pkg.lastIndexOf('.');
-                pkg = lastDot != -1 ? pkg.substring(0, lastDot) : "";
+                pkg = (lastDot != -1) ? pkg.substring(0, lastDot) : "";
             }
-            className = (pkg.length() > 0 ? pkg + '.' : "") + className.replace('/', '.');
+
+            className = ((pkg.length() > 0) ? (pkg + '.') : "") + className.replace('/', '.');
+
             TypeDeclaration type = env.getTypeDeclaration(className);
-            fileToCheck = type != null ? CompilerUtils.getSourceFile(type, false) : null;
-            if (fileToCheck == null) fileExists = false;
+            fileToCheck = (type != null) ? CompilerUtils.getSourceFile(type, false) : null;
+
+            if (fileToCheck == null) {
+                fileExists = false;
+            }
         }
         // In certain error conditions (jpfFile == null), we can't determine the file.  In this case, just ignore.
         else if (CompilerUtils.getSourceFile(outerClass, false) != null) {
@@ -197,22 +204,31 @@ public class WebappPathType
                 String[] webContentRoots = CompilerUtils.getWebContentRoots(env);
                 String jpfParentRelativePath = "";
                 PackageDeclaration jpfPackage = outerClass.getPackage();
-                if (jpfPackage != null) jpfParentRelativePath = jpfPackage.getQualifiedName().replace('.', '/');
+
+                if (jpfPackage != null) {
+                    jpfParentRelativePath = jpfPackage.getQualifiedName().replace('.', '/');
+                }
 
                 for (int i = 0; i < webContentRoots.length; i++) {
                     String webContentRoot = webContentRoots[i];
                     File desiredParentDir = new File(webContentRoot, jpfParentRelativePath);
                     fileToCheck = new File(desiredParentDir, filePath);
-                    if (fileToCheck.exists()) break;
+
+                    if (fileToCheck.exists()) {
+                        break;
+                    }
                 }
             }
 
-            if (fileToCheck != null && ! fileToCheck.exists() && ! (ignoreDirectories && fileToCheck.isDirectory())) {
+            if ((fileToCheck == null) || !fileToCheck.exists()) {
                 fileExists = false;
             }
         }
 
-        if (retFileToCheck != null) retFileToCheck.set(fileToCheck);
+        if (retFileToCheck != null) {
+            retFileToCheck.set(fileToCheck);
+        }
+
         return fileExists;
     }
 

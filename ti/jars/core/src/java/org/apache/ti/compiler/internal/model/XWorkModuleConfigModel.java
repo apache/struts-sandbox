@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,11 +20,13 @@ package org.apache.ti.compiler.internal.model;
 import org.apache.ti.compiler.internal.FatalCompileTimeException;
 import org.apache.ti.compiler.internal.JpfLanguageConstants;
 import org.apache.ti.compiler.internal.model.validation.ValidationModel;
+
 import org.w3c.dom.Element;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -33,11 +35,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 public abstract class XWorkModuleConfigModel
         extends AbstractResultContainer
         implements XWorkResultContainer, XWorkExceptionHandlerContainer, JpfLanguageConstants {
-
     static final String PATH_RESULT = "pathResult";
     static final String NAVIGATE_TO_PAGE_RESULT = "navigateToPageResult";
     static final String NAVIGATE_TO_ACTION_RESULT = "navigateToActionResult";
@@ -49,12 +49,12 @@ public abstract class XWorkModuleConfigModel
     private ArrayList _messageResources = new ArrayList();
     private ValidationModel _validationModel;
     private List _additionalValidatorConfigs;
-
     private boolean _returnToPageDisabled = true;
     private boolean _returnToActionDisabled = true;
     private boolean _isNestedPageFlow = false;
     private boolean _isLongLivedPageFlow = false;
     private boolean _isSharedFlow = false;
+
     /**
      * Map of name to typename
      */
@@ -63,18 +63,11 @@ public abstract class XWorkModuleConfigModel
     private String _multipartHandlerClassName = null;
     private String _memFileSize = null;
     private List _tilesDefinitionsConfigs = null;
-
-
-    protected static final String DUPLICATE_ACTION_COMMENT = "Note that there is more than one action with path \"{0}\"."
-            + "  Use a form-qualified action path if this is not the "
-            + "one you want.";
-
-    protected static final String PAGEFLOW_REQUESTPROCESSOR_CLASSNAME
-            = PAGEFLOW_PACKAGE + ".PageFlowRequestProcessor";
-
-    protected static final String PAGEFLOW_CONTROLLER_CONFIG_CLASSNAME
-            = PAGEFLOW_PACKAGE + ".config.PageFlowControllerConfig";
-
+    protected static final String DUPLICATE_ACTION_COMMENT = "Note that there is more than one action with path \"{0}\"." +
+                                                             "  Use a form-qualified action path if this is not the " +
+                                                             "one you want.";
+    protected static final String PAGEFLOW_REQUESTPROCESSOR_CLASSNAME = PAGEFLOW_PACKAGE + ".PageFlowRequestProcessor";
+    protected static final String PAGEFLOW_CONTROLLER_CONFIG_CLASSNAME = PAGEFLOW_PACKAGE + ".config.PageFlowControllerConfig";
     protected static final String XWORK_CONFIG_PREFIX = "xwork-pageflow";
     protected static final char STRUTS_CONFIG_SEPARATOR = '-';
     protected static final String WEBINF_DIR_NAME = "WEB-INF";
@@ -84,9 +77,8 @@ public abstract class XWorkModuleConfigModel
     protected static final String TILES_PLUG_IN_CLASSNAME = STRUTS_PACKAGE + ".tiles.TilesPlugin";
     protected static final String TILES_DEFINITIONS_CONFIG_PROPERTY = "definitions-config";
     protected static final String TILES_MODULE_AWARE_PROPERTY = "moduleAware";
-    protected static final String NETUI_VALIDATOR_RULES_URI = '/' + WEBINF_DIR_NAME + "/beehive-netui-validator-rules.xml";
+    protected static final String NETUI_VALIDATOR_RULES_URI = '/' + WEBINF_DIR_NAME + "/ti-validator-rules.xml";
     protected static final String STRUTS_VALIDATOR_RULES_URI = '/' + WEBINF_DIR_NAME + "/validator-rules.xml";
-
 
     public XWorkModuleConfigModel(String controllerClassName) {
         super(null);
@@ -94,8 +86,9 @@ public abstract class XWorkModuleConfigModel
         _controllerClassName = controllerClassName;
 
         //
-        // Add a reference for the default validation message resources (in beehive-netui-pageflow.jar).
+        // Add a reference for the default validation message resources (in the runtime jar).
         //
+
         /* TODO: re-add message bundle support
         MessageResourcesModel mrm = new MessageResourcesModel( this );
         mrm.setParameter( DEFAULT_VALIDATION_MESSAGE_BUNDLE );
@@ -129,9 +122,9 @@ public abstract class XWorkModuleConfigModel
             // "natural" mapping for the given path.  Otherwise, replace the existing one if the existing one has a
             // form bean and if the new mapping's form bean type comes alphabetically before the existing one's.
             //
-            if (mapping.getFormBeanType() == null
-                    || (conflictingAction.getFormBeanType() != null
-                    && mapping.getFormBeanType().compareTo(conflictingAction.getFormBeanType()) < 0)) {
+            if ((mapping.getFormBeanType() == null) ||
+                    ((conflictingAction.getFormBeanType() != null) &&
+                    (mapping.getFormBeanType().compareTo(conflictingAction.getFormBeanType()) < 0))) {
                 _actions.put(mappingPath, mapping);
                 defaultMappingForThisPath = mapping;
                 conflictingAction.setOverloaded(false);
@@ -140,7 +133,7 @@ public abstract class XWorkModuleConfigModel
             addDisambiguatedAction(mapping);
             addDisambiguatedAction(conflictingAction);
             defaultMappingForThisPath.setOverloaded(true);
-            defaultMappingForThisPath.setComment(DUPLICATE_ACTION_COMMENT.replaceAll("\\{0\\}", mappingPath));  // @TODO I18N
+            defaultMappingForThisPath.setComment(DUPLICATE_ACTION_COMMENT.replaceAll("\\{0\\}", mappingPath)); // @TODO I18N
         } else {
             _actions.put(mappingPath, mapping);
         }
@@ -148,7 +141,9 @@ public abstract class XWorkModuleConfigModel
 
     protected String getFormQualifiedActionPath(XWorkActionModel action) {
         assert action.getFormBeanType() != null : "action " + action.getName() + " has no form bean";
+
         String beanType = action.getFormBeanType();
+
         return action.getName() + '_' + makeFullyQualifiedBeanName(beanType);
     }
 
@@ -163,15 +158,16 @@ public abstract class XWorkModuleConfigModel
         return formType.replace('.', '_').replace('$', '_');
     }
 
-    protected static class ActionComparator implements Comparator {
-
+    protected static class ActionComparator
+            implements Comparator {
         public int compare(Object o1, Object o2) {
             assert o1 instanceof XWorkActionModel && o2 instanceof XWorkActionModel;
 
             XWorkActionModel am1 = (XWorkActionModel) o1;
             XWorkActionModel am2 = (XWorkActionModel) o2;
 
-            assert ! am1.getName().equals(am2.getName());     // there should be no duplicate paths
+            assert !am1.getName().equals(am2.getName()); // there should be no duplicate paths
+
             return am1.getName().compareTo(am2.getName());
         }
     }
@@ -184,6 +180,7 @@ public abstract class XWorkModuleConfigModel
         ArrayList sortedActions = new ArrayList();
         sortedActions.addAll(_actions.values());
         Collections.sort(sortedActions, new ActionComparator());
+
         return sortedActions;
     }
 
@@ -198,15 +195,16 @@ public abstract class XWorkModuleConfigModel
     /**
      * Get the MessageResourcesModel for which no "key" is set (the default one used at runtime).
      */
+
     /* TODO: re-add message bundle support
     public MessageResourcesModel getDefaultMessageResources()
     {
-        for ( java.util.Iterator ii = _messageResources.iterator(); ii.hasNext(); )  
+        for ( java.util.Iterator ii = _messageResources.iterator(); ii.hasNext(); )
         {
             MessageResourcesModel i = ( MessageResourcesModel ) ii.next();
             if ( i.getKey() == null ) return i;
         }
-        
+
         return null;
     }
     */
@@ -227,14 +225,14 @@ public abstract class XWorkModuleConfigModel
     }
 
     public void setAdditionalValidatorConfigs(List additionalValidatorConfigs) {
-        if (additionalValidatorConfigs != null && ! additionalValidatorConfigs.isEmpty()) {
+        if ((additionalValidatorConfigs != null) && !additionalValidatorConfigs.isEmpty()) {
             _additionalValidatorConfigs = additionalValidatorConfigs;
         }
     }
 
     public void setValidationModel(ValidationModel validationModel) {
-        if (! validationModel.isEmpty())  // if there's nothing in the validation model, we don't care about it.
-        {
+        if (!validationModel.isEmpty()) // if there's nothing in the validation model, we don't care about it.
+         {
             _validationModel = validationModel;
         }
     }
@@ -244,7 +242,11 @@ public abstract class XWorkModuleConfigModel
      */
     public String getNamespace() {
         int lastDot = _controllerClassName.lastIndexOf('.');
-        if (lastDot == -1) return "/";
+
+        if (lastDot == -1) {
+            return "/";
+        }
+
         return "/" + _controllerClassName.substring(0, lastDot).replace('.', '/');
     }
 
@@ -256,10 +258,8 @@ public abstract class XWorkModuleConfigModel
 
     public void writeXml(PrintWriter writer, File mergeFile)
             throws IOException, XmlModelWriterException, FatalCompileTimeException {
-        XmlModelWriter xw = new XmlModelWriter(mergeFile, "xwork",
-                "-//OpenSymphony Group//XWork 1.0//EN",
-                "http://www.opensymphony.com/xwork/xwork-1.0.dtd",
-                getHeaderComment(mergeFile));
+        XmlModelWriter xw = new XmlModelWriter(mergeFile, "xwork", "-//OpenSymphony Group//XWork 1.0//EN",
+                                               "http://www.opensymphony.com/xwork/xwork-1.0.dtd", getHeaderComment(mergeFile));
 
         Element root = xw.getDocument().getDocumentElement();
 
@@ -295,21 +295,18 @@ public abstract class XWorkModuleConfigModel
         // message-resources
         //
         //writeMessageResources( scElement );
-
         //
         // ValidatorPlugIn
         //
         //writeValidatorInit( scElement );
-
         //
         // TilesPlugin
         //
         //writeTilesInit( scElement );
-
         //
         // Write the file.
         //
-        xw.write(writer);
+        xw.simpleFastWrite(writer);
     }
 
     private void writeActions(XmlModelWriter xw, Element parentElement) {
@@ -324,7 +321,7 @@ public abstract class XWorkModuleConfigModel
     private void writeExceptions(XmlModelWriter xw, Element parentElement) {
         List exceptionCatches = getExceptionCatchesList();
 
-        if (exceptionCatches != null && ! exceptionCatches.isEmpty()) {
+        if ((exceptionCatches != null) && !exceptionCatches.isEmpty()) {
             for (int i = 0; i < exceptionCatches.size(); ++i) {
                 XWorkExceptionHandlerModel ec = (XWorkExceptionHandlerModel) exceptionCatches.get(i);
                 ec.writeXML(xw, parentElement);
@@ -335,25 +332,44 @@ public abstract class XWorkModuleConfigModel
     protected void writeModuleMetadataElement(XmlModelWriter xw, Element parentElement) {
         Element metadataElement = xw.addElement(parentElement, "action");
         xw.addComment(metadataElement,
-                "This is hopefully temporary. It's a dummy action with metadata (params) related to this module");
+                      "This is hopefully temporary. It's a dummy action with metadata (params) related to this module");
         metadataElement.setAttribute("name", "_moduleMetadata");
 
         addParam(xw, metadataElement, "controllerClassName", _controllerClassName);
 
-        if (_isNestedPageFlow) addParam(xw, metadataElement, "nestedFlow", true);
-        if (_isLongLivedPageFlow) addParam(xw, metadataElement, "longLivedFlow", true);
-        if (_isSharedFlow) addParam(xw, metadataElement, "sharedFlow", true);
-        if (isReturnToPageDisabled()) addParam(xw, metadataElement, "returnToPageDisabled", true);
-        if (isReturnToActionDisabled()) addParam(xw, metadataElement, "returnToActionDisabled", true);
+        if (_isNestedPageFlow) {
+            addParam(xw, metadataElement, "nestedFlow", true);
+        }
 
-        if (_sharedFlows != null && _sharedFlows.size() > 0) {
+        if (_isLongLivedPageFlow) {
+            addParam(xw, metadataElement, "longLivedFlow", true);
+        }
+
+        if (_isSharedFlow) {
+            addParam(xw, metadataElement, "sharedFlow", true);
+        }
+
+        if (isReturnToPageDisabled()) {
+            addParam(xw, metadataElement, "returnToPageDisabled", true);
+        }
+
+        if (isReturnToActionDisabled()) {
+            addParam(xw, metadataElement, "returnToActionDisabled", true);
+        }
+
+        if ((_sharedFlows != null) && (_sharedFlows.size() > 0)) {
             StringBuffer str = new StringBuffer();
             boolean first = true;
 
             for (java.util.Iterator i = _sharedFlows.entrySet().iterator(); i.hasNext();) {
                 Map.Entry entry = (Map.Entry) i.next();
-                if (! first) str.append(',');
+
+                if (!first) {
+                    str.append(',');
+                }
+
                 first = false;
+
                 String name = (String) entry.getKey();
                 String type = (String) entry.getValue();
                 str.append(name).append('=').append(type);
@@ -384,26 +400,26 @@ public abstract class XWorkModuleConfigModel
         {
             PlugInDocument.PlugIn plugInElementToEdit = null;
             PlugInDocument.PlugIn[] existingPlugIns = scElement.getPlugInArray();
-            
+
             for ( int i = 0; i < existingPlugIns.length; i++ )
             {
                 PlugInDocument.PlugIn existingPlugIn = existingPlugIns[i];
-                
+
                 if ( VALIDATOR_PLUG_IN_CLASSNAME.equals( existingPlugIn.getClassName() ) )
                 {
                     plugInElementToEdit = existingPlugIn;
                     break;
                 }
             }
-            
+
             if ( plugInElementToEdit == null )
             {
                 plugInElementToEdit = scElement.addNewPlugIn();
                 plugInElementToEdit.setClassName( VALIDATOR_PLUG_IN_CLASSNAME );
             }
-            
+
             SetPropertyDocument.SetProperty[] existingSetProperties = plugInElementToEdit.getSetPropertyArray();
-            
+
             for ( int i = 0; i < existingSetProperties.length; i++ )
             {
                 if ( VALIDATOR_PATHNAMES_PROPERTY.equals( existingSetProperties[i].getProperty() ) )
@@ -415,31 +431,31 @@ public abstract class XWorkModuleConfigModel
                     return;
                 }
             }
-            
+
             SetPropertyDocument.SetProperty pathnamesProperty = plugInElementToEdit.addNewSetProperty();
             pathnamesProperty.setProperty( VALIDATOR_PATHNAMES_PROPERTY );
             StringBuffer pathNames = new StringBuffer();
             pathNames.append( NETUI_VALIDATOR_RULES_URI );
             pathNames.append( ",/WEB-INF/classes/" ).append( _validationModel.getOutputFileURI() );
-            
+
             if ( _validationModel != null && ! _validationModel.isEmpty() )
             {
                 pathNames.append( ',' ).append( _validationModel.getOutputFileURI() );
             }
-            
+
             if ( _additionalValidatorConfigs != null )
             {
-                for ( java.util.Iterator ii = _additionalValidatorConfigs.iterator(); ii.hasNext(); )  
+                for ( java.util.Iterator ii = _additionalValidatorConfigs.iterator(); ii.hasNext(); )
                 {
                     String configFile = ( String ) ii.next();
                     pathNames.append( ',' ).append( configFile );
                 }
             }
-            
+
             pathnamesProperty.setValue( pathNames.toString() );
         }
     }
-    
+
     protected void writeTilesInit( StrutsConfigDocument.StrutsConfig scElement )
     {
         if ( _tilesDefinitionsConfigs == null || _tilesDefinitionsConfigs.isEmpty() )
@@ -498,7 +514,7 @@ public abstract class XWorkModuleConfigModel
             StringBuffer pathNames = new StringBuffer();
             boolean firstOne = true;
 
-            for ( java.util.Iterator ii = _tilesDefinitionsConfigs.iterator(); ii.hasNext(); )  
+            for ( java.util.Iterator ii = _tilesDefinitionsConfigs.iterator(); ii.hasNext(); )
             {
                 String definitionsConfig = ( String ) ii.next();
                 if ( ! firstOne ) pathNames.append( ',' );
@@ -516,9 +532,7 @@ public abstract class XWorkModuleConfigModel
         }
     }
     */
-
-    protected String getHeaderComment(File mergeFile)
-            throws FatalCompileTimeException {
+    protected String getHeaderComment(File mergeFile) throws FatalCompileTimeException {
         return null;
     }
 
@@ -533,10 +547,15 @@ public abstract class XWorkModuleConfigModel
     public static String getOutputFilePath(String baseFileName, String containingPackage) {
         StringBuffer fileName = new StringBuffer(XWORK_CONFIG_OUTPUT_DIR);
         fileName.append('/');
-        if (containingPackage != null) fileName.append(containingPackage.replace('.', '/'));
+
+        if (containingPackage != null) {
+            fileName.append(containingPackage.replace('.', '/'));
+        }
+
         fileName.append('/');
         fileName.append(baseFileName);
         fileName.append(".xml");
+
         return fileName.toString();
     }
 

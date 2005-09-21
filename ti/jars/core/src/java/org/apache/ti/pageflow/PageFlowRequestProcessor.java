@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,9 +23,9 @@ import org.apache.ti.util.logging.Logger;
 
 import java.io.IOException;
 import java.io.Serializable;
+
 import java.util.HashMap;
 import java.util.Map;
-
 
 /**
  * The Page Flow extension of the Struts RequestProcessor, which contains callbacks that are invoked
@@ -34,27 +34,24 @@ import java.util.Map;
  */
 public class PageFlowRequestProcessor
         implements Serializable, InternalConstants, PageFlowConstants {
-
     private static int requestNumber = 0;
-
     private static final Logger _log = Logger.getInstance(PageFlowRequestProcessor.class);
-
     private static final String ACTION_OVERRIDE_PARAM_PREFIX = "actionOverride:";
     private static final int ACTION_OVERRIDE_PARAM_PREFIX_LEN = ACTION_OVERRIDE_PARAM_PREFIX.length();
     private static final String SCHEME_UNSECURE = "http";
     private static final String SCHEME_SECURE = "https";
     private static final String REDIRECT_REQUEST_ATTRS_PREFIX = InternalConstants.ATTR_PREFIX + "requestAttrs:";
     private static final String REDIRECT_REQUEST_ATTRS_PARAM = "forceRedirect";
+    private Map /*< String, Class >*/ _formBeanClasses = new HashMap /*< String, Class >*/();
 
-
-    private Map/*< String, Class >*/ _formBeanClasses = new HashMap/*< String, Class >*/();
     // private Map/*< String, List< PageFlowAction > >*/ _overloadedActions = new HashMap/*< String, List< PageFlowAction > >*/();
     private ContainerAdapter _containerAdapter;
     private Handlers _handlers;
     private FlowControllerFactory _flowControllerFactory;
+
     //private InternalConcurrentHashMap/*< String, Class >*/ _pageServletClasses = new InternalConcurrentHashMap/*< String, Class >*/();
     //private PageFlowPageFilter _pageServletFilter;
-    
+
     /*
     protected void processPopulate( HttpServletRequest request, HttpServletResponse response, Object form,
                                     PageFlowAction mapping )
@@ -90,7 +87,7 @@ public class PageFlowRequestProcessor
         PageFlowActionContext requestWrapper = getContext();
         boolean alreadyCalledInRequest = requestWrapper.isProcessPopulateAlreadyCalled();
         if ( ! alreadyCalledInRequest ) requestWrapper.setProcessPopulateAlreadyCalled( true );
-        
+
         //
         // If this is a forwarded request and the form-bean is null, don't call to ProcessPopulate.
         // We don't want to expose errors due to parameters from the original request, which won't
@@ -103,7 +100,7 @@ public class PageFlowRequestProcessor
             // no databinding errors when the override action does not use a form bean.
             //
             if ( form == null && requestWrapper.isForwardedByButton() ) form = NULL_ACTION_FORM;
-            
+
             ProcessPopulate.populate( request, response, form, alreadyCalledInRequest );
         }
     }
@@ -112,12 +109,13 @@ public class PageFlowRequestProcessor
     /**
      * The requested action can be overridden by a request parameter.  In this case, we parse the action from
      * the request parameter and forward to a URI constructed from it.
-     * 
+     *
      * @return <code>true</code> if the action was overridden by a request parameter, in which case the request
      *         was forwarded.
      * @throws IOException
-     * @throws PageFlowException    
-     */ 
+     * @throws PageFlowException
+     */
+
     /* TODO: re-add this -- it should be in Chain
     protected boolean processActionOverride()
         throws IOException, PageFlowException
@@ -136,8 +134,8 @@ public class PageFlowRequestProcessor
             //
             // TODO: re-add multipart support
             // HttpServletRequest multipartAwareRequest = processMultipart( request );
-            
-            
+
+
             for ( Iterator i = getContext().getWebContext().getRequestScope().keySet().iterator(); i.hasNext(); )
             {
                 String paramName = ( String ) i.next();
@@ -160,16 +158,16 @@ public class PageFlowRequestProcessor
                 }
             }
         }
-        
+
         return false;
     }
-    
+
     private void processSecurity()
     {
-        PageFlowActionContext context = PageFlowActionContext.getContext();        
+        PageFlowActionContext context = PageFlowActionContext.getContext();
         Map requestScope = context.getWebContext().getRequestScope();
         String uri = context.getRequestPath();
-        
+
         //
         // Allow the container to do a security check on forwarded requests, if that feature is enabled.
         //
@@ -188,11 +186,11 @@ public class PageFlowRequestProcessor
                     _log.debug( "checkSecurity() caused a redirect.  Ending processing for this request "
                             + '(' + uri + ')' );
                 }
-                
+
                 return;
             }
         }
-        
+
         //
         // If we've come in on a forced redirect due to security constraints, look for request attrs
         // that we put into the session.
@@ -201,19 +199,19 @@ public class PageFlowRequestProcessor
         if ( hash != null )
         {
             Map sessionScope = getContext().getSession();
-            
+
             if ( sessionScope != null )
             {
                 String carryoverAttrName = makeRedirectedRequestAttrsKey( uri, hash );
                 Map attrs = ( Map ) sessionScope.get( carryoverAttrName );
                 sessionScope.remove( carryoverAttrName );
-                
+
                 if ( attrs != null )
                 {
                     for ( Iterator i = attrs.entrySet().iterator(); i.hasNext(); )
                     {
                         Map.Entry entry = ( Map.Entry ) i.next();
-                        
+
                         String attrName = ( String ) entry.getKey();
                         if ( requestScope.get( attrName ) == null )
                         {
@@ -225,17 +223,18 @@ public class PageFlowRequestProcessor
         }
     }
     */
-    
+
     /**
      * Process any direct request for a page flow by forwarding to its "begin" action.
-     * 
+     *
      * @param request the current HttpServletRequest
      * @param response the current HttpServletResponse
      * @param uri the decoded request URI
      * @return <code>true</code> if the request was for a page flow, in which case it was forwarded.
      * @throws IOException
      * @throws PageFlowException
-     */ 
+     */
+
     /* TODO: re-add
     protected boolean processPageFlowRequest( HttpServletRequest request, HttpServletResponse response, String uri )
         throws IOException, PageFlowException
@@ -309,32 +308,33 @@ public class PageFlowRequestProcessor
 
             doForward( uri, request, response );
             return true;
-        } 
-        
+        }
+
         return false;
     }
-    
+
     protected PageFlowAction getBeginMapping()
     {
     return ( PageFlowAction ) moduleConfig.findActionConfig( BEGIN_ACTION_PATH );
     }
-    
+
     */
-    
+
     /**
      * A MultipartRequestWrapper that we cache in the outer request once we've handled the multipart request once.
      * It extends the base Struts MultipartRequestWrapper by being aware of ScopedRequests; for ScopedRequests, it
      * filters the parameter names accordingly.
-     */ 
+     */
+
     /* TODO: re-add
     private static class RehydratedMultipartRequestWrapper extends MultipartRequestWrapper
     {
         public RehydratedMultipartRequestWrapper( HttpServletRequest req )
         {
             super( req );
-             
+
             MultipartRequestHandler handler = MultipartRequestUtils.getCachedMultipartHandler( req );
-             
+
             if ( handler != null )
             {
                 ScopedRequest scopedRequest = ScopedUtils.unwrapRequest( req );
@@ -344,10 +344,11 @@ public class PageFlowRequestProcessor
         }
     }
     */
-    
+
     /**
      * If this is a multipart request, wrap it with a special wrapper.  Otherwise, return the request unchanged.
      */
+
     /* TODO: re-add multipart support
     protected HttpServletRequest processMultipart( HttpServletRequest request )
     {
@@ -357,14 +358,14 @@ public class PageFlowRequestProcessor
         if ( contentType != null && contentType.startsWith( "multipart/form-data" ) )
         {
             PageFlowActionContext pageFlowRequestWrapper = getContext();
-            
+
             //
             // We may have already gotten a multipart wrapper during process().  If so, use that.
             //
             MultipartRequestWrapper cachedWrapper = pageFlowRequestWrapper.getMultipartRequestWrapper();
-            
+
             if ( cachedWrapper != null && cachedWrapper.getRequest() == request ) return cachedWrapper;
-            
+
             try
             {
                 //
@@ -378,7 +379,7 @@ public class PageFlowRequestProcessor
                 _log.error( "Could not parse multipart request.", e.getRootCause() );
                 return request;
             }
-            
+
             MultipartRequestWrapper ret = new RehydratedMultipartRequestWrapper( request );
             pageFlowRequestWrapper.setMultipartRequestWrapper( ret );
             return ret;
@@ -390,7 +391,6 @@ public class PageFlowRequestProcessor
 
     }
     */
-
     /*
     private boolean isCorrectFormType( Class formBeanClass, PageFlowAction mapping )
     {
@@ -398,7 +398,7 @@ public class PageFlowRequestProcessor
         Class cachedFormBeanClass = ( Class ) _formBeanClasses.get( mapping.getName() );
         return isCorrectFormType( formBeanClass, cachedFormBeanClass, mapping );
     }
-    
+
     private boolean isCorrectFormType( Class formBeanClass, Class actionMappingFormBeanClass, PageFlowAction mapping )
     {
         if ( actionMappingFormBeanClass != null )
@@ -412,20 +412,19 @@ public class PageFlowRequestProcessor
             //
             FormBeanConfig mappingFormBean = moduleConfig.findFormBeanConfig( mapping.getName() );
             String formClassName = formBeanClass.getName();
-            
+
             if ( mappingFormBean != null && mappingFormBean.getType().equals( formClassName ) ) return true;
-            
+
             if ( mapping instanceof PageFlowAction )
             {
                 String desiredType = ( ( PageFlowAction ) mapping ).getFormBeanClass();
                 if ( formClassName.equals( desiredType ) ) return true;
             }
         }
-        
+
         return false;
     }
     */
-
     /* TODO: re-add tokens, or something like it.
     private PageFlowAction checkTransaction( HttpServletRequest request, HttpServletResponse response,
                                             PageFlowAction mapping, String actionPath )
@@ -438,7 +437,7 @@ public class PageFlowRequestProcessor
                 FlowController currentFC = getContext().getCurrentFlowController();
                 String actionName = InternalUtils.getActionName( mapping );
                 DoubleSubmitException ex = new DoubleSubmitException( actionName, currentFC );
-                
+
                 if ( currentFC != null )
                 {
                     try
@@ -451,72 +450,69 @@ public class PageFlowRequestProcessor
                         _log.error( "Exception occurred while handling " + ex.getClass().getName(), servletException );
                     }
                 }
-                
+
                 ex.sendResponseErrorCode( response );
                 return null;
             }
         }
-        
+
         return mapping;
     }
     */
-    public void init()
-            throws PageFlowException {
+    public void init() throws PageFlowException {
         //
         // Cache a list of overloaded actions for each overloaded action path (actions are overloaded by form bean type).
         //
         // TODO: re-add overloaded action support
-//        cacheOverloadedPageFlowActions();
-        
+        //        cacheOverloadedPageFlowActions();
         //
         // Cache the form bean Classes by form bean name.
         //
         // TODO: re-add class caching?
-//        cacheFormClasses();
+        //        cacheFormClasses();
     }
-    
+
     /* TODO: re-add overloaded action support
     private void cacheOverloadedPageFlowActions()
     {
         ActionConfig[] actionConfigs = moduleConfig.findActionConfigs();
-        
+
         for ( int i = 0; i < actionConfigs.length; i++ )
         {
             ActionConfig actionConfig = actionConfigs[i];
-            
+
             if ( actionConfig instanceof PageFlowAction )
             {
                 PageFlowAction mapping = ( PageFlowAction ) actionConfig;
                 String unqualifiedActionPath = ( ( PageFlowAction ) actionConfig ).getUnqualifiedActionPath();
-                
+
                 if ( unqualifiedActionPath != null )
                 {
                     List overloaded = ( List ) _overloadedActions.get( unqualifiedActionPath );
-                    
+
                     if ( overloaded == null )
                     {
                         overloaded = new ArrayList();
                         _overloadedActions.put( unqualifiedActionPath, overloaded );
                     }
-                    
+
                     overloaded.add( mapping );
                 }
             }
         }
     }
     */
-    
     /*
     private void cacheFormClasses()
     {
         FormBeanConfig[] formBeans = moduleConfig.findFormBeanConfigs();
         ReloadableClassHandler rch = _handlers.getReloadableClassHandler();
-        
+
         for ( int i = 0; i < formBeans.length; i++ )
         {
             FormBeanConfig formBeanConfig = formBeans[i];
             String formType = InternalUtils.getFormBeanType( formBeanConfig );
-            
+
             try
             {
                 Class formBeanClass = rch.loadClass( formType );
@@ -535,7 +531,7 @@ public class PageFlowRequestProcessor
      * Read component instance mapping configuration file.
      * This is where we read files properties.
      */
-    
+
     /* TODO: re-add Tiles support
     protected void initDefinitionsMapping() throws PageFlowException
     {
@@ -556,32 +552,31 @@ public class PageFlowRequestProcessor
         }
     }
     */
-
     /* TODO: re-add this.  It's code to customize XWork -- to handle shared flow and form-bean-specific actions.
     public PageFlowAction processMapping( HttpServletRequest request, HttpServletResponse response, String path )
         throws IOException
     {
         FlowController fc = getContext().getFlowController();
         Object forwardedForm = InternalUtils.getForwardedFormBean( false );
-        
+
         //
         // First, see if this is a request for a shared flow action.  The shared flow's name (as declared by the
         // current page flow) will precede the dot.
         //
         if ( fc != null && ! processSharedFlowMapping( request, response, path, fc ) ) return null;
-        
+
         //
         // Look for a form-specific action path.  This is used when there are two actions with the same
         // name, but different forms (in nesting).
         //
         Class forwardedFormClass = null;
-        
+
         if ( forwardedForm != null )
         {
             forwardedFormClass = forwardedForm.getClass();
             List possibleMatches = ( List ) _overloadedActions.get( path );
             PageFlowAction bestMatch = null;
-            
+
             //
             // Troll through the overloaded actions for the given path.  Look for the one whose form bean class is
             // exactly the class of the forwarded form; failing that, look for one that's assignable from the class
@@ -591,7 +586,7 @@ public class PageFlowRequestProcessor
             {
                 PageFlowAction possibleMatch = ( PageFlowAction ) possibleMatches.get( i );
                 Class cachedFormBeanClass = ( Class ) _formBeanClasses.get( possibleMatch.getName() );
-                
+
                 if ( forwardedFormClass.equals( cachedFormBeanClass ) )
                 {
                     bestMatch = possibleMatch;
@@ -602,30 +597,30 @@ public class PageFlowRequestProcessor
                     bestMatch = possibleMatch;
                 }
             }
-            
+
             if ( bestMatch != null )
             {
                 request.setAttribute( Globals.MAPPING_KEY, bestMatch );
-                
+
                 if ( _log.isDebugEnabled() )
                 {
                     _log.debug( "Found form-specific action mapping " + bestMatch.getPath() + " for " + path
                                 + ", form " + forwardedFormClass.getName() );
                 }
-                
+
                 return checkTransaction(bestMatch);
             }
         }
-        
+
         //
         // Look for a directly-defined mapping for this path.
         //
         PageFlowAction mapping = ( PageFlowAction ) moduleConfig.findActionConfig( path );
-        
+
         if ( mapping != null )
         {
             boolean wrongForm = false;
-            
+
             //
             // We're going to bail out if there is a forwarded form and this mapping requires a different form type.
             //
@@ -634,7 +629,7 @@ public class PageFlowRequestProcessor
                 boolean mappingHasNoFormBean = mapping.getName() == null;
                 wrongForm = mappingHasNoFormBean || ! isCorrectFormType( forwardedFormClass, mapping );
             }
-            
+
             if ( ! wrongForm )
             {
                 request.setAttribute( Globals.MAPPING_KEY, mapping );
@@ -647,7 +642,7 @@ public class PageFlowRequestProcessor
         // in a shared flow.
         //
         String errorServletPath = getContext().getOriginalServletPath();
-        
+
         //
         // If the error action path has a slash in it, then it's not local to the current page flow.  Replace
         // it with the original servlet path.
@@ -655,7 +650,7 @@ public class PageFlowRequestProcessor
         if ( errorServletPath != null && path.indexOf( '/' ) > 0 ) path = errorServletPath;
         return processUnresolvedAction( path, request, response, forwardedForm );
     }
-    
+
     protected boolean processSharedFlowMapping( HttpServletRequest request, HttpServletResponse response,
                                                 String actionPath, FlowController currentFlowController )
             throws IOException
@@ -663,7 +658,7 @@ public class PageFlowRequestProcessor
         if ( currentFlowController.isPageFlow() )
         {
             int dot = actionPath.indexOf( '.' );
-            
+
             if ( dot != -1 )
             {
                 Map/*< String, SharedFlowController >* sharedFlows = PageFlowUtils.getSharedFlows( request );
@@ -672,7 +667,7 @@ public class PageFlowRequestProcessor
                 assert actionPath.length() > 0 && actionPath.charAt( 0 ) == '/' : actionPath;
                 String sharedFlowName = actionPath.substring( 1, dot );
                 SharedFlowController sf = ( SharedFlowController ) sharedFlows.get( sharedFlowName );
-                
+
                 if ( sf != null )
                 {
                     if ( _log.isDebugEnabled() )
@@ -680,13 +675,13 @@ public class PageFlowRequestProcessor
                         _log.debug( "Forwarding to shared flow " + sf.getDisplayName() + " to handle action \""
                                     + actionPath + "\"." );
                     }
-                    
+
                     //
                     // Save the original request URI, so if the action fails on the shared flow, too, then we can
                     // give an error message that includes *this* URI, not the shared flow URI.
                     //
                     getContext().setOriginalServletPath( InternalUtils.getRequestPath( request ) );
-                    
+
                     //
                     // Construct a URI that is [shared flow namespace] + [base action path] + [action-extension (.do)]
                     //
@@ -696,7 +691,7 @@ public class PageFlowRequestProcessor
                     uri.append( '/' );
                     uri.append( actionPath.substring( dot + 1 ) );
                     uri.append( ACTION_EXTENSION );
-                    
+
                     try
                     {
                         doForward( uri.toString(), request, response );
@@ -709,10 +704,10 @@ public class PageFlowRequestProcessor
                 }
             }
         }
-        
+
         return true;
     }
-    
+
     protected PageFlowAction processUnresolvedAction( String actionPath, HttpServletRequest request,
                                                      HttpServletResponse response, Object returningForm )
         throws IOException
@@ -722,14 +717,14 @@ public class PageFlowRequestProcessor
             InternalStringBuilder msg = new InternalStringBuilder( "action \"" ).append( actionPath );
             _log.info( msg.append( "\" was also unhandled by Global.app." ).toString() );
         }
-        
+
         //
         // If there's a PageFlowController for this request, try and let it handle an
         // action-not-found exception.  Otherwise, let Struts print out its "invalid path"
         // message.
         //
         FlowController fc = PageFlowUtils.getCurrentPageFlow( request );
-        
+
         try
         {
             if ( fc != null )
@@ -743,25 +738,24 @@ public class PageFlowRequestProcessor
         catch ( PageFlowException e )
         {
             // ignore this -- just let Struts do its thing.
-            
+
             if ( _log.isDebugEnabled() )
             {
                 _log.debug( e );
             }
         }
-                    
+
         if ( _log.isDebugEnabled() )
         {
-            _log.debug( "Couldn't handle an ActionNotFoundException -- delegating to Struts" ); 
+            _log.debug( "Couldn't handle an ActionNotFoundException -- delegating to Struts" );
         }
-        
+
         return super.processMapping( request, response, actionPath );
     }
     */
-    
     /*
     protected boolean processRoles( HttpServletRequest request, HttpServletResponse response, PageFlowAction mapping )
-        throws IOException, PageFlowException 
+        throws IOException, PageFlowException
     {
         //
         // If there are no required roles for this action, just return.
@@ -775,7 +769,7 @@ public class PageFlowRequestProcessor
         // Check the current user against the list of required roles
         FlowController fc = getContext().getCurrentFlowController();
         FlowControllerHandlerContext context = new FlowControllerHandlerContext( request, response, fc );
-        
+
         for ( int i = 0; i < roles.length; i++ )
         {
             if ( _handlers.getLoginHandler().isUserInRole( context, roles[i] ) )
@@ -784,7 +778,7 @@ public class PageFlowRequestProcessor
                 {
                     _log.debug( " User " + request.getRemoteUser() + " has role '" + roles[i] + "', granting access" );
                 }
-                
+
                 return true;
             }
         }
@@ -794,7 +788,7 @@ public class PageFlowRequestProcessor
         {
             _log.debug( " User '" + request.getRemoteUser() + "' does not have any required role, denying access" );
         }
-                
+
         //
         // Here, Struts sends an HTTP error.  We try to let the current page flow handle a relevant exception.
         //
@@ -802,7 +796,7 @@ public class PageFlowRequestProcessor
         String actionName = InternalUtils.getActionName( mapping );
         FlowController currentFC = getContext().getCurrentFlowController();
         FlowControllerException ex;
-        
+
         if ( loginHandler.getUserPrincipal( context ) == null )
         {
             ex = currentFC.createNotLoggedInException( actionName, request );
@@ -811,7 +805,7 @@ public class PageFlowRequestProcessor
         {
             ex = new UnfulfilledRolesException( mapping.getRoleNames(), mapping.getRoles(), actionName, currentFC );
         }
-        
+
         if ( currentFC != null )
         {
             forward fwd = currentFC.handleException( ex, mapping, null, request, response );
@@ -821,10 +815,10 @@ public class PageFlowRequestProcessor
         {
             ( ( ResponseErrorCodeSender ) ex ).sendResponseErrorCode( response );
         }
-        
+
         return false;
     }
-    
+
     private static String addScopeParams( String url, HttpServletRequest request )
     {
         //
@@ -840,33 +834,33 @@ public class PageFlowRequestProcessor
             return url;
         }
     }
-    
-    */
 
+    */
 
     /**
      * Set the no-cache headers.  This overrides the base Struts behavior to prevent caching even for the pages.
      */
+
     /*
     protected void processNoCache( HttpServletRequest request, HttpServletResponse response )
     {
         //
         // Set the no-cache headers if:
         //    1) the module is configured for it, or
-        //    2) netui-config.xml has an "always" value for <pageflow-config><prevent-cache>, or
-        //    3) netui-config.xml has an "inDevMode" value for <pageflow-config><prevent-cache>, and we're not in
+        //    2) struts-ti-config.xml has an "always" value for <pageflow-config><prevent-cache>, or
+        //    3) struts-ti-config.xml has an "inDevMode" value for <pageflow-config><prevent-cache>, and we're not in
         //       production mode.
         //
         boolean noCache = moduleConfig.getControllerConfig().getNocache();
-        
+
         if ( ! noCache )
         {
             PageflowConfig pfConfig = ConfigUtil.getConfig().getPageflowConfig();
-            
+
             if ( pfConfig != null )
             {
                 PageflowConfig.PreventCache.Enum preventCache = pfConfig.getPreventCache();
-                
+
                 if ( preventCache != null )
                 {
                     switch ( preventCache.intValue() )
@@ -881,7 +875,7 @@ public class PageFlowRequestProcessor
                 }
             }
         }
-        
+
         if ( noCache )
         {
             //
@@ -894,5 +888,4 @@ public class PageFlowRequestProcessor
         }
     }
     */
-
 }

@@ -5,9 +5,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,8 +17,8 @@
  */
 package org.apache.ti.core.factory;
 
-import org.apache.ti.schema.config.CustomProperty;
-import org.apache.ti.schema.config.PageflowFactory;
+import org.apache.ti.util.config.bean.CustomPropertyConfig;
+import org.apache.ti.util.config.bean.PageFlowFactoryConfig;
 import org.apache.ti.util.internal.DiscoveryUtils;
 import org.apache.ti.util.logging.Logger;
 
@@ -26,18 +26,19 @@ import org.apache.ti.util.logging.Logger;
  * Utility class for creating application-scoped factories.
  */
 public class FactoryUtils {
-
     private static final Logger _log = Logger.getInstance(FactoryUtils.class);
 
     /**
-	 * @todo Finish documenting me!
-     * 
+     * @todo Finish documenting me!
+     *
      * @param factoryBean
      * @param factoryType
      * @return The factory specified
      */
-    public static Factory getFactory(PageflowFactory factoryBean, Class factoryType) {
-        if (factoryBean == null) return null;
+    public static Factory getFactory(PageFlowFactoryConfig factoryBean, Class factoryType) {
+        if (factoryBean == null) {
+            return null;
+        }
 
         String className = factoryBean.getFactoryClass();
         ClassLoader cl = DiscoveryUtils.getClassLoader();
@@ -46,17 +47,17 @@ public class FactoryUtils {
             Class actualFactoryType = cl.loadClass(className);
 
             if (!factoryType.isAssignableFrom(actualFactoryType)) {
-                _log.error("Factory class " + actualFactoryType.getName() + " is not derived from "
-                        + factoryType.getName());
+                _log.error("Factory class " + actualFactoryType.getName() + " is not derived from " + factoryType.getName());
+
                 return null;
             }
 
-            CustomProperty[] props = factoryBean.getCustomPropertyArray();
+            CustomPropertyConfig[] props = factoryBean.getCustomProperties();
             FactoryConfig config = new FactoryConfig();
 
             if (props != null) {
                 for (int i = 0; i < props.length; i++) {
-                    CustomProperty prop = props[i];
+                    CustomPropertyConfig prop = props[i];
                     config.addCustomProperty(prop.getName(), prop.getValue());
                 }
             }
@@ -70,8 +71,8 @@ public class FactoryUtils {
     }
 
     /**
-	 * @todo Finish documenting me!
-     * 
+     * @todo Finish documenting me!
+     *
      * @param factoryType
      * @param config
      * @return FIX ME

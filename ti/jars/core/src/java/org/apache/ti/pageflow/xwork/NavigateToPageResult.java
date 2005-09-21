@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,6 +18,7 @@
 package org.apache.ti.pageflow.xwork;
 
 import com.opensymphony.xwork.ActionInvocation;
+
 import org.apache.ti.pageflow.FlowControllerException;
 import org.apache.ti.pageflow.Forward;
 import org.apache.ti.pageflow.NoCurrentPageFlowException;
@@ -27,8 +28,8 @@ import org.apache.ti.pageflow.PreviousPageInfo;
 import org.apache.ti.pageflow.internal.InternalUtils;
 import org.apache.ti.util.logging.Logger;
 
-public class NavigateToPageResult extends NavigateToResult {
-
+public class NavigateToPageResult
+        extends NavigateToResult {
     private static final Logger _log = Logger.getInstance(NavigateToPageResult.class);
 
     /**
@@ -46,7 +47,7 @@ public class NavigateToPageResult extends NavigateToResult {
         if (curJpf == null) {
             FlowControllerException ex = new NoCurrentPageFlowException(this);
             InternalUtils.throwPageFlowException(ex);
-            assert false;   // throwPageFlowException() must throw.
+            assert false; // throwPageFlowException() must throw.
         }
 
         PreviousPageInfo prevPageInfo;
@@ -54,18 +55,21 @@ public class NavigateToPageResult extends NavigateToResult {
         switch (getPreviousPageIndex()) {
             case 0:
                 prevPageInfo = curJpf.getCurrentPageInfo();
+
                 break;
 
             case 1:
                 prevPageInfo = curJpf.getPreviousPageInfo();
+
                 break;
 
             default:
                 assert false : getPreviousPageIndex() + " is not a valid previous-page index";
+
                 // of course, in the future, we should support any index, up to an app-configured max
                 prevPageInfo = curJpf.getCurrentPageInfo();
         }
-                
+
         // The previous result has already been initialized from the previous Forward.
         //    1) Initialize from *this* forward, overwriting previously-initialized values.
         //    2) Apply the previous Forward (sets values in the request).
@@ -74,10 +78,15 @@ public class NavigateToPageResult extends NavigateToResult {
         PageFlowActionContext actionContext = (PageFlowActionContext) invocation.getInvocationContext();
         Forward currentForward = actionContext.getForward();
         assert currentForward != null : "no forward found in context for Result \"" + getName() + '"';
+
         PageFlowResult prevResult = prevPageInfo.getResult();
         Forward previousForward = prevPageInfo.getForward();
-        prevResult.initFrom(currentForward, actionContext);
-        if (previousForward != null) prevResult.applyForward(previousForward, actionContext);
+        prevResult.initFrom(currentForward, actionContext, false);
+
+        if (previousForward != null) {
+            prevResult.applyForward(previousForward, actionContext);
+        }
+
         prevResult.applyForward(currentForward, actionContext);
         actionContext.setPreviousPageInfo(prevPageInfo);
         prevResult.finishExecution(currentForward, actionContext);
@@ -91,7 +100,7 @@ public class NavigateToPageResult extends NavigateToResult {
     String fwdPath = retFwd.getPath();
     String newQueryString = fwd.getQueryString();
     int existingQueryPos = fwdPath.indexOf( '?' );
-            
+
     //
     // If the new forward (the one with ti.NavigateTo.currentPage/previousPage) has a query string, use that.
     // Otherwise, if the old forward has no query string, restore the one from the PreviousPageInfo if
@@ -107,7 +116,7 @@ public class NavigateToPageResult extends NavigateToResult {
     {
         retFwd.setPath( fwdPath + getQueryString( fwd, prevPageInfo ) );
     }
-    
+
     */
     /*
     protected Forward applyForward(Forward fwd, ModuleConfig altModuleConfig) {
@@ -116,46 +125,46 @@ public class NavigateToPageResult extends NavigateToResult {
         // in the ActionConteext, but if it's a shared flow, then we don't want to use that.
         //
         PageFlowController curJpf = PageFlowUtils.getCurrentPageFlow();
-        
+
         if ( curJpf == null )
         {
             FlowControllerException ex = new NoCurrentPageFlowException( this );
             InternalUtils.throwPageFlowException( ex);
             assert false;   // throwPageFlowException() must throw.
         }
-        
+
         PreviousPageInfo prevPageInfo;
-        
+
         switch ( getPreviousPageIndex() )
         {
             case 0:
                 prevPageInfo = curJpf.getCurrentPageInfo();
                 break;
-                
+
             case 1:
                 prevPageInfo = curJpf.getPreviousPageInfo();
                 break;
-            
+
             default:
                 assert false : getPreviousPageIndex() + " is not a valid previous-page index";
                     // of course, in the future, we should support any index, up to an app-configured max
                 prevPageInfo = curJpf.getCurrentPageInfo();
         }
-        
+
         Forward retFwd = doReturnToPage(fwd, prevPageInfo, curJpf);
-        
+
         if ( prevPageInfo != null )
         {
-            PageFlowActionContext actionContext = PageFlowActionContext.getContext();        
+            PageFlowActionContext actionContext = PageFlowActionContext.getContext();
             //mapping = prevPageInfo.getAction();
             //if ( form == null ) form = prevPageInfo.getFormBean();
         }
-        
+
         if ( _log.isDebugEnabled() )
         {
             _log.debug( "navigate-to-page: " + ( fwd != null ? fwd.getPath() : "[null]" ) );
         }
-        
+
         return retFwd;
     }
 
@@ -167,24 +176,24 @@ public class NavigateToPageResult extends NavigateToResult {
             {
                 _log.info( "Attempted return-to-page, but previous page info was missing." );
             }
-        
+
             FlowControllerException ex = new NoPreviousPageException( this, currentPageFlow );
             InternalUtils.throwPageFlowException( ex);
         }
-        
+
         //
         // Figure out what URI to return to, and set the original form in the request or session.
-        //        
+        //
         Forward retFwd = prevPageInfo.getResult();
         PageFlowAction prevAction = prevPageInfo.getAction();
-        PageFlowActionContext actionContext = PageFlowActionContext.getContext();        
-        
+        PageFlowActionContext actionContext = PageFlowActionContext.getContext();
+
         //
         // Restore any forms that are specified by this forward (overwrite the original forms).
         //
         PageFlowUtils.setOutputForms( retFwd, false );
         InternalUtils.addActionOutputs( retFwd.getActionOutputs(), false );
-        
+
         //
         // If the user hit the previous page directly (without going through an action), prevMapping will be null.
         //
@@ -196,20 +205,20 @@ public class NavigateToPageResult extends NavigateToResult {
             //
             Object currentForm = actionContext.getAction().getFormBean();
             if ( currentForm != null ) PageFlowUtils.setOutputForm( currentForm, false );
-        
+
             //
             // Initialize the page with the original form it got forwarded (but we don't overwrite the form that was
             // set above).
             //
             InternalUtils.setFormInScope( prevAction.getFormBeanAttribute(), prevPageInfo.getFormBean(), false );
         }
-            
+
         //
         // If we're forwarding to a page in a different pageflow, we need to make sure the returned forward has
         // the right namespace, and that it has contextRelative=true.
         //
         FlowController flowController = actionContext.getFlowController();
-        
+
         if ( ! retFwd.getPath().startsWith( "/" ) && flowController != currentPageFlow )
         {
             assert false : "NYI";
@@ -219,13 +228,13 @@ public class NavigateToPageResult extends NavigateToResult {
                                         true );
 
         }
-        
+
         if ( _log.isDebugEnabled() )
         {
             _log.debug( "Return-to-page in PageFlowController " + flowController.getClass().getName()
                        + ": original URI " + retFwd.getPath() );
         }
-        
+
         if ( retFwd != null )
         {
             //
@@ -233,14 +242,14 @@ public class NavigateToPageResult extends NavigateToResult {
             // use the redirect value from the original forward.
             //
             if ( ! hasExplicitRedirectValue() ) setRedirect( fwd.isRedirect() );
-            
+
             //
             // If there's a query string, override the previous query string.
             //
             String fwdPath = retFwd.getPath();
             String newQueryString = fwd.getQueryString();
             int existingQueryPos = fwdPath.indexOf( '?' );
-            
+
             //
             // If the new forward (the one with ti.NavigateTo.currentPage/previousPage) has a query string, use that.
             // Otherwise, if the old forward has no query string, restore the one from the PreviousPageInfo if
@@ -257,19 +266,18 @@ public class NavigateToPageResult extends NavigateToResult {
                 retFwd.setPath( fwdPath + getQueryString( fwd, prevPageInfo ) );
             }
         }
-        
-       
+
+
         actionContext.setPreviousPageInfo( prevPageInfo );
         return retFwd;
     }
     */
-        
     protected boolean shouldSavePreviousPageInfo() {
         return _previousPageIndex > 0;
     }
 
     public String getNavigateToAsString() {
-        return _previousPageIndex > 0 ? "ti.NavigateTo.previousPage" : "ti.NavigateTo.currentPage";  // TODO: constant
+        return (_previousPageIndex > 0) ? "ti.NavigateTo.previousPage" : "ti.NavigateTo.currentPage"; // TODO: constant
     }
 
     public boolean isPath() {

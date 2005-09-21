@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -37,26 +37,23 @@ import org.apache.ti.compiler.internal.typesystem.declaration.TypeDeclaration;
 import org.apache.ti.compiler.internal.typesystem.env.AnnotationProcessorEnvironment;
 import org.apache.ti.compiler.internal.typesystem.type.DeclaredType;
 import org.apache.ti.compiler.internal.typesystem.type.TypeInstance;
-import org.apache.xmlbeans.XmlException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-
 public class GenXWorkModuleConfigModel
         extends XWorkModuleConfigModel
         implements JpfLanguageConstants {
-
     private static final boolean CASE_INSENSITIVE_FILES = new File("x").equals(new File("X"));
-
     private ClassDeclaration _jclass;
     private String _containingPackage;
     private File _strutsConfigFile;
@@ -64,8 +61,7 @@ public class GenXWorkModuleConfigModel
     private AnnotationProcessorEnvironment _env;
     private FlowControllerInfo _fcInfo;
 
-    protected void recalculateStrutsConfigFile()
-            throws XmlException, IOException, FatalCompileTimeException {
+    protected void recalculateStrutsConfigFile() throws IOException, FatalCompileTimeException {
         _strutsConfigFile = calculateStrutsConfigFile(); // caching this
     }
 
@@ -75,7 +71,7 @@ public class GenXWorkModuleConfigModel
 
     public GenXWorkModuleConfigModel(File sourceFile, ClassDeclaration jclass, AnnotationProcessorEnvironment env,
                                      FlowControllerInfo fcInfo, boolean checkOnly, Diagnostics diagnostics)
-            throws XmlException, IOException, FatalCompileTimeException {
+            throws IOException, FatalCompileTimeException {
         super(jclass.getQualifiedName());
 
         _jclass = jclass;
@@ -87,12 +83,15 @@ public class GenXWorkModuleConfigModel
 
         recalculateStrutsConfigFile();
 
-        if (checkOnly) return;
+        if (checkOnly) {
+            return;
+        }
 
         if (_jclass != null) {
             MergedControllerAnnotation mca = fcInfo.getMergedControllerAnnotation();
             setNestedPageFlow(mca.isNested());
             setLongLivedPageFlow(mca.isLongLived());
+
             //addMessageBundles( mca.getMessageBundles() );
             addSimpleActions(mca.getSimpleActions());
             setMultipartHandler(mca.getMultipartHandler());
@@ -112,19 +111,19 @@ public class GenXWorkModuleConfigModel
 
         if (fcInfo != null) {
             setSharedFlows(fcInfo.getSharedFlowTypeNames());
-            setReturnToActionDisabled(! fcInfo.isNavigateToActionEnabled());
-            setReturnToPageDisabled(! fcInfo.isNavigateToPageEnabled());
+            setReturnToActionDisabled(!fcInfo.isNavigateToActionEnabled());
+            setReturnToPageDisabled(!fcInfo.isNavigateToPageEnabled());
         }
     }
 
     private void inferBeginAction(ClassDeclaration jclass, FlowControllerInfo fcInfo) {
         boolean isAbstract = jclass.hasModifier(Modifier.ABSTRACT);
 
-        if (! isAbstract
-                && ! WebappPathOrActionType.actionExists(BEGIN_ACTION_NAME, jclass, null, getEnv(), fcInfo, true)) {
+        if (!isAbstract && !WebappPathOrActionType.actionExists(BEGIN_ACTION_NAME, jclass, null, getEnv(), fcInfo, true)) {
             XWorkActionModel inferredBeginAction = new XWorkActionModel(BEGIN_ACTION_NAME, this);
             inferredBeginAction.setSimpleAction(true);
             inferredBeginAction.setDefaultForwardName("success");
+
             XWorkResultModel fwd = new XWorkResultModel("success", BEGIN_ACTION_NAME + getDefaultFileExtension(), this);
             inferredBeginAction.addForward(fwd);
             inferredBeginAction.setComment("(implicit)");
@@ -137,16 +136,16 @@ public class GenXWorkModuleConfigModel
 
         for (Iterator ii = innerTypes.iterator(); ii.hasNext();) {
             TypeDeclaration innerType = (TypeDeclaration) ii.next();
+
             if (innerType instanceof ClassDeclaration) {
                 ClassDeclaration innerClass = (ClassDeclaration) innerType;
 
-                if (innerType.hasModifier(Modifier.PUBLIC)
-                        && CompilerUtils.isAssignableFrom(PAGEFLOW_FORM_CLASS_NAME, innerClass, _env)) {
+                if (innerType.hasModifier(Modifier.PUBLIC) &&
+                        CompilerUtils.isAssignableFrom(PAGEFLOW_FORM_CLASS_NAME, innerClass, _env)) {
                     addFormBean(innerClass, null);
                 }
             }
         }
-
     }
 
     /**
@@ -166,8 +165,9 @@ public class GenXWorkModuleConfigModel
         // See if the app already has a form-bean of this type.  If so,
         // we'll just use it; otherwise, we need to create it.
         //
-        boolean usesPageFlowScopedFormBean = usedByAction != null ? usedByAction.getFormBeanMember() != null : false;
+        boolean usesPageFlowScopedFormBean = (usedByAction != null) ? (usedByAction.getFormBeanMember() != null) : false;
         getMessageResourcesFromForm(formType, usedByAction);
+
         return formClass;
     }
 
@@ -176,7 +176,7 @@ public class GenXWorkModuleConfigModel
     {
         if ( messageBundles != null )
         {
-            for ( Iterator ii = messageBundles.iterator(); ii.hasNext(); )  
+            for ( Iterator ii = messageBundles.iterator(); ii.hasNext(); )
             {
                 AnnotationInstance ann = ( AnnotationInstance ) ii.next();
                 addMessageResources( new GenMessageBundleModel( this, ann ) );
@@ -184,7 +184,6 @@ public class GenXWorkModuleConfigModel
         }
     }
     */
-
     private void addSimpleActions(Collection simpleActionAnnotations) {
         if (simpleActionAnnotations != null) {
             for (Iterator ii = simpleActionAnnotations.iterator(); ii.hasNext();) {
@@ -211,7 +210,7 @@ public class GenXWorkModuleConfigModel
     }
 
     private void addTilesDefinitionsConfigs(List tilesDefinitionsConfigs) {
-        if (tilesDefinitionsConfigs == null || tilesDefinitionsConfigs.isEmpty()) {
+        if ((tilesDefinitionsConfigs == null) || tilesDefinitionsConfigs.isEmpty()) {
             return;
         }
 
@@ -220,7 +219,7 @@ public class GenXWorkModuleConfigModel
         for (Iterator ii = tilesDefinitionsConfigs.iterator(); ii.hasNext();) {
             String definitionsConfig = (String) ii.next();
 
-            if (definitionsConfig != null && definitionsConfig.length() > 0) {
+            if ((definitionsConfig != null) && (definitionsConfig.length() > 0)) {
                 paths.add(definitionsConfig);
             }
         }
@@ -234,9 +233,10 @@ public class GenXWorkModuleConfigModel
         for (int i = 0; i < actionMethods.length; i++) {
             MethodDeclaration actionMethod = actionMethods[i];
 
-            if (! actionMethod.hasModifier(Modifier.ABSTRACT)) {
+            if (!actionMethod.hasModifier(Modifier.ABSTRACT)) {
                 XWorkActionModel actionModel = new GenXWorkActionModel(actionMethod, this, _jclass);
                 addAction(actionModel);
+
                 ParameterDeclaration[] params = actionMethod.getParameters();
 
                 if (params.length > 0) {
@@ -252,7 +252,9 @@ public class GenXWorkModuleConfigModel
     }
 
     private void getMessageResourcesFromForm(TypeDeclaration formTypeDecl, XWorkActionModel actionModel) {
-        if (! (formTypeDecl instanceof ClassDeclaration)) return;
+        if (!(formTypeDecl instanceof ClassDeclaration)) {
+            return;
+        }
 
         ClassDeclaration formClassDecl = (ClassDeclaration) formTypeDecl;
 
@@ -265,12 +267,12 @@ public class GenXWorkModuleConfigModel
                 String key = "formMessages:" + CompilerUtils.getLoadableName(formClassDecl);
 
                 /* TODO: re-add message bundle support
-                for ( Iterator ii = getMessageResourcesList().iterator(); ii.hasNext(); )  
+                for ( Iterator ii = getMessageResourcesList().iterator(); ii.hasNext(); )
                 {
                     MessageResourcesModel i = ( MessageResourcesModel ) ii.next();
                     if ( key.equals( i.getKey() ) && i.getParameter().equals( defaultMessageResources ) ) return;
                 }
-                
+
                 MessageResourcesModel mrm = new MessageResourcesModel( this );
                 mrm.setKey( key );
                 mrm.setParameter( defaultMessageResources );
@@ -283,23 +285,20 @@ public class GenXWorkModuleConfigModel
     }
 
     protected String getMergeFileName() {
-        return null;   // In Beehive, this was Struts merge.  Will we have XWork-merge?
+        return null; // In Beehive, this was Struts merge.  Will we have XWork-merge?
     }
 
-    public void writeToFile()
-            throws FileNotFoundException, IOException, XmlModelWriterException, FatalCompileTimeException {
+    public void writeToFile() throws FileNotFoundException, IOException, XmlModelWriterException, FatalCompileTimeException {
         PrintWriter writer = getEnv().getFiler().createTextFile(_strutsConfigFile);
 
         try {
             writeXml(writer, getMergeFile(getMergeFileName()));
-        }
-        finally {
+        } finally {
             writer.close();
         }
     }
 
-    public boolean isStale()
-            throws FatalCompileTimeException {
+    public boolean isStale() throws FatalCompileTimeException {
         return isStale(getMergeFile(getMergeFileName()));
     }
 
@@ -327,13 +326,13 @@ public class GenXWorkModuleConfigModel
         //
         // We can write to the file if it doesn't exist yet.
         //
-        if (! _strutsConfigFile.exists()) {
+        if (!_strutsConfigFile.exists()) {
             return true;
         }
 
         long lastWrite = _strutsConfigFile.lastModified();
 
-        if (mergeFile != null && mergeFile.exists() && mergeFile.lastModified() > lastWrite) {
+        if ((mergeFile != null) && mergeFile.exists() && (mergeFile.lastModified() > lastWrite)) {
             return true;
         }
 
@@ -350,7 +349,7 @@ public class GenXWorkModuleConfigModel
      * the file as a test to see whether it's possible.
      */
     public boolean canWrite() {
-        if (! _strutsConfigFile.canWrite()) {
+        if (!_strutsConfigFile.canWrite()) {
             return false;
         }
 
@@ -361,11 +360,9 @@ public class GenXWorkModuleConfigModel
             // (NTFS only?) will cause an exception to be thrown.
             //
             new FileOutputStream(_strutsConfigFile, true).close();
-        }
-        catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             return false;
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             return false;
         }
 
@@ -376,8 +373,7 @@ public class GenXWorkModuleConfigModel
         return _strutsConfigFile;
     }
 
-    public File getMergeFile(String mergeFileName)
-            throws FatalCompileTimeException {
+    public File getMergeFile(String mergeFileName) throws FatalCompileTimeException {
         if (mergeFileName != null) {
             return CompilerUtils.getFileRelativeToSourceFile(_jclass, mergeFileName, getEnv());
         }
@@ -385,19 +381,20 @@ public class GenXWorkModuleConfigModel
         return null;
     }
 
-    protected String getHeaderComment(File mergeFile)
-            throws FatalCompileTimeException {
+    protected String getHeaderComment(File mergeFile) throws FatalCompileTimeException {
         StringBuffer comment = new StringBuffer(" Generated from ");
         comment.append(getWebappRelativePath(_sourceFile));
+
         if (mergeFile != null) {
             comment.append(" and ").append(getWebappRelativePath(mergeFile));
         }
+
         comment.append(" on ").append(new Date().toString()).append(' ');
+
         return comment.toString();
     }
 
-    private String getWebappRelativePath(File file)
-            throws FatalCompileTimeException {
+    private String getWebappRelativePath(File file) throws FatalCompileTimeException {
         String filePath = file.getAbsoluteFile().getPath();
         String[] sourceRoots = CompilerUtils.getWebSourceRoots(_env);
 
@@ -416,6 +413,7 @@ public class GenXWorkModuleConfigModel
         // Look in the web content root.
         //
         String[] webContentRoots = CompilerUtils.getWebContentRoots(getEnv());
+
         for (int i = 0; i < webContentRoots.length; i++) {
             String webContentRoot = webContentRoots[i].replace('/', File.separatorChar);
 
@@ -425,6 +423,7 @@ public class GenXWorkModuleConfigModel
         }
 
         assert false : "could not calculate webapp-relative file from " + file;
+
         return file.toString();
     }
 

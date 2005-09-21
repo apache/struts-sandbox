@@ -5,9 +5,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,8 +18,8 @@
 package org.apache.ti.core.urls;
 
 import org.apache.ti.pageflow.xwork.PageFlowActionContext;
-import org.apache.ti.schema.config.UrlConfig;
 import org.apache.ti.util.config.ConfigUtil;
+import org.apache.ti.util.config.bean.UrlConfig;
 import org.apache.ti.util.internal.DiscoveryUtils;
 import org.apache.ti.util.logging.Logger;
 
@@ -45,16 +45,14 @@ import java.util.Map;
  * <p/>
  * In general, an implementation of this abstract class should be thread-safe,
  * not having state. If it is used as per-webapp default <code>TemplatedURLFormatter</code>,
- * defined in beehive-netui-config.xml (with a class name),
+ * defined in ti-config.xml (with a class name),
  * <code>URLRewriterService.getTemplatedURL()</code>
  * will share the same instance (from the application - see
  * {@link #getTemplatedURLFormatter}) for multiple simultaneous requests.
  * </p>
  */
 public abstract class TemplatedURLFormatter {
-
     private static final Logger _log = Logger.getInstance(TemplatedURLFormatter.class);
-
     private static final String TEMPLATED_URL_FORMATTER_ATTR = "_netui:templatedURLFormatter";
 
     /**
@@ -63,41 +61,38 @@ public abstract class TemplatedURLFormatter {
     public static final String DEFAULT_TEMPLATE_REF = "default-url-templates";
 
     // Base set of tokens
+
     /**
-	 * @todo Finish documenting me!
+         * @todo Finish documenting me!
      */
     public static final String SCHEME_TOKEN = "{url:scheme}";
-    
+
     /**
-	 * @todo Finish documenting me!
+         * @todo Finish documenting me!
      */
     public static final String DOMAIN_TOKEN = "{url:domain}";
-    
+
     /**
-	 * @todo Finish documenting me!
+         * @todo Finish documenting me!
      */
     public static final String PORT_TOKEN = "{url:port}";
-    
+
     /**
-	 * @todo Finish documenting me!
+         * @todo Finish documenting me!
      */
     public static final String PATH_TOKEN = "{url:path}";
-    
+
     /**
-	 * @todo Finish documenting me!
+         * @todo Finish documenting me!
      */
     public static final String QUERY_STRING_TOKEN = "{url:queryString}";
-    
+
     /**
-	 * @todo Finish documenting me!
+         * @todo Finish documenting me!
      */
     public static final String FRAGMENT_TOKEN = "{url:fragment}";
-
-    private List _knownTokens =
-            Arrays.asList(new String[]{SCHEME_TOKEN, DOMAIN_TOKEN, PORT_TOKEN, FRAGMENT_TOKEN});
-
-    private List requiredTokens =
-            Arrays.asList(new String[]{PATH_TOKEN, QUERY_STRING_TOKEN});
+    private List _knownTokens = Arrays.asList(new String[] { SCHEME_TOKEN, DOMAIN_TOKEN, PORT_TOKEN, FRAGMENT_TOKEN });
+    private List requiredTokens = Arrays.asList(new String[] { PATH_TOKEN, QUERY_STRING_TOKEN });
 
     /**
      * Gets the TemplatedURLFormatter instance attribute of the application.
@@ -109,44 +104,48 @@ public abstract class TemplatedURLFormatter {
     }
 
     /**
-	 * @todo Finish documenting me!
-     * 
+         * @todo Finish documenting me!
+     *
      * @param applicationScope
      * @param defaultFormatter
-     * 
+     *
      * @return The {@link TemplatedURLFormatter} for this configuration.
      */
     public static TemplatedURLFormatter initApplication(Map applicationScope, TemplatedURLFormatter defaultFormatter) {
         // get the default template formatter class name from the config file
         TemplatedURLFormatter formatter = createTemplatedURLFormatter();
-        
+
         // if there's no TemplatedURLFormatter in the config file, use our default impl.
         if (formatter == null) {
             formatter = defaultFormatter;
         }
 
         applicationScope.put(TEMPLATED_URL_FORMATTER_ATTR, formatter);
+
         return formatter;
     }
 
     private static TemplatedURLFormatter createTemplatedURLFormatter() {
         TemplatedURLFormatter formatter = null;
-        
+
         // check for a default template formatter class name from the config file
         UrlConfig urlConfig = ConfigUtil.getConfig().getUrlConfig();
-        if (urlConfig != null && urlConfig.isSetTemplatedUrlFormatterClass()) {
+
+        if (urlConfig != null) {
             String className = urlConfig.getTemplatedUrlFormatterClass();
+
             if (className != null) {
                 className = className.trim();
-                
+
                 // create an instance of the def template formatter class
                 ClassLoader cl = DiscoveryUtils.getClassLoader();
 
                 try {
                     Class formatterClass = cl.loadClass(className);
+
                     if (!TemplatedURLFormatter.class.isAssignableFrom(formatterClass)) {
-                        _log.error("The templated-url-formatter-class, " + className
-                                + ", does not extend TemplatedURLFormatter.");
+                        _log.error("The templated-url-formatter-class, " + className +
+                                   ", does not extend TemplatedURLFormatter.");
                     } else {
                         formatter = (TemplatedURLFormatter) formatterClass.newInstance();
                     }

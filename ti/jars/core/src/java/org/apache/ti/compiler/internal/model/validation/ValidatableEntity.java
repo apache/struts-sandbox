@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,18 +17,19 @@
  */
 package org.apache.ti.compiler.internal.model.validation;
 
-import org.apache.ti.schema.validator11.FieldDocument;
-import org.apache.ti.schema.validator11.FormDocument;
+import org.apache.ti.compiler.internal.model.XmlElementSupport;
+import org.apache.ti.compiler.internal.model.XmlModelWriter;
+
+import org.w3c.dom.Element;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-class ValidatableEntity {
-
+class ValidatableEntity
+        extends XmlElementSupport {
     private String _entityName;
     private Map _fields = new HashMap();
-
 
     public ValidatableEntity(String entityName) {
         _entityName = entityName;
@@ -46,33 +47,15 @@ class ValidatableEntity {
         return (ValidatableField) _fields.get(fieldName);
     }
 
-    public void writeToXMLBean(FormDocument.Form formElement) {
-        assert formElement.getName().equals(_entityName);
+    public void writeToElement(XmlModelWriter xw, Element element) {
+        assert _entityName.equals(getElementAttribute(element, "name")) : _entityName + ", " +
+        getElementAttribute(element, "name");
 
-        FieldDocument.Field[] existingFieldElements = formElement.getFieldArray();
         for (Iterator i = _fields.values().iterator(); i.hasNext();) {
             ValidatableField field = (ValidatableField) i.next();
-            FieldDocument.Field fieldElementToUse = null;
             String fieldPropertyName = field.getPropertyName();
-
-            //
-            // Look for an existing field element to update, or create one if none matches this field's property name.
-            //
-            for (int j = 0; j < existingFieldElements.length; j++) {
-                FieldDocument.Field existingFieldElement = existingFieldElements[j];
-
-                if (fieldPropertyName.equals(existingFieldElement.getProperty())) {
-                    fieldElementToUse = existingFieldElement;
-                    break;
-                }
-            }
-
-            if (fieldElementToUse == null) {
-                fieldElementToUse = formElement.addNewField();
-                fieldElementToUse.setProperty(fieldPropertyName);
-            }
-
-            field.writeToXMLBean(fieldElementToUse);
+            Element fieldElementToUse = findChildElement(xw, element, "field", "property", fieldPropertyName, true);
+            field.writeXML(xw, fieldElementToUse);
         }
     }
 }

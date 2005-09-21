@@ -38,7 +38,7 @@
             <li>
                 All login-related behavior (current user, login, logout, etc.) is defined by
                 <code>org.apache.beehive.samples.netui.loginexample.ExampleLoginHandler</code>, which
-                is registered as the login handler in WEB-INF/beehive-netui-config.xml.  This overrides the
+                is registered as the login handler in WEB-INF/struts-ti-config.xml.  This overrides the
                 default behavior, which is to use the current Servlet container's login mechanism.
             </li>
             <li>

@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,10 +20,13 @@ package org.apache.ti.pageflow.faces.internal;
 import org.apache.ti.pageflow.handler.Handlers;
 import org.apache.ti.pageflow.internal.AnnotationReader;
 import org.apache.ti.pageflow.internal.InternalUtils;
-import org.apache.ti.schema.annotations.ProcessedAnnotation;
+import org.apache.ti.pageflow.internal.annotationreader.ProcessedAnnotation;
 import org.apache.ti.util.internal.cache.FieldCache;
 import org.apache.ti.util.internal.cache.MethodCache;
 import org.apache.ti.util.logging.Logger;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponentBase;
@@ -31,8 +34,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.el.EvaluationException;
 import javax.faces.el.MethodBinding;
 import javax.faces.el.MethodNotFoundException;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 /**
  * Internal class used in JSF/Page Flow integration.  This exists to cause form beans to be submitted to Page Flow
@@ -43,11 +44,9 @@ import java.lang.reflect.Method;
 public class BackingClassMethodBinding
         extends MethodBinding
         implements StateHolder {
-
     private static final Logger _log = Logger.getInstance(BackingClassMethodBinding.class);
     private static final FieldCache _fieldCache = new FieldCache();
     private static final MethodCache _methodCache = new MethodCache();
-
     private String _methodName;
     private Class[] _params;
     private MethodBinding _delegate;
@@ -62,8 +61,7 @@ public class BackingClassMethodBinding
         _delegate = delegate;
     }
 
-    public Class getType(FacesContext context)
-            throws MethodNotFoundException {
+    public Class getType(FacesContext context) throws MethodNotFoundException {
         return _delegate.getType(context);
     }
 
@@ -76,7 +74,7 @@ public class BackingClassMethodBinding
      * ti.commandHandler.  If it is, look through the "raiseActions" annotation array for a form bean member variable
      * associated with the action being raised.  If one is found, set it in the request so it gets passed to the action.
      */
-    public Object invoke(FacesContext context, Object params[])
+    public Object invoke(FacesContext context, Object[] params)
             throws EvaluationException, MethodNotFoundException {
         Object result = _delegate.invoke(context, params);
 
@@ -89,13 +87,15 @@ public class BackingClassMethodBinding
 
                 Method method = _methodCache.getMethod(backingClass, _methodName, _params);
 
-                if (method == null) throw new MethodNotFoundException(_methodName);
+                if (method == null) {
+                    throw new MethodNotFoundException(_methodName);
+                }
+
                 AnnotationReader annReader = Handlers.get().getAnnotationHandler().getAnnotationReader(backingClass);
-                ProcessedAnnotation ann = annReader.getJpfAnnotation(method, "commandHandler");
+                ProcessedAnnotation ann = annReader.getTiAnnotation(method, "commandHandler");
 
                 if (ann != null) {
-                    ProcessedAnnotation[] raiseActions =
-                            AnnotationReader.getAnnotationArrayAttribute(ann, "raiseActions");
+                    ProcessedAnnotation[] raiseActions = AnnotationReader.getAnnotationArrayAttribute(ann, "raiseActions");
 
                     if (raiseActions != null) {
                         setOutputFormBeans(raiseActions, backingClass, backingBean, action);
@@ -114,22 +114,24 @@ public class BackingClassMethodBinding
             String actionAttr = AnnotationReader.getStringAttribute(raiseAction, "action");
 
             if (actionAttr.equals(action)) {
-                String formBeanMember =
-                        AnnotationReader.getStringAttribute(raiseAction, "outputFormBean");
+                String formBeanMember = AnnotationReader.getStringAttribute(raiseAction, "outputFormBean");
 
-                if (formBeanMember != null && formBeanMember.length() > 0) {
+                if ((formBeanMember != null) && (formBeanMember.length() > 0)) {
                     try {
                         Field field = _fieldCache.getDeclaredField(backingClass, formBeanMember);
+
                         if (field == null) {
-                            _log.error("Could not find field " + formBeanMember + " specified as the outputFormBean "
-                                    + "for action " + action + " raised by " + backingClass.getName());
+                            _log.error("Could not find field " + formBeanMember + " specified as the outputFormBean " +
+                                       "for action " + action + " raised by " + backingClass.getName());
+
                             return;
                         }
+
                         Object value = field.get(backingBean);
                         InternalUtils.setForwardedFormBean(value);
                     } catch (IllegalAccessException e) {
-                        _log.error("Could not access field " + formBeanMember + " specified as the outputFormBean "
-                                + "for action " + action + " raised by " + backingClass.getName(), e);
+                        _log.error("Could not access field " + formBeanMember + " specified as the outputFormBean " +
+                                   "for action " + action + " raised by " + backingClass.getName(), e);
                     }
                 }
             }
@@ -137,7 +139,7 @@ public class BackingClassMethodBinding
     }
 
     public Object saveState(FacesContext context) {
-        return new Object[]{_methodName, _params, UIComponentBase.saveAttachedState(context, _delegate)};
+        return new Object[] { _methodName, _params, UIComponentBase.saveAttachedState(context, _delegate) };
     }
 
     public void restoreState(FacesContext context, Object state) {

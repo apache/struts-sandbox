@@ -18,6 +18,7 @@
 package org.apache.ti.util.logging.internal;
 
 import org.apache.commons.logging.Log;
+
 import org.apache.log4j.Category;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -28,7 +29,7 @@ import java.io.StringWriter;
 /**
  * <p/>
  * Logging abstraction used to pipe log messages to Log4J.  This class is used for
- * NetUI backwards compatability so that previous {@link org.apache.beehive.netui.util.logging.Logger}
+ * NetUI backwards compatability so that previous {@link org.apache.ti.util.logging.Logger}
  * clients continue to log through the usual Log4J channels.
  * </p>
  *
@@ -36,7 +37,6 @@ import java.io.StringWriter;
  */
 public final class Log4JLogger
         implements Log {
-
     private static final String STRUTS_APPENDER = "commons-logging";
 
     static {
@@ -44,8 +44,9 @@ public final class Log4JLogger
         // that we don't spam the console with all messages
         Category root = Category.getRoot();
 
-        if (root.getAppender(STRUTS_APPENDER) != null)
+        if (root.getAppender(STRUTS_APPENDER) != null) {
             root.removeAppender(STRUTS_APPENDER);
+        }
     }
 
     private Logger _logInstance;
@@ -87,68 +88,81 @@ public final class Log4JLogger
     }
 
     public void debug(Object message) {
-        if (_logInstance.isEnabledFor(Level.DEBUG))
+        if (_logInstance.isEnabledFor(Level.DEBUG)) {
             _logInstance.debug(message);
+        }
     }
 
     public void debug(Object message, Throwable t) {
-        if (_logInstance.isEnabledFor(Level.DEBUG))
+        if (_logInstance.isEnabledFor(Level.DEBUG)) {
             _logInstance.debug(format(message, t));
+        }
     }
 
     public void trace(Object message) {
-        if (_logInstance.isEnabledFor(Level.DEBUG))
+        if (_logInstance.isEnabledFor(Level.DEBUG)) {
             _logInstance.debug(message);
+        }
     }
 
     public void trace(Object message, Throwable t) {
-        if (_logInstance.isEnabledFor(Level.DEBUG))
+        if (_logInstance.isEnabledFor(Level.DEBUG)) {
             _logInstance.debug(format(message, t));
+        }
     }
 
     public void info(Object message) {
-        if (_logInstance.isEnabledFor(Level.INFO))
+        if (_logInstance.isEnabledFor(Level.INFO)) {
             _logInstance.info(message);
+        }
     }
 
     public void info(Object message, Throwable t) {
-        if (_logInstance.isEnabledFor(Level.INFO))
+        if (_logInstance.isEnabledFor(Level.INFO)) {
             _logInstance.info(format(message, t));
+        }
     }
 
     public void warn(Object message) {
-        if (_logInstance.isEnabledFor(Level.WARN))
+        if (_logInstance.isEnabledFor(Level.WARN)) {
             _logInstance.warn(message);
+        }
     }
 
     public void warn(Object message, Throwable t) {
-        if (_logInstance.isEnabledFor(Level.WARN))
+        if (_logInstance.isEnabledFor(Level.WARN)) {
             _logInstance.warn(format(message, t));
+        }
     }
 
     public void error(Object message) {
-        if (_logInstance.isEnabledFor(Level.ERROR))
+        if (_logInstance.isEnabledFor(Level.ERROR)) {
             _logInstance.error(message);
+        }
     }
 
     public void error(Object message, Throwable t) {
-        if (_logInstance.isEnabledFor(Level.ERROR))
+        if (_logInstance.isEnabledFor(Level.ERROR)) {
             _logInstance.error(format(message, t));
+        }
     }
 
     public void fatal(Object message) {
-        if (_logInstance.isEnabledFor(Level.FATAL))
+        if (_logInstance.isEnabledFor(Level.FATAL)) {
             _logInstance.fatal(message);
+        }
     }
 
     public void fatal(Object message, Throwable t) {
-        if (_logInstance.isEnabledFor(Level.FATAL))
+        if (_logInstance.isEnabledFor(Level.FATAL)) {
             _logInstance.fatal(format(message, t));
+        }
     }
 
     private String format(Object m, Throwable t) {
-        if (t == null)
+        if (t == null) {
             return m.toString();
+        }
 
         StringWriter sw = new StringWriter();
         t.printStackTrace(new PrintWriter(sw));

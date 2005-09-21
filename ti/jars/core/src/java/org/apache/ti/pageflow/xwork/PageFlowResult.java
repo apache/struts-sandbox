@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,6 +19,7 @@ package org.apache.ti.pageflow.xwork;
 
 import com.opensymphony.xwork.ActionInvocation;
 import com.opensymphony.xwork.Result;
+
 import org.apache.ti.pageflow.*;
 import org.apache.ti.pageflow.handler.ForwardRedirectHandler;
 import org.apache.ti.pageflow.handler.Handlers;
@@ -30,19 +31,19 @@ import org.apache.ti.util.internal.InternalStringBuilder;
 import org.apache.ti.util.logging.Logger;
 
 import java.io.Serializable;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public abstract class PageFlowResult implements Result {
-
+public abstract class PageFlowResult
+        implements Result {
     private static final Logger _log = Logger.getInstance(PageFlowResult.class);
-
-
-    private static final Map/*< String, Class >*/ PRIMITIVE_TYPES = new HashMap/*< String, Class >*/();
+    private static final Map /*< String, Class >*/ PRIMITIVE_TYPES = new HashMap /*< String, Class >*/();
 
     static {
         PRIMITIVE_TYPES.put("boolean", boolean.class);
@@ -72,8 +73,9 @@ public abstract class PageFlowResult implements Result {
         PageFlowActionContext actionContext = (PageFlowActionContext) invocation.getInvocationContext();
         Forward fwd = actionContext.getForward();
         assert fwd != null : "no forward found in context for Result \"" + getName() + '"';
+
         if (!preprocess(fwd, actionContext)) {
-            initFrom(fwd, actionContext);
+            initFrom(fwd, actionContext, true);
             applyForward(fwd, actionContext);
             finishExecution(fwd, actionContext);
         }
@@ -177,10 +179,9 @@ public abstract class PageFlowResult implements Result {
         _externalRedirect = externalRedirect;
     }
 
-    private static class ActionOutput implements Serializable {
-
+    private static class ActionOutput
+            implements Serializable {
         private static final long serialVersionUID = 1;
-
         private String _actionOutputName;
         private String _type;
         private boolean _isNullable;
@@ -207,6 +208,7 @@ public abstract class PageFlowResult implements Result {
     protected void setActionOutput(int n, String concatenatedVals) {
         String[] vals = concatenatedVals.split("\\|");
         assert vals.length == 3 : vals.length;
+
         String name = vals[2];
         String type = vals[0];
         boolean isNullable = Boolean.valueOf(vals[1]).booleanValue();
@@ -307,13 +309,17 @@ public abstract class PageFlowResult implements Result {
         _inheritedPath = inheritedPath;
     }
 
-    protected void initFrom(Forward fwd, PageFlowActionContext actionContext) {
+    protected void initFrom(Forward fwd, PageFlowActionContext actionContext, boolean checkForErrors) {
         // If there was a path specified on the Forward (programmatically), use that.
         // TODO: enforce an annotation attribute that allows this; otherwise, throw.
-        if (fwd.getPath() != null) setLocation(fwd.getPath());
-        
+        if (fwd.getPath() != null) {
+            setLocation(fwd.getPath());
+        }
+
         // Add query params to the path.
-        if (fwd.getQueryString() != null) setLocation(getLocation() + fwd.getQueryString());
+        if (fwd.getQueryString() != null) {
+            setLocation(getLocation() + fwd.getQueryString());
+        }
 
         Class returnFormClass = null;
 
@@ -330,10 +336,15 @@ public abstract class PageFlowResult implements Result {
 
         if (_outputFormBeanMember != null) {
             try {
-                assert flowController != null;  // should be set in initialize()
+                assert flowController != null; // should be set in initialize()
+
                 Field field = flowController.getClass().getDeclaredField(_outputFormBeanMember);
                 returnFormClass = field.getType();
-                if (!Modifier.isPublic(field.getModifiers())) field.setAccessible(true);
+
+                if (!Modifier.isPublic(field.getModifiers())) {
+                    field.setAccessible(true);
+                }
+
                 Object form = field.get(flowController);
 
                 if (form != null) {
@@ -350,35 +361,36 @@ public abstract class PageFlowResult implements Result {
             } catch (NoSuchFieldException e) {
                 assert false : "could not find field " + _outputFormBeanMember; // compiler should catch this
             } catch (IllegalAccessException e) {
-                assert false;   // should not get here -- field is accessible.
+                assert false; // should not get here -- field is accessible.
             }
         }
 
-        checkOutputFormBeans(fwd, returnFormClass, flowController);
-        checkActionOutputs(fwd, actionContext);
-        
-        
-        //
-        // Throw an exception if this is a redirect, and if there was an output form or an action output added.
-        // Output forms and action outputs are carried in the request, and will be lost on redirects.
-        //
-        if (isRedirect()) {
-            if (_actionOutputDeclarations != null && !_actionOutputDeclarations.isEmpty()) {
-                FlowControllerException ex =
-                        new IllegalActionOutputException(_name, flowController,
-                                (String) _actionOutputDeclarations.keySet().iterator().next());
-                InternalUtils.throwPageFlowException(ex);
-            }
+        if (checkForErrors) {
+            checkOutputFormBeans(fwd, returnFormClass, flowController);
+            checkActionOutputs(fwd, actionContext);
 
-            List outputForms = fwd.getOutputFormBeans();
-            if (outputForms != null && !outputForms.isEmpty()) {
-                FlowControllerException ex =
-                        new IllegalRedirectOutputFormException(_name, flowController,
-                                outputForms.get(0).getClass().getName());
-                InternalUtils.throwPageFlowException(ex);
+            //
+            // Throw an exception if this is a redirect, and if there was an output form or an action output added.
+            // Output forms and action outputs are carried in the request, and will be lost on redirects.
+            //
+            if (isRedirect()) {
+                if ((_actionOutputDeclarations != null) && !_actionOutputDeclarations.isEmpty()) {
+                    FlowControllerException ex = new IllegalActionOutputException(_name, flowController,
+                                                                                  (String) _actionOutputDeclarations.keySet()
+                                                                                                                    .iterator()
+                                                                                                                    .next());
+                    InternalUtils.throwPageFlowException(ex);
+                }
+
+                List outputForms = fwd.getOutputFormBeans();
+
+                if ((outputForms != null) && !outputForms.isEmpty()) {
+                    FlowControllerException ex = new IllegalRedirectOutputFormException(_name, flowController,
+                                                                                        outputForms.get(0).getClass().getName());
+                    InternalUtils.throwPageFlowException(ex);
+                }
             }
         }
-
     }
 
     private void checkOutputFormBeans(Forward fwd, Class returnFormClass, FlowController flowController) {
@@ -386,14 +398,14 @@ public abstract class PageFlowResult implements Result {
         // Make sure that if there's currently an output form, that it confirms to the return-form-type.
         //
         List outputForms = fwd.getOutputFormBeans();
-        if (returnFormClass != null && outputForms != null && outputForms.size() > 0) {
+
+        if ((returnFormClass != null) && (outputForms != null) && (outputForms.size() > 0)) {
             Object outputForm = outputForms.get(0);
 
             if (!returnFormClass.isInstance(outputForm)) {
-                FlowControllerException ex =
-                        new IllegalOutputFormTypeException(getName(), flowController,
-                                outputForm.getClass().getName(),
-                                returnFormClass.getName());
+                FlowControllerException ex = new IllegalOutputFormTypeException(getName(), flowController,
+                                                                                outputForm.getClass().getName(),
+                                                                                returnFormClass.getName());
                 InternalUtils.throwPageFlowException(ex);
             }
         }
@@ -404,7 +416,9 @@ public abstract class PageFlowResult implements Result {
      * in production mode
      */
     private void checkActionOutputs(Forward fwd, PageFlowActionContext actionContext) {
-        if (_actionOutputDeclarations == null) return;
+        if (_actionOutputDeclarations == null) {
+            return;
+        }
 
         boolean isInProductionMode = AdapterManager.getContainerAdapter().isInProductionMode();
         Map fwdActionOutputs = fwd.getActionOutputs();
@@ -412,19 +426,18 @@ public abstract class PageFlowResult implements Result {
         for (Iterator i = _actionOutputDeclarations.values().iterator(); i.hasNext();) {
             ActionOutput actionOutput = (ActionOutput) i.next();
 
-            if (!actionOutput.getNullable()
-                    && (fwdActionOutputs == null || fwdActionOutputs.get(actionOutput.getName()) == null)) {
+            if (!actionOutput.getNullable() &&
+                    ((fwdActionOutputs == null) || (fwdActionOutputs.get(actionOutput.getName()) == null))) {
                 FlowController flowController = actionContext.getFlowController();
-                FlowControllerException ex =
-                        new MissingActionOutputException(flowController, actionOutput.getName(), getName());
+                FlowControllerException ex = new MissingActionOutputException(flowController, actionOutput.getName(), getName());
                 InternalUtils.throwPageFlowException(ex);
             }
-                
+
             //
             // If we're *not* in production mode, do some (expensive) checks to ensure that the types for the
             // action outputs match their declared types.
             //
-            if (!isInProductionMode && fwdActionOutputs != null) {
+            if (!isInProductionMode && (fwdActionOutputs != null)) {
                 Object actualActionOutput = fwdActionOutputs.get(actionOutput.getName());
 
                 if (actualActionOutput != null) {
@@ -442,9 +455,9 @@ public abstract class PageFlowResult implements Result {
                         try {
                             expectedType = Class.forName(expectedTypeName);
                         } catch (ClassNotFoundException e) {
-                            _log.error("Could not load expected action output type " + expectedTypeName
-                                    + " for action output '" + actionOutput.getName() + "' on forward '"
-                                    + getName() + "'; skipping type check.");
+                            _log.error("Could not load expected action output type " + expectedTypeName + " for action output '" +
+                                       actionOutput.getName() + "' on forward '" + getName() + "'; skipping type check.");
+
                             continue;
                         }
                     }
@@ -453,18 +466,17 @@ public abstract class PageFlowResult implements Result {
                     int actualArrayDims = 0;
                     InternalStringBuilder arraySuffix = new InternalStringBuilder();
 
-                    while (actualType.isArray() && actualArrayDims <= expectedArrayDims) {
+                    while (actualType.isArray() && (actualArrayDims <= expectedArrayDims)) {
                         ++actualArrayDims;
                         arraySuffix.append("[]");
                         actualType = actualType.getComponentType();
                     }
 
-                    if (actualArrayDims != expectedArrayDims || !expectedType.isAssignableFrom(actualType)) {
+                    if ((actualArrayDims != expectedArrayDims) || !expectedType.isAssignableFrom(actualType)) {
                         FlowController fc = actionContext.getFlowController();
-                        FlowControllerException ex =
-                                new MismatchedActionOutputException(fc, actionOutput.getName(), getName(),
-                                        expectedTypeName,
-                                        actualType.getName() + arraySuffix);
+                        FlowControllerException ex = new MismatchedActionOutputException(fc, actionOutput.getName(), getName(),
+                                                                                         expectedTypeName,
+                                                                                         actualType.getName() + arraySuffix);
                         InternalUtils.throwPageFlowException(ex);
                     }
                 }
@@ -486,8 +498,7 @@ public abstract class PageFlowResult implements Result {
         return false;
     }
 
-    protected void doForward(String path)
-            throws PageFlowException {
+    protected void doForward(String path) throws PageFlowException {
         if (!processPageForward(path)) {
             ForwardRedirectHandler fwdRedirectHandler = Handlers.get().getForwardRedirectHandler();
             fwdRedirectHandler.forward(path);
@@ -501,7 +512,6 @@ public abstract class PageFlowResult implements Result {
         //
         PageFlowUtils.setOutputForms(fwd, true);
         InternalUtils.addActionOutputs(fwd.getActionOutputs(), true);
-
     }
 
     /**
@@ -513,11 +523,11 @@ public abstract class PageFlowResult implements Result {
         Handlers handlers = Handlers.get();
         ForwardRedirectHandler fwdRedirectHandler = handlers.getForwardRedirectHandler();
         FlowController fc = actionContext.getFlowController();
-        
+
         // Register this module as the one that's handling the action.
         assert fc != null;
         InternalUtils.setForwardingModule(fc.getNamespace());
-        
+
         //
         // Save info on this forward for return-to="currentPage" or return-to="previousPage".  But, don't save
         // the info if the current forward is a return-to="currentPage" -- we don't want this to turn into
@@ -527,12 +537,16 @@ public abstract class PageFlowResult implements Result {
             Object formBean = actionContext.getFormBean();
             fc.savePreviousPageInfo(this, fwd, formBean);
         }
-        
+
         // Try to get a resolved path from the forward; otherwise, just use the configured path.
         String path = getLocation();
-        if (path == null) path = getLocation();
-        boolean startsWithSlash = path.length() > 0 && path.charAt(0) == '/';
-        
+
+        if (path == null) {
+            path = getLocation();
+        }
+
+        boolean startsWithSlash = (path.length() > 0) && (path.charAt(0) == '/');
+
         //
         // If the URI is absolute (e.g., starts with "http:"), do a redirect to it no matter what.
         //
@@ -556,10 +570,10 @@ public abstract class PageFlowResult implements Result {
                 // off the shared flow module prefix "/-" and replace it with "/").
                 //
                 ModuleConfig mc = actionContext.getModuleConfig();
-                
+
                 // TODO: ACTION_EXTENSION can no longer be a constant -- we support arbitrary Servlet mappings
-                if (mc.isSharedFlow() && !fwdURI.endsWith(PageFlowConstants.ACTION_EXTENSION)
-                        && fwdURI.startsWith(InternalConstants.SHARED_FLOW_MODULE_PREFIX)) {
+                if (mc.isSharedFlow() && !fwdURI.endsWith(PageFlowConstants.ACTION_EXTENSION) &&
+                        fwdURI.startsWith(InternalConstants.SHARED_FLOW_MODULE_PREFIX)) {
                     fwdURI = '/' + fwdURI.substring(InternalConstants.SHARED_FLOW_MODULE_PREFIX_LEN);
                 }
             }
@@ -573,7 +587,6 @@ public abstract class PageFlowResult implements Result {
         return path;
     }
 
-
     protected abstract boolean shouldSavePreviousPageInfo();
 
     /**
@@ -581,7 +594,4 @@ public abstract class PageFlowResult implements Result {
      * navigateTo=ti.NavigateTo.currentPage).
      */
     public abstract boolean isPath();
-
 }
-
-

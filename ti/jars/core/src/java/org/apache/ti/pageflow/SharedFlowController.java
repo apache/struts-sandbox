@@ -4,9 +4,9 @@
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
-* 
+*
 *     http://www.apache.org/licenses/LICENSE-2.0
-* 
+*
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -42,7 +42,7 @@ import org.apache.ti.util.internal.cache.ClassLevelCache;
  * </li>
  * <li>
  * Any page flow is hit, and the <code>&lt;default-shared-flow-refs&gt;</code> element in
- * /WEB-INF/beehive-netui-config.xml declares that this shared flow will be used by all page flows in the web
+ * /WEB-INF/struts-ti-config.xml declares that this shared flow will be used by all page flows in the web
  * application.
  * </li>
  * </ul>
@@ -79,7 +79,6 @@ import org.apache.ti.util.internal.cache.ClassLevelCache;
 public abstract class SharedFlowController
         extends FlowController
         implements PageFlowConstants {
-
     private static final String CACHED_INFO_KEY = "cachedInfo";
 
     /**
@@ -150,8 +149,8 @@ public abstract class SharedFlowController
         // Special case: if the given forward has a path to a page in the current pageflow, let that pageflow save
         // the info on this page.  Otherwise, don't ever save any info on what we're forwarding to.
         //
-        if (result != null && result.isPath())  // i.e., it's a straight forward to a path, not a navigateTo, etc.
-        {
+        if ((result != null) && result.isPath()) // i.e., it's a straight forward to a path, not a navigateTo, etc.
+         {
             PageFlowController currentJpf = PageFlowUtils.getCurrentPageFlow();
 
             if (currentJpf != null) {
@@ -171,7 +170,10 @@ public abstract class SharedFlowController
         // Save this previous-action info in the *current page flow*.
         //
         PageFlowController currentJpf = PageFlowUtils.getCurrentPageFlow();
-        if (currentJpf != null) currentJpf.savePreviousActionInfo();
+
+        if (currentJpf != null) {
+            currentJpf.savePreviousActionInfo();
+        }
     }
 
     /**

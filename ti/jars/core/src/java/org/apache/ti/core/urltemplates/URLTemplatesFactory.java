@@ -18,6 +18,7 @@
 package org.apache.ti.core.urltemplates;
 
 import org.apache.commons.chain.web.WebContext;
+
 import org.apache.ti.core.factory.Factory;
 import org.apache.ti.core.urls.TemplatedURLFormatter;
 import org.apache.ti.pageflow.ContainerAdapter;
@@ -31,8 +32,8 @@ import java.util.Collection;
  * rewritten URLs) used by a {@link org.apache.ti.core.urls.TemplatedURLFormatter}
  * via the {@link org.apache.ti.core.urls.URLRewriterService}.
  */
-public abstract class URLTemplatesFactory extends Factory {
-
+public abstract class URLTemplatesFactory
+        extends Factory {
     private static final String URL_TEMPLATE_FACTORY_ATTR = "_netui:urlTemplatesFactory";
 
     // Constants for URL template types
@@ -51,13 +52,13 @@ public abstract class URLTemplatesFactory extends Factory {
     public static final String DEFAULT_URL_TEMPLATE_CONFIG_FILE_PATH = "/WEB-INF/beehive-url-template-config.xml";
 
     // Path to the URL templates config file.
-    private String _configFilePath = DEFAULT_URL_TEMPLATE_CONFIG_FILE_PATH;
+    protected String _configFilePath = DEFAULT_URL_TEMPLATE_CONFIG_FILE_PATH;
 
     // The known tokens (collection of String objects) in a valid template.
-    private Collection _knownTokens = null;
+    protected Collection _knownTokens = null;
 
     // The required tokens (collection of String objects) in a valid template.
-    private Collection _requiredTokens = null;
+    protected Collection _requiredTokens = null;
 
     /**
      * Gets the URLTemplatesFactory instance attribute of the application.
@@ -65,8 +66,7 @@ public abstract class URLTemplatesFactory extends Factory {
      * @return the URLTemplatesFactory instance from the application scope.
      */
     public static URLTemplatesFactory getURLTemplatesFactory() {
-        return (URLTemplatesFactory)
-                PageFlowActionContext.get().getApplication().get(URL_TEMPLATE_FACTORY_ATTR);
+        return (URLTemplatesFactory) PageFlowActionContext.get().getApplication().get(URL_TEMPLATE_FACTORY_ATTR);
     }
 
     /**
@@ -78,7 +78,7 @@ public abstract class URLTemplatesFactory extends Factory {
         // URLTemplatesFactory has not been initialized,
         // get a URLTemplatesFactory object from the containerAdapter.
         URLTemplatesFactory templatesFactory = createURLTemplatesFactory(defaultFactory, containerAdapter);
-        
+
         // get the known/req tokens from the default formatter for the factory to use to verify templates
         templatesFactory.setKnownTokens(formatter.getKnownTokens());
         templatesFactory.setRequiredTokens(formatter.getRequiredTokens());
@@ -108,7 +108,7 @@ public abstract class URLTemplatesFactory extends Factory {
         URLTemplatesFactory factory = (URLTemplatesFactory) containerAdapter.getFactory(URLTemplatesFactory.class, null, null);
 
         // if there's no URLTemplatesFactory, use our default impl.
-        return factory != null ? factory : defaultFactory;
+        return (factory != null) ? factory : defaultFactory;
     }
 
     /**

@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,6 +21,7 @@ import org.apache.commons.logging.Log;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+
 import java.lang.reflect.Method;
 
 /**
@@ -33,7 +34,6 @@ import java.lang.reflect.Method;
  */
 public class Logger
         implements Log {
-
     /**
      * Factory method for creating NetUI Logger instances.
      *
@@ -70,12 +70,14 @@ public class Logger
      */
     public Logger(String clientClassName) {
         Class clientClass = null;
+
         try {
             /* create a default log4j logger -- this shouldn't throw a CNF exception */
             clientClass = Class.forName(clientClassName);
         } catch (ClassNotFoundException e) {
             throw new IllegalArgumentException("Could not load NetUI logger client class '" + clientClassName + "'");
         }
+
         _logDelegate = createDefaultLogger(clientClass);
     }
 
@@ -113,80 +115,92 @@ public class Logger
     }
 
     public void debug(Object message) {
-        if (isDebugEnabled())
+        if (isDebugEnabled()) {
             _logDelegate.debug(message);
+        }
     }
 
     public void debug(Object message, Throwable t) {
-        if (isDebugEnabled())
+        if (isDebugEnabled()) {
             _logDelegate.debug(format(message, t));
+        }
     }
 
     public void trace(Object message) {
-        if (isTraceEnabled())
+        if (isTraceEnabled()) {
             _logDelegate.trace(message);
+        }
     }
 
     public void trace(Object message, Throwable t) {
-        if (isTraceEnabled())
+        if (isTraceEnabled()) {
             _logDelegate.trace(format(message, t));
+        }
     }
 
     public void info(Object message) {
-        if (isInfoEnabled())
+        if (isInfoEnabled()) {
             _logDelegate.info(message);
+        }
     }
 
     public void info(Object message, Throwable t) {
-        if (isInfoEnabled())
+        if (isInfoEnabled()) {
             _logDelegate.info(format(message, t));
+        }
     }
 
     public void warn(Object message) {
-        if (isWarnEnabled())
+        if (isWarnEnabled()) {
             _logDelegate.warn(message);
+        }
     }
 
     public void warn(Object message, Throwable t) {
-        if (isWarnEnabled())
+        if (isWarnEnabled()) {
             _logDelegate.warn(format(message, t));
+        }
     }
 
     public void error(Object message) {
-        if (isErrorEnabled())
+        if (isErrorEnabled()) {
             _logDelegate.error(message);
+        }
     }
 
     public void error(Object message, Throwable t) {
-        if (isErrorEnabled())
+        if (isErrorEnabled()) {
             _logDelegate.error(format(message, t));
+        }
     }
 
     public void fatal(Object message) {
-        if (isFatalEnabled())
+        if (isFatalEnabled()) {
             _logDelegate.fatal(message);
+        }
     }
 
     public void fatal(Object message, Throwable t) {
-        if (isFatalEnabled())
+        if (isFatalEnabled()) {
             _logDelegate.fatal(format(message, t));
+        }
     }
 
     private String format(Object m, Throwable t) {
-        if (t == null)
+        if (t == null) {
             return m.toString();
+        }
 
         StringWriter sw = new StringWriter();
         t.printStackTrace(new PrintWriter(sw));
-        
+
         /* note, no reason to close a StringWriter */
-        
         return m + "\n\n" + "Throwable: " + t.toString() + "\nStack Trace:\n" + sw.toString();
     }
 
     /**
      * Internal method used to create the backwards-compat NetUI logger.  This method
-     * looks up the {@link org.apache.beehive.netui.util.logging.internal.Log4JLogger}
+     * looks up the {@link org.apache.ti.util.logging.internal.Log4JLogger}
      * and creates a new instance returning the resulting {@link Log}.
      *
      * @param loggerClient the logger client
@@ -195,14 +209,16 @@ public class Logger
     private static final Log createDefaultLogger(Class loggerClient) {
         assert loggerClient != null : "Received a null loggerClient Class";
 
-        String className = "org.apache.beehive.netui.util.logging.internal.Log4JLogger";
+        String className = "org.apache.ti.util.logging.internal.Log4JLogger";
+
         try {
             Class logDelegateClass = Logger.class.getClassLoader().loadClass(className);
-            Method method = logDelegateClass.getMethod("getInstance", new Class[]{Class.class});
-            return (Log) method.invoke(null, new Object[]{loggerClient});
+            Method method = logDelegateClass.getMethod("getInstance", new Class[] { Class.class });
+
+            return (Log) method.invoke(null, new Object[] { loggerClient });
         } catch (Exception e) {
             IllegalStateException ie = new IllegalStateException("Could not create log implementation '" + className +
-                    "' for client of type '" + loggerClient.getName() + "'");
+                                                                 "' for client of type '" + loggerClient.getName() + "'");
             ie.initCause(e);
             throw ie;
         }

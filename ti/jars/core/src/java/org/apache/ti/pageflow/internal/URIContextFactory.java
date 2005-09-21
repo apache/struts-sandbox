@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,15 +19,14 @@ package org.apache.ti.pageflow.internal;
 
 import org.apache.ti.core.urls.MutableURI;
 import org.apache.ti.core.urls.URIContext;
-import org.apache.ti.schema.config.UrlConfig;
 import org.apache.ti.util.config.ConfigUtil;
+import org.apache.ti.util.config.bean.UrlConfig;
 
 /**
  * Factory for the {@link URIContext} with the data needed to write out
  * a string form of a {@link MutableURI}.
  */
 public final class URIContextFactory {
-
     /* do not construct */
     private URIContextFactory() {
     }
@@ -45,8 +44,8 @@ public final class URIContextFactory {
         URIContext uriContext = MutableURI.getDefaultContext();
         UrlConfig urlConfig = ConfigUtil.getConfig().getUrlConfig();
 
-        if (urlConfig != null && urlConfig.isSetHtmlAmpEntity()) {
-            uriContext.setUseAmpEntity(urlConfig.getHtmlAmpEntity());
+        if (urlConfig != null) {
+            uriContext.setUseAmpEntity(urlConfig.isHtmlAmpEntity());
         }
 
         return uriContext;

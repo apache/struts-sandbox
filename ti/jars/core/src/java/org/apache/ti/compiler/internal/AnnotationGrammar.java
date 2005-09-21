@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-
 /**
  * Our base class for customizable annotation tag grammars.  It has stock behavior for basic
  * things like making sure required attributes exist, and provides plugin points for more
@@ -39,7 +38,6 @@ import java.util.Set;
  */
 public abstract class AnnotationGrammar
         implements JpfLanguageConstants {
-
     /**
      * If this tag requires a particular runtime version...
      */
@@ -51,9 +49,8 @@ public abstract class AnnotationGrammar
     private Map _memberArrayGrammars = new HashMap();
     private Map _memberTypes = new HashMap();
 
-
     /**
-     * @param requiredRuntimeVersion causes an error to be produced if the version in the manifest of beehive-netui-pageflow.jar
+     * @param requiredRuntimeVersion causes an error to be produced if the version in the manifest of the runtime jar
      *                               is not high enough.
      */
     protected AnnotationGrammar(AnnotationProcessorEnvironment env, Diagnostics diags, String requiredRuntimeVersion,
@@ -72,8 +69,7 @@ public abstract class AnnotationGrammar
         return _diagnostics;
     }
 
-    public final Object check(AnnotationInstance annotation, AnnotationInstance[] parentAnnotations,
-                              MemberDeclaration classMember)
+    public final Object check(AnnotationInstance annotation, AnnotationInstance[] parentAnnotations, MemberDeclaration classMember)
             throws FatalCompileTimeException {
         return check(annotation, parentAnnotations, classMember, -1);
     }
@@ -81,13 +77,18 @@ public abstract class AnnotationGrammar
     public final Object check(AnnotationInstance annotation, AnnotationInstance[] parentAnnotations,
                               MemberDeclaration classMember, int annotationArrayIndex)
             throws FatalCompileTimeException {
-        if (! beginCheck(annotation, parentAnnotations, classMember)) return null;
+        if (!beginCheck(annotation, parentAnnotations, classMember)) {
+            return null;
+        }
 
         Map valuesPresent = annotation.getElementValues();
         HashSet wasPresent = new HashSet();
         HashMap checkResults = new HashMap();
 
-        if (parentAnnotations == null) parentAnnotations = new AnnotationInstance[0];
+        if (parentAnnotations == null) {
+            parentAnnotations = new AnnotationInstance[0];
+        }
+
         int oldLen = parentAnnotations.length;
         AnnotationInstance[] parentsIncludingMe = new AnnotationInstance[oldLen + 1];
         System.arraycopy(parentAnnotations, 0, parentsIncludingMe, 0, oldLen);
@@ -101,15 +102,15 @@ public abstract class AnnotationGrammar
 
             wasPresent.add(memberName);
             onCheckMember(decl, value, annotation, parentAnnotations, classMember);
+
             Object grammarOrType = null;
 
             if ((grammarOrType = _memberGrammars.get(memberName)) != null) {
                 AnnotationGrammar childGrammar = (AnnotationGrammar) grammarOrType;
 
-                if (childGrammar != null)   // it will be non-null unless there are other, more basic, errors
-                {
-                    Object result =
-                            childGrammar.check((AnnotationInstance) value.getValue(), parentsIncludingMe, classMember);
+                if (childGrammar != null) // it will be non-null unless there are other, more basic, errors
+                 {
+                    Object result = childGrammar.check((AnnotationInstance) value.getValue(), parentsIncludingMe, classMember);
 
                     if (result != null) {
                         checkResults.put(memberName, result);
@@ -129,11 +130,13 @@ public abstract class AnnotationGrammar
             } else {
                 AnnotationMemberType memberType = (AnnotationMemberType) _memberTypes.get(memberName);
 
-                if (memberType != null)   // it will be non-null unless there are other, more basic, errors
-                {
-                    Object result =
-                            memberType.check(decl, value, parentsIncludingMe, classMember, annotationArrayIndex);
-                    if (result != null) checkResults.put(memberName, result);
+                if (memberType != null) // it will be non-null unless there are other, more basic, errors
+                 {
+                    Object result = memberType.check(decl, value, parentsIncludingMe, classMember, annotationArrayIndex);
+
+                    if (result != null) {
+                        checkResults.put(memberName, result);
+                    }
                 }
             }
         }
@@ -147,12 +150,12 @@ public abstract class AnnotationGrammar
         //
         // First check to see if there's a required runtime version.
         //
-        if (! _runtimeVersionChecker.checkRuntimeVersion(_requiredRuntimeVersion, annotation, _diagnostics,
-                "error.required-runtime-version-annotation", null)) {
+        if (!_runtimeVersionChecker.checkRuntimeVersion(_requiredRuntimeVersion, annotation, _diagnostics,
+                                                            "error.required-runtime-version-annotation", null)) {
             return false;
         }
 
-        return onBeginCheck(annotation, parentAnnotations, classMember);  // for derived classes
+        return onBeginCheck(annotation, parentAnnotations, classMember); // for derived classes
     }
 
     protected void addError(Declaration element, String key) {
@@ -284,7 +287,8 @@ public abstract class AnnotationGrammar
         // Check mutually-exclusive attributes and child annotations.
         //
         String[][] mutuallyExclusiveAttrs = getMutuallyExclusiveAttrs();
-        for (int i = 0; mutuallyExclusiveAttrs != null && i < mutuallyExclusiveAttrs.length; ++i) {
+
+        for (int i = 0; (mutuallyExclusiveAttrs != null) && (i < mutuallyExclusiveAttrs.length); ++i) {
             String alreadyFound = null;
 
             for (int j = 0; j < mutuallyExclusiveAttrs[i].length; ++j) {
@@ -305,7 +309,8 @@ public abstract class AnnotationGrammar
         // Check required attributes and child annotations.
         //
         String[][] requiredAttrs = getRequiredAttrs();
-        for (int i = 0; requiredAttrs != null && i < requiredAttrs.length; ++i) {
+
+        for (int i = 0; (requiredAttrs != null) && (i < requiredAttrs.length); ++i) {
             boolean foundOne = false;
 
             for (int j = 0; j < requiredAttrs[i].length; ++j) {
@@ -313,11 +318,12 @@ public abstract class AnnotationGrammar
 
                 if (wasPresent.contains(thisAttr)) {
                     foundOne = true;
+
                     break;
                 }
             }
 
-            if (! foundOne) {
+            if (!foundOne) {
                 String errorKey = "error.atleast-one-must-exist-" + requiredAttrs[i].length;
                 getDiagnostics().addErrorArrayArgs(annotation, errorKey, requiredAttrs[i]);
             }
@@ -327,7 +333,8 @@ public abstract class AnnotationGrammar
         // Check inter-dependencies for attributes and child annotations.
         //
         String[][] attrDependencies = getAttrDependencies();
-        for (int i = 0; attrDependencies != null && i < attrDependencies.length; ++i) {
+
+        for (int i = 0; (attrDependencies != null) && (i < attrDependencies.length); ++i) {
             String thisAttr = attrDependencies[i][0];
 
             if (wasPresent.contains(thisAttr)) {
@@ -336,18 +343,19 @@ public abstract class AnnotationGrammar
                 for (int j = 1; j < attrDependencies[i].length; ++j) {
                     if (wasPresent.contains(attrDependencies[i][j])) {
                         foundOne = true;
+
                         break;
                     }
                 }
 
-                if (! foundOne) {
+                if (!foundOne) {
                     String key = "error.attr-dependency-not-found-" + (attrDependencies[i].length - 1);
                     getDiagnostics().addErrorArrayArgs(annotation, key, attrDependencies[i]);
                 }
             }
         }
 
-        return onEndCheck(annotation, parentAnnotations, classMember, checkResults);   // for derived classes
+        return onEndCheck(annotation, parentAnnotations, classMember, checkResults); // for derived classes
     }
 
     protected boolean onBeginCheck(AnnotationInstance annotation, AnnotationInstance[] parentAnnotations,
@@ -411,4 +419,4 @@ public abstract class AnnotationGrammar
     public RuntimeVersionChecker getRuntimeVersionChecker() {
         return _runtimeVersionChecker;
     }
-}      
+}

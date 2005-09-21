@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,6 +18,8 @@
 package org.apache.ti.compiler.internal;
 
 import org.apache.ti.compiler.internal.model.XWorkModuleConfigModel;
+import org.apache.ti.compiler.internal.model.XmlModelWriter;
+import org.apache.ti.compiler.internal.model.XmlModelWriterException;
 import org.apache.ti.compiler.internal.typesystem.declaration.AnnotationInstance;
 import org.apache.ti.compiler.internal.typesystem.declaration.AnnotationTypeElementDeclaration;
 import org.apache.ti.compiler.internal.typesystem.declaration.AnnotationValue;
@@ -25,45 +27,47 @@ import org.apache.ti.compiler.internal.typesystem.declaration.MemberDeclaration;
 import org.apache.ti.compiler.internal.typesystem.declaration.TypeDeclaration;
 import org.apache.ti.compiler.internal.typesystem.env.AnnotationProcessorEnvironment;
 import org.apache.ti.compiler.internal.typesystem.type.TypeInstance;
-import org.apache.ti.schema.annotations.AnnotatedElement;
-import org.apache.ti.schema.annotations.AnnotationAttribute;
-import org.apache.ti.schema.annotations.ProcessedAnnotation;
-import org.apache.ti.schema.annotations.ProcessedAnnotationsDocument;
-import org.apache.xmlbeans.XmlOptions;
+
+import org.w3c.dom.Element;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 public class AnnotationToXML {
-
     private static final String ANNOTATIONS_FILE_PREFIX = "annotations-";
-
-    private ProcessedAnnotationsDocument _doc;
+    private XmlModelWriter _xw;
     private TypeDeclaration _typeDecl;
 
-    public AnnotationToXML(TypeDeclaration typeDecl) {
-        _doc = ProcessedAnnotationsDocument.Factory.newInstance();
+    public AnnotationToXML(TypeDeclaration typeDecl) throws IOException, XmlModelWriterException {
         _typeDecl = typeDecl;
-        ProcessedAnnotationsDocument.ProcessedAnnotations pa = _doc.addNewProcessedAnnotations();
-        pa.setTypeName(typeDecl.getQualifiedName());
+
+        String typeName = typeDecl.getQualifiedName();
+        StringBuffer comment = new StringBuffer(" Generated from ");
+        comment.append(typeName);
+        comment.append(" on ").append(new Date().toString()).append(' ');
+        _xw = new XmlModelWriter(null, "processed-annotations", null, null, comment.toString());
+        _xw.addElementWithText(_xw.getRootElement(), "type-name", typeName);
     }
 
     public void include(MemberDeclaration memberDecl, AnnotationInstance annotation) {
-        AnnotatedElement element = _doc.getProcessedAnnotations().addNewAnnotatedElement();
-        String name = memberDecl instanceof TypeDeclaration
-                ? ((TypeDeclaration) memberDecl).getQualifiedName()
-                : memberDecl.getSimpleName();
-        element.setElementName(name);
-        ProcessedAnnotation xmlAnnotation = element.addNewAnnotation();
+        String name = (memberDecl instanceof TypeDeclaration) ? ((TypeDeclaration) memberDecl).getQualifiedName()
+                                                              : memberDecl.getSimpleName();
+        Element annotatedElement = _xw.addElement(_xw.getRootElement(), "annotated-element");
+        _xw.addElementWithText(annotatedElement, "element-name", name);
+
+        Element xmlAnnotation = _xw.addElement(annotatedElement, "annotation");
         include(xmlAnnotation, annotation);
     }
 
-    private void include(ProcessedAnnotation xmlAnnotation, AnnotationInstance annotation) {
-        xmlAnnotation.setAnnotationName(annotation.getAnnotationType().getAnnotationTypeDeclaration().getQualifiedName());
+    private void include(Element xmlAnnotation, AnnotationInstance annotation) {
+        String annotationName = annotation.getAnnotationType().getAnnotationTypeDeclaration().getQualifiedName();
+        _xw.addElementWithText(xmlAnnotation, "annotation-name", annotationName);
 
         Map elementValues = annotation.getElementValues();
 
@@ -74,48 +78,47 @@ public class AnnotationToXML {
 
             String name = elementDecl.getSimpleName();
             Object value = annotationValue.getValue();
-            AnnotationAttribute xmlAttr = xmlAnnotation.addNewAnnotationAttribute();
-            xmlAttr.setAttributeName(name);
+            Element xmlAttr = _xw.addElement(xmlAnnotation, "annotation-attribute");
+            _xw.addElementWithText(xmlAttr, "attribute-name", name);
 
             if (value instanceof List) {
                 for (Iterator j = ((List) value).iterator(); j.hasNext();) {
                     Object o = j.next();
                     assert o instanceof AnnotationValue : o.getClass().getName();
+
                     Object listVal = ((AnnotationValue) o).getValue();
 
                     // we only handle lists of annotations at the moment
                     assert listVal instanceof AnnotationInstance : listVal.getClass().getName();
-                    include(xmlAttr.addNewAnnotationValue(), (AnnotationInstance) listVal);
+                    include(_xw.addElement(xmlAttr, "annotation-value"), (AnnotationInstance) listVal);
                 }
             } else {
                 // we only support a few types at the moment
                 assert value instanceof TypeInstance || value instanceof String : value.getClass().getName();
-                xmlAttr.setStringValue1(value.toString());
+                _xw.addElementWithText(xmlAttr, "string-value", value.toString());
             }
         }
     }
 
-    public void writeXml(Diagnostics diagnostics, AnnotationProcessorEnvironment env) {
-        String typeName = _typeDecl.getQualifiedName();
-        int lastDot = typeName.lastIndexOf('.');
-        String baseName = ANNOTATIONS_FILE_PREFIX + typeName.substring(lastDot + 1);
-        String containingPackage = lastDot != -1 ? typeName.substring(0, lastDot) : null;
-        String outputFilePath = XWorkModuleConfigModel.getOutputFilePath(baseName, containingPackage);
+    public void writeXml(Diagnostics diagnostics, AnnotationProcessorEnvironment env)
+            throws IOException, XmlModelWriterException {
+        String outputFilePath = getFilePath(_typeDecl);
         File outputFile = new File(outputFilePath);
+        PrintWriter writer = env.getFiler().createTextFile(outputFile);
 
         try {
-            XmlOptions options = new XmlOptions();
-            options.setSavePrettyPrint();
-            PrintWriter writer = env.getFiler().createTextFile(outputFile);
-            try {
-                _doc.save(writer, options);
-            }
-            finally {
-                writer.close();
-            }
+            _xw.simpleFastWrite(writer);
+        } finally {
+            writer.close();
         }
-        catch (IOException e) {
-            diagnostics.addError(_typeDecl, "error.could-not-generate", outputFilePath, e.getMessage());
-        }
+    }
+
+    public static String getFilePath(TypeDeclaration typeDecl) {
+        String typeName = typeDecl.getQualifiedName();
+        int lastDot = typeName.lastIndexOf('.');
+        typeName = typeName.substring(lastDot + 1);
+
+        return XWorkModuleConfigModel.getOutputFilePath(ANNOTATIONS_FILE_PREFIX + typeName,
+                                                        typeDecl.getPackage().getQualifiedName());
     }
 }

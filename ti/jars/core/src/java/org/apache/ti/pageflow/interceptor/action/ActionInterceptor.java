@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,11 +22,10 @@ import org.apache.ti.pageflow.interceptor.InterceptorChain;
 import org.apache.ti.pageflow.interceptor.InterceptorContext;
 import org.apache.ti.pageflow.interceptor.InterceptorException;
 
-
 /**
- * Base class for Page Flow action interceptors.  These are configured in /WEB-INF/beehive-netui-config.xml like this:
+ * Base class for Page Flow action interceptors.  These are configured in /WEB-INF/struts-ti-config.xml like this:
  * <pre>
- *    &lt;netui-config xmlns="http://beehive.apache.org/netui/2004/server/config"&gt;
+ *    &lt;ti-config xmlns="http://struts.apache.org/ti/2005/server/config"&gt;
  *        ...
  * <p/>
  *        &lt;pageflow-action-interceptors&gt;
@@ -52,7 +51,7 @@ import org.apache.ti.pageflow.interceptor.InterceptorException;
  *        &lt;/pageflow-action-interceptors&gt;
  * <p/>
  *        ...
- *    &lt;/netui-config&gt;
+ *    &lt;/ti-config&gt;
  * <p/>
  * </pre>
  * <p/>
@@ -61,7 +60,6 @@ import org.apache.ti.pageflow.interceptor.InterceptorException;
  */
 public abstract class ActionInterceptor
         extends AbstractInterceptor {
-
     /**
      * Callback invoked before the action is processed.  During this method, {@link #setOverrideForward} may be called
      * to:
@@ -88,7 +86,8 @@ public abstract class ActionInterceptor
     /**
      * Callback invoked before the action is processed.  {@link #preAction} may be used instead.
      */
-    public void preInvoke(InterceptorContext context, InterceptorChain chain) throws InterceptorException {
+    public void preInvoke(InterceptorContext context, InterceptorChain chain)
+            throws InterceptorException {
         preAction((ActionInterceptorContext) context, chain);
     }
 
@@ -112,7 +111,8 @@ public abstract class ActionInterceptor
     /**
      * Callback invoked after the action is processed.  {@link #postAction} may be used instead.
      */
-    public void postInvoke(InterceptorContext context, InterceptorChain chain) throws InterceptorException {
+    public void postInvoke(InterceptorContext context, InterceptorChain chain)
+            throws InterceptorException {
         postAction((ActionInterceptorContext) context, chain);
     }
 

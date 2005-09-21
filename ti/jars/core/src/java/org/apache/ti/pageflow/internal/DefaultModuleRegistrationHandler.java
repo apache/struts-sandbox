@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,39 +21,42 @@ import com.opensymphony.xwork.config.Configuration;
 import com.opensymphony.xwork.config.ConfigurationManager;
 import com.opensymphony.xwork.config.entities.ActionConfig;
 import com.opensymphony.xwork.config.providers.XmlConfigurationProvider;
+
 import org.apache.commons.chain.web.WebContext;
+
 import org.apache.ti.pageflow.ModuleConfig;
 import org.apache.ti.pageflow.ModuleConfigLocator;
-import org.apache.ti.pageflow.PageFlowEventReporter;
 import org.apache.ti.pageflow.PageFlowConstants;
+import org.apache.ti.pageflow.PageFlowEventReporter;
 import org.apache.ti.pageflow.handler.Handler;
 import org.apache.ti.pageflow.handler.HandlerConfig;
 import org.apache.ti.pageflow.handler.ModuleRegistrationHandler;
 import org.apache.ti.pageflow.xwork.PageFlowActionContext;
-import org.apache.ti.schema.config.ModuleConfigLocators;
-import org.apache.ti.schema.config.PageflowConfig;
 import org.apache.ti.util.SourceResolver;
 import org.apache.ti.util.config.ConfigUtil;
+import org.apache.ti.util.config.bean.ModuleConfigLocatorConfig;
+import org.apache.ti.util.config.bean.PageFlowConfig;
 import org.apache.ti.util.internal.DiscoveryUtils;
 import org.apache.ti.util.internal.concurrent.InternalConcurrentHashMap;
 import org.apache.ti.util.logging.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
+
 import java.net.URL;
+
 import java.util.ArrayList;
 import java.util.Map;
 
-public class DefaultModuleRegistrationHandler extends DefaultHandler implements ModuleRegistrationHandler {
-
-    private Map/*< String, ModuleConfig >*/ _registeredModules = new InternalConcurrentHashMap/*< String, ModuleConfig >*/();
+public class DefaultModuleRegistrationHandler
+        extends DefaultHandler
+        implements ModuleRegistrationHandler {
+    private Map /*< String, ModuleConfig >*/ _registeredModules = new InternalConcurrentHashMap /*< String, ModuleConfig >*/();
     private ModuleConfigLocator[] _moduleConfigLocators = null;
     private static final ModuleConfig NONEXISTANT_MODULE_CONFIG = new NonexistantModuleConfig();
     private static final Logger _log = Logger.getInstance(DefaultModuleRegistrationHandler.class);
     private static final String MODULE_METADATA_ACTION_NAME = "_moduleMetadata";
-    private static final ModuleConfigLocator[] DEFAULT_MODULE_CONFIG_LOCATORS =
-            new ModuleConfigLocator[]{new DefaultModuleConfigLocator()};
-
+    private static final ModuleConfigLocator[] DEFAULT_MODULE_CONFIG_LOCATORS = new ModuleConfigLocator[] { new DefaultModuleConfigLocator() };
     private SourceResolver _sourceResolver;
 
     public DefaultModuleRegistrationHandler() {
@@ -67,36 +70,34 @@ public class DefaultModuleRegistrationHandler extends DefaultHandler implements 
         _sourceResolver = sourceResolver;
     }
 
-
-    private static class DefaultModuleConfigLocator implements ModuleConfigLocator {
-
+    private static class DefaultModuleConfigLocator
+            implements ModuleConfigLocator {
         public String getModuleResourcePath(String moduleName) {
             assert moduleName.startsWith("/") : moduleName;
+
             return PageFlowConstants.PAGEFLOW_MODULE_CONFIG_GEN_DIR + moduleName + "/pageflow.xml";
         }
     }
 
     private void setupModuleConfigLocators() {
         ModuleConfigLocator[] defaultLocators = getDefaultModuleConfigLocators();
-        ArrayList/*< ModuleConfigLocator >*/ locators = new ArrayList/*< ModuleConfigLocator >*/();
+        ArrayList /*< ModuleConfigLocator >*/ locators = new ArrayList /*< ModuleConfigLocator >*/();
 
         for (int i = 0; i < defaultLocators.length; ++i) {
             locators.add(defaultLocators[i]);
         }
-        
+
         //
-        // Look for ModuleConfigLocators in beehive-netui-config.xml.
+        // Look for ModuleConfigLocators in struts-ti-config.xml.
         //
-        PageflowConfig pfConfig = ConfigUtil.getConfig().getPageflowConfig();
+        PageFlowConfig pfConfig = ConfigUtil.getConfig().getPageFlowConfig();
 
         if (pfConfig != null) {
-            ModuleConfigLocators mcLocators = pfConfig.getModuleConfigLocators();
+            ModuleConfigLocatorConfig[] mcLocators = pfConfig.getModuleConfigLocators();
 
             if (mcLocators != null) {
-                ModuleConfigLocators.ModuleConfigLocator[] array = mcLocators.getModuleConfigLocatorArray();
-
-                for (int i = 0; i < array.length; i++) {
-                    addModuleConfigLocator(array[i].getLocatorClass().trim(), locators);
+                for (int i = 0; i < mcLocators.length; i++) {
+                    addModuleConfigLocator(mcLocators[i].getLocatorClass().trim(), locators);
                 }
             }
         }
@@ -104,12 +105,12 @@ public class DefaultModuleRegistrationHandler extends DefaultHandler implements 
         _moduleConfigLocators = (ModuleConfigLocator[]) locators.toArray(new ModuleConfigLocator[locators.size()]);
     }
 
-    private static void addModuleConfigLocator(String locatorClassName, ArrayList/*< ModuleConfigLocator >*/ locators) {
+    private static void addModuleConfigLocator(String locatorClassName, ArrayList /*< ModuleConfigLocator >*/ locators) {
         try {
             Class locatorClass = DiscoveryUtils.loadImplementorClass(locatorClassName, ModuleConfigLocator.class);
 
-            if (locatorClass != null)  // previous call will log an error if it can't find the class
-            {
+            if (locatorClass != null) // previous call will log an error if it can't find the class
+             {
                 ModuleConfigLocator locator = (ModuleConfigLocator) locatorClass.newInstance();
                 locators.add(locator);
             }
@@ -156,6 +157,7 @@ public class DefaultModuleRegistrationHandler extends DefaultHandler implements 
                 ModuleConfigLocator locator = _moduleConfigLocators[i];
                 String moduleConfigPath = locator.getModuleResourcePath(namespace);
                 URL url = getModuleConfigURL(moduleConfigPath);
+
                 if (url != null) {
                     return url;
                 }
@@ -171,15 +173,17 @@ public class DefaultModuleRegistrationHandler extends DefaultHandler implements 
 
         try {
             WebContext webContext = PageFlowActionContext.get().getWebContext();
+
             return _sourceResolver.resolve(fileName, webContext);
         } catch (IOException e) {
             _log.error("Could not resolve module config from " + fileName, e);
+
             return null;
         }
     }
 
-    private class ModuleConfigProvider extends XmlConfigurationProvider {
-
+    private class ModuleConfigProvider
+            extends XmlConfigurationProvider {
         private URL _moduleConfigURL;
 
         public ModuleConfigProvider(URL moduleConfigURL) {
@@ -192,6 +196,7 @@ public class DefaultModuleRegistrationHandler extends DefaultHandler implements 
                 return _moduleConfigURL.openStream();
             } catch (IOException e) {
                 _log.error("Could not load module configuration from " + _moduleConfigURL.toString(), e);
+
                 return null;
             }
         }
@@ -218,18 +223,22 @@ public class DefaultModuleRegistrationHandler extends DefaultHandler implements 
         }
 
         ConfigurationManager.addConfigurationProvider(new ModuleConfigProvider(moduleConfURL));
+
         Configuration rootConfig = ConfigurationManager.getConfiguration();
         rootConfig.reload();
+
         Map actionConfigsByNamespace = rootConfig.getRuntimeConfiguration().getActionConfigs();
         Map actionConfigs = (Map) actionConfigsByNamespace.get(namespace);
         assert actionConfigs != null : "could not load action configs for namespace " + namespace;
+
         // TODO: This is a hack.  We write general module metadata to a special action.  We simply need params
         // at the module level.
         ActionConfig moduleMetadata = (ActionConfig) actionConfigs.get(MODULE_METADATA_ACTION_NAME);
-        assert moduleMetadata != null : "Could not find module-metadata action " + MODULE_METADATA_ACTION_NAME
-                + " for module " + namespace + '.';
+        assert moduleMetadata != null : "Could not find module-metadata action " + MODULE_METADATA_ACTION_NAME + " for module " +
+        namespace + '.';
+
         ModuleConfig moduleConfig = new ModuleConfig(namespace, moduleMetadata, actionConfigs);
-                
+
         // Make a callback to the event reporter.
         PageFlowEventReporter er = AdapterManager.getContainerAdapter().getEventReporter();
         er.flowControllerRegistered(moduleConfig);
@@ -250,6 +259,7 @@ public class DefaultModuleRegistrationHandler extends DefaultHandler implements 
 
     void ensureModuleSelected(String namespace) {
         ModuleConfig moduleConfig = getModuleConfig(namespace);
+
         if (moduleConfig != null) {
             InternalUtils.selectModule(moduleConfig);
         }
@@ -267,7 +277,7 @@ public class DefaultModuleRegistrationHandler extends DefaultHandler implements 
      */
     public ModuleConfig getModuleConfig(String namespace) {
         assert namespace != null;
-        
+
         //
         // Dynamically register the module, if appropriate.  If we've already
         // tried to register it (_registeredModules.containsKey( namespace )), don't
@@ -292,6 +302,7 @@ public class DefaultModuleRegistrationHandler extends DefaultHandler implements 
 
             if (mc == null) {
                 _registeredModules.put(namespace, NONEXISTANT_MODULE_CONFIG);
+
                 // ConcurrentHashMap doesn't allow null values
             } else {
                 _registeredModules.put(namespace, mc);
@@ -301,8 +312,8 @@ public class DefaultModuleRegistrationHandler extends DefaultHandler implements 
         return mc;
     }
 
-    private static class NonexistantModuleConfig extends ModuleConfig {
-
+    private static class NonexistantModuleConfig
+            extends ModuleConfig {
         public NonexistantModuleConfig() {
             super();
         }

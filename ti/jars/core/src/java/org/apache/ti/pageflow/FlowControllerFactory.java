@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,27 +24,23 @@ import org.apache.ti.pageflow.handler.ModuleRegistrationHandler;
 import org.apache.ti.pageflow.internal.InternalConstants;
 import org.apache.ti.pageflow.internal.InternalUtils;
 import org.apache.ti.pageflow.xwork.PageFlowActionContext;
-import org.apache.ti.schema.config.DefaultSharedFlowRefs;
-import org.apache.ti.schema.config.PageflowConfig;
-import org.apache.ti.schema.config.PageflowFactories;
-import org.apache.ti.schema.config.PageflowFactory;
-import org.apache.ti.schema.config.SharedFlowRef;
 import org.apache.ti.util.config.ConfigUtil;
+import org.apache.ti.util.config.bean.PageFlowConfig;
+import org.apache.ti.util.config.bean.PageFlowFactoriesConfig;
+import org.apache.ti.util.config.bean.PageFlowFactoryConfig;
+import org.apache.ti.util.config.bean.SharedFlowRefConfig;
 import org.apache.ti.util.logging.Logger;
 
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-
 /**
  * Factory for creating {@link FlowController}s - user {@link PageFlowController}s and {@link SharedFlowController}s.
  */
 public class FlowControllerFactory
         extends Factory {
-
     private static final Logger _log = Logger.getInstance(FlowControllerFactory.class);
-
     private static final String CONTEXT_ATTR = InternalConstants.ATTR_PREFIX + "fcFactory";
 
     protected FlowControllerFactory() {
@@ -54,15 +50,18 @@ public class FlowControllerFactory
     }
 
     public static void init(Map appScope) {
-        PageflowFactories factoriesBean = ConfigUtil.getConfig().getPageflowFactories();
+        PageFlowFactoriesConfig factoriesBean = ConfigUtil.getConfig().getPageFlowFactories();
         FlowControllerFactory factory = null;
 
         if (factoriesBean != null) {
-            PageflowFactory fcFactoryBean = factoriesBean.getFlowcontrollerFactory();
+            PageFlowFactoryConfig fcFactoryBean = factoriesBean.getPageFlowFactory();
             factory = (FlowControllerFactory) FactoryUtils.getFactory(fcFactoryBean, FlowControllerFactory.class);
         }
 
-        if (factory == null) factory = new FlowControllerFactory();
+        if (factory == null) {
+            factory = new FlowControllerFactory();
+        }
+
         factory.reinit();
 
         appScope.put(CONTEXT_ATTR, factory);
@@ -83,9 +82,10 @@ public class FlowControllerFactory
     public static FlowControllerFactory get() {
         Map appScope = PageFlowActionContext.get().getApplication();
         FlowControllerFactory factory = (FlowControllerFactory) appScope.get(CONTEXT_ATTR);
-        assert factory != null
-                : FlowControllerFactory.class.getName() + " was not found in application attribute " + CONTEXT_ATTR;
+        assert factory != null : FlowControllerFactory.class.getName() + " was not found in application attribute " +
+        CONTEXT_ATTR;
         factory.reinit();
+
         return factory;
     }
 
@@ -96,15 +96,16 @@ public class FlowControllerFactory
      *
      * @return the {@link PageFlowController} for the request, or <code>null</code> if none was found.
      */
-    public PageFlowController getPageFlowForRequest()
-            throws InstantiationException, IllegalAccessException {
+    public PageFlowController getPageFlowForRequest() throws InstantiationException, IllegalAccessException {
         PageFlowController cur = PageFlowUtils.getCurrentPageFlow();
-        
+
         //
         // Reinitialize transient data that may have been lost on session failover.
         //
-        if (cur != null) cur.reinitialize();
-        
+        if (cur != null) {
+            cur.reinitialize();
+        }
+
         //
         // If there's no current PageFlow, or if the current PageFlowController has a namespace that
         // is incompatible with the current request URI, then create the appropriate PageFlowController.
@@ -112,12 +113,16 @@ public class FlowControllerFactory
         PageFlowActionContext actionContext = PageFlowActionContext.get();
         String namespace = actionContext.getNamespace();
 
-        if (namespace != null && (cur == null || !cur.getNamespace().equals(namespace))) {
+        if ((namespace != null) && ((cur == null) || !cur.getNamespace().equals(namespace))) {
             try {
                 String className = InternalUtils.getFlowControllerClassName(namespace);
-                return className != null ? createPageFlow(className) : null;
+
+                return (className != null) ? createPageFlow(className) : null;
             } catch (ClassNotFoundException e) {
-                if (_log.isInfoEnabled()) _log.info("No page flow exists for namespace " + namespace);
+                if (_log.isInfoEnabled()) {
+                    _log.info("No page flow exists for namespace " + namespace);
+                }
+
                 return null;
             }
         }
@@ -135,6 +140,7 @@ public class FlowControllerFactory
     public PageFlowController createPageFlow(String pageFlowClassName)
             throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         Class pageFlowClass = getFlowControllerClass(pageFlowClassName);
+
         return createPageFlow(pageFlowClass);
     }
 
@@ -148,8 +154,10 @@ public class FlowControllerFactory
      */
     public PageFlowController createPageFlow(Class pageFlowClass)
             throws InstantiationException, IllegalAccessException {
-        if (!PageFlowController.class.isAssignableFrom(pageFlowClass)) return null;
-        
+        if (!PageFlowController.class.isAssignableFrom(pageFlowClass)) {
+            return null;
+        }
+
         //
         // First check if this is a request for a "long lived" page flow.  If so, try
         // PageFlowUtils.getCurrentPageFlow again, with the longLived flag.
@@ -160,8 +168,8 @@ public class FlowControllerFactory
         ModuleConfig mc = mrh.getModuleConfig(namespace);
 
         if (mc == null) {
-            _log.error("Struts module " + namespace + " not found for " + pageFlowClass.getName()
-                    + "; cannot create page flow.");
+            _log.error("Struts module " + namespace + " not found for " + pageFlowClass.getName() + "; cannot create page flow.");
+
             return null;
         }
 
@@ -174,7 +182,7 @@ public class FlowControllerFactory
                 }
             }
         }
-        
+
         //
         // First, see if this is a nested page flow that's already on the stack.  Unless "renesting" is explicitly
         // enabled, we don't want to allow another instance of this page flow to be nested.  This is a common
@@ -191,20 +199,21 @@ public class FlowControllerFactory
         boolean isNestable = mc.isNestedFlow();
         PageFlowStack pfStack = PageFlowStack.get(false);
 
-        if (isNestable && pfStack != null) {
-            PageflowConfig options = ConfigUtil.getConfig().getPageflowConfig();
+        if (isNestable && (pfStack != null)) {
+            PageFlowConfig options = ConfigUtil.getConfig().getPageFlowConfig();
 
-            if (options == null || !options.getEnableSelfNesting()) {
+            if ((options == null) || !options.isEnableSelfNesting()) {
                 int lastIndexOfJpfClass = pfStack.lastIndexOf(pageFlowClass);
 
                 if (lastIndexOfJpfClass != -1) {
                     retVal = pfStack.popUntil(lastIndexOfJpfClass);
                     retVal.persistInSession();
+
                     return retVal;
                 }
             }
         }
-        
+
         //
         // OK, if it's not an existing long lived page flow, and if this wasn't a nested page flow already on the
         // stack, then create a new instance.
@@ -217,7 +226,7 @@ public class FlowControllerFactory
             retVal = (PageFlowController) getFlowControllerInstance(pageFlowClass);
             createdNew = true;
         }
-        
+
         //
         // Store the previous PageFlowController on the nesting stack (if this one is nestable),
         // or destroy the nesting stack.
@@ -226,7 +235,10 @@ public class FlowControllerFactory
             //
             // Call create() on the newly-created page flow.
             //
-            if (createdNew) retVal.create();
+            if (createdNew) {
+                retVal.create();
+            }
+
             PageFlowController current = PageFlowUtils.getCurrentPageFlow();
 
             if (current != null) {
@@ -234,7 +246,10 @@ public class FlowControllerFactory
                     _log.debug("Pushing PageFlowController " + current + " onto the nesting stack");
                 }
 
-                if (pfStack == null) pfStack = PageFlowStack.get(true);
+                if (pfStack == null) {
+                    pfStack = PageFlowStack.get(true);
+                }
+
                 pfStack.push(current);
             }
 
@@ -248,7 +263,7 @@ public class FlowControllerFactory
                 if (_log.isDebugEnabled()) {
                     _log.debug("Destroying the PageFlowController stack.");
                 }
-                
+
                 //
                 // Start popping page flows until 1) there are none left on the stack, or 2) we find
                 // one of the type we're returning.  If (2), we'll use that one (this means that executing
@@ -259,8 +274,8 @@ public class FlowControllerFactory
 
                 if (onStackAlready != null) {
                     if (_log.isDebugEnabled()) {
-                        _log.debug("Found a page flow of type " + retVal.getClass() + " in the stack; "
-                                + "using that instance and stopping destruction of the nesting stack.");
+                        _log.debug("Found a page flow of type " + retVal.getClass() + " in the stack; " +
+                                   "using that instance and stopping destruction of the nesting stack.");
                     }
 
                     retVal = onStackAlready;
@@ -283,7 +298,10 @@ public class FlowControllerFactory
                 //
                 retVal.reinitialize();
                 retVal.persistInSession();
-                if (createdNew) retVal.create();
+
+                if (createdNew) {
+                    retVal.create();
+                }
             }
         }
 
@@ -299,6 +317,7 @@ public class FlowControllerFactory
     public SharedFlowController createSharedFlow(String sharedFlowClassName)
             throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         Class sharedFlowClass = getFlowControllerClass(sharedFlowClassName);
+
         return createSharedFlow(sharedFlowClass);
     }
 
@@ -324,6 +343,7 @@ public class FlowControllerFactory
         }
 
         retVal.persistInSession();
+
         return retVal;
     }
 
@@ -337,22 +357,28 @@ public class FlowControllerFactory
      * @throws InstantiationException if a declared shared flow class could not be instantiated.
      * @throws IllegalAccessException if a declared shared flow class was not accessible.
      */
-    public Map/*< String, SharedFlowController >*/ getSharedFlowsForRequest()
+    public Map /*< String, SharedFlowController >*/ getSharedFlowsForRequest()
             throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         PageFlowActionContext actionContext = PageFlowActionContext.get();
         String namespace = actionContext.getNamespace();
-        LinkedHashMap/*< String, SharedFlowController >*/ sharedFlows = getDefaultSharedFlows();
-        if (namespace == null) return null;
+        LinkedHashMap /*< String, SharedFlowController >*/ sharedFlows = getDefaultSharedFlows();
+
+        if (namespace == null) {
+            return null;
+        }
+
         ModuleRegistrationHandler mrh = Handlers.get().getModuleRegistrationHandler();
         ModuleConfig mc = mrh.getModuleConfig(namespace);
 
         if (mc != null) {
-            Map/*< String, String >*/ sharedFlowTypes = mc.getSharedFlowTypes();
+            Map /*< String, String >*/ sharedFlowTypes = mc.getSharedFlowTypes();
 
-            if (sharedFlowTypes != null && sharedFlowTypes.size() > 0) {
-                if (sharedFlows == null) sharedFlows = new LinkedHashMap/*< String, SharedFlowController >*/();
+            if ((sharedFlowTypes != null) && (sharedFlowTypes.size() > 0)) {
+                if (sharedFlows == null) {
+                    sharedFlows = new LinkedHashMap /*< String, SharedFlowController >*/();
+                }
 
-                for (Iterator/*<Map.Entry>*/ i = sharedFlowTypes.entrySet().iterator(); i.hasNext();) {
+                for (Iterator /*<Map.Entry>*/ i = sharedFlowTypes.entrySet().iterator(); i.hasNext();) {
                     Map.Entry entry = (Map.Entry) i.next();
                     String name = (String) entry.getKey();
                     String type = (String) entry.getValue();
@@ -366,22 +392,22 @@ public class FlowControllerFactory
         return sharedFlows;
     }
 
-    LinkedHashMap/*< String, SharedFlowController >*/ getDefaultSharedFlows()
+    LinkedHashMap /*< String, SharedFlowController >*/ getDefaultSharedFlows()
             throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-        DefaultSharedFlowRefs defaultRefs = ConfigUtil.getConfig().getDefaultSharedFlowRefs();
+        SharedFlowRefConfig[] defaultRefs = ConfigUtil.getConfig().getSharedFlowRefs();
 
         if (defaultRefs != null) {
-            SharedFlowRef[] refs = defaultRefs.getSharedFlowRefArray();
+            if (defaultRefs.length > 0) {
+                LinkedHashMap /*< String, SharedFlowController >*/ sharedFlows = new LinkedHashMap();
 
-            if (refs.length > 0) {
-                LinkedHashMap/*< String, SharedFlowController >*/ sharedFlows = new LinkedHashMap();
+                for (int i = 0; i < defaultRefs.length; i++) {
+                    SharedFlowRefConfig ref = defaultRefs[i];
 
-                for (int i = 0; i < refs.length; i++) {
-                    SharedFlowRef ref = refs[i];
                     if (_log.isInfoEnabled()) {
-                        _log.info("Shared flow of type " + ref.getType() + " is a default shared flow reference "
-                                + "with name " + ref.getName());
+                        _log.info("Shared flow of type " + ref.getType() + " is a default shared flow reference " + "with name " +
+                                  ref.getName());
                     }
+
                     addSharedFlow(ref.getName(), ref.getType(), sharedFlows);
                 }
 
@@ -395,7 +421,7 @@ public class FlowControllerFactory
     private void addSharedFlow(String name, String type, LinkedHashMap sharedFlows)
             throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         SharedFlowController sf = PageFlowUtils.getSharedFlow(type);
-        
+
         //
         // Reinitialize transient data that may have been lost on session failover.
         //
@@ -428,8 +454,9 @@ public class FlowControllerFactory
      */
     public FlowController getFlowControllerInstance(Class flowControllerClass)
             throws InstantiationException, IllegalAccessException {
-        assert FlowController.class.isAssignableFrom(flowControllerClass)
-                : "Class " + flowControllerClass.getName() + " does not extend " + FlowController.class.getName();
+        assert FlowController.class.isAssignableFrom(flowControllerClass) : "Class " + flowControllerClass.getName() +
+        " does not extend " + FlowController.class.getName();
+
         return (FlowController) flowControllerClass.newInstance();
     }
 }

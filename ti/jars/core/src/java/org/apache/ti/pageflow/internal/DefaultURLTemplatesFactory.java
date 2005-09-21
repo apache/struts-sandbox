@@ -18,29 +18,61 @@
 package org.apache.ti.pageflow.internal;
 
 import org.apache.commons.chain.web.WebContext;
+
 import org.apache.ti.core.urltemplates.URLTemplate;
 import org.apache.ti.core.urltemplates.URLTemplates;
 import org.apache.ti.core.urltemplates.URLTemplatesFactory;
-import org.apache.ti.schema.urltemplates.UrlTemplateConfigDocument;
-import org.apache.ti.schema.urltemplates.UrlTemplateConfigDocument.UrlTemplateConfig;
-import org.apache.ti.schema.urltemplates.UrlTemplateDocument;
-import org.apache.ti.schema.urltemplates.UrlTemplateRefDocument;
-import org.apache.ti.schema.urltemplates.UrlTemplateRefGroupDocument;
 import org.apache.ti.util.SourceResolver;
-import org.apache.ti.util.internal.InternalStringBuilder;
 import org.apache.ti.util.logging.Logger;
-import org.apache.xmlbeans.XmlException;
+import org.apache.ti.util.xml.DomUtils;
+import org.apache.ti.util.xml.XmlInputStreamResolver;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import org.xml.sax.EntityResolver;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import java.io.IOException;
+import java.io.InputStream;
+
 import java.net.URL;
+
 import java.util.HashMap;
+import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * Methods for configuring and retrieving the URLTemplate object.
  */
-public class DefaultURLTemplatesFactory extends URLTemplatesFactory {
-
+public class DefaultURLTemplatesFactory
+        extends URLTemplatesFactory {
     private static final Logger _log = Logger.getInstance(DefaultURLTemplatesFactory.class);
+
+    // Constants for schema elements
+    private static final String KEY = "key";
+    private static final String NAME = "name";
+    private static final String TEMPLATE_NAME = "template-name";
+    private static final String URL_TEMPLATE = "url-template";
+    private static final String URL_TEMPLATE_REF = "url-template-ref";
+    private static final String URL_TEMPLATE_REF_GROUP = "url-template-ref-group";
+    private static final String VALUE = "value";
+    private static final String CONFIG_SCHEMA = "org/apache/beehive/netui/core/urltemplates/schema/url-template-config.xsd";
+    private static final XmlInputStreamResolver SCHEMA_RESOLVER = new XmlInputStreamResolver() {
+        public String getResourcePath() {
+            return CONFIG_SCHEMA;
+        }
+
+        public InputStream getInputStream() {
+            return DefaultURLTemplatesFactory.class.getClassLoader().getResourceAsStream(getResourcePath());
+        }
+    };
 
     // The actual URL templates and template ref groups
     private URLTemplates _urlTemplates;
@@ -77,11 +109,11 @@ public class DefaultURLTemplatesFactory extends URLTemplatesFactory {
         }
 
         String ref = _urlTemplates.getTemplateNameByRef(refGroupName, key);
+
         if (ref == null) {
             // If the template is a secure template, look for the secure default
             // before resolving to the default
-            if (key.equals(URLTemplatesFactory.SECURE_RENDER_TEMPLATE) ||
-                    key.equals(URLTemplatesFactory.SECURE_ACTION_TEMPLATE) ||
+            if (key.equals(URLTemplatesFactory.SECURE_RENDER_TEMPLATE) || key.equals(URLTemplatesFactory.SECURE_ACTION_TEMPLATE) ||
                     key.equals(URLTemplatesFactory.SECURE_RESOURCE_TEMPLATE)) {
                 ref = _urlTemplates.getTemplateNameByRef(refGroupName, URLTemplatesFactory.SECURE_DEFAULT_TEMPLATE);
             }
@@ -91,121 +123,208 @@ public class DefaultURLTemplatesFactory extends URLTemplatesFactory {
     }
 
     /**
-     * Initialization method that parses the URL template config file to
-     * get the URL templates and template reference groups.
-     */
-    protected void load(WebContext webContext, SourceResolver sourceResolver) {
-        String configFilePath = getConfigFilePath();
+    * Initialization method that parses the URL template config file to
+    * get the URL templates and template reference groups.
+    */
+    public void load(WebContext webContext, SourceResolver sourceResolver) {
+        _urlTemplates = new URLTemplates();
+
+        InputStream xmlInputStream = null;
+        InputStream xsdInputStream = null;
 
         try {
-            URL url = sourceResolver.resolve(configFilePath, webContext);
-            if (url != null) {
-                _urlTemplates = getTemplatesFromConfig(url);
-            } else {
-                // No descriptor
-                _urlTemplates = new URLTemplates();
+            URL url = sourceResolver.resolve(_configFilePath, webContext);
 
+            if (url != null) {
+                xmlInputStream = url.openStream();
+
+                /* load the XSD input stream */
+                xsdInputStream = SCHEMA_RESOLVER.getInputStream();
+
+                final String W3C_XML_SCHEMA = "http://www.w3.org/2001/XMLSchema";
+                final String JAXP_SCHEMA_LANGUAGE = "http://java.sun.com/xml/jaxp/properties/schemaLanguage";
+                final String JAXP_SCHEMA_SOURCE = "http://java.sun.com/xml/jaxp/properties/schemaSource";
+
+                DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+                dbf.setValidating(true);
+                dbf.setNamespaceAware(true);
+                dbf.setAttribute(JAXP_SCHEMA_LANGUAGE, W3C_XML_SCHEMA);
+                dbf.setAttribute(JAXP_SCHEMA_SOURCE, xsdInputStream);
+
+                DocumentBuilder db = dbf.newDocumentBuilder();
+
+                /* add an ErrorHandler that just logs validation problems */
+                db.setErrorHandler(new ErrorHandler() {
+                        public void warning(SAXParseException exception) {
+                            _log.info("Validation warning validating config file \"" + _configFilePath +
+                                      "\" against XML Schema \"" + SCHEMA_RESOLVER.getResourcePath());
+                        }
+
+                        public void error(SAXParseException exception) {
+                            _log.error("Validation errors occurred parsing the config file \"" + _configFilePath +
+                                       "\".  Cause: " + exception, exception);
+                        }
+
+                        public void fatalError(SAXParseException exception) {
+                            _log.error("Validation errors occurred parsing the config file \"" + _configFilePath +
+                                       "\".  Cause: " + exception, exception);
+                        }
+                    });
+
+                db.setEntityResolver(new EntityResolver() {
+                        public InputSource resolveEntity(String publicId, String systemId) {
+                            if (systemId.endsWith("/url-template-config.xsd")) {
+                                InputStream inputStream = DefaultURLTemplatesFactory.class.getClassLoader().getResourceAsStream(CONFIG_SCHEMA);
+
+                                return new InputSource(inputStream);
+                            } else {
+                                return null;
+                            }
+                        }
+                    });
+
+                Document document = db.parse(xmlInputStream);
+                Element root = document.getDocumentElement();
+                loadTemplates(root);
+                loadTemplateRefGroups(root);
+            } else {
                 if (_log.isInfoEnabled()) {
-                    InternalStringBuilder message = new InternalStringBuilder();
-                    message.append("Running without URL template descriptor, ");
-                    message.append(configFilePath);
-                    _log.info(message.toString());
+                    _log.info("Running without URL template descriptor, " + _configFilePath);
                 }
             }
-        } catch (XmlException xe) {
-            // Bad descriptor
-            _log.error("Malformed URL template descriptor in " + configFilePath, xe);
+        } catch (ParserConfigurationException pce) {
+            _log.error("Problem loading URL template descriptor file " + _configFilePath, pce);
+        } catch (SAXException se) {
+            _log.error("Problem parsing URL template descriptor in " + _configFilePath, se);
         } catch (IOException ioe) {
-            // Bad descriptor
-            _log.error("Problem parsing URL template descriptor in " + configFilePath, ioe);
-        } catch (Exception e) {
-            // Bad descriptor
-            _log.error("Problem loading URL template descriptor file " + configFilePath, e);
+            _log.error("Problem reading URL template descriptor file " + _configFilePath, ioe);
+        } finally {
+            // Close the streams
+            try {
+                if (xmlInputStream != null) {
+                    xmlInputStream.close();
+                }
+            } catch (Exception ignore) {
+            }
+
+            try {
+                if (xsdInputStream != null) {
+                    xsdInputStream.close();
+                }
+            } catch (IOException ignore) {
+            }
         }
     }
 
     /**
-     * Loads the templates from a URL template config document.
-     *
-     * @param url the URL to load the config file.
-     * @return The URL templates found in the config document.
-     */
-    protected URLTemplates getTemplatesFromConfig(URL url) throws XmlException, IOException {
-        URLTemplates urlTemplates = new URLTemplates();
-
-        UrlTemplateConfig urlTemplateConfig = UrlTemplateConfigDocument.Factory.parse(url).getUrlTemplateConfig();
-
+    * Loads the templates from a URL template config document.
+    *
+    * @param parent
+    */
+    private void loadTemplates(Element parent) {
         // Load templates
-        UrlTemplateDocument.UrlTemplate[] templates = urlTemplateConfig.getUrlTemplateArray();
-        String configFilePath = getConfigFilePath();
-        for (int i = 0; i < templates.length; i++) {
-            String name = templates[i].getName();
-            if (name != null) {
-                name = name.trim();
-            } else {
-                _log.error("Malformed URL template descriptor in " + configFilePath
-                        + ". The url-template name is missing.");
+        List templates = DomUtils.getChildElementsByName(parent, URL_TEMPLATE);
+
+        for (int i = 0; i < templates.size(); i++) {
+            Element template = (Element) templates.get(i);
+            String name = getElementText(template, NAME);
+
+            if (name == null) {
+                _log.error("Malformed URL template descriptor in " + _configFilePath + ". The url-template name is missing.");
+
                 continue;
             }
 
-            String value = templates[i].getValue();
-            if (value != null) {
-                value = value.trim();
-                if (_log.isDebugEnabled()) {
-                    _log.debug("[URLTemplate] " + name + " = " + value);
-                }
-                URLTemplate urlTemplate = new URLTemplate(value);
-                urlTemplate.verify(getKnownTokens(), getRequiredTokens());
-                urlTemplates.addTemplate(name, urlTemplate);
-            } else {
-                _log.error("Malformed URL template descriptor in " + configFilePath
-                        + ". The url-template value is missing.");
+            String value = getElementText(template, VALUE);
+
+            if (value == null) {
+                _log.error("Malformed URL template descriptor in " + _configFilePath +
+                           ". The url-template value is missing for template " + name);
+
+                continue;
+            }
+
+            if (_log.isDebugEnabled()) {
+                _log.debug("[URLTemplate] " + name + " = " + value);
+            }
+
+            URLTemplate urlTemplate = new URLTemplate(value);
+
+            if (urlTemplate.verify(_knownTokens, _requiredTokens)) {
+                _urlTemplates.addTemplate(name, urlTemplate);
             }
         }
+    }
 
+    /**
+     * Loads the template reference groups from a URL template config document.
+     *
+     * @param parent
+     */
+    private void loadTemplateRefGroups(Element parent) {
         // Load template refs
-        UrlTemplateRefGroupDocument.UrlTemplateRefGroup[] templateRefGroups = urlTemplateConfig.getUrlTemplateRefGroupArray();
-        for (int i = 0; i < templateRefGroups.length; i++) {
-            HashMap refGroup = new HashMap();
-            String refGroupName = templateRefGroups[i].getName();
-            if (refGroupName != null) {
-                refGroupName = refGroupName.trim();
-            } else {
-                _log.error("Malformed URL template descriptor in " + configFilePath
-                        + ". The url-template-ref-group name is missing.");
+        List templateRefGroups = DomUtils.getChildElementsByName(parent, URL_TEMPLATE_REF_GROUP);
+        ;
+
+        for (int i = 0; i < templateRefGroups.size(); i++) {
+            Element refGroupElement = (Element) templateRefGroups.get(i);
+            String refGroupName = getElementText(refGroupElement, NAME);
+
+            if (refGroupName == null) {
+                _log.error("Malformed URL template descriptor in " + _configFilePath +
+                           ". The url-template-ref-group name is missing.");
+
                 continue;
             }
 
-            UrlTemplateRefDocument.UrlTemplateRef[] templateRefs = templateRefGroups[i].getUrlTemplateRefArray();
-            for (int j = 0; j < templateRefs.length; j++) {
-                String key = templateRefs[j].getKey();
+            HashMap refGroup = new HashMap();
+            List templateRefs = DomUtils.getChildElementsByName(refGroupElement, URL_TEMPLATE_REF);
+            ;
 
-                if (key != null) {
-                    key = key.trim();
-                } else {
-                    _log.error("Malformed URL template descriptor in " + configFilePath
-                            + ". The url-template-ref key is missing.");
+            for (int j = 0; j < templateRefs.size(); j++) {
+                Element templateRefElement = (Element) templateRefs.get(j);
+                String key = getElementText(templateRefElement, KEY);
+
+                if (key == null) {
+                    _log.error("Malformed URL template descriptor in " + _configFilePath +
+                               ". The url-template-ref key is missing in url-template-ref-group " + refGroupName);
+
                     continue;
                 }
 
-                String name = templateRefs[j].getTemplateName();
+                String name = getElementText(templateRefElement, TEMPLATE_NAME);
+
                 if (name != null) {
-                    name = name.trim();
                     refGroup.put(key, name);
+
                     if (_log.isDebugEnabled()) {
                         _log.debug("[" + refGroupName + " URLTemplate] " + key + " = " + name);
                     }
                 } else {
-                    _log.error("Malformed URL template descriptor in " + configFilePath
-                            + ". The url-template-ref template-name is missing.");
+                    _log.error("Malformed URL template descriptor in " + _configFilePath +
+                               ". The url-template-ref template-name is missing in url-template-ref-group " + refGroupName);
                 }
             }
 
             if (refGroup.size() != 0) {
-                urlTemplates.addTemplateRefGroup(refGroupName, refGroup);
+                _urlTemplates.addTemplateRefGroup(refGroupName, refGroup);
+            }
+        }
+    }
+
+    private String getElementText(Element parent, String elementName) {
+        Element child = DomUtils.getChildElementByName(parent, elementName);
+
+        if (child != null) {
+            String text = DomUtils.getElementText(child);
+
+            if (text != null) {
+                text = text.trim();
+
+                return (text.length() == 0) ? null : text;
             }
         }
 
-        return urlTemplates;
+        return null;
     }
 }

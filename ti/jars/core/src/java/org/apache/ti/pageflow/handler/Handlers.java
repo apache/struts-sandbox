@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,16 +18,18 @@
 package org.apache.ti.pageflow.handler;
 
 import com.opensymphony.xwork.ActionContext;
+
 import org.apache.ti.pageflow.internal.DefaultHandler;
 import org.apache.ti.pageflow.internal.InternalConstants;
-import org.apache.ti.schema.config.CustomProperty;
-import org.apache.ti.schema.config.NetuiConfigDocument;
-import org.apache.ti.schema.config.PageflowHandlers;
 import org.apache.ti.util.config.ConfigUtil;
+import org.apache.ti.util.config.bean.CustomPropertyConfig;
+import org.apache.ti.util.config.bean.NetUIConfig;
+import org.apache.ti.util.config.bean.PageFlowHandlersConfig;
 import org.apache.ti.util.internal.DiscoveryUtils;
 import org.apache.ti.util.logging.Logger;
 
 import java.io.Serializable;
+
 import java.util.Map;
 
 /**
@@ -35,12 +37,9 @@ import java.util.Map;
  */
 public class Handlers
         implements Serializable {
-
     private static final long serialVersionUID = 1;
     private static final Logger _log = Logger.getInstance(Handlers.class);
-
     private static final String CONTEXT_ATTR = InternalConstants.ATTR_PREFIX + "_handlers";
-
     private ExceptionsHandler _exceptionsHandler = null;
     private ForwardRedirectHandler _forwardRedirectHandler = null;
     private LoginHandler _loginHandler = null;
@@ -48,7 +47,6 @@ public class Handlers
     private ReloadableClassHandler _reloadableClassHandler = null;
     private ModuleRegistrationHandler _moduleRegistrationHandler = null;
     private AnnotationHandler _annotationHandler = null;
-
     private DefaultHandler _defaultExceptionsHandler;
     private DefaultHandler _defaultForwardRedirectHandler;
     private DefaultHandler _defaultLoginHandler;
@@ -61,6 +59,7 @@ public class Handlers
         ActionContext actionContext = ActionContext.getContext();
         Handlers handlers = (Handlers) actionContext.getApplication().get(CONTEXT_ATTR);
         assert handlers != null : "Page Flow Handlers not initialized.";
+
         return handlers;
     }
 
@@ -68,36 +67,35 @@ public class Handlers
         //
         // Load/create Handlers.
         //
-        NetuiConfigDocument.NetuiConfig netuiConfig = ConfigUtil.getConfig();
-        PageflowHandlers handlers = netuiConfig.getPageflowHandlers();
+        NetUIConfig netuiConfig = ConfigUtil.getConfig();
+        PageFlowHandlersConfig handlers = netuiConfig.getPageFlowHandlers();
 
-        _exceptionsHandler = (ExceptionsHandler)
-                adaptHandler(handlers != null ? handlers.getExceptionsHandlerArray() : null, _defaultExceptionsHandler,
-                        ExceptionsHandler.class);
+        _exceptionsHandler = (ExceptionsHandler) adaptHandler((handlers != null) ? handlers.getExceptionsHandlers() : null,
+                                                              _defaultExceptionsHandler, ExceptionsHandler.class);
 
-        _forwardRedirectHandler = (ForwardRedirectHandler)
-                adaptHandler(handlers != null ? handlers.getForwardRedirectHandlerArray() : null,
-                        _defaultForwardRedirectHandler, ForwardRedirectHandler.class);
+        _forwardRedirectHandler = (ForwardRedirectHandler) adaptHandler((handlers != null)
+                                                                        ? handlers.getForwardRedirectHandlers() : null,
+                                                                        _defaultForwardRedirectHandler,
+                                                                        ForwardRedirectHandler.class);
 
-        _loginHandler = (LoginHandler)
-                adaptHandler(handlers != null ? handlers.getLoginHandlerArray() : null, _defaultLoginHandler,
-                        LoginHandler.class);
+        _loginHandler = (LoginHandler) adaptHandler((handlers != null) ? handlers.getLoginHandlers() : null,
+                                                    _defaultLoginHandler, LoginHandler.class);
 
-        _storageHandler = (StorageHandler)
-                adaptHandler(handlers != null ? handlers.getStorageHandlerArray() : null, _defaultStorageHandler,
-                        StorageHandler.class);
+        _storageHandler = (StorageHandler) adaptHandler((handlers != null) ? handlers.getStorageHandlers() : null,
+                                                        _defaultStorageHandler, StorageHandler.class);
 
-        _reloadableClassHandler = (ReloadableClassHandler)
-                adaptHandler(handlers != null ? handlers.getReloadableClassHandlerArray() : null,
-                        _defaultReloadableClassHandler, ReloadableClassHandler.class);
+        _reloadableClassHandler = (ReloadableClassHandler) adaptHandler((handlers != null)
+                                                                        ? handlers.getReloadableClassHandlers() : null,
+                                                                        _defaultReloadableClassHandler,
+                                                                        ReloadableClassHandler.class);
 
-        _moduleRegistrationHandler = (ModuleRegistrationHandler)
-                adaptHandler(handlers != null ? handlers.getModuleRegistrationHandlerArray() : null,
-                        _defaultModuleRegistrationHandler, ModuleRegistrationHandler.class);
+        _moduleRegistrationHandler = (ModuleRegistrationHandler) adaptHandler((handlers != null)
+                                                                              ? handlers.getModuleRegistrationHandlers() : null,
+                                                                              _defaultModuleRegistrationHandler,
+                                                                              ModuleRegistrationHandler.class);
 
-        _annotationHandler = (AnnotationHandler)
-                adaptHandler(handlers != null ? handlers.getAnnotationHandlerArray() : null,
-                        _defaultAnnotationHandler, AnnotationHandler.class);
+        _annotationHandler = (AnnotationHandler) adaptHandler((handlers != null) ? handlers.getAnnotationHandlers() : null,
+                                                              _defaultAnnotationHandler, AnnotationHandler.class);
 
         appScope.put(CONTEXT_ATTR, this);
     }
@@ -130,22 +128,24 @@ public class Handlers
         return _annotationHandler;
     }
 
-    private static Handler adaptHandler(org.apache.ti.schema.config.Handler[] handlerBeanConfigs,
+    private static Handler adaptHandler(org.apache.ti.util.config.bean.HandlerConfig[] handlerBeanConfigs,
                                         DefaultHandler defaultHandler, Class baseClassOrInterface) {
         Handler retVal = defaultHandler;
 
         if (handlerBeanConfigs != null) {
             for (int i = 0; i < handlerBeanConfigs.length; i++) {
                 String handlerClass = handlerBeanConfigs[i].getHandlerClass();
-                CustomProperty[] props = handlerBeanConfigs[i].getCustomPropertyArray();
+                CustomPropertyConfig[] props = handlerBeanConfigs[i].getCustomProperties();
                 Handler handler = createHandler(handlerClass, baseClassOrInterface, retVal);
 
                 if (handler != null) {
                     HandlerConfig config = new HandlerConfig(handlerClass);
 
-                    for (int j = 0; j < props.length; j++) {
-                        CustomProperty prop = props[j];
-                        config.addCustomProperty(prop.getName(), prop.getValue());
+                    if (props != null) {
+                        for (int j = 0; j < props.length; j++) {
+                            CustomPropertyConfig prop = props[j];
+                            config.addCustomProperty(prop.getName(), prop.getValue());
+                        }
                     }
 
                     handler.init(config, retVal);
@@ -156,6 +156,7 @@ public class Handlers
 
         defaultHandler.init(null, null);
         defaultHandler.setRegisteredHandler(retVal);
+
         return retVal;
     }
 
@@ -167,8 +168,8 @@ public class Handlers
      * @return an initialized Handler.
      */
     private static Handler createHandler(String className, Class baseClassOrInterface, Handler previousHandler) {
-        assert Handler.class.isAssignableFrom(baseClassOrInterface)
-                : baseClassOrInterface.getName() + " cannot be assigned to " + Handler.class.getName();
+        assert Handler.class.isAssignableFrom(baseClassOrInterface) : baseClassOrInterface.getName() + " cannot be assigned to " +
+        Handler.class.getName();
 
         ClassLoader cl = DiscoveryUtils.getClassLoader();
 
@@ -176,14 +177,17 @@ public class Handlers
             Class handlerClass = cl.loadClass(className);
 
             if (!baseClassOrInterface.isAssignableFrom(handlerClass)) {
-                _log.error("Handler " + handlerClass.getName() + " does not implement or extend "
-                        + baseClassOrInterface.getName());
+                _log.error("Handler " + handlerClass.getName() + " does not implement or extend " +
+                           baseClassOrInterface.getName());
+
                 return null;
             }
 
             Handler handler = (Handler) handlerClass.newInstance();
+
             // TODO: add a way to set custom props on HandlerConfig
             handler.init(new HandlerConfig(className), previousHandler);
+
             return handler;
         } catch (ClassNotFoundException e) {
             _log.error("Could not find Handler class " + className, e);

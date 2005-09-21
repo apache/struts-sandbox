@@ -36,7 +36,8 @@ import org.apache.beehive.samples.netui.jsf.physician.PhysicianSession;
 @ti.controller(
     simpleActions={
         @ti.simpleAction(name="begin", action="physicianSearch"),
-        @ti.simpleAction(name="physicianSearch", path="search.faces")
+        @ti.simpleAction(name="physicianSearch", path="search.faces"),
+        @ti.simpleAction(name="returnToPreviousPage", navigateTo=ti.NavigateTo.previousPage)
     },
     sharedFlowRefs={
         @ti.sharedFlowRef(name="shared", type=org.apache.ti.samples.jsf.SharedFlow.class)

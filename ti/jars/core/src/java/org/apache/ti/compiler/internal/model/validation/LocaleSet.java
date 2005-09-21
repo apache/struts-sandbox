@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,22 +17,23 @@
  */
 package org.apache.ti.compiler.internal.model.validation;
 
-import org.apache.ti.schema.validator11.FormDocument;
-import org.apache.ti.schema.validator11.FormsetDocument;
+import org.apache.ti.compiler.internal.model.XmlElementSupport;
+import org.apache.ti.compiler.internal.model.XmlModelWriter;
+
+import org.w3c.dom.Element;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
-public class LocaleSet {
-
+public class LocaleSet
+        extends XmlElementSupport {
     private Locale _locale;
     private Map _entities = new HashMap();
 
-
     public LocaleSet() {
-        _locale = null;     // default locale;
+        _locale = null; // default locale;
     }
 
     public LocaleSet(Locale locale) {
@@ -51,42 +52,18 @@ public class LocaleSet {
         _entities.put(entity.getEntityName(), entity);
     }
 
-    public void writeToXMLBean(FormsetDocument.Formset formset) {
+    public void writeToElement(XmlModelWriter xw, Element element) {
         if (_locale != null) {
-            formset.setLanguage(_locale.getLanguage());
-            if (_locale.getCountry().length() > 0) {
-                formset.setCountry(_locale.getCountry());
-                if (_locale.getVariant().length() > 0) {
-                    formset.setVariant(_locale.getVariant());
-                }
-            }
+            setElementAttribute(element, "language", _locale.getLanguage());
+            setElementAttribute(element, "country", _locale.getCountry());
+            setElementAttribute(element, "variant", _locale.getVariant());
         }
 
-        FormDocument.Form[] existingFormElements = formset.getFormArray();
         for (Iterator i = _entities.values().iterator(); i.hasNext();) {
             ValidatableEntity entity = (ValidatableEntity) i.next();
             String entityName = entity.getEntityName();
-
-            //
-            // Look for an existing  element, or create one if none matches this entity name.
-            //
-            FormDocument.Form formElementToUse = null;
-
-            for (int j = 0; j < existingFormElements.length; j++) {
-                FormDocument.Form formElement = existingFormElements[j];
-
-                if (entityName.equals(formElement.getName())) {
-                    formElementToUse = formElement;
-                    break;
-                }
-            }
-
-            if (formElementToUse == null) {
-                formElementToUse = formset.addNewForm();
-                formElementToUse.setName(entityName);
-            }
-
-            entity.writeToXMLBean(formElementToUse);
+            Element formElementToUse = findChildElement(xw, element, "form", "name", entityName, true);
+            entity.writeXML(xw, formElementToUse);
         }
     }
 }

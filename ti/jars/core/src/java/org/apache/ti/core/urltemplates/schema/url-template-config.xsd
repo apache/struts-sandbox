@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://struts.apache.org/ti/2005/server/url-template-config"
+           xmlns:netui="http://struts.apache.org/ti/2005/server/url-template-config"
+           elementFormDefault="qualified">
+
+
+    <xs:element name="url-template-config">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="netui:url-template" maxOccurs="unbounded"/>
+                <xs:element ref="netui:url-template-ref-group" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="url-template">
+        <xs:annotation>
+            <xs:documentation>
+                The url-template element specifies URL templates.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+                <xs:element name="value" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="url-template-ref-group">
+        <xs:annotation>
+            <xs:documentation>
+                A group of references to url-template elements.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+                <xs:element ref="netui:url-template-ref" minOccurs="1" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="url-template-ref">
+        <xs:annotation>
+            <xs:documentation>
+                The url-template-ref element declares references to URL templates.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="key" type="xs:string" minOccurs="1" maxOccurs="1"/>
+                <xs:element name="template-name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

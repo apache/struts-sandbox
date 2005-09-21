@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,6 +18,7 @@
 package org.apache.ti.pageflow;
 
 import org.apache.commons.chain.web.WebContext;
+
 import org.apache.ti.core.ActionMessage;
 import org.apache.ti.core.urls.FreezableMutableURI;
 import org.apache.ti.core.urls.MutableURI;
@@ -32,41 +33,36 @@ import org.apache.ti.pageflow.internal.InternalConstants;
 import org.apache.ti.pageflow.internal.InternalUtils;
 import org.apache.ti.pageflow.internal.URIContextFactory;
 import org.apache.ti.pageflow.xwork.PageFlowActionContext;
-import org.apache.ti.schema.config.UrlConfig;
 import org.apache.ti.script.common.ImplicitObjectUtil;
 import org.apache.ti.util.config.ConfigUtil;
+import org.apache.ti.util.config.bean.UrlConfig;
 import org.apache.ti.util.internal.FileUtils;
 import org.apache.ti.util.internal.InternalStringBuilder;
 import org.apache.ti.util.internal.concurrent.InternalConcurrentHashMap;
 import org.apache.ti.util.logging.Logger;
 
 import java.net.URISyntaxException;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-
 /**
  * Utility methods related to Page Flow.
  */
 public class PageFlowUtils
         implements PageFlowConstants, InternalConstants {
-
     private static final Logger _log = Logger.getInstance(PageFlowUtils.class);
-
     private static final String ACTION_PATH_ATTR = ATTR_PREFIX + "_actionPath";
     private static final int PAGEFLOW_EXTENSION_LEN = PAGEFLOW_EXTENSION.length();
-    private static final String DEFAULT_AUTORESOLVE_EXTENSIONS[] = new String[]{ACTION_EXTENSION, PAGEFLOW_EXTENSION};
-
+    private static final String[] DEFAULT_AUTORESOLVE_EXTENSIONS = new String[] { ACTION_EXTENSION, PAGEFLOW_EXTENSION };
 
     /**
      * Map of Struts module prefix to Map of form-type-name to form-name.
      */
-    private static Map/*< String, Map< String, List< String > > >*/ _formNameMaps =
-            new InternalConcurrentHashMap/*< String, Map< String, List< String > > >*/();
-
+    private static Map /*< String, Map< String, List< String > > >*/ _formNameMaps = new InternalConcurrentHashMap /*< String, Map< String, List< String > > >*/();
 
     /**
      * Get a URI for the "begin" action in the PageFlowController associated with the given
@@ -85,6 +81,7 @@ public class PageFlowUtils
         }
 
         retVal.append('/').append(BEGIN_ACTION_NAME).append(ACTION_EXTENSION);
+
         return retVal.toString();
     }
 
@@ -97,8 +94,9 @@ public class PageFlowUtils
     public static PageFlowController getNestingPageFlow() {
         PageFlowStack jpfStack = PageFlowStack.get(false);
 
-        if (jpfStack != null && !jpfStack.isEmpty()) {
+        if ((jpfStack != null) && !jpfStack.isEmpty()) {
             PageFlowController top = jpfStack.peek().getPageFlow();
+
             return top;
         }
 
@@ -113,7 +111,8 @@ public class PageFlowUtils
      */
     public static final PageFlowController getCurrentPageFlow() {
         ActionResolver cur = getCurrentActionResolver();
-        return cur instanceof PageFlowController ? (PageFlowController) cur : null;
+
+        return (cur instanceof PageFlowController) ? (PageFlowController) cur : null;
     }
 
     /**
@@ -123,7 +122,7 @@ public class PageFlowUtils
      */
     public static ActionResolver getCurrentActionResolver() {
         StorageHandler sh = Handlers.get().getStorageHandler();
-        
+
         //
         // First see if the current page flow is a long-lived, which is stored in its own attribute.
         //
@@ -134,6 +133,7 @@ public class PageFlowUtils
             return getLongLivedPageFlow(currentLongLivedNamespace);
         } else {
             String currentJpfAttrName = InternalUtils.getScopedAttrName(CURRENT_JPF_ATTR);
+
             return (ActionResolver) sh.getAttribute(currentJpfAttrName);
         }
     }
@@ -146,9 +146,10 @@ public class PageFlowUtils
      *
      * @return a Map of shared flow name (string) to shared flow instance ({@link SharedFlowController}).
      */
-    public static Map/*< String, SharedFlowController >*/ getSharedFlows() {
-        Map/*< String, SharedFlowController >*/ sharedFlows = ImplicitObjectUtil.getSharedFlow();
-        return sharedFlows != null ? sharedFlows : Collections.EMPTY_MAP;
+    public static Map /*< String, SharedFlowController >*/ getSharedFlows() {
+        Map /*< String, SharedFlowController >*/ sharedFlows = ImplicitObjectUtil.getSharedFlow();
+
+        return (sharedFlows != null) ? sharedFlows : Collections.EMPTY_MAP;
     }
 
     /**
@@ -159,6 +160,7 @@ public class PageFlowUtils
      */
     public static SharedFlowController getSharedFlow(String sharedFlowClassName) {
         StorageHandler sh = Handlers.get().getStorageHandler();
+
         return (SharedFlowController) sh.getAttribute(SHARED_FLOW_ATTR_PREFIX + sharedFlowClassName);
     }
 
@@ -205,7 +207,9 @@ public class PageFlowUtils
         StorageHandler sh = Handlers.get().getStorageHandler();
         String attrName = InternalUtils.getLongLivedFlowAttr(namespace);
         attrName = InternalUtils.getScopedAttrName(attrName);
+
         PageFlowController retVal = (PageFlowController) sh.getAttribute(attrName);
+
         return retVal;
     }
 
@@ -260,29 +264,34 @@ public class PageFlowUtils
             PageFlowActionContext actionContext = PageFlowActionContext.get();
             ModuleConfig moduleConfig = actionContext.getModuleConfig();
             Class formClass = formBean.getClass();
-            
+
             //
             // Get the names of *all* form beans of the desired type, and blast out this instance under all those names.
             //
             Map formBeanAttrNames = moduleConfig.getFormBeanAttributeNames();
             List formNames = (List) formBeanAttrNames.get(formClass.getName());
             List additionalFormNames = null;
-            
+
             //
             // formNames is a statically-scoped list.  Below, we create a dynamic list of form names that correspond
             // to *implemented interfaces* of the given form bean class.
             //
             Class[] interfaces = formClass.getInterfaces();
+
             for (int i = 0; i < interfaces.length; i++) {
                 Class formInterface = interfaces[i];
                 List toAdd = (List) formBeanAttrNames.get(formInterface.getName());
+
                 if (toAdd != null) {
-                    if (additionalFormNames == null) additionalFormNames = new ArrayList();
+                    if (additionalFormNames == null) {
+                        additionalFormNames = new ArrayList();
+                    }
+
                     additionalFormNames.addAll(toAdd);
                 }
             }
 
-            if (formNames == null && additionalFormNames == null) {
+            if ((formNames == null) && (additionalFormNames == null)) {
                 String formName = generateFormBeanName(formClass);
                 InternalUtils.setFormInScope(formName, formBean, overwrite);
             } else {
@@ -336,7 +345,8 @@ public class PageFlowUtils
         List names = (List) moduleConfig.getFormBeanAttributeNames().get(formBeanClass.getName());
 
         if (names != null) {
-            assert names.size() > 0;    // getFormNamesFromModuleConfig returns null or a nonempty list
+            assert names.size() > 0; // getFormNamesFromModuleConfig returns null or a nonempty list
+
             return (String) names.get(0);
         }
 
@@ -357,7 +367,7 @@ public class PageFlowUtils
     private static String generateFormBeanName(Class formBeanClass) {
         ModuleConfig moduleConfig = PageFlowActionContext.get().getModuleConfig();
         String formBeanClassName = formBeanClass.getName();
-        
+
         //
         // A form-bean wasn't found for this type, so we'll create a name.  First try and create
         // name that is a camelcased version of the classname without all of its package/outer-class
@@ -391,9 +401,12 @@ public class PageFlowUtils
         assert uri != null;
         assert uri.length() > 0;
 
-        if (uri.charAt(0) == '/') uri = uri.substring(1);
+        if (uri.charAt(0) == '/') {
+            uri = uri.substring(1);
+        }
 
         assert FileUtils.osSensitiveEndsWith(uri, PAGEFLOW_EXTENSION) : uri;
+
         if (FileUtils.osSensitiveEndsWith(uri, PAGEFLOW_EXTENSION)) {
             uri = uri.substring(0, uri.length() - PAGEFLOW_EXTENSION_LEN);
         }
@@ -488,7 +501,8 @@ public class PageFlowUtils
      */
     public static Object getActionOutput(String name) {
         Map map = InternalUtils.getActionOutputMap(false);
-        return map != null ? map.get(name) : null;
+
+        return (map != null) ? map.get(name) : null;
     }
 
     /**
@@ -520,7 +534,7 @@ public class PageFlowUtils
      * @param messageArg   an argument to the message
      */
     public static void addActionError(String propertyName, String messageKey, Object messageArg) {
-        Object[] messageArgs = new Object[]{messageArg};
+        Object[] messageArgs = new Object[] { messageArg };
         InternalUtils.addActionError(propertyName, new ActionMessage(messageKey, messageArgs));
     }
 
@@ -533,7 +547,7 @@ public class PageFlowUtils
      * @param messageArg2  the second argument to the message
      */
     public static void addActionError(String propertyName, String messageKey, Object messageArg1, Object messageArg2) {
-        Object[] messageArgs = new Object[]{messageArg1, messageArg2};
+        Object[] messageArgs = new Object[] { messageArg1, messageArg2 };
         InternalUtils.addActionError(propertyName, new ActionMessage(messageKey, messageArgs));
     }
 
@@ -546,8 +560,9 @@ public class PageFlowUtils
      * @param messageArg2  the second argument to the message
      * @param messageArg3  the third argument to the message
      */
-    public static void addActionError(String propertyName, String messageKey, Object messageArg1, Object messageArg2, Object messageArg3) {
-        Object[] messageArgs = new Object[]{messageArg1, messageArg2, messageArg3};
+    public static void addActionError(String propertyName, String messageKey, Object messageArg1, Object messageArg2,
+                                      Object messageArg3) {
+        Object[] messageArgs = new Object[] { messageArg1, messageArg2, messageArg3 };
         InternalUtils.addActionError(propertyName, new ActionMessage(messageKey, messageArgs));
     }
 
@@ -562,12 +577,11 @@ public class PageFlowUtils
         ExpressionMessage msg = new ExpressionMessage(expression, messageArgs);
         InternalUtils.addActionError(propertyName, msg);
     }
-    
+
     /**
      * Resolve the given action to a URI by running an entire request-processing cycle on the given ScopedRequest
      * and ScopedResponse.
-     * @exclude
-     * 
+     *
      * @param actionOverride if not <code>null</code>, this qualified action-path is used to construct an action
      *                       URI which is set as the request URI.  The action-path <strong>must</strong> begin with '/',
      *                       which makes it qualified from the webapp root.
@@ -575,6 +589,7 @@ public class PageFlowUtils
      *                              on which this method will be recursively called.  If <code>null</code>, the
      *                              default extensions ".do" and ".jpf" will be used.
      */
+
     /* TODO: re-add some form of this, for portal/portlet support
     public static ActionResult strutsLookup( String actionOverride, String[] autoResolveExtensions )
         throws Exception
@@ -583,7 +598,7 @@ public class PageFlowUtils
         ScopedResponse scopedResponse = ScopedUtils.unwrapResponse( response );
         assert scopedRequest != null : request.getClass().getName();
         assert scopedResponse != null : response.getClass().getName();
-        
+
         if ( scopedRequest == null )
         {
             throw new IllegalArgumentException( "request must be of type " + ScopedRequest.class.getName() );
@@ -592,15 +607,15 @@ public class PageFlowUtils
         {
             throw new IllegalArgumentException( "response must be of type " + ScopedResponse.class.getName() );
         }
-        
+
         ActionServlet as = InternalUtils.getActionServlet( context );
-        
+
         if ( as == null )
         {
             _log.error( "There is no initialized ActionServlet.  The ActionServlet must be set to load-on-startup." );
             return null;
         }
-        
+
         if ( actionOverride != null )
         {
             // The action must be fully-qualified with its namespace.
@@ -616,7 +631,7 @@ public class PageFlowUtils
         // will allow us to tell whether processing the request actually forwarded somewhere.
         //
         scopedRequest.setForwardedURI( null );
-        
+
         //
         // Now process the request.  We create a PageFlowRequestWrapper for pageflow-specific request-scoped info.
         //
@@ -628,12 +643,12 @@ public class PageFlowUtils
         if ( ! scopedResponse.didRedirect() )
         {
             returnURI = scopedRequest.getForwardedURI();
-            
+
             if ( autoResolveExtensions == null )
             {
                 autoResolveExtensions = DEFAULT_AUTORESOLVE_EXTENSIONS;
             }
-            
+
             if ( returnURI != null )
             {
                 for ( int i = 0; i < autoResolveExtensions.length; ++i )
@@ -650,9 +665,9 @@ public class PageFlowUtils
         {
             returnURI = scopedResponse.getRedirectURI();
         }
-        
+
         DeferredSessionStorageHandler.applyChanges( scopedRequest, context );
-        
+
         if ( returnURI != null )
         {
             return new ActionResultImpl( returnURI, scopedResponse.didRedirect(), scopedResponse.getStatusCode(),
@@ -664,7 +679,7 @@ public class PageFlowUtils
         }
     }
     */
-    
+
     /**
      * Create a raw action URI, which can be modified before being sent through the registered URL rewriting chain
      * using {@link URLRewriterService#rewriteURL}.  Use {@link #getRewrittenActionURI} to get a fully-rewritten URI.
@@ -678,7 +693,9 @@ public class PageFlowUtils
     public static MutableURI getActionURI(String actionName)
             throws URISyntaxException {
         // TODO: need ActionMapper to be reversible -- it should construct the URI.
-        if (actionName.length() < 1) throw new IllegalArgumentException("actionName must be non-empty");
+        if (actionName.length() < 1) {
+            throw new IllegalArgumentException("actionName must be non-empty");
+        }
 
         PageFlowActionContext actionContext = PageFlowActionContext.get();
         InternalStringBuilder actionURI = new InternalStringBuilder(actionContext.getRequestContextPath());
@@ -689,12 +706,17 @@ public class PageFlowUtils
         }
 
         actionURI.append(actionName);
-        if (!actionName.endsWith(ACTION_EXTENSION)) actionURI.append(ACTION_EXTENSION);
+
+        if (!actionName.endsWith(ACTION_EXTENSION)) {
+            actionURI.append(ACTION_EXTENSION);
+        }
 
         FreezableMutableURI uri = new FreezableMutableURI();
+
         // TODO: re-add the following line, using some abstraction
         //uri.setEncoding( response.getCharacterEncoding() );
         uri.setURI(actionURI.toString(), true);
+
         return uri;
     }
 
@@ -714,11 +736,18 @@ public class PageFlowUtils
     public static String getRewrittenActionURI(String actionName, Map params, String fragment, boolean forXML)
             throws URISyntaxException {
         MutableURI uri = getActionURI(actionName);
-        if (params != null) uri.addParameters(params, false);
-        if (fragment != null) uri.setFragment(uri.encode(fragment));
+
+        if (params != null) {
+            uri.addParameters(params, false);
+        }
+
+        if (fragment != null) {
+            uri.setFragment(uri.encode(fragment));
+        }
 
         boolean needsToBeSecure = needsToBeSecure(uri.getPath(), true);
         URLRewriterService.rewriteURL(uri, URLType.ACTION, needsToBeSecure);
+
         String key = getURLTemplateKey(URLType.ACTION, needsToBeSecure);
         URIContext uriContext = URIContextFactory.getInstance(forXML);
 
@@ -739,8 +768,7 @@ public class PageFlowUtils
      * @throws URISyntaxException if there's a problem converting the action URI (derived
      *                            from processing the given action name) into a MutableURI.
      */
-    public static String getRewrittenResourceURI(String path, Map params,
-                                                 String fragment, boolean forXML)
+    public static String getRewrittenResourceURI(String path, Map params, String fragment, boolean forXML)
             throws URISyntaxException {
         return rewriteResourceOrHrefURL(path, params, fragment, forXML, URLType.RESOURCE);
     }
@@ -769,11 +797,12 @@ public class PageFlowUtils
         boolean encoded = false;
         UrlConfig urlConfig = ConfigUtil.getConfig().getUrlConfig();
 
-        if (urlConfig != null && urlConfig.isSetUrlEncodeUrls()) {
-            encoded = !urlConfig.getUrlEncodeUrls();
+        if (urlConfig != null) {
+            encoded = !urlConfig.isUrlEncodeUrls();
         }
 
         FreezableMutableURI uri = new FreezableMutableURI();
+
         // TODO: re-add the following line, using some abstraction
         //uri.setEncoding( response.getCharacterEncoding() );
         uri.setURI(path, encoded);
@@ -787,11 +816,12 @@ public class PageFlowUtils
         }
 
         URIContext uriContext = URIContextFactory.getInstance(forXML);
+
         if (uri.isAbsolute()) {
             return uri.getURIString(uriContext);
         }
 
-        if (path.length() != 0 && path.charAt(0) != '/') {
+        if ((path.length() != 0) && (path.charAt(0) != '/')) {
             PageFlowActionContext actionContext = PageFlowActionContext.get();
             String reqPath = actionContext.getRequestPath();
             reqPath = reqPath.substring(0, reqPath.lastIndexOf('/') + 1);
@@ -800,6 +830,7 @@ public class PageFlowUtils
 
         boolean needsToBeSecure = needsToBeSecure(uri.getPath(), true);
         URLRewriterService.rewriteURL(uri, urlType, needsToBeSecure);
+
         String key = getURLTemplateKey(urlType, needsToBeSecure);
 
         return URLRewriterService.getTemplatedURL(uri, key, uriContext);
@@ -829,23 +860,27 @@ public class PageFlowUtils
      *         </ul>
      */
     public static boolean needsToBeSecure(String uri, boolean stripContextPath) {
-        PageFlowActionContext actionContext = PageFlowActionContext.get();        
-        
+        PageFlowActionContext actionContext = PageFlowActionContext.get();
+
         // Get the web-app relative path for security check
         String secureCheck = uri;
+
         if (stripContextPath) {
             String contextPath = actionContext.getRequestContextPath();
+
             if (secureCheck.startsWith(contextPath)) {
                 secureCheck = secureCheck.substring(contextPath.length());
             }
         }
 
         boolean secure = false;
+
         if (secureCheck.indexOf('?') > -1) {
             secureCheck = secureCheck.substring(0, secureCheck.indexOf('?'));
         }
 
         SecurityProtocol sp = getSecurityProtocol(secureCheck);
+
         if (sp.equals(SecurityProtocol.UNSPECIFIED)) {
             secure = actionContext.isRequestSecure();
         } else {
@@ -865,6 +900,7 @@ public class PageFlowUtils
      */
     public static String getURLTemplateKey(URLType urlType, boolean needsToBeSecure) {
         String key = URLTemplatesFactory.ACTION_TEMPLATE;
+
         if (urlType.equals(URLType.ACTION)) {
             if (needsToBeSecure) {
                 key = URLTemplatesFactory.SECURE_ACTION_TEMPLATE;
@@ -881,5 +917,4 @@ public class PageFlowUtils
 
         return key;
     }
-
 }

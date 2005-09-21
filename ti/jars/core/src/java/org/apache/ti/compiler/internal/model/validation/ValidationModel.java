@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,16 +19,16 @@ package org.apache.ti.compiler.internal.model.validation;
 
 import org.apache.ti.compiler.internal.FatalCompileTimeException;
 import org.apache.ti.compiler.internal.JpfLanguageConstants;
-import org.apache.ti.schema.validator11.FormValidationDocument;
-import org.apache.ti.schema.validator11.FormsetDocument;
-import org.apache.xmlbeans.XmlCursor;
-import org.apache.xmlbeans.XmlDocumentProperties;
-import org.apache.xmlbeans.XmlException;
-import org.apache.xmlbeans.XmlOptions;
+import org.apache.ti.compiler.internal.model.XmlElementSupport;
+import org.apache.ti.compiler.internal.model.XmlModelWriter;
+import org.apache.ti.compiler.internal.model.XmlModelWriterException;
+
+import org.w3c.dom.Element;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -38,19 +38,17 @@ import java.util.Locale;
 import java.util.Map;
 
 public abstract class ValidationModel
+        extends XmlElementSupport
         implements JpfLanguageConstants {
-
     private Map _localeSets = new HashMap();
     private LocaleSet _defaultLocaleSet = new LocaleSet();
-    private List _rulesToAddForAllLocales = new ArrayList();       // list of RuleAdd
+    private List _rulesToAddForAllLocales = new ArrayList(); // list of RuleAdd
     private boolean _empty = true;
     private ValidatorVersion _validatorVersion = ValidatorVersion.oneOne;
 
     public static class ValidatorVersion {
-
         private static final int INT_ONE_ZERO = 0;
         private static final int INT_ONE_ONE = 1;
-
         private int _val;
 
         private ValidatorVersion(int val) {
@@ -66,7 +64,6 @@ public abstract class ValidationModel
     }
 
     public static class RuleInfo {
-
         private String _entityName;
         private String _fieldName;
         private String _fieldDisplayName;
@@ -97,7 +94,6 @@ public abstract class ValidationModel
     }
 
     private static class RuleAdd {
-
         public RuleAdd(RuleInfo ruleInfo, ValidatorRule rule) {
             this.ruleInfo = ruleInfo;
             this.rule = rule;
@@ -116,7 +112,7 @@ public abstract class ValidationModel
         // default to the least common denominator (validator v1.0) unless
         // explicitly set to v1.1.
         //
-        if (validatorVersion != null && validatorVersion.equals(VALIDATOR_VERSION_ONE_ONE_STR)) {
+        if ((validatorVersion != null) && validatorVersion.equals(VALIDATOR_VERSION_ONE_ONE_STR)) {
             _validatorVersion = ValidatorVersion.oneOne;
         } else {
             _validatorVersion = ValidatorVersion.oneZero;
@@ -128,10 +124,10 @@ public abstract class ValidationModel
     }
 
     public void addFieldRule(RuleInfo ruleInfo, ValidatorRule rule, Locale locale) {
-        LocaleSet localeSet;
+        LocaleSet localeSet = null;
 
-        if (locale == null)   // default locale
-        {
+        if (locale == null) // default locale
+         {
             localeSet = _defaultLocaleSet;
         } else {
             localeSet = (LocaleSet) _localeSets.get(locale);
@@ -161,16 +157,19 @@ public abstract class ValidationModel
     private ValidatableField getField(RuleInfo ruleInfo, LocaleSet localeSet) {
         String entityName = ruleInfo.getEntityName();
         ValidatableEntity entity = localeSet.getEntity(entityName);
+
         if (entity == null) {
             return null;
         }
 
         String fieldName = ruleInfo.getFieldName();
+
         return entity.getField(fieldName);
     }
 
     private boolean hasFieldRule(RuleInfo ruleInfo, ValidatorRule rule, LocaleSet localeSet) {
         ValidatableField field = getField(ruleInfo, localeSet);
+
         if (field == null) {
             return false;
         }
@@ -181,13 +180,17 @@ public abstract class ValidationModel
     private void addFieldRule(RuleInfo ruleInfo, ValidatorRule rule, LocaleSet localeSet) {
         String entityName = ruleInfo.getEntityName();
         ValidatableEntity entity = localeSet.getEntity(entityName);
-        if (entity == null) localeSet.addValidatableEntity(entity = new ValidatableEntity(entityName));
+
+        if (entity == null) {
+            localeSet.addValidatableEntity(entity = new ValidatableEntity(entityName));
+        }
 
         String fieldName = ruleInfo.getFieldName();
         ValidatableField field = entity.getField(fieldName);
+
         if (field == null) {
-            field = ValidatableFieldFactory.getInstance(fieldName, ruleInfo.getFieldDisplayName(),
-                    ruleInfo.getFieldDisplayNameKey(), getValidatorVersion());
+            field = new ValidatableField(fieldName, ruleInfo.getFieldDisplayName(), ruleInfo.getFieldDisplayNameKey(),
+                                         !getValidatorVersion().equals(ValidatorVersion.oneZero));
             entity.addField(field);
         }
 
@@ -200,7 +203,7 @@ public abstract class ValidationModel
     }
 
     public void writeXml(PrintWriter writer, File mergeFile)
-            throws XmlException, IOException, FatalCompileTimeException {
+            throws IOException, FatalCompileTimeException, XmlModelWriterException {
         //
         // First, if we haven't written the all-locale rules to each locale, do so now.
         // However, before we add a rule, check that it does not already exist. We don't
@@ -213,6 +216,7 @@ public abstract class ValidationModel
 
                 for (Iterator j = _localeSets.values().iterator(); j.hasNext();) {
                     LocaleSet localeSet = (LocaleSet) j.next();
+
                     if (!hasFieldRule(ruleAdd.ruleInfo, ruleAdd.rule, localeSet)) {
                         addFieldRule(ruleAdd.ruleInfo, ruleAdd.rule, localeSet);
                     }
@@ -226,73 +230,36 @@ public abstract class ValidationModel
             _rulesToAddForAllLocales = null;
         }
 
-        //
-        // Create and initialize the document, or parse the given one (with which we'll merge).
-        //
-        FormValidationDocument doc;
+        String publicID;
+        String systemID;
 
-        if (mergeFile != null && mergeFile.canRead()) {
-            doc = FormValidationDocument.Factory.parse(mergeFile);
+        if (_validatorVersion.equals(ValidatorVersion.oneZero)) {
+            publicID = "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.0//EN";
+            systemID = "http://jakarta.apache.org/commons/dtds/validator_1_0.dtd";
         } else {
-            doc = FormValidationDocument.Factory.newInstance();
+            publicID = "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.1//EN";
+            systemID = "http://jakarta.apache.org/commons/dtds/validator_1_1.dtd";
         }
 
-        XmlDocumentProperties dp = doc.documentProperties();
+        String comment = getHeaderComment(mergeFile);
+        XmlModelWriter xw = new XmlModelWriter(mergeFile, "form-validation", publicID, systemID, comment);
+        writeXML(xw, xw.getRootElement());
+        xw.simpleFastWrite(writer);
+    }
 
-        if (dp.getDoctypeName() == null) {
-            dp.setDoctypeName("form-validation");  // NOI18N
-        }
-
-        if (dp.getDoctypePublicId() == null) {
-            if (_validatorVersion.equals(ValidatorVersion.oneZero)) {
-                dp.setDoctypePublicId("-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.0//EN");
-            } else {
-                dp.setDoctypePublicId("-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.1//EN");
-            }
-        }
-
-        if (dp.getDoctypeSystemId() == null) {
-            if (_validatorVersion.equals(ValidatorVersion.oneZero)) {
-                dp.setDoctypeSystemId("http://jakarta.apache.org/commons/dtds/validator_1_0.dtd");
-            } else {
-                dp.setDoctypeSystemId("http://jakarta.apache.org/commons/dtds/validator_1_1.dtd");
-            }
-        }
-
-
-        FormValidationDocument.FormValidation formValidationElement = doc.getFormValidation();
-
-        if (formValidationElement == null) {
-            formValidationElement = doc.addNewFormValidation();
-        }
-
-        //
-        // Write the "generated by" comment.
-        //
-        XmlCursor curs = formValidationElement.newCursor();
-        String headerComment = getHeaderComment(mergeFile);
-        if (headerComment != null) curs.insertComment(headerComment);
-
+    protected void writeToElement(XmlModelWriter xw, Element element) {
         //
         // Now write out all the LocaleSets, which contain the forms/fields/rules.
         //
-        writeLocaleSets(formValidationElement);
-        writeLocaleSet(_defaultLocaleSet, formValidationElement);
-
-        //
-        // Write the file.
-        //
-        XmlOptions options = new XmlOptions();
-        options.setSavePrettyPrint();
-        doc.save(writer, options);
+        writeLocaleSets(xw, element);
+        writeLocaleSet(xw, element, _defaultLocaleSet);
     }
 
-    protected String getHeaderComment(File mergeFile)
-            throws FatalCompileTimeException {
+    protected String getHeaderComment(File mergeFile) throws FatalCompileTimeException {
         return null;
     }
 
-    private void writeLocaleSets(FormValidationDocument.FormValidation formValidationElement) {
+    private void writeLocaleSets(XmlModelWriter xw, Element element) {
         //
         // Commons Validator behavior is to build a key from the locale of a FormSet
         // or uses the default Locale (Locale.getDefault() - the system locale) to
@@ -312,6 +279,7 @@ public abstract class ValidationModel
 
         for (java.util.Iterator ii = allLocales.iterator(); ii.hasNext();) {
             Locale locale = (Locale) ii.next();
+
             if (locale.getCountry().length() > 0) {
                 if (locale.getVariant().length() > 0) {
                     langCountryVariant.add(locale);
@@ -323,47 +291,46 @@ public abstract class ValidationModel
             }
         }
 
-        writeLocaleSets(langCountryVariant, formValidationElement);
-        writeLocaleSets(langCountry, formValidationElement);
-        writeLocaleSets(lang, formValidationElement);
+        writeLocaleSets(xw, element, langCountryVariant);
+        writeLocaleSets(xw, element, langCountry);
+        writeLocaleSets(xw, element, lang);
     }
 
-    private void writeLocaleSets(Collection locales, FormValidationDocument.FormValidation formValidationElement) {
+    private void writeLocaleSets(XmlModelWriter xw, Element element, Collection locales) {
         for (java.util.Iterator ii = locales.iterator(); ii.hasNext();) {
             Locale locale = (Locale) ii.next();
             LocaleSet localeSet = (LocaleSet) _localeSets.get(locale);
-            writeLocaleSet(localeSet, formValidationElement);
+            writeLocaleSet(xw, element, localeSet);
         }
     }
 
-    private void writeLocaleSet(LocaleSet localeSet, FormValidationDocument.FormValidation formValidationElement) {
-        FormsetDocument.Formset[] existingFormSetElements = formValidationElement.getFormsetArray();
-        FormsetDocument.Formset formSetElementToUse = null;
+    private void writeLocaleSet(XmlModelWriter xw, Element element, LocaleSet localeSet) {
         Locale locale = localeSet.getLocale();
+        Element formSetElement = null;
 
-        for (int i = 0; i < existingFormSetElements.length; i++) {
-            FormsetDocument.Formset existingFormSetElement = existingFormSetElements[i];
+        if (locale == null) {
+            formSetElement = findChildElement(xw, element, "formset", "language", null, false);
+        } else {
+            Element possibleMatch = findChildElement(xw, element, "formset", "language", locale.getLanguage(), false);
 
-            if (locale == null && existingFormSetElement.getLanguage() == null) {
-                formSetElementToUse = existingFormSetElement;
-                break;
-            } else if (locale != null && locale.getLanguage().equals(existingFormSetElement.getLanguage())) {
-                if ((locale.getCountry().length() == 0 && existingFormSetElement.getCountry() == null)
-                        || locale.getCountry().equals(existingFormSetElement.getCountry())) {
-                    if ((locale.getVariant().length() == 0 && existingFormSetElement.getVariant() == null)
-                            || locale.getVariant().equals(existingFormSetElement.getVariant())) {
-                        formSetElementToUse = existingFormSetElement;
-                        break;
-                    }
+            if (possibleMatch != null) {
+                String country = getElementAttribute(possibleMatch, "country");
+                String variant = getElementAttribute(possibleMatch, "variant");
+                String localeCountry = locale.getCountry();
+                String localeVariant = locale.getVariant();
+
+                if ((((localeCountry.length() == 0) && (country == null)) || localeCountry.equals(country)) &&
+                        (((localeVariant.length() == 0) && (variant == null)) || localeVariant.equals(variant))) {
+                    formSetElement = possibleMatch;
                 }
             }
         }
 
-        if (formSetElementToUse == null) {
-            formSetElementToUse = formValidationElement.addNewFormset();
+        if (formSetElement == null) {
+            formSetElement = xw.addElement(element, "formset");
         }
 
-        localeSet.writeToXMLBean(formSetElementToUse);
+        localeSet.writeXML(xw, formSetElement);
     }
 
     public boolean isEmpty() {
@@ -374,5 +341,5 @@ public abstract class ValidationModel
         _empty = empty;
     }
 
-    public abstract String getOutputFileURI();
-}    
+    public abstract String getOutputFilePath();
+}

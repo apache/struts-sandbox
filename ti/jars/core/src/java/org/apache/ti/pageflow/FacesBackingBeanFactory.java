@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,14 +24,13 @@ import org.apache.ti.pageflow.internal.AnnotationReader;
 import org.apache.ti.pageflow.internal.InternalConstants;
 import org.apache.ti.pageflow.internal.InternalUtils;
 import org.apache.ti.pageflow.xwork.PageFlowActionContext;
-import org.apache.ti.schema.config.PageflowFactories;
-import org.apache.ti.schema.config.PageflowFactory;
 import org.apache.ti.util.config.ConfigUtil;
+import org.apache.ti.util.config.bean.PageFlowFactoriesConfig;
+import org.apache.ti.util.config.bean.PageFlowFactoryConfig;
 import org.apache.ti.util.internal.FileUtils;
 import org.apache.ti.util.logging.Logger;
 
 import java.util.Map;
-
 
 /**
  * Factory for creating "backing beans" for JavaServer Faces pages.
@@ -39,9 +38,7 @@ import java.util.Map;
 public class FacesBackingBeanFactory
         extends Factory
         implements InternalConstants {
-
     private static final Logger _log = Logger.getInstance(FacesBackingBeanFactory.class);
-
     private static final String CONTEXT_ATTR = InternalConstants.ATTR_PREFIX + "jsfBackingFactory";
 
     protected void onCreate() {
@@ -51,15 +48,18 @@ public class FacesBackingBeanFactory
     }
 
     public static void init(Map appScope) {
-        PageflowFactories factoriesBean = ConfigUtil.getConfig().getPageflowFactories();
+        PageFlowFactoriesConfig factoriesBean = ConfigUtil.getConfig().getPageFlowFactories();
         FacesBackingBeanFactory factory = null;
 
         if (factoriesBean != null) {
-            PageflowFactory fcFactoryBean = factoriesBean.getFacesBackingBeanFactory();
+            PageFlowFactoryConfig fcFactoryBean = factoriesBean.getFacesBackingBeanFactory();
             factory = (FacesBackingBeanFactory) FactoryUtils.getFactory(fcFactoryBean, FacesBackingBeanFactory.class);
         }
 
-        if (factory == null) factory = new FacesBackingBeanFactory();
+        if (factory == null) {
+            factory = new FacesBackingBeanFactory();
+        }
+
         factory.reinit();
 
         appScope.put(CONTEXT_ATTR, factory);
@@ -80,9 +80,10 @@ public class FacesBackingBeanFactory
     public static FacesBackingBeanFactory get() {
         Map appScope = PageFlowActionContext.get().getApplication();
         FacesBackingBeanFactory factory = (FacesBackingBeanFactory) appScope.get(CONTEXT_ATTR);
-        assert factory != null
-                : FacesBackingBeanFactory.class.getName() + " was not found in application attribute " + CONTEXT_ATTR;
+        assert factory != null : FacesBackingBeanFactory.class.getName() + " was not found in application attribute " +
+        CONTEXT_ATTR;
         factory.reinit();
+
         return factory;
     }
 
@@ -92,25 +93,28 @@ public class FacesBackingBeanFactory
     public FacesBackingBean getFacesBackingBeanForRequest() {
         String uri = PageFlowActionContext.get().getRequestPath();
         assert uri.charAt(0) == '/' : uri;
+
         String backingClassName = FileUtils.stripFileExtension(uri.substring(1).replace('/', '.'));
         FacesBackingBean currentBean = InternalUtils.getFacesBackingBean();
-        
+
         //
         // If there is no current backing bean, or if the current one doesn't match the desired classname, create one.
         //
-        if (currentBean == null || !currentBean.getClass().getName().equals(backingClassName)) {
+        if ((currentBean == null) || !currentBean.getClass().getName().equals(backingClassName)) {
             FacesBackingBean bean = null;
 
             if (FileUtils.uriEndsWith(uri, FACES_EXTENSION) || FileUtils.uriEndsWith(uri, JSF_EXTENSION)) {
                 bean = loadFacesBackingBean(backingClassName);
-                
+
                 //
                 // If we didn't create (or failed to create) a backing bean, and if this is a JSF request, then create
                 // a default one.  This ensures that there will be a place for things like page inputs, that get stored
                 // in the backing bean across postbacks to the same JSF.
                 //
-                if (bean == null) bean = new DefaultFacesBackingBean();
-                
+                if (bean == null) {
+                    bean = new DefaultFacesBackingBean();
+                }
+
                 //
                 // If we created a backing bean, invoke its create callback, and tell it to store itself in the session.
                 //
@@ -122,10 +126,11 @@ public class FacesBackingBeanFactory
                     }
 
                     bean.persistInSession();
+
                     return bean;
                 }
             }
-            
+
             //
             // We didn't create a backing bean.  If there's one in the session (an inappropriate one), remove it.
             //
@@ -133,7 +138,7 @@ public class FacesBackingBeanFactory
         } else if (currentBean != null) {
             if (_log.isDebugEnabled()) {
                 _log.debug("Using existing backing bean instance " + currentBean + " for request " +
-                        PageFlowActionContext.get().getRequestPath());
+                           PageFlowActionContext.get().getRequestPath());
             }
 
             currentBean.reinitialize();
@@ -161,26 +166,24 @@ public class FacesBackingBeanFactory
 
             if (backingClass == null) {
                 if (_log.isTraceEnabled()) {
-                    _log.trace("No backing bean class " + backingClassName + " found for request "
-                            + PageFlowActionContext.get().getRequestPath());
+                    _log.trace("No backing bean class " + backingClassName + " found for request " +
+                               PageFlowActionContext.get().getRequestPath());
                 }
             } else {
                 AnnotationReader annReader = Handlers.get().getAnnotationHandler().getAnnotationReader(backingClass);
 
-                if (annReader.getJpfAnnotation(backingClass, "facesBacking") != null) {
+                if (annReader.getTiAnnotation(backingClass, "facesBacking") != null) {
                     if (_log.isDebugEnabled()) {
-                        _log.debug("Found backing class " + backingClassName + " for request "
-                                + PageFlowActionContext.get().getRequestPath()
-                                + "; creating a new instance.");
+                        _log.debug("Found backing class " + backingClassName + " for request " +
+                                   PageFlowActionContext.get().getRequestPath() + "; creating a new instance.");
                     }
 
                     return getFacesBackingBeanInstance(backingClass);
                 } else {
                     if (_log.isDebugEnabled()) {
-                        _log.debug("Found matching backing class " + backingClassName + " for request "
-                                + PageFlowActionContext.get().getRequestPath()
-                                + ", but it does not have the " + ANNOTATION_QUALIFIER
-                                + "facesBacking annotation.");
+                        _log.debug("Found matching backing class " + backingClassName + " for request " +
+                                   PageFlowActionContext.get().getRequestPath() + ", but it does not have the " +
+                                   ANNOTATION_QUALIFIER + "facesBacking annotation.");
                     }
                 }
             }
@@ -195,7 +198,6 @@ public class FacesBackingBeanFactory
 
     private static class DefaultFacesBackingBean
             extends FacesBackingBean {
-
     }
 
     /**
@@ -218,8 +220,9 @@ public class FacesBackingBeanFactory
      */
     public FacesBackingBean getFacesBackingBeanInstance(Class beanClass)
             throws InstantiationException, IllegalAccessException {
-        assert FacesBackingBean.class.isAssignableFrom(beanClass)
-                : "Class " + beanClass.getName() + " does not extend " + FacesBackingBean.class.getName();
+        assert FacesBackingBean.class.isAssignableFrom(beanClass) : "Class " + beanClass.getName() + " does not extend " +
+        FacesBackingBean.class.getName();
+
         return (FacesBackingBean) beanClass.newInstance();
     }
 }

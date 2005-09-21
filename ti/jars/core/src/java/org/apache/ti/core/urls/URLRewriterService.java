@@ -5,9 +5,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,12 +22,12 @@ import org.apache.ti.util.internal.InternalStringBuilder;
 import org.apache.ti.util.logging.Logger;
 
 import java.io.PrintStream;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 
 /**
  * Methods for registering URL rewriters, adding URL rewriters
@@ -48,9 +48,7 @@ import java.util.Map;
  * URI formatter so they can manage their own templates and formatting. </p>
  */
 public class URLRewriterService {
-
     private static final Logger _log = Logger.getInstance(URLRewriterService.class);
-
     private static final String URL_REWRITERS_KEY = "url_rewriters";
     private static final String TEMPLATTED_URL_FORMATTER_KEY = "templated_url_formatter";
 
@@ -62,7 +60,7 @@ public class URLRewriterService {
      * @return a prefix to use to rewrite a query parameter name.
      */
     public static String getNamePrefix(String name) {
-        ArrayList/*< URLRewriter >*/ rewriters = getRewriters();
+        ArrayList /*< URLRewriter >*/ rewriters = getRewriters();
 
         InternalStringBuilder prefix = new InternalStringBuilder();
 
@@ -70,6 +68,7 @@ public class URLRewriterService {
             for (Iterator i = rewriters.iterator(); i.hasNext();) {
                 URLRewriter rewriter = (URLRewriter) i.next();
                 String nextPrefix = rewriter.getNamePrefix(name);
+
                 if (nextPrefix != null) {
                     prefix.append(nextPrefix);
                 }
@@ -101,7 +100,7 @@ public class URLRewriterService {
      * @see #registerURLRewriter
      */
     public static void rewriteURL(MutableURI url, URLType type, boolean needsToBeSecure) {
-        ArrayList/*< URLRewriter >*/ rewriters = getRewriters();
+        ArrayList /*< URLRewriter >*/ rewriters = getRewriters();
 
         if (rewriters != null) {
             for (Iterator i = rewriters.iterator(); i.hasNext();) {
@@ -121,7 +120,7 @@ public class URLRewriterService {
      *
      * @return an unmodifiable list of the URLRewriters that have been registered.
      */
-    public static List/*< URLRewriter >*/ getURLRewriters() {
+    public static List /*< URLRewriter >*/ getURLRewriters() {
         return Collections.unmodifiableList(getRewriters());
     }
 
@@ -136,10 +135,10 @@ public class URLRewriterService {
      *         the chain.
      */
     public static boolean registerURLRewriter(URLRewriter rewriter) {
-        ArrayList/*< URLRewriter >*/ rewriters = getRewriters();
+        ArrayList /*< URLRewriter >*/ rewriters = getRewriters();
 
         if (rewriters == null) {
-            rewriters = new ArrayList/*< URLRewriter >*/();
+            rewriters = new ArrayList /*< URLRewriter >*/();
             rewriters.add(rewriter);
             PageFlowActionContext.get().getRequestScope().put(URL_REWRITERS_KEY, rewriters);
         } else {
@@ -162,10 +161,10 @@ public class URLRewriterService {
      *         the chain.
      */
     public static boolean registerURLRewriter(int index, URLRewriter rewriter) {
-        ArrayList/*< URLRewriter >*/ rewriters = getRewriters();
+        ArrayList /*< URLRewriter >*/ rewriters = getRewriters();
 
         if (rewriters == null) {
-            rewriters = new ArrayList/*< URLRewriter >*/();
+            rewriters = new ArrayList /*< URLRewriter >*/();
             rewriters.add(rewriter);
             PageFlowActionContext.get().put(URL_REWRITERS_KEY, rewriters);
         } else {
@@ -175,18 +174,19 @@ public class URLRewriterService {
         return true;
     }
 
-    private static ArrayList/*< URLRewriter >*/ getRewriters() {
+    private static ArrayList /*< URLRewriter >*/ getRewriters() {
         Map innerRequestScope = PageFlowActionContext.get().getInnerRequestScope();
+
         return (ArrayList /*< URLRewriter >*/) innerRequestScope.get(URL_REWRITERS_KEY);
     }
 
-    private static boolean addRewriter(ArrayList/*< URLRewriter >*/ rewriters, URLRewriter rewriter, int index) {
+    private static boolean addRewriter(ArrayList /*< URLRewriter >*/ rewriters, URLRewriter rewriter, int index) {
         if (otherRewritersAllowed(rewriters)) {
             if (!rewriters.contains(rewriter)) {
                 if (!rewriter.allowOtherRewriters()) {
                     rewriters.clear();
 
-                    if (rewriters.size() > 0 && _log.isDebugEnabled()) {
+                    if ((rewriters.size() > 0) && _log.isDebugEnabled()) {
                         InternalStringBuilder message = new InternalStringBuilder();
                         message.append("Register exclusive URLRewriter, \"");
                         message.append(rewriter.getClass().getName());
@@ -194,6 +194,7 @@ public class URLRewriterService {
                         _log.debug(message.toString());
                     }
                 }
+
                 rewriters.add(index, rewriter);
             }
         } else {
@@ -213,9 +214,8 @@ public class URLRewriterService {
         return true;
     }
 
-    private static boolean otherRewritersAllowed(ArrayList/*< URLRewriter >*/ rewriters) {
-        if (rewriters != null && rewriters.size() == 1 &&
-                !((URLRewriter) rewriters.get(0)).allowOtherRewriters()) {
+    private static boolean otherRewritersAllowed(ArrayList /*< URLRewriter >*/ rewriters) {
+        if ((rewriters != null) && (rewriters.size() == 1) && !((URLRewriter) rewriters.get(0)).allowOtherRewriters()) {
             return false;
         }
 
@@ -223,8 +223,8 @@ public class URLRewriterService {
     }
 
     /**
-	 * @todo Finish documenting me!
-	 * 
+         * @todo Finish documenting me!
+         *
      * Unregister the URLRewriter (remove from the list) from the request.
      *
      * @param rewriter the URLRewriter to unregister
@@ -235,7 +235,7 @@ public class URLRewriterService {
             return;
         }
 
-        ArrayList/*< URLRewriter >*/ rewriters = getRewriters();
+        ArrayList /*< URLRewriter >*/ rewriters = getRewriters();
 
         if (rewriters == null) {
             return;
@@ -259,15 +259,16 @@ public class URLRewriterService {
      * Tell whether rewritten form actions should be allowed to have query parameters.  If this returns
      * <code>false</code>, then a form-tag implementation should render query parameters into hidden
      * fields on the form instead of allowing them to remain in the URL.
-     * 
+     *
      * @return Return true if allowed, false if not.
      */
     public static boolean allowParamsOnFormAction() {
-        ArrayList/*< URLRewriter >*/ rewriters = getRewriters();
+        ArrayList /*< URLRewriter >*/ rewriters = getRewriters();
 
         if (rewriters != null) {
             for (Iterator i = rewriters.iterator(); i.hasNext();) {
                 URLRewriter rewriter = (URLRewriter) i.next();
+
                 if (!rewriter.allowParamsOnFormAction()) {
                     return false;
                 }
@@ -284,13 +285,17 @@ public class URLRewriterService {
      *               If <code>null</null>, <code>System.err</code> is used.
      */
     public static void dumpURLRewriters(PrintStream output) {
-        ArrayList/*< URLRewriter >*/ rewriters = getRewriters();
+        ArrayList /*< URLRewriter >*/ rewriters = getRewriters();
 
-        if (output == null) output = System.err;
+        if (output == null) {
+            output = System.err;
+        }
+
         output.println("*** List of URLRewriter objects: " + rewriters);
 
         if (rewriters != null) {
             int count = 0;
+
             for (Iterator i = rewriters.iterator(); i.hasNext();) {
                 URLRewriter rewriter = (URLRewriter) i.next();
                 output.println("        " + count++ + ".  " + rewriter.getClass().getName());
@@ -311,7 +316,7 @@ public class URLRewriterService {
      * <p/>
      * <p>First try to use ther per-request registered <code>TemplatedURLFormatter</code>.
      * If one is not registered, try to use the per-webapp default
-     * <code>TemplatedURLFormatter</code>, defined in beehive-netui-config.xml
+     * <code>TemplatedURLFormatter</code>, defined in struts-ti-config.xml
      * (with a class name) and set as an attribute of the application. Otherwise,
      * with no formatter, just return {@link MutableURI#getURIString(URIContext)}.
      *
@@ -322,8 +327,10 @@ public class URLRewriterService {
      */
     public static String getTemplatedURL(MutableURI uri, String key, URIContext uriContext) {
         TemplatedURLFormatter formatter = getTemplatedURLFormatter();
+
         if (formatter == null) {
             formatter = TemplatedURLFormatter.getTemplatedURLFormatter();
+
             if (formatter == null) {
                 return uri.getURIString(uriContext);
             }
@@ -334,6 +341,7 @@ public class URLRewriterService {
 
     private static TemplatedURLFormatter getTemplatedURLFormatter() {
         Map innerRequestScope = PageFlowActionContext.get().getInnerRequestScope();
+
         return (TemplatedURLFormatter) innerRequestScope.get(TEMPLATTED_URL_FORMATTER_KEY);
     }
 

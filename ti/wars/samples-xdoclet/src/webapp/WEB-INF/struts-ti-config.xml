@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<netui-config xmlns="http://struts.apache.org/ti/2004/server/config">
+<ti-config xmlns="http://struts.apache.org/ti/2005/server/config">
 
     <expression-languages>
         <default-language>netuiel</default-language>
@@ -36,4 +36,4 @@
         </login-handler>
     </pageflow-handlers>
 
-</netui-config>
+</ti-config>

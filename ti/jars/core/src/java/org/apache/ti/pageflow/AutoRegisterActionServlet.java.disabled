@@ -69,7 +69,7 @@ import org.apache.ti.util.internal.concurrent.InternalConcurrentHashMap;
 
 /**
  * ActionServlet that automatically registers requested Struts modules based on a set of module configuration file
- * locators.  The user may specify {@link ModuleConfigLocator} classes in /WEB-INF/beehive-netui-config.xml using the
+ * locators.  The user may specify {@link ModuleConfigLocator} classes in /WEB-INF/struts-ti-config.xml using the
  * <code>&lt;module-config-locators&gt;</code> element.
  */
 public class AutoRegisterActionServlet extends ActionServlet
@@ -259,7 +259,7 @@ import org.apache.ti.util.internal.concurrent.InternalConcurrentHashMap;
 
 /**
  * ActionServlet that automatically registers requested Struts modules based on a set of module configuration file
- * locators.  The user may specify {@link ModuleConfigLocator} classes in /WEB-INF/beehive-netui-config.xml using the
+ * locators.  The user may specify {@link ModuleConfigLocator} classes in /WEB-INF/struts-ti-config.xml using the
  * <code>&lt;module-config-locators&gt;</code> element.
  */
 public class AutoRegisterActionServlet extends ActionServlet

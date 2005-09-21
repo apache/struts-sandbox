@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,6 +18,7 @@
 package org.apache.ti.pageflow;
 
 import org.apache.commons.chain.web.WebContext;
+
 import org.apache.ti.core.factory.Factory;
 import org.apache.ti.core.factory.FactoryConfig;
 import org.apache.ti.pageflow.internal.PageFlowBeanContext;
@@ -26,17 +27,13 @@ import org.apache.ti.util.logging.Logger;
 
 import javax.security.auth.login.LoginException;
 
-
 /**
  * Default implementation of a container adapter.
  */
 public abstract class DefaultContainerAdapter
         implements ContainerAdapter {
-
     private static final Logger _log = Logger.getInstance(DefaultContainerAdapter.class);
-
     private static boolean _productionMode = true;
-
     private PageFlowEventReporter _eventReporter;
 
     static {
@@ -96,7 +93,7 @@ public abstract class DefaultContainerAdapter
      * @return <code>-1</code>.
      */
     public int getListenPort() {
-        // TODO: have a configuration in netui-config.xml to specify this; an alternative to having to have an adapter.
+        // TODO: have a configuration in struts-ti-config.xml to specify this; an alternative to having to have an adapter.
         return -1;
     }
 
@@ -107,7 +104,7 @@ public abstract class DefaultContainerAdapter
      * @return <code>-1</code>.
      */
     public int getSecureListenPort() {
-        // TODO: have a configuration in netui-config.xml to specify this; an alternative to having to have an adapter.
+        // TODO: have a configuration in struts-ti-config.xml to specify this; an alternative to having to have an adapter.
         return -1;
     }
 
@@ -119,8 +116,7 @@ public abstract class DefaultContainerAdapter
      */
     public void login(String username, String password)
             throws LoginException {
-        throw new UnsupportedOperationException("login is not supported by "
-                + DefaultContainerAdapter.class.getName());
+        throw new UnsupportedOperationException("login is not supported by " + DefaultContainerAdapter.class.getName());
     }
 
     /**
@@ -129,8 +125,7 @@ public abstract class DefaultContainerAdapter
      * @throws UnsupportedOperationException in all cases.
      */
     public void logout(boolean invalidateSessions) {
-        throw new UnsupportedOperationException("logout is not supported by "
-                + DefaultContainerAdapter.class.getName());
+        throw new UnsupportedOperationException("logout is not supported by " + DefaultContainerAdapter.class.getName());
     }
 
     public String getFullContextPath() {

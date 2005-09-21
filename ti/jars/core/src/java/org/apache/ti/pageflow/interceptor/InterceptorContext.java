@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,11 +17,12 @@
  */
 package org.apache.ti.pageflow.interceptor;
 
-import org.apache.ti.schema.config.CustomProperty;
+import org.apache.ti.util.config.bean.CustomPropertyConfig;
 import org.apache.ti.util.internal.DiscoveryUtils;
 import org.apache.ti.util.logging.Logger;
 
 import java.io.Serializable;
+
 import java.util.List;
 
 /**
@@ -29,9 +30,7 @@ import java.util.List;
  */
 public class InterceptorContext
         implements Serializable {
-
     private static final Logger _log = Logger.getInstance(InterceptorContext.class);
-
     private Object _resultOverride;
     private Interceptor _overridingInterceptor;
 
@@ -52,18 +51,18 @@ public class InterceptorContext
         return _overridingInterceptor;
     }
 
-    protected static void addInterceptors(org.apache.ti.schema.config.Interceptor[] configBeans,
-                                          List/*< Interceptor >*/ interceptorsList, Class baseClassOrInterface) {
+    protected static void addInterceptors(org.apache.ti.util.config.bean.InterceptorConfig[] configBeans,
+                                          List /*< Interceptor >*/ interceptorsList, Class baseClassOrInterface) {
         if (configBeans != null) {
             for (int i = 0; i < configBeans.length; i++) {
-                org.apache.ti.schema.config.Interceptor configBean = configBeans[i];
+                org.apache.ti.util.config.bean.InterceptorConfig configBean = configBeans[i];
                 String className = configBean.getInterceptorClass();
                 InterceptorConfig config = new InterceptorConfig(className);
-                CustomProperty[] customProps = configBean.getCustomPropertyArray();
+                CustomPropertyConfig[] customProps = configBean.getCustomProperties();
 
                 if (customProps != null) {
                     for (int j = 0; j < customProps.length; j++) {
-                        CustomProperty customProp = customProps[j];
+                        CustomPropertyConfig customProp = customProps[j];
                         config.addCustomProperty(customProp.getName(), customProp.getValue());
                     }
                 }
@@ -83,9 +82,13 @@ public class InterceptorContext
      * @return an initialized Interceptor, or <code>null</code> if an error occurred.
      */
     protected static Interceptor addInterceptor(InterceptorConfig config, Class baseClassOrInterface,
-                                                List/*< Interceptor >*/ interceptors) {
+                                                List /*< Interceptor >*/ interceptors) {
         Interceptor interceptor = createInterceptor(config, baseClassOrInterface);
-        if (interceptor != null) interceptors.add(interceptor);
+
+        if (interceptor != null) {
+            interceptors.add(interceptor);
+        }
+
         return interceptor;
     }
 
@@ -97,8 +100,8 @@ public class InterceptorContext
      * @return an initialized Interceptor, or <code>null</code> if an error occurred.
      */
     protected static Interceptor createInterceptor(InterceptorConfig config, Class baseClassOrInterface) {
-        assert Interceptor.class.isAssignableFrom(baseClassOrInterface)
-                : baseClassOrInterface.getName() + " cannot be assigned to " + Interceptor.class.getName();
+        assert Interceptor.class.isAssignableFrom(baseClassOrInterface) : baseClassOrInterface.getName() +
+        " cannot be assigned to " + Interceptor.class.getName();
 
         ClassLoader cl = DiscoveryUtils.getClassLoader();
         String className = config.getInterceptorClass();
@@ -107,13 +110,15 @@ public class InterceptorContext
             Class interceptorClass = cl.loadClass(className);
 
             if (!baseClassOrInterface.isAssignableFrom(interceptorClass)) {
-                _log.error("Interceptor " + interceptorClass.getName() + " does not implement or extend "
-                        + baseClassOrInterface.getName());
+                _log.error("Interceptor " + interceptorClass.getName() + " does not implement or extend " +
+                           baseClassOrInterface.getName());
+
                 return null;
             }
 
             Interceptor interceptor = (Interceptor) interceptorClass.newInstance();
             interceptor.init(config);
+
             return interceptor;
         } catch (ClassNotFoundException e) {
             _log.error("Could not find interceptor class " + className, e);
@@ -125,5 +130,4 @@ public class InterceptorContext
 
         return null;
     }
-
 }

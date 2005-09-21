@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,11 +34,11 @@ import org.apache.ti.compiler.internal.typesystem.declaration.TypeDeclaration;
 import org.apache.ti.compiler.internal.typesystem.env.AnnotationProcessorEnvironment;
 import org.apache.ti.compiler.internal.typesystem.type.ClassType;
 import org.apache.ti.compiler.internal.typesystem.type.TypeInstance;
-import org.apache.xmlbeans.XmlException;
 
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -48,11 +48,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-
 public abstract class FlowControllerChecker
         extends BaseChecker
         implements JpfLanguageConstants {
-
     private AnnotationGrammar _controllerGrammar;
     private AnnotationGrammar _actionGrammar;
     private AnnotationGrammar _exceptionHandlerGrammar;
@@ -76,28 +74,25 @@ public abstract class FlowControllerChecker
 
     protected abstract AnnotationGrammar getControllerGrammar();
 
-    public Map onCheck(ClassDeclaration jclass)
-            throws FatalCompileTimeException {
+    public Map onCheck(ClassDeclaration jclass) throws FatalCompileTimeException {
         FlowControllerInfo fcInfo = getFCSourceFileInfo();
 
         _checkResultMap = new HashMap();
         _controllerGrammar = getControllerGrammar();
         _actionGrammar = new ActionGrammar(getEnv(), getDiagnostics(), getRuntimeVersionChecker(), fcInfo);
-        _exceptionHandlerGrammar =
-                new ExceptionHandlerGrammar(getEnv(), getDiagnostics(), getRuntimeVersionChecker(), fcInfo);
+        _exceptionHandlerGrammar = new ExceptionHandlerGrammar(getEnv(), getDiagnostics(), getRuntimeVersionChecker(), fcInfo);
         _formBeanChecker = new FormBeanChecker(getEnv(), getDiagnostics());
 
         SilentDiagnostics silentDiagnostics = new SilentDiagnostics();
         _actionGrammarSilentDiagnostics = new ActionGrammar(getEnv(), silentDiagnostics, getRuntimeVersionChecker(), fcInfo);
-        _exceptionHandlerGrammarSilentDiagnostics =
-                new ExceptionHandlerGrammar(getEnv(), silentDiagnostics, getRuntimeVersionChecker(), fcInfo);
+        _exceptionHandlerGrammarSilentDiagnostics = new ExceptionHandlerGrammar(getEnv(), silentDiagnostics,
+                                                                                getRuntimeVersionChecker(), fcInfo);
 
         fcInfo.startBuild(getEnv(), jclass);
 
         try {
             return onCheckInternal(jclass);
-        }
-        finally {
+        } finally {
             fcInfo.endBuild();
         }
     }
@@ -110,7 +105,8 @@ public abstract class FlowControllerChecker
         // Check the base class.
         //
         String desiredBaseClass = getDesiredBaseClass(jclass);
-        if (desiredBaseClass != null && ! CompilerUtils.isAssignableFrom(desiredBaseClass, jclass, getEnv())) {
+
+        if ((desiredBaseClass != null) && !CompilerUtils.isAssignableFrom(desiredBaseClass, jclass, getEnv())) {
             getDiagnostics().addError(jclass, "error.does-not-extend-base", desiredBaseClass);
         }
 
@@ -142,7 +138,7 @@ public abstract class FlowControllerChecker
             // Only add diagnostics if the method is in this class, or if it's inherited from a class that's *not* on
             // sourcepath (i.e., its SourcePosition is null).
             //
-            if (declaringType.equals(jclass) || declaringType.getPosition() == null) {
+            if (declaringType.equals(jclass) || (declaringType.getPosition() == null)) {
                 checkMethod(method, jclass, _actionGrammar, _exceptionHandlerGrammar);
             } else {
                 //
@@ -160,7 +156,10 @@ public abstract class FlowControllerChecker
 
         for (Iterator ii = innerTypes.iterator(); ii.hasNext();) {
             TypeDeclaration innerType = (TypeDeclaration) ii.next();
-            if (innerType instanceof ClassDeclaration) checkInnerClass((ClassDeclaration) innerType);
+
+            if (innerType instanceof ClassDeclaration) {
+                checkInnerClass((ClassDeclaration) innerType);
+            }
         }
 
         //
@@ -173,11 +172,13 @@ public abstract class FlowControllerChecker
         // whether there were Forwards that contained navigateTo attributes.
         //
         enableNavigateTo(jclass, fcInfo.getMergedControllerAnnotation(), fcInfo);
+
         Map sharedFlowTypes = fcInfo.getSharedFlowTypes();
 
         if (sharedFlowTypes != null) {
             for (Iterator ii = sharedFlowTypes.values().iterator(); ii.hasNext();) {
                 TypeDeclaration sharedFlowType = (TypeDeclaration) ii.next();
+
                 //
                 // Saving of previous-page/previous-action info must be enabled if any of the referenced shared flows
                 // use this feature.
@@ -188,6 +189,7 @@ public abstract class FlowControllerChecker
 
         endCheckClass(jclass);
         _checkResultMap.put(JpfLanguageConstants.ExtraInfoKeys.flowControllerInfo, fcInfo);
+
         return _checkResultMap;
     }
 
@@ -212,8 +214,13 @@ public abstract class FlowControllerChecker
                 enableNavigateTo(CompilerUtils.getAnnotation(ann, VALIDATION_ERROR_FORWARD_ATTR, true), fcInfo);
             }
 
-            if (ann == null) ann = CompilerUtils.getAnnotation(method, EXCEPTION_HANDLER_TAG_NAME);
-            if (ann != null) enableNavigateTo(CompilerUtils.getAnnotationArray(ann, FORWARDS_ATTR, true), fcInfo);
+            if (ann == null) {
+                ann = CompilerUtils.getAnnotation(method, EXCEPTION_HANDLER_TAG_NAME);
+            }
+
+            if (ann != null) {
+                enableNavigateTo(CompilerUtils.getAnnotationArray(ann, FORWARDS_ATTR, true), fcInfo);
+            }
         }
     }
 
@@ -227,7 +234,10 @@ public abstract class FlowControllerChecker
     }
 
     private static void enableNavigateTo(AnnotationInstance ann, FlowControllerInfo fcInfo) {
-        if (ann == null) return;
+        if (ann == null) {
+            return;
+        }
+
         String val = CompilerUtils.getEnumFieldName(ann, NAVIGATE_TO_ATTR, true);
 
         if (val != null) {
@@ -243,7 +253,7 @@ public abstract class FlowControllerChecker
     }
 
     protected abstract GenXWorkModuleConfigModel createStrutsApp(ClassDeclaration jclass)
-            throws XmlException, IOException, FatalCompileTimeException;
+            throws IOException, FatalCompileTimeException;
 
     protected void startCheckClass(ClassDeclaration jclass)
             throws FatalCompileTimeException {
@@ -259,11 +269,7 @@ public abstract class FlowControllerChecker
         try {
             strutsApp = createStrutsApp(jclass);
             strutsConfigFile = strutsApp.getStrutsConfigFile();
-        }
-        catch (XmlException e) {
-            // will be reported at generate time
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             // will be reported at generate time
         }
 
@@ -272,26 +278,29 @@ public abstract class FlowControllerChecker
 
             getFCSourceFileInfo().addReferencedFile(strutsConfigFile);
 
-            if (strutsConfigFile.exists() && strutsApp != null && ! strutsApp.canWrite()) {
+            if (strutsConfigFile.exists() && (strutsApp != null) && !strutsApp.canWrite()) {
                 getDiagnostics().addError(jclass, "error.struts-config-not-writable", strutsConfigFile);
             }
         }
 
-        getRuntimeVersionChecker().checkRuntimeVersion(VERSION_8_SP2_STRING, jclass, getDiagnostics(),
-                "warning.runtime-version", null);
+        getRuntimeVersionChecker().checkRuntimeVersion(VERSION_8_SP2_STRING, jclass, getDiagnostics(), "warning.runtime-version",
+                                                       null);
 
         //
         // Check the Jpf.Controller annotation on this class.
         //
         AnnotationInstance controllerAnnotation = CompilerUtils.getAnnotation(jclass, CONTROLLER_TAG_NAME);
-        if (controllerAnnotation != null) _controllerGrammar.check(controllerAnnotation, null, jclass);
+
+        if (controllerAnnotation != null) {
+            _controllerGrammar.check(controllerAnnotation, null, jclass);
+        }
 
         //
         // Check relative paths on Jpf.Catch, Jpf.Forward, and Jpf.SimpleAction annotations on superclasses.
         // If inheritLocalPaths is set to true on @Jpf.Controller, then we don't need to do this check, since
         // inherited paths will always resolve.
         //
-        if (! getFCSourceFileInfo().getMergedControllerAnnotation().isInheritLocalPaths()) {
+        if (!getFCSourceFileInfo().getMergedControllerAnnotation().isInheritLocalPaths()) {
             checkInheritedRelativePaths(jclass);
         }
     }
@@ -302,20 +311,20 @@ public abstract class FlowControllerChecker
     private void checkInheritedRelativePaths(ClassDeclaration jclass)
             throws FatalCompileTimeException {
         for (ClassType type = jclass.getSuperclass();
-             type != null && CompilerUtils.isAssignableFrom(FLOWCONTROLLER_BASE_CLASS, type, getEnv());
-             type = type.getSuperclass()) {
+                 (type != null) && CompilerUtils.isAssignableFrom(FLOWCONTROLLER_BASE_CLASS, type, getEnv());
+                 type = type.getSuperclass()) {
             TypeDeclaration decl = CompilerUtils.getDeclaration(type);
 
             //
             // Check simple actions in the Controller annotation.
             //
-            List simpleActions =
-                    CompilerUtils.getAnnotationArrayValue(decl, CONTROLLER_TAG_NAME, SIMPLE_ACTIONS_ATTR, true);
+            List simpleActions = CompilerUtils.getAnnotationArrayValue(decl, CONTROLLER_TAG_NAME, SIMPLE_ACTIONS_ATTR, true);
 
             if (simpleActions != null) {
                 for (Iterator j = simpleActions.iterator(); j.hasNext();) {
                     AnnotationInstance i = (AnnotationInstance) j.next();
                     checkRelativePath(i, PATH_ATTR, jclass, decl, false);
+
                     List conditionalForwards = CompilerUtils.getAnnotationArray(i, CONDITIONAL_FORWARDS_ATTR, true);
 
                     if (conditionalForwards != null) {
@@ -364,10 +373,14 @@ public abstract class FlowControllerChecker
             // Check Forwards and Catches on action methods and exception-handler methods.
             //
             MethodDeclaration[] methods = decl.getMethods();
+
             for (int i = 0; i < methods.length; i++) {
                 MethodDeclaration method = methods[i];
                 AnnotationInstance ann = CompilerUtils.getAnnotation(method, ACTION_TAG_NAME);
-                if (ann == null) ann = CompilerUtils.getAnnotation(method, EXCEPTION_HANDLER_TAG_NAME);
+
+                if (ann == null) {
+                    ann = CompilerUtils.getAnnotation(method, EXCEPTION_HANDLER_TAG_NAME);
+                }
 
                 if (ann != null) {
                     List methodForwards = CompilerUtils.getAnnotationArray(ann, FORWARDS_ATTR, true);
@@ -393,21 +406,17 @@ public abstract class FlowControllerChecker
         }
     }
 
-    private void checkRelativePath(AnnotationInstance ann, String memberName, TypeDeclaration jclass,
-                                   TypeDeclaration baseType, boolean isError)
-            throws FatalCompileTimeException {
+    private void checkRelativePath(AnnotationInstance ann, String memberName, TypeDeclaration jclass, TypeDeclaration baseType,
+                                   boolean isError) throws FatalCompileTimeException {
         if (ann != null) {
             AnnotationValue pathVal = CompilerUtils.getAnnotationValue(ann, memberName, true);
 
             if (pathVal != null) {
                 String path = (String) pathVal.getValue();
 
-                if (path.charAt(0) != '/' && ! WebappPathType.relativePathExists(path, jclass, getEnv())) {
-                    String[] args = {
-                            path,
-                            ANNOTATION_INTERFACE_PREFIX + ann.getAnnotationType().getDeclaration().getSimpleName(),
-                            baseType.getQualifiedName()
-                    };
+                if ((path.charAt(0) != '/') && !WebappPathType.relativePathExists(path, jclass, getEnv())) {
+                    String[] args = { path, ANNOTATION_INTERFACE_PREFIX +
+                                    ann.getAnnotationType().getDeclaration().getSimpleName(), baseType.getQualifiedName() };
 
                     if (isError) {
                         getDiagnostics().addErrorArrayArgs(ann, "message.inherited-file-not-found", args);
@@ -419,8 +428,8 @@ public abstract class FlowControllerChecker
         }
     }
 
-    private void checkRelativePath(String methodName, AnnotationInstance ann, String memberName,
-                                   TypeDeclaration jclass, TypeDeclaration baseType, boolean isError)
+    private void checkRelativePath(String methodName, AnnotationInstance ann, String memberName, TypeDeclaration jclass,
+                                   TypeDeclaration baseType, boolean isError)
             throws FatalCompileTimeException {
         if (ann != null) {
             AnnotationValue pathVal = CompilerUtils.getAnnotationValue(ann, memberName, true);
@@ -428,13 +437,9 @@ public abstract class FlowControllerChecker
             if (pathVal != null) {
                 String path = (String) pathVal.getValue();
 
-                if (path.charAt(0) != '/' && ! WebappPathType.relativePathExists(path, jclass, getEnv())) {
-                    String[] args = {
-                            path,
-                            ANNOTATION_INTERFACE_PREFIX + ann.getAnnotationType().getDeclaration().getSimpleName(),
-                            methodName,
-                            baseType.getQualifiedName()
-                    };
+                if ((path.charAt(0) != '/') && !WebappPathType.relativePathExists(path, jclass, getEnv())) {
+                    String[] args = { path, ANNOTATION_INTERFACE_PREFIX +
+                                    ann.getAnnotationType().getDeclaration().getSimpleName(), methodName, baseType.getQualifiedName() };
 
                     if (isError) {
                         getDiagnostics().addErrorArrayArgs(jclass, "message.method-inherited-file-not-found", args);
@@ -446,7 +451,6 @@ public abstract class FlowControllerChecker
         }
     }
 
-
     protected void checkField(FieldDeclaration field, TypeDeclaration jclass) {
         //
         // Only warn about nonserializable member data that's defined in this particular class.
@@ -454,16 +458,15 @@ public abstract class FlowControllerChecker
         if (CompilerUtils.typesAreEqual(jclass, field.getDeclaringType())) {
             TypeInstance type = field.getType();
 
-            if (! field.hasModifier(Modifier.TRANSIENT) && ! field.hasModifier(Modifier.STATIC)
-                    && type instanceof ClassType
-                    && ! CompilerUtils.isAssignableFrom(SERIALIZABLE_CLASS_NAME, type, getEnv())) {
+            if (!field.hasModifier(Modifier.TRANSIENT) && !field.hasModifier(Modifier.STATIC) && type instanceof ClassType &&
+                    !CompilerUtils.isAssignableFrom(SERIALIZABLE_CLASS_NAME, type, getEnv())) {
                 getDiagnostics().addWarning(field, "warning.nonserializable-member-data");
             }
         }
     }
 
-    protected void checkMethod(MethodDeclaration method, ClassDeclaration jclass,
-                               AnnotationGrammar actionGrammar, AnnotationGrammar exceptionHandlerGrammar)
+    protected void checkMethod(MethodDeclaration method, ClassDeclaration jclass, AnnotationGrammar actionGrammar,
+                               AnnotationGrammar exceptionHandlerGrammar)
             throws FatalCompileTimeException {
         AnnotationInstance[] annotations = method.getAnnotationInstances();
 
@@ -474,10 +477,9 @@ public abstract class FlowControllerChecker
             if (annotationName.equals(ACTION_TAG_NAME)) {
                 actionGrammar.check(annotation, null, method);
 
-                if (! CompilerUtils.isAssignableFrom(FORWARD_CLASS_NAME, method.getReturnType(), getEnv())
-                        && ! CompilerUtils.isAssignableFrom(STRING_CLASS_NAME, method.getReturnType(), getEnv())) {
-                    getDiagnostics().addError(method, "error.method-wrong-return-type", FORWARD_CLASS_NAME,
-                            STRING_CLASS_NAME);
+                if (!CompilerUtils.isAssignableFrom(FORWARD_CLASS_NAME, method.getReturnType(), getEnv()) &&
+                        !CompilerUtils.isAssignableFrom(STRING_CLASS_NAME, method.getReturnType(), getEnv())) {
+                    getDiagnostics().addError(method, "error.method-wrong-return-type", FORWARD_CLASS_NAME, STRING_CLASS_NAME);
                 }
             } else if (annotationName.equals(EXCEPTION_HANDLER_TAG_NAME)) {
                 exceptionHandlerGrammar.check(annotation, null, method);
@@ -492,15 +494,15 @@ public abstract class FlowControllerChecker
     }
 
     private void checkExceptionHandlerMethod(MethodDeclaration method) {
-        if (! CompilerUtils.isAssignableFrom(FORWARD_CLASS_NAME, method.getReturnType(), getEnv())
-                && ! CompilerUtils.isAssignableFrom(STRING_CLASS_NAME, method.getReturnType(), getEnv())) {
+        if (!CompilerUtils.isAssignableFrom(FORWARD_CLASS_NAME, method.getReturnType(), getEnv()) &&
+                !CompilerUtils.isAssignableFrom(STRING_CLASS_NAME, method.getReturnType(), getEnv())) {
             getDiagnostics().addError(method, "error.method-wrong-return-type", FORWARD_CLASS_NAME, STRING_CLASS_NAME);
         }
 
         ParameterDeclaration[] parameters = method.getParameters();
 
         if (parameters.length == 2) {
-            if (! CompilerUtils.isAssignableFrom(THROWABLE_CLASS_NAME, parameters[0].getType(), getEnv())) {
+            if (!CompilerUtils.isAssignableFrom(THROWABLE_CLASS_NAME, parameters[0].getType(), getEnv())) {
                 getDiagnostics().addError(method, "error.exception-method-wrong-exception-arg", THROWABLE_CLASS_NAME);
             }
 
@@ -510,16 +512,14 @@ public abstract class FlowControllerChecker
         }
     }
 
-    private void checkExceptionHandlerArgType(MethodDeclaration method, ParameterDeclaration[] parameters,
-                                              int index, String className) {
-        if (! CompilerUtils.isOfClass(parameters[index].getType(), className, getEnv())) {
-            getDiagnostics().addError(method, "error.exception-method-wrong-arg-type", new Integer(index + 1),
-                    className);
+    private void checkExceptionHandlerArgType(MethodDeclaration method, ParameterDeclaration[] parameters, int index,
+                                              String className) {
+        if (!CompilerUtils.isOfClass(parameters[index].getType(), className, getEnv())) {
+            getDiagnostics().addError(method, "error.exception-method-wrong-arg-type", new Integer(index + 1), className);
         }
     }
 
-    protected void checkForOverlappingClasses(ClassDeclaration jpfClass, String baseClass, String fileExtension,
-                                              String errorKey) {
+    protected void checkForOverlappingClasses(ClassDeclaration jpfClass, String baseClass, String fileExtension, String errorKey) {
         File jpfFile = CompilerUtils.getSourceFile(jpfClass, true);
         File parentDir = jpfFile.getParentFile();
         PackageDeclaration pkg = jpfClass.getPackage();
@@ -533,15 +533,16 @@ public abstract class FlowControllerChecker
         //
         for (int i = 0; i < packageClasses.length; i++) {
             ClassDeclaration classDecl = packageClasses[i];
-            if (CompilerUtils.getAnnotation(classDecl, CONTROLLER_TAG_NAME) != null
-                    && CompilerUtils.isAssignableFrom(baseClass, classDecl, getEnv())) {
+
+            if ((CompilerUtils.getAnnotation(classDecl, CONTROLLER_TAG_NAME) != null) &&
+                    CompilerUtils.isAssignableFrom(baseClass, classDecl, getEnv())) {
                 File file = CompilerUtils.getSourceFile(classDecl, false);
 
                 //
                 // Add the dependency if it's a different file and if the file exists (it may have been deleted
                 // sometime after the list of classes in this package got built.
                 //
-                if (! jpfFile.equals(file) && file != null && file.exists()) {
+                if (!jpfFile.equals(file) && (file != null) && file.exists()) {
                     overlapping.add(file.getName());
                     overlappingFiles.add(file);
                 }
@@ -556,14 +557,15 @@ public abstract class FlowControllerChecker
         //
         File[] peers = parentDir.listFiles(new ExtensionFileFilter(fileExtension));
 
-        if (peers != null)    // make sure the directory hasn't been deleted while we're running
-        {
+        if (peers != null) // make sure the directory hasn't been deleted while we're running
+         {
             for (int i = 0; i < peers.length; i++) {
                 File peer = peers[i];
-                if (! peer.equals(jpfFile)) {
+
+                if (!peer.equals(jpfFile)) {
                     String name = peer.getName();
 
-                    if (! overlapping.contains(name)) {
+                    if (!overlapping.contains(name)) {
                         overlapping.add(name);
                         overlappingFiles.add(peer);
                     }
@@ -572,6 +574,7 @@ public abstract class FlowControllerChecker
         }
 
         int len = overlapping.size();
+
         if (len > 0) {
             if (len > 3) {
                 getDiagnostics().addErrorArrayArgs(jpfClass, errorKey, overlapping.toArray());
@@ -583,8 +586,8 @@ public abstract class FlowControllerChecker
         getCheckResultMap().put(JpfLanguageConstants.ExtraInfoKeys.overlappingPageFlowFiles, overlappingFiles);
     }
 
-    private static class ExtensionFileFilter implements FilenameFilter {
-
+    private static class ExtensionFileFilter
+            implements FilenameFilter {
         private String _extension;
 
         public ExtensionFileFilter(String extension) {

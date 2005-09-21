@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,6 +19,7 @@ package org.apache.ti.pageflow.internal;
 
 import org.apache.commons.chain.web.WebContext;
 import org.apache.commons.chain.web.servlet.ServletWebContext;
+
 import org.apache.ti.Globals;
 import org.apache.ti.core.ActionMessage;
 import org.apache.ti.pageflow.ActionResolver;
@@ -34,27 +35,26 @@ import org.apache.ti.pageflow.handler.ReloadableClassHandler;
 import org.apache.ti.pageflow.handler.StorageHandler;
 import org.apache.ti.pageflow.xwork.PageFlowAction;
 import org.apache.ti.pageflow.xwork.PageFlowActionContext;
-import org.apache.ti.schema.config.PageflowConfig;
 import org.apache.ti.util.Bundle;
 import org.apache.ti.util.MessageResources;
 import org.apache.ti.util.config.ConfigUtil;
+import org.apache.ti.util.config.bean.MultipartHandler;
+import org.apache.ti.util.config.bean.PageFlowConfig;
 import org.apache.ti.util.internal.InternalStringBuilder;
 import org.apache.ti.util.internal.ServletUtils;
 import org.apache.ti.util.logging.Logger;
 
 import java.lang.reflect.Method;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 
-
 public class InternalUtils
         implements PageFlowConstants, InternalConstants {
-
     private static final Logger _log = Logger.getInstance(InternalUtils.class);
-
     private static final String LONGLIVED_PAGEFLOWS_ATTR_PREFIX = ATTR_PREFIX + "longLivedPageFlow:";
     private static final String ACTIONOUTPUT_MAP_ATTR = ATTR_PREFIX + "actionOutputs";
     private static final String BINDING_UPDATE_ERRORS_ATTR = ATTR_PREFIX + "bindingUpdateErrors";
@@ -64,12 +64,10 @@ public class InternalUtils
     private static final String FORWARDING_MODULE_ATTR = ATTR_PREFIX + "forwardingModule";
     private static final String IGNORE_INCLUDE_SERVLET_PATH_ATTR = ATTR_PREFIX + "ignoreIncludeServletPath";
 
-
     /**
      * If not in production mode, write an error to the response; otherwise, set a response error code.
      */
-    public static void sendDevTimeError(String messageKey, Throwable cause, int productionTimeErrorCode,
-                                        Object[] messageArgs) {
+    public static void sendDevTimeError(String messageKey, Throwable cause, int productionTimeErrorCode, Object[] messageArgs) {
         // TODO: re-add this
     }
 
@@ -83,11 +81,9 @@ public class InternalUtils
     /**
      * Write an error to the response.
      */
-    public static void sendError(String messageKey, Object[] messageArgs, Throwable cause,
-                                 boolean avoidDirectResponseOutput) {
-        assert messageArgs.length == 0 || !(messageArgs[0] instanceof Object[])
-                : "Object[] passed to sendError; this is probably a mistaken use of varargs";
-        
+    public static void sendError(String messageKey, Object[] messageArgs, Throwable cause, boolean avoidDirectResponseOutput) {
+        assert (messageArgs.length == 0) || !(messageArgs[0] instanceof Object[]) : "Object[] passed to sendError; this is probably a mistaken use of varargs";
+
         // request may be null because of deprecated FlowController.sendError().
         if (avoidDirectResponseOutput) {
             String baseMessage = Bundle.getString(messageKey + "_Message", messageArgs);
@@ -95,6 +91,7 @@ public class InternalUtils
         }
 
         String html = Bundle.getString(messageKey + "_Page", messageArgs);
+
         // TODO re-add
         //ServletUtils.writeHtml(getWebContext(), html, true);
         System.err.println(html);
@@ -114,7 +111,8 @@ public class InternalUtils
             return parentClass.getDeclaredMethod(methodName, signature);
         } catch (NoSuchMethodException e) {
             Class superClass = parentClass.getSuperclass();
-            return superClass != null ? lookupMethod(superClass, methodName, signature) : null;
+
+            return (superClass != null) ? lookupMethod(superClass, methodName, signature) : null;
         }
     }
 
@@ -178,6 +176,7 @@ public class InternalUtils
     public static Class getReloadableClass(String className)
             throws ClassNotFoundException {
         ReloadableClassHandler handler = Handlers.get().getReloadableClassHandler();
+
         return handler.loadClass(className);
     }
 
@@ -185,7 +184,7 @@ public class InternalUtils
         Map requestScope = PageFlowActionContext.get().getRequestScope();
         Map map = (Map) requestScope.get(ACTIONOUTPUT_MAP_ATTR);
 
-        if (map == null && createIfNotExist) {
+        if ((map == null) && createIfNotExist) {
             map = new HashMap();
             requestScope.put(ACTIONOUTPUT_MAP_ATTR, map);
         }
@@ -195,9 +194,14 @@ public class InternalUtils
 
     public static Map getPageInputMap() {
         Map actionOutputsFromPageFlow = getActionOutputMap(false);
-        if (actionOutputsFromPageFlow != null) return actionOutputsFromPageFlow;
+
+        if (actionOutputsFromPageFlow != null) {
+            return actionOutputsFromPageFlow;
+        }
+
         FacesBackingBean fbb = getFacesBackingBean();
-        return fbb != null ? fbb.getPageInputMap() : null;
+
+        return (fbb != null) ? fbb.getPageInputMap() : null;
     }
 
     /**
@@ -240,7 +244,7 @@ public class InternalUtils
             //String formName = PageFlowActionContext.getContext().getAction().getFormBeanAttribute();
             assert formAttribute != null;
 
-            if (overwrite || getWebContext().getRequestScope().get(formAttribute) == null) {
+            if (overwrite || (getWebContext().getRequestScope().get(formAttribute) == null)) {
                 getWebContext().getRequestScope().put(formAttribute, formBean);
             }
         }
@@ -269,16 +273,17 @@ public class InternalUtils
         if (resolver == null) {
             sh.removeAttribute(currentJpfAttrName);
             sh.removeAttribute(currentLongLivedJpfAttrName);
+
             return;
         }
-        
+
         //
         // If this is a long-lived page flow, also store the instance in an attribute that never goes away.
         //
         if (resolver.getModuleConfig().isLongLivedFlow()) {
             String longLivedAttrName = getLongLivedFlowAttr(resolver.getNamespace());
             longLivedAttrName = getScopedAttrName(longLivedAttrName);
-            
+
             // Only set this attribute if it's not already there.  We want to avoid our onDestroy() callback that's
             // invoked when the page flow's session attribute is unbound.
             if (sh.getAttribute(longLivedAttrName) != resolver) {
@@ -295,14 +300,17 @@ public class InternalUtils
 
     public static String getFlowControllerClassName(String namespace) {
         assert namespace != null;
+
         ModuleRegistrationHandler mrh = Handlers.get().getModuleRegistrationHandler();
         ModuleConfig moduleConfig = mrh.getModuleConfig(namespace);
-        return moduleConfig != null ? moduleConfig.getControllerClassName() : null;
+
+        return (moduleConfig != null) ? moduleConfig.getControllerClassName() : null;
     }
 
     public static FacesBackingBean getFacesBackingBean() {
         StorageHandler sh = Handlers.get().getStorageHandler();
         String attrName = getScopedAttrName(FACES_BACKING_ATTR);
+
         return (FacesBackingBean) sh.getAttribute(attrName);
     }
 
@@ -311,15 +319,17 @@ public class InternalUtils
 
         if (lastDot != -1) {
             className = className.substring(0, lastDot);
+
             return '/' + className.replace('.', '/');
         } else {
             return "/";
         }
     }
 
-    public static PageflowConfig.MultipartHandler.Enum getMultipartHandlerType() {
-        PageflowConfig pfConfig = ConfigUtil.getConfig().getPageflowConfig();
-        return pfConfig != null ? pfConfig.getMultipartHandler() : null;
+    public static MultipartHandler getMultipartHandlerType() {
+        PageFlowConfig pfConfig = ConfigUtil.getConfig().getPageFlowConfig();
+
+        return (pfConfig != null) ? pfConfig.getMultipartHandler() : null;
     }
 
     /**
@@ -334,6 +344,7 @@ public class InternalUtils
             InternalStringBuilder value = new InternalStringBuilder(qualifiedAction.length() + lastSlash);
             value.append(pageURI.substring(0, lastSlash));
             value.append(qualifiedAction);
+
             return value.toString();
         }
 
@@ -343,11 +354,11 @@ public class InternalUtils
     public static String createActionPath(String qualifiedAction) {
         ModuleConfig moduleConfig = PageFlowActionContext.get().getModuleConfig();
 
-
         if (moduleConfig != null) {
             InternalStringBuilder value = new InternalStringBuilder(qualifiedAction.length() + 16);
             value.append(moduleConfig.getNamespace());
             value.append(qualifiedAction);
+
             return value.toString();
         }
 
@@ -356,17 +367,24 @@ public class InternalUtils
 
     public static String qualifyAction(String action) {
         assert action != null;
+
         InternalStringBuilder sb = null;
 
         String queryString = null;
         int question = action.indexOf('?');
-        if (question >= 0) queryString = action.substring(question);
+
+        if (question >= 0) {
+            queryString = action.substring(question);
+        }
 
         String actionMapping = getActionMappingName(action);
         sb = new InternalStringBuilder(action.length() + ACTION_EXTENSION_LEN + 1);
         sb.append(actionMapping);
         sb.append(ACTION_EXTENSION);
-        if (queryString != null) sb.append(queryString);
+
+        if (queryString != null) {
+            sb.append(queryString);
+        }
 
         return sb.toString();
     }
@@ -391,6 +409,7 @@ public class InternalUtils
 
     public static String getCleanActionName(String action, boolean prependSlash) {
         int question = action.indexOf('?');
+
         if (question >= 0) {
             action = action.substring(0, question);
         }
@@ -400,14 +419,17 @@ public class InternalUtils
         }
 
         if (action.charAt(0) == '/') {
-            if (!prependSlash) action = action.substring(1);
+            if (!prependSlash) {
+                action = action.substring(1);
+            }
         } else {
-            if (prependSlash) action = '/' + action;
+            if (prependSlash) {
+                action = '/' + action;
+            }
         }
 
         return action;
     }
-
 
     /**
      * Add a parameter to the given URL. Assumes there is no trailing
@@ -419,14 +441,15 @@ public class InternalUtils
      * @return the URL, with the given parameter added.
      */
     public static String addParam(String url, String paramName, String paramVal) {
-        return url + (url.indexOf('?') != -1 ? '&' : '?') + paramName + '=' + paramVal;
+        return url + ((url.indexOf('?') != -1) ? '&' : '?') + paramName + '=' + paramVal;
     }
 
     public static void throwPageFlowException(FlowControllerException effect)
             throws FlowControllerException {
         if (effect.causeMayBeSessionExpiration() && ServletUtils.isSessionExpired(getWebContext())) {
-            PageflowConfig pfc = ConfigUtil.getConfig().getPageflowConfig();
-            if (pfc == null || !pfc.isSetThrowSessionExpiredException() || pfc.getThrowSessionExpiredException()) {
+            PageFlowConfig pfc = ConfigUtil.getConfig().getPageFlowConfig();
+
+            if ((pfc == null) || pfc.isThrowSessionExpiredException()) {
                 throw new SessionExpiredException(effect);
             }
         }
@@ -442,7 +465,11 @@ public class InternalUtils
      */
     public static final String getRelativeURI(PageFlowController relativeTo) {
         PageFlowActionContext actionContext = PageFlowActionContext.get();
-        if (relativeTo == null) return actionContext.getRequestPath();
+
+        if (relativeTo == null) {
+            return actionContext.getRequestPath();
+        }
+
         return getRelativeURI(actionContext.getRequestURI(), relativeTo);
     }
 
@@ -455,9 +482,17 @@ public class InternalUtils
      */
     public static final String getRelativeURI(String uri, PageFlowController relativeTo) {
         String contextPath = PageFlowActionContext.get().getRequestPath();
-        if (relativeTo != null) contextPath += relativeTo.getNamespace();
+
+        if (relativeTo != null) {
+            contextPath += relativeTo.getNamespace();
+        }
+
         int overlap = uri.indexOf(contextPath + '/');
-        if (overlap == -1) return null;
+
+        if (overlap == -1) {
+            return null;
+        }
+
         return uri.substring(overlap + contextPath.length());
     }
 
@@ -476,7 +511,11 @@ public class InternalUtils
     public static Object getForwardedFormBean(boolean removeFromRequest) {
         Map requestScope = getWebContext().getRequestScope();
         Object form = requestScope.get(FORWARDED_FORMBEAN_ATTR);
-        if (removeFromRequest) requestScope.remove(FORWARDED_FORMBEAN_ATTR);
+
+        if (removeFromRequest) {
+            requestScope.remove(FORWARDED_FORMBEAN_ATTR);
+        }
+
         return form;
     }
 
@@ -486,7 +525,8 @@ public class InternalUtils
      */
     public static boolean avoidDirectResponseOutput() {
         Boolean avoid = (Boolean) getWebContext().getRequestScope().get(AVOID_DIRECT_RESPONSE_OUTPUT_ATTR);
-        return avoid != null && avoid.booleanValue();
+
+        return (avoid != null) && avoid.booleanValue();
     }
 
     /**
@@ -519,12 +559,13 @@ public class InternalUtils
      * call with <code>ignore</code>==<code>true</code> to be balanced by a call with
      * <code>ignore</code>==<code>false</code>.
      */
+
     /* TODO: re-add for page template support
     public static void setIgnoreIncludeServletPath( boolean ignore )
     {
         Map requestScope = getWebContext().getRequestScope();
         Integer depth = ( Integer ) requestScope.get( IGNORE_INCLUDE_SERVLET_PATH_ATTR );
-        
+
         if ( ignore )
         {
             if ( depth == null ) depth = new Integer( 0 );
@@ -534,7 +575,7 @@ public class InternalUtils
         {
             assert depth != null : "call to setIgnoreIncludeServletPath() was imbalanced";
             depth = new Integer( depth.intValue() - 1 );
-            
+
             if ( depth.intValue() == 0 )
             {
                 requestScope.remove( IGNORE_INCLUDE_SERVLET_PATH_ATTR );
@@ -546,7 +587,6 @@ public class InternalUtils
         }
     }
     */
-
     public static boolean ignoreIncludeServletPath() {
         return getWebContext().getRequestScope().get(IGNORE_INCLUDE_SERVLET_PATH_ATTR) != null;
     }
@@ -559,6 +599,7 @@ public class InternalUtils
      */
     public static ModuleConfig selectModule(String namespace) {
         ModuleRegistrationHandler mrh = Handlers.get().getModuleRegistrationHandler();
+
         return selectModule(mrh.getModuleConfig(namespace));
     }
 
@@ -567,29 +608,33 @@ public class InternalUtils
 
         if (config == null) {
             actionContext.setModuleConfig(null);
+
             return null;
         }
-        
+
         // Just return it if it's already registered.
-        if (actionContext.getModuleConfig() == config) return config;
-        actionContext.setModuleConfig(config);       
+        if (actionContext.getModuleConfig() == config) {
+            return config;
+        }
+
+        actionContext.setModuleConfig(config);
 
         /* TODO: re-add messages support
         MessageResourcesConfig[] mrConfig = config.findMessageResourcesConfigs();
         Object formBean = PageFlowActionContext.getContext().getAction().getFormBean();
-        
+
         for ( int i = 0; i < mrConfig.length; i++ )
         {
             String key = mrConfig[i].getKey();
             MessageResources resources = ( MessageResources ) servletContext.getAttribute( key + prefix );
-            
+
             if ( resources != null )
             {
                 if ( ! ( resources instanceof ExpressionAwareMessageResources ) )
                 {
                     resources = new ExpressionAwareMessageResources( resources, formBean, request, servletContext );
                 }
-                
+
                 requestScope.put( key, resources );
             }
             else
@@ -598,7 +643,6 @@ public class InternalUtils
             }
         }
         */
-        
         return config;
     }
 
@@ -610,9 +654,11 @@ public class InternalUtils
             String qualified = getQualifiedBundleName(bundleName);
             resources = (MessageResources) getWebContext().getApplicationScope().get(qualified);
         }
-        
+
         // If we can't find resources with this name, try them at the root (unqualified).
-        if (resources == null) resources = (MessageResources) getWebContext().getApplicationScope().get(bundleName);
+        if (resources == null) {
+            resources = (MessageResources) getWebContext().getApplicationScope().get(bundleName);
+        }
 
         return resources;
     }
@@ -629,7 +675,7 @@ public class InternalUtils
                 ModuleConfig mc = actionContext.getModuleConfig();
 
                 // Note that we don't append the namespace for the root module.
-                if (mc != null && mc.getNamespace() != null && mc.getNamespace().length() > 1) {
+                if ((mc != null) && (mc.getNamespace() != null) && (mc.getNamespace().length() > 1)) {
                     bundleName += mc.getNamespace();
                 }
             } else if (bundleName.endsWith("/")) {
@@ -644,9 +690,11 @@ public class InternalUtils
     public static Locale lookupLocale() {
         WebContext webContext = getWebContext();
         Locale locale = (Locale) webContext.getSessionScope().get(Globals.LOCALE_KEY);
-        if (locale == null && webContext instanceof ServletWebContext) {
+
+        if ((locale == null) && webContext instanceof ServletWebContext) {
             locale = ((ServletWebContext) webContext).getRequest().getLocale();
         }
+
         return locale;
     }
 
@@ -657,19 +705,18 @@ public class InternalUtils
     public static String getScopedAttrName(String attrName) {
         // Now, this is simply handled by the ActionContext implementation.  If it needs to wrap session attribute
         // names, it does.
-        
+
         /*
         String requestScopeParam = request.getParameter( SCOPE_ID_PARAM );
-        
+
         if ( requestScopeParam != null )
         {
             return getScopedName( attrName, requestScopeParam );
         }
-        
+
         ScopedRequest scopedRequest = unwrapRequest( request );
         return scopedRequest != null ? scopedRequest.getScopedName( attrName ) : attrName;
         */
         return attrName;
     }
-
 }

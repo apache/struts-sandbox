@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,14 +22,12 @@ import org.apache.ti.pageflow.interceptor.InterceptorChain;
 import org.apache.ti.pageflow.interceptor.InterceptorContext;
 import org.apache.ti.pageflow.interceptor.InterceptorException;
 
-
 /**
  * A request interceptor, which can run before and/or after a request.  Request interceptors are configured in the
- * <code>&lt;request-interceptors&gt;</code> element of WEB-INF/beehive-netui-config.xml.
+ * <code>&lt;request-interceptors&gt;</code> element of WEB-INF/struts-ti-config.xml.
  */
 public abstract class RequestInterceptor
         extends AbstractInterceptor {
-
     /**
      * Callback invoked before the request is processed.  During this method, {@link #cancelRequest} may be called to
      * cancel further request processing.  {@link InterceptorChain#continueChain} is called to invoke the rest of the
@@ -41,7 +39,8 @@ public abstract class RequestInterceptor
     /**
      * Callback invoked before the request is processed.  {@link #preRequest} may be used instead.
      */
-    public void preInvoke(InterceptorContext context, InterceptorChain chain) throws InterceptorException {
+    public void preInvoke(InterceptorContext context, InterceptorChain chain)
+            throws InterceptorException {
         preRequest((RequestInterceptorContext) context, chain);
     }
 
@@ -55,7 +54,8 @@ public abstract class RequestInterceptor
     /**
      * Callback invoked after the request is processed.  {@link #postRequest} may be used instead.
      */
-    public void postInvoke(InterceptorContext context, InterceptorChain chain) throws InterceptorException {
+    public void postInvoke(InterceptorContext context, InterceptorChain chain)
+            throws InterceptorException {
         postRequest((RequestInterceptorContext) context, chain);
     }
 

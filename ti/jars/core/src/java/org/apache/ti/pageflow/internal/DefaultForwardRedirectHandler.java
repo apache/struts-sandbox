@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,11 +21,10 @@ import org.apache.ti.pageflow.PageFlowException;
 import org.apache.ti.pageflow.PageFlowStack;
 import org.apache.ti.pageflow.handler.ForwardRedirectHandler;
 import org.apache.ti.pageflow.xwork.PageFlowActionContext;
-import org.apache.ti.schema.config.PageflowConfig;
 import org.apache.ti.util.config.ConfigUtil;
+import org.apache.ti.util.config.bean.PageFlowConfig;
 
 import javax.servlet.http.HttpServletResponse;
-
 
 /**
  * Handler for redirects and server forwards.
@@ -33,52 +32,43 @@ import javax.servlet.http.HttpServletResponse;
 public abstract class DefaultForwardRedirectHandler
         extends DefaultHandler
         implements ForwardRedirectHandler {
-
-    private static final int DEFAULT_MAX_FORWARDS_PER_REQUEST = 25;
-    private static final int DEFAULT_MAX_NESTING_STACK_DEPTH = 10;
-
-
     public DefaultForwardRedirectHandler() {
     }
 
-    public void forward(String uri)
-            throws PageFlowException {
+    public void forward(String uri) throws PageFlowException {
         PageFlowActionContext actionContext = PageFlowActionContext.get();
         int requestCount = actionContext.getForwardedRequestCount();
-        
+
         //
         // See if we've exceeded the maximum number of forwards.
         //
-        PageflowConfig pageflowConfig = ConfigUtil.getConfig().getPageflowConfig();
-        
+        PageFlowConfig pageflowConfig = ConfigUtil.getConfig().getPageFlowConfig();
+
         // Why can't we read the default value from the XmlObjext?
-        int forwardOverflowCount = pageflowConfig != null && pageflowConfig.isSetMaxForwardsPerRequest()
-                ? pageflowConfig.getMaxForwardsPerRequest()
-                : DEFAULT_MAX_FORWARDS_PER_REQUEST;
+        int forwardOverflowCount = pageflowConfig.getMaxForwardsPerRequest();
+
         if (requestCount > forwardOverflowCount) {
-            InternalUtils.sendDevTimeError("PageFlow_Forward_Overflow", null,
-                    HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                    new Object[]{new Integer(forwardOverflowCount), uri});
+            InternalUtils.sendDevTimeError("PageFlow_Forward_Overflow", null, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                                           new Object[] { new Integer(forwardOverflowCount), uri });
+
             return;
         }
-        
+
         //
         // See if we've exceeded the maximum nesting depth.
         //
         PageFlowStack pfStack = PageFlowStack.get(false);
-        
-        // Why can't we read the default value from the XmlObjext?
-        int nestingOverflowCount = pageflowConfig != null && pageflowConfig.isSetMaxNestingStackDepth()
-                ? pageflowConfig.getMaxNestingStackDepth()
-                : DEFAULT_MAX_NESTING_STACK_DEPTH;
 
-        if (pfStack != null && pfStack.size() > nestingOverflowCount) {
-            Object[] args = new Object[]{new Integer(pfStack.size()), new Integer(nestingOverflowCount)};
-            InternalUtils.sendDevTimeError("PageFlow_Nesting_Overflow", null,
-                    HttpServletResponse.SC_INTERNAL_SERVER_ERROR, args);
+        // Why can't we read the default value from the XmlObjext?
+        int nestingOverflowCount = pageflowConfig.getMaxNestingStackDepth();
+
+        if ((pfStack != null) && (pfStack.size() > nestingOverflowCount)) {
+            Object[] args = new Object[] { new Integer(pfStack.size()), new Integer(nestingOverflowCount) };
+            InternalUtils.sendDevTimeError("PageFlow_Nesting_Overflow", null, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, args);
+
             return;
         }
-            
+
         //
         // We're OK -- do the forward.
         //

@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,11 +29,9 @@ import org.apache.ti.compiler.internal.typesystem.type.TypeInstance;
 import java.util.Iterator;
 import java.util.List;
 
-
 public class GenSimpleActionModel
         extends GenXWorkActionModel
         implements JpfLanguageConstants {
-
     public GenSimpleActionModel(AnnotationInstance annotation, GenXWorkModuleConfigModel parentApp, ClassDeclaration jclass) {
         super(CompilerUtils.getString(annotation, NAME_ATTR, true), annotation, parentApp, jclass);
 
@@ -41,12 +39,13 @@ public class GenSimpleActionModel
         addForwards(annotation, parentApp, jclass);
 
         String formMember = getFormBeanMember();
+
         if (formMember != null) {
             FieldDeclaration field = CompilerUtils.findField(jclass, formMember);
-            assert field != null;  // checker should prevent this
+            assert field != null; // checker should prevent this
             setFormBeanType(addFormBean(field.getType(), parentApp));
         } else {
-            setReadonly(true);     // can't modify member state; mark as read-only
+            setReadonly(true); // can't modify member state; mark as read-only
 
             TypeInstance formBeanType = CompilerUtils.getTypeInstance(annotation, USE_FORM_BEAN_TYPE_ATTR, true);
 
@@ -55,7 +54,7 @@ public class GenSimpleActionModel
             }
         }
 
-        StringBuilder comment = new StringBuilder("Generated from @");
+        StringBuffer comment = new StringBuffer("Generated from @");
         comment.append(ANNOTATION_INTERFACE_PREFIX);
         comment.append(annotation.getAnnotationType().getAnnotationTypeDeclaration().getSimpleName());
         comment.append("(name=");
@@ -80,17 +79,17 @@ public class GenSimpleActionModel
 
         if (forwardRef == null) {
             forwardRef = DEFAULT_SIMPLE_ACTION_FORWARD_NAME;
+
             XWorkResultModel fwd = new SimpleActionXWorkResult(forwardRef, parentApp, annotation, jclass);
 
-            if (fwd.getPath() != null || fwd.isNavigateTo() || fwd.isNestedReturn()) {
+            if ((fwd.getPath() != null) || fwd.isNavigateTo() || fwd.isNestedReturn()) {
                 addForward(fwd);
             }
         }
 
         setDefaultForwardName(forwardRef);
 
-        List conditionalFwdAnnotations =
-                CompilerUtils.getAnnotationArray(annotation, CONDITIONAL_FORWARDS_ATTR, true);
+        List conditionalFwdAnnotations = CompilerUtils.getAnnotationArray(annotation, CONDITIONAL_FORWARDS_ATTR, true);
 
         if (conditionalFwdAnnotations != null) {
             int anonCount = 0;
@@ -101,20 +100,24 @@ public class GenSimpleActionModel
                 String expression = CompilerUtils.getString(conditionalFwdAnnotation, CONDITION_ATTR, true);
                 assert expression != null;
 
-                if (conditionalFwd.getName() == null) conditionalFwd.setName("_anon" + ++anonCount);
+                if (conditionalFwd.getName() == null) {
+                    conditionalFwd.setName("_anon" + ++anonCount);
+                }
+
                 addForward(conditionalFwd);
                 addConditionalForward(expression, conditionalFwd.getName());
             }
         }
     }
 
-    private static class SimpleActionXWorkResult extends GenXWorkResultModel {
-
+    private static class SimpleActionXWorkResult
+            extends GenXWorkResultModel {
         public SimpleActionXWorkResult(GenXWorkModuleConfigModel parent, AnnotationInstance annotation, ClassDeclaration jclass) {
             super(parent, annotation, jclass, null);
         }
 
-        public SimpleActionXWorkResult(String name, GenXWorkModuleConfigModel parent, AnnotationInstance annotation, ClassDeclaration jclass) {
+        public SimpleActionXWorkResult(String name, GenXWorkModuleConfigModel parent, AnnotationInstance annotation,
+                                       ClassDeclaration jclass) {
             super(parent, annotation, jclass, null);
             setName(name);
         }
@@ -124,4 +127,3 @@ public class GenSimpleActionModel
         }
     }
 }
-
