@@ -12,7 +12,7 @@ namespace PhoneBook.Web.Controls
 		protected DataGrid list;
 		protected Button add;
 
-		public void Open(IDictionary criteria)
+		public override bool Open(IDictionary criteria)
 		{
 			IViewHelper helper = ReadExecute(App.ENTRY_LIST, criteria);
 			bool ok = helper.IsNominal;
@@ -23,6 +23,7 @@ namespace PhoneBook.Web.Controls
 				list.DataSource = result;
 				list.DataBind();
 			}
+			return ok;
 		}
 
 		private static string LABEL = "_label";
@@ -70,7 +71,7 @@ namespace PhoneBook.Web.Controls
 
 		private void Page_Load(object sender, EventArgs e)
 		{
-			add.Click += new EventHandler(list_Add);
+			add.Click += new EventHandler(add_Click);
 			add.Text = GetMessage(add.ID);
 			Grid_Load();
 		}

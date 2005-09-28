@@ -7,7 +7,7 @@ namespace PhoneBook.Web.Controls
 {
 	public class AppGridControl : GridControl
 	{
-		public override IEntryList NewContextList
+		protected override IEntryList NewContextList
 		{
 			get { return new AppEntryList(); }
 		}
