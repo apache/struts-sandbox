@@ -219,7 +219,7 @@ namespace Nexus.Web.Controls
 
 		#region Binding methods 
 
-		public virtual void DataSource(IViewHelper helper)
+		protected virtual void DataSource(IViewHelper helper)
 		{
 			IList list = helper.Outcome as IList;
 			Grid.DataSource = list;
@@ -231,7 +231,7 @@ namespace Nexus.Web.Controls
 			Grid.DataBind();
 		}
 
-		public virtual int BindItemColumn(int i)
+		protected virtual int BindItemColumn(int i)
 		{
 			ButtonColumn column = new ButtonColumn();
 			column.ButtonType = ButtonColumnType.PushButton;
@@ -241,7 +241,7 @@ namespace Nexus.Web.Controls
 			return ++i;
 		}
 
-		public virtual int BindEditColumn(int i)
+		protected virtual int BindEditColumn(int i)
 		{
 			EditCommandColumn column = new EditCommandColumn();
 			column.ButtonType = ButtonColumnType.PushButton;
@@ -252,7 +252,7 @@ namespace Nexus.Web.Controls
 			return ++i;
 		}
 
-		public virtual int BindColumns(int i)
+		protected virtual int BindColumns(int i)
 		{
 			DataGrid grid = Grid;
 			grid.DataKeyField = DataKeyField;
@@ -267,7 +267,7 @@ namespace Nexus.Web.Controls
 			return i;
 		}
 
-		public int BindColumn(int pos, string headerText, string dataField, string sortExpression, string dataFormat)
+		protected int BindColumn(int pos, string headerText, string dataField, string sortExpression, string dataFormat)
 		{
 			BoundColumn column = new BoundColumn();
 			column.HeaderText = headerText;
@@ -285,12 +285,12 @@ namespace Nexus.Web.Controls
 
 		private bool bind = true;
 
-		public virtual void InitGrid()
+		protected virtual void InitGrid()
 		{
 			bind = true;
 		}
 
-		public virtual void BindGrid(IViewHelper helper)
+		protected virtual void BindGrid(IViewHelper helper)
 		{
 			// Only bind columns once
 			// WARNING: Won't work with a singleton
@@ -365,12 +365,12 @@ namespace Nexus.Web.Controls
 		/// Override getter to return new instance of the Context list 
 		/// for this application. 
 		/// </summary>
-		public virtual IEntryList NewContextList
+		protected virtual IEntryList NewContextList
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public virtual IViewHelper DataInsert()
+		protected virtual IViewHelper DataInsert()
 		{
 			DataGrid grid = Grid;
 			IEntryList list = NewContextList;
@@ -385,13 +385,13 @@ namespace Nexus.Web.Controls
 			return helper;
 		}
 
-		public virtual IViewHelper Find(string key, ControlCollection controls)
+		protected virtual IViewHelper Find(string key, ControlCollection controls)
 		{
 			IViewHelper helper = ExecuteBind(FindCommand);
 			return helper;
 		}
 
-		public virtual IViewHelper Save(string key, ControlCollection controls)
+		protected virtual IViewHelper Save(string key, ControlCollection controls)
 		{
 			IViewHelper h = GetHelperFor(SaveCommand);
 			if (h.IsNominal)
@@ -477,10 +477,16 @@ namespace Nexus.Web.Controls
 			return Open();
 		}
 
-		public void Reset(IDictionary criteria)
+		public virtual void Reset(IDictionary criteria)
 		{
 			list_ResetIndex();
 			Open(criteria);
+		}
+
+		public virtual void Reset()
+		{
+			list_ResetIndex();
+			list_Refresh();
 		}
 
 		protected virtual void list_Item(string commandName, int index)
@@ -592,12 +598,12 @@ namespace Nexus.Web.Controls
 
 		// postback events
 
-		protected void list_Edit(object source, DataGridCommandEventArgs e)
+		private void list_Edit(object source, DataGridCommandEventArgs e)
 		{
 			list_Edit(e.Item.ItemIndex);
 		}
 
-		protected void list_Save(object source, DataGridCommandEventArgs e)
+		private void list_Save(object source, DataGridCommandEventArgs e)
 		{
 			string key = (list_Insert) ? null : GetDataKey();
 			ControlCollection controls = GetControls(e);
@@ -614,23 +620,24 @@ namespace Nexus.Web.Controls
 			if (!okay) Page_Error = helper;
 		}
 
-		protected void list_Quit(object source, DataGridCommandEventArgs e)
+		private void list_Quit(object source, DataGridCommandEventArgs e)
 		{
 			list_Quit();
 		}
 
-		protected virtual void list_Add(object sender, EventArgs e)
+		private void list_Add(object sender, EventArgs e)
 		{
 			list_Add_Load();
+			if (View_Add!=null) View_Add(sender,e);
 		}
 
-		protected void List_Item(object source, DataGridCommandEventArgs e)
+		private void List_Item(object source, DataGridCommandEventArgs e)
 		{
 			int index = e.Item.ItemIndex;
 			list_Item(e.CommandName, index);
 		}
 
-		protected void list_PageIndexChanged(object sender, DataGridPageChangedEventArgs e)
+		private void list_PageIndexChanged(object sender, DataGridPageChangedEventArgs e)
 		{
 			Grid.CurrentPageIndex = e.NewPageIndex;
 			list_Refresh();
@@ -638,7 +645,18 @@ namespace Nexus.Web.Controls
 
 		#endregion
 
-		public virtual void list_Item_Click(int index)
+		/// <summary>
+		/// Signal when an item is being added.
+		/// </summary>
+		/// 
+		public event EventHandler View_Add;
+
+		protected void add_Click(object sender, EventArgs e)
+		{
+			list_Add(sender,e);
+		}
+
+		protected virtual void list_Item_Click(int index)
 		{
 			// Override to provide implementation
 		}
