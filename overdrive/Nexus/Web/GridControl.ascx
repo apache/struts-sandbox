@@ -1,1 +1,1 @@
-<%@ Control Language="c#" AutoEventWireup="false" Codebehind="GridControl.ascx.cs" Inherits="Nexus.Web.Controls.GridControl" TargetSchema="http://schemas.microsoft.com/intellisense/ie5" %>
+<%@ Control Language="c#" AutoEventWireup="false" Codebehind="GridControl.ascx.cs" Inherits="Nexus.Web.GridControl" TargetSchema="http://schemas.microsoft.com/intellisense/ie5" %>

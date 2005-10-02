@@ -5,7 +5,7 @@ using System.Web.UI.WebControls;
 using Nexus.Core;
 using Nexus.Core.Helpers;
 
-namespace Nexus.Web.Controls
+namespace Nexus.Web
 {
 	public class GridControl : ViewControl
 	{

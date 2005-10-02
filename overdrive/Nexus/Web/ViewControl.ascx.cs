@@ -6,7 +6,7 @@ using Nexus.Core;
 using Nexus.Core.Helpers;
 using UserControl = Spring.Web.UI.UserControl;
 
-namespace Nexus.Web.Controls
+namespace Nexus.Web
 {
 	/// <summary>
 	/// Base class for view controls (sub forms).
