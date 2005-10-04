@@ -1,6 +1,6 @@
 using System;
 using Nexus.Core;
-using Nexus.Web.Controls;
+using Nexus.Web;
 using PhoneBook.Core;
 
 namespace PhoneBook.Web.Controls

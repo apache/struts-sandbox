@@ -5,7 +5,7 @@ using System.Web.UI.WebControls;
 using Nexus.Core;
 using Nexus.Core.Helpers;
 using Nexus.Core.Profile;
-using Nexus.Web.Controls;
+using Nexus.Web;
 using PhoneBook.Core;
 using PhoneBook.Web.Controls;
 using Spring.Web.UI;
