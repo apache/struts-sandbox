@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Web.UI;
 using Nexus.Core.Helpers;
+using Nexus.Core.Profile;
 
 namespace Nexus.Web
 {
@@ -12,6 +13,11 @@ namespace Nexus.Web
 		/// </summary>
 		/// 
 		void ResetControls();
+
+		/// <summary>
+		/// User profile, which includes user ID and Locale.
+		/// </summary>
+		IProfile Profile { get; set; }
 
 		IViewHelper GetHelperFor(string command);
 		IViewHelper Execute(string command);

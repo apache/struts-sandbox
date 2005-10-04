@@ -4,6 +4,44 @@
         <name>Nexus.Core</name>
     </assembly>
     <members>
+        <member name="T:WQD.Core.Controls.FindArgs">
+            <summary>
+            Provide an EventArgs type to interace with FindControls
+            that can be read or bound via an IDictionary object.
+            </summary>
+            
+        </member>
+        <member name="F:WQD.Core.Controls.FindArgs.OldArgs">
+            <summary>
+            A reference to the original arguments for an event, if any.
+            </summary>
+            
+        </member>
+        <member name="F:WQD.Core.Controls.FindArgs.Criteria">
+            <summary>
+            Expose our dictionary instance.
+            </summary>
+            
+        </member>
+        <member name="M:WQD.Core.Controls.FindArgs.#ctor(System.Collections.IDictionary)">
+            <summary>
+            Create this instance using the given dictionary.
+            </summary>
+            
+        </member>
+        <member name="M:WQD.Core.Controls.FindArgs.#ctor">
+            <summary>
+            Create a new instance with empty fields.
+            </summary>
+            
+        </member>
+        <member name="M:WQD.Core.Controls.FindArgs.#ctor(System.EventArgs)">
+            <summary>
+            Create a new instance, setting the old event arguments.
+            </summary>
+            <param name="oldArgs">Old Event arguments</param>
+            
+        </member>
         <member name="T:Nexus.Core.Helpers.IViewHelper">
             <summary>
             Provide a facade for use by a code-behind to simplify access to the 
@@ -245,12 +283,6 @@
             All other properties and methods of the Helper refer to the Context, 
             making Context the cornerstone property.
             </remarks>
-            
-        </member>
-        <member name="P:Nexus.Core.Helpers.ViewHelper.Profile">
-            <summary>
-            Provide the user Profile for this Helper, if any.
-            </summary>
             
         </member>
         <member name="T:Nexus.Core.Profile.IProfile">
@@ -990,7 +1022,7 @@
             </summary>
             <param name="command">Command ID</param>
             <returns>IRequestCommand instance for name</returns>
-            <exception cref="!:Exception">
+            <exception cref="T:System.Exception">
             Throws Exception if name is null, 
             name is not in catalog, 
             or if instance for name is not a IRequestCommand

@@ -4,6 +4,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using Nexus.Core;
 using Nexus.Core.Helpers;
+using Nexus.Core.Profile;
 using UserControl = Spring.Web.UI.UserControl;
 
 namespace Nexus.Web
@@ -226,9 +227,18 @@ namespace Nexus.Web
 			}
 		}
 
+		private IProfile _Profile; 
+
+		public IProfile Profile
+		{
+			get { return _Profile; }
+			set { _Profile = value; }
+		}
+
 		public IViewHelper GetHelperFor(string command)
 		{
 			IViewHelper helper = Catalog.GetHelperFor(command);
+			helper.Profile = Profile;
 			return helper;
 		}
 
@@ -583,6 +593,18 @@ namespace Nexus.Web
 			ResetControls();
 		}
 
+		/// <summary>
+		/// Automatically lookup messages for Buttons, HyperLinks, and Labels.
+		/// </summary>
+		/// <remarks><p>
+		/// Called during page Init cycle; override to change behavior or disable.
+		/// </p></remarks>
+		protected virtual void Page_Init()
+		{
+			if (IsPostBack) return;
+			GetMessages();
+		}
+
 		private void Page_Load(object sender, EventArgs e)
 		{
 			// Put user code to initialize the page here
@@ -597,6 +619,7 @@ namespace Nexus.Web
 			//
 			InitializeComponent();
 			base.OnInit(e);
+			Page_Init();
 		}
 
 		/// <summary>

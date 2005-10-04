@@ -625,7 +625,7 @@ namespace Nexus.Web
 			list_Quit();
 		}
 
-		private void list_Add(object sender, EventArgs e)
+		protected void list_Add(object sender, EventArgs e)
 		{
 			list_Add_Load();
 			if (View_Add!=null) View_Add(sender,e);

@@ -269,10 +269,6 @@ namespace Nexus.Core.Helpers
 			}
 		}
 
-		/// <summary>
-		/// Provide the user Profile for this Helper, if any.
-		/// </summary>
-		/// 
 		public IProfile Profile
 		{
 			get { return Context.Profile; }
