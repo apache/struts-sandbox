@@ -68,7 +68,7 @@
             To provide a default Alert or Required to use when no other is provided, 
             provide a Message Resource entry in the form: "_alert" or "_required".
             </p><p>
-            If a Label mesasge is not found, the FieldContext ID is returned instead. 
+            If a Label message is not found, the FieldContext ID is returned instead. 
             Otherwise, if no message is found, 
             then the FieldContext ID and property tag (e.g. "LastName_required") 
             is returned. 

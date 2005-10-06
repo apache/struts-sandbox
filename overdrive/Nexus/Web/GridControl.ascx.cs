@@ -19,7 +19,7 @@ namespace Nexus.Web
 		/// <summary>
 		/// Values to use with a query statement.
 		/// </summary>
-		public virtual IDictionary list_Criteria
+		private IDictionary list_Criteria
 		{
 			get
 			{
@@ -672,6 +672,12 @@ namespace Nexus.Web
 			base.Page_Reset();
 		}
 
+		/// <summary>
+		/// Handle the page's Load event.
+		/// </summary>
+		/// <param name="sender">Event source</param>
+		/// <param name="e">Runtime arguments</param>
+		/// 
 		private void Page_Load(object sender, EventArgs e)
 		{
 			Grid.AutoGenerateColumns = false;
@@ -686,6 +692,11 @@ namespace Nexus.Web
 
 		#region Web Form Designer generated code
 
+		/// <summary>
+		///		Initialize components.
+		/// </summary>
+		/// <param name="e">Runtime parameters</param>
+		/// 
 		protected override void OnInit(EventArgs e)
 		{
 			//

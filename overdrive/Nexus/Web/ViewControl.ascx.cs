@@ -207,6 +207,68 @@ namespace Nexus.Web
 
 		#endregion 
 
+		#region ViewState methods 
+
+		/// <summary>
+		/// Token under which to store the array of primary keys. 
+		/// </summary>
+		/// 
+		private const string KEYS = "Keys";
+
+		/// <summary>
+		/// Set an array of primary keys to the view state.
+		/// </summary>
+		/// <param name="keys">.</param>
+		/// 
+		protected void SetKeyIndex(string[] keys)
+		{
+			ViewState[KEYS] = keys;
+		}
+
+		/// <summary>
+		/// Return the nth key from the array kept in view state.
+		/// </summary>
+		/// <param name="index">Array index for the primary key (corresponds to index of the DataGrid).</param>
+		/// <returns>Nth key from primary key array kept in view state.</returns>
+		protected string GetKeyIndex(int index)
+		{
+			string[] keys = (string[]) ViewState[KEYS];
+			return keys[index];
+		}
+
+		/// <summary>
+		/// Return the primary key for the current item index of the DataGrid.
+		/// </summary>
+		/// <param name="e">DataGrid event arguments.</param>
+		/// <param name="offset">Number of items on prior pages, if any (page*pagesize).</param>
+		/// <returns>The primary key for the current item index of the DataGrid.</returns>
+		protected string GetKeyIndex(DataGridCommandEventArgs e, int offset)
+		{
+			return GetKeyIndex(e.Item.ItemIndex + offset);
+		}
+
+		/// <summary>
+		/// Return the index for the given key, 
+		/// usually so that it can be selected.
+		/// </summary>
+		/// <param name="list">List of KeyValue entries.</param>
+		/// <param name="key">A key value from the list</param>
+		/// <returns>-1 if not found</returns>
+		/// 
+		protected int IndexForKey (IList list, string key)
+		{
+			int i = 0;
+			foreach (KeyValue row in list)
+			{
+				if (key.Equals (row.Key))
+					return i;
+				i++;
+			}
+			return -1;
+		}
+
+		#endregion
+
 		#region IViewControl methods
 
 		public void ResetControls()
@@ -276,6 +338,18 @@ namespace Nexus.Web
 					else
 						BindListControl(x, s, r);
 				}
+				if (IsCheckBox(t))
+				{
+					CheckBox x = (CheckBox) t;
+					object v = dictionary[ToColumn(x.ID, prefix)];
+					if (v != null) x.Checked = true;
+				}
+				if (IsRadioButton(t))
+				{
+					RadioButton x = (RadioButton) t;
+					object v = dictionary[ToColumn(x.ID, prefix)];
+					if (v != null) x.Checked = true;
+				}
 			}
 		}
 
@@ -339,12 +413,14 @@ namespace Nexus.Web
 					TextBox x = (TextBox) t;
 					string value = (nullOnEmpty) ? NullOnEmpty(x.Text) : x.Text;
 					dictionary.Add(ToColumn(x.ID, prefix), value);
+					continue;
 				}
 				if (IsLabel(t))
 				{
 					Label x = (Label) t;
 					string value = (nullOnEmpty) ? NullOnEmpty(x.Text) : x.Text;
 					dictionary.Add(ToColumn(x.ID, prefix), value);
+					continue;
 				}
 				if (IsListControl(t))
 				{
@@ -352,6 +428,7 @@ namespace Nexus.Web
 					string root = RootId(x.ID, prefix, list_suffix);
 					string value = (nullOnEmpty) ? NullOnEmpty(x.SelectedValue) : x.SelectedValue;
 					dictionary.Add(root, value);
+					continue;
 				}
 				if (IsCheckBox(t))
 				{
@@ -359,6 +436,7 @@ namespace Nexus.Web
 					string key = ToColumn(x.ID, prefix);
 					string value = (x.Checked) ? key : null;
 					dictionary.Add(key, value);
+					continue;
 				}
 				if (IsRadioButton(t))
 				{
@@ -366,6 +444,7 @@ namespace Nexus.Web
 					string key = ToColumn(x.ID, prefix);
 					string value = (x.Checked) ? key : null;
 					dictionary.Add(key, value);
+					continue;
 				}
 			}
 		}
@@ -458,10 +537,17 @@ namespace Nexus.Web
 		{
 			foreach (Control t in controls)
 			{
+				if (IsLabel(t))
+				{
+					Label x = (Label) t;
+					x.Text = GetMessage(x.ID);
+					continue;
+				}
 				if (IsButton(t))
 				{
 					Button x = (Button) t;
 					x.Text = GetMessage(x.ID);
+					continue;
 				}
 				if (IsHyperLink(t))
 				{
@@ -469,11 +555,6 @@ namespace Nexus.Web
 					x.Text = GetMessage(x.ID + TITLE);
 					x.NavigateUrl = GetMessage(x.ID + LINK);
 					continue;
-				}
-				if (IsLabel(t))
-				{
-					Label x = (Label) t;
-					x.Text = GetMessage(x.ID);
 				}
 			}
 		}
@@ -605,6 +686,12 @@ namespace Nexus.Web
 			GetMessages();
 		}
 
+		/// <summary>
+		/// Handle the page's Load event.
+		/// </summary>
+		/// <param name="sender">Event source</param>
+		/// <param name="e">Runtime arguments</param>
+		/// 
 		private void Page_Load(object sender, EventArgs e)
 		{
 			// Put user code to initialize the page here
@@ -612,6 +699,11 @@ namespace Nexus.Web
 
 		#region Web Form Designer generated code
 
+		/// <summary>
+		///		Initialize components.
+		/// </summary>
+		/// <param name="e">Runtime parameters</param>
+		/// 
 		protected override void OnInit(EventArgs e)
 		{
 			//

@@ -913,7 +913,7 @@
         </member>
         <member name="P:Nexus.Core.Validators.IProcessorContext.Target">
             <summary>
-            Reorod the target value after conversion or formatting.
+            Record the target value after conversion or formatting.
             </summary>
             
         </member>

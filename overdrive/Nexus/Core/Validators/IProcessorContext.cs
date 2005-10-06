@@ -23,7 +23,7 @@ namespace Nexus.Core.Validators
 		object Source { get; set; }
 
 		/// <summary>
-		/// Reorod the target value after conversion or formatting.
+		/// Record the target value after conversion or formatting.
 		/// </summary>
 		/// 
 		object Target { get; set; }
