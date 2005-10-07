@@ -33,6 +33,13 @@ namespace Nexus.Core.Tables
 			set { _Strict = value; }
 		}
 
+		public virtual IFieldContext NewFieldContext(string id)
+		{
+			IFieldContext field = new FieldContext();
+			field.ID = id;
+			return field;
+		}
+		
 		public virtual IFieldContext AddFieldContext
 		{
 			set
@@ -58,9 +65,19 @@ namespace Nexus.Core.Tables
 		{
 			if (id == null) throw new ArgumentNullException("id==null", "Nexus.Core.Tables.FieldTable.GetFieldContext");
 			IFieldContext fieldContext = Field[id] as IFieldContext;
-			bool problem = ((fieldContext == null) && (Strict));
-			if (problem)
-				throw new ArgumentNullException(id, "Nexus.Core.Tables.FieldTable.GetFieldContext");
+			bool missing = (fieldContext == null);
+			if (missing) 
+				if (Strict)
+					throw new ArgumentNullException(id, "Nexus.Core.Tables.FieldTable.GetFieldContext");
+				else 
+				{ 
+					System.Object lockThis = new System.Object();
+					lock(lockThis)
+					{
+						fieldContext = NewFieldContext(id);
+						AddFieldContext = fieldContext;
+					}
+				}
 			return fieldContext;
 		}
 

@@ -4,6 +4,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using Nexus.Core;
 using Nexus.Core.Helpers;
+using WQD.Core.Controls;
 
 namespace Nexus.Web
 {
@@ -19,7 +20,7 @@ namespace Nexus.Web
 		/// <summary>
 		/// Values to use with a query statement.
 		/// </summary>
-		private IDictionary list_Criteria
+		protected IDictionary list_Criteria
 		{
 			get
 			{
@@ -653,7 +654,11 @@ namespace Nexus.Web
 
 		protected void add_Click(object sender, EventArgs e)
 		{
-			list_Add(sender,e);
+			if (View_Add!=null)
+			{
+				FindArgs f = new FindArgs(e,list_Criteria);
+				View_Add(sender,f);
+			}
 		}
 
 		protected virtual void list_Item_Click(int index)

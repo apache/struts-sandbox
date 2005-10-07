@@ -19,6 +19,17 @@ namespace Nexus.Core.Tables
 		bool Strict { set; get; }
 
 		/// <summary>
+		/// Factory method to create a stub context 
+		/// when field is required and Strict is false.
+		/// </summary>
+		/// <remarks><p>
+		/// The IFieldContext instance should provide a default for Required.
+		/// </p></remarks>
+		/// <param name="id">The fieldname</param>
+		/// <returns>New default context for ID</returns>
+		IFieldContext NewFieldContext(string id);
+
+		/// <summary>
 		/// Add a field to the set. 
 		/// </summary>
 		/// 

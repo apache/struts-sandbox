@@ -112,6 +112,19 @@
             If the context has not been initialized yet.
             </exception>
         </member>
+        <member name="T:Nexus.Extras.Spring.FieldTable">
+            <summary>
+            Companion to Nexus.Extras.Spring.FieldContext.
+            </summary>
+        </member>
+        <member name="P:Nexus.Extras.Spring.FieldTable.MessageSource">
+            <summary>
+            Identify the message source for this FieldTable.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">
+            If the context has not been initialized yet.
+            </exception>
+        </member>
         <member name="T:Agility.Extras.Spring.Objects">
             <summary>
             A singleton implementation of the IHelper protocol, 

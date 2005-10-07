@@ -36,7 +36,7 @@ namespace Nexus.Web
 		/// </summary>
 		protected IViewHelper Page_Error
 		{
-			set { View_Error_Send(this, new ViewArgs(value)); }
+			set { View_Error_Handler(this, new ViewArgs(value)); }
 		}
 
 		#region String utilities 
@@ -301,6 +301,7 @@ namespace Nexus.Web
 		{
 			IViewHelper helper = Catalog.GetHelperFor(command);
 			helper.Profile = Profile;
+			// helper;
 			return helper;
 		}
 
@@ -646,12 +647,23 @@ namespace Nexus.Web
 		/// </summary>
 		/// <param name="sender">This object</param>
 		/// <param name="e">A ViewArgs instance with the IViewHelper containing the error messages(s).</param>
-		private void View_Error_Send(object sender, ViewArgs e)
+		private void View_Error_Handler(object sender, EventArgs e)
 		{
 			if (View_Error != null)
 			{
 				View_Error(sender, e);
 			}
+		}
+
+		/// <summary>
+		/// Initialize the control to use the stanard View_Error event handerl.
+		/// </summary>
+		/// <param name="c">Control to register</param>
+		/// 
+		protected void InitView(ViewControl c)
+		{
+			c.View_Error += new EventHandler(View_Error_Handler);
+			c.Profile = Profile;
 		}
 
 		/// <summary>

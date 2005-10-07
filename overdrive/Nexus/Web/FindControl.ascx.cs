@@ -65,7 +65,7 @@ namespace Nexus.Web
 			if (View_Find != null)
 			{
 				FindArgs a = new FindArgs(e, Criteria);
-				View_Find(sender, a);
+				View_Find(sender, a); 
 			}
 		}
 
