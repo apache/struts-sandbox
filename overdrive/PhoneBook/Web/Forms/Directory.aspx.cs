@@ -3,7 +3,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using Nexus.Core;
 using Nexus.Core.Helpers;
-using Nexus.Web.Controls;
+using Nexus.Web;
 using PhoneBook.Web.Controls;
 
 namespace PhoneBook.Web.Forms

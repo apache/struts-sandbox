@@ -31,8 +31,10 @@
 			<hr>
 			</asp:Panel>
 						
+			<!-- FINDER -->
 			<app:Finder id="finder" Runat="server"></app:Finder>
 			
+			<!-- LISTER -->
  			<app:Lister id="lister" runat="server"></app:Lister>
 			
 		</form>

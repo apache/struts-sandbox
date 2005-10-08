@@ -88,15 +88,15 @@ namespace WNE.Core.Forms
 		[Test]
 		public void FindControls()
 		{
-			WebAssert.Visible(pnlFind);
+			AssertVisibility(pnlFind,true);
 			foreach (DropDownListTester list in GetLists())
 			{
-				WebAssert.Visible(list);
+				AssertVisibility(list,true);
 			}
-			WebAssert.Visible(cmdListAll);
-			WebAssert.Visible(pnlList);
-			WebAssert.Visible(repList);
-			WebAssert.NotVisible(cmdAdd); // Visible if Editor
+			AssertVisibility(cmdListAll,true);
+			AssertVisibility(pnlList,true);
+			AssertVisibility(repList,true);
+			AssertVisibility(cmdAdd,true); // Visible if Editor
 		}
 
 		/// <summary>
@@ -108,7 +108,8 @@ namespace WNE.Core.Forms
 		{
 			foreach (DropDownListTester list in GetLists())
 			{
-				Assert.IsTrue(list.Items.Count > 0, list.HtmlId + ": Expected all filter lists to have items.");
+				bool ok = (list.Items.Count > 0);
+				AssertEquals(list.HtmlId + ": Expected all filter lists to have items",true,ok);
 			}
 		}
 
