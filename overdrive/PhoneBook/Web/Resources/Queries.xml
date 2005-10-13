@@ -101,6 +101,11 @@
 					pk_entry=#entry_key#
 				</isNotNull>
 			</dynamic>			
+			<dynamic>
+			   <isNotNull property="query_limit">
+					LIMIT #query_limit# OFFSET #query_offset# 
+			   </isNotNull>			
+			</dynamic>	
 		</select>
 
 		<insert id="entry_insert" parameterMap="entry_save_param">

@@ -82,6 +82,18 @@ namespace PhoneBook.Core
 		#region Commands
 
 		/// <summary>
+		/// Token for SQL LIMIT clause.
+		/// </summary>
+		/// 
+		public const string QUERY_LIMIT = "query_limit";
+
+		/// <summary>
+		/// Token for SQL OFFSET clause.
+		/// </summary>
+		/// 
+		public const string QUERY_OFFSET = "query_offset";
+
+		/// <summary>
 		/// Token for select one command.
 		/// </summary>
 		/// 

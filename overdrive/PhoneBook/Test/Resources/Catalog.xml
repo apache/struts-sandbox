@@ -19,6 +19,8 @@
 				<value>hired</value>
 				<value>hours</value>
 				<value>editor</value>
+				<value>query_offset</value>
+				<value>query_limit</value>
 			</list>
 		</property>
   </object>

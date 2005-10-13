@@ -76,7 +76,27 @@ namespace PhoneBook.Core.Commands
 			string extension = row.extension;
 			Assert.IsNotNull(extension, "Expected each row to have an extension.");
 			Assert.IsTrue(extension.Length > "1234567890".Length, extension + ": Expected formatted extension.");
-
 		}
+
+		[Test]
+		public void SelectAll_Offset()
+		{
+			IViewHelper helper = catalog.GetHelperFor(App.ENTRY_LIST);
+			helper.Criteria[App.QUERY_LIMIT] = 2;
+			helper.Criteria[App.QUERY_OFFSET] = 4;
+			helper.Execute();
+			if (!helper.IsNominal) Assert.Fail(helper.ErrorsText);
+			IList list = helper.Outcome;
+			Assert.IsTrue(list.Count==2);
+			AppEntry entry = list[0] as AppEntry;
+			helper.Criteria[App.QUERY_LIMIT] = 2;
+			helper.Criteria[App.QUERY_OFFSET] = 2;
+			helper.Execute();
+			IList list2 = helper.Outcome;
+			AppEntry entry2 = list2[0] as AppEntry;
+			Assert.IsFalse(entry.entry_key.Equals(entry2.entry_key));
+		}
+
+
 	}
 }
