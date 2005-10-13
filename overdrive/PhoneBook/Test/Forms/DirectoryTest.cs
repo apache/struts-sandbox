@@ -27,7 +27,7 @@ namespace WNE.Core.Forms
 	[TestFixture]
 	public class DirectoryTest : WebFormTestCase
 	{
-		private PanelTester pnlFind;
+		private UserControlTester finder;
 		private DropDownListTester last_name_list;
 		private DropDownListTester first_name_list;
 		private DropDownListTester extension_list;
@@ -35,18 +35,18 @@ namespace WNE.Core.Forms
 		private DropDownListTester hired_list;
 		private DropDownListTester hours_list;
 		// TODO: private DropDownListTester editor_list;
-		private ButtonTester cmdListAll;
+		private ButtonTester find;
 
-		private PanelTester pnlList;
-		private DataGridTester repList;
-		private ButtonTester cmdAdd;
+		private UserControlTester lister;
+		private DataGridTester list;
+		private ButtonTester add;
 
 		/// <summary>
 		/// Provide an array of the DropDownListTesters.
 		/// </summary>
 		/// <returns>An array of the DropDownListTesters</returns>
 		/// 
-		private DropDownListTester[] GetLists()
+		private DropDownListTester[] GetFilters()
 		{
 			DropDownListTester[] lists = {last_name_list, first_name_list, extension_list, user_name_list, hired_list, hours_list};
 			return lists;
@@ -63,21 +63,21 @@ namespace WNE.Core.Forms
 			Browser.UserLanguages = userLanguages;
 			Browser.Credentials = CredentialCache.DefaultCredentials;
 
-			pnlFind = new PanelTester("pnlFind", CurrentWebForm);
-			last_name_list = new DropDownListTester(App.LAST_NAME_LIST, CurrentWebForm);
-			first_name_list = new DropDownListTester(App.FIRST_NAME_LIST, CurrentWebForm);
-			extension_list = new DropDownListTester(App.EXTENSION_LIST, CurrentWebForm);
-			user_name_list = new DropDownListTester(App.USER_NAME_LIST, CurrentWebForm);
-			hired_list = new DropDownListTester(App.HIRED_LIST, CurrentWebForm);
-			hours_list = new DropDownListTester(App.HOURS_LIST, CurrentWebForm);
+			finder = new UserControlTester("finder", CurrentWebForm);
+			last_name_list = new DropDownListTester(App.LAST_NAME_LIST, finder);
+			first_name_list = new DropDownListTester(App.FIRST_NAME_LIST, finder);
+			extension_list = new DropDownListTester(App.EXTENSION_LIST, finder);
+			user_name_list = new DropDownListTester(App.USER_NAME_LIST, finder);
+			hired_list = new DropDownListTester(App.HIRED_LIST, finder);
+			hours_list = new DropDownListTester(App.HOURS_LIST, finder);
 			// TODO: editor_list = new DropDownListTester (App.EDITOR_LIST, CurrentWebForm);
-			cmdListAll = new ButtonTester("cmdListAll", CurrentWebForm);
+			find = new ButtonTester("find", finder);
 
-			pnlList = new PanelTester("pnlList", CurrentWebForm);
-			repList = new DataGridTester("repList", CurrentWebForm);
-			cmdAdd = new ButtonTester("cmdAdd", CurrentWebForm);
+			lister = new UserControlTester("lister", CurrentWebForm);
+			list = new DataGridTester("list", lister);
+			add = new ButtonTester("add", lister);
 
-			Browser.GetPage("http://localhost/PhoneBook/Forms/Directory.aspx");
+			Browser.GetPage("http://localhost/PhoneBook/Forms/Directory2.aspx");
 		}
 
 
@@ -88,15 +88,14 @@ namespace WNE.Core.Forms
 		[Test]
 		public void FindControls()
 		{
-			AssertVisibility(pnlFind, true);
-			foreach (DropDownListTester list in GetLists())
+			foreach (DropDownListTester filter in GetFilters())
 			{
-				AssertVisibility(list, true);
+				AssertVisibility(filter, true);
 			}
-			AssertVisibility(cmdListAll, true);
-			AssertVisibility(pnlList, true);
-			AssertVisibility(repList, true);
-			AssertVisibility(cmdAdd, true); // Visible if Editor
+			AssertVisibility(find, true);
+
+			AssertVisibility(list, true);
+			AssertVisibility(add, true); // Visible if Editor
 		}
 
 		/// <summary>
@@ -106,10 +105,10 @@ namespace WNE.Core.Forms
 		[Test]
 		public void ListControls()
 		{
-			foreach (DropDownListTester list in GetLists())
+			foreach (DropDownListTester filter in GetFilters())
 			{
-				bool ok = (list.Items.Count > 0);
-				AssertEquals(list.HtmlId + ": Expected all filter lists to have items", true, ok);
+				bool ok = (filter.Items.Count > 0);
+				AssertEquals(filter.HtmlId + ": Expected all filter lists to have items", true, ok);
 			}
 		}
 
