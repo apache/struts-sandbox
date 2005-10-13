@@ -27,7 +27,7 @@ namespace PhoneBook.Core.Commands
 	{
 		public override bool RequestExecute(IRequestContext context)
 		{
-			object o = Mapper().QueryForObject(QueryID, context);
+			object o = Mapper.QueryForObject(QueryID, context);
 			context[ID] = o;
 			IDictionary entry = o as IDictionary;
 			foreach (DictionaryEntry e in entry)

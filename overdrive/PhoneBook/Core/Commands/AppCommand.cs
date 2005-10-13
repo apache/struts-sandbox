@@ -25,17 +25,54 @@ namespace PhoneBook.Core.Commands
 	/// 
 	public abstract class AppCommand : RequestCommand
 	{
-		public SqlMapper Mapper()
+		/// <summary>
+		/// Provide a filed for Mapper property.
+		/// </summary>
+		/// 
+		private SqlMapper _Mapper;
+
+		/// <summary>
+		/// Expose a preconfigured SqlMapper instance that Commands can use to run statements.
+		/// </summary>
+		/// <remarks><p>
+		/// Commands use Mapper to invoke SqlMap statements, such as 
+		/// <code>
+		/// object row = Mapper ().QueryForObject (QueryID, context);
+		/// </code>.
+		/// </p><p>
+		/// Any SqlMapper API method may be called. 
+		/// </p><p>
+		/// The default behavior of BAseNexusCommand is to use the 
+		/// command ID if the QueryID is null.
+		/// </p></remarks>
+		/// <returns>Preconfigured Mapper instance</returns>
+		/// 
+		public SqlMapper Mapper
 		{
-			// return IBatisNet.DataMapper.Mapper.Instance();
-			return IBatisNet.DataMapper.Mapper.Instance();
+			get { return _Mapper; }
+			set { _Mapper = value; }
+
 		}
 
+		/// <summary>
+		/// Indicate whether string is null or zero length.
+		/// </summary>
+		/// <param name="input">Input to validate</param>
+		/// <returns>True if string is nyull or zero length</returns>
+		/// 
 		public bool IsEmpty(string input)
 		{
 			return ((input == null) || (input.Equals(String.Empty)));
 		}
 
+		/// <summary>
+		/// Create new Global Universal Identifer as a formatted string.
+		/// </summary>
+		/// <returns>String representing a new GUID</returns>
+		/// <remarks><p>
+		/// No two calls to this method will ever return duplicate strings.
+		/// </p></remarks>
+		/// 
 		public string GuidString()
 		{
 			Guid guid = Guid.NewGuid();

@@ -5,7 +5,7 @@
 
 	<!-- entry commands -->
 
-  <object id="entry_list" type="PhoneBook.Core.Commands.BaseList, PhoneBook.Core">
+  <object id="entry_list" parent="BaseList">
 		<property name="ID"><value>entry_list</value></property>
 		<property name="QueryID"><value>entry</value></property>
 		<property name="RelatedIDs">
@@ -23,7 +23,7 @@
 		</property>
   </object>
   
-  <object id="entry" type="PhoneBook.Core.Commands.BaseEntry, PhoneBook.Core">
+  <object id="entry" parent="BaseEntry">
 		<property name="ID"><value>entry</value></property>
 		<property name="RelatedIDs">
 			<list>
@@ -92,7 +92,7 @@
 		</property>
 	</object>
 			
-  <object id="entry_save" type="PhoneBook.Core.Commands.BaseSave, PhoneBook.Core">
+  <object id="entry_save" parent="BaseSave">
 		<property name="ID">
 			<value>entry_save</value>
 		</property>

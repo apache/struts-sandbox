@@ -55,7 +55,12 @@
 	  <property name="FieldTable"><ref object="FieldTable"/></property>
 	  <property name="PreOp"><ref object="pre-op"/></property>
 	  <property name="PostOp"><ref object="post-op"/></property>
-	  <property name="ViewHelper"><object type="Nexus.Web.WebHelper" singleton="false"/></property>
+	  <property name="ViewHelper"><object type="Nexus.Web.WebHelper, Nexus.Web" singleton="false"/></property>
  </object>
  
+<!-- iBATIS Mapper -->
+  
+  <object id="Mapper" type="IBatisNet.DataMapper.Mapper, IBatisNet.DataMapper" 
+		factory-method="Instance"/> 
+      
 </objects>

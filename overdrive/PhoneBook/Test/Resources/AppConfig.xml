@@ -58,4 +58,9 @@
 	  <property name="ViewHelper"><object type="Nexus.Web.WebHelper, Nexus.Web" singleton="false"/></property>
  </object>
  
+<!-- iBATIS Mapper -->
+  
+  <object id="Mapper" type="IBatisNet.DataMapper.Mapper, IBatisNet.DataMapper" 
+		factory-method="Instance"/> 
+      
 </objects>
