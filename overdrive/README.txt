@@ -46,7 +46,8 @@ Installing a development copy of OverDrive
 
 SUBVERSION
 
-* Use subversion to checkout OverDrive from the Apache repository
+* Use Subversion to checkout OverDrive from the 
+   [Apache repository|http://svn.apache.org/viewcvs.cgi/struts/sandbox/trunk/overdrive/].
 
 * If you are using [TortoiseSVN|http://tortoisesvn.tigris.org/] (recommended) 
 ** Create a likely subdirectory (e.g. /projects/Struts/OverDrive)
@@ -55,20 +56,28 @@ SUBVERSION
 *** Be sure the destination path is set to the folder you created!
 
 * After the checkout:
-** Download the external dependencies to the same directory from [http://people.apache.org/~husted/overdrive-local-cache.zip]
-** Unzip this archive to the same directory, to create the folders 
-*** local-cache 
+** [Download the external dependencies|
+   http://opensource2.atlassian.com/confluence/oss/download/attachments/442/overdrive-local-cache.zip] 
+   (local-cache) to the same directory.
+** Unzip this archive to the same directory, to create the folder local-cache 
+   with several subfolders.
+*** local-cache
 **** Agility
 **** iBatisNet
+**** NUnitAsp
 **** Nexus
-**** NUnitAsp.bin
-**** SpringNet.bin. 
-** This archive contains development versions of some products, so be 
-sure to use these rather than the released versions. Our goal is to 
-stay current with the development versions for now.
+**** SpringNet 
+** This archive may contain development versions of some products, 
+   so be sure to use these rather than the released assemblies. 
+   Our goal is to stay current with the development versions for now.
 ** If you have not already done so, also install NUnit 2.2 or later. 
-There is a MSI available from  [http://NUnit.org], along with a 
-Mono-friendly ZIP. 
+   There is a MSI available from  [http://NUnit.org], along with a Mono-friendly ZIP. 
+
+----
+
+See also 
+* [VStudio Readme]
+* [Database Readme]
 
 
 VISUAL STUDIO
@@ -84,7 +93,7 @@ h2. NUnit
 *** Press Apply 
 *** For "Start Application", browse to your instance of "nunit-gui.exe".
 
-* Using the TestDriven.Net plugin rather than the NUnit GUI is suggested.
+* We recommend using the TestDriven.Net plugin rather than the NUnit GUI.
 ** [http://www.testdriven.net/]
 
 h2. Agility 
@@ -93,8 +102,7 @@ h2. Agility
 
 h2. Nexus
 
-* The Nexus solution has a web project. To allow running the project 
-in-place: 
+* The Nexus solution has a web project. To allow running the project in-place: 
 ** Right-click on the "Nexus/Web" folder 
 ** Open "Sharing" and "Security/Web Sharing"
 ** Set the sharename to "Nexus"
@@ -102,30 +110,38 @@ in-place:
 
 h2. PhoneBook
 
-* The PhoneBook solution has a web project. To allow running the project 
-in-place: 
+* The PhoneBook solution has a web project. To allow running the project in-place: 
 ** Right-click on the "PhoneBook/Web" folder 
 ** Open "Sharing" and "Security/Web" Sharing
 ** Set the sharename to "Phonebook"
-* Build Nexus before building PhoneBook
+* Build Nexus (and Agility) before building PhoneBook
 
 h2. Subversion 
 
-* Using the Ankh plugin for Subversion is suggested.
+* We recommend using the Ankh plugin for Subversion.
 ** [http://ankhsvn.tigris.org/]
+
+----
+
+See also
+
+* [Subversion Readme]
+* [Database Readme]
 
 
 DATABASE
 
-* Right now, the PhoneBook application is using a MySQL 3.x database by 
-default. We mean to change that to SharpHSQL Real Soon Now 
-[http://www.c-sharpcorner.com/database/SharpHSQL.asp]. But for now, you 
-need MySQL 3.x installed. 
-** Create a database named phonebook
-** Create an entry table 
+* Right now, the PhoneBook application is using a MySQL 4.0 database by default. 
+** We mean to change the default that to [SharpHSQL|
+   http://www.c-sharpcorner.com/database/SharpHSQL.asp] Real Soon Now, 
+   and make it easy to switch between various database systems. 
+** But for now, you will need [MySQL 4.0|
+   ftp://mirror.mcs.anl.gov/pub/mysql/Downloads/MySQL-4.0/] installed. 
+   Then, all you need to do is execute the {{Phonebook-Start.sql}} script
 
-# Database: phonebook
-# Table: 'entry'
+{code:sql}
+CREATE DATABASE `phonebook`;
+USE `phonebook`;
 CREATE TABLE `entry` (
   `pk_entry` char(36) NOT NULL default '',
   `last_name` char(18) NOT NULL default '',
@@ -135,11 +151,24 @@ CREATE TABLE `entry` (
   `editor` tinyint(3) unsigned NOT NULL default '0',
   `hired` datetime NOT NULL default '0000-00-00 00:00:00',
   `hours` double NOT NULL default '37.5'
-) TYPE=MyISAM ROW_FORMAT=FIXED; 
+) TYPE=MyISAM ROW_FORMAT=FIXED;
+INSERT INTO `entry` (`pk_entry`,`last_name`,`first_name`,`extension`,`user_name`,`editor`,`hired`,`hours`) VALUES 
+ ('c5b6bbb1-66d6-49cb-9db6-743af6627828','Clinton','William','5557437828','bubba',0,'1992-08-19 00:00:00',37.5),
+ ('7c424227-8e19-4fb5-b089-423cfca723e1','Roosevelt','Theodore','5557438942','bull',0,'2001-09-14 00:00:00',37.5),
+ ('9320ea40-0c01-43e8-9cec-8fb9b3928c2c','Kennedy','John F.','5557433928','fitz',0,'1987-05-29 00:00:00',37.5),
+ ('3b27c933-c1dc-4d85-9744-c7d9debae196','Pierce','Franklin','5557437919','hawkeye',0,'1984-11-18 00:00:00',35),
+ ('554ff9e7-a6f5-478a-b76b-a666f5c54e40','Jefferson','Thomas','5557435440','monty',0,'1976-07-04 00:00:00',37.5);
+{code}
+
+----
+
+See also 
+
+* [Subversion Readme] 
+* [VStudio Readme]
 
 ----
 
 For more help, visit http://opensource.atlassian.com/confluence/oss/display/OVR/Home
 
 ----
-
