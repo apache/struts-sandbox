@@ -299,31 +299,23 @@
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "Resources\Command\AppBase.xml"
+                    RelPath = "Resources\AppBase.xml"
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "Resources\Command\AppConfig.xml"
+                    RelPath = "Resources\AppConfig.xml"
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "Resources\Command\AppFields.xml"
+                    RelPath = "Resources\AppFields.xml"
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "Resources\Command\Catalog.xml"
+                    RelPath = "Resources\Catalog.xml"
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "Resources\Query\default.xml"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "Resources\Query\FilterLists.xml"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "Resources\Query\SelectAll.xml"
+                    RelPath = "Resources\Queries.xml"
                     BuildAction = "Content"
                 />
             </Include>
