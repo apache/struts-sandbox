@@ -7,6 +7,7 @@
 	
 	<import resource="Resources/Command/AppBase.xml"/>
 	<import resource="Resources/Command/AppConfig.xml"/>
+	<import resource="Resources/Command/AppFields.xml"/>
 	<import resource="Resources/Command/Catalog.xml"/>
 	
 </objects>

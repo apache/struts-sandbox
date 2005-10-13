@@ -307,6 +307,10 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "Resources\Command\AppFields.xml"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "Resources\Command\Catalog.xml"
                     BuildAction = "Content"
                 />
