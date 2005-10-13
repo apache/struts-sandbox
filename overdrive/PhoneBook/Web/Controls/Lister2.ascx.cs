@@ -31,7 +31,7 @@ namespace PhoneBook.Web.Controls
 		private void Grid_Load()
 		{
 			AppUserProfile profile = Session[UserProfile.USER_PROFILE] as AppUserProfile;
-			HasEditColumn = profile.IsEditor;			
+			HasEditColumn = profile.IsEditor;
 		}
 
 		private void Grid_Init()
