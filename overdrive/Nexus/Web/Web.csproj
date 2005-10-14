@@ -175,11 +175,6 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "NexusDataGrid.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "ViewControl.ascx"
                     BuildAction = "Content"
                 />

@@ -18,6 +18,49 @@ namespace Nexus.Web
 		private string LIST_CRITERIA_KEY = "list_Criteria";
 
 		/// <summary>
+		/// Set the given criteria to the list_Critieria (creating a new one if null), and, 
+		/// If AllowCustomPage is set, 
+		/// calcuate new Limit and Offset, based on pageIndex, and set to criteria; 
+		/// obtain Count from criteria (or set to 0).
+		/// </summary>
+		/// <remarks><p>
+		/// This form is provided to be called by list_Criteria_Init. 
+		/// The other form is provided to be called by other methods.
+		/// </p></remarks>
+		/// <param name="criteria">The criteria instance to store the attributes</param>
+		/// <param name="pageIndex">The new page index</param>
+		protected IDictionary list_Criteria_NewPageIndex(IDictionary criteria, int pageIndex)
+		{
+			if (Grid.AllowCustomPaging)
+			{
+				if (criteria==null) criteria = new Hashtable(); // FIXME: Spring?
+				int page = pageIndex;
+				int limit = Grid.PageSize;
+				int offset = page * limit;
+				criteria[ITEM_LIMIT] = limit;
+				criteria[ITEM_OFFSET] = offset;
+			}
+			list_Criteria = criteria;
+			return criteria;
+		}
+	
+		/// <summary>
+		/// If AllowCustomPage is set, 
+		/// calculate new List and Offset, using the list_Context.
+		/// </summary>
+		/// <remarks><p>
+		/// The other form is provided to be called by list_Criteria_Init. 
+		/// This form is provided to be called by other methods.
+		/// </p></remarks>
+		/// <param name="pageIndex">The new page index</param>
+		/// <returns>The updated list_Criteria instance</returns>
+		protected IDictionary list_Criteria_NewPageIndex(int pageIndex)
+		{
+			IDictionary criteria = list_Criteria;
+			return list_Criteria_NewPageIndex(criteria,pageIndex);
+		}
+
+		/// <summary>
 		/// Values to use with a query statement.
 		/// </summary>
 		protected IDictionary list_Criteria
@@ -216,6 +259,14 @@ namespace Nexus.Web
 			set { _HasEditColumn = value; }
 		}
 
+		private bool _AllowCustomPaging = false;
+
+		public virtual bool AllowCustomPaging
+		{
+			get { return _AllowCustomPaging; }
+			set { _AllowCustomPaging = value; }
+		}
+
 		#endregion		
 
 		#region Binding methods 
@@ -223,7 +274,8 @@ namespace Nexus.Web
 		protected virtual void DataSource(IViewHelper helper)
 		{
 			IList list = helper.Outcome as IList;
-			Grid.DataSource = list;
+			DataGrid grid = Grid;
+			grid.DataSource = list;
 		}
 
 		public override void DataBind()
@@ -301,8 +353,13 @@ namespace Nexus.Web
 				int i = 0;
 				if (HasEditColumn) i = BindEditColumn(i);
 				if (HasItemColumn) i = BindItemColumn(i);
+				if (AllowCustomPaging)
+				{
+					Grid.AllowCustomPaging = true;
+					int itemCount = Convert.ToInt32(helper.Criteria[ITEM_COUNT]);
+					Grid.VirtualItemCount = itemCount;
+				}
 				BindColumns(i);
-
 			}
 			DataSource(helper);
 			DataBind();
@@ -437,6 +494,13 @@ namespace Nexus.Web
 		public virtual IViewHelper LoadGrid(IDictionary criteria)
 		{
 			IViewHelper helper;
+
+			if ((Grid.AllowCustomPaging) && (criteria==null))
+			{
+				list_Criteria_NewPageIndex(criteria,0);
+				HasCriteria = true;
+			}
+
 			if (HasCriteria)
 				helper = ExecuteList(criteria);
 			else
@@ -474,7 +538,7 @@ namespace Nexus.Web
 		public virtual bool Open(IDictionary criteria)
 		{
 			Page_Reset();
-			list_Criteria = criteria;
+			list_Criteria_NewPageIndex(criteria,0);
 			return Open();
 		}
 
@@ -585,18 +649,6 @@ namespace Nexus.Web
 			return controls;
 		}
 
-		private bool GetList()
-		{
-			IViewHelper helper = Execute(ListCommand);
-			bool okay = helper.IsNominal;
-			if (okay)
-			{
-				DataSource(helper);
-				DataBind();
-			}
-			return okay;
-		}
-
 		// postback events
 
 		private void list_Edit(object source, DataGridCommandEventArgs e)
@@ -612,11 +664,10 @@ namespace Nexus.Web
 			bool okay = helper.IsNominal;
 			if (okay)
 			{
-				okay = GetList();
-				// ISSUE: Event? Page_Prompt = (List_Insert) ? msg_ADD_SUCCESS : msg_SAVE_SUCCESS;
 				list_Insert = false;
 				list_ItemIndex = -1;
-				list_Refresh();
+				okay = this.Open();
+				// ISSUE: Event? Page_Prompt = (List_Insert) ? msg_ADD_SUCCESS : msg_SAVE_SUCCESS;
 			}
 			if (!okay) Page_Error = helper;
 		}
@@ -638,10 +689,26 @@ namespace Nexus.Web
 			list_Item(e.CommandName, index);
 		}
 
+		public const string ITEM_LIMIT = "item_limit";
+		public const string ITEM_OFFSET = "item_offset";
+		public const string ITEM_COUNT = "item_count";
+
 		private void list_PageIndexChanged(object sender, DataGridPageChangedEventArgs e)
 		{
-			Grid.CurrentPageIndex = e.NewPageIndex;
-			list_Refresh();
+			DataGrid grid = Grid;
+			
+			if (grid.AllowCustomPaging)
+			{
+				IDictionary criteria = list_Criteria_NewPageIndex(e.NewPageIndex);
+				IViewHelper helper = GetHelperFor(ListCommand);
+				helper.Read(criteria,true);
+				helper.Execute();
+				DataSource(helper);
+			}
+
+			grid.CurrentPageIndex = e.NewPageIndex;
+			list_Refresh();				
+			
 		}
 
 		#endregion
