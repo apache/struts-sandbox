@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Web.UI.WebControls;
-using Nexus.Core.Helpers;
 using Nexus.Core.Profile;
 using PhoneBook.Core;
 
@@ -11,20 +10,6 @@ namespace PhoneBook.Web.Controls
 	{
 		protected DataGrid list;
 		protected Button add;
-
-		public override bool Open(IDictionary criteria)
-		{
-			IViewHelper helper = ReadExecute(App.ENTRY_LIST, criteria);
-			bool ok = helper.IsNominal;
-			if (!ok) Page_Error = helper;
-			else
-			{
-				IList result = helper.Outcome;
-				list.DataSource = result;
-				list.DataBind();
-			}
-			return ok;
-		}
 
 		private static string LABEL = "_label";
 
@@ -40,7 +25,7 @@ namespace PhoneBook.Web.Controls
 			ListCommand = App.ENTRY_LIST;
 			SaveCommand = App.ENTRY_SAVE;
 			DataKeyField = App.ENTRY_KEY;
-			HasItemColumn = false;
+			AllowCustomPaging = true;
 
 			IList f = new ArrayList(7);
 			f.Add(App.LAST_NAME);

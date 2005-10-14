@@ -13,6 +13,8 @@
 
 	<object id="BaseChain" type="Nexus.Core.RequestChain, Nexus.Core"/>
 	
+	<object id="BaseCount" type="PhoneBook.Core.Commands.BaseCount, PhoneBook.Core" parent="BaseMapper"/>
+
 	<object id="BaseEntry" type="PhoneBook.Core.Commands.BaseEntry, PhoneBook.Core" parent="BaseMapper"/>
 	
 	<object id="BaseFilterList" type="PhoneBook.Core.Commands.BaseFilterList, PhoneBook.Core" parent="BaseMapper"/>

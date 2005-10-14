@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+using System;
 using System.Collections;
 using Nexus.Core;
 using Nexus.Core.Helpers;
@@ -79,24 +80,34 @@ namespace PhoneBook.Core.Commands
 		}
 
 		[Test]
-		public void SelectAll_Offset()
+		public void SelectAll_Limit()
 		{
 			IViewHelper helper = catalog.GetHelperFor(App.ENTRY_LIST);
-			helper.Criteria[App.QUERY_LIMIT] = 2;
-			helper.Criteria[App.QUERY_OFFSET] = 4;
+			helper.Criteria[App.ITEM_LIMIT] = 2;
+			helper.Criteria[App.ITEM_OFFSET] = 4;
 			helper.Execute();
 			if (!helper.IsNominal) Assert.Fail(helper.ErrorsText);
 			IList list = helper.Outcome;
-			Assert.IsTrue(list.Count==2);
+			Assert.IsTrue(list.Count==2,"Expected result set to be limited to two entries.");
 			AppEntry entry = list[0] as AppEntry;
-			helper.Criteria[App.QUERY_LIMIT] = 2;
-			helper.Criteria[App.QUERY_OFFSET] = 2;
+			helper.Criteria[App.ITEM_LIMIT] = 2;
+			helper.Criteria[App.ITEM_OFFSET] = 2;
 			helper.Execute();
 			IList list2 = helper.Outcome;
 			AppEntry entry2 = list2[0] as AppEntry;
-			Assert.IsFalse(entry.entry_key.Equals(entry2.entry_key));
+			Assert.IsFalse(entry.entry_key.Equals(entry2.entry_key),"Expected result sets to be different");
 		}
 
+		[Test]
+		public void SelectAll_Count()
+		{
+			IViewHelper helper = catalog.GetHelperFor(App.ENTRY_LIST_COUNT);
+			helper.Execute();
+			if (!helper.IsNominal) Assert.Fail(helper.ErrorsText);
+			IDictionary entry = helper.Criteria;
+			int count = Convert.ToInt32(entry[App.ITEM_COUNT]);
+			Assert.IsTrue(count==7);
+		}
 
 	}
 }

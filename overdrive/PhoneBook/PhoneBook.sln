@@ -33,6 +33,7 @@ Global
 		{2F4D056B-4211-4A17-8F47-37901085B3AE}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
+		..\Nexus\Web\GridControl.ascx.cs = ..\Nexus\Web\GridControl.ascx.cs
 		prebuild.bat = prebuild.bat
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

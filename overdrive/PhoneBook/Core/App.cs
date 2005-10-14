@@ -85,13 +85,19 @@ namespace PhoneBook.Core
 		/// Token for SQL LIMIT clause.
 		/// </summary>
 		/// 
-		public const string QUERY_LIMIT = "query_limit";
+		public const string ITEM_LIMIT = "item_limit";
 
 		/// <summary>
 		/// Token for SQL OFFSET clause.
 		/// </summary>
 		/// 
-		public const string QUERY_OFFSET = "query_offset";
+		public const string ITEM_OFFSET = "item_offset";
+
+		/// <summary>
+		/// Token for SQL COUNT clause.
+		/// </summary>
+		/// 
+		public const string ITEM_COUNT = "item_count";
 
 		/// <summary>
 		/// Token for select one command.
@@ -104,6 +110,12 @@ namespace PhoneBook.Core
 		/// </summary>
 		/// 
 		public const string ENTRY_LIST = "entry_list";
+
+		/// <summary>
+		/// Token for the count of a select all command.
+		/// </summary>
+		/// 
+		public const string ENTRY_LIST_COUNT = "entry_list_count";
 
 		/// <summary>
 		/// Token for List Last Names command.

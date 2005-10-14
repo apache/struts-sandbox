@@ -23,6 +23,7 @@
 				<ref object="hired"/> 
 				<ref object="hours"/> 				
 				<ref object="_entry_list"/> 
+				<ref object="_entry_list_count"/> 
 				<ref object="_extension_list"/>
 				<ref object="_hired_list"/>
 			</list>
@@ -75,6 +76,11 @@
 		<property name="Processor"><ref object="EntryListProcessor"/></property>
 	</object>
 		
+	<object id="_entry_list_count" parent="BaseFieldContext">
+		<property name="ID"><value>entry_list_count</value></property>
+		<property name="Processor"><ref object="CollectionProcessor"/></property>
+	</object>
+
 	<object id="_extension_list" parent="BaseFieldContext">
 		<property name="ID"><value>extension_list</value></property>
 		<property name="Processor"><ref object="ExtensionListProcessor"/></property>
@@ -85,6 +91,10 @@
 		<property name="Processor"><ref object="HiredListProcessor"/></property>
 	</object>
 
+	<object id="CollectionProcessor" type="Nexus.Core.Validators.CollectionProcessor, Nexus.Core">
+		<property name="ID"><value>EntryCountProcessor</value></property>
+	</object>
+	
  		<!-- "d" is .NET for "short date" --> 
 	<object id="DateTimeProcessor" type="Nexus.Core.Validators.DateTimeProcessor">
 		<property name="ID"><value>DateTimeProcessor</value></property>

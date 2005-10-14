@@ -5,7 +5,7 @@
 
 	<!-- entry commands -->
 
-  <object id="entry_list" parent="BaseList">
+  <object id="entry_list_rows" parent="BaseList">
 		<property name="ID"><value>entry_list</value></property>
 		<property name="QueryID"><value>entry</value></property>
 		<property name="RelatedIDs">
@@ -19,10 +19,30 @@
 				<value>hired</value>
 				<value>hours</value>
 				<value>editor</value>
+				<value>item_offset</value>
+				<value>item_limit</value>
 			</list>
 		</property>
   </object>
   
+  <object id="entry_list_count" parent="BaseCount">
+		<property name="ID"><value>entry_list_count</value></property>
+		<property name="QueryID"><value>entry_count</value></property>
+		<property name="RelatedIDs">
+			<list>
+				<value>item_count</value>
+				<value>entry_key</value>
+				<value>last_name</value>
+				<value>first_name</value>
+				<value>extension</value>
+				<value>user_name</value>
+				<value>hired</value>
+				<value>hours</value>
+				<value>editor</value>
+			</list>
+		</property>
+  </object>
+
   <object id="entry" parent="BaseEntry">
 		<property name="ID"><value>entry</value></property>
 		<property name="RelatedIDs">
@@ -75,7 +95,19 @@
   
   
 	<!-- chains -->
-
+    
+    <object id="entry_list" parent="BaseChain">
+		<property name="ID">
+			<value>entry_list</value>
+		</property>
+		<property name="AddCommands">
+			<list>
+				<ref object="entry_list_rows" />
+				<ref object="entry_list_count" />
+			</list>
+		</property>
+	</object>
+    
     <object id="entry_find" parent="BaseChain">
 		<property name="ID">
 			<value>entry_find</value>
