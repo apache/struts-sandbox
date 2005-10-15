@@ -97,16 +97,16 @@ namespace PhoneBook.Core.Commands
 			helper.Execute();
 			if (!helper.IsNominal) Assert.Fail(helper.ErrorsText);
 			IList list = helper.Outcome;
-			Assert.IsTrue(list.Count==2,"Expected result set to be limited to two entries.");
+			Assert.IsTrue(list.Count == 2, "Expected result set to be limited to two entries.");
 			AppEntry entry = list[0] as AppEntry;
 			helper.Criteria[App.ITEM_LIMIT] = 2;
 			helper.Criteria[App.ITEM_OFFSET] = 2;
 			helper.Execute();
 			IList list2 = helper.Outcome;
 			AppEntry entry2 = list2[0] as AppEntry;
-			Assert.IsFalse(entry.entry_key.Equals(entry2.entry_key),"Expected result sets to be different");
+			Assert.IsFalse(entry.entry_key.Equals(entry2.entry_key), "Expected result sets to be different");
 			int count = Convert.ToInt32(helper.Criteria[App.ITEM_COUNT]);
-			Assert.IsTrue(count>2,"Expected the overall count to be higher");
+			Assert.IsTrue(count > 2, "Expected the overall count to be higher");
 		}
 
 	}

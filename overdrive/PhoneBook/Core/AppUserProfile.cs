@@ -11,7 +11,6 @@ namespace PhoneBook.Core
 	/// 
 	public class AppUserProfile : UserProfile
 	{
-
 		/// <summary>
 		/// Provide a field for IsEditor property.
 		/// </summary>

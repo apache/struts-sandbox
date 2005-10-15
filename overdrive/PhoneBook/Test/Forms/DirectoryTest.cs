@@ -71,7 +71,7 @@ namespace WNE.Core.Forms
 		private DropDownListTester hours_list;
 
 		// TODO: private DropDownListTester editor_list;
-		
+
 		/// <summary>
 		/// Provide find instance for testing.
 		/// </summary>

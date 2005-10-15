@@ -11,7 +11,6 @@ namespace PhoneBook.Web.Controls
 	/// </summary>
 	public class Lister2 : AppGridControl
 	{
-
 		/// <summary>
 		/// Provide instance of DataGrid control
 		/// </summary>

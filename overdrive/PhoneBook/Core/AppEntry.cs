@@ -23,7 +23,6 @@ namespace PhoneBook.Core
 	/// 
 	public class AppEntry
 	{
-
 		/// <summary>
 		/// Internal storage.
 		/// </summary>

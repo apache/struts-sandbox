@@ -7,7 +7,6 @@ using PhoneBook.Core;
 
 namespace PhoneBook.Web.Controls
 {
-
 	/// <summary>
 	/// Present matching directory entries.
 	/// </summary>

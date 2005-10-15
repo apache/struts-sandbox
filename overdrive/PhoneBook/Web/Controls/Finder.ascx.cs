@@ -119,7 +119,7 @@ namespace PhoneBook.Web.Controls
 			string key = id.Substring(0, v);
 			helper.Criteria[key] = list.SelectedValue;
 			Filter_Reset(list);
-			Filter_Changed(this, new FindArgs(e,helper.Criteria));
+			Filter_Changed(this, new FindArgs(e, helper.Criteria));
 		}
 
 		/// <summary>
@@ -160,7 +160,6 @@ namespace PhoneBook.Web.Controls
 		}
 
 		#region Web Form Designer generated code
-
 
 		/// <summary>
 		///		Initialize components.
