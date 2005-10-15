@@ -1,5 +1,4 @@
-/*
- * Copyright 2005 The Apache Software Foundation.
+/* * Copyright 2005 The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +18,12 @@ using Nexus.Core;
 namespace PhoneBook.Core.Commands
 {
 	/// <summary>
-	/// Execute database statement for QueryID, 
-	/// convert list returned to an AppContextList,  
-	/// and place converted list in context under ID.
+	/// Execute database statement indicated by QueryID, 
+	/// for a list of objects
+	/// returning each attribute in the main context.
 	/// </summary>
 	/// 
-	public class BaseList : AppCommand
+	public class BaseList : BaseMapper
 	{
 		public override bool RequestExecute(IRequestContext context)
 		{

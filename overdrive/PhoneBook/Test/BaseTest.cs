@@ -21,7 +21,7 @@ using NUnit.Framework;
 namespace PhoneBook.Core
 {
 	/// <summary>
-	/// Provide a base class so unit tests can share utility.
+	/// Provide base class so unit tests can share utility.
 	/// </summary>
 	/// 
 	[TestFixture]
@@ -53,7 +53,8 @@ namespace PhoneBook.Core
 		}
 
 		/// <summary>
-		/// Demonstrate GUIDs and provide a device for generating GUIDs if needed.
+		/// Exercise GUID creation, 
+		/// and provide a device for generating GUIDs if needed.
 		/// </summary>
 		/// 
 		[Test]

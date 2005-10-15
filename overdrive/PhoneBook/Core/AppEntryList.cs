@@ -4,7 +4,7 @@ using Nexus.Core;
 namespace PhoneBook.Core
 {
 	/// <summary>
-	/// Implement IEntryList for AppEntry objects.
+	/// Implement Nexus.Core.IEntryList for AppEntry objects.
 	/// </summary>
 	/// 
 	public class AppEntryList : ArrayList, IEntryList

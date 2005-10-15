@@ -59,6 +59,10 @@ namespace PhoneBook.Core.Commands
 			SelectAll_Result(context);
 		}
 
+		/// <summary>
+		/// Exercise Entry List and validate hired and extension string formatting.
+		/// </summary>
+		/// 
 		[Test]
 		public void FilterHelper_Format()
 		{
@@ -79,6 +83,11 @@ namespace PhoneBook.Core.Commands
 			Assert.IsTrue(extension.Length > "1234567890".Length, extension + ": Expected formatted extension.");
 		}
 
+		/// <summary>
+		/// Exercise custom paging 
+		/// (retrieve only visible section of the result se).
+		/// </summary>
+		/// 
 		[Test]
 		public void SelectAll_Limit()
 		{
@@ -96,17 +105,8 @@ namespace PhoneBook.Core.Commands
 			IList list2 = helper.Outcome;
 			AppEntry entry2 = list2[0] as AppEntry;
 			Assert.IsFalse(entry.entry_key.Equals(entry2.entry_key),"Expected result sets to be different");
-		}
-
-		[Test]
-		public void SelectAll_Count()
-		{
-			IViewHelper helper = catalog.GetHelperFor(App.ENTRY_LIST_COUNT);
-			helper.Execute();
-			if (!helper.IsNominal) Assert.Fail(helper.ErrorsText);
-			IDictionary entry = helper.Criteria;
-			int count = Convert.ToInt32(entry[App.ITEM_COUNT]);
-			Assert.IsTrue(count==7);
+			int count = Convert.ToInt32(helper.Criteria[App.ITEM_COUNT]);
+			Assert.IsTrue(count>2,"Expected the overall count to be higher");
 		}
 
 	}

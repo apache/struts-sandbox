@@ -30,6 +30,7 @@ namespace PhoneBook.Core.Commands
 		/// <summary>
 		/// Confirm that Helper contains the expected command.
 		/// </summary>
+		/// 
 		[Test]
 		public void HelperContains()
 		{

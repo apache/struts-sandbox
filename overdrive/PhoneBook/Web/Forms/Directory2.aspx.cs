@@ -15,16 +15,25 @@ namespace PhoneBook.Web.Forms
 	/// <summary>
 	///  Maintain a list of employees with their telephone extension [OVR-5]. 
 	/// </summary>
+	/// <remarks><p>
+	/// This version of the directory page supports paging and editing 
+	/// through use of the Nexus GridControl.
+	/// </p></remarks>
 	/// 
 	public class Directory2 : Page
 	{
 		#region Base Page members
 
+		/// <summary>
+		/// Provide field for AppUserProfile property.
+		/// </summary>
+		/// 
 		private AppUserProfile _Profile;
 
 		/// <summary>
-		///  Obtain a profile for a user.
+		/// Expose the user's profile. 
 		/// </summary>
+		/// 
 		protected AppUserProfile Profile
 		{
 			set
@@ -43,6 +52,7 @@ namespace PhoneBook.Web.Forms
 		/// based on the client's WindowsIdentity.
 		/// </summary>
 		/// <returns>A new or prexisting AppUserProfile</returns>
+		/// 
 		protected AppUserProfile NewProfile()
 		{
 			WindowsIdentity id = WindowsIdentity.GetCurrent();
@@ -69,8 +79,9 @@ namespace PhoneBook.Web.Forms
 		}
 
 		/// <summary>
-		/// Display a list of error messagess.
+		/// Present a list of error messages.
 		/// </summary>
+		/// 
 		protected IViewHelper Page_Error
 		{
 			set
@@ -86,27 +97,38 @@ namespace PhoneBook.Web.Forms
 		/// <summary>
 		/// Display a Prompt message.
 		/// </summary>
+		/// 
 		protected string Page_Prompt
 		{
 			set { prompt_label.Text = value; }
 		}
 
+		/// <summary>
+		/// Provide a field for Catalog property.
+		/// </summary>
+		/// 
 		private IRequestCatalog _Catalog;
 
 		/// <summary>
-		/// Provide reference ot the Catalog (object factory) for this application. 
+		/// Expose the Catalog (object factory) for this application. 
 		/// </summary>
 		/// <remarks><p>
 		/// Subclasses adding EventHandlers 
 		/// should pass a reference to themselves with a ViewArgs instance, 
 		/// encapsulating the Helper.
 		/// </p></remarks>
+		/// 
 		public virtual IRequestCatalog Catalog
 		{
 			get { return _Catalog; }
 			set { _Catalog = value; }
 		}
 
+		/// <summary>
+		/// Handle View Error
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void View_Error(object sender, EventArgs e)
 		{
 			ViewArgs v = e as ViewArgs;
@@ -116,6 +138,12 @@ namespace PhoneBook.Web.Forms
 			else throw new ArgumentException("View_Error: (e.helper==null)");
 		}
 
+		/// <summary>
+		/// Initialize User Controls by handling View Error events 
+		/// and passing through our Catalog reference.
+		/// </summary>
+		/// <param name="c">Control to initialize</param>
+		/// 
 		private void View_Init(ViewControl c)
 		{
 			c.View_Error += new EventHandler(View_Error);
@@ -131,6 +159,32 @@ namespace PhoneBook.Web.Forms
 
 		#endregion
 
+		#region Event handlers
+
+		protected Lister2 lister;
+
+		/// <summary>
+		/// Capture input values to filter a list of directory entries.
+		/// </summary>
+		protected Finder2 finder;
+
+		/// <summary>
+		/// Handle Filter Changed event by opening the Lister control 
+		/// and passing through the search criteria 
+		/// provided by the event arts.
+		/// </summary>
+		/// <param name="sender">Event source</param>
+		/// <param name="e">Runtime arguements</param>
+		/// 
+		protected void finder_Click(object sender, EventArgs e)
+		{
+			ViewArgs a = e as ViewArgs;
+			IViewHelper helper = a.Helper;
+			lister.Reset(helper.Criteria);
+		}
+
+		#endregion
+
 		#region Page Properties 
 
 		protected HtmlGenericControl title;
@@ -142,22 +196,13 @@ namespace PhoneBook.Web.Forms
 
 		#endregion
 
-		#region Event handlers
-
-		protected Lister2 lister;
-		protected Finder2 finder;
-
-		protected void finder_Click(object sender, EventArgs e)
-		{
-			ViewArgs a = e as ViewArgs;
-			IViewHelper helper = a.Helper;
-			lister.Reset(helper.Criteria);
-		}
-
-		#endregion
-
 		#region Page Events
 
+		/// <summary>
+		/// Handle Page Init event by obtaining the user profile 
+		/// and initalizing the controls.
+		/// </summary>
+		/// 
 		private void Page_Init()
 		{
 			Profile = Session[UserProfile.USER_PROFILE] as AppUserProfile;
@@ -165,9 +210,15 @@ namespace PhoneBook.Web.Forms
 
 			View_Init(finder);
 			View_Init(lister);
-			finder.Click += new EventHandler(finder_Click);
+			finder.Filter_Changed += new EventHandler(finder_Click);
 		}
 
+		/// <summary>
+		/// Handle page's load event.
+		/// </summary>
+		/// <param name="sender">Event source</param>
+		/// <param name="e">Runtime parameters</param>
+		/// 
 		private void Page_Load(object sender, EventArgs e)
 		{
 			error_panel.Visible = false;
@@ -188,6 +239,11 @@ namespace PhoneBook.Web.Forms
 
 		#region Web Form Designer generated code
 
+		/// <summary>
+		///		Initialize components.
+		/// </summary>
+		/// <param name="e">Runtime parameters</param>
+		/// 
 		protected override void OnInit(EventArgs e)
 		{
 			//
@@ -202,6 +258,7 @@ namespace PhoneBook.Web.Forms
 		///		Required method for Designer support - do not modify
 		///		the contents of this method with the code editor.
 		/// </summary>
+		/// 
 		private void InitializeComponent()
 		{
 			this.Load += new EventHandler(this.Page_Load);

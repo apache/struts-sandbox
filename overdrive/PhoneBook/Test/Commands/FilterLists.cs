@@ -69,6 +69,12 @@ namespace PhoneBook.Core.Commands
 			}
 		}
 
+		/// <summary>
+		/// Excercise entry file and validate key value list.
+		/// </summary>
+		/// <param name="key">ID for list</param>
+		/// <returns>The validated list</returns>
+		/// 
 		private IKeyValueList FilterList(string key)
 		{
 			IViewHelper helper = catalog.GetHelperFor(App.ENTRY_FIND);
@@ -78,6 +84,10 @@ namespace PhoneBook.Core.Commands
 			return list;
 		}
 
+		/// <summary>
+		/// Exercise Extension List filter.
+		/// </summary>
+		/// 
 		[Test]
 		public void TestFilterFormat_extension()
 		{
@@ -89,6 +99,10 @@ namespace PhoneBook.Core.Commands
 			}
 		}
 
+		/// <summary>
+		/// Exercise Hired filter.
+		/// </summary>
+		/// 
 		[Test]
 		public void TestFilterFormat_hired()
 		{

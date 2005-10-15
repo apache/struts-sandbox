@@ -5,7 +5,7 @@ namespace PhoneBook.Core.Commands
 	/// <summary>
 	/// Invoke a query that returns the count of a result set.
 	/// </summary>
-	public class BaseCount: AppCommand
+	public class BaseCount: BaseMapper
 		{
 			public override bool RequestExecute(IRequestContext context)
 			{

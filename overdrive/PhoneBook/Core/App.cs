@@ -112,12 +112,6 @@ namespace PhoneBook.Core
 		public const string ENTRY_LIST = "entry_list";
 
 		/// <summary>
-		/// Token for the count of a select all command.
-		/// </summary>
-		/// 
-		public const string ENTRY_LIST_COUNT = "entry_list_count";
-
-		/// <summary>
 		/// Token for List Last Names command.
 		/// </summary>
 		/// 

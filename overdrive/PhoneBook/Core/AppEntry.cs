@@ -23,8 +23,22 @@ namespace PhoneBook.Core
 	/// 
 	public class AppEntry
 	{
+
+		/// <summary>
+		/// Internal storage.
+		/// </summary>
+		/// 
 		private IDictionary _Value = new Hashtable(5);
 
+		/// <summary>
+		/// Add each source entry to our internal store. 
+		/// </summary>
+		/// <remarks><p>
+		/// Entries with keys that match the property names will be exposed. 
+		/// Other entries may be added, but can only be retrieved via Get.
+		/// </p></remarks>
+		/// <param name="sources">Entries to add</param>
+		/// 
 		public void AddAll(IDictionary sources)
 		{
 			ICollection keys = sources.Keys;
@@ -34,17 +48,43 @@ namespace PhoneBook.Core
 			}
 		}
 
+		/// <summary>
+		/// Add a single entry to our internal store.
+		/// </summary>
+		/// <remarks><p>
+		/// Entries with keys that match the property names will be exposed. 
+		/// Other entries may be added, but can only be retrieved via Get.
+		/// </p></remarks>
+		/// <param name="key">ID for entry</param>
+		/// <param name="value">Content for entry</param>
+		/// 
 		public void Add(string key, string value)
 		{
 			_Value.Add(key, value);
 		}
 
-		private string Get(string key)
+		/// <summary>
+		/// Provide the value corresponding to key from the internal store.
+		/// </summary>
+		/// <param name="key">ID for entry</param>
+		/// <returns>Content for entry</returns>
+		/// 
+		public string Get(string key)
 		{
 			return _Value[key] as string;
 		}
 
-		private void Set(string key, string value)
+		/// <summary>
+		/// Set an entry to the internal store, overwriting any existing entry.
+		/// </summary>
+		/// <remarks><p>
+		/// This is a protected method used by the Properties. 
+		/// Use an existing Property to set values, 
+		/// or extend the class to include other Properties. 
+		/// </p></remarks>
+		/// <param name="key"></param>
+		/// <param name="value"></param>
+		protected void Set(string key, string value)
 		{
 			_Value[key] = value;
 		}

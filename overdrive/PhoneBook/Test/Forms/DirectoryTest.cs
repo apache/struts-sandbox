@@ -24,21 +24,76 @@ namespace WNE.Core.Forms
 	/// <summary>
 	/// Exercise the Directory page controls.
 	/// </summary>
+	/// 
 	[TestFixture]
 	public class DirectoryTest : WebFormTestCase
 	{
+		/// <summary>
+		/// Provide finder instance for testing.
+		/// </summary>
+		/// 
 		private UserControlTester finder;
+
+		/// <summary>
+		/// Provide last_name_list instance for testing.
+		/// </summary>
+		/// 
 		private DropDownListTester last_name_list;
+
+		/// <summary>
+		/// Provide first_name_list instance for testing.
+		/// </summary>
+		/// 
 		private DropDownListTester first_name_list;
+
+		/// <summary>
+		/// Provide extension_list instance for testing.
+		/// </summary>
+		/// 
 		private DropDownListTester extension_list;
+
+		/// <summary>
+		/// Provide user_name_list instance for testing.
+		/// </summary>
+		/// 
 		private DropDownListTester user_name_list;
+
+		/// <summary>
+		/// Provide finder instance for testing.
+		/// </summary>
+		/// 
 		private DropDownListTester hired_list;
+
+		/// <summary>
+		/// Provide hours_list instance for testing.
+		/// </summary>
+		/// 
 		private DropDownListTester hours_list;
+
 		// TODO: private DropDownListTester editor_list;
+		
+		/// <summary>
+		/// Provide find instance for testing.
+		/// </summary>
+		/// 
 		private ButtonTester find;
 
+		/// <summary>
+		/// Provide finder lister for testing.
+		/// </summary>
+		/// 
 		private UserControlTester lister;
+
+		/// <summary>
+		/// Provide list instance for testing.
+		/// </summary>
+		/// 
 		private DataGridTester list;
+
+		/// <summary>
+		/// Provide add instance for testing.
+		/// </summary>
+		/// 
 		private ButtonTester add;
 
 		/// <summary>

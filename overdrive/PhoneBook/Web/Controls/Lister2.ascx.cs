@@ -6,19 +6,47 @@ using PhoneBook.Core;
 
 namespace PhoneBook.Web.Controls
 {
+	/// <summary>
+	/// Present matching directory entries.
+	/// </summary>
 	public class Lister2 : AppGridControl
 	{
+
+		/// <summary>
+		/// Provide instance of DataGrid control
+		/// </summary>
+		/// 
 		protected DataGrid list;
+
+		/// <summary>
+		/// Provide instance of Add button.
+		/// </summary>
+		/// 
 		protected Button add;
 
+		/// <summary>
+		/// ID Token to indicate a Label control.
+		/// </summary>
+		/// 
 		private static string LABEL = "_label";
 
+		/// <summary>
+		/// Complete loading Grid 
+		/// after other members have initialized.
+		/// </summary>
+		/// 
 		private void Grid_Load()
 		{
 			AppUserProfile profile = Session[UserProfile.USER_PROFILE] as AppUserProfile;
 			HasEditColumn = profile.IsEditor;
 		}
 
+		/// <summary>
+		/// Initialize our Grid instance 
+		/// by setting the columns, labels, 
+		/// and other dynamic attributes.
+		/// </summary>
+		/// 
 		private void Grid_Init()
 		{
 			FindCommand = App.ENTRY_FIND;
@@ -48,12 +76,23 @@ namespace PhoneBook.Web.Controls
 			DataLabels = k;
 		}
 
+		/// <summary>
+		/// Handle Page Init event by obtaining the user profile 
+		/// and initalizing the controls.
+		/// </summary>
+		/// 
 		private void Page_Init()
 		{
 			Grid = list;
 			Grid_Init();
 		}
 
+		/// <summary>
+		/// Handle page's load event.
+		/// </summary>
+		/// <param name="sender">Event source</param>
+		/// <param name="e">Runtime parameters</param>
+		/// 
 		private void Page_Load(object sender, EventArgs e)
 		{
 			add.Click += new EventHandler(add_Click);
@@ -63,6 +102,11 @@ namespace PhoneBook.Web.Controls
 
 		#region Web Form Designer generated code
 
+		/// <summary>
+		///		Initialize components.
+		/// </summary>
+		/// <param name="e">Runtime parameters</param>
+		/// 
 		protected override void OnInit(EventArgs e)
 		{
 			//

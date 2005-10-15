@@ -19,11 +19,12 @@ using Nexus.Core;
 namespace PhoneBook.Core.Commands
 {
 	/// <summary>
-	/// Execute database statement for QueryID for a single object, 
+	/// Execute database statement indicated by QueryID 
+	/// for a single object, 
 	/// returning each attribute in the main context.
 	/// </summary>
 	/// 
-	public class BaseEntry : AppCommand
+	public class BaseEntry : BaseMapper
 	{
 		public override bool RequestExecute(IRequestContext context)
 		{

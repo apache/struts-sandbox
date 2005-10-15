@@ -7,23 +7,60 @@ using PhoneBook.Core;
 
 namespace PhoneBook.Web.Controls
 {
+	/// <summary>
+	/// Capture input values to filter a list of directory entries.
+	/// </summary>
+	/// 
 	public class Finder2 : ViewControl
 	{
+		/// <summary>
+		/// Signal update to input filters 
+		/// by passing FindArgs with the search critiers.
+		/// </summary>
+		/// 
+		public event EventHandler Filter_Changed;
+
+		/// <summary>
+		/// Populate the entry finder's own controls. 
+		/// </summary>
+		/// 
+		public void Open()
+		{
+			IViewHelper h = GetHelperFor(App.ENTRY_FIND);
+			ExecuteBind(h);
+			bool ok = (h.IsNominal);
+			if (!ok)
+				Page_Error = h;
+		}
+
+		/// <summary>
+		/// Provide runtime instance of find Button.
+		/// </summary>
+		/// 
 		protected Button find;
 
 		/// <summary>
-		/// Fires when search criteria is input.
+		/// Handle the Click event of the Find button 
+		/// by resetting the filters 
+		/// and raising the Filter Changed event
+		/// so that the presentation will list all entries.
 		/// </summary>
-		public event EventHandler Click;
-
+		/// <param name="sender">Event source</param>
+		/// <param name="e">Runtime parameters</param>
+		/// 
 		private void find_Click(object sender, EventArgs e)
 		{
-			if (Click == null) return;
+			if (Filter_Changed == null) return;
 			Filter_Reset(null);
 			IViewHelper helper = Read(App.ENTRY_FIND);
-			Click(this, new ViewArgs(helper));
+			Filter_Changed(this, new ViewArgs(helper));
 		}
 
+		/// <summary>
+		/// Unselect all but the active filter.
+		/// </summary>
+		/// <param name="except">The active filter</param>
+		/// 
 		private void Filter_Reset(DropDownList except)
 		{
 			// Reset filter controls
@@ -40,7 +77,15 @@ namespace PhoneBook.Web.Controls
 			if (except != null) except.SelectedIndex = exceptIndex;
 		}
 
-		private void Filter_Changed(object sender, EventArgs e)
+		/// <summary>
+		/// Handle the SelectIndexChanged event for any of the filters 
+		/// by capturing its settings 
+		/// and raising the Filter_Changed event.
+		/// </summary>
+		/// <param name="sender">Event source</param>
+		/// <param name="e">Runtime parameters</param>
+		/// 
+		private void filter_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			IViewHelper helper = Catalog.GetHelperFor(App.ENTRY_LIST);
 			DropDownList list = sender as DropDownList;
@@ -49,29 +94,19 @@ namespace PhoneBook.Web.Controls
 			string key = id.Substring(0, v);
 			helper.Criteria[key] = list.SelectedValue;
 			Filter_Reset(list);
-			Click(this, new ViewArgs(helper));
-		}
-
-		public void Open()
-		{
-			IViewHelper h = GetHelperFor(App.ENTRY_FIND);
-			ExecuteBind(h);
-			bool ok = (h.IsNominal);
-			if (!ok)
-				Page_Error = h;
+			Filter_Changed(this, new ViewArgs(helper));
 		}
 
 		private void Page_Load(object sender, EventArgs e)
 		{
 			find.Click += new EventHandler(find_Click);
-			foreach (Control c in Controls)
+			foreach (Control control in Controls)
 			{
-				if (IsListControl(c))
+				if (IsListControl(control))
 				{
-					DropDownList x = (DropDownList) c;
-					x.SelectedIndexChanged += new EventHandler(Filter_Changed);
-					;
-					x.AutoPostBack = true;
+					DropDownList filter = (DropDownList) control;
+					filter.SelectedIndexChanged += new EventHandler(filter_SelectedIndexChanged);
+					filter.AutoPostBack = true;
 				}
 			}
 

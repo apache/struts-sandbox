@@ -20,13 +20,13 @@ using Nexus.Core;
 namespace PhoneBook.Core.Commands
 {
 	/// <summary>
-	/// Add data access methods to RequestCommand.
+	/// Extend RequestCommand with data access methods.
 	/// </summary>
 	/// 
-	public abstract class AppCommand : RequestCommand
+	public abstract class BaseMapper : RequestCommand
 	{
 		/// <summary>
-		/// Provide a filed for Mapper property.
+		/// Provide a field for Mapper property.
 		/// </summary>
 		/// 
 		private SqlMapper _Mapper;
@@ -37,7 +37,7 @@ namespace PhoneBook.Core.Commands
 		/// <remarks><p>
 		/// Commands use Mapper to invoke SqlMap statements, such as 
 		/// <code>
-		/// object row = Mapper ().QueryForObject (QueryID, context);
+		/// object row = Mapper.QueryForObject (QueryID, context);
 		/// </code>.
 		/// </p><p>
 		/// Any SqlMapper API method may be called. 

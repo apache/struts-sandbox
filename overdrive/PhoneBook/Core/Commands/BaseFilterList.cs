@@ -19,12 +19,12 @@ using Nexus.Core;
 namespace PhoneBook.Core.Commands
 {
 	/// <summary>
-	/// Execute database statement for QueryID 
+	/// Execute database statement indicated by QueryID 
 	/// and wrap result in KeyValue objects 
 	/// so that lists can be displayed by standard methods.
 	/// </summary>
 	/// 
-	public class BaseFilterList : AppCommand
+	public class BaseFilterList : BaseMapper
 	{
 		public override bool RequestExecute(IRequestContext context)
 		{
