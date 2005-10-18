@@ -276,6 +276,8 @@ namespace Nexus.Web
 			IList list = helper.Outcome as IList;
 			DataGrid grid = Grid;
 			grid.DataSource = list;
+
+
 		}
 
 		public override void DataBind()
@@ -343,6 +345,17 @@ namespace Nexus.Web
 			bind = true;
 		}
 
+		/// <summary>
+		/// Obtain item count from Helper.
+		/// </summary>
+		/// <param name="helper">The helper to examine</param>
+		/// <returns>Total count of items for all pages</returns>
+		/// 	
+		private int GetItemCount(IViewHelper helper)
+		{
+			return Convert.ToInt32(helper.Criteria[ITEM_COUNT]);
+		}
+
 		protected virtual void BindGrid(IViewHelper helper)
 		{
 			// Only bind columns once
@@ -353,13 +366,19 @@ namespace Nexus.Web
 				int i = 0;
 				if (HasEditColumn) i = BindEditColumn(i);
 				if (HasItemColumn) i = BindItemColumn(i);
+				int count = (helper.Outcome).Count; 
+				DataGrid grid = Grid;
 				if (AllowCustomPaging)
 				{
-					Grid.AllowCustomPaging = true;
-					int itemCount = Convert.ToInt32(helper.Criteria[ITEM_COUNT]);
-					Grid.VirtualItemCount = itemCount;
+					count = GetItemCount(helper);
+					grid.AllowCustomPaging = true;
+					grid.VirtualItemCount = count;
 				}
 				BindColumns(i);
+				ListPageIndexChanged_Raise(this, 
+					grid.CurrentPageIndex,
+					grid.PageSize,
+					count);
 			}
 			DataSource(helper);
 			DataBind();
@@ -693,10 +712,101 @@ namespace Nexus.Web
 		public const string ITEM_OFFSET = "item_offset";
 		public const string ITEM_COUNT = "item_count";
 
+		#endregion
+
+		#region ListPageIndexChanged 
+
+		/// <summary>
+		/// Signal that the Grid page index has changed, 
+		/// and provide values for a page index hint.
+		/// </summary>
+		/// 
+		public event EventHandler ListPageIndexChanged; 
+
+		/// <summary>
+		/// Provide a default key for message resources that set the hint label.
+		/// </summary>
+		/// 
+		public const string PAGE_INDEX_HINT = "page_index_hint";
+
+		/// <summary>
+		/// Provide a default key for the "Not Found" hint.
+		/// </summary>
+		/// 
+		public const string NOT_FOUND_HINT = "not_found_hint";
+
+		/// <summary>
+		/// Provide values for a page index message (items x thru x of x).
+		/// </summary>
+		/// 
+		public class ListPageIndexChangedArgs : EventArgs
+		{
+			public int ItemFrom;
+			public int ItemThru;
+			public int ItemCount;
+		}
+
+		/// <summary>
+		/// Lookup the PAGE_INDEX_HINT or the NOT_FOUND_HINT in the application 
+		/// message resources, and return as a formatted string. 
+		/// </summary>
+		/// <param name="args">Our ListPageIndexChangedArgs with the page index values</param>
+		/// <returns>Formatted message string ready to markup and present</returns>
+		/// 
+		public string ListPageIndexChanged_Message(ListPageIndexChangedArgs args)
+		{			
+			
+			string[] m_args = new string[3];
+			m_args[0] = Convert.ToString(args.ItemFrom);
+			m_args[1] = Convert.ToString(args.ItemThru);
+			m_args[2] = Convert.ToString(args.ItemCount);
+		
+			string text;
+			if (args.ItemCount==0) 
+			{
+				text = GetMessage(NOT_FOUND_HINT);
+			}
+			else
+			{
+				text = GetMessage(PAGE_INDEX_HINT,m_args);				
+			}			
+			return text;
+		}
+
+		/// <summary>
+		/// Raise the ListPageIndexChanged event.  
+		/// </summary>
+		/// <param name="sender">Event source</param>
+		/// <param name="page">Current page number</param>
+		/// <param name="size">Items per page</param>
+		/// <param name="count">Total number of items</param>
+		/// 
+		private void ListPageIndexChanged_Raise(object sender, int page, int size, int count)
+		{
+			if (ListPageIndexChanged!=null)
+			{
+				int from = (page * size) + 1;
+				int thru = (page * size) + size;
+				if (thru>count) thru = count;				
+				ListPageIndexChangedArgs a = new ListPageIndexChangedArgs();
+				a.ItemFrom = from;
+				a.ItemThru = thru;
+				a.ItemCount = count;
+				ListPageIndexChanged(sender, a);
+			}			
+		}
+
+		/// <summary>
+		/// Handle the PageIndexChanged raised by our DataGrid.
+		/// </summary>
+		/// <param name="sender">Event source</param>
+		/// <param name="e">Runtime arguements</param>
+		/// 
 		private void list_PageIndexChanged(object sender, DataGridPageChangedEventArgs e)
 		{
 			DataGrid grid = Grid;
-			
+			int count = (grid.DataSource as IList).Count; 
+
 			if (grid.AllowCustomPaging)
 			{
 				IDictionary criteria = list_Criteria_NewPageIndex(e.NewPageIndex);
@@ -704,11 +814,12 @@ namespace Nexus.Web
 				helper.Read(criteria,true);
 				helper.Execute();
 				DataSource(helper);
+				count = GetItemCount(helper) ;
 			}
-
 			grid.CurrentPageIndex = e.NewPageIndex;
+
+			ListPageIndexChanged_Raise(sender, e.NewPageIndex, grid.PageSize, count);
 			list_Refresh();				
-			
 		}
 
 		#endregion
