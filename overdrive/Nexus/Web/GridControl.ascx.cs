@@ -863,13 +863,14 @@ namespace Nexus.Web
 		/// 
 		private void Page_Load(object sender, EventArgs e)
 		{
-			Grid.AutoGenerateColumns = false;
-			Grid.EditItemIndex = list_ItemIndex;
-			Grid.CancelCommand += new DataGridCommandEventHandler(list_Quit);
-			Grid.EditCommand += new DataGridCommandEventHandler(list_Edit);
-			Grid.UpdateCommand += new DataGridCommandEventHandler(list_Save);
-			Grid.ItemCommand += new DataGridCommandEventHandler(List_Item);
-			Grid.PageIndexChanged += new DataGridPageChangedEventHandler(list_PageIndexChanged);
+			DataGrid grid = Grid;
+			grid.AutoGenerateColumns = false;
+			grid.EditItemIndex = list_ItemIndex;
+			grid.CancelCommand += new DataGridCommandEventHandler(list_Quit);
+			grid.EditCommand += new DataGridCommandEventHandler(list_Edit);
+			grid.UpdateCommand += new DataGridCommandEventHandler(list_Save);
+			grid.ItemCommand += new DataGridCommandEventHandler(List_Item);
+			grid.PageIndexChanged += new DataGridPageChangedEventHandler(list_PageIndexChanged);
 			if (this.Visible) Open();
 		}
 

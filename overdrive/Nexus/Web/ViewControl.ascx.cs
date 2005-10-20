@@ -52,7 +52,8 @@ namespace Nexus.Web
 		/// <param name="id">The full id, including prefix and suffix.</param>
 		/// <param name="prefix">The prefix to omit.</param>
 		/// <param name="suffix">The suffix to omit.</param>
-		/// <returns></returns>
+		/// <returns>ID for corresponding entry</returns>
+		/// 
 		private string RootId(string id, string prefix, string suffix)
 		{
 			int v = id.LastIndexOf(suffix);
@@ -62,10 +63,11 @@ namespace Nexus.Web
 		}
 
 		/// <summary>
-		/// Trim Sany QL wildcards that may have been added to a search string.
+		/// Trim any SQL wildcards that may have been added to a search string.
 		/// </summary>
 		/// <param name="input">String to trim</param>
 		/// <returns>Input without SQL wildcards</returns>
+		/// 
 		protected string TrimWildCards(string input)
 		{
 			string trimmed = null;
@@ -140,6 +142,18 @@ namespace Nexus.Web
 		protected bool IsLabel(Control control)
 		{
 			return (typeof (Label).Equals(control.GetType()));
+		}
+
+		/// <summary>
+		/// Return true if control is a MessageLabel 
+		/// or MessageLabel subclass.
+		/// </summary>
+		/// <param name="control">Control to test.</param>
+		/// <returns>True if control is a NameLabel</returns>
+		/// 
+		protected bool IsMessageLabel(Control control)
+		{
+			return (control is MessageLabel);
 		}
 
 		/// <summary>
@@ -301,7 +315,8 @@ namespace Nexus.Web
 		{
 			IViewHelper helper = Catalog.GetHelperFor(command);
 			helper.Profile = Profile;
-			// helper;
+			// IDictionary criteria = Profile.Criteria;
+			// helper.Read(criteria);
 			return helper;
 		}
 
@@ -321,6 +336,13 @@ namespace Nexus.Web
 					TextBox x = (TextBox) t;
 					object v = dictionary[ToColumn(x.ID, prefix)];
 					if (v != null) x.Text = v.ToString();
+				}
+				if (IsMessageLabel(t))
+				{
+					MessageLabel x = (MessageLabel) t;
+					object v = dictionary[ToColumn(x.ID, prefix)];
+					if (v != null) x.Text = v.ToString();
+					continue;
 				}
 				if (IsLabel(t))
 				{
@@ -538,10 +560,17 @@ namespace Nexus.Web
 		{
 			foreach (Control t in controls)
 			{
-				if (IsLabel(t))
+				if (IsMessageLabel(t))
 				{
-					Label x = (Label) t;
-					x.Text = GetMessage(x.ID);
+					MessageLabel x = (MessageLabel) t;
+					if (x.Resource) try
+					{
+						x.Text = GetMessage(x.ID);						
+					}
+					catch (Exception e)
+					{
+						if (x.Required)  throw(e);
+					}
 					continue;
 				}
 				if (IsButton(t))

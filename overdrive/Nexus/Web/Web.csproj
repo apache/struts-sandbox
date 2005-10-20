@@ -114,6 +114,11 @@
         <Files>
             <Include>
                 <File
+                    RelPath = "AlertLabel.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -166,13 +171,28 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "HintLabel.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IViewControl.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "MessageLabel.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Messages.resx"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "TextLabel.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "ViewControl.ascx"
