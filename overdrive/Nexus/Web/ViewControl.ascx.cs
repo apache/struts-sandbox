@@ -294,11 +294,20 @@ namespace Nexus.Web
 				{
 					TextBox x = (TextBox) control;
 					x.Text = String.Empty;
+					continue;
 				}
 				if (IsListControl(control))
 				{
 					ListControl x = (ListControl) control;
 					x.SelectedIndex = -1;
+					continue;
+				}
+
+				if (IsRadioButton(control))
+				{
+					RadioButton x = (RadioButton) control;
+					x.Checked = false;
+					continue;
 				}
 			}
 		}
@@ -733,6 +742,15 @@ namespace Nexus.Web
 		public virtual void Page_Reset()
 		{
 			ResetControls();
+		}
+
+		/// <summary>
+		/// Reset control values.
+		/// </summary>
+		/// 
+		protected void reset_Click(object sender, EventArgs e)
+		{
+			Page_Reset();
 		}
 
 		/// <summary>
