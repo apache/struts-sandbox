@@ -6,9 +6,32 @@ namespace Nexus.Web
 {
 	public class WebHelper : ViewHelper
 	{
-		public override string ErrorsText
+		public override string AlertsFor(string id)
 		{
-			get { return HtmlMessageBuilder(Alerts); }
+			string alert = null;			
+			IList list = Alerts[id] as IList;
+			if (list==null) return alert; 
+
+			if (list.Count==1)
+			{
+				alert = HtmlMessage(list[0]);
+			}
+			else
+			{
+				alert = HtmlMessageList(list);
+			} 
+			return alert;
+		}
+
+		public override string AlertsText
+		{
+			get
+			{	return HtmlMessageBuilder(Alerts); }
+		}
+
+		public override string HintsFor(string id)
+		{
+			 return HtmlMessageList(Hints[id] as IList); 
 		}
 
 		public override string HintsText
@@ -17,6 +40,20 @@ namespace Nexus.Web
 		}
 
 		#region Message utilities
+
+		/// <summary>
+		/// Build a  message using HTML markup.
+		/// </summary>
+		/// <param name="message">A message</param>
+		/// <returns>HTML markup presenting the messages.</returns>
+		/// 
+		private string HtmlMessage(object message)
+		{
+			StringBuilder sb = new StringBuilder("<p>");
+			sb.Append(message.ToString());
+			sb.Append("</p>");
+			return sb.ToString();
+		}
 
 		/// <summary>
 		/// Build a set of messages using HTML markup.

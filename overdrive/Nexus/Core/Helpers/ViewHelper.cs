@@ -147,7 +147,11 @@ namespace Nexus.Core.Helpers
 
 		#region Messages (abstract) 
 
-		public abstract string ErrorsText { get; }
+		public abstract string AlertsFor(string id);
+
+		public abstract string AlertsText { get; }
+
+		public abstract string HintsFor(string id);
 
 		public abstract string HintsText { get; }
 

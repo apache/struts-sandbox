@@ -42,7 +42,7 @@ namespace Nexus.Web
 				IViewHelper helper = Read(FindCommand);
 				if (!helper.IsNominal)
 				{
-					Page_Error = helper;
+					Page_Alert = helper;
 				}
 				return helper.Criteria;
 			}
@@ -82,7 +82,7 @@ namespace Nexus.Web
 		public virtual void Open()
 		{
 			IViewHelper helper = ExecuteBind(FindCommand);
-			if (!helper.IsNominal) Page_Error = helper;
+			if (!helper.IsNominal) Page_Alert = helper;
 		}
 
 		public virtual void Open(IDictionary criteria)
@@ -90,7 +90,7 @@ namespace Nexus.Web
 			IViewHelper helper = GetHelperFor(FindCommand);
 			helper.Read(criteria, true);
 			ExecuteBind(helper);
-			if (!helper.IsNominal) Page_Error = helper;
+			if (!helper.IsNominal) Page_Alert = helper;
 		}
 
 		/// <summary>

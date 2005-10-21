@@ -88,6 +88,29 @@ namespace Nexus.Core.Helpers
 		IDictionary Alerts { get; }
 
 		/// <summary>
+		/// Return the Alerts for the specifiied ID, 
+		/// formatted for display by a UI control.
+		/// </summary>
+		/// <remarks>
+		/// If messages are localized or customized, 
+		/// the helper will return correct version for the user.
+		/// UI specific implementation may markup the errors as needed.
+		/// </remarks>
+		/// 
+		string AlertsFor(string id);
+
+		/// <summary>
+		/// Return the Alerts, including any Fault, formatted for display by a UI control.
+		/// </summary>
+		/// <remarks>
+		/// If messages are localized or customized, 
+		/// the helper will return correct version for the user.
+		/// UI specific implementation may markup the errors as needed.
+		/// </remarks>
+		/// 
+		string AlertsText { get; }
+
+		/// <summary>
 		/// Indicate if alerts are queued.
 		/// </summary>
 		/// <returns>True if alerts are queued.</returns>
@@ -118,7 +141,16 @@ namespace Nexus.Core.Helpers
 		bool IsNominal { get; }
 
 		/// <summary>
-		/// Return the Alerts, including any Fault, formatted for display by a UI control.
+		/// Record a list of hint (or advisory) messages, 
+		/// keyed by a field or other identifier, 
+		/// or to a magic global key.
+		/// </summary>
+		/// 
+		IDictionary Hints { get; }
+
+		/// <summary>
+		/// Return the Hints for the specifiied ID, 
+		/// formatted for display by a UI control.
 		/// </summary>
 		/// <remarks>
 		/// If messages are localized or customized, 
@@ -126,15 +158,7 @@ namespace Nexus.Core.Helpers
 		/// UI specific implementation may markup the errors as needed.
 		/// </remarks>
 		/// 
-		string ErrorsText { get; }
-
-		/// <summary>
-		/// Record a list of hint (or advisory) messages, 
-		/// keyed by a field or other identifier, 
-		/// or to a magic global key.
-		/// </summary>
-		/// 
-		IDictionary Hints { get; }
+		string HintsFor(string id);
 
 		/// <summary>
 		/// Indicate if Hints are queued.

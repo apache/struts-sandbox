@@ -34,9 +34,9 @@ namespace Nexus.Web
 		/// Psuedo property to generate an Error event encapsulating 
 		/// our Helper property, containing the error.
 		/// </summary>
-		protected IViewHelper Page_Error
+		protected IViewHelper Page_Alert
 		{
-			set { View_Error_Handler(this, new ViewArgs(value)); }
+			set { View_Alert_Handler(this, new ViewArgs(value)); }
 		}
 
 		#region String utilities 
@@ -151,7 +151,7 @@ namespace Nexus.Web
 		/// <param name="control">Control to test.</param>
 		/// <returns>True if control is a NameLabel</returns>
 		/// 
-		protected bool IsMessageLabel(Control control)
+		protected bool IsViewLabel(Control control)
 		{
 			return (control is MessageLabel);
 		}
@@ -327,6 +327,22 @@ namespace Nexus.Web
 			return helper;
 		}
 
+		protected virtual void InitViewLabels()
+		{
+			foreach (Control t in Controls)
+			{
+				if (IsViewLabel(t))
+				{
+					MessageLabel x = (MessageLabel) t;
+					if (x.View_Alert)
+					{
+						View_Alert += new EventHandler(x.View_Alert_Handler);
+					}
+					continue;
+				}				
+			}			
+		}
+
 		private void BindControls(ControlCollection controls, IDictionary dictionary, string prefix, string list_suffix)
 		{
 			foreach (Control t in controls)
@@ -337,7 +353,7 @@ namespace Nexus.Web
 					object v = dictionary[ToColumn(x.ID, prefix)];
 					if (v != null) x.Text = v.ToString();
 				}
-				if (IsMessageLabel(t))
+				if (IsViewLabel(t))
 				{
 					MessageLabel x = (MessageLabel) t;
 					object v = dictionary[ToColumn(x.ID, prefix)];
@@ -560,7 +576,7 @@ namespace Nexus.Web
 		{
 			foreach (Control t in controls)
 			{
-				if (IsMessageLabel(t))
+				if (IsViewLabel(t))
 				{
 					MessageLabel x = (MessageLabel) t;
 					if (x.Resource) try
@@ -669,29 +685,29 @@ namespace Nexus.Web
 		/// <summary>
 		/// Signal when an error is exposed. 
 		/// </summary>
-		public event EventHandler View_Error;
+		public event EventHandler View_Alert;
 
 		/// <summary>
 		/// Pass an error to another control registered to received it.
 		/// </summary>
 		/// <param name="sender">This object</param>
 		/// <param name="e">A ViewArgs instance with the IViewHelper containing the error messages(s).</param>
-		private void View_Error_Handler(object sender, EventArgs e)
+		private void View_Alert_Handler(object sender, EventArgs e)
 		{
-			if (View_Error != null)
+			if (View_Alert != null)
 			{
-				View_Error(sender, e);
+				View_Alert(sender, e);
 			}
 		}
 
 		/// <summary>
-		/// Initialize the control to use the stanard View_Error event handerl.
+		/// Initialize the control to use the standard View_Alert event handerl.
 		/// </summary>
 		/// <param name="c">Control to register</param>
 		/// 
 		protected void InitView(ViewControl c)
 		{
-			c.View_Error += new EventHandler(View_Error_Handler);
+			c.View_Alert += new EventHandler(View_Alert_Handler); // Bubble event
 			c.Profile = Profile;
 		}
 
@@ -723,6 +739,7 @@ namespace Nexus.Web
 		/// </p></remarks>
 		protected virtual void Page_Init()
 		{
+			InitViewLabels();
 			if (IsPostBack) return;
 			GetMessages();
 		}

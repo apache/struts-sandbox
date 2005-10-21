@@ -549,7 +549,7 @@ namespace Nexus.Web
 			bool okay = helper.IsNominal;
 			if (!okay)
 			{
-				Page_Error = helper;
+				Page_Alert = helper;
 			}
 			return okay;
 		}
@@ -641,7 +641,7 @@ namespace Nexus.Web
 				list_Insert = true;
 				list_ItemIndex = 0;
 			}
-			else Page_Error = helper;
+			else Page_Alert = helper;
 		}
 
 		#endregion
@@ -688,7 +688,7 @@ namespace Nexus.Web
 				okay = this.Open();
 				// ISSUE: Event? Page_Prompt = (List_Insert) ? msg_ADD_SUCCESS : msg_SAVE_SUCCESS;
 			}
-			if (!okay) Page_Error = helper;
+			if (!okay) Page_Alert = helper;
 		}
 
 		private void list_Quit(object source, DataGridCommandEventArgs e)

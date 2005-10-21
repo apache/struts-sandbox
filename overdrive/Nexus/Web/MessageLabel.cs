@@ -1,4 +1,6 @@
+using System;
 using System.Web.UI.WebControls;
+using Nexus.Core.Helpers;
 
 namespace Nexus.Web
 {
@@ -123,6 +125,34 @@ namespace Nexus.Web
 			set { _View_Alert = value;}
 		}
 
-	}
-		
+		/// <summary>
+		/// Present a list of error mesasges.
+		/// </summary>
+		/// 
+		protected IViewHelper Alerts
+		{
+			set
+			{
+				if (value != null)
+				{
+					Text = value.AlertsFor(EntryID);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Provide a standard Event Handler for passing Alert messages.
+		/// </summary>
+		/// <param name="sender">Event source</param>
+		/// <param name="e">Runtime parameters</param>
+		/// 
+		public void View_Alert_Handler(object sender, EventArgs e)
+		{
+			ViewArgs v = e as ViewArgs;
+			if (v == null) throw new ArgumentException("ViewLabel.View_Alert_Handler: !(e is ViewArgs)");
+			IViewHelper helper = v.Helper;
+			if (helper != null) Alerts = helper;
+			else throw new ArgumentException("ViewLabel.View_Alert_Handler: (e.helper==null)");
+		}
+	}		
 }
