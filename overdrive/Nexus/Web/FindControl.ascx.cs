@@ -79,18 +79,23 @@ namespace Nexus.Web
 		/// through the standard page error handler.
 		/// </p></remarks>
 		/// 
-		public virtual void Open()
-		{
+		public virtual bool Open()
+		{						
 			IViewHelper helper = ExecuteBind(FindCommand);
-			if (!helper.IsNominal) Page_Alert = helper;
+			Bind(Profile.Criteria);
+			bool okay = helper.IsNominal;
+			if (!okay) Page_Alert = helper;
+			return okay;
 		}
 
-		public virtual void Open(IDictionary criteria)
+		public virtual bool Open(IDictionary criteria)
 		{
 			IViewHelper helper = GetHelperFor(FindCommand);
 			helper.Read(criteria, true);
 			ExecuteBind(helper);
-			if (!helper.IsNominal) Page_Alert = helper;
+			bool okay = helper.IsNominal;
+			if (!okay) Page_Alert = helper;
+			return okay;
 		}
 
 		/// <summary>

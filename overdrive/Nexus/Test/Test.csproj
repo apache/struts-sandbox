@@ -105,6 +105,11 @@
                     Project = "{7931CACD-0E73-4DD2-A373-FF6A01CE6186}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "Web"
+                    Project = "{2BD7CDE0-01F7-4CC5-9AE9-2F9470FB7007}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>
@@ -151,11 +156,6 @@
                 />
                 <File
                     RelPath = "Commands\ObjectByKey.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Helpers\ViewHelperTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

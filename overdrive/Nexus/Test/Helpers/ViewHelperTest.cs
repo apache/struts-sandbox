@@ -15,6 +15,7 @@
  */
 using System;
 using Agility.Core;
+using Nexus.Web;
 using NUnit.Framework;
 
 namespace Nexus.Core.Helpers

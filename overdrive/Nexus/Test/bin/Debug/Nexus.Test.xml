@@ -222,7 +222,7 @@
             </summary>
             
         </member>
-        <member name="M:Nexus.Core.RequestContextTest.IsNominal_Errors_and_Fault">
+        <member name="M:Nexus.Core.RequestContextTest.IsNominal_Alerts_and_Fault">
             <summary>
             A IRequestContext is not nominal if multiple errors are added 
             and an Exception is set.

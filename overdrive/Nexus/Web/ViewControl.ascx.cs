@@ -315,8 +315,6 @@ namespace Nexus.Web
 		{
 			IViewHelper helper = Catalog.GetHelperFor(command);
 			helper.Profile = Profile;
-			// IDictionary criteria = Profile.Criteria;
-			// helper.Read(criteria);
 			return helper;
 		}
 

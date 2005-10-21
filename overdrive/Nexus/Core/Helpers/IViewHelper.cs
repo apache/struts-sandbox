@@ -39,7 +39,7 @@ namespace Nexus.Core.Helpers
 		/// 
 		void Execute();
 
-		// <summary>
+		/// <summary>
 		/// Read input into the Criteria from a given Dictionary.
 		/// </summary>
 		/// <param name="criteria">Attributes to add to Critiera</param>

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Globalization;
 using System.Security.Principal;
 
@@ -68,7 +69,7 @@ namespace Nexus.Core.Profile
 		/// Record the user id portion of the Identity Name.
 		/// </summary>
 		/// <remarks><p>
-		/// The UserId can be used to related staff records to user logins.
+		/// The UserId can be used to relate staff records to user logins.
 		/// </p></remarks>
 		public string UserId
 		{
@@ -85,12 +86,36 @@ namespace Nexus.Core.Profile
 
 		#region UserLocale 
 
+		/// <summary>
+		/// Provide a field for UserLocale property.
+		/// </summary>
 		private CultureInfo _UserLocale;
 
 		public CultureInfo UserLocale
 		{
 			get { return _UserLocale; }
 			set { _UserLocale = value; }
+		}
+
+		#endregion
+
+		#region Criteria
+
+		/// <summary>
+		/// Provide a field for Criteria property.
+		/// </summary>
+		/// 
+		private IDictionary _Criteria;
+
+		public IDictionary Criteria
+		{
+			get
+			{
+				if (_Criteria==null) 
+					_Criteria = new Hashtable();
+				return _Criteria;
+			}
+			set { _Criteria = value; }
 		}
 
 		#endregion
