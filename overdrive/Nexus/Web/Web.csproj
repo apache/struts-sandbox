@@ -181,11 +181,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "MessageLabel.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Messages.resx"
                     BuildAction = "EmbeddedResource"
                 />
@@ -208,6 +203,11 @@
                     RelPath = "ViewControl.ascx.resx"
                     DependentUpon = "ViewControl.ascx.cs"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "ViewLabel.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Web.config"
