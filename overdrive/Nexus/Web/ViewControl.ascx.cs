@@ -338,6 +338,12 @@ namespace Nexus.Web
 					{
 						View_Alert += new EventHandler(x.View_Alert_Handler);
 					}
+					/* 
+					if (x.View_Hint)
+					{
+						View_Hint += new EventHandler(x.View_Hint_Handler);
+					}
+					*/
 					continue;
 				}				
 			}			
