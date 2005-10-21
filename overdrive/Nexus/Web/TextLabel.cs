@@ -4,7 +4,7 @@ namespace Nexus.Web
 	/// Extend MessageLabel to ignore runtime events,  
 	/// require an entry, and use an alternate suffix.
 	/// </summary>
-	public class TextLabel : MessageLabel
+	public class TextLabel : ViewLabel
 	{
 		
 		/// <summary>

@@ -9,7 +9,7 @@ namespace Nexus.Web
 	/// Present dynamic message by consulting with Message Resources 
 	/// or handling an event.
 	/// </summary>
-	public class MessageLabel : Label
+	public class ViewLabel : Label
 	{
 
 		/// <summary>

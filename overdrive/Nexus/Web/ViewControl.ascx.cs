@@ -153,7 +153,7 @@ namespace Nexus.Web
 		/// 
 		protected bool IsViewLabel(Control control)
 		{
-			return (control is MessageLabel);
+			return (control is ViewLabel);
 		}
 
 		/// <summary>
@@ -333,7 +333,7 @@ namespace Nexus.Web
 			{
 				if (IsViewLabel(t))
 				{
-					MessageLabel x = (MessageLabel) t;
+					ViewLabel x = (ViewLabel) t;
 					if (x.View_Alert)
 					{
 						View_Alert += new EventHandler(x.View_Alert_Handler);
@@ -355,7 +355,7 @@ namespace Nexus.Web
 				}
 				if (IsViewLabel(t))
 				{
-					MessageLabel x = (MessageLabel) t;
+					ViewLabel x = (ViewLabel) t;
 					object v = dictionary[ToColumn(x.ID, prefix)];
 					if (v != null) x.Text = v.ToString();
 					continue;
@@ -578,7 +578,7 @@ namespace Nexus.Web
 			{
 				if (IsViewLabel(t))
 				{
-					MessageLabel x = (MessageLabel) t;
+					ViewLabel x = (ViewLabel) t;
 					if (x.Resource) try
 					{
 						x.Text = GetMessage(x.ID);						

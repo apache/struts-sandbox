@@ -4,7 +4,7 @@ namespace Nexus.Web
 	/// Extend MessageLabel to respond only to the View_Hint event 
 	/// and use an alternate suffix.
 	/// </summary>
-	public class HintLabel : MessageLabel
+	public class HintLabel : ViewLabel
 	{
 		
 		/// <summary>
