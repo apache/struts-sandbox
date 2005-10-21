@@ -78,7 +78,7 @@ namespace Nexus.Core
 		/// </summary>
 		/// 
 		[Test]
-		public void IsNominal_Errors_and_Fault()
+		public void IsNominal_Alerts_and_Fault()
 		{
 			context.AddAlert("Business logic error");
 			context.AddAlert("Business logic error 2");

@@ -156,7 +156,7 @@ namespace Nexus.Core
 			bool hasAlerts = helper.HasAlerts;
 			if (hasAlerts)
 			{
-				Assert.Fail(helper.ErrorsText);
+				Assert.Fail(helper.AlertsText);
 			}
 		}
 
