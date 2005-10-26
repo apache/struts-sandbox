@@ -43,7 +43,7 @@ namespace Nexus.Web
 		public const string MESSAGE_SUFFIX = "_msg";
 
 		/// <summary>
-		/// Field for Suffix property.
+		/// Field for Suffix property ["_msg"].
 		/// </summary>
 		/// 
 		private string _Suffix = MESSAGE_SUFFIX;
@@ -59,13 +59,13 @@ namespace Nexus.Web
 		}
 
 		/// <summary>
-		/// Field for Resource property.
+		/// Field for Resource property [TRUE].
 		/// </summary>
 		/// 
 		private bool _Resource = true;
 
 		/// <summary>
-		/// If true, populate from Message Resources [TRUE].
+		/// If true, populate from Message Resources.
 		/// </summary>
 		/// 
 		public bool Resource
@@ -75,14 +75,14 @@ namespace Nexus.Web
 		}
 		
 		/// <summary>
-		/// Field for Required property.
+		/// Field for Required property [FALSE].
 		/// </summary>
 		/// 
 		private bool _Required = false;
 
 		/// <summary>
 		/// If true, throw exception if Resource==true 
-		/// and message not in resource [FALSE].
+		/// and message not in resource.
 		/// </summary>
 		/// 
 		public bool Required
@@ -92,14 +92,14 @@ namespace Nexus.Web
 		}
 
 		/// <summary>
-		/// Field for View_Hint property.
+		/// Field for View_Hint property [TRUE].
 		/// </summary>
 		/// 
 		private bool _View_Hint = true;
 
 		/// <summary>
 		/// If true, register for View_Alert event 
-		/// and display any alert for corresponding field [TRUE].
+		/// and display any alert for corresponding field.
 		/// </summary>
 		/// 
 		public bool View_Hint
@@ -109,14 +109,14 @@ namespace Nexus.Web
 		}
 
 		/// <summary>
-		/// Field for View_Alert property.
+		/// Field for View_Alert property [TRUE].
 		/// </summary>
 		/// 
 		private bool _View_Alert = true;
 
 		/// <summary>
 		/// If true, register for View_Hint event 
-		/// and display any hint for corresponding field [TRUE].
+		/// and display any hint for corresponding field.
 		/// </summary>
 		/// 
 		public bool View_Alert

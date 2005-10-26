@@ -20,8 +20,6 @@ namespace Nexus.Web
 		public AlertLabel()
 		{
 			Suffix = ALERT_SUFFIX;
-			Resource = false;
-			Required = false;
 			View_Hint = false;
 			EnableViewState = false;
 		}

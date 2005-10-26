@@ -18,8 +18,6 @@ namespace Nexus.Web
 		public HintLabel()
 		{
 			Suffix = HINT_SUFFIX;
-			Resource = false;
-			Required = false;
 			View_Alert = false;
 		}
 	}
