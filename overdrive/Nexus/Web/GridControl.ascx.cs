@@ -20,8 +20,7 @@ namespace Nexus.Web
 		/// <summary>
 		/// Set the given criteria to the list_Critieria (creating a new one if null), and, 
 		/// If AllowCustomPage is set, 
-		/// calcuate new Limit and Offset, based on pageIndex, and set to criteria; 
-		/// obtain Count from criteria (or set to 0).
+		/// calcuate new Limit and Offset, based on pageIndex, and set to criteria.
 		/// </summary>
 		/// <remarks><p>
 		/// This form is provided to be called by list_Criteria_Init. 
@@ -276,8 +275,10 @@ namespace Nexus.Web
 			IList list = helper.Outcome as IList;
 			DataGrid grid = Grid;
 			grid.DataSource = list;
-
-
+			if (grid.AllowCustomPaging)
+			{
+				grid.VirtualItemCount = GetItemCount(helper);
+			}
 		}
 
 		public override void DataBind()
