@@ -95,7 +95,7 @@ namespace PhoneBook.Core.Commands
 			helper.Criteria[App.ITEM_LIMIT] = 2;
 			helper.Criteria[App.ITEM_OFFSET] = 4;
 			helper.Execute();
-			if (!helper.IsNominal) Assert.Fail(helper.ErrorsText);
+			if (!helper.IsNominal) Assert.Fail(helper.AlertsText);
 			IList list = helper.Outcome;
 			Assert.IsTrue(list.Count == 2, "Expected result set to be limited to two entries.");
 			AppEntry entry = list[0] as AppEntry;

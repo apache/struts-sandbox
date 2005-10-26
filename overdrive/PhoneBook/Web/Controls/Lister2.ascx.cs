@@ -94,8 +94,7 @@ namespace PhoneBook.Web.Controls
 		/// 
 		private void Page_Load(object sender, EventArgs e)
 		{
-			add.Click += new EventHandler(add_Click);
-			add.Text = GetMessage(add.ID);
+			add.Click += new EventHandler(list_Add);
 			Grid_Load();
 		}
 

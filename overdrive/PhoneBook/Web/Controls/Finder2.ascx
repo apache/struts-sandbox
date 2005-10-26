@@ -1,4 +1,5 @@
 <%@ Control Language="c#" AutoEventWireup="false" Codebehind="Finder2.ascx.cs" Inherits="PhoneBook.Web.Controls.Finder2" TargetSchema="http://schemas.microsoft.com/intellisense/ie5"%>
+<%@ Register TagPrefix="x" Namespace="Nexus.Web" Assembly="Nexus.Web" %>
 <table>
 	<tr>
 		<td colspan="6" >
@@ -7,12 +8,12 @@
 		</td>
 	</tr>
 	<tr>
-		<td><asp:Label runat="server" id="last_name_label"></asp:label></td>
-		<td><asp:Label runat="server" id="first_name_label"></asp:label></td>
-		<td><asp:Label runat="server" id="extension_label"></asp:Label></td>
-		<td><asp:Label runat="server" id="user_name_label"></asp:Label></td>
-		<td><asp:Label runat="server" id="hired_label"></asp:Label></td>
-		<td><asp:Label runat="server" id="hours_label"></asp:Label></td>			  
+		<td><x:TextLabel runat="server" id="last_name_label"></x:TextLabel></td>
+		<td><x:TextLabel runat="server" id="first_name_label"></x:TextLabel></td>
+		<td><x:TextLabel runat="server" id="extension_label"></x:TextLabel></td>
+		<td><x:TextLabel runat="server" id="user_name_label"></x:TextLabel></td>
+		<td><x:TextLabel runat="server" id="hired_label"></x:TextLabel></td>
+		<td><x:TextLabel runat="server" id="hours_label"></x:TextLabel></td>			  
 	</tr>
 	<tr>
 		<td><asp:DropDownList ID="last_name_list" Runat=server></asp:DropDownList></td>

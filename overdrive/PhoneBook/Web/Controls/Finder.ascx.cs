@@ -30,7 +30,7 @@ namespace PhoneBook.Web.Controls
 			IViewHelper h = this.ExecuteBind(App.ENTRY_FIND);
 			bool ok = (h.IsNominal);
 			if (!ok)
-				Page_Error = h;
+				Page_Alert = h;
 		}
 
 		/// <summary>

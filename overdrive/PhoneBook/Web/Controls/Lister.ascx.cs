@@ -22,7 +22,7 @@ namespace PhoneBook.Web.Controls
 		{
 			IViewHelper helper = ReadExecute(App.ENTRY_LIST, criteria);
 			bool ok = helper.IsNominal;
-			if (!ok) Page_Error = helper;
+			if (!ok) Page_Alert = helper;
 			else
 			{
 				IList result = helper.Outcome;

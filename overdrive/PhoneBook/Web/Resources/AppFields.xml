@@ -5,14 +5,6 @@
 
 	 <!-- FieldTable -->
 
-		<!-- Strict is not enabled, so we only need to list fields that are 
-			(1) used by a GridViewHelper,
-			(2) need special formatting (via a Processor), 
-			(3) represent a list with fields that need a Processor (fields listed because of (2))).
-			The default processing will apply .ToString() to any unregistered fields, 
-			and pass through any unregistered lists verbatim 
-			(which is cool if all the fields on the list are strings that don't need formatting).
-		-->
 	<object id="FieldTable" type="Nexus.Core.Tables.FieldTable">
 		<property name="AddFieldContexts">
 			<list>
@@ -68,6 +60,7 @@
 	<object id="editor" parent="BaseFieldContext">
 		<property name="ID"><value>editor</value></property>	
 	</object>
+
 	<!-- property name="ControlTypeName"><value>CheckBox</value></property -->	
 
 	<!-- We need to "hash" the name with "_" to avoid conflict with the filter Command -->

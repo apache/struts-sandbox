@@ -41,7 +41,7 @@ namespace PhoneBook.Web.Forms
 		{
 			set
 			{
-				error_label.Text = value.ErrorsText;
+				error_label.Text = value.AlertsText;
 				error_panel.Visible = true;
 			}
 		}
@@ -124,7 +124,7 @@ namespace PhoneBook.Web.Forms
 		/// 
 		private void View_Init(ViewControl c)
 		{
-			c.View_Error += new EventHandler(View_Error);
+			c.View_Alert += new EventHandler(View_Error);
 			c.Catalog = this.Catalog; // ISSUE: Why isn't control injection working?
 		}
 

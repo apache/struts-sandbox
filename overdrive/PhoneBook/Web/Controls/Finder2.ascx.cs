@@ -30,7 +30,7 @@ namespace PhoneBook.Web.Controls
 			ExecuteBind(h);
 			bool ok = (h.IsNominal);
 			if (!ok)
-				Page_Error = h;
+				Page_Alert = h;
 		}
 
 		/// <summary>
@@ -109,9 +109,6 @@ namespace PhoneBook.Web.Controls
 					filter.AutoPostBack = true;
 				}
 			}
-
-			if (IsPostBack) return;
-			GetMessages();
 		}
 
 		#region Web Form Designer generated code
