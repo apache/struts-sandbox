@@ -76,6 +76,24 @@ namespace PhoneBook.Web.Controls
 		}
 
 		/// <summary>
+		/// Provide a runtime instance of the label over the DataGrid.
+		/// </summary>
+		/// 
+		public Label hint;
+
+		/// <summary>
+		/// Update the page index hint. 
+		/// </summary>
+		/// <param name="sender">Event source</param>
+		/// <param name="e">Runtime parameters</param>
+		/// 
+		private void this_ListPageIndexChanged(object sender, EventArgs e)
+		{
+			ListPageIndexChangedArgs a = e as ListPageIndexChangedArgs;
+			hint.Text = ListPageIndexChanged_Message(a);
+		}
+
+		/// <summary>
 		/// Handle Page Init event by obtaining the user profile 
 		/// and initalizing the controls.
 		/// </summary>
@@ -84,6 +102,7 @@ namespace PhoneBook.Web.Controls
 		{
 			Grid = list;
 			Grid_Init();
+			this.ListPageIndexChanged += new EventHandler(this_ListPageIndexChanged);
 		}
 
 		/// <summary>

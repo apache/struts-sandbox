@@ -374,14 +374,14 @@ namespace Nexus.Web
 		{
 			// Only bind columns once
 			// WARNING: Won't work with a singleton
+			DataGrid grid = Grid;
+			int count = (helper.Outcome).Count; 
 			if (bind)
 			{
 				bind = false;
 				int i = 0;
 				if (HasEditColumn) i = BindEditColumn(i);
 				if (HasItemColumn) i = BindItemColumn(i);
-				int count = (helper.Outcome).Count; 
-				DataGrid grid = Grid;
 				if (AllowCustomPaging)
 				{
 					count = GetItemCount(helper);
@@ -389,11 +389,11 @@ namespace Nexus.Web
 					grid.VirtualItemCount = count;
 				}
 				BindColumns(i);
-				ListPageIndexChanged_Raise(this, 
-					grid.CurrentPageIndex,
-					grid.PageSize,
-					count);
 			}
+			ListPageIndexChanged_Raise(this, 
+				grid.CurrentPageIndex,
+				grid.PageSize,
+				count);
 			DataSource(helper);
 			DataBind();
 		}
