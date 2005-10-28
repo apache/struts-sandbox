@@ -73,6 +73,19 @@ namespace Nexus.Web
 		}
 
 		/// <summary>
+		/// Merge values into list_Criteria.
+		/// </summary>
+		/// <param name="criteria">Values to append</param>
+		public void Read(IDictionary criteria)
+		{
+			ICollection keys = criteria.Keys;
+			foreach (string key in keys)
+			{
+				list_Criteria[key] = criteria[key];		
+			}			
+		}
+
+		/// <summary>
 		/// Attribute token for List_ItemIndex
 		/// </summary>
 		private const string LIST_ITEM_INDEX = "list_ItemIndex";
