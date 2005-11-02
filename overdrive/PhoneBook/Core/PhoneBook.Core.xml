@@ -4,22 +4,70 @@
         <name>PhoneBook.Core</name>
     </assembly>
     <members>
-        <member name="T:PhoneBook.Core.Commands.AppCommand">
+        <member name="T:PhoneBook.Core.Commands.BaseMapper">
             <summary>
-            Add data access methods to RequestCommand.
+            Extend RequestCommand with data access methods.
             </summary>
             
         </member>
+        <member name="F:PhoneBook.Core.Commands.BaseMapper._Mapper">
+            <summary>
+            Provide a field for Mapper property.
+            </summary>
+            
+        </member>
+        <member name="M:PhoneBook.Core.Commands.BaseMapper.IsEmpty(System.String)">
+            <summary>
+            Indicate whether string is null or zero length.
+            </summary>
+            <param name="input">Input to validate</param>
+            <returns>True if string is nyull or zero length</returns>
+            
+        </member>
+        <member name="M:PhoneBook.Core.Commands.BaseMapper.GuidString">
+            <summary>
+            Create new Global Universal Identifer as a formatted string.
+            </summary>
+            <returns>String representing a new GUID</returns>
+            <remarks><p>
+            No two calls to this method will ever return duplicate strings.
+            </p></remarks>
+            
+        </member>
+        <member name="P:PhoneBook.Core.Commands.BaseMapper.Mapper">
+            <summary>
+            Expose a preconfigured SqlMapper instance that Commands can use to run statements.
+            </summary>
+            <remarks><p>
+            Commands use Mapper to invoke SqlMap statements, such as 
+            <code>
+            object row = Mapper.QueryForObject (QueryID, context);
+            </code>.
+            </p><p>
+            Any SqlMapper API method may be called. 
+            </p><p>
+            The default behavior of BAseNexusCommand is to use the 
+            command ID if the QueryID is null.
+            </p></remarks>
+            <returns>Preconfigured Mapper instance</returns>
+            
+        </member>
+        <member name="T:PhoneBook.Core.Commands.BaseCount">
+            <summary>
+            Invoke a query that returns the count of a result set.
+            </summary>
+        </member>
         <member name="T:PhoneBook.Core.Commands.BaseEntry">
             <summary>
-            Execute database statement for QueryID for a single object, 
+            Execute database statement indicated by QueryID 
+            for a single object, 
             returning each attribute in the main context.
             </summary>
             
         </member>
         <member name="T:PhoneBook.Core.Commands.BaseFilterList">
             <summary>
-            Execute database statement for QueryID 
+            Execute database statement indicated by QueryID 
             and wrap result in KeyValue objects 
             so that lists can be displayed by standard methods.
             </summary>
@@ -27,42 +75,67 @@
         </member>
         <member name="T:PhoneBook.Core.Commands.BaseList">
             <summary>
-            Execute database statement for QueryID, 
-            convert list returned to an AppContextList,  
-            and place converted list in context under ID.
+            Execute database statement indicated by QueryID, 
+            for a list of objects
+            returning each attribute in the main context.
             </summary>
             
         </member>
         <member name="T:PhoneBook.Core.Commands.BaseSave">
             <summary>
-            Base Command for saving an Entity to the persistant store (database).
+            Store an entity for future reference.
             </summary>
+            
+        </member>
+        <member name="F:PhoneBook.Core.Commands.BaseSave._KeyID">
+            <summary>
+            Provide a field for KeyID property.
+            </summary>
+            
+        </member>
+        <member name="F:PhoneBook.Core.Commands.BaseSave._InsertID">
+            <summary>
+            Provide a field for InsertID property.
+            </summary>
+        </member>
+        <member name="F:PhoneBook.Core.Commands.BaseSave._UpdateID">
+            <summary>
+            Provide a field for UpdateID property.
+            </summary>
+            
         </member>
         <member name="M:PhoneBook.Core.Commands.BaseSave.Save(Nexus.Core.IRequestContext,System.String,System.String,System.String)">
             <summary>
+            Insert or update an entity to the persistent store. 
+            </summary>
+            <remark><p>
             If the "fieldID" is empty, use the insertID statement, 
             otherwise, use the updateID statement.
-            </summary>
+            </p></remark>
             <param name="context">The INexusContext we are processing.</param>
             <param name="fieldID">The name of the key field.</param>
             <param name="insertID">The name of the "insert" mapping for the Entity.</param>
             <param name="updateID">The name of the "update" mapping for the Entity.</param>
             <returns>False</returns>
+            
         </member>
         <member name="P:PhoneBook.Core.Commands.BaseSave.KeyID">
             <summary>
-            The name of the key field.
+            Record the unique identifier for the entity.
             </summary>
+            
         </member>
         <member name="P:PhoneBook.Core.Commands.BaseSave.InsertID">
             <summary>
-            The name of the "insert" mapping for the Entity.
+            Record the name of the "insert" mapping for the entity.
             </summary>
+            
         </member>
         <member name="P:PhoneBook.Core.Commands.BaseSave.UpdateID">
             <summary>
-            The name of the "update" mapping for the Entity.
+            Record the name of the "update" mapping for the entity.
             </summary>
+            
         </member>
         <member name="T:PhoneBook.Core.App">
             <summary>
@@ -115,6 +188,24 @@
         <member name="F:PhoneBook.Core.App.EDITOR">
             <summary>
             Token for editor property.
+            </summary>
+            
+        </member>
+        <member name="F:PhoneBook.Core.App.ITEM_LIMIT">
+            <summary>
+            Token for SQL LIMIT clause.
+            </summary>
+            
+        </member>
+        <member name="F:PhoneBook.Core.App.ITEM_OFFSET">
+            <summary>
+            Token for SQL OFFSET clause.
+            </summary>
+            
+        </member>
+        <member name="F:PhoneBook.Core.App.ITEM_COUNT">
+            <summary>
+            Token for SQL COUNT clause.
             </summary>
             
         </member>
@@ -199,22 +290,115 @@
             </summary>
             
         </member>
+        <member name="F:PhoneBook.Core.AppEntry._Value">
+            <summary>
+            Internal storage.
+            </summary>
+            
+        </member>
+        <member name="M:PhoneBook.Core.AppEntry.AddAll(System.Collections.IDictionary)">
+            <summary>
+            Add each source entry to our internal store. 
+            </summary>
+            <remarks><p>
+            Entries with keys that match the property names will be exposed. 
+            Other entries may be added, but can only be retrieved via Get.
+            </p></remarks>
+            <param name="sources">Entries to add</param>
+            
+        </member>
+        <member name="M:PhoneBook.Core.AppEntry.Add(System.String,System.String)">
+            <summary>
+            Add a single entry to our internal store.
+            </summary>
+            <remarks><p>
+            Entries with keys that match the property names will be exposed. 
+            Other entries may be added, but can only be retrieved via Get.
+            </p></remarks>
+            <param name="key">ID for entry</param>
+            <param name="value">Content for entry</param>
+            
+        </member>
+        <member name="M:PhoneBook.Core.AppEntry.Get(System.String)">
+            <summary>
+            Provide the value corresponding to key from the internal store.
+            </summary>
+            <param name="key">ID for entry</param>
+            <returns>Content for entry</returns>
+            
+        </member>
+        <member name="M:PhoneBook.Core.AppEntry.Set(System.String,System.String)">
+            <summary>
+            Set an entry to the internal store, overwriting any existing entry.
+            </summary>
+            <remarks><p>
+            This is a protected method used by the Properties. 
+            Use an existing Property to set values, 
+            or extend the class to include other Properties. 
+            </p></remarks>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
         <member name="T:PhoneBook.Core.AppEntryList">
             <summary>
-            Implement IEntryList for AppEntry objects.
+            Implement Nexus.Core.IEntryList for AppEntry objects.
+            </summary>
+            
+        </member>
+        <member name="T:PhoneBook.Core.AppEntryListProcessor">
+            <summary>
+            Implement Nexus.Core.Validators.EntryListProcess for AppEntryList.
             </summary>
             
         </member>
         <member name="T:PhoneBook.Core.AppUserProfile">
             <summary>
-            Extend UserProfile to include an IsEditor property.
+            Extend UserProfile to include properties specific to this application, 
+            such as IsEditor.
             </summary>
+            
+        </member>
+        <member name="F:PhoneBook.Core.AppUserProfile._IsEditor">
+            <summary>
+            Provide a field for IsEditor property.
+            </summary>
+        </member>
+        <member name="F:PhoneBook.Core.AppUserProfile._Entry">
+            <summary>
+            Provide a field for Entry property.
+            </summary>
+            
+        </member>
+        <member name="F:PhoneBook.Core.AppUserProfile._FullName">
+            <summary>
+            Provide a field for FullName property.
+            </summary>
+            
         </member>
         <member name="M:PhoneBook.Core.AppUserProfile.#ctor(System.Security.Principal.IIdentity)">
             <summary>
             Instantiate from an IIdentity.
             </summary>
             <param name="id">Identity to copy for this profile.</param>
+            
+        </member>
+        <member name="P:PhoneBook.Core.AppUserProfile.IsEditor">
+            <summary>
+            Indicate whether user has editing priveleges. 
+            </summary>
+            
+        </member>
+        <member name="P:PhoneBook.Core.AppUserProfile.Entry">
+            <summary>
+            Record directory entry for user.
+            </summary>
+            
+        </member>
+        <member name="P:PhoneBook.Core.AppUserProfile.FullName">
+            <summary>
+            Record the user's full name (first and last names).
+            </summary>
+            
         </member>
         <member name="T:PhoneBook.Core.TelephoneProcessor">
             <summary>

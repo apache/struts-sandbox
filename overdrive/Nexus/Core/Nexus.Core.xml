@@ -4,6 +4,44 @@
         <name>Nexus.Core</name>
     </assembly>
     <members>
+        <member name="T:WQD.Core.Controls.FindArgs">
+            <summary>
+            Provide an EventArgs type to interace with FindControls
+            that can be read or bound via an IDictionary object.
+            </summary>
+            
+        </member>
+        <member name="F:WQD.Core.Controls.FindArgs.OldArgs">
+            <summary>
+            A reference to the original arguments for an event, if any.
+            </summary>
+            
+        </member>
+        <member name="F:WQD.Core.Controls.FindArgs.Criteria">
+            <summary>
+            Expose our dictionary instance.
+            </summary>
+            
+        </member>
+        <member name="M:WQD.Core.Controls.FindArgs.#ctor(System.Collections.IDictionary)">
+            <summary>
+            Create this instance using the given dictionary.
+            </summary>
+            
+        </member>
+        <member name="M:WQD.Core.Controls.FindArgs.#ctor">
+            <summary>
+            Create a new instance with empty fields.
+            </summary>
+            
+        </member>
+        <member name="M:WQD.Core.Controls.FindArgs.#ctor(System.EventArgs)">
+            <summary>
+            Create a new instance, setting the old event arguments.
+            </summary>
+            <param name="oldArgs">Old Event arguments</param>
+            
+        </member>
         <member name="T:Nexus.Core.Helpers.IViewHelper">
             <summary>
             Provide a facade for use by a code-behind to simplify access to the 
@@ -23,7 +61,38 @@
             </summary>
             
         </member>
-        <!-- Badly formed XML comment ignored for member "M:Nexus.Core.Helpers.IViewHelper.Read(System.Collections.IDictionary,System.Boolean)" -->
+        <member name="M:Nexus.Core.Helpers.IViewHelper.Read(System.Collections.IDictionary,System.Boolean)">
+            <summary>
+            Read input into the Criteria from a given Dictionary.
+            </summary>
+            <param name="criteria">Attributes to add to Critiera</param>
+            <param name="nullIfEmpty">Set attributes for empty strings to null</param>
+            
+        </member>
+        <member name="M:Nexus.Core.Helpers.IViewHelper.AlertsFor(System.String)">
+            <summary>
+            Return the Alerts for the specifiied ID, 
+            formatted for display by a UI control.
+            </summary>
+            <remarks>
+            If messages are localized or customized, 
+            the helper will return correct version for the user.
+            UI specific implementation may markup the errors as needed.
+            </remarks>
+            
+        </member>
+        <member name="M:Nexus.Core.Helpers.IViewHelper.HintsFor(System.String)">
+            <summary>
+            Return the Hints for the specifiied ID, 
+            formatted for display by a UI control.
+            </summary>
+            <remarks>
+            If messages are localized or customized, 
+            the helper will return correct version for the user.
+            UI specific implementation may markup the errors as needed.
+            </remarks>
+            
+        </member>
         <member name="P:Nexus.Core.Helpers.IViewHelper.Criteria">
             <summary>
             Store input and output values.
@@ -62,6 +131,17 @@
             </remarks>
             
         </member>
+        <member name="P:Nexus.Core.Helpers.IViewHelper.AlertsText">
+            <summary>
+            Return the Alerts, including any Fault, formatted for display by a UI control.
+            </summary>
+            <remarks>
+            If messages are localized or customized, 
+            the helper will return correct version for the user.
+            UI specific implementation may markup the errors as needed.
+            </remarks>
+            
+        </member>
         <member name="P:Nexus.Core.Helpers.IViewHelper.HasAlerts">
             <summary>
             Indicate if alerts are queued.
@@ -90,17 +170,6 @@
             Indicate if there are no alerts or fault pending.
             </summary>
             <returns>True if all is well.</returns>
-            
-        </member>
-        <member name="P:Nexus.Core.Helpers.IViewHelper.ErrorsText">
-            <summary>
-            Return the Alerts, including any Fault, formatted for display by a UI control.
-            </summary>
-            <remarks>
-            If messages are localized or customized, 
-            the helper will return correct version for the user.
-            UI specific implementation may markup the errors as needed.
-            </remarks>
             
         </member>
         <member name="P:Nexus.Core.Helpers.IViewHelper.Hints">
@@ -247,26 +316,29 @@
             </remarks>
             
         </member>
-        <member name="P:Nexus.Core.Helpers.ViewHelper.Profile">
-            <summary>
-            Provide the user Profile for this Helper, if any.
-            </summary>
-            
-        </member>
         <member name="T:Nexus.Core.Profile.IProfile">
             <summary>
             Record user settings.
             </summary>
+            
         </member>
         <member name="P:Nexus.Core.Profile.IProfile.UserId">
             <summary>
             Record the User ID.
             </summary>
+            
         </member>
         <member name="P:Nexus.Core.Profile.IProfile.UserLocale">
             <summary>
             Record the User Locale.
             </summary>
+            
+        </member>
+        <member name="P:Nexus.Core.Profile.IProfile.Criteria">
+            <summary>
+            Record other default settings.
+            </summary>
+            
         </member>
         <member name="T:Nexus.Core.Profile.UserIdentity">
             <summary>
@@ -374,6 +446,17 @@
             <param name="name">A Identity Name that may contain a machine name reference</param>
             <returns>Identity name with machine name removed</returns>
         </member>
+        <member name="F:Nexus.Core.Profile.UserProfile._UserLocale">
+            <summary>
+            Provide a field for UserLocale property.
+            </summary>
+        </member>
+        <member name="F:Nexus.Core.Profile.UserProfile._Criteria">
+            <summary>
+            Provide a field for Criteria property.
+            </summary>
+            
+        </member>
         <member name="M:Nexus.Core.Profile.UserProfile.#ctor">
             <summary>
             Instantiate a default profile.
@@ -405,7 +488,7 @@
             Record the user id portion of the Identity Name.
             </summary>
             <remarks><p>
-            The UserId can be used to related staff records to user logins.
+            The UserId can be used to relate staff records to user logins.
             </p></remarks>
         </member>
         <member name="T:Nexus.Core.Tables.FieldContext">
@@ -518,6 +601,17 @@
             Inventory of fields and processors used by the application.
             </summary>
             
+        </member>
+        <member name="M:Nexus.Core.Tables.IFieldTable.NewFieldContext(System.String)">
+            <summary>
+            Factory method to create a stub context 
+            when field is required and Strict is false.
+            </summary>
+            <remarks><p>
+            The IFieldContext instance should provide a default for Required.
+            </p></remarks>
+            <param name="id">The fieldname</param>
+            <returns>New default context for ID</returns>
         </member>
         <member name="M:Nexus.Core.Tables.IFieldTable.GetFieldContext(System.String)">
             <summary>
@@ -881,7 +975,7 @@
         </member>
         <member name="P:Nexus.Core.Validators.IProcessorContext.Target">
             <summary>
-            Reorod the target value after conversion or formatting.
+            Record the target value after conversion or formatting.
             </summary>
             
         </member>
@@ -1628,44 +1722,6 @@
             <summary>
             Token for Entry Item command name.
             </summary>
-        </member>
-        <member name="T:WQD.Core.Controls.FindArgs">
-            <summary>
-            Provide an EventArgs type to interace with FindControls
-            that can be read or bound via an IDictionary object.
-            </summary>
-            
-        </member>
-        <member name="F:WQD.Core.Controls.FindArgs.OldArgs">
-            <summary>
-            A reference to the original arguments for an event, if any.
-            </summary>
-            
-        </member>
-        <member name="F:WQD.Core.Controls.FindArgs.Criteria">
-            <summary>
-            Expose our dictionary instance.
-            </summary>
-            
-        </member>
-        <member name="M:WQD.Core.Controls.FindArgs.#ctor(System.Collections.IDictionary)">
-            <summary>
-            Create this instance using the given dictionary.
-            </summary>
-            
-        </member>
-        <member name="M:WQD.Core.Controls.FindArgs.#ctor">
-            <summary>
-            Create a new instance with empty fields.
-            </summary>
-            
-        </member>
-        <member name="M:WQD.Core.Controls.FindArgs.#ctor(System.EventArgs)">
-            <summary>
-            Create a new instance, setting the old event arguments.
-            </summary>
-            <param name="oldArgs">Old Event arguments</param>
-            
         </member>
     </members>
 </doc>
