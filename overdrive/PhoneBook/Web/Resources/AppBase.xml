@@ -31,4 +31,6 @@
 
 	<object id="BaseSave" type="PhoneBook.Core.Commands.BaseSave, PhoneBook.Core" parent="BaseMapper"/>
 
+    <object id="EntryInitial" type="PhoneBook.Core.Commands.EntryInitial, PhoneBook.Core" parent="BaseMapper"/>
+
 </objects>

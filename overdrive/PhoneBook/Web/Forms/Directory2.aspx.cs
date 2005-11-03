@@ -179,7 +179,6 @@ namespace PhoneBook.Web.Forms
 			FindArgs a = e as FindArgs;
 			lister.Read(a.Criteria);
 			lister.Reset();
-			lister.Open();
 		}
 
 		/// <summary>

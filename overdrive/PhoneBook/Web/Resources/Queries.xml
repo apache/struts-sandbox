@@ -76,6 +76,9 @@
 				pk_entry AS entry_key				
 			FROM entry
 			<dynamic prepend="WHERE">			
+				<isNotNull property="initial" prepend="AND">
+					last_name LIKE #initial#
+				</isNotNull>
 				<isNotNull property="last_name" prepend="AND">
 					last_name=#last_name#
 				</isNotNull>
@@ -111,6 +114,9 @@
 		<select id="entry_count" paramClass="Hashtable" resultClass="string">
 			SELECT COUNT(*) FROM entry
 			<dynamic prepend="WHERE">			
+				<isNotNull property="initial" prepend="AND">
+					last_name LIKE #initial#
+				</isNotNull>
 				<isNotNull property="last_name" prepend="AND">
 					last_name=#last_name#
 				</isNotNull>
@@ -137,6 +143,12 @@
 				</isNotNull>
 			</dynamic>			
 		</select>
+		
+		<select id="entry_initial" paramClass="string" resultClass="string">		
+			SELECT COUNT(*) 
+			FROM entry
+			WHERE last_name LIKE #value#
+		</select>									
 		
 		<insert id="entry_insert" parameterMap="entry_save_param">
     		INSERT INTO entry (    			
