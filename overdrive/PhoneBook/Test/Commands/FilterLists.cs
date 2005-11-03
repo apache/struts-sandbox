@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+using System;
 using System.Collections;
 using Nexus.Core;
 using Nexus.Core.Helpers;
@@ -114,5 +115,36 @@ namespace PhoneBook.Core.Commands
 				Assert.IsTrue(okay, "Expected short date format, not: " + key);
 			}
 		}
+
+		[Test]
+		public void Initial()
+		{
+			IViewHelper helper = catalog.GetHelperFor(App.ENTRY_LIST);
+			helper.Criteria["initial"] = "C%";
+			helper.Execute();
+			Assert.IsTrue(helper.IsNominal,helper.AlertsText);
+			IList list = helper.Outcome;
+			Assert.IsTrue(list.Count>0,"Expected one or more entries");
+			foreach (AppEntry entry in list) 
+			{
+				Assert.IsTrue("C".Equals(entry.last_name.Substring(0,1)),"Expected all to be C*");
+			}
+			int count = Convert.ToInt32(helper.Criteria["item_count"]);
+			Assert.IsTrue(count==list.Count,"Expected counts to match");
+		}
+
+		[Test]
+		public void InitialDistinct()
+		{
+			IViewHelper helper = catalog.GetHelperFor(App.ENTRY_INITIAL);
+			helper.Execute();
+			Assert.IsTrue(helper.IsNominal,helper.AlertsText);
+			IList list = helper.Outcome;
+			Assert.IsTrue(list.Count>0,"Expected one or more entries");
+			string a = list[0] as string;
+			Assert.IsNotNull(a,"Expected letter");
+			Assert.IsTrue("C".Equals(a),"Expected C");			
+		}
+
 	}
 }

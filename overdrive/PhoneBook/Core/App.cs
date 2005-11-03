@@ -106,10 +106,16 @@ namespace PhoneBook.Core
 		public const string ENTRY = "entry";
 
 		/// <summary>
-		/// Token for select all command.
+		/// Token for list all command.
 		/// </summary>
 		/// 
 		public const string ENTRY_LIST = "entry_list";
+
+		/// <summary>
+		/// Token for Entry Initial command.
+		/// </summary>
+		/// 
+		public const string ENTRY_INITIAL = "entry_initial";
 
 		/// <summary>
 		/// Token for List Last Names command.

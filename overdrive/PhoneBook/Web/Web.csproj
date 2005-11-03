@@ -227,6 +227,22 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Controls\InitialFilter.ascx"
+                    SubType = "UserControl"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Controls\InitialFilter.ascx.cs"
+                    DependentUpon = "InitialFilter.ascx"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controls\InitialFilter.ascx.resx"
+                    DependentUpon = "InitialFilter.ascx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Controls\Lister.ascx"
                     SubType = "UserControl"
                     BuildAction = "Content"

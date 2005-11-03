@@ -1,7 +1,8 @@
 <%@ Register TagPrefix="ovr" Namespace="Nexus.Web" Assembly="Nexus.Web" %>
 <%@ Page language="c#" Codebehind="Directory2.aspx.cs" AutoEventWireup="false" Inherits="PhoneBook.Web.Forms.Directory2" %>
-<%@ Register TagPrefix="app" TagName="Finder" Src="../Controls/Finder2.ascx" %>
+<%@ Register TagPrefix="app" TagName="Filter" Src="../Controls/InitialFilter.ascx" %>
 <%@ Register TagPrefix="app" TagName="Lister" Src="../Controls/Lister2.ascx" %>
+<%@ Register TagPrefix="app" TagName="Finder" Src="../Controls/Finder2.ascx" %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
 <HTML>
@@ -34,6 +35,9 @@
 			<!-- FINDER -->
 			<app:Finder id="finder" Runat="server"></app:Finder>
 			
+			<!-- LETTER FILTER -->
+			<app:Filter id="letter_filter" Runat="server"></app:Filter>
+
 			<!-- LISTER -->
  			<app:Lister id="lister" runat="server"></app:Lister>
 			

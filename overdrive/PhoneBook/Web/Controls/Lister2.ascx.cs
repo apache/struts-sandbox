@@ -24,12 +24,6 @@ namespace PhoneBook.Web.Controls
 		protected Button add;
 
 		/// <summary>
-		/// ID Token to indicate a Label control.
-		/// </summary>
-		/// 
-		private static string LABEL = "_label";
-
-		/// <summary>
 		/// Complete loading Grid 
 		/// after other members have initialized.
 		/// </summary>
@@ -41,13 +35,20 @@ namespace PhoneBook.Web.Controls
 		}
 
 		/// <summary>
+		/// ID Token to indicate a Label control.
+		/// </summary>
+		/// 
+		private static string LABEL = "_label";
+
+		/// <summary>
 		/// Initialize our Grid instance 
 		/// by setting the columns, labels, 
 		/// and other dynamic attributes.
 		/// </summary>
 		/// 
-		private void Grid_Init()
+		private void Grid_Init(DataGrid grid)
 		{
+			Grid = grid;
 			FindCommand = App.ENTRY_FIND;
 			ListCommand = App.ENTRY_LIST;
 			SaveCommand = App.ENTRY_SAVE;
@@ -100,9 +101,9 @@ namespace PhoneBook.Web.Controls
 		/// 
 		private void Page_Init()
 		{
-			Grid = list;
-			Grid_Init();
+			Grid_Init(list);
 			this.ListPageIndexChanged += new EventHandler(this_ListPageIndexChanged);
+			add.Click += new EventHandler(list_Add);
 		}
 
 		/// <summary>
@@ -113,7 +114,6 @@ namespace PhoneBook.Web.Controls
 		/// 
 		private void Page_Load(object sender, EventArgs e)
 		{
-			add.Click += new EventHandler(list_Add);
 			Grid_Load();
 		}
 

@@ -9,6 +9,7 @@ using Nexus.Web;
 using PhoneBook.Core;
 using PhoneBook.Web.Controls;
 using Spring.Web.UI;
+using WQD.Core.Controls;
 
 namespace PhoneBook.Web.Forms
 {
@@ -161,11 +162,36 @@ namespace PhoneBook.Web.Forms
 
 		#region Event handlers
 
+		/// <summary>
+		/// Filter Lister for Directory
+		/// </summary>
+		/// 
+		protected InitialFilter letter_filter;
+
+		/// <summary>
+		/// Apply letter filter to WNE Facilty List.
+		/// </summary>
+		/// <param name="sender">Event source</param>
+		/// <param name="e">Runtime arguments</param>
+		/// 
+		private void letter_filter_View_Filter(object sender, EventArgs e)
+		{
+			FindArgs a = e as FindArgs;
+			lister.Read(a.Criteria);
+			lister.Reset();
+			lister.Open();
+		}
+
+		/// <summary>
+		/// List matching directory entries.
+		/// </summary>
+		/// 
 		protected Lister2 lister;
 
 		/// <summary>
 		/// Capture input values to filter a list of directory entries.
 		/// </summary>
+		/// 
 		protected Finder2 finder;
 
 		/// <summary>
@@ -176,7 +202,7 @@ namespace PhoneBook.Web.Forms
 		/// <param name="sender">Event source</param>
 		/// <param name="e">Runtime arguements</param>
 		/// 
-		protected void finder_Click(object sender, EventArgs e)
+		protected void finder_Filter_Changed(object sender, EventArgs e)
 		{
 			ViewArgs a = e as ViewArgs;
 			IViewHelper helper = a.Helper;
@@ -209,8 +235,15 @@ namespace PhoneBook.Web.Forms
 			this.PreRender += new EventHandler(this.Page_PreRender);
 
 			View_Init(finder);
+
+			View_Init(letter_filter);
+			letter_filter.View_Filter += new EventHandler(letter_filter_View_Filter);
+			IViewHelper helper = Catalog.GetHelperFor(App.ENTRY_INITIAL);
+			helper.Execute();
+			letter_filter.Open(helper.Outcome);
+
 			View_Init(lister);
-			finder.Filter_Changed += new EventHandler(finder_Click);
+			finder.Filter_Changed += new EventHandler(finder_Filter_Changed);
 		}
 
 		/// <summary>
