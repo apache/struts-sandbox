@@ -800,7 +800,7 @@ namespace Nexus.Web
 			{
 				int from = (page * size) + 1;
 				int thru = (page * size) + size;
-				// if (thru>count) thru = count;				
+				if (thru>count) thru = count;				
 				ListPageIndexChangedArgs a = new ListPageIndexChangedArgs();
 				a.ItemFrom = from;
 				a.ItemThru = thru;

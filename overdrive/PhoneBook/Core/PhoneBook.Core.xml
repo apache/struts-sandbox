@@ -137,6 +137,21 @@
             </summary>
             
         </member>
+        <member name="T:PhoneBook.Core.Commands.EntryInitial">
+            <summary>
+            Create list of initial letters for Facility Names.
+            </summary>
+        </member>
+        <member name="F:PhoneBook.Core.Commands.EntryInitial.ALL">
+            <summary>
+            Document token representing match all entries.
+            </summary>
+        </member>
+        <member name="F:PhoneBook.Core.Commands.EntryInitial.WILDCARD">
+            <summary>
+            Document the wildcard character used by SQL queries.
+            </summary>
+        </member>
         <member name="T:PhoneBook.Core.App">
             <summary>
             Tokens representing context keys.
@@ -217,7 +232,13 @@
         </member>
         <member name="F:PhoneBook.Core.App.ENTRY_LIST">
             <summary>
-            Token for select all command.
+            Token for list all command.
+            </summary>
+            
+        </member>
+        <member name="F:PhoneBook.Core.App.ENTRY_INITIAL">
+            <summary>
+            Token for Entry Initial command.
             </summary>
             
         </member>

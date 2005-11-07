@@ -183,7 +183,7 @@ namespace Nexus.Web.Controls
 		/// </summary>
 		/// <param name="input">List of letters to present as commands</param>
 		private void LetterTable_Init(IList input)
-		{		
+		{					
 			DataTable dt = new DataTable();
 			dt.Columns.Add(new DataColumn(LETTER_COLUMN, typeof (string)));
 
@@ -195,6 +195,7 @@ namespace Nexus.Web.Controls
 			}
 			
 			LetterTable = dt;
+			Letter = null;
 		}
 
 		/// <summary>
