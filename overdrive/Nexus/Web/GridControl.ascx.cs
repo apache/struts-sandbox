@@ -189,20 +189,11 @@ namespace Nexus.Web
 			set { _DataKeyField = value; }
 		}
 
-		private IList _DataFields;
-
-		public virtual IList DataFields
+		private IList _Configs; 
+		public virtual IList Configs
 		{
-			get { return _DataFields; }
-			set { _DataFields = value; }
-		}
-
-		private IList _DataLabels;
-
-		public virtual IList DataLabels
-		{
-			get { return _DataLabels; }
-			set { _DataLabels = value; }
+			get {return _Configs;}
+			set {_Configs = value;}
 		}
 
 		#endregion
@@ -325,31 +316,41 @@ namespace Nexus.Web
 		{
 			DataGrid grid = Grid;
 			grid.DataKeyField = DataKeyField;
-			int colCount = DataFields.Count;
-			int lblCount = DataLabels.Count;
+			IList configs = Configs;
+			int colCount = configs.Count;
 			for (int c = 0; c < colCount; c++)
 			{
-				string column = DataFields[c] as string;
-				string label = (lblCount < c) ? column : DataLabels[c] as string;
-				i = BindColumn(i, label, column);
+				IGridConfig config = configs[c] as IGridConfig;
+				if (config.HasTemplate)
+				{
+					i = BindTemplateColumn(i, config);
+				}
+				else i = BindColumn(i, config);
 			}
 			return i;
 		}
 
-		protected int BindColumn(int pos, string headerText, string dataField, string sortExpression, string dataFormat)
+		protected int BindColumn(int pos, IGridConfig config)
 		{
 			BoundColumn column = new BoundColumn();
-			column.HeaderText = headerText;
-			column.DataField = dataField;
-			column.SortExpression = sortExpression; // See DataGridColumn.SortExpression Property
-			column.DataFormatString = dataFormat; // See Formatting Types in .NET Dev Guide
+			column.HeaderText = config.HeaderText;
+			column.DataField = config.DataField;
+			// column.SortExpression = config.sortExpression; // See DataGridColumn.SortExpression Property
+			// column.DataFormatString = config.dataFormat; // See Formatting Types in .NET Dev Guide
 			Grid.Columns.AddAt(pos, column);
 			return pos + 1;
 		}
 
-		public int BindColumn(int pos, string headerText, string dataField)
+		protected int BindTemplateColumn(int pos, IGridConfig config)
 		{
-			return BindColumn(pos, headerText, dataField, String.Empty, String.Empty);
+			TemplateColumn column = new TemplateColumn();
+			column.HeaderText = config.HeaderText;
+			column.ItemTemplate = config.ItemTemplate;
+			column.EditItemTemplate = config.EditItemTemplate;
+			// column.SortExpression = config.sortExpression; // See DataGridColumn.SortExpression Property
+			// column.DataFormatString = config.dataFormat; // See Formatting Types in .NET Dev Guide
+			Grid.Columns.AddAt(pos, column);
+			return pos + 1;
 		}
 
 		private bool bind = true;
@@ -487,8 +488,9 @@ namespace Nexus.Web
 			IViewHelper h = GetHelperFor(SaveCommand);
 			if (h.IsNominal)
 			{
+				IList configs = Configs;
 				h.Criteria[DataKeyField] = key;
-				int cols = DataFields.Count;
+				int cols = configs.Count;
 				string[] keys = new string[2 + cols];
 				// reconstruct the standard edit column keys
 				// just as placeholders, really
@@ -497,7 +499,7 @@ namespace Nexus.Web
 				int index = 2;
 				// append our field names to the array of keys
 				for (int i = 0; i < cols; i++)
-					keys[index++] = DataFields[i] as string;
+					keys[index++] = (configs[i] as IGridConfig).DataField;
 				ReadGridControls(controls, h.Criteria, keys, true);
 				h.Execute();
 			}
@@ -914,8 +916,138 @@ namespace Nexus.Web
 		}
 
 		#endregion
-	}
 
+		#region Templates
+
+		public interface IGridConfig
+		{
+			string DataField {get;}
+			string HeaderText {get;}
+			ITemplate ItemTemplate {get;set;}
+			ITemplate EditItemTemplate {get;set;}
+			bool HasTemplate {get;}
+		}
+
+		public class GridConfig : IGridConfig
+		{
+			/// <summary>
+			/// Attribute name (required).
+			/// </summary>
+			/// 
+			private string _DataField;
+			public string DataField
+			{
+				get { return _DataField; }
+			}
+
+			/// <summary>
+			/// Heading for this attribute (optional).
+			/// </summary>
+			/// 
+			private string _HeaderText;
+			public string HeaderText
+			{
+				get 
+				{
+					if (_HeaderText==null) return DataField; 
+					return _HeaderText;
+				}
+			}
+
+			/// <summary>
+			/// Item template for this attribute (optional).
+			/// </summary>
+			private ITemplate _ItemTemplate;
+			public ITemplate ItemTemplate
+			{
+				get {return _ItemTemplate;}
+				set {_ItemTemplate = value;}
+			}
+
+			/// <summary>
+			/// Edit template for this attribute (optional).
+			/// </summary>
+			private ITemplate _EditItemTemplate;
+			public ITemplate EditItemTemplate
+			{
+				get {return _EditItemTemplate;}
+				set {_EditItemTemplate = value;}
+			}
+
+			// string DataFormat;
+			// string SortFormat;
+			// ITemplate ItemFormat;
+
+			public bool HasTemplate
+			{
+				get {return (_ItemTemplate != null) || (_EditItemTemplate != null);}
+			}
+			
+			public GridConfig(string dataField, string headerText)
+			{
+				_DataField = dataField;
+				_HeaderText = headerText;
+			}
+
+			public GridConfig(string dataField, string headerText, ITemplate itemTemplate, ITemplate editItemTemplate)
+			{
+				_DataField = dataField;
+				_HeaderText = headerText;
+				_ItemTemplate = itemTemplate;
+				_EditItemTemplate = editItemTemplate;
+			}
+		}
+
+
+		public class LiteralTemplate : ITemplate
+		{
+
+			private string _DataField;
+
+			private void LiteralTemplate_DataBinding(object sender, EventArgs e)
+			{
+				Literal lc;
+				lc = (Literal) sender;
+				DataGridItem container = (DataGridItem) lc.NamingContainer;
+				lc.Text = DataBinder.Eval(container.DataItem, _DataField) as string;
+			}
+
+			public void InstantiateIn(Control container)
+			{
+				Literal lc = new Literal();
+				lc.DataBinding += new EventHandler(LiteralTemplate_DataBinding);
+				container.Controls.Add(lc);
+			}
+
+			public LiteralTemplate (string dataField)
+			{
+				_DataField = dataField;
+				
+			}
+		}
+		
+		public class DropDownListTemplate : ITemplate
+		{
+			
+			private DropDownList _List;
+
+			public void InstantiateIn(Control container)
+			{
+				container.Controls.Add(_List);
+			}
+
+			public DropDownListTemplate(object dataSource)
+			{
+				_List = new DropDownList();
+				_List.DataSource = dataSource;
+				_List.DataBind();
+			}
+		}
+		
+		
+		#endregion
+	
+	}
 
 	/* 
 
