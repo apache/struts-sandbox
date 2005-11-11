@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
+using System.Web.UI;
 using System.Web.UI.WebControls;
+using Nexus.Core.Helpers;
 using Nexus.Core.Profile;
 using PhoneBook.Core;
 
@@ -11,6 +13,7 @@ namespace PhoneBook.Web.Controls
 	/// </summary>
 	public class Lister2 : AppGridControl
 	{
+		
 		/// <summary>
 		/// Provide instance of DataGrid control
 		/// </summary>
@@ -23,6 +26,68 @@ namespace PhoneBook.Web.Controls
 		/// 
 		protected Button add;
 
+		protected override IViewHelper Save(string key, ControlCollection controls)
+		{
+			IViewHelper h = GetHelperFor(SaveCommand);
+			if (h.IsNominal)
+			{
+				IList configs = Configs;
+				h.Criteria[DataKeyField] = key;
+				int cols = configs.Count;
+				string[] keys = new string[2 + cols];
+				// reconstruct the standard edit column keys
+				// just as placeholders, really
+				keys[0] = SaveText;
+				keys[1] = QuitText;
+				int index = 2;
+				// append our field names to the array of keys
+				for (int i = 0; i < cols; i++)
+					keys[index++] = (configs[i] as IGridConfig).DataField;
+				ReadGridControls(controls, h.Criteria, keys, true);
+
+				bool needEditorValue = (null==h.Criteria[App.EDITOR]); 
+					// FIXME: [OVR-24] - Template columns not passed by DataGridCommandEventArgs
+				if (needEditorValue)
+				{
+					h.Criteria[App.EDITOR] = FindControlValue(App.EDITOR);
+				}
+
+				h.Execute();
+			}
+			return h;
+		}
+
+		public override ControlCollection GetControls(DataGridCommandEventArgs e)
+		{
+
+			DataGrid grid = Grid;
+			ControlCollection controls = new ControlCollection(grid);
+			foreach (TableCell cell in e.Item.Cells)
+			{
+				for (int i = 0; i < cell.Controls.Count; i++)
+					controls.Add(cell.Controls[i]);
+			}
+						
+			/*
+			// What the scripts usually do, but our EDITOR_CELL is null.
+			const int EDITOR_CELL = 8;
+			TableCell o = e.Item.Cells[EDITOR_CELL];
+			DropDownList r = (DropDownList) o.FindControl(App.EDITOR);
+			controls.Add(r);
+			object o = e.Item.FindControl(App.EDITOR);
+
+			// The template is in the DataGrid, just not in the event
+			TableRow item = grid.Items[1];
+			foreach (TableCell cell in item.Cells)
+			{
+				for (int i = 0; i < cell.Controls.Count; i++)
+					controls.Add(cell.Controls[i]);				
+			}	
+			*/
+
+			return controls;
+		}
+
 		/// <summary>
 		/// Complete loading Grid 
 		/// after other members have initialized.
@@ -34,11 +99,27 @@ namespace PhoneBook.Web.Controls
 			HasEditColumn = profile.IsEditor;
 		}
 
+		private ITemplate GetList()
+		{
+			IList data = new ArrayList();
+			data.Add("0");
+			data.Add("1");
+			DropDownListTemplate list = new DropDownListTemplate(App.EDITOR,data);
+			return list;
+		}
+
 		/// <summary>
 		/// ID Token to indicate a Label control.
 		/// </summary>
 		/// 
 		private static string LABEL = "_label";
+
+		private IGridConfig GetConfig(string dataField)
+		{
+			string headerText = GetMessage(dataField + LABEL);
+			IGridConfig config = new GridConfig(dataField,headerText);
+			return config;
+		}
 
 		/// <summary>
 		/// Initialize our Grid instance 
@@ -55,25 +136,22 @@ namespace PhoneBook.Web.Controls
 			DataKeyField = App.ENTRY_KEY;
 			AllowCustomPaging = true;
 
-			IList f = new ArrayList(7);
-			f.Add(App.LAST_NAME);
-			f.Add(App.FIRST_NAME);
-			f.Add(App.EXTENSION);
-			f.Add(App.USER_NAME);
-			f.Add(App.HIRED);
-			f.Add(App.HOURS);
-			f.Add(App.EDITOR);
-			DataFields = f;
+			ITemplate editor = GetList();
+			ITemplate literal = new LiteralTemplate(App.EDITOR);
 
-			IList k = new ArrayList(7);
-			k.Add(GetMessage(App.LAST_NAME + LABEL));
-			k.Add(GetMessage(App.FIRST_NAME + LABEL));
-			k.Add(GetMessage(App.EXTENSION + LABEL));
-			k.Add(GetMessage(App.USER_NAME + LABEL));
-			k.Add(GetMessage(App.HIRED + LABEL));
-			k.Add(GetMessage(App.HOURS + LABEL));
-			k.Add(GetMessage(App.EDITOR + LABEL));
-			DataLabels = k;
+			IList list = new ArrayList(7);
+			list.Add(GetConfig(App.LAST_NAME));
+			list.Add(GetConfig(App.FIRST_NAME));
+			list.Add(GetConfig(App.EXTENSION));
+			list.Add(GetConfig(App.USER_NAME));
+			list.Add(GetConfig(App.HIRED));
+			list.Add(GetConfig(App.HOURS));
+			IGridConfig c = GetConfig(App.EDITOR);
+			c.ItemTemplate = literal;
+			c.EditItemTemplate = editor;
+			list.Add(c);
+			Configs = list;
+
 		}
 
 		/// <summary>
@@ -144,5 +222,6 @@ namespace PhoneBook.Web.Controls
 		}
 
 		#endregion
+
 	}
 }
