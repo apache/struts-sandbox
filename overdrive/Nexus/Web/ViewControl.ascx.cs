@@ -219,6 +219,42 @@ namespace Nexus.Web
 			}
 		}
 
+		/// <summary>
+		/// Kludgy method to read the value of a control 
+		/// directly from the request under certain circumstances. 
+		/// </summary>
+		/// <remarks><p>
+		/// This method is intended to workaround a problem 
+		/// we are having with dymanci DataGrid templates. 
+		/// The template column seems to be absent from the event args. 
+		/// Other columns are there, but a template column is ignored. 
+		/// </p><p>
+		/// This method can retrieve the value directly from the request
+		/// *if* the identifier is a unique string of characters that 
+		/// won't be found as part of another parameter. 
+		/// The DataGrid changes the identifer name, 
+		/// but appends the control id given by the template. 
+		/// So, we use key.IndexOf to find the control id within the
+		/// manufactured parameter id. 
+		/// Kludgy, but it's only meant as a workaround (see OVR-24).
+		/// </p></remarks>
+		/// 
+		/// <param name="id">Control ID</param>
+		/// <returns>Value of first paramter that has "id" 
+		/// as any part of its name.</returns>
+		protected string FindControlValue(string id)
+		{			
+			string ctlKey = null;
+			string[] keys = Request.Params.AllKeys;
+			foreach (string key in keys)
+			{
+				bool found = (key.IndexOf(id)>-1);
+				if (found) ctlKey = key;
+				continue;
+			}
+			return Request.Params[ctlKey]; // FIXME
+		}
+
 		#endregion 
 
 		#region ViewState methods 

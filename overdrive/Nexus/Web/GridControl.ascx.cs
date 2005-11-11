@@ -403,7 +403,7 @@ namespace Nexus.Web
 
 		#region Special ReadControls method 
 
-		private void ReadGridControls(ControlCollection controls, IDictionary dictionary, string[] keys, bool nullIfEmpty)
+		protected void ReadGridControls(ControlCollection controls, IDictionary dictionary, string[] keys, bool nullIfEmpty)
 		{
 			int i = -1;
 			foreach (Control t in controls)
@@ -671,7 +671,7 @@ namespace Nexus.Web
 			return key;
 		}
 
-		private ControlCollection GetControls(DataGridCommandEventArgs e)
+		public virtual ControlCollection GetControls(DataGridCommandEventArgs e)
 		{
 			DataGrid grid = Grid;
 			ControlCollection controls = new ControlCollection(grid);
@@ -1015,14 +1015,14 @@ namespace Nexus.Web
 			public void InstantiateIn(Control container)
 			{
 				Literal lc = new Literal();
+				lc.ID = _DataField;
 				lc.DataBinding += new EventHandler(LiteralTemplate_DataBinding);
 				container.Controls.Add(lc);
 			}
 
 			public LiteralTemplate (string dataField)
-			{
-				_DataField = dataField;
-				
+			{				
+				_DataField = dataField;				
 			}
 		}
 		
@@ -1036,15 +1036,15 @@ namespace Nexus.Web
 				container.Controls.Add(_List);
 			}
 
-			public DropDownListTemplate(object dataSource)
+			public DropDownListTemplate(string id, object dataSource)
 			{
 				_List = new DropDownList();
+				_List.ID = id;
 				_List.DataSource = dataSource;
 				_List.DataBind();
 			}
 		}
-		
-		
+				
 		#endregion
 	
 	}
