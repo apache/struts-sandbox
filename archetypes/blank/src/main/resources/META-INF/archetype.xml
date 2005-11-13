@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<archetype>
+   <id>blank</id>
+   <resources>
+      <resource>src/main/webapp/index.jsp</resource>
+      <resource>src/main/webapp/pages/Welcome.jsp</resource>
+      <resource>src/main/webapp/WEB-INF/struts-config.xml</resource>
+      <resource>src/main/webapp/WEB-INF/tiles-defs.xml</resource>
+      <resource>src/main/webapp/WEB-INF/validation.xml</resource>
+      <resource>src/main/webapp/WEB-INF/web.xml</resource>
+      <resource>src/main/resources/MessageResources.properties</resource>
+   </resources>
+</archetype>
