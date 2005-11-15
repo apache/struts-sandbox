@@ -4,6 +4,5 @@ namespace PhoneBook.Web.Controls
 {
 	public class InitialFilter : LetterFilter
 	{
-
 	}
 }

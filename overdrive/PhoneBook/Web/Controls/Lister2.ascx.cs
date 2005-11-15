@@ -14,7 +14,6 @@ namespace PhoneBook.Web.Controls
 	/// </summary>
 	public class Lister2 : AppGridControl
 	{
-		
 		/// <summary>
 		/// Provide instance of DataGrid control
 		/// </summary>
@@ -29,23 +28,22 @@ namespace PhoneBook.Web.Controls
 
 		protected override IViewHelper Save(string key, ControlCollection controls)
 		{
-			IViewHelper h = base.Save(key,controls,false);
+			IViewHelper h = base.Save(key, controls, false);
 			if (h.IsNominal)
 			{
-				bool needEditorValue = (null==h.Criteria[App.EDITOR]); 
+				bool needEditorValue = (null == h.Criteria[App.EDITOR]);
 				// FIXME: [OVR-24] - Template columns not passed by DataGridCommandEventArgs
 				if (needEditorValue)
 				{
 					h.Criteria[App.EDITOR] = FindControlValue(App.EDITOR);
 				}
-				h.Execute();				
+				h.Execute();
 			}
 			return h;
 		}
 
 		public override ControlCollection GetControls(DataGridCommandEventArgs e)
 		{
-
 			DataGrid grid = Grid;
 			ControlCollection controls = new ControlCollection(grid);
 			foreach (TableCell cell in e.Item.Cells)
@@ -53,7 +51,7 @@ namespace PhoneBook.Web.Controls
 				for (int i = 0; i < cell.Controls.Count; i++)
 					controls.Add(cell.Controls[i]);
 			}
-						
+
 			/*
 			// What the scripts usually do, but our EDITOR_CELL is null.
 			const int EDITOR_CELL = 8;
@@ -87,18 +85,19 @@ namespace PhoneBook.Web.Controls
 
 
 		private IKeyValueList _EditorKeys = null;
+
 		private IKeyValueList EditorKeys
 		{
 			get
 			{
-				if (_EditorKeys==null)
+				if (_EditorKeys == null)
 				{
 					IKeyValueList data = new KeyValueList();
 					// FIXME: Obtain from Spring?
-					data.Add(new KeyValue(" ","--v--"));
-					data.Add(new KeyValue("0","NO"));
-					data.Add(new KeyValue("1","YES"));
-					_EditorKeys = data;					
+					data.Add(new KeyValue(" ", "--v--"));
+					data.Add(new KeyValue("0", "NO"));
+					data.Add(new KeyValue("1", "YES"));
+					_EditorKeys = data;
 				}
 				return _EditorKeys;
 			}
@@ -113,7 +112,7 @@ namespace PhoneBook.Web.Controls
 		private IGridConfig GetConfig(string dataField)
 		{
 			string headerText = GetMessage(dataField + LABEL);
-			IGridConfig config = new GridConfig(dataField,headerText);
+			IGridConfig config = new GridConfig(dataField, headerText);
 			return config;
 		}
 
@@ -141,8 +140,8 @@ namespace PhoneBook.Web.Controls
 			list.Add(GetConfig(App.HIRED));
 			list.Add(GetConfig(App.HOURS));
 			IGridConfig c = GetConfig(App.EDITOR);
-			c.ItemTemplate = new KeyValueTemplate(App.EDITOR,EditorKeys);
-			c.EditItemTemplate = new DropDownListTemplate(App.EDITOR,EditorKeys);
+			c.ItemTemplate = new KeyValueTemplate(App.EDITOR, EditorKeys);
+			c.EditItemTemplate = new DropDownListTemplate(App.EDITOR, EditorKeys);
 			list.Add(c);
 			Configs = list;
 		}
@@ -215,10 +214,7 @@ namespace PhoneBook.Web.Controls
 		}
 
 		#endregion
-
 	}
 
-
-	
 
 }

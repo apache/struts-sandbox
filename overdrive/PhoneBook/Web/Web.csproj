@@ -234,7 +234,7 @@
                 <File
                     RelPath = "Controls\InitialFilter.ascx.cs"
                     DependentUpon = "InitialFilter.ascx"
-                    SubType = "Code"
+                    SubType = "ASPXCodeBehind"
                     BuildAction = "Compile"
                 />
                 <File

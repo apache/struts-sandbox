@@ -122,15 +122,15 @@ namespace PhoneBook.Core.Commands
 			IViewHelper helper = catalog.GetHelperFor(App.ENTRY_LIST);
 			helper.Criteria["initial"] = "C%";
 			helper.Execute();
-			Assert.IsTrue(helper.IsNominal,helper.AlertsText);
+			Assert.IsTrue(helper.IsNominal, helper.AlertsText);
 			IList list = helper.Outcome;
-			Assert.IsTrue(list.Count>0,"Expected one or more entries");
-			foreach (AppEntry entry in list) 
+			Assert.IsTrue(list.Count > 0, "Expected one or more entries");
+			foreach (AppEntry entry in list)
 			{
-				Assert.IsTrue("C".Equals(entry.last_name.Substring(0,1)),"Expected all to be C*");
+				Assert.IsTrue("C".Equals(entry.last_name.Substring(0, 1)), "Expected all to be C*");
 			}
 			int count = Convert.ToInt32(helper.Criteria["item_count"]);
-			Assert.IsTrue(count==list.Count,"Expected counts to match");
+			Assert.IsTrue(count == list.Count, "Expected counts to match");
 		}
 
 		[Test]
@@ -138,12 +138,12 @@ namespace PhoneBook.Core.Commands
 		{
 			IViewHelper helper = catalog.GetHelperFor(App.ENTRY_INITIAL);
 			helper.Execute();
-			Assert.IsTrue(helper.IsNominal,helper.AlertsText);
+			Assert.IsTrue(helper.IsNominal, helper.AlertsText);
 			IList list = helper.Outcome;
-			Assert.IsTrue(list.Count>0,"Expected one or more entries");
+			Assert.IsTrue(list.Count > 0, "Expected one or more entries");
 			string a = list[0] as string;
-			Assert.IsNotNull(a,"Expected letter");
-			Assert.IsTrue("C".Equals(a),"Expected C");			
+			Assert.IsNotNull(a, "Expected letter");
+			Assert.IsTrue("C".Equals(a), "Expected C");
 		}
 
 	}
