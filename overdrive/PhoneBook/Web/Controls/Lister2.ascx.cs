@@ -95,6 +95,7 @@ namespace PhoneBook.Web.Controls
 				{
 					IKeyValueList data = new KeyValueList();
 					// FIXME: Obtain from Spring?
+					data.Add(new KeyValue(" ","--v--"));
 					data.Add(new KeyValue("0","NO"));
 					data.Add(new KeyValue("1","YES"));
 					_EditorKeys = data;					
@@ -136,6 +137,7 @@ namespace PhoneBook.Web.Controls
 			SaveCommand = App.ENTRY_SAVE;
 			DataKeyField = App.ENTRY_KEY;
 			AllowCustomPaging = true;
+			// HasEditColumn = true; // Set from profile
 
 			ITemplate editor = GetList();
 			ITemplate literal = new KeyValueTemplate(App.EDITOR,EditorKeys);
