@@ -104,12 +104,6 @@ namespace PhoneBook.Web.Controls
 			}
 		}
 
-		private ITemplate GetList()
-		{
-			DropDownListTemplate list = new DropDownListTemplate(App.EDITOR,EditorKeys);
-			return list;
-		}
-
 		/// <summary>
 		/// ID Token to indicate a Label control.
 		/// </summary>
@@ -139,9 +133,6 @@ namespace PhoneBook.Web.Controls
 			AllowCustomPaging = true;
 			// HasEditColumn = true; // Set from profile
 
-			ITemplate editor = GetList();
-			ITemplate literal = new KeyValueTemplate(App.EDITOR,EditorKeys);
-
 			IList list = new ArrayList(7);
 			list.Add(GetConfig(App.LAST_NAME));
 			list.Add(GetConfig(App.FIRST_NAME));
@@ -150,11 +141,10 @@ namespace PhoneBook.Web.Controls
 			list.Add(GetConfig(App.HIRED));
 			list.Add(GetConfig(App.HOURS));
 			IGridConfig c = GetConfig(App.EDITOR);
-			c.ItemTemplate = literal;
-			c.EditItemTemplate = editor;
+			c.ItemTemplate = new KeyValueTemplate(App.EDITOR,EditorKeys);
+			c.EditItemTemplate = new DropDownListTemplate(App.EDITOR,EditorKeys);
 			list.Add(c);
 			Configs = list;
-
 		}
 
 		/// <summary>
@@ -227,4 +217,8 @@ namespace PhoneBook.Web.Controls
 		#endregion
 
 	}
+
+
+	
+
 }
