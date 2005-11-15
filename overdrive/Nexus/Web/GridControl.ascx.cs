@@ -1071,16 +1071,13 @@ namespace Nexus.Web
 			{
 				if (value != null)
 				{
-					foreach (ListItem i in control.Items)
-						i.Selected = false;
-
 					int index = 0;
 					foreach (ListItem i in control.Items)
 					{
 						if (value.Equals(i.Value))
 						{
-							i.Selected = true;
 							control.SelectedIndex = index;
+							continue;
 						}
 						index++;
 					}
@@ -1094,13 +1091,35 @@ namespace Nexus.Web
 				DataGridItem container = (DataGridItem) control.NamingContainer;
 				string key = DataBinder.Eval(container.DataItem, _DataField) as string;
 				SelectItem(control, key);
-				_Control.SelectedIndex = control.SelectedIndex;
+				_SelectedIndex = control.SelectedIndex; // FIXME: [OVR-24]
+			}
+
+			/// <summary>
+			/// Cache the selected index for OnPreRender.
+			/// </summary>
+			private int _SelectedIndex; 	
+
+			/// <summary>
+			/// Kludge method to set Selected Index.
+			/// </summary>
+			/// <remarks><p>
+			/// After setting the selected index on DataBinding, 
+			/// it is somehow being reset to 0 before prerender. 
+			/// This method restores the selected index st by 
+			/// OnDataBinding. 
+			/// </p></remarks>
+			/// <param name="sender">Event source</param>
+			/// <param name="e">Runtime parameters</param>
+			private void OnPreRender(object sender, EventArgs e)
+			{
+				DropDownList control;
+				control = (DropDownList) sender;
+				control.SelectedIndex = _SelectedIndex;
 			}
 
 			public void InstantiateIn(Control container)
 			{
 				container.Controls.Add(_Control);
-				_Control.DataBinding += new EventHandler(OnDataBinding);
 			}
 
 			public DropDownListTemplate(string id, object dataSource)
@@ -1110,6 +1129,8 @@ namespace Nexus.Web
 				_Control.ID = id;
 				_Control.DataSource = dataSource;
 				_Control.DataBind();
+				_Control.DataBinding += new EventHandler(OnDataBinding);
+				_Control.PreRender += new EventHandler(OnPreRender);
 			}
 
 			public DropDownListTemplate(string id, IKeyValueList list)
@@ -1121,6 +1142,8 @@ namespace Nexus.Web
 				_Control.DataTextField = "value";
 				_Control.DataValueField = "key";
 				_Control.DataBind();
+				_Control.DataBinding += new EventHandler(OnDataBinding);
+				_Control.PreRender += new EventHandler(OnPreRender);
 			}		
 		}
 				
