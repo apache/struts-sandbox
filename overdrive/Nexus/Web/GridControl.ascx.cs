@@ -1009,7 +1009,7 @@ namespace Nexus.Web
 
 			private string _DataField;
 
-			private void LiteralTemplate_DataBinding(object sender, EventArgs e)
+			private void OnDataBinding(object sender, EventArgs e)
 			{
 				Literal lc;
 				lc = (Literal) sender;
@@ -1021,7 +1021,7 @@ namespace Nexus.Web
 			{
 				Literal lc = new Literal();
 				lc.ID = _DataField;
-				lc.DataBinding += new EventHandler(LiteralTemplate_DataBinding);
+				lc.DataBinding += new EventHandler(OnDataBinding);
 				container.Controls.Add(lc);
 			}
 
@@ -1031,23 +1031,77 @@ namespace Nexus.Web
 			}
 		}
 		
+		public class KeyValueTemplate : ITemplate
+		{
+
+			private string _DataField;
+			private IKeyValueList _List;
+
+			private void OnDataBinding(object sender, EventArgs e)
+			{
+				Literal lc;
+				lc = (Literal) sender;
+				DataGridItem container = (DataGridItem) lc.NamingContainer;
+				string key = DataBinder.Eval(container.DataItem, _DataField) as string;
+				lc.Text = _List.ValueFor(key);
+			}
+
+			public void InstantiateIn(Control container)
+			{
+				Literal lc = new Literal();
+				lc.ID = _DataField;
+				lc.DataBinding += new EventHandler(OnDataBinding);
+				container.Controls.Add(lc);
+			}
+
+			public KeyValueTemplate (string dataField, IKeyValueList list)
+			{				
+				_DataField = dataField;				
+				_List = list;
+			}
+		}
+
 		public class DropDownListTemplate : ITemplate
 		{
 			
+			private string _DataField;
 			private DropDownList _List;
+
+			private void OnDataBinding(object sender, EventArgs e)
+			{
+				DropDownList _list;
+				_list = (DropDownList) sender;
+				DataGridItem container = (DataGridItem) _list.NamingContainer;
+				object key = DataBinder.Eval(container.DataItem, _DataField);
+				string item = key.ToString();
+				_list.SelectedValue = item;
+			}
 
 			public void InstantiateIn(Control container)
 			{
 				container.Controls.Add(_List);
+				_List.DataBinding += new EventHandler(OnDataBinding);
 			}
 
 			public DropDownListTemplate(string id, object dataSource)
 			{
+				_DataField = id;
 				_List = new DropDownList();
 				_List.ID = id;
 				_List.DataSource = dataSource;
 				_List.DataBind();
 			}
+
+			public DropDownListTemplate(string id, IKeyValueList list)
+			{
+				_DataField = id;
+				_List = new DropDownList();
+				_List.ID = id;
+				_List.DataSource = list;
+				_List.DataTextField = "key";
+				_List.DataValueField = "value";
+				_List.DataBind();
+			}		
 		}
 				
 		#endregion

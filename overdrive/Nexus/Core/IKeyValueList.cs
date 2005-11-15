@@ -7,5 +7,6 @@ namespace Nexus.Core
 	/// </summary>
 	public interface IKeyValueList : IList
 	{
+		string ValueFor(string key); 
 	}
 }
