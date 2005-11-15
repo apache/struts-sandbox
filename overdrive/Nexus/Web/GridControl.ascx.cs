@@ -1011,18 +1011,18 @@ namespace Nexus.Web
 
 			private void OnDataBinding(object sender, EventArgs e)
 			{
-				Literal lc;
-				lc = (Literal) sender;
-				DataGridItem container = (DataGridItem) lc.NamingContainer;
-				lc.Text = DataBinder.Eval(container.DataItem, _DataField) as string;
+				Literal control;
+				control = (Literal) sender;
+				DataGridItem container = (DataGridItem) control.NamingContainer;
+				control.Text = DataBinder.Eval(container.DataItem, _DataField) as string;
 			}
 
 			public void InstantiateIn(Control container)
 			{
-				Literal lc = new Literal();
-				lc.ID = _DataField;
-				lc.DataBinding += new EventHandler(OnDataBinding);
-				container.Controls.Add(lc);
+				Literal control = new Literal();
+				control.ID = _DataField;
+				control.DataBinding += new EventHandler(OnDataBinding);
+				container.Controls.Add(control);
 			}
 
 			public LiteralTemplate (string dataField)
@@ -1035,29 +1035,29 @@ namespace Nexus.Web
 		{
 
 			private string _DataField;
-			private IKeyValueList _List;
+			private IKeyValueList _Control;
 
 			private void OnDataBinding(object sender, EventArgs e)
 			{
-				Literal lc;
-				lc = (Literal) sender;
-				DataGridItem container = (DataGridItem) lc.NamingContainer;
+				Literal control;
+				control = (Literal) sender;
+				DataGridItem container = (DataGridItem) control.NamingContainer;
 				string key = DataBinder.Eval(container.DataItem, _DataField) as string;
-				lc.Text = _List.ValueFor(key);
+				control.Text = _Control.ValueFor(key);
 			}
 
 			public void InstantiateIn(Control container)
 			{
-				Literal lc = new Literal();
-				lc.ID = _DataField;
-				lc.DataBinding += new EventHandler(OnDataBinding);
-				container.Controls.Add(lc);
+				Literal control = new Literal();
+				control.ID = _DataField;
+				control.DataBinding += new EventHandler(OnDataBinding);
+				container.Controls.Add(control);
 			}
 
 			public KeyValueTemplate (string dataField, IKeyValueList list)
 			{				
 				_DataField = dataField;				
-				_List = list;
+				_Control = list;
 			}
 		}
 
@@ -1065,42 +1065,62 @@ namespace Nexus.Web
 		{
 			
 			private string _DataField;
-			private DropDownList _List;
+			private DropDownList _Control;
 
+			private void SelectItem(ListControl control, string value)
+			{
+				if (value != null)
+				{
+					foreach (ListItem i in control.Items)
+						i.Selected = false;
+
+					int index = 0;
+					foreach (ListItem i in control.Items)
+					{
+						if (value.Equals(i.Value))
+						{
+							i.Selected = true;
+							control.SelectedIndex = index;
+						}
+						index++;
+					}
+				}
+			}
+			
 			private void OnDataBinding(object sender, EventArgs e)
 			{
-				DropDownList _list;
-				_list = (DropDownList) sender;
-				DataGridItem container = (DataGridItem) _list.NamingContainer;
-				object key = DataBinder.Eval(container.DataItem, _DataField);
-				string item = key.ToString();
-				_list.SelectedValue = item;
+				DropDownList control;
+				control = (DropDownList) sender;
+				DataGridItem container = (DataGridItem) control.NamingContainer;
+				string key = DataBinder.Eval(container.DataItem, _DataField) as string;
+				SelectItem(control, key);
+				_Control.SelectedIndex = control.SelectedIndex;
 			}
 
 			public void InstantiateIn(Control container)
 			{
-				container.Controls.Add(_List);
-				_List.DataBinding += new EventHandler(OnDataBinding);
+				container.Controls.Add(_Control);
+				_Control.DataBinding += new EventHandler(OnDataBinding);
 			}
 
 			public DropDownListTemplate(string id, object dataSource)
 			{
 				_DataField = id;
-				_List = new DropDownList();
-				_List.ID = id;
-				_List.DataSource = dataSource;
-				_List.DataBind();
+				_Control = new DropDownList();
+				_Control.ID = id;
+				_Control.DataSource = dataSource;
+				_Control.DataBind();
 			}
 
 			public DropDownListTemplate(string id, IKeyValueList list)
 			{
 				_DataField = id;
-				_List = new DropDownList();
-				_List.ID = id;
-				_List.DataSource = list;
-				_List.DataTextField = "key";
-				_List.DataValueField = "value";
-				_List.DataBind();
+				_Control = new DropDownList();
+				_Control.ID = id;
+				_Control.DataSource = list;
+				_Control.DataTextField = "value";
+				_Control.DataValueField = "key";
+				_Control.DataBind();
 			}		
 		}
 				
