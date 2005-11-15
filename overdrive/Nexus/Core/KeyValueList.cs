@@ -31,7 +31,7 @@ namespace Nexus.Core
 
 		public string ValueFor(string key)
 		{
-			if ((key==null) || (key.Equals(String.Empty))) return key;
+			if ((key == null) || (key.Equals(String.Empty))) return key;
 			foreach (IKeyValue kv in this)
 			{
 				if (key.Equals(kv.Key)) return kv.Value as string;

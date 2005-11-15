@@ -1,12 +1,10 @@
 using System;
 using System.Collections;
 using Nexus.Core.Helpers;
-using Nexus.Web;
 using WQD.Core.Controls;
 
 namespace Nexus.Web
 {
-
 	/// <summary>
 	/// Base class for find controls.
 	/// </summary>
@@ -65,7 +63,7 @@ namespace Nexus.Web
 			if (View_Find != null)
 			{
 				FindArgs a = new FindArgs(e, Criteria);
-				View_Find(sender, a); 
+				View_Find(sender, a);
 			}
 		}
 
@@ -80,7 +78,7 @@ namespace Nexus.Web
 		/// </p></remarks>
 		/// 
 		public virtual bool Open()
-		{						
+		{
 			IViewHelper helper = ExecuteBind(FindCommand);
 			Bind(Profile.Criteria);
 			bool okay = helper.IsNominal;

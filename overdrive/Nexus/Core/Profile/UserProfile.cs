@@ -111,7 +111,7 @@ namespace Nexus.Core.Profile
 		{
 			get
 			{
-				if (_Criteria==null) 
+				if (_Criteria == null)
 					_Criteria = new Hashtable();
 				return _Criteria;
 			}

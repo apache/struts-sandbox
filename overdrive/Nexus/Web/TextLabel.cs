@@ -6,12 +6,11 @@ namespace Nexus.Web
 	/// </summary>
 	public class TextLabel : ViewLabel
 	{
-		
 		/// <summary>
 		/// Default suffix for NameLabel IDs ["_label"].
 		/// </summary>
 		public const string TEXT_SUFFIX = "_label";
-		
+
 		/// <summary>
 		/// Set the defaults for this subclass.
 		/// </summary>

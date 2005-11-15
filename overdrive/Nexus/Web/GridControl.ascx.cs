@@ -32,17 +32,17 @@ namespace Nexus.Web
 		{
 			if (Grid.AllowCustomPaging)
 			{
-				if (criteria==null) criteria = new Hashtable(); // FIXME: Spring?
+				if (criteria == null) criteria = new Hashtable(); // FIXME: Spring?
 				int page = pageIndex;
 				int limit = Grid.PageSize;
-				int offset = page * limit;
+				int offset = page*limit;
 				criteria[ITEM_LIMIT] = limit;
 				criteria[ITEM_OFFSET] = offset;
 			}
 			list_Criteria = criteria;
 			return criteria;
 		}
-	
+
 		/// <summary>
 		/// If AllowCustomPage is set, 
 		/// calculate new List and Offset, using the list_Context.
@@ -56,7 +56,7 @@ namespace Nexus.Web
 		protected IDictionary list_Criteria_NewPageIndex(int pageIndex)
 		{
 			IDictionary criteria = list_Criteria;
-			return list_Criteria_NewPageIndex(criteria,pageIndex);
+			return list_Criteria_NewPageIndex(criteria, pageIndex);
 		}
 
 		/// <summary>
@@ -81,8 +81,8 @@ namespace Nexus.Web
 			ICollection keys = criteria.Keys;
 			foreach (string key in keys)
 			{
-				list_Criteria[key] = criteria[key];		
-			}			
+				list_Criteria[key] = criteria[key];
+			}
 		}
 
 		/// <summary>
@@ -189,11 +189,12 @@ namespace Nexus.Web
 			set { _DataKeyField = value; }
 		}
 
-		private IList _Configs; 
+		private IList _Configs;
+
 		public virtual IList Configs
 		{
-			get {return _Configs;}
-			set {_Configs = value;}
+			get { return _Configs; }
+			set { _Configs = value; }
 		}
 
 		#endregion
@@ -376,7 +377,7 @@ namespace Nexus.Web
 			// Only bind columns once
 			// WARNING: Won't work with a singleton
 			DataGrid grid = Grid;
-			int count = (helper.Outcome).Count; 
+			int count = (helper.Outcome).Count;
 			if (bind)
 			{
 				bind = false;
@@ -391,10 +392,10 @@ namespace Nexus.Web
 				}
 				BindColumns(i);
 			}
-			ListPageIndexChanged_Raise(this, 
-				grid.CurrentPageIndex,
-				grid.PageSize,
-				count);
+			ListPageIndexChanged_Raise(this,
+			                           grid.CurrentPageIndex,
+			                           grid.PageSize,
+			                           count);
 			DataSource(helper);
 			DataBind();
 		}
@@ -508,9 +509,9 @@ namespace Nexus.Web
 
 		protected virtual IViewHelper Save(string key, ControlCollection controls)
 		{
-			return Save(key,controls,true);
+			return Save(key, controls, true);
 		}
-	
+
 		#endregion
 
 		#region Loading methods
@@ -535,9 +536,9 @@ namespace Nexus.Web
 		{
 			IViewHelper helper;
 
-			if ((Grid.AllowCustomPaging) && (criteria==null))
+			if ((Grid.AllowCustomPaging) && (criteria == null))
 			{
-				list_Criteria_NewPageIndex(criteria,0);
+				list_Criteria_NewPageIndex(criteria, 0);
 				HasCriteria = true;
 			}
 
@@ -578,7 +579,7 @@ namespace Nexus.Web
 		public virtual bool Open(IDictionary criteria)
 		{
 			Page_Reset();
-			list_Criteria_NewPageIndex(criteria,0);
+			list_Criteria_NewPageIndex(criteria, 0);
 			return Open();
 		}
 
@@ -719,7 +720,7 @@ namespace Nexus.Web
 		protected void list_Add(object sender, EventArgs e)
 		{
 			list_Add_Load();
-			if (View_Add!=null) View_Add(sender,e);
+			if (View_Add != null) View_Add(sender, e);
 		}
 
 		private void List_Item(object source, DataGridCommandEventArgs e)
@@ -741,7 +742,7 @@ namespace Nexus.Web
 		/// and provide values for a page index hint.
 		/// </summary>
 		/// 
-		public event EventHandler ListPageIndexChanged; 
+		public event EventHandler ListPageIndexChanged;
 
 		/// <summary>
 		/// Provide a default key for message resources that set the hint label.
@@ -774,22 +775,21 @@ namespace Nexus.Web
 		/// <returns>Formatted message string ready to markup and present</returns>
 		/// 
 		public string ListPageIndexChanged_Message(ListPageIndexChangedArgs args)
-		{			
-			
+		{
 			string[] m_args = new string[3];
 			m_args[0] = Convert.ToString(args.ItemFrom);
 			m_args[1] = Convert.ToString(args.ItemThru);
 			m_args[2] = Convert.ToString(args.ItemCount);
-		
+
 			string text;
-			if (args.ItemCount==0) 
+			if (args.ItemCount == 0)
 			{
 				text = GetMessage(NOT_FOUND_HINT);
 			}
 			else
 			{
-				text = GetMessage(PAGE_INDEX_HINT,m_args);				
-			}			
+				text = GetMessage(PAGE_INDEX_HINT, m_args);
+			}
 			return text;
 		}
 
@@ -803,17 +803,17 @@ namespace Nexus.Web
 		/// 
 		private void ListPageIndexChanged_Raise(object sender, int page, int size, int count)
 		{
-			if (ListPageIndexChanged!=null)
+			if (ListPageIndexChanged != null)
 			{
-				int from = (page * size) + 1;
-				int thru = (page * size) + size;
-				if (thru>count) thru = count;				
+				int from = (page*size) + 1;
+				int thru = (page*size) + size;
+				if (thru > count) thru = count;
 				ListPageIndexChangedArgs a = new ListPageIndexChangedArgs();
 				a.ItemFrom = from;
 				a.ItemThru = thru;
 				a.ItemCount = count;
 				ListPageIndexChanged(sender, a);
-			}			
+			}
 		}
 
 		/// <summary>
@@ -825,21 +825,21 @@ namespace Nexus.Web
 		private void list_PageIndexChanged(object sender, DataGridPageChangedEventArgs e)
 		{
 			DataGrid grid = Grid;
-			int count = (grid.DataSource as IList).Count; 
+			int count = (grid.DataSource as IList).Count;
 
 			if (grid.AllowCustomPaging)
 			{
 				IDictionary criteria = list_Criteria_NewPageIndex(e.NewPageIndex);
 				IViewHelper helper = GetHelperFor(ListCommand);
-				helper.Read(criteria,true);
+				helper.Read(criteria, true);
 				helper.Execute();
 				DataSource(helper);
-				count = GetItemCount(helper) ;
+				count = GetItemCount(helper);
 			}
 			grid.CurrentPageIndex = e.NewPageIndex;
 
 			ListPageIndexChanged_Raise(sender, e.NewPageIndex, grid.PageSize, count);
-			list_Refresh();				
+			list_Refresh();
 		}
 
 		#endregion
@@ -852,10 +852,10 @@ namespace Nexus.Web
 
 		protected void add_Click(object sender, EventArgs e)
 		{
-			if (View_Add!=null)
+			if (View_Add != null)
 			{
-				FindArgs f = new FindArgs(e,list_Criteria);
-				View_Add(sender,f);
+				FindArgs f = new FindArgs(e, list_Criteria);
+				View_Add(sender, f);
 			}
 		}
 
@@ -926,11 +926,11 @@ namespace Nexus.Web
 
 		public interface IGridConfig
 		{
-			string DataField {get;}
-			string HeaderText {get;}
-			ITemplate ItemTemplate {get;set;}
-			ITemplate EditItemTemplate {get;set;}
-			bool HasTemplate {get;}
+			string DataField { get; }
+			string HeaderText { get; }
+			ITemplate ItemTemplate { get; set; }
+			ITemplate EditItemTemplate { get; set; }
+			bool HasTemplate { get; }
 		}
 
 		public class GridConfig : IGridConfig
@@ -940,6 +940,7 @@ namespace Nexus.Web
 			/// </summary>
 			/// 
 			private string _DataField;
+
 			public string DataField
 			{
 				get { return _DataField; }
@@ -950,11 +951,12 @@ namespace Nexus.Web
 			/// </summary>
 			/// 
 			private string _HeaderText;
+
 			public string HeaderText
 			{
-				get 
+				get
 				{
-					if (_HeaderText==null) return DataField; 
+					if (_HeaderText == null) return DataField;
 					return _HeaderText;
 				}
 			}
@@ -963,20 +965,22 @@ namespace Nexus.Web
 			/// Item template for this attribute (optional).
 			/// </summary>
 			private ITemplate _ItemTemplate;
+
 			public ITemplate ItemTemplate
 			{
-				get {return _ItemTemplate;}
-				set {_ItemTemplate = value;}
+				get { return _ItemTemplate; }
+				set { _ItemTemplate = value; }
 			}
 
 			/// <summary>
 			/// Edit template for this attribute (optional).
 			/// </summary>
 			private ITemplate _EditItemTemplate;
+
 			public ITemplate EditItemTemplate
 			{
-				get {return _EditItemTemplate;}
-				set {_EditItemTemplate = value;}
+				get { return _EditItemTemplate; }
+				set { _EditItemTemplate = value; }
 			}
 
 			// string DataFormat;
@@ -985,9 +989,9 @@ namespace Nexus.Web
 
 			public bool HasTemplate
 			{
-				get {return (_ItemTemplate != null) || (_EditItemTemplate != null);}
+				get { return (_ItemTemplate != null) || (_EditItemTemplate != null); }
 			}
-			
+
 			public GridConfig(string dataField, string headerText)
 			{
 				_DataField = dataField;
@@ -1006,7 +1010,6 @@ namespace Nexus.Web
 
 		public class LiteralTemplate : ITemplate
 		{
-
 			private string _DataField;
 
 			private void OnDataBinding(object sender, EventArgs e)
@@ -1025,15 +1028,14 @@ namespace Nexus.Web
 				container.Controls.Add(control);
 			}
 
-			public LiteralTemplate (string dataField)
-			{				
-				_DataField = dataField;				
+			public LiteralTemplate(string dataField)
+			{
+				_DataField = dataField;
 			}
 		}
-		
+
 		public class KeyValueTemplate : ITemplate
 		{
-
 			private string _DataField;
 			private IKeyValueList _Control;
 
@@ -1054,16 +1056,15 @@ namespace Nexus.Web
 				container.Controls.Add(control);
 			}
 
-			public KeyValueTemplate (string dataField, IKeyValueList list)
-			{				
-				_DataField = dataField;				
+			public KeyValueTemplate(string dataField, IKeyValueList list)
+			{
+				_DataField = dataField;
 				_Control = list;
 			}
 		}
 
 		public class DropDownListTemplate : ITemplate
 		{
-			
 			private string _DataField;
 			private DropDownList _Control;
 
@@ -1083,7 +1084,7 @@ namespace Nexus.Web
 					}
 				}
 			}
-			
+
 			private void OnDataBinding(object sender, EventArgs e)
 			{
 				DropDownList control;
@@ -1097,7 +1098,7 @@ namespace Nexus.Web
 			/// <summary>
 			/// Cache the selected index for OnPreRender.
 			/// </summary>
-			private int _SelectedIndex; 	
+			private int _SelectedIndex;
 
 			/// <summary>
 			/// Kludge method to set Selected Index.
@@ -1144,11 +1145,10 @@ namespace Nexus.Web
 				_Control.DataBind();
 				_Control.DataBinding += new EventHandler(OnDataBinding);
 				_Control.PreRender += new EventHandler(OnPreRender);
-			}		
+			}
 		}
-				
+
 		#endregion
-	
 	}
 
 	/* 

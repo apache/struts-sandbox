@@ -243,12 +243,12 @@ namespace Nexus.Web
 		/// <returns>Value of first paramter that has "id" 
 		/// as any part of its name.</returns>
 		protected string FindControlValue(string id)
-		{			
+		{
 			string ctlKey = null;
 			string[] keys = Request.Params.AllKeys;
 			foreach (string key in keys)
 			{
-				bool found = (key.IndexOf(id)>-1);
+				bool found = (key.IndexOf(id) > -1);
 				if (found) ctlKey = key;
 				continue;
 			}
@@ -305,12 +305,12 @@ namespace Nexus.Web
 		/// <param name="key">A key value from the list</param>
 		/// <returns>-1 if not found</returns>
 		/// 
-		protected int IndexForKey (IList list, string key)
+		protected int IndexForKey(IList list, string key)
 		{
 			int i = 0;
 			foreach (KeyValue row in list)
 			{
-				if (key.Equals (row.Key))
+				if (key.Equals(row.Key))
 					return i;
 				i++;
 			}
@@ -348,7 +348,7 @@ namespace Nexus.Web
 			}
 		}
 
-		private IProfile _Profile; 
+		private IProfile _Profile;
 
 		public IProfile Profile
 		{
@@ -388,8 +388,8 @@ namespace Nexus.Web
 					}
 					*/
 					continue;
-				}				
-			}			
+				}
+			}
 		}
 
 		private void BindControls(ControlCollection controls, IDictionary dictionary, string prefix, string list_suffix)
@@ -630,11 +630,11 @@ namespace Nexus.Web
 					ViewLabel x = (ViewLabel) t;
 					if (x.Resource) try
 					{
-						x.Text = GetMessage(x.ID);						
+						x.Text = GetMessage(x.ID);
 					}
 					catch (Exception e)
 					{
-						if (x.Required)  throw(e);
+						if (x.Required) throw(e);
 					}
 					continue;
 				}

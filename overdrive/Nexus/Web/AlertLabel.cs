@@ -6,13 +6,12 @@ namespace Nexus.Web
 	/// </summary>
 	public class AlertLabel : ViewLabel
 	{
-		
 		/// <summary>
 		/// Default suffix for NameLabel IDs ["_alert"].
 		/// </summary>
 		/// 
 		public const string ALERT_SUFFIX = "_alert";
-		
+
 		/// <summary>
 		/// Set the defaults for this subclass.
 		/// </summary>
@@ -26,4 +25,3 @@ namespace Nexus.Web
 
 	}
 }
-

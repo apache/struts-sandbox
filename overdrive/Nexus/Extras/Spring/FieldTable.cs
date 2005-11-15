@@ -6,9 +6,8 @@ namespace Nexus.Extras.Spring
 	/// <summary>
 	/// Companion to Nexus.Extras.Spring.FieldContext.
 	/// </summary>
-	public class FieldTable : Nexus.Core.Tables.FieldTable
+	public class FieldTable : Core.Tables.FieldTable
 	{
-
 		private IMessageSource _MessageSource;
 
 		/// <summary>
@@ -30,6 +29,6 @@ namespace Nexus.Extras.Spring
 			field.MessageSource = this.MessageSource;
 			return field;
 		}
-		
+
 	}
 }

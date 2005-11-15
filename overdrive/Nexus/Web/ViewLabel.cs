@@ -4,14 +4,12 @@ using Nexus.Core.Helpers;
 
 namespace Nexus.Web
 {
-
 	/// <summary>
 	/// Present dynamic message by consulting with Message Resources 
 	/// or handling an event.
 	/// </summary>
 	public class ViewLabel : Label
 	{
-
 		/// <summary>
 		/// Field for EntryID property.
 		/// </summary>
@@ -30,14 +28,14 @@ namespace Nexus.Web
 		{
 			get
 			{
-				if ((_EntryID==null) || (_EntryID.Length==0))
+				if ((_EntryID == null) || (_EntryID.Length == 0))
 				{
 					int v = ID.LastIndexOf(Suffix);
 					_EntryID = ID.Substring(0, v);
 				}
 				return _EntryID;
 			}
-			set { _EntryID = value;}
+			set { _EntryID = value; }
 		}
 
 		public const string MESSAGE_SUFFIX = "_msg";
@@ -55,7 +53,7 @@ namespace Nexus.Web
 		public string Suffix
 		{
 			get { return _Suffix; }
-			set { _Suffix = value;}
+			set { _Suffix = value; }
 		}
 
 		/// <summary>
@@ -71,9 +69,9 @@ namespace Nexus.Web
 		public bool Resource
 		{
 			get { return _Resource; }
-			set { _Resource = value;}
+			set { _Resource = value; }
 		}
-		
+
 		/// <summary>
 		/// Field for Required property [FALSE].
 		/// </summary>
@@ -88,7 +86,7 @@ namespace Nexus.Web
 		public bool Required
 		{
 			get { return _Required; }
-			set { _Required = value;}
+			set { _Required = value; }
 		}
 
 		/// <summary>
@@ -105,7 +103,7 @@ namespace Nexus.Web
 		public bool View_Hint
 		{
 			get { return _View_Hint; }
-			set { _View_Hint = value;}
+			set { _View_Hint = value; }
 		}
 
 		/// <summary>
@@ -122,7 +120,7 @@ namespace Nexus.Web
 		public bool View_Alert
 		{
 			get { return _View_Alert; }
-			set { _View_Alert = value;}
+			set { _View_Alert = value; }
 		}
 
 		/// <summary>
@@ -154,5 +152,5 @@ namespace Nexus.Web
 			if (helper != null) Alerts = helper;
 			else throw new ArgumentException("ViewLabel.View_Alert_Handler: (e.helper==null)");
 		}
-	}		
+	}
 }

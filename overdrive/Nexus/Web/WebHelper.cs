@@ -8,30 +8,29 @@ namespace Nexus.Web
 	{
 		public override string AlertsFor(string id)
 		{
-			string alert = null;			
+			string alert = null;
 			IList list = Alerts[id] as IList;
-			if (list==null) return alert; 
+			if (list == null) return alert;
 
-			if (list.Count==1)
+			if (list.Count == 1)
 			{
 				alert = HtmlMessage(list[0]);
 			}
 			else
 			{
 				alert = HtmlMessageList(list);
-			} 
+			}
 			return alert;
 		}
 
 		public override string AlertsText
 		{
-			get
-			{	return HtmlMessageBuilder(Alerts); }
+			get { return HtmlMessageBuilder(Alerts); }
 		}
 
 		public override string HintsFor(string id)
 		{
-			 return HtmlMessageList(Hints[id] as IList); 
+			return HtmlMessageList(Hints[id] as IList);
 		}
 
 		public override string HintsText

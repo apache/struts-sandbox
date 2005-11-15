@@ -6,12 +6,11 @@ namespace Nexus.Web
 	/// </summary>
 	public class HintLabel : ViewLabel
 	{
-		
 		/// <summary>
 		/// Default suffix for NameLabel IDs ["_hint"].
 		/// </summary>
 		public const string HINT_SUFFIX = "_hint";
-		
+
 		/// <summary>
 		/// Set the defaults for this subclass.
 		/// </summary>
@@ -22,4 +21,3 @@ namespace Nexus.Web
 		}
 	}
 }
-

@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Data;
 using System.Web.UI.WebControls;
-using Nexus.Web;
 using WQD.Core.Controls;
 
 namespace Nexus.Web.Controls
@@ -17,7 +16,6 @@ namespace Nexus.Web.Controls
 	/// 
 	public class LetterFilter : FindControl
 	{
-		
 		/// <summary>
 		/// Document token representing match all entries.
 		/// </summary>
@@ -28,12 +26,11 @@ namespace Nexus.Web.Controls
 		/// </summary>
 		public const string ITEM_INITIAL = "initial";
 		/// <summary>
-
 		/// Provide a key under which to store the selected letter in ViewState.
 		/// </summary>
 		/// 
 		public const string LETTER_KEY = "_Letter";
-					
+
 		/// <summary>
 		/// Document the wildcard character used by SQL queries.
 		/// </summary>
@@ -151,7 +148,7 @@ namespace Nexus.Web.Controls
 					if (ALL.Equals(letter)) letter = null;
 					string letter2 = letter + WILDCARD;
 					IDictionary criteria = new Hashtable(1);
-					criteria.Add(ITEM_INITIAL,letter2);
+					criteria.Add(ITEM_INITIAL, letter2);
 					FindArgs a = new FindArgs(e, criteria);
 					View_Filter(source, a);
 				}
@@ -183,7 +180,7 @@ namespace Nexus.Web.Controls
 		/// </summary>
 		/// <param name="input">List of letters to present as commands</param>
 		private void LetterTable_Init(IList input)
-		{					
+		{
 			DataTable dt = new DataTable();
 			dt.Columns.Add(new DataColumn(LETTER_COLUMN, typeof (string)));
 
@@ -193,7 +190,7 @@ namespace Nexus.Web.Controls
 				dr[0] = input[i];
 				dt.Rows.Add(dr);
 			}
-			
+
 			LetterTable = dt;
 			Letter = null;
 		}
@@ -210,10 +207,10 @@ namespace Nexus.Web.Controls
 			{
 				// Default to A-Z
 				string[] input = {
-									 "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
-									 "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
-									 "U", "V", "W", "X", "Y", "Z", ALL
-								 };
+					"A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
+					"K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
+					"U", "V", "W", "X", "Y", "Z", ALL
+				};
 
 				LetterTable_Init(input);
 			}
@@ -233,7 +230,7 @@ namespace Nexus.Web.Controls
 		public bool Open(IList letters)
 		{
 			LetterTable_Init(letters);
-			return Open();			
+			return Open();
 		}
 
 
