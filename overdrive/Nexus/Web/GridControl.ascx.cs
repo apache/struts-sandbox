@@ -483,7 +483,7 @@ namespace Nexus.Web
 			return helper;
 		}
 
-		protected virtual IViewHelper Save(string key, ControlCollection controls)
+		protected virtual IViewHelper Save(string key, ControlCollection controls, bool execute)
 		{
 			IViewHelper h = GetHelperFor(SaveCommand);
 			if (h.IsNominal)
@@ -501,11 +501,16 @@ namespace Nexus.Web
 				for (int i = 0; i < cols; i++)
 					keys[index++] = (configs[i] as IGridConfig).DataField;
 				ReadGridControls(controls, h.Criteria, keys, true);
-				h.Execute();
+				if (execute) h.Execute();
 			}
 			return h;
 		}
 
+		protected virtual IViewHelper Save(string key, ControlCollection controls)
+		{
+			return Save(key,controls,true);
+		}
+	
 		#endregion
 
 		#region Loading methods
