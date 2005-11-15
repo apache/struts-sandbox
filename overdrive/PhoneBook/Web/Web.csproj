@@ -186,7 +186,7 @@
                 <File
                     RelPath = "Controls\AppGridControl.ascx.cs"
                     DependentUpon = "AppGridControl.ascx"
-                    SubType = "ASPXCodeBehind"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
@@ -202,7 +202,7 @@
                 <File
                     RelPath = "Controls\Finder.ascx.cs"
                     DependentUpon = "Finder.ascx"
-                    SubType = "ASPXCodeBehind"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
@@ -218,7 +218,7 @@
                 <File
                     RelPath = "Controls\Finder2.ascx.cs"
                     DependentUpon = "Finder2.ascx"
-                    SubType = "ASPXCodeBehind"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
@@ -250,7 +250,7 @@
                 <File
                     RelPath = "Controls\Lister.ascx.cs"
                     DependentUpon = "Lister.ascx"
-                    SubType = "ASPXCodeBehind"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
@@ -302,7 +302,7 @@
                 <File
                     RelPath = "Forms\Directory2.aspx.cs"
                     DependentUpon = "Directory2.aspx"
-                    SubType = "ASPXCodeBehind"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File

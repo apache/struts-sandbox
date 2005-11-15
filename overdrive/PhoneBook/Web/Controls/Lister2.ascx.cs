@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Nexus.Core;
 using Nexus.Core.Helpers;
 using Nexus.Core.Profile;
 using PhoneBook.Core;
@@ -28,31 +29,16 @@ namespace PhoneBook.Web.Controls
 
 		protected override IViewHelper Save(string key, ControlCollection controls)
 		{
-			IViewHelper h = GetHelperFor(SaveCommand);
+			IViewHelper h = base.Save(key,controls,false);
 			if (h.IsNominal)
 			{
-				IList configs = Configs;
-				h.Criteria[DataKeyField] = key;
-				int cols = configs.Count;
-				string[] keys = new string[2 + cols];
-				// reconstruct the standard edit column keys
-				// just as placeholders, really
-				keys[0] = SaveText;
-				keys[1] = QuitText;
-				int index = 2;
-				// append our field names to the array of keys
-				for (int i = 0; i < cols; i++)
-					keys[index++] = (configs[i] as IGridConfig).DataField;
-				ReadGridControls(controls, h.Criteria, keys, true);
-
 				bool needEditorValue = (null==h.Criteria[App.EDITOR]); 
-					// FIXME: [OVR-24] - Template columns not passed by DataGridCommandEventArgs
+				// FIXME: [OVR-24] - Template columns not passed by DataGridCommandEventArgs
 				if (needEditorValue)
 				{
 					h.Criteria[App.EDITOR] = FindControlValue(App.EDITOR);
 				}
-
-				h.Execute();
+				h.Execute();				
 			}
 			return h;
 		}
@@ -99,12 +85,27 @@ namespace PhoneBook.Web.Controls
 			HasEditColumn = profile.IsEditor;
 		}
 
+
+		private IKeyValueList _EditorKeys = null;
+		private IKeyValueList EditorKeys
+		{
+			get
+			{
+				if (_EditorKeys==null)
+				{
+					IKeyValueList data = new KeyValueList();
+					// FIXME: Obtain from Spring?
+					data.Add(new KeyValue("0","NO"));
+					data.Add(new KeyValue("1","YES"));
+					_EditorKeys = data;					
+				}
+				return _EditorKeys;
+			}
+		}
+
 		private ITemplate GetList()
 		{
-			IList data = new ArrayList();
-			data.Add("0");
-			data.Add("1");
-			DropDownListTemplate list = new DropDownListTemplate(App.EDITOR,data);
+			DropDownListTemplate list = new DropDownListTemplate(App.EDITOR,EditorKeys);
 			return list;
 		}
 
@@ -137,7 +138,7 @@ namespace PhoneBook.Web.Controls
 			AllowCustomPaging = true;
 
 			ITemplate editor = GetList();
-			ITemplate literal = new LiteralTemplate(App.EDITOR);
+			ITemplate literal = new KeyValueTemplate(App.EDITOR,EditorKeys);
 
 			IList list = new ArrayList(7);
 			list.Add(GetConfig(App.LAST_NAME));
