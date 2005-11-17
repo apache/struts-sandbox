@@ -719,7 +719,7 @@ namespace Nexus.Web
 			control.DataValueField = "Key";
 			control.DataSource = list;
 			control.DataBind();
-			SelectListItem(control, value);
+			if (value!=null) SelectListItem(control, value);
 		}
 
 		protected void BindListControl(ListControl control, IList list)
