@@ -610,7 +610,7 @@ namespace Nexus.Web
 					{
 						if (list_Insert)
 							// ISSUE: If insert fails, old input is not retained. [WNE-67]
-							list_Add_Load();
+							list_Add();
 						else
 							list_Refresh();
 						break;
@@ -652,7 +652,7 @@ namespace Nexus.Web
 			Grid.CurrentPageIndex = 0; // sic
 		}
 
-		protected virtual void list_Add_Load()
+		protected virtual void list_Add()
 		{
 			IViewHelper helper = DataInsert();
 			bool okay = helper.IsNominal;
@@ -719,7 +719,7 @@ namespace Nexus.Web
 
 		protected void list_Add(object sender, EventArgs e)
 		{
-			list_Add_Load();
+			list_Add();
 			if (View_Add != null) View_Add(sender, e);
 		}
 
