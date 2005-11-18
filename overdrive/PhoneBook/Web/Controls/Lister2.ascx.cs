@@ -26,6 +26,26 @@ namespace PhoneBook.Web.Controls
 		/// 
 		protected Button add;
 
+		/// <summary>
+		/// Toggle off the add button when adding.
+		/// </summary>
+		/// 
+		protected override void list_Add()
+		{
+			base.list_Add();
+			add.Visible = false;
+		}
+
+		/// <summary>
+		/// Toggle off the add button when editing.
+		/// </summary>
+		/// 
+		protected override void list_Edit(int index)
+		{
+			base.list_Edit(index);
+			add.Visible = false;
+		}
+
 		protected override IViewHelper Save(string key, ControlCollection controls)
 		{
 			IViewHelper h = base.Save(key, controls, false);
@@ -73,6 +93,17 @@ namespace PhoneBook.Web.Controls
 		}
 
 		/// <summary>
+		/// Toggle add button on and present Grid.
+		/// </summary>
+		/// <returns>True if nominal</returns>
+		/// 
+		public override bool Open()
+		{
+			add.Visible = true;
+			return base.Open ();
+		}
+
+		/// <summary>
 		/// Complete loading Grid 
 		/// after other members have initialized.
 		/// </summary>
@@ -83,10 +114,9 @@ namespace PhoneBook.Web.Controls
 			HasEditColumn = profile.IsEditor;
 		}
 
-
 		private IKeyValueList _EditorKeys = null;
 
-		private IKeyValueList EditorKeys
+		private IKeyValueList EditorKeyList
 		{
 			get
 			{
@@ -109,6 +139,11 @@ namespace PhoneBook.Web.Controls
 		/// 
 		private static string LABEL = "_label";
 
+		/// <summary>
+		/// Assemble an IGridConfig for an attribute.
+		/// </summary>
+		/// <param name="dataField">The attribute ID</param>
+		/// <returns>An IGridConfig instance</returns>
 		private IGridConfig GetConfig(string dataField)
 		{
 			string headerText = GetMessage(dataField + LABEL);
@@ -140,8 +175,8 @@ namespace PhoneBook.Web.Controls
 			list.Add(GetConfig(App.HIRED));
 			list.Add(GetConfig(App.HOURS));
 			IGridConfig c = GetConfig(App.EDITOR);
-			c.ItemTemplate = new KeyValueTemplate(App.EDITOR, EditorKeys);
-			c.EditItemTemplate = new DropDownListTemplate(App.EDITOR, EditorKeys);
+			c.ItemTemplate = new KeyValueTemplate(App.EDITOR, EditorKeyList);
+			c.EditItemTemplate = new DropDownListTemplate(App.EDITOR, EditorKeyList);
 			list.Add(c);
 			Configs = list;
 		}
