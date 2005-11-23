@@ -75,7 +75,9 @@ namespace Nexus.Web
 			return trimmed;
 		}
 
-		private static KeyValue _NullKey = new KeyValue(String.Empty, "--v--");
+		public const string NULL_TOKEN = "--v--";
+
+		private static KeyValue _NullKey = new KeyValue(String.Empty, NULL_TOKEN);
 
 		/// <summary>
 		/// Default value for dropdown lists. 

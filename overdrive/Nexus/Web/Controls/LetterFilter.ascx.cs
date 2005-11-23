@@ -201,7 +201,7 @@ namespace Nexus.Web.Controls
 		/// so that the letters are ready to present.
 		/// </summary>
 		/// 
-		public bool Open()
+		public override bool Open()
 		{
 			if (LetterTable == null)
 			{

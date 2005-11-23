@@ -14,7 +14,7 @@ namespace Nexus.Core.Validators
 			bool okay = false;
 			string source = incoming.Source as string;
 
-			if (IsStringEmpty(source))
+			if (IsInput(source))
 			{
 				DateTime t = DateTime_Convert(source);
 				bool isDateTimeEmpty = DateTime_Empty.Equals(t);
@@ -44,14 +44,14 @@ namespace Nexus.Core.Validators
 			{
 				string target = DateTime_Format(source);
 				outgoing.Target = target;
-				okay = IsStringEmpty(target);
+				okay = IsInput(target);
 			}
 			return okay;
 		}
 
 		#endregion
 
-		private bool IsStringEmpty(string v)
+		private bool IsInput(string v)
 		{
 			return ((v != null) && (!String.Empty.Equals(v)));
 		}

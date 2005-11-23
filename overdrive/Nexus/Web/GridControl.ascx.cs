@@ -1059,8 +1059,8 @@ namespace Nexus.Web
 			public KeyValueTemplate(string dataField, IKeyValueList list)
 			{
 				_DataField = dataField;
-				_Control = list;
-			}
+				_Control = list;				
+			}	
 		}
 
 		public class DropDownListTemplate : ITemplate
@@ -1134,8 +1134,18 @@ namespace Nexus.Web
 				_Control.PreRender += new EventHandler(OnPreRender);
 			}
 
-			public DropDownListTemplate(string id, IKeyValueList list)
+			public DropDownListTemplate(string id, IKeyValueList list) : this(id,list,false)
 			{
+				
+			}
+				
+			public DropDownListTemplate(string id, IKeyValueList list, bool insertNullKey)
+			{
+				if (insertNullKey) 
+				{
+					list.Insert(0, new KeyValue(String.Empty, NULL_TOKEN));
+				}
+
 				_DataField = id;
 				_Control = new DropDownList();
 				_Control.ID = id;
