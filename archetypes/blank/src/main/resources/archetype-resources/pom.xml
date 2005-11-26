@@ -18,7 +18,7 @@
       </dependency>
       <dependency>
          <groupId>org.apache.struts</groupId>
-         <artifactId>struts-core</artifactId>
+         <artifactId>struts-action</artifactId>
          <version>1.3.0-dev</version>
       </dependency>
       <dependency>

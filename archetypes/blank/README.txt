@@ -28,15 +28,15 @@ Prerequisites
 -------------
 
 In order to build the archetype (and the webapp created from it) you will need
-the Struts Core, Taglib and Tiles jars in your local Maven 2 repository.
+the Struts Action, Taglib and Tiles jars in your local Maven 2 repository.
 
 You can accomplish this by building the artifacts with Maven 2, or by installing
 the jars as follows:
 
    $ mvn install:install-file 
-         -Dfile=/path/to/struts-core-1.3.0-dev.jar
+         -Dfile=/path/to/struts-action-1.3.0-dev.jar
          -DgroupId=org.apache.struts
-         -DartifactId=struts-core
+         -DartifactId=struts-action
          -Dversion=1.3.0-dev
          -Dpackaging=jar
          -DgeneratePom=true
