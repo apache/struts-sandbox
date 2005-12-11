@@ -1,0 +1,8 @@
+NOTICE
+
+This software consists of voluntary contributions made by many
+individuals on behalf of the Apache Software Foundation
+
+Portions of this software are Copyright(c) 2002-2003 by 
+OpenSymphony and provided under the Open Symphony License 
+[http://opensymphony.com/xwork/license.action].

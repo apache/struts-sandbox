@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+/*
+ * Copyright 2001-2004 The Apache Software Foundation.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+ -->
+
+
+<project>
+
+  <pomVersion>3</pomVersion>
+  <groupId>struts</groupId>
+  <name>Struts Ti</name>
+  <currentVersion>1.0-SNAPSHOT</currentVersion>
+  <organization>
+    <name>Apache Software Foundation</name>
+    <url>http://www.apache.org/</url>
+    <logo>http://www.apache.org/images/asf-logo.gif</logo>
+  </organization>
+
+  <inceptionYear>2005</inceptionYear>
+  <package>org.apache.ti</package>
+  <logo>http://struts.apache.org/images/struts.gif</logo>
+  <gumpRepositoryId>struts-ti-svn</gumpRepositoryId>
+  
+  <description>
+    Struts Ti is a simplified Model 2 framework for developing webapps which allows the developer better access to the
+    underlying servlet/portlet environment. It serves a niche of web applications that don.t want the additional
+    complexity of server-side components and verbose configuration, yet want the structure and controller features of a
+    modern web framework. Struts Ti builds on the directions of Struts 1.x, yet re-implements the framework to provide a
+    clean slate for the next generation of Struts Ti. It aims to combine the simplicity of Ruby on Rails and NanoWeb,
+    the refinement of WebWork 2, the tool-friendly authoring of Beehive, and the history of Struts 1.x.</description>
+
+  <shortDescription>MVC Web Application Framework</shortDescription>
+  <url>http://struts.apache.org/index.html</url>
+  <issueTrackingUrl>http://issues.apache.org/bugzilla/</issueTrackingUrl>
+  <siteAddress>struts.apache.org</siteAddress>
+  <siteDirectory>/www/struts.apache.org/</siteDirectory>
+  <distributionSite>struts.apache.org</distributionSite>
+  <distributionDirectory>/www/www.apache.org/builds/</distributionDirectory>
+<!--  <distributionDirectory>/www/www.apache.org/dist/java-repository/</distributionDirectory>-->
+
+  <repository>
+    <connection>scm|svn|http|//svn.apache.org/repos/asf/struts/sandbox/trunk/ti</connection>
+    <developerConnection>scm|svn|https|//svn.apache.org/repos/asf/struts/sandbox/trunk/ti</developerConnection>
+    <url>http://svn.apache.org/repos/asf/struts/sandbox/trunk/ti</url>
+  </repository>
+  
+  <mailingLists>
+    <mailingList>
+      <name>Struts User List</name>
+      <subscribe>user-subscribe@struts.apache.org</subscribe>
+      <unsubscribe>user-unsubscribe@struts.apache.org</unsubscribe>
+      <archive>http://mail-archives.apache.org/eyebrowse/SummarizeList?listId=42</archive>
+    </mailingList>
+    <mailingList>
+      <name>Struts Developer List</name>
+      <subscribe>dev-subscribe@struts.apache.org</subscribe>
+      <unsubscribe>dev-unsubscribe@struts.apache.org</unsubscribe>
+      <archive>http://mail-archives.apache.org/eyebrowse/SummarizeList?listId=41</archive>
+    </mailingList>
+  </mailingLists>
+
+  <developers>
+   
+    <developer>
+      <name>Ted Husted</name>
+      <id>husted</id>
+      <email>husted at apache.org</email>
+      <organization></organization>
+    </developer>
+    
+    <developer>
+      <name>Martin Cooper</name>
+      <id>martinc</id>
+      <email>martinc at apache.org</email>
+      <organization></organization>
+    </developer>
+    
+    <developer>
+      <name>Don Brown</name>
+      <id>mrdon</id>
+      <email>mrdon at apache.org</email>
+      <organization></organization>
+    </developer>
+
+    <developer>
+      <name>James Mitchell</name>
+      <id>jmitchell</id>
+      <email>jmitchell at apache.org</email>
+      <organization>EdgeTech, Inc.</organization>
+    </developer>
+
+ </developers>
+
+  <contributors/>
+  
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <!-- ################################################################ -->
+  <!--        Project build and reports section                         -->
+  <!-- ################################################################ -->
+
+  <build>
+    <nagEmailAddress>struts-dev@struts.apache.org</nagEmailAddress>
+    <sourceDirectory>src/java</sourceDirectory>
+    <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
+    
+    <unitTest>
+      <includes>
+        <include>**/Test*.java</include>
+      </includes>
+      <resources>
+        <resource>
+          <directory>${basedir}/src/test</directory>
+          <includes>
+            <exclude>**/*.java</exclude>
+          </includes>
+        </resource>
+      </resources>
+    </unitTest>
+    <resources>
+      <resource>
+        <directory>${basedir}/src/java</directory>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
+      </resource>
+    </resources>
+ 
+    <!-- J A R  R E S O U R C E S -->
+    <!-- Resources that are packaged up inside the JAR file -->
+<!--
+    <resources>
+      <resource>
+        <directory>${basedir}/src/share</directory>
+        <includes>
+          <include>**/*.properties</include>
+        </includes>
+      </resource>
+    </resources>
+-->
+
+  </build>
+  
+  
+  <!-- ################################################################ -->
+  <!--        Project dependency section                                -->
+  <!-- ################################################################ -->
+
+  <dependencies>
+
+	<!-- Standard dependencies -->  
+    <dependency>
+      <groupId>servletapi</groupId>
+      <artifactId>servletapi</artifactId>
+      <version>2.4</version>
+      <url>http://java.sun.com/products/servlet/</url>
+    </dependency>
+    
+    <dependency>
+      <groupId>jspapi</groupId>
+      <artifactId>jsp-api</artifactId>
+      <version>2.0</version>
+      <url>http://java.sun.com/products/jsp/</url>
+    </dependency>
+
+    <!--  commons-*  -->
+    <dependency>
+      <groupId>commons-beanutils</groupId>
+      <artifactId>commons-beanutils</artifactId>
+      <version>1.7.0</version>
+      <url>http://jakarta.apache.org/commons/beanutils/</url>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
+    
+    <dependency>
+      <groupId>commons-chain</groupId>
+      <artifactId>commons-chain</artifactId>
+      <version>1.0</version>
+      <url>http://jakarta.apache.org/commons/chain/</url>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
+  
+    <dependency>
+      <groupId>commons-digester</groupId>
+      <artifactId>commons-digester</artifactId>
+      <version>1.7</version>
+      <url>http://jakarta.apache.org/commons/digester/</url>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
+    
+   <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>1.0.4</version>
+      <url>http://jakarta.apache.org/commons/logging/</url>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-el</groupId>
+      <artifactId>commons-el</artifactId>
+      <version>1.0</version>
+      <url>http://jakarta.apache.org/commons/el/</url>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-validator</groupId>
+      <artifactId>commons-validator</artifactId>
+      <version>1.1.4</version>
+      <url>http://jakarta.apache.org/commons/validator/</url>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
+
+    <!-- OpenSymphony -->
+    <dependency>
+      <groupId>opensymphony</groupId>
+      <artifactId>xwork</artifactId>
+      <version>SNAPSHOT</version>
+      <url>http://www.opensymphony.com/xwork/</url>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
+    
+    <dependency>
+      <groupId>opensymphony</groupId>
+      <artifactId>webwork</artifactId>
+      <version>2.2-beta-3</version>
+      <url>http://www.opensymphony.com/webwork/</url>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
+
+    <dependency>
+      <groupId>opensymphony</groupId>
+      <artifactId>oscore</artifactId>
+      <version>2.2.4</version>
+      <url>http://www.opensymphony.com/oscore/</url>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
+
+    <!-- ognl -->
+    <dependency>
+      <groupId>ognl</groupId>
+      <artifactId>ognl</artifactId>
+      <version>2.6.7</version>
+      <url>http://www.ognl.org/</url>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
+    
+   
+    <!-- Spring -->
+    <dependency>
+      <groupId>springframework</groupId>
+      <artifactId>spring-core</artifactId>
+      <version>1.2.1</version>
+      <url>http://www.springframework.org/</url>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
+    
+    <dependency>
+      <groupId>springframework</groupId>
+      <artifactId>spring-beans</artifactId>
+      <version>1.2.1</version>
+      <url>http://www.springframework.org/</url>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
+   
+   <!-- for unit tests -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <url>http://www.junit.org/</url>
+    </dependency>
+    
+
+  </dependencies>
+
+
+
+  <reports>
+
+    <report>maven-checkstyle-plugin</report>
+    <report>maven-changelog-plugin</report>
+    <report>maven-changes-plugin</report>
+    <report>maven-developer-activity-plugin</report>
+    <report>maven-faq-plugin</report>
+    <report>maven-file-activity-plugin</report>
+    <report>maven-javadoc-plugin</report>
+    <report>maven-jdepend-plugin</report>
+    <report>maven-junit-report-plugin</report>
+    <report>maven-jxr-plugin</report>
+	<!--report>maven-linkcheck-plugin</report-->
+    <report>maven-pmd-plugin</report>
+    <report>maven-simian-plugin</report>
+    <report>maven-tasklist-plugin</report>
+    <report>maven-jcoverage-plugin</report>
+    <!--report>maven-findbugs-plugin</report-->
+
+  </reports>
+</project>
