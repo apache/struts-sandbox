@@ -29,6 +29,7 @@ import org.apache.ti.compiler.internal.typesystem.type.ReferenceType;
 import org.apache.ti.compiler.internal.typesystem.type.TypeInstance;
 import org.apache.ti.compiler.internal.typesystem.type.TypeVariable;
 import org.apache.ti.compiler.internal.typesystem.util.SourcePosition;
+import org.apache.ti.compiler.internal.grammar.ActionGrammar;
 
 import java.io.File;
 import java.net.URI;
@@ -639,6 +640,40 @@ public class CompilerUtils
         return position != null ? position.file() : null;
     }
 
+    public static boolean hasActionMethodSignature(MethodDeclaration method, AnnotationProcessorEnvironment env) {
+        if (! ActionGrammar.hasActionMethodReturnType(method, env)) {
+            return false;
+        }
+
+        ParameterDeclaration[] parameters = method.getParameters();
+        if (parameters.length == 0) {
+            return true;
+        } else if (parameters.length == 1) {
+            TypeInstance argType = parameters[0].getType();
+            if (! (argType instanceof DeclaredType)) {
+                return false;
+            }
+            TypeDeclaration argTypeDecl = getDeclaration((DeclaredType) argType);
+            boolean isClass = argTypeDecl instanceof ClassDeclaration;
+
+            if (isClass && ! hasDefaultConstructor(argTypeDecl)) {
+                return false;
+            }
+
+            if (! argTypeDecl.hasModifier(Modifier.PUBLIC)) {
+                return false;
+            }
+
+            if (isClass && argTypeDecl.getDeclaringType() != null && ! argTypeDecl.hasModifier(Modifier.STATIC)) {
+                return false;
+            }
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public static class ExtendedAnnotationProcessorEnvironment
             implements AnnotationProcessorEnvironment {
 
@@ -1121,5 +1156,25 @@ public class CompilerUtils
 
         env.setAttribute(optionName, retVal);
         return retVal;
+    }
+    
+    public static AnnotationInstance getActionAnnotation(MethodDeclaration method, TypeDeclaration containingType,
+                                                         AnnotationProcessorEnvironment env) {
+        AnnotationInstance actionAnnotation = CompilerUtils.getAnnotation(method, ACTION_TAG_NAME);
+        if (actionAnnotation != null) {
+            return actionAnnotation;
+        }
+        
+        if (hasActionMethodSignature(method, env)) {
+            SynthesizedAnnotation annotation =
+                    new SynthesizedAnnotation(containingType, ACTION_TAG_NAME, method.getPosition(), env);
+            AnnotationInstance forwardAnnotation = CompilerUtils.getAnnotation(method, FORWARD_TAG_NAME);
+            if (forwardAnnotation != null) {
+                annotation.addMemberValue(FORWARDS_ATTR, forwardAnnotation, true);
+            }
+            return annotation;
+        }
+        
+        return null;
     }
 }

@@ -170,8 +170,9 @@ public class ForwardGrammar
             addAdditionalAnnotationsToCheck(classLevelCatches, outerType, additionalEntities);
 
             if (classMember instanceof MethodDeclaration) {
-                Collection methodLevelCatches =
-                        CompilerUtils.getAnnotationArrayValue(classMember, ACTION_TAG_NAME, CATCHES_ATTR, true);
+                MethodDeclaration method = (MethodDeclaration) classMember;
+                AnnotationInstance actionAnnotation = CompilerUtils.getActionAnnotation(method, outerType, getEnv());
+                Collection methodLevelCatches = CompilerUtils.getAnnotationArray(actionAnnotation, CATCHES_ATTR, true);
                 addAdditionalAnnotationsToCheck(methodLevelCatches, outerType, additionalEntities);
             }
 

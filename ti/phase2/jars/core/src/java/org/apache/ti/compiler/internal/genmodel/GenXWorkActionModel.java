@@ -42,7 +42,9 @@ public class GenXWorkActionModel
     public GenXWorkActionModel(Declaration sourceElement, GenXWorkModuleConfigModel parentApp, ClassDeclaration jclass) {
         super(parentApp);
 
-        init(getActionName(sourceElement), getActionAnnotation(sourceElement), parentApp, jclass);
+        MethodDeclaration methodDecl = (MethodDeclaration) sourceElement;
+        AnnotationInstance actionAnnotation = CompilerUtils.getActionAnnotation(methodDecl, jclass, parentApp.getEnv());
+        init(getActionName(sourceElement), actionAnnotation, parentApp, jclass);
 
         // Get the form class from the method argument.
         setFormBeanType(getFormBean(sourceElement, parentApp));
@@ -185,11 +187,6 @@ public class GenXWorkActionModel
         assert paramType instanceof DeclaredType : paramType.getClass().getName();  // checker should enforce this
         TypeDeclaration decl = CompilerUtils.getDeclaration((DeclaredType) paramType);
         return parentApp.addFormBean(decl, this);
-    }
-
-    protected AnnotationInstance getActionAnnotation(Declaration sourceElement) {
-        assert sourceElement instanceof MethodDeclaration : sourceElement.getClass().getName();
-        return CompilerUtils.getAnnotation(sourceElement, ACTION_TAG_NAME);
     }
 
     protected void getForwards(AnnotationInstance annotation, ClassDeclaration jclass, GenXWorkModuleConfigModel parentApp) {

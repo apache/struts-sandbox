@@ -35,13 +35,13 @@ import org.apache.beehive.samples.netui.jsf.physician.PhysicianSession;
  */
 @ti.controller(
     simpleActions={
-        @ti.simpleAction(name="begin", action="physicianSearch"),
-        @ti.simpleAction(name="physicianSearch", path="search.faces"),
+        @ti.simpleAction(name="physicianSearch", path="begin_success.faces"),
         @ti.simpleAction(name="returnToPreviousPage", navigateTo=ti.NavigateTo.previousPage)
     },
     sharedFlowRefs={
         @ti.sharedFlowRef(name="shared", type=org.apache.ti.samples.jsf.SharedFlow.class)
-    }
+    },
+    defaultResultSuffix="_success.faces"
 )
 public class Controller
     extends PageFlowController
@@ -103,21 +103,9 @@ public class Controller
     //
     // Page Flow Actions
     //
-    @ti.action(
-        forwards={
-            @ti.forward(
-                name="success",
-                path="physicianDetail.faces",
-                actionOutputs={
-                    @ti.actionOutput(name="physician", type=Physician.class, required=true)
-                }
-            )
-        }
-    )
     protected Forward physicianDetail()
     {
         Forward success = new Forward("success");
-
         String paramValue = (String) getContext().getWebContext().getParam().get("physicianId");
         int id = TypeUtils.convertToInt(paramValue);
         Physician physician = physicianSession.getPhysician(id);
@@ -130,21 +118,7 @@ public class Controller
      * This action is equivalent to the "physicianDetail" action above
      * but the row data (physician) is gotten directly from the JSF DataModel.
      */
-    @ti.action(
-        forwards={
-            @ti.forward(
-                name="success",
-                path="physicianDetail.faces",
-                actionOutputs={
-                    @ti.actionOutput(
-                        name="physician",
-                        type=Physician.class,
-                        required=true
-                    )
-                }
-            )
-        }
-    )
+    @ti.forward(name="success", path="physicianDetail_success.faces")
     protected Forward physicianDetailJSFStyle()
     {
         Forward success = new Forward("success");
@@ -155,11 +129,7 @@ public class Controller
         return success;
     }
 
-    @ti.action(
-        forwards={
-            @ti.forward(name="success", navigateTo=ti.NavigateTo.currentPage)
-        }
-    )
+    @ti.forward(name="success", navigateTo=ti.NavigateTo.currentPage)
     protected Forward displayPhysiciansAbbreviated(PhysicianSearchForm form)
     {
         Forward success = new Forward("success");
@@ -167,11 +137,6 @@ public class Controller
         return success;
     }
     
-    @ti.action(
-        forwards={
-            @ti.forward(name="success", path="physicianResultsWithDetail.faces")
-        }
-    )
     protected Forward displayPhysiciansWithDetail(PhysicianSearchForm form)
     {
         Forward success = new Forward("success");
@@ -179,11 +144,6 @@ public class Controller
         return success;
     }
     
-    @ti.action(
-        forwards={
-            @ti.forward(name="success", path="confirmMailSent.faces")
-        }
-    )
     protected Forward submitMailMessage(MailMessageForm form)
     {
         Forward success = new Forward("success");

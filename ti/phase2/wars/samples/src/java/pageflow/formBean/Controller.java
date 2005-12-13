@@ -15,7 +15,6 @@ public class Controller extends PageFlowController {
         public String getFoo() { return _foo; }
     }
 
-    @ti.action
     public Forward submit(MyBean bean) {
         return new Forward(Action.SUCCESS, "result", bean.getFoo());
     }

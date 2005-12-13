@@ -59,6 +59,15 @@ public class ActionGrammar
         return null;
     }
 
+    public static boolean hasActionMethodReturnType(MethodDeclaration method, AnnotationProcessorEnvironment env) {
+        if (! CompilerUtils.isAssignableFrom(FORWARD_CLASS_NAME, method.getReturnType(), env)
+                && ! CompilerUtils.isAssignableFrom(STRING_CLASS_NAME, method.getReturnType(), env)) {
+            return false;
+        }
+        
+        return true;
+    }
+
     protected boolean onBeginCheck(AnnotationInstance annotation, AnnotationInstance[] parentAnnotations,
                                    MemberDeclaration classMember)
             throws FatalCompileTimeException {

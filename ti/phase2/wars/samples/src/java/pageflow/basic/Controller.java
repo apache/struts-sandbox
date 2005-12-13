@@ -13,7 +13,6 @@ import com.opensymphony.xwork.Action;
 )
 public class Controller extends PageFlowController {
 
-    @ti.action
     public String someAction() {
         return Action.SUCCESS;
     }
@@ -21,12 +20,10 @@ public class Controller extends PageFlowController {
     static class CustomException extends Exception {}
     static class IntentionalException extends CustomException {}
 
-    @ti.action
     public String throw1() throws IntentionalException {
         throw new IntentionalException();  // caught by the @ti.handleException for CustomException
     }
 
-    @ti.action
     public String throw2() {
         throw new ArithmeticException("intentional");
     }

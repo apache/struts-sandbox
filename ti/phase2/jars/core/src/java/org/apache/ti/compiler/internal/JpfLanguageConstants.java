@@ -158,6 +158,7 @@ public interface JpfLanguageConstants {
     public static final String PREVENT_DOUBLE_SUBMIT_ATTR = "preventDoubleSubmit";
     public static final String FORWARD_REF_ATTR = "forwardRef";
     public static final String TYPE_HINT_ATTR = "typeHint";
+    public static final String DEFAULT_RESULT_SUFFIX_ATTR = "defaultResultSuffix";
 
     public static final String MIN_INT_ATTR = "minInt";
     public static final String MAX_INT_ATTR = "maxInt";
@@ -204,6 +205,8 @@ public interface JpfLanguageConstants {
     public static final String ARRAY_TYPE_SUFFIX = "[]";
     public static final String GETTER_PREFIX = "get";
     public static final String BOOLEAN_GETTER_PREFIX = "is";
+    
+    public static final String DEFAULT_RESULT_SUFFIX = '.' + JSP_FILE_EXTENSION;
 
     public static final String RUNTIME_VERSION_ATTRIBUTE = "PageFlow-Runtime-Version";
 

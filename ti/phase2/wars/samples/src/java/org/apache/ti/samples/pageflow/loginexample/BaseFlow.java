@@ -35,11 +35,7 @@ import org.apache.ti.pageflow.annotations.ti;
 public abstract class BaseFlow
     extends PageFlowController
 {
-    @ti.action(
-        forwards={
-            @ti.forward(name="success", navigateTo=ti.NavigateTo.currentPage)
-        }
-    )
+    @ti.forward(name="success", navigateTo=ti.NavigateTo.currentPage)
     public Forward logout()
     {
         logout(false);

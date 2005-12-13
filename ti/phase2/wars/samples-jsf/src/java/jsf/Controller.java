@@ -23,12 +23,12 @@ import org.apache.ti.pageflow.annotations.ti;
 
 @ti.controller(
     simpleActions={
-        @ti.simpleAction(name="begin", path="home.faces"),
-        @ti.simpleAction(name="locatePhysician", path="/jsf/physiciansFlow/Controller.jpf")
+        @ti.simpleAction(name="locatePhysician", path="physiciansFlow/Controller.jpf")
     },
     sharedFlowRefs={
         @ti.sharedFlowRef(name="shared", type=org.apache.ti.samples.jsf.SharedFlow.class)
-    }
+    },
+    defaultResultSuffix="_success.faces"
 )
 public class Controller 
     extends PageFlowController

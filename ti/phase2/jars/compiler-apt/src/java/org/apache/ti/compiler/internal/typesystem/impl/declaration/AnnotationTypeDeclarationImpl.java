@@ -58,6 +58,7 @@ public class AnnotationTypeDeclarationImpl
     }
 
     public AnnotationTypeElementDeclaration getMember(String name) {
+        getAnnotationMembers();
         return _membersByName.get(name);
     }
 }

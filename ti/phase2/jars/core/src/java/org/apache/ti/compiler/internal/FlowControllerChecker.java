@@ -22,15 +22,7 @@ import org.apache.ti.compiler.internal.grammar.ActionGrammar;
 import org.apache.ti.compiler.internal.grammar.ExceptionHandlerGrammar;
 import org.apache.ti.compiler.internal.grammar.WebappPathType;
 import org.apache.ti.compiler.internal.processor.SilentDiagnostics;
-import org.apache.ti.compiler.internal.typesystem.declaration.AnnotationInstance;
-import org.apache.ti.compiler.internal.typesystem.declaration.AnnotationValue;
-import org.apache.ti.compiler.internal.typesystem.declaration.ClassDeclaration;
-import org.apache.ti.compiler.internal.typesystem.declaration.FieldDeclaration;
-import org.apache.ti.compiler.internal.typesystem.declaration.MethodDeclaration;
-import org.apache.ti.compiler.internal.typesystem.declaration.Modifier;
-import org.apache.ti.compiler.internal.typesystem.declaration.PackageDeclaration;
-import org.apache.ti.compiler.internal.typesystem.declaration.ParameterDeclaration;
-import org.apache.ti.compiler.internal.typesystem.declaration.TypeDeclaration;
+import org.apache.ti.compiler.internal.typesystem.declaration.*;
 import org.apache.ti.compiler.internal.typesystem.env.AnnotationProcessorEnvironment;
 import org.apache.ti.compiler.internal.typesystem.type.ClassType;
 import org.apache.ti.compiler.internal.typesystem.type.TypeInstance;
@@ -171,7 +163,7 @@ public abstract class FlowControllerChecker
         // Runtime performance enhancement: enable saving of previous-page and previous-action information based on
         // whether there were Forwards that contained navigateTo attributes.
         //
-        enableNavigateTo(jclass, fcInfo.getMergedControllerAnnotation(), fcInfo);
+        enableNavigateTo(jclass, fcInfo.getMergedControllerAnnotation(), fcInfo, getEnv());
 
         Map sharedFlowTypes = fcInfo.getSharedFlowTypes();
 
@@ -183,7 +175,7 @@ public abstract class FlowControllerChecker
                 // Saving of previous-page/previous-action info must be enabled if any of the referenced shared flows
                 // use this feature.
                 //
-                enableNavigateTo(sharedFlowType, new MergedControllerAnnotation(sharedFlowType), fcInfo);
+                enableNavigateTo(sharedFlowType, new MergedControllerAnnotation(sharedFlowType), fcInfo, getEnv());
             }
         }
 
@@ -194,7 +186,7 @@ public abstract class FlowControllerChecker
     }
 
     private static void enableNavigateTo(TypeDeclaration flowControllerClass, MergedControllerAnnotation controllerAnn,
-                                         FlowControllerInfo fcInfo) {
+                                         FlowControllerInfo fcInfo, AnnotationProcessorEnvironment env) {
         //
         // Look through Forwards and SimpleActions in the Controller annotation.
         //
@@ -208,7 +200,7 @@ public abstract class FlowControllerChecker
 
         for (int i = 0; i < methods.length; i++) {
             MethodDeclaration method = methods[i];
-            AnnotationInstance ann = CompilerUtils.getAnnotation(method, ACTION_TAG_NAME);
+            AnnotationInstance ann = CompilerUtils.getActionAnnotation(method, flowControllerClass, env);
 
             if (ann != null) {
                 enableNavigateTo(CompilerUtils.getAnnotation(ann, VALIDATION_ERROR_FORWARD_ATTR, true), fcInfo);
@@ -376,7 +368,7 @@ public abstract class FlowControllerChecker
 
             for (int i = 0; i < methods.length; i++) {
                 MethodDeclaration method = methods[i];
-                AnnotationInstance ann = CompilerUtils.getAnnotation(method, ACTION_TAG_NAME);
+                AnnotationInstance ann = CompilerUtils.getActionAnnotation(method, jclass, getEnv());
 
                 if (ann == null) {
                     ann = CompilerUtils.getAnnotation(method, EXCEPTION_HANDLER_TAG_NAME);
@@ -468,21 +460,17 @@ public abstract class FlowControllerChecker
     protected void checkMethod(MethodDeclaration method, ClassDeclaration jclass, AnnotationGrammar actionGrammar,
                                AnnotationGrammar exceptionHandlerGrammar)
             throws FatalCompileTimeException {
-        AnnotationInstance[] annotations = method.getAnnotationInstances();
-
-        for (int i = 0; i < annotations.length; i++) {
-            AnnotationInstance annotation = annotations[i];
-            String annotationName = CompilerUtils.getDeclaration(annotation.getAnnotationType()).getSimpleName();
-
-            if (annotationName.equals(ACTION_TAG_NAME)) {
-                actionGrammar.check(annotation, null, method);
-
-                if (!CompilerUtils.isAssignableFrom(FORWARD_CLASS_NAME, method.getReturnType(), getEnv()) &&
-                        !CompilerUtils.isAssignableFrom(STRING_CLASS_NAME, method.getReturnType(), getEnv())) {
-                    getDiagnostics().addError(method, "error.method-wrong-return-type", FORWARD_CLASS_NAME, STRING_CLASS_NAME);
-                }
-            } else if (annotationName.equals(EXCEPTION_HANDLER_TAG_NAME)) {
-                exceptionHandlerGrammar.check(annotation, null, method);
+        
+        AnnotationInstance actionAnnotation = CompilerUtils.getActionAnnotation(method, jclass, getEnv());
+        if (actionAnnotation != null) {
+            actionGrammar.check(actionAnnotation, null, method);
+            if (! ActionGrammar.hasActionMethodReturnType(method, getEnv())) {
+                getDiagnostics().addError(method, "error.method-wrong-return-type", FORWARD_CLASS_NAME, STRING_CLASS_NAME);
+            }
+        } else {
+            AnnotationInstance exceptionHandlerAnnotation = CompilerUtils.getAnnotation(method, EXCEPTION_HANDLER_TAG_NAME);
+            if (exceptionHandlerAnnotation != null) {
+                exceptionHandlerGrammar.check(exceptionHandlerAnnotation, null, method);
                 checkExceptionHandlerMethod(method);
             }
         }

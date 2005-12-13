@@ -228,12 +228,13 @@ public class GenXWorkModuleConfigModel
     }
 
     private void addActionMethods() {
-        MethodDeclaration[] actionMethods = CompilerUtils.getClassMethods(_jclass, ACTION_TAG_NAME);
+        MethodDeclaration[] actionMethods = CompilerUtils.getClassMethods(_jclass, null);
 
         for (int i = 0; i < actionMethods.length; i++) {
             MethodDeclaration actionMethod = actionMethods[i];
-
-            if (!actionMethod.hasModifier(Modifier.ABSTRACT)) {
+            
+            if (CompilerUtils.getActionAnnotation(actionMethod, _jclass, getEnv()) != null
+                && !actionMethod.hasModifier(Modifier.ABSTRACT)) {
                 XWorkActionModel actionModel = new GenXWorkActionModel(actionMethod, this, _jclass);
                 addAction(actionModel);
 
@@ -445,7 +446,8 @@ public class GenXWorkModuleConfigModel
      * @todo make this configurable.
      */
     String getDefaultFileExtension() {
-        return '.' + JSP_FILE_EXTENSION;
+        String suffix = getFlowControllerInfo().getMergedControllerAnnotation().getDefaultResultSuffix();
+        return suffix != null ? suffix : DEFAULT_RESULT_SUFFIX;
     }
 
     protected String getValidationFilePrefix() {

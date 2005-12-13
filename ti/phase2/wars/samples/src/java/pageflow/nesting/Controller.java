@@ -45,7 +45,6 @@ public class Controller extends PageFlowController
     public String getYourName() { return _yourName; }
     public void setYourName(String yourName) { _yourName = yourName; }
 
-    @ti.action
     protected Forward chooseAirportDone( ChooseAirport.Results results )
     {
         Forward fwd = new Forward(Action.SUCCESS);

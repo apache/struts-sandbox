@@ -262,6 +262,12 @@ public interface ti {
          * @todo doc
          */
         boolean inheritLocalPaths() default false;
+        
+        /**
+         * For actions, exception handlers, etc., the suffix that is appended to the name to create an inferred result
+         * path, when no explicit result path is given.
+         */
+        String defaultResultSuffix() default "";
     }
 
     /**
@@ -271,8 +277,8 @@ public interface ti {
      * a location for shared state.  This annotation is used within {@link controller}.
      */
     @Target(ANNOTATION_TYPE)
-            @Retention(RUNTIME)
-            public @interface sharedFlowRef {
+    @Retention(RUNTIME)
+    public @interface sharedFlowRef {
 
         /**
          * The local name of the shared flow reference.
@@ -290,8 +296,8 @@ public interface ti {
      * expression.
      */
     @Target(ANNOTATION_TYPE)
-            @Retention(RUNTIME)
-            public @interface conditionalForward {
+    @Retention(RUNTIME)
+    public @interface conditionalForward {
 
         //-----------------------
         // Required attributes...
@@ -385,8 +391,8 @@ public interface ti {
      * Optional class-level annotation that can store tool-specific view properties.
      */
     @Target(TYPE)
-            @Retention(SOURCE)
-            public @interface viewProperties {
+    @Retention(SOURCE)
+    public @interface viewProperties {
 
         String[] value() default {};
     }
@@ -423,8 +429,8 @@ public interface ti {
      * @see simpleAction
      */
     @Target(METHOD)
-            @Retention(RUNTIME)
-            public @interface action {
+    @Retention(RUNTIME)
+    public @interface action {
 
         /**
          * Array of declarative catches, which can reroute to a page or to a handler method ({@link exceptionHandler})
@@ -536,8 +542,8 @@ public interface ti {
      * @see action
      */
     @Target(ANNOTATION_TYPE)
-            @Retention(RUNTIME)
-            public @interface simpleAction {
+    @Retention(RUNTIME)
+    public @interface simpleAction {
 
         //-----------------------
         // Required attributes...
@@ -743,8 +749,8 @@ public interface ti {
      * A declarative "catch" for exceptions thrown from actions ({@link action}, {@link simpleAction}).
      */
     @Target(ANNOTATION_TYPE)
-            @Retention(RUNTIME)
-            public @interface handleException {
+    @Retention(RUNTIME)
+    public @interface handleException {
 
         //-----------------------
         // Required attributes...
@@ -806,8 +812,8 @@ public interface ti {
      * triggered.  This annotation is required for a method to be recognized as an exception handler.
      */
     @Target(METHOD)
-            @Retention(RUNTIME)
-            public @interface exceptionHandler {
+    @Retention(RUNTIME)
+    public @interface exceptionHandler {
 
         /**
          * Array of Forwards that can be used from this exception handler.  The method uses a forward by returning a
@@ -829,9 +835,9 @@ public interface ti {
      * A destination that is used by actions ({@link action}, {@link simpleAction}) and exception handlers
      * {@link exceptionHandler}.
      */
-    @Target(ANNOTATION_TYPE)
-            @Retention(RUNTIME)
-            public @interface forward {
+    @Target({ANNOTATION_TYPE, METHOD})
+    @Retention(RUNTIME)
+    public @interface forward {
 
         //-----------------------
         // Required attributes...
@@ -937,8 +943,8 @@ public interface ti {
      * required-presence.
      */
     @Target(ANNOTATION_TYPE)
-            @Retention(RUNTIME)
-            public @interface actionOutput {
+    @Retention(RUNTIME)
+    public @interface actionOutput {
 
         /**
          * The name of the action output.  This is the <i>action-output-name</i> in the databinding expression
@@ -972,8 +978,8 @@ public interface ti {
      * Annotation used within {@link controller} to declare a message bundle for use in the page flow.
      */
     @Target(ANNOTATION_TYPE)
-            @Retention(RUNTIME)
-            public @interface messageBundle {
+    @Retention(RUNTIME)
+    public @interface messageBundle {
 
         /**
          * The path to the message bundle, as a ServletContext resource.  This may be specified with either '/' or'.'
@@ -1013,8 +1019,8 @@ public interface ti {
      * @see validateCustomRule
      */
     @Target(ANNOTATION_TYPE)
-            @Retention(RUNTIME)
-            public @interface messageArg {
+    @Retention(RUNTIME)
+    public @interface messageArg {
 
         /**
          * The JSP 2.0-style expression (e.g., <code>${pageFlow.myProperty}</code>) or literal string that will be used
@@ -1048,8 +1054,8 @@ public interface ti {
      * Used within {@link validatableProperty} and {@link validationLocaleRules}.
      */
     @Target(ANNOTATION_TYPE)
-            @Retention(RUNTIME)
-            public @interface validateRequired {
+    @Retention(RUNTIME)
+    public @interface validateRequired {
 
         /**
          * If set to <code>false</code>, then this rule will not be applied.
@@ -1088,8 +1094,8 @@ public interface ti {
      * Used within {@link validatableProperty} and {@link validationLocaleRules}.
      */
     @Target(ANNOTATION_TYPE)
-            @Retention(RUNTIME)
-            public @interface validateMinLength {
+    @Retention(RUNTIME)
+    public @interface validateMinLength {
 
         /**
          * If set to <code>false</code>, then this rule will not be applied.
@@ -1133,8 +1139,8 @@ public interface ti {
      * Used within {@link validatableProperty} and {@link validationLocaleRules}.
      */
     @Target(ANNOTATION_TYPE)
-            @Retention(RUNTIME)
-            public @interface validateMaxLength {
+    @Retention(RUNTIME)
+    public @interface validateMaxLength {
 
         /**
          * If set to <code>false</code>, then this rule will not be applied.
@@ -1178,8 +1184,8 @@ public interface ti {
      * Used within {@link validatableProperty} and {@link validationLocaleRules}.
      */
     @Target(ANNOTATION_TYPE)
-            @Retention(RUNTIME)
-            public @interface validateMask {
+    @Retention(RUNTIME)
+    public @interface validateMask {
 
         /**
          * If set to <code>false</code>, then this rule will not be applied.
@@ -1223,8 +1229,8 @@ public interface ti {
      * Used within {@link validatableProperty} and {@link validationLocaleRules}.
      */
     @Target(ANNOTATION_TYPE)
-            @Retention(RUNTIME)
-            public @interface validateType {
+    @Retention(RUNTIME)
+    public @interface validateType {
 
         /**
          * If set to <code>false</code>, then this rule will not be applied.
@@ -1268,8 +1274,8 @@ public interface ti {
      * Used within {@link validatableProperty} and {@link validationLocaleRules}.
      */
     @Target(ANNOTATION_TYPE)
-            @Retention(RUNTIME)
-            public @interface validateDate {
+    @Retention(RUNTIME)
+    public @interface validateDate {
 
         /**
          * If set to <code>false</code>, then this rule will not be applied.
@@ -1319,8 +1325,8 @@ public interface ti {
      * Used within {@link validatableProperty} and {@link validationLocaleRules}.
      */
     @Target(ANNOTATION_TYPE)
-            @Retention(RUNTIME)
-            public @interface validateRange {
+    @Retention(RUNTIME)
+    public @interface validateRange {
 
         /**
          * If set to <code>false</code>, then this rule will not be applied.
@@ -1380,8 +1386,8 @@ public interface ti {
      * Used within {@link validatableProperty} and {@link validationLocaleRules}.
      */
     @Target(ANNOTATION_TYPE)
-            @Retention(RUNTIME)
-            public @interface validateCreditCard {
+    @Retention(RUNTIME)
+    public @interface validateCreditCard {
 
         /**
          * If set to <code>false</code>, then this rule will not be applied.
@@ -1421,8 +1427,8 @@ public interface ti {
      * Used within {@link validatableProperty} and {@link validationLocaleRules}.
      */
     @Target(ANNOTATION_TYPE)
-            @Retention(RUNTIME)
-            public @interface validateEmail {
+    @Retention(RUNTIME)
+    public @interface validateEmail {
 
         /**
          * If set to <code>false</code>, then this rule will not be applied.
@@ -1461,8 +1467,8 @@ public interface ti {
      * Used within {@link validatableProperty} and {@link validationLocaleRules}.
      */
     @Target(ANNOTATION_TYPE)
-            @Retention(RUNTIME)
-            public @interface validateValidWhen {
+    @Retention(RUNTIME)
+    public @interface validateValidWhen {
 
         /**
          * If set to <code>false</code>, then this rule will not be applied.
@@ -1505,8 +1511,8 @@ public interface ti {
      * A variable name/value that is used by {@link validateCustomRule}.
      */
     @Target(ANNOTATION_TYPE)
-            @Retention(RUNTIME)
-            public @interface validateCustomVariable {
+    @Retention(RUNTIME)
+    public @interface validateCustomVariable {
 
         /**
          * The variable name.
@@ -1524,8 +1530,8 @@ public interface ti {
      * Used within {@link validatableProperty} and {@link validationLocaleRules}.
      */
     @Target(ANNOTATION_TYPE)
-            @Retention(RUNTIME)
-            public @interface validateCustomRule {
+    @Retention(RUNTIME)
+    public @interface validateCustomRule {
 
         /**
          * The name of the custom rule to run.  This rule may be specified in a ValidatorPlugIn config that is declared
@@ -1569,8 +1575,8 @@ public interface ti {
      * {@link validatableProperty}.
      */
     @Target(ANNOTATION_TYPE)
-            @Retention(RUNTIME)
-            public @interface validationLocaleRules {
+    @Retention(RUNTIME)
+    public @interface validationLocaleRules {
 
         /** A validateRequired rule that will be applied for the given locale. */
         validateRequired validateRequired() default @validateRequired(enabled = false);
@@ -1634,8 +1640,8 @@ public interface ti {
      * applied for every locale, and sets of locale-specific rules.
      */
     @Target({ANNOTATION_TYPE, METHOD})
-            @Retention(RUNTIME)
-            public @interface validatableProperty {
+    @Retention(RUNTIME)
+    public @interface validatableProperty {
 
         /**
          * The name of the property to run rules against.  When this annotation is used on a property getter method,
@@ -1704,8 +1710,8 @@ public interface ti {
      * {@link controller#validatableBeans}.
      */
     @Target(ANNOTATION_TYPE)
-            @Retention(RUNTIME)
-            public @interface validatableBean {
+    @Retention(RUNTIME)
+    public @interface validatableBean {
 
         /**
          * The bean type for which the validation rules will apply.
@@ -1724,9 +1730,9 @@ public interface ti {
      * message bundle for the page flow in which a validation error message is generated.
      */
     @Target(TYPE)
-            @Retention(RUNTIME)
-            @Inherited
-            public @interface formBean {
+    @Retention(RUNTIME)
+    @Inherited
+    public @interface formBean {
 
         /**
          * The path to the message bundle, as a ServletContext resource.  This may be specified with either '/' or'.'
@@ -1744,8 +1750,8 @@ public interface ti {
      * {@link org.apache.ti.pageflow.FacesBackingBean}.
      */
     @Target(FIELD)
-            @Retention(RUNTIME)
-            public @interface sharedFlowField {
+    @Retention(RUNTIME)
+    public @interface sharedFlowField {
 
         /**
          * The name of the shared flow, as declared in {@link sharedFlowRef#name} on {@link controller}. 
@@ -1759,8 +1765,8 @@ public interface ti {
      * backing class.
      */
     @Target(FIELD)
-            @Retention(RUNTIME)
-            public @interface pageFlowField {
+    @Retention(RUNTIME)
+    public @interface pageFlowField {
 
     }
 
@@ -1774,8 +1780,8 @@ public interface ti {
      * @see commandHandler
      */
     @Target(TYPE)
-            @Retention(RUNTIME)
-            public @interface facesBacking {
+    @Retention(RUNTIME)
+    public @interface facesBacking {
 
     }
 
@@ -1790,8 +1796,8 @@ public interface ti {
      * @see facesBacking
      */
     @Target(METHOD)
-            @Retention(RUNTIME)
-            public @interface commandHandler {
+    @Retention(RUNTIME)
+    public @interface commandHandler {
 
         /**
          * An array of raiseAction annotations, which cause form beans to be sent when particular Page Flow actions
@@ -1805,8 +1811,8 @@ public interface ti {
      * Page Flow action is raised.
      */
     @Target(ANNOTATION_TYPE)
-            @Retention(RUNTIME)
-            public @interface raiseAction {
+    @Retention(RUNTIME)
+    public @interface raiseAction {
 
         /**
          * The name of the Page Flow action.

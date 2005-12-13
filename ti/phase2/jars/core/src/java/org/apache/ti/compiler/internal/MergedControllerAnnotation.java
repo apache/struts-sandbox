@@ -48,6 +48,12 @@ public class MergedControllerAnnotation
     private LinkedHashMap _messageResources = new LinkedHashMap();
     private LinkedHashMap _messageBundles = new LinkedHashMap();
     private String _multipartHandler;
+    
+    /**
+     * For actions, exception handlers, etc., the suffix that is appended to the name to create an inferred result path,
+     * when no explicit result path is given.
+     */
+    private String _defaultResultSuffix;
 
     public MergedControllerAnnotation(TypeDeclaration jclass) {
         mergeControllerAnnotations(jclass);
@@ -88,6 +94,9 @@ public class MergedControllerAnnotation
 
         String multipartHandler = CompilerUtils.getEnumFieldName(controllerAnnotation, MULTIPART_HANDLER_ATTR, true);
         if (multipartHandler != null) _multipartHandler = multipartHandler;
+        
+        String defaultResultSuffix = CompilerUtils.getString(controllerAnnotation, DEFAULT_RESULT_SUFFIX_ATTR, true);
+        if (defaultResultSuffix != null) _defaultResultSuffix = defaultResultSuffix;
     }
 
     private static List mergeStringArray(List memberList, AnnotationInstance parentAnnotation,
@@ -185,6 +194,10 @@ public class MergedControllerAnnotation
 
     public String getMultipartHandler() {
         return _multipartHandler;
+    }
+
+    public String getDefaultResultSuffix() {
+        return _defaultResultSuffix;
     }
 
     private void mergeControllerAnnotations(TypeDeclaration jclass) {

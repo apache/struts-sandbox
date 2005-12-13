@@ -65,7 +65,7 @@ public class ChooseAirport extends PageFlowController
             @ti.forward(name="nonefound", path="nonefound.jsp")
         },
         validationErrorForward=@ti.forward(name="failure", navigateTo=ti.NavigateTo.currentPage)
-   )
+    )
     protected String doSearch(SearchForm form)
     {
         // Of course, in real life we would be going through a Control to talk to some authoritative

@@ -57,8 +57,6 @@ public class Controller extends PageFlowController
         private String _password;
 
         @ti.validatableProperty(
-            // We could have also used the 'displayName' attribute -- a hardcoded string or a 
-            // JSP 2.0-style expression.
             displayNameKey="displaynames.username",
             validateRequired=@ti.validateRequired(),
             validateMinLength=@ti.validateMinLength(chars=4)

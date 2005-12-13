@@ -108,9 +108,12 @@ public class WebappPathOrActionType
 
             for (int i = 0; i < methods.length; i++) {
                 MethodDeclaration method = methods[i];
-                if (method.getSimpleName().equals(actionName)
-                        && CompilerUtils.getAnnotation(method, ACTION_TAG_NAME) != null) {
-                    return true;
+                if (method.getSimpleName().equals(actionName))
+                {
+                    if (CompilerUtils.getActionAnnotation(method, classDecl, env) != null
+                        || ActionGrammar.hasActionMethodReturnType(method, env)) {
+                        return true;
+                    }
                 }
             }
 

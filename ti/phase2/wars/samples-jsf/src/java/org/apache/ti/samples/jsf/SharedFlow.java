@@ -17,10 +17,6 @@
  */
 package org.apache.ti.samples.jsf;
 
-import java.io.IOException;
-
-import org.apache.ti.pageflow.Forward;
-import org.apache.ti.pageflow.PageFlowException;
 import org.apache.ti.pageflow.SharedFlowController;
 import org.apache.ti.pageflow.annotations.ti;
 
