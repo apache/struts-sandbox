@@ -39,12 +39,12 @@ public class TestScopedModelDrivenInterceptor extends TestCase {
         assertTrue(obj instanceof String);
 
         HashMap session = new HashMap();
-        obj = inter.resolveModel(factory, session, "java.lang.String", "request", "foo");
+        obj = inter.resolveModel(factory, session, "java.lang.String", "session", "foo");
         assertNotNull(obj);
         assertTrue(obj instanceof String);
         assertTrue(obj == session.get("foo"));
 
-        obj = inter.resolveModel(factory, session, "java.lang.String", "request", "foo");
+        obj = inter.resolveModel(factory, session, "java.lang.String", "session", "foo");
         assertNotNull(obj);
         assertTrue(obj instanceof String);
         assertTrue(obj == session.get("foo"));

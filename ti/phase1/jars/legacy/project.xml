@@ -25,4 +25,22 @@
   <artifactId>struts-ti-core</artifactId>
   <name>Struts Ti Core</name>
 
+  <dependencies>
+
+	<!-- Standard dependencies -->  
+    <dependency>
+      <groupId>struts</groupId>
+      <artifactId>struts</artifactId>
+      <version>1.2.8</version>
+      <url>http://struts.apache.org/</url>
+    </dependency>
+ 
+    <dependency>
+      <groupId>rife</groupId>
+      <artifactId>rife-continuations</artifactId>
+      <version>1.2</version>
+      <url>http://rifers.org/</url>
+    </dependency>
+  </dependencies>
+
 </project>

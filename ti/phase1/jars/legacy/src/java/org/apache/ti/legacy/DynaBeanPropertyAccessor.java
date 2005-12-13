@@ -15,6 +15,7 @@
  * limitations under the License.
  *
  */
+
 package org.apache.ti.legacy;
 
 import java.io.Serializable;
@@ -25,8 +26,7 @@ import ognl.PropertyAccessor;
 import java.util.Map;
 
 /**
- * 
- * @todo Finish documenting me!
+ * Provides access to DynaBean properties in OGNL
  */
 public class DynaBeanPropertyAccessor implements PropertyAccessor {
 
