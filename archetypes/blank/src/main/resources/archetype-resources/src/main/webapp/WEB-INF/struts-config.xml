@@ -104,12 +104,6 @@
     </action-mappings>
 
 
-<!-- ============================================= Controller Configuration -->
-
-    <controller
-       processorClass="org.apache.struts.tiles.TilesRequestProcessor"/>
-
-
 <!-- ======================================== Message Resources Definitions -->
 
     <message-resources parameter="MessageResources" />

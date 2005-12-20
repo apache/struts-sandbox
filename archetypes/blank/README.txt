@@ -37,7 +37,7 @@ the jars as follows:
          -Dfile=/path/to/struts-action-1.3.0-dev.jar
          -DgroupId=org.apache.struts
          -DartifactId=struts-action
-         -Dversion=1.3.0-dev
+         -Dversion=1.3.0-SNAPSHOT
          -Dpackaging=jar
          -DgeneratePom=true
 
