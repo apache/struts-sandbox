@@ -20,9 +20,13 @@ package org.apache.ti.legacy;
 
 import com.opensymphony.xwork.*;
 import com.opensymphony.xwork.config.entities.ActionConfig;
+import com.opensymphony.xwork.config.entities.ResultConfig;
+import com.opensymphony.xwork.config.entities.ExceptionMappingConfig;
 import org.apache.struts.action.*;
 import org.apache.struts.config.*;
-import java.util.*;
+
+import java.util.Iterator;
+import java.util.Arrays;
 
 
 /**
@@ -43,18 +47,70 @@ public class StrutsFactory {
         return FACTORY;
     }
 
-    public ModuleConfig createModuleConfig() {
-        return null;
+    /**
+     * Create a Struts 1.x ModuleConfig based on an XWork package configuration.
+     * 
+     * @param packageName the name of the XWork package configuration to wrap.  This becomes the module prefix for the
+     *     newly-created ModuleConfig.
+     * @return a wrapper Struts 1.x ModuleConfig.
+     */
+    public ModuleConfig createModuleConfig(String packageName) {
+        assert packageName != null;
+        return new WrapperModuleConfig(packageName);
     }
 
+    /**
+     * Create a Struts 1.x ActionMapping from an XWork ActionConfig.
+     * 
+     * @param cfg the XWork ActionConfig.
+     * @return a wrapper Struts 1.x ActionMapping.
+     */
     public ActionMapping createActionMapping(ActionConfig cfg) {
-        return null;
+        assert cfg != null;
+        return new WrapperActionMapping(cfg);
+    }
+
+    /**
+     * Create a Struts 1.x ActionMapping from an XWork ActionConfig.  This version provides an existing action path
+     * and ModuleConfig.  Package-protected for now; may not need to be exposed publicly.
+     * 
+     * @param cfg the XWork ActionConfig.
+     * @param actionPath the Struts 1.x-style action path ('/' + action-name).
+     * @param moduleConfig the Struts 1.x ModuleConfig that contains the ActionMapping.
+     * @return a wrapper Struts 1.x ActionMapping.
+     */
+    ActionMapping createActionMapping(ActionConfig cfg, String actionPath, ModuleConfig moduleConfig) {
+        assert cfg != null;
+        assert moduleConfig != null;
+        return new WrapperActionMapping(cfg, actionPath, moduleConfig);
+    }
+
+    /**
+     * Create a Struts 1.x ActionForward from an XWork ResultConfig.
+     * 
+     * @param cfg the XWork ResultConfig.
+     * @return a wrapper Struts 1.x ActionMapping.
+     */
+    public ActionForward createActionForward(ResultConfig cfg) {
+        assert cfg != null;
+        return new WrapperActionForward(cfg);
+    }
+
+    /**
+     * Create a Struts 1.x ExceptionConfig from an XWork ExceptionMappingConfig.
+     * 
+     * @param cfg the XWork ExceptionMappingConfig.
+     * @return a wrapper Struts 1.x ExceptionConfig.
+     */
+    public ExceptionConfig createExceptionConfig(ExceptionMappingConfig cfg) {
+        assert cfg != null;
+        return new WrapperExceptionConfig(cfg);
     }
 
     public void convertErrors(ActionErrors errors, Object action) {
         ValidationAware vaction = null;
         TextProvider text = null;
-        
+
         if (action instanceof ValidationAware) {
             vaction = (ValidationAware)action;
         }
@@ -77,8 +133,8 @@ public class StrutsFactory {
                         msg = text.getText(error.getKey(), Arrays.asList(values));
                     } else {
                         msg = text.getText(error.getKey());
-                    }    
-                } 
+                    }
+                }
                 if (vaction != null) {
                     if (field == errors.GLOBAL_MESSAGE) {
                         vaction.addActionError(msg);
@@ -90,5 +146,5 @@ public class StrutsFactory {
                 }
             }
         }
-    }    
+    }
 }

@@ -45,6 +45,7 @@ public class PlugInInterceptor extends AroundInterceptor
 
     private String className;
     private Map params = new HashMap();
+    private String modulePrefix;
     private PlugIn plugin = null;
     private static final Log LOG = LogFactory.getLog(PlugInInterceptor.class);
 
@@ -58,8 +59,13 @@ public class PlugInInterceptor extends AroundInterceptor
 
     public Map getParams() {
         return params;
-    }    
-    
+    }
+
+    // TODO: we should be able to find the package name/namespace during init time, but for now it's passed in as param.
+    public void setModulePrefix(String modulePrefix) {
+        this.modulePrefix = modulePrefix;
+    }
+
     public void setServletContext(final ServletContext servletContext) {
         ActionServlet servlet = new ActionServlet() {
             public ServletContext getServletContext() {
@@ -67,7 +73,9 @@ public class PlugInInterceptor extends AroundInterceptor
             }
         };
 
-        ModuleConfig modConfig = StrutsFactory.getStrutsFactory().createModuleConfig();
+        // Create a ModuleConfig based on the module prefix.  This assumes that there is an existing XWork package
+        // configuration with the given module prefix.
+        ModuleConfig modConfig = StrutsFactory.getStrutsFactory().createModuleConfig(modulePrefix);
 
         try {
             plugin = (PlugIn) ObjectFactory.getObjectFactory().buildBean(className, null);
