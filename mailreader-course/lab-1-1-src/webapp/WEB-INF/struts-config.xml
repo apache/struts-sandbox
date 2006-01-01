@@ -20,7 +20,8 @@
         </form-bean>
     </form-beans>
 
-    <action-mappings>
+    <action-mappings
+            type="org.apache.struts.action.RequestActionMapping">
 
         <action path="/Register"
                 name="RegisterForm"
@@ -28,9 +29,21 @@
                 validate="false"/>
 
         <action path="/RegisterSave"
-                extends="/Register"
-                forward="/Success.html"/>
+                forward="/Success.html"
+                name="RegisterForm"
+                validate="true"
+                input="/Register.do"/>
 
     </action-mappings>
+
+    <message-resources
+            parameter="MessageResources"/>
+
+    <plug-in className="org.apache.struts.validator.ValidatorPlugIn">
+        <set-property
+                property="pathnames"
+                value="/org/apache/struts/validator/validator-rules.xml,
+                 /WEB-INF/validator.xml"/>
+    </plug-in>
 
 </struts-config>

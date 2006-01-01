@@ -5,10 +5,11 @@
     </head>
 
     <body>
+    <html:errors/>
     <html:form action="/RegisterSave">
-        UserName: <html:text property="username"/><br>
-        enter password: <html:password property="password"/><br>
-        re-enter password: <html:password property="password2"/><br>
+        Username: <html:text property="username"/><br>
+        Password: <html:password property="password"/><br>
+        Confirm Password: <html:password property="password2"/><br>
         <html:submit value="Register"/>
     </html:form>
     </body>
