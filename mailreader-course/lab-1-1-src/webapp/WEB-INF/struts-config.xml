@@ -23,11 +23,11 @@
     <action-mappings>
 
         <action path="/Register"
-                forward="/Register.jsp"
                 name="RegisterForm"
+                forward="/RegisterForm.jsp"
                 validate="false"/>
 
-        <action path="/RegisterProcess"
+        <action path="/RegisterSave"
                 extends="/Register"
                 forward="/Success.html"/>
 
