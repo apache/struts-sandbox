@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE struts-config PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 1.3//EN"
+        "http://struts.apache.org/dtds/struts-config_1_3.dtd">
+<struts-config>
+
+    <form-beans>
+        <form-bean
+                name="RegisterForm"
+                type="org.apache.struts.validator.DynaValidatorForm">
+            <form-property
+                    name="username"
+                    type="java.lang.String"/>
+            <form-property
+                    name="password"
+                    type="java.lang.String"/>
+            <form-property
+                    name="password2"
+                    type="java.lang.String"/>
+        </form-bean>
+    </form-beans>
+
+    <action-mappings>
+
+        <action path="/Register"
+                forward="/Register.jsp"
+                name="RegisterForm"
+                validate="false"/>
+
+        <action path="/RegisterProcess"
+                extends="/Register"
+                forward="/Success.html"/>
+
+    </action-mappings>
+
+</struts-config>

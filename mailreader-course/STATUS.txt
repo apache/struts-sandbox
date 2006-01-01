@@ -1,0 +1,63 @@
+==============================================================================
+MALREADER TRAINING COURSE WHITEBOARD STATUS
+------------------------------------------------------------------------------
+Project: 
+  http://struts.apache.org/
+Wiki: 
+  http://strutsuniversity.org/MailReader+Training+Course
+Mailing Lists: 
+  http://struts.apache.org/mail.html -- dev@ with [COURSE] keyword
+Source Code: 
+  http://svn.apache.org/viewcvs.cgi/struts/sandbox/trunk/mailreader-course/
+Committers: 
+  Ted Husted [add your name here].
+Status File: 
+  http://svn.apache.org/viewcvs.cgi/struts/sandbox/trunk/mailreader-course/STATUS.txt?view=markup
+
+COURSE SUMMARY 
+
+The Struts MailReader Training Course is a step-by-step introduction to the 
+leading web application framework for Java. Lectures are reinforced by 
+several labs designed to explore common problems and best practice soutions. 
+This course is intended for developers who want field-tested advice on how 
+to get your applications working the "Struts Way".
+
+COURSE OBJECTIVES
+
+    * Present and apply MVC application architecture
+    * Build a working Struts application
+    * Understand how to unit test Struts applications
+    * Explain key Struts best practices
+    * Use popular Struts extensions to increase productivity
+
+AUDIENCE
+
+Developers and programmers who want to learn about web application 
+development using the Apache Struts Action framework
+
+PREREQUISITES
+
+To benefit from this Struts training course, students should have experience 
+programming with Java along with a basic knowledge of html. Experience with a 
+modern Java IDE, such as NetBeans or Eclipse, is also beneficial.
+
+SOURCE CODE
+
+A set of "starter" source files are provided for each lab under folders 
+labeled in the style
+
+* lab-#-#
+
+where #-# is the day and session number for the lab.
+
+An example of each completed lab is provided under a companion folder labeled 
+
+* lab-#-#-src
+
+LECTURE NOTES 
+
+Notes for the lecture session introducing each lab are maintained on the 
+Struts University wiki. For the notes and a session outline see: 
+
+* http://StrutsUniversity.org/MailReader+Training+Course
+==============================================================================
