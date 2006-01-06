@@ -1,0 +1,22 @@
+<?xml version='1.0'?>
+<database>
+    <user username="user"
+          password="pass"
+          fullName="John Q. User"
+          fromAddress="John.User@somewhere.com">
+        <subscription
+                host="mail.hotmail.com"
+                type="pop3"
+                autoConnect="false"
+                username="user1234"
+                password="bar">
+        </subscription>
+        <subscription
+                host="mail.yahoo.com"
+                type="imap"
+                autoConnect="false"
+                username="jquser"
+                password="foo">
+        </subscription>
+    </user>
+</database>

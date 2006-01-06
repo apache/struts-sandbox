@@ -1,0 +1,145 @@
+<?xml version="1.0"?>
+<!DOCTYPE project SYSTEM "entities/WebTest.dtd" [
+        <!ENTITY taskdef-webtest SYSTEM "entities/taskdef.xml">
+        <!ENTITY config SYSTEM "entities/config.xml">
+        <!ENTITY logon-fail SYSTEM "file:./entities/logon-fail.xml">
+        <!ENTITY logon-hermes SYSTEM "file:./entities/logon-hermes.xml">
+        <!ENTITY logon-open SYSTEM "file:./entities/logon-open.xml">
+        <!ENTITY logon-page SYSTEM "file:./entities/logon-page.xml">
+        <!ENTITY menu-page SYSTEM "file:./entities/menu-page.xml">
+        <!ENTITY register-hermes SYSTEM "file:./entities/register-hermes.xml">
+        <!ENTITY register-open SYSTEM "file:./entities/register-open.xml">
+        <!ENTITY register-page SYSTEM "file:./entities/register-page.xml">
+        <!ENTITY form-submit SYSTEM "file:./entities/form-submit.xml">
+        ]>
+
+<project name="MailReader Storyboard - Exercise navigation and database logic
+- Canoo WebTests" basedir="." default="clean">
+
+    <!-- Load local preferences, if any -->
+    <property file="webtest.properties"/>
+
+    <!-- These properties can be customized using via webtest.properties -->
+    <!-- See webtest.properties.sample for a starter file -->
+    <property name="webtest.home"
+              location="/opt/Canoo/webtest-1.7"/>
+
+    <property name="host"
+              value="localhost"/>
+
+    <property name="port"
+              value="8080"/>
+
+    <property name="basepath"
+              value="lab-1-4-src"/>
+
+    <property name="mailreader.home"
+              location="../../"/>
+
+    <property name="resource.home"
+              location="classes/MessageResources.properties"/>
+
+    <property name="webapps.home"
+              location="/Program Files/Apache Software Foundation/Tomcat 5.5/webapps/"/>
+
+    <!-- Load application resources -->
+    <property file="${resource.home}"/>
+
+    <taskdef file="${webtest.home}/webtestTaskdefs.properties">
+        <classpath>
+            <fileset dir="${webtest.home}" includes="**/lib/*.jar"/>
+            <fileset dir="${webtest.home}" includes="**/lib/runtime/*.jar"/>
+        </classpath>
+    </taskdef>
+
+    <target name="clean" description="Only run against a clean database"
+            depends="Register,Logon"/>
+
+    <target name="clean-database"
+            description="Sets database.xml to default. Stop server, run target, and Start server.">
+        <copy file="${mailreader.home}/webapp/WEB-INF/database.xml"
+              tofile="${webapps.home}/${basepath}/WEB-INF/database.xml"
+              overwrite="true"/>
+    </target>
+
+    <target name="Register"
+            description="Subscribers can store login credentials and a
+            primary email contact with the system.">
+
+        <webtest name="Register Hermes (MSS)">
+            &config;
+            <steps>
+                &register-open;
+                &register-hermes;
+                <verifyTitle
+                        description="Menu page title"
+                        text="${MainMenu.title}"/>
+            </steps>
+        </webtest>
+
+    </target>
+
+    <target name="Logon"
+            description="Subscribers can present their registration credentials to
+        use an account again.">
+
+        <webtest name="Open logon action (MSS)">
+            &config;
+            <steps>
+                &logon-open;
+                <setInputField
+                        description="Default username"
+                        name="username"
+                        value="user"/>
+                <setInputField
+                        description="Correct default password"
+                        name="password"
+                        value="pass"/>
+                &form-submit;
+                &menu-page;
+            </steps>
+        </webtest>
+
+        <webtest name="Open logon action (MSS)">
+            &config;
+            <steps>
+                &logon-hermes;
+            </steps>
+        </webtest>
+
+        <webtest name="Logon - Wrong password (1c)">
+            &config;
+            <steps>
+                &logon-open;
+                <setInputField
+                        description="Registered username"
+                        name="username"
+                        value="hermes"/>
+                <setInputField
+                        description="Wrong password"
+                        name="password"
+                        value="medusa"/>
+                &logon-fail;
+            </steps>
+        </webtest>
+
+        <webtest name="Logon - No Account (1a)">
+            &config;
+            <steps>
+                &logon-open;
+                <setInputField
+                        description="Not a username"
+                        name="username"
+                        value="zeus"/>
+                <setInputField
+                        description="Not a password"
+                        name="password"
+                        value="joltBolt"/>
+                &logon-fail;
+            </steps>
+        </webtest>
+
+    </target>
+
+
+</project>

@@ -1,0 +1,4 @@
+<invoke
+        description="Open Register screen"
+        url="Register.do"/>
+        &register-page;
