@@ -8,8 +8,6 @@
     <html:errors/>
     <html:form action="/RegisterSave">
         Username: <html:text property="username"/><br>
-        Password: <html:password property="password"/><br>
-        Confirm Password: <html:password property="password2"/><br>
         <html:submit value="Register"/>
     </html:form>
     </body>

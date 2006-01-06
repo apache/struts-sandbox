@@ -11,12 +11,6 @@
             <form-property
                     name="username"
                     type="java.lang.String"/>
-            <form-property
-                    name="password"
-                    type="java.lang.String"/>
-            <form-property
-                    name="password2"
-                    type="java.lang.String"/>
         </form-bean>
     </form-beans>
 
@@ -29,21 +23,9 @@
                 validate="false"/>
 
         <action path="/RegisterSave"
-                forward="/Success.html"
-                name="RegisterForm"
-                validate="true"
-                input="/Register.do"/>
+                extends="/Register"
+                forward="/MainMenu.jsp"/>
 
     </action-mappings>
-
-    <message-resources
-            parameter="MessageResources"/>
-
-    <plug-in className="org.apache.struts.validator.ValidatorPlugIn">
-        <set-property
-                property="pathnames"
-                value="/org/apache/struts/validator/validator-rules.xml,
-                 /WEB-INF/validator.xml"/>
-    </plug-in>
 
 </struts-config>
