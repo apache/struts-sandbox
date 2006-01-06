@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE form-validation PUBLIC
+        "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.2.0//EN"
+        "http://jakarta.apache.org/commons/dtds/validator_1_2_0.dtd">
+
+<form-validation>
+
+    <formset>
+        <form name="RegisterForm">
+
+            <field property="username" depends="required">
+                <arg position="0" key="username.label"/>
+            </field>
+
+            <field property="password" depends="required">
+                <arg position="0" key="password.label"/>
+            </field>
+
+            <field property="password2" depends="required,validwhen">
+                <arg position="0" key="password2.label"/>
+                <var>
+                    <var-name>test</var-name>
+                    <var-value>(*this* == password)</var-value>
+                </var>
+            </field>
+
+            <!-- Lab 1-2: Insert remaining fields from use case -->
+
+            <field property="fullName"
+                   depends="required">
+                <arg key="fullName.label"/>
+            </field>
+
+            <field property="fromAddress"
+                   depends="required,email">
+                <arg key="fromAddress.label"/>
+            </field>
+
+            <field property="replyToAddress"
+                   depends="email">
+                <arg key="replyToAddress.label"/>
+            </field>
+
+        </form>
+    </formset>
+</form-validation>
