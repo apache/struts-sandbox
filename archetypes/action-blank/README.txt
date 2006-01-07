@@ -15,7 +15,7 @@ To use the archetype to create a blank project:
    $ cd ~/projects
    $ mvn archetype:create 
          -DarchetypeGroupId=struts
-         -DarchetypeArtifactId=struts-action-archetype-blank 
+         -DarchetypeArtifactId=struts-archetype-action-blank 
          -DarchetypeVersion=1.3.0-SNAPSHOT 
          -DgroupId=com.example
          -DpackageName=com.example.projectname
