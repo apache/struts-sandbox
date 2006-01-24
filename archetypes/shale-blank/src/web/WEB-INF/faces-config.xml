@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+ Copyright 2006 The Apache Software Foundation.
+ 
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ 
+      http://www.apache.org/licenses/LICENSE-2.0
+ 
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+
+ $Id$
+
+-->
+
+<!DOCTYPE faces-config PUBLIC
+  "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
+  "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
+
+<faces-config>
+
+
+  <!-- ========================= Locale Management ========================= -->
+
+
+  <!-- Uncomment the following element and configure the default and
+       supported locales for your application -->
+<!--
+  <application>
+    <locale-config>
+      <default-locale>en</default-locale>
+      <supported-locale>en</supported-locale>
+      <supported-locale>fr</supported-locale>
+      <supported-locale>de</supported-locale>
+      <supported-locale>es</supported-locale>
+    </locale-config>
+  </application>
+-->
+
+
+  <!-- Uncomment the following element (after fixing the package name as needed)
+       if your localized message bundle contains replacements for the standard
+       converter or validator error messages. -->
+<!--
+  <application>
+    <message-bundle>org.apache.shale.blank.Bundle</message-bundle>
+  </application>
+-->
+
+
+  <!-- ============================== /welcome.jsp ========================= -->
+
+
+  <managed-bean>
+    <managed-bean-name>welcome</managed-bean-name>
+    <managed-bean-class>org.apache.shale.blank.WelcomeBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <!-- This simple example has no navigation rules, but if it did they could
+       go right here.  JavaServer Faces lets you organize the elements of the
+       configuration resources in whatever order makes sense.  In most cases,
+       it will be easiest to group the settings related to each individual
+       page, or group of related pages, together.
+  -->
+<!--
+  <navigation-rule>
+    <from-view-id>/welcome.jsp</from-view-id>
+    <navigation-case>
+        <from-outcome>next</from-outcome>
+        <to-view-id>/nextpage.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+-->
+
+</faces-config>
