@@ -1,7 +1,0 @@
-Extension-Name: @projectPackage@
-Specification-Vendor: @specVendor@
-Specification-Version: @specVersion@
-Implementation-Vendor-Id: @implVendorId@
-Implementation-Vendor: @implVendor@
-Implementation-Version: @implVersion@
-
