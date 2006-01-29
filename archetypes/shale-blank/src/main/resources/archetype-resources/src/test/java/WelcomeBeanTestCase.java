@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * $Id$
  */
 
-package org.apache.shale.blank;
+package $package;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -25,7 +24,6 @@ import org.apache.shale.test.base.AbstractViewControllerTestCase;
 /**
  * <p>Test case for the {@link WelcomeBean} ViewController implementation.</p>
  *
- * $Id$
  */
 public class WelcomeBeanTestCase extends AbstractViewControllerTestCase {
 

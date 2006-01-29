@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * $Id$
  */
 
-package org.apache.shale.blank;
+package $package;
 
 import java.util.Date;
 import org.apache.shale.view.AbstractViewController;

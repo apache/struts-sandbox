@@ -16,8 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 
- $Id$
-
 -->
 
 <!DOCTYPE faces-config PUBLIC
@@ -45,12 +43,12 @@
 -->
 
 
-  <!-- Uncomment the following element (after fixing the package name as needed)
+  <!-- Uncomment the following element
        if your localized message bundle contains replacements for the standard
        converter or validator error messages. -->
 <!--
   <application>
-    <message-bundle>org.apache.shale.blank.Bundle</message-bundle>
+    <message-bundle>${package}.Bundle</message-bundle>
   </application>
 -->
 
@@ -60,7 +58,7 @@
 
   <managed-bean>
     <managed-bean-name>welcome</managed-bean-name>
-    <managed-bean-class>org.apache.shale.blank.WelcomeBean</managed-bean-class>
+    <managed-bean-class>${package}.WelcomeBean</managed-bean-class>
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
