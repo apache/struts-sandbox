@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+   <modelVersion>4.0.0</modelVersion>
+   <groupId>${groupId}</groupId>
+   <artifactId>${artifactId}</artifactId>
+   <packaging>war</packaging>
+   <version>${version}</version>
+   <name>Shale Blank Archetype</name>
+   <url>http://struts.apache.org/struts-shale</url>
+
+   <repositories>
+      <repository>
+         <id>apache-snapshot</id>
+         <name>Apache Snapshot Repository</name>
+         <url>http://cvs.apache.org/maven-snapshot-repository</url>
+      </repository>
+   </repositories>
+
+   <dependencies>
+      <dependency>
+         <groupId>junit</groupId>
+         <artifactId>junit</artifactId>
+         <version>3.8.1</version>
+         <scope>test</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>myfaces</groupId>
+         <artifactId>myfaces-api</artifactId>
+         <version>1.1.1</version>
+      </dependency>
+
+      <dependency>
+         <groupId>myfaces</groupId>
+         <artifactId>myfaces-impl</artifactId>
+         <version>1.1.1</version>
+      </dependency>
+
+      <dependency>
+         <groupId>javax.servlet</groupId>
+         <artifactId>servlet-api</artifactId>
+         <version>2.4</version>
+         <scope>provided</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>javax.servlet</groupId>
+         <artifactId>jsp-api</artifactId>
+         <version>2.0</version>
+         <scope>provided</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>struts</groupId>
+         <artifactId>shale-core</artifactId>
+         <version>1.0.1-SNAPSHOT</version>
+      </dependency>
+
+      <dependency>
+         <groupId>struts</groupId>
+         <artifactId>shale-test</artifactId>
+         <version>1.0.1-SNAPSHOT</version>
+         <scope>test</scope>
+      </dependency>
+
+   </dependencies>
+
+   <build>
+      <resources>
+         <resource>
+           <directory>src/main/resources/</directory>
+         </resource>
+         <resource>
+            <directory>src/main/webapp-filtered</directory>
+            <targetPath>../${artifactId}/</targetPath>
+            <filtering>true</filtering>
+         </resource>
+       </resources>
+       <finalName>${artifactId}</finalName>
+   </build>
+
+   <properties>
+     <state.saving.method>client</state.saving.method>
+   </properties>
+
+</project>

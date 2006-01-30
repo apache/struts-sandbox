@@ -15,25 +15,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * $Id:$
+ * $Id$
  */
 -->
 <archetype>
    <id>shale-blank</id>
-  <sources>
-    <source>src/main/java/WelcomeBean.java</source>
-    <source>src/main/resources/Bundle.properties</source>
-    </sources>
-  <testSources>
-    <source>src/test/java/WelcomeBeanTestCase.java</source>
-  </testSources>
-  <resources>
+   <sources>
+      <source>src/main/java/WelcomeBean.java</source>
+      <source>src/main/resources/Bundle.properties</source>
+   </sources>
+   <testSources>
+      <source>src/test/java/WelcomeBeanTestCase.java</source>
+   </testSources>
+   <resources>
+      <resource>src/main/java/overview.html</resource>
       <resource>src/main/webapp/index.jsp</resource>
-      <resource>src/main/webapp/messages.jspf</resource>
       <resource>src/main/webapp/welcome.jsp</resource>
       <resource>src/main/webapp/WEB-INF/chain-config.xml</resource>
       <resource>src/main/webapp/WEB-INF/dialog-config.xml</resource>
       <resource>src/main/webapp/WEB-INF/faces-config.xml</resource>
-      <resource>src/main/webapp/WEB-INF/web.xml</resource>
-  </resources>
+      <resource>src/main/webapp-filtered/messages.jspf</resource>
+      <resource>src/main/webapp-filtered/WEB-INF/web.xml</resource>
+   </resources>
 </archetype>
+

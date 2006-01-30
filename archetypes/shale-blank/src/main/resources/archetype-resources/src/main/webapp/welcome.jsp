@@ -14,8 +14,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 
- $Id$
-
 --%>
 
 <%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %>
