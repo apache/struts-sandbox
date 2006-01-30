@@ -30,11 +30,11 @@
    <resources>
       <resource>src/main/java/overview.html</resource>
       <resource>src/main/webapp/index.jsp</resource>
+      <resource>src/main/webapp/messages.jspf</resource>
       <resource>src/main/webapp/welcome.jsp</resource>
       <resource>src/main/webapp/WEB-INF/chain-config.xml</resource>
       <resource>src/main/webapp/WEB-INF/dialog-config.xml</resource>
       <resource>src/main/webapp/WEB-INF/faces-config.xml</resource>
-      <resource>src/main/webapp-filtered/messages.jspf</resource>
       <resource>src/main/webapp-filtered/WEB-INF/web.xml</resource>
    </resources>
 </archetype>
