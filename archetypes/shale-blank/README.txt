@@ -24,7 +24,7 @@ To use the archetype to create a blank project:
 To build your new webapp:
 
    $ cd projectname
-   $ mvn war:war
+   $ mvn package
 
 
 Prerequisites
