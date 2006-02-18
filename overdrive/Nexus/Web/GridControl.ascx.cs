@@ -447,6 +447,19 @@ namespace Nexus.Web
 					continue;
 				}
 			}
+
+			/// Workaround so that template columns can be utilized by a dynamic DataGrid.
+			/// [OVR-24] - Template columns not passed by DataGridCommandEventArgs
+			foreach (IGridConfig c in Configs)
+			{
+				bool isTemplateColumn = c.ItemTemplate!=null;
+				if (isTemplateColumn)
+				{
+					string key = c.DataField;
+					string value =  FindControlValue(key);
+					dictionary.Add(key,value);
+				}
+			}
 		}
 
 		#endregion
@@ -484,7 +497,7 @@ namespace Nexus.Web
 			return helper;
 		}
 
-		protected virtual IViewHelper Save(string key, ControlCollection controls, bool execute)
+		protected virtual IViewHelper Save(string key, ControlCollection controls)
 		{
 			IViewHelper h = GetHelperFor(SaveCommand);
 			if (h.IsNominal)
@@ -502,14 +515,10 @@ namespace Nexus.Web
 				for (int i = 0; i < cols; i++)
 					keys[index++] = (configs[i] as IGridConfig).DataField;
 				ReadGridControls(controls, h.Criteria, keys, true);
-				if (execute) h.Execute();
+
+				h.Execute();
 			}
 			return h;
-		}
-
-		protected virtual IViewHelper Save(string key, ControlCollection controls)
-		{
-			return Save(key, controls, true);
 		}
 
 		#endregion

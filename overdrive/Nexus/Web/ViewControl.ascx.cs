@@ -347,6 +347,13 @@ namespace Nexus.Web
 					x.Checked = false;
 					continue;
 				}
+
+				if (IsCheckBox(control))
+				{
+					CheckBox x = (CheckBox) control;
+					x.Checked = false;
+					continue;
+				}
 			}
 		}
 
@@ -717,6 +724,8 @@ namespace Nexus.Web
 		/// 
 		private void BindListControl(ListControl control, IList list, string value)
 		{
+			bool insertKey = ((list != null) && (!list.Contains(NullKey)));
+			if (insertKey) list.Insert(0, NullKey);
 			control.DataTextField = "Value";
 			control.DataValueField = "Key";
 			control.DataSource = list;
@@ -726,8 +735,6 @@ namespace Nexus.Web
 
 		protected void BindListControl(ListControl control, IList list)
 		{
-			bool insertKey = ((list != null) && (!list.Contains(NullKey)));
-			if (insertKey) list.Insert(0, NullKey);
 			BindListControl(control, list, null);
 		}
 

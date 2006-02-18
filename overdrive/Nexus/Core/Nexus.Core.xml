@@ -1084,7 +1084,7 @@
             </summary>
             <param name="command">Command ID</param>
             <returns>IRequestCommand instance for name</returns>
-            <exception cref="T:System.Exception">
+            <exception cref="!:Exception">
             Throws Exception if name is null, 
             name is not in catalog, 
             or if instance for name is not a IRequestCommand
