@@ -726,8 +726,8 @@ namespace Nexus.Web
 		{
 			bool insertKey = ((list != null) && (!list.Contains(NullKey)));
 			if (insertKey) list.Insert(0, NullKey);
-			control.DataTextField = "Value";
-			control.DataValueField = "Key";
+			control.DataTextField = KeyValue.VALUE;
+			control.DataValueField = KeyValue.KEY;
 			control.DataSource = list;
 			control.DataBind();
 			if (value!=null) SelectListItem(control, value);

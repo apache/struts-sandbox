@@ -23,6 +23,23 @@ namespace Nexus.Core
 	[Serializable]
 	public class KeyValue : IKeyValue
 	{
+
+		/// <summary>
+		/// Expose name of "Key" field.
+		/// </summary>
+		/// <remarks><p>
+		/// Use this field for the DataValueField (sic).
+		/// </p></remarks>
+		public static const string KEY = "Key";
+
+		/// <summary>
+		/// Expose name of "Value" field.
+		/// </summary>
+		/// <remarks><p>
+		/// Use this field for the DataTextField (sic).
+		/// </p></remarks>
+		public static const string VALUE= "Value";
+
 		public KeyValue()
 		{
 			;
