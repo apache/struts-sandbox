@@ -26,10 +26,25 @@ To build your new webapp:
    $ cd projectname
    $ mvn package
 
+To start Tomcat 5.5 and deploy your webapp:
+
+   $ mvn cargo:start
+
+   Open a browser and visit http://localhost:8080/projectname
 
 Prerequisites
 -------------
 
+   Maven 2 from http://maven.apache.org
+
+Cargo Configuration
+-------------------
+
+   The Cargo plugin is configured to download Apache Tomcat 5.5.15.
+
+   To use a locally installed version, in pom.xml,
+      1. Uncomment the <home> element and change the path
+      2. Remove the <zipUrlInstaller> section.
 
 Other Issues
 ------------

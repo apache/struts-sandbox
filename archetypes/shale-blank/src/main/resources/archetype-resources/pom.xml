@@ -68,6 +68,26 @@
    </dependencies>
 
    <build>
+      <plugins>
+         <plugin>
+            <groupId>org.codehaus.cargo</groupId>
+            <artifactId>cargo-maven2-plugin</artifactId>
+            <version>0.1</version>
+            <configuration>
+               <container>
+                  <containerId>tomcat5x</containerId>
+                  <!--home>C:/java/apache-tomcat-5.5.15</home-->
+                  <zipUrlInstaller>
+                     <url>http://www.apache.org/dist/tomcat/tomcat-5/v5.5.15/bin/apache-tomcat-5.5.15.zip</url>
+                     <installDir>${project.build.directory}/tomcat-zip</installDir>
+                  </zipUrlInstaller>
+               </container>
+               <configuration>
+                  <dir>${project.build.directory}/tomcat</dir>
+               </configuration>
+            </configuration>
+         </plugin>
+      </plugins>
       <resources>
          <resource>
            <directory>src/main/resources/</directory>
