@@ -775,7 +775,24 @@ namespace Nexus.Web
 			public int ItemThru;
 			public int ItemCount;
 		}
-
+		
+		/// <summary>
+		/// Optional extension point so that subclasses can make adjustments 
+		/// based on whether there are items to display or not. 
+		/// </summary>
+		/// <remarks><p>
+		/// The classic use case for this method is to turn off the Grid 
+		/// if there are not any items to display in the Grid. 
+		/// In this case, if this control is used more than once in an enclosing 
+		/// page or control, then the Grid should be toggled on or off for 
+		/// each instance (Visible = isItems);
+		/// </p></remarks>
+		/// <param name="isItems">True if there are 1 or more items to display</param>
+		public virtual void ListPageIndexChanged_IsItems(bool isItems)
+		{
+			// Override to provide functionalilty	
+		}
+		
 		/// <summary>
 		/// Lookup the PAGE_INDEX_HINT or the NOT_FOUND_HINT in the application 
 		/// message resources, and return as a formatted string. 
@@ -783,22 +800,17 @@ namespace Nexus.Web
 		/// <param name="args">Our ListPageIndexChangedArgs with the page index values</param>
 		/// <returns>Formatted message string ready to markup and present</returns>
 		/// 
-		public string ListPageIndexChanged_Message(ListPageIndexChangedArgs args)
+		public virtual string ListPageIndexChanged_Message(ListPageIndexChangedArgs args)
 		{
+			bool isItems = (args.ItemCount > 0);
+			ListPageIndexChanged_IsItems(isItems);
+
 			string[] m_args = new string[3];
 			m_args[0] = Convert.ToString(args.ItemFrom);
 			m_args[1] = Convert.ToString(args.ItemThru);
 			m_args[2] = Convert.ToString(args.ItemCount);
 
-			string text;
-			if (args.ItemCount == 0)
-			{
-				text = GetMessage(NOT_FOUND_HINT);
-			}
-			else
-			{
-				text = GetMessage(PAGE_INDEX_HINT, m_args);
-			}
+			string text = isItems ? GetMessage(PAGE_INDEX_HINT, m_args) : GetMessage(NOT_FOUND_HINT);
 			return text;
 		}
 

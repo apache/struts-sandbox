@@ -30,7 +30,7 @@ namespace Nexus.Core
 		/// <remarks><p>
 		/// Use this field for the DataValueField (sic).
 		/// </p></remarks>
-		public static const string KEY = "Key";
+		public const string KEY = "Key";
 
 		/// <summary>
 		/// Expose name of "Value" field.
@@ -38,7 +38,7 @@ namespace Nexus.Core
 		/// <remarks><p>
 		/// Use this field for the DataTextField (sic).
 		/// </p></remarks>
-		public static const string VALUE= "Value";
+		public const string VALUE= "Value";
 
 		public KeyValue()
 		{
