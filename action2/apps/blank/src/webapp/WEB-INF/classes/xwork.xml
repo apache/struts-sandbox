@@ -7,8 +7,8 @@
 
         <default-action-ref name="home"/>
 
-        <action name="home" class="blank2.HomeAction">
-            <result>/pages/home.jsp</result>
+        <action name="Hello" class="Action2.Hello">
+            <result>/pages/Hello.jsp</result>
         </action>
 
         <!-- Add your actions here -->
