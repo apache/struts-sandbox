@@ -1,5 +1,4 @@
 <%@taglib prefix="ww" uri="/webwork" %>
-
 <html>
 <head>
 <title>Showcase - Non-UI Tag - Example Submited </title>
@@ -36,7 +35,6 @@
 			</ww:iterator>
 		</td>
 	</tr>
-	<ww:label label="Thoughts" name="thoughts" />
 
 </table>
 </body>

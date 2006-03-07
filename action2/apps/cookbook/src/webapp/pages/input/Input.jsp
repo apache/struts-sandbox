@@ -1,4 +1,4 @@
-<%@ taglib prefix="ww" uri="/webwork" %>
+<%@taglib prefix="ww" uri="/webwork" %>
 <html>
 <head>
     <title>UI Tags Example</title>
@@ -107,13 +107,7 @@
 			doubleEmptyOption="true"
 			doubleMultiple="true" />
 
-    <ww:richtexteditor
-    		width="700"
-    		label="Your Thougths"
-     		name="thoughts"
-     		tooltip="Enter your thoughts here" />
-
-    <ww:submit onclick="alert('aaaa');" />
+    <ww:submit onclick="alert('Don't Panic! (Just press OK to continue)');" />
 </ww:form>
 
 </body>
