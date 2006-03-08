@@ -2,15 +2,15 @@
 
 <xwork>
 
-    <package name="input" extends="webwork-default" >
+    <package name="Input" extends="webwork-default" >
 
         <action name="Input" class="cookbook2.Input">
             <result>/pages/input/Input.jsp</result>
             <result name="input">/pages/input/Input.jsp</result>
         </action>
 
-        <action name="InputResult" method="submit" class="cookbook2.Input" >
-        	<result>/pages/input/InputResult.jsp</result>
+        <action name="InputResult" class="cookbook2.Input" >
+        	<result>/pages/input/Result.jsp</result>
         	<result name="input">/pages/input/Input.jsp</result>
         </action>
                 

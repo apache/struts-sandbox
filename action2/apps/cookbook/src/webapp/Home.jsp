@@ -29,32 +29,58 @@
 </table>
 <br />
 <table width="85%" border="0" cellpadding="2" cellspacing="5">
+
+    <tr valign="top">
+      <td>Hello World</td>
+      <td>
+
+          <ww:url id="Hello_exe" action="Hello" />
+          <ww:a href="%{Hello_exe}">
+              <img src="<ww:url value="/images/execute.gif"/>" alt="" hspace="4" border="0"  align="top" class="inline" />
+          </ww:a>
+          <ww:a href="%{Hello_exe}">Execute</ww:a>
+
+      </td>
+      <td>
+
+          <ww:url id="Hello_src" value="/pages/Hello/index.jsp" />
+          <ww:a href="%{Hello_src}">
+              <img src="<ww:url value="/images/code.gif"/>" alt="" hspace="4" border="0"  align="top" class="inline" />
+          </ww:a>
+          <ww:a href="%{Hello_src}">
+              View Source
+          </ww:a>
+
+      </td>
+    </tr>
+
+
   <tr valign="top">
     <td>Simple Input Form using Action Properties</td>
     <td>
 
-        <ww:url id="input_exe" action="Input" />
-        <ww:a href="%{input_exe}">
+        <ww:url id="Input_exe" action="Input!input" />
+        <ww:a href="%{Input_exe}">
             <img src="<ww:url value="/images/execute.gif"/>" alt="" hspace="4" border="0"  align="top" class="inline" />
         </ww:a>
 
-        <ww:a href="%{input_exe}">Execute</ww:a>
+        <ww:a href="%{Input_exe}">Execute</ww:a>
 
 	</td>
     <td>
 
-        <ww:url id="input_src" value="/pages/input/index.jsp" />
-
-        <ww:a href="%{input_src}">
+        <ww:url id="Input_src" value="/pages/input/index.jsp" />
+        <ww:a href="%{Input_src}">
             <img src="<ww:url value="/images/code.gif"/>" alt="" hspace="4" border="0"  align="top" class="inline" />
         </ww:a>
-
-        <ww:a href="%{input_src}">
+        <ww:a href="%{Input_src}">
             View Source
         </ww:a>
 
     </td>
   </tr>
+
+
   <tr valign="top">
     <td>Simple Form using a POJO</td>
     <td>
@@ -64,6 +90,34 @@
         [TODO]
 	</td>
   </tr>
+
+
+
+    <tr valign="top">
+      <td>Complex Input Form using Select Controls</td>
+      <td>
+
+          <ww:url id="Select_exe" action="Select" />
+          <ww:a href="%{Select_exe}">
+              <img src="<ww:url value="/images/execute.gif"/>" alt="" hspace="4" border="0"  align="top" class="inline" />
+          </ww:a>
+
+          <ww:a href="%{Select_exe}">Execute</ww:a>
+
+      </td>
+      <td>
+
+          <ww:url id="Select_src" value="/pages/Select/index.jsp" />
+          <ww:a href="%{Select_src}">
+              <img src="<ww:url value="/images/code.gif"/>" alt="" hspace="4" border="0"  align="top" class="inline" />
+          </ww:a>
+          <ww:a href="%{Select_src}">
+              View Source
+          </ww:a>
+
+      </td>
+    </tr>
+
 
 </table>
 <p><img src="<ww:url value="/images/valid-xhtml10.png"/>" alt="Valid XHTML 1.0!" height="31" width="88" /></p>

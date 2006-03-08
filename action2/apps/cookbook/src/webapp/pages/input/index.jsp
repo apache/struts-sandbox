@@ -3,8 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Source Code for Input Form Example</title>
-<link rel="stylesheet" type="text/css" href="<ww:url value="/css/example.css" />" >
+<title>Source Code for Input Form</title>
+<link rel="stylesheet" type="text/css" href="<ww:url value="/css/cookbook.css" />" >
 </head>
 <body>
 
@@ -18,12 +18,12 @@
     <img src="<ww:url value="/images/return.gif"/>" alt="" hspace="4" border="0"  align="top" class="inline" />
 </a>
 
-<h1>Source Code for Input Form Example</h1>
+<h1>Source Code for Input Form</h1>
 <hr noshade="noshade"/>
 
 <h2>Server Pages</h2>
 <p><a href="<ww:url value="/View.jsp?src=/pages/input/Input.jsp"/>">Input.jsp</a></p>
-<p><a href="<ww:url value="/View.jsp?src=/page/input/InputResults.jsp"/>">InputResult.jsp</a></p>
+<p><a href="<ww:url value="/View.jsp?src=/pages/input/Result.jsp"/>">Result.jsp</a></p>
 
 <h2>Actions</h2>
 <p><a href="<ww:url value="/View.jsp?src=/WEB-INF/src/java/cookbook/Input.java"/>">Input.java</a></p>
