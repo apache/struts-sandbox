@@ -6,7 +6,7 @@
 
     <include file="xwork-Hello.xml"/>
 
-    <include file="xwork-Input.xml"/>
+    <include file="xwork-Simple.xml"/>
 
     <include file="xwork-Select.xml"/>
 

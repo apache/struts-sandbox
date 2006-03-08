@@ -1,0 +1,12 @@
+<!DOCTYPE xwork PUBLIC "-//OpenSymphony Group//XWork 1.1.1//EN" "http://www.opensymphony.com/xwork/xwork-1.1.1.dtd">
+
+<xwork>
+
+    <package name="Hello" extends="webwork-default" >
+
+        <action name="Hello" class="cookbook2.Hello">
+            <result>/pages/Hello/Result.jsp</result>
+        </action>
+
+    </package>
+</xwork>

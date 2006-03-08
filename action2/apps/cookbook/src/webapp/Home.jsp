@@ -59,21 +59,21 @@
     <td>Simple Input Form using Action Properties</td>
     <td>
 
-        <ww:url id="Input_exe" action="Input!input" />
-        <ww:a href="%{Input_exe}">
+        <ww:url id="Simple_exe" action="Simple!input" />
+        <ww:a href="%{Simple_exe}">
             <img src="<ww:url value="/images/execute.gif"/>" alt="" hspace="4" border="0"  align="top" class="inline" />
         </ww:a>
 
-        <ww:a href="%{Input_exe}">Execute</ww:a>
+        <ww:a href="%{Simple_exe}">Execute</ww:a>
 
 	</td>
     <td>
 
-        <ww:url id="Input_src" value="/pages/input/index.jsp" />
-        <ww:a href="%{Input_src}">
+        <ww:url id="Simple_src" value="/pages/Simple/index.jsp" />
+        <ww:a href="%{Simple_src}">
             <img src="<ww:url value="/images/code.gif"/>" alt="" hspace="4" border="0"  align="top" class="inline" />
         </ww:a>
-        <ww:a href="%{Input_src}">
+        <ww:a href="%{Simple_src}">
             View Source
         </ww:a>
 

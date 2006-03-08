@@ -3,12 +3,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Source Code for Input Form</title>
+<title>Source Code for Input Form with Select Controls</title>
 <link rel="stylesheet" type="text/css" href="<ww:url value="/css/cookbook.css" />" >
 </head>
 <body>
 
-<ww:url id="input_exe" action="Simple!setup" />
+<ww:url id="input_exe" action="Select!setup" />
 
 <ww:a href="%{input_exe}">
     <img src="<ww:url value="/images/execute.gif"/>" alt="" hspace="4" border="0"  align="top" class="inline" />
@@ -18,18 +18,18 @@
     <img src="<ww:url value="/images/return.gif"/>" alt="" hspace="4" border="0"  align="top" class="inline" />
 </a>
 
-<h1>Source Code for Input Form</h1>
+<h1>Source Code for Input Select Form</h1>
 <hr noshade="noshade"/>
 
 <h2>Server Pages</h2>
-<p><a href="<ww:url value="/View.jsp?src=/pages/Simple/Input.jsp"/>">Input.jsp</a></p>
-<p><a href="<ww:url value="/View.jsp?src=/pages/Simple/Result.jsp"/>">Result.jsp</a></p>
+<p><a href="<ww:url value="/View.jsp?src=/pages/Select/Select.jsp"/>">Select.jsp</a></p>
+<p><a href="<ww:url value="/View.jsp?src=/page/Select/Result.jsp"/>">Result.jsp</a></p>
 
 <h2>Actions</h2>
-<p><a href="<ww:url value="/View.jsp?src=/WEB-INF/src/java/cookbook/Simple.java"/>">Input.java</a></p>
+<p><a href="<ww:url value="/View.jsp?src=/WEB-INF/src/java/cookbook/Select.java"/>">Select.java</a></p>
 
 <h2>Configuration files</h2>
-<p><a href="<ww:url value="/View.jsp?src=/WEB-INF/classes/xwork-Simple.xml"/>">xwork-Input.xml</a></p>
+<p><a href="<ww:url value="/View.jsp?src=/WEB-INF/classes/xwork-Select.xml"/>">xwork-Select.xml</a></p>
 
 <h2>Other source files</h2>
 <p>None</p>

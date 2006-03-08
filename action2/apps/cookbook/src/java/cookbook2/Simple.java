@@ -2,7 +2,7 @@ package cookbook2;
 
 import com.opensymphony.xwork.ActionSupport;
 
-public class Input extends ActionSupport {
+public class Simple extends ActionSupport {
 
     private String name;
 
@@ -15,6 +15,15 @@ public class Input extends ActionSupport {
     }
 
     public String execute() throws Exception {
+        return SUCCESS;
+    }
+
+    public String input() throws Exception {
+        name = "glock";
+        return SUCCESS;
+    }
+
+    public String result() throws Exception {
         return SUCCESS;
     }
 }

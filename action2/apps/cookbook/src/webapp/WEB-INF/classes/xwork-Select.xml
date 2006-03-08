@@ -1,0 +1,18 @@
+<!DOCTYPE xwork PUBLIC "-//OpenSymphony Group//XWork 1.1.1//EN" "http://www.opensymphony.com/xwork/xwork-1.1.1.dtd">
+
+<xwork>
+
+    <package name="Select" extends="webwork-default" >
+
+        <action name="Select" method="setup" class="cookbook2.Select">
+            <result>/pages/Select/Input.jsp</result>
+            <result name="input">/pages/Select/Input.jsp</result>
+        </action>
+
+        <action name="SelectResult" class="cookbook2.Select" >
+        	<result>/pages/Select/Result.jsp</result>
+        	<result name="input">/pages/Select/Input.jsp</result>
+        </action>
+                
+    </package>
+</xwork>
