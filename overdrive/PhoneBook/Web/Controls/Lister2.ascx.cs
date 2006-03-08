@@ -48,7 +48,7 @@ namespace PhoneBook.Web.Controls
 
 		protected override IViewHelper Save(string key, ControlCollection controls)
 		{
-			IViewHelper h = base.Save(key, controls, false);
+			IViewHelper h = base.Save(key, controls);
 			if (h.IsNominal)
 			{
 				bool needEditorValue = (null == h.Criteria[App.EDITOR]);

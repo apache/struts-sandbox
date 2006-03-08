@@ -1450,6 +1450,22 @@
             Implement IKeyValue.
             </summary>
         </member>
+        <member name="F:Nexus.Core.KeyValue.KEY">
+            <summary>
+            Expose name of "Key" field.
+            </summary>
+            <remarks><p>
+            Use this field for the DataValueField (sic).
+            </p></remarks>
+        </member>
+        <member name="F:Nexus.Core.KeyValue.VALUE">
+            <summary>
+            Expose name of "Value" field.
+            </summary>
+            <remarks><p>
+            Use this field for the DataTextField (sic).
+            </p></remarks>
+        </member>
         <member name="T:Nexus.Core.KeyValueList">
             <summary>
             Implement IKeyValueList.
