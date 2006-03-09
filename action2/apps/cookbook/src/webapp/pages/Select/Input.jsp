@@ -1,13 +1,13 @@
 <%@taglib prefix="ww" uri="/webwork" %>
 <html>
 <head>
-    <title>Cookbook - Input Form with Select Controls</title>
+    <title>Cookbook - Complex Input Form using Select Controls</title>
     <ww:head/>
 </head>
 
 <body>
 
-<ww:form action="SelectResult" method="post">
+<ww:form>
     <ww:textfield
     		label="Name"
     		name="name"

@@ -25,7 +25,7 @@
 <p><a href="<ww:url value="/View.jsp?src=/pages/Hello/Result.jsp"/>">Result.jsp</a></p>
 
 <h2>Actions</h2>
-<p><a href="<ww:url value="/View.jsp?src=/WEB-INF/src/java/cookbook/Hello.java"/>">Hello.java</a></p>
+<p>None</p>
 
 <h2>Configuration files</h2>
 <p><a href="<ww:url value="/View.jsp?src=/WEB-INF/classes/xwork-Hello.xml"/>">xwork-Hello.xml</a></p>

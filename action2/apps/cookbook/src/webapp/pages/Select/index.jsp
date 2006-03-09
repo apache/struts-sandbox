@@ -3,12 +3,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Source Code for Input Form with Select Controls</title>
+<title>Source Code for Complex Input Form using Select Controls</title>
 <link rel="stylesheet" type="text/css" href="<ww:url value="/css/cookbook.css" />" >
 </head>
 <body>
 
-<ww:url id="input_exe" action="Select!setup" />
+<ww:url id="input_exe" action="Select" />
 
 <ww:a href="%{input_exe}">
     <img src="<ww:url value="/images/execute.gif"/>" alt="" hspace="4" border="0"  align="top" class="inline" />
@@ -18,7 +18,7 @@
     <img src="<ww:url value="/images/return.gif"/>" alt="" hspace="4" border="0"  align="top" class="inline" />
 </a>
 
-<h1>Source Code for Input Select Form</h1>
+<h1>Source Code for Complex Input Form using Select Controls</h1>
 <hr noshade="noshade"/>
 
 <h2>Server Pages</h2>

@@ -4,15 +4,10 @@
 
     <package name="Select" extends="webwork-default" >
 
-        <action name="Select" method="setup" class="cookbook2.Select">
-            <result>/pages/Select/Input.jsp</result>
+        <action name="Select" class="cookbook2.Select">
+            <result>/pages/Select/Result.jsp</result>
             <result name="input">/pages/Select/Input.jsp</result>
         </action>
 
-        <action name="SelectResult" class="cookbook2.Select" >
-        	<result>/pages/Select/Result.jsp</result>
-        	<result name="input">/pages/Select/Input.jsp</result>
-        </action>
-                
     </package>
 </xwork>

@@ -1,7 +1,7 @@
 <%@taglib prefix="ww" uri="/webwork" %>
 <html>
 <head>
-<title>Cookbook - Input Form with Select Controls</title>
+<title>Cookbook - Complex Input Form using Select Controls</title>
 </head>
 <body>
 <a href="Home.jsp"><img src="images/return.gif" height="24" width="24" alt="Go Home" class="icon" /></a>

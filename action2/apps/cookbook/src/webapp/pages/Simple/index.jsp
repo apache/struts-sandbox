@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<ww:url id="input_exe" action="Simple!setup" />
+<ww:url id="input_exe" action="Simple!input" />
 
 <ww:a href="%{input_exe}">
     <img src="<ww:url value="/images/execute.gif"/>" alt="" hspace="4" border="0"  align="top" class="inline" />
@@ -18,7 +18,7 @@
     <img src="<ww:url value="/images/return.gif"/>" alt="" hspace="4" border="0"  align="top" class="inline" />
 </a>
 
-<h1>Source Code for Input Form</h1>
+<h1>Source Code for Simple Input Form using Action Properties</h1>
 <hr noshade="noshade"/>
 
 <h2>Server Pages</h2>

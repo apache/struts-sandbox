@@ -13,17 +13,5 @@ public class Simple extends ActionSupport {
     public String getName() {
         return this.name;
     }
-
-    public String execute() throws Exception {
-        return SUCCESS;
-    }
-
-    public String input() throws Exception {
-        name = "glock";
-        return SUCCESS;
-    }
-
-    public String result() throws Exception {
-        return SUCCESS;
-    }
+    
 }

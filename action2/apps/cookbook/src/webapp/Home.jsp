@@ -63,7 +63,6 @@
         <ww:a href="%{Simple_exe}">
             <img src="<ww:url value="/images/execute.gif"/>" alt="" hspace="4" border="0"  align="top" class="inline" />
         </ww:a>
-
         <ww:a href="%{Simple_exe}">Execute</ww:a>
 
 	</td>
@@ -91,17 +90,14 @@
 	</td>
   </tr>
 
-
-
-    <tr valign="top">
+  <tr valign="top">
       <td>Complex Input Form using Select Controls</td>
       <td>
 
-          <ww:url id="Select_exe" action="Select" />
+          <ww:url id="Select_exe" action="Select!input" />
           <ww:a href="%{Select_exe}">
               <img src="<ww:url value="/images/execute.gif"/>" alt="" hspace="4" border="0"  align="top" class="inline" />
           </ww:a>
-
           <ww:a href="%{Select_exe}">Execute</ww:a>
 
       </td>
@@ -117,7 +113,6 @@
 
       </td>
     </tr>
-
 
 </table>
 <p><img src="<ww:url value="/images/valid-xhtml10.png"/>" alt="Valid XHTML 1.0!" height="31" width="88" /></p>

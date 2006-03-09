@@ -4,7 +4,7 @@
 
     <package name="Hello" extends="webwork-default" >
 
-        <action name="Hello" class="cookbook2.Hello">
+        <action name="Hello" class="com.opensymphony.xwork.ActionSupport">
             <result>/pages/Hello/Result.jsp</result>
         </action>
 

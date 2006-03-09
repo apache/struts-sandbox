@@ -11,7 +11,7 @@
     <ww:property value="#parameters['src']"/>
 <hr noshade="noshade" />
 <pre>
-<ww:include value="#parameters['src']"/>
+     <ww:include value="#parameters['src']" />
 </pre>
 </body>
 </html>
