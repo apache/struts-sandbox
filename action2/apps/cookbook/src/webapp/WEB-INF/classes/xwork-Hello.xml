@@ -4,8 +4,12 @@
 
     <package name="Hello" extends="webwork-default" >
 
-        <action name="Hello" class="com.opensymphony.xwork.ActionSupport">
+        <action name="Hello">
             <result>/pages/Hello/Result.jsp</result>
+        </action>
+
+        <action name="HelloView">
+            <result>/pages/Hello/index.jsp</result>
         </action>
 
     </package>

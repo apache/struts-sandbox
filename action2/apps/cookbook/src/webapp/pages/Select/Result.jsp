@@ -4,8 +4,8 @@
 <title>Cookbook - Complex Input Form using Select Controls</title>
 </head>
 <body>
-<a href="Home.jsp"><img src="images/return.gif" height="24" width="24" alt="Go Home" class="icon" /></a>
-<a href="pages/Select/index.jsp"><img src="images/code.gif" height="24" width="24" alt="Go Home" class="icon" /></a>
+<a href="<ww:url value="/Home.jsp"/>"><img src="<ww:url value="/images/return.gif"/>" height="24" width="24" alt="Go Home" class="icon"/></a>
+<a href="<ww:url value="/pages/Select/index.jsp"/>"><img src="<ww:url value="/images/code.gif"/>" height="24" width="24" alt="Go Home" class="icon" /></a>
 <h1>Input Result</h1>
 <table>
 	<ww:label label="Name" name="name" />

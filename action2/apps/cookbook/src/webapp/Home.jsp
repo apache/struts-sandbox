@@ -15,13 +15,13 @@
 <p>To navigate your way through the examples, the following icons will help: </p>
 <table border="0" cellspacing="5" width="85%" >
   <tr valign="top">
-    <td width="30"><img alt="." src="<ww:url value="/images/execute.gif"/>"></td>
-    <td>Execute the example</td>
-  </tr>
-  <tr valign="top">
     <td width="30"><img alt="." src="<ww:url value="/images/return.gif"/>" height="24" width="24" /></td>
     <td>Return to this screen</td>
   </tr>
+    <tr valign="top">
+      <td width="30"><img alt="." src="<ww:url value="/images/execute.gif"/>"></td>
+      <td>Execute the example</td>
+    </tr>
   <tr valign="top">
     <td><img alt="" src="<ww:url value="images/code.gif"/>" height="24" width="24" /></td>
     <td>View the source code for the example</td>
@@ -43,7 +43,7 @@
       </td>
       <td>
 
-          <ww:url id="Hello_src" value="/pages/Hello/index.jsp" />
+          <ww:url id="Hello_src" action="HelloView" />
           <ww:a href="%{Hello_src}">
               <img src="<ww:url value="/images/code.gif"/>" alt="" hspace="4" border="0"  align="top" class="inline" />
           </ww:a>
@@ -68,7 +68,7 @@
 	</td>
     <td>
 
-        <ww:url id="Simple_src" value="/pages/Simple/index.jsp" />
+        <ww:url id="Simple_src" action="SimpleView" />
         <ww:a href="%{Simple_src}">
             <img src="<ww:url value="/images/code.gif"/>" alt="" hspace="4" border="0"  align="top" class="inline" />
         </ww:a>
@@ -103,7 +103,7 @@
       </td>
       <td>
 
-          <ww:url id="Select_src" value="/pages/Select/index.jsp" />
+          <ww:url id="Select_src" action="SelectView" />
           <ww:a href="%{Select_src}">
               <img src="<ww:url value="/images/code.gif"/>" alt="" hspace="4" border="0"  align="top" class="inline" />
           </ww:a>

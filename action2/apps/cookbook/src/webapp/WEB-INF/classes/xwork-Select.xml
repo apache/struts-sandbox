@@ -9,5 +9,9 @@
             <result name="input">/pages/Select/Input.jsp</result>
         </action>
 
+        <action name="SelectView">
+            <result>/pages/Select/index.jsp</result>
+        </action>
+
     </package>
 </xwork>

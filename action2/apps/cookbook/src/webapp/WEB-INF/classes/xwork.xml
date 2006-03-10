@@ -4,6 +4,8 @@
 
     <include file="webwork-default.xml"/>
 
+    <include file="xwork-Home.xml"/>
+
     <include file="xwork-Hello.xml"/>
 
     <include file="xwork-Simple.xml"/>

@@ -9,5 +9,9 @@
             <result name="input">/pages/Simple/Input.jsp</result>
         </action>
 
+        <action name="SimpleView">
+            <result>/pages/Simple/index.jsp</result>
+        </action>
+
     </package>
 </xwork>
