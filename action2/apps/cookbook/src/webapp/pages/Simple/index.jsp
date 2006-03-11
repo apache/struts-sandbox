@@ -14,18 +14,23 @@
 <hr noshade="noshade"/>
 
 <h2>Server Pages</h2>
-<ww:url id="input" value="/View.jsp?src=/pages/Simple/Input.jsp"/>
-<ww:url id="result" value="/View.jsp?src=/pages/Simple/Result.jsp"/>
-<p><a href="<ww:property value="#input"/>">Select.jsp</a></p>
-<p><a href="<ww:property value="#result"/>">Result.jsp</a></p>
+<ul><li>
+    <a href="<ww:url action="View-Input"/>">Input.jsp</a>
+</li><li>
+    <a href="<ww:url action="View-Result"/>">Result.jsp</a>
+</li></ul>
 
 <h2>Actions</h2>
-<ww:url id="action" value="/View.jsp?src=/WEB-INF/src/java/cookbook/Simple.java"/>
-<p><a href="<ww:property value="#action"/>">Simple.java</a></p>
+<ul><li>
+    <a href="<ww:url action="View-Action"/>">Simple.java</a>
+</li></ul>
 
 <h2>Configuration files</h2>
-<ww:url id="config" value="/View.jsp?src=/WEB-INF/classes/xwork-Simple.xml"/>
-<p><a href="<ww:property value="#config"/>">xwork-Simple.xml</a></p>
+<ul><li>
+    <a href="<ww:url action="View-Config"/>">xwork-Simple.xml</a>
+</li><li>
+    <a href="<ww:url action="View-Validation"/>">validation-Simple.xml</a>
+</li></ul>
 
 <h2>Other source files</h2>
 <p>None</p>

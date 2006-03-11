@@ -13,15 +13,17 @@
 <hr noshade="noshade"/>
 
 <h2>Server Pages</h2>
-<ww:url id="result" value="/View.jsp?src=/pages/Hello/Result.jsp"/>
-<p><a href="<ww:property value="#result"/>">Result.jsp</a></p>
+<ul><li>
+    <a href="<ww:url action="View-Result"/>">Result.jsp</a>
+</li></ul>
 
 <h2>Actions</h2>
 <p>None</p>
 
 <h2>Configuration files</h2>
-<ww:url id="config" value="/View.jsp?src=/WEB-INF/classes/xwork-Hello.xml"/>
-<p><a href="<ww:property value="#config"/>">xwork-Hello.xml</a></p>
+<ul><li>
+    <a href="<ww:url action="View-Config"/>">xwork-Hello.xml</a>
+</li></ul>
 
 <h2>Other source files</h2>
 <p>None</p>

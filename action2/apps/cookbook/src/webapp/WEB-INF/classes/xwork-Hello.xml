@@ -12,5 +12,13 @@
             <result>/pages/Hello/index.jsp</result>
         </action>
 
+        <action name="View-Result">
+            <result type="plaintext">/pages/Hello/Result.jsp</result>
+        </action>
+
+        <action name="View-Config">
+            <result type="plaintext">/WEB-INF/classes/xwork-Hello.xml</result>
+        </action>
+
     </package>
 </xwork>
