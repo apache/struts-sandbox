@@ -8,14 +8,7 @@
 </head>
 <body>
 
-<a href="<ww:url action="Home" />">
-    <img src="<ww:url value="/images/return.gif"/>" alt="Home" hspace="4" border="0"  align="top" class="inline" />
-</a>
-
-<ww:url id="Open" action="Open" namespace="/Select" />
-<ww:a href="%{Open}">
-    <img src="<ww:url value="/images/execute.gif"/>" alt="Open" hspace="4" border="0"  align="top" class="inline" />
-</ww:a>
+<ww:include value="/header-index.jsp"/>
 
 <h1>Source Code for Complex Input Form using Select Controls</h1>
 <hr noshade="noshade"/>

@@ -2,20 +2,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Source Code for Hello World</title>
 <link rel="stylesheet" type="text/css" href="<ww:url value="/css/cookbook.css" />" >
 </head>
 <body>
 
-<a href="<ww:url action="Home" />">
-    <img src="<ww:url value="/images/return.gif"/>" alt="Home" hspace="4" border="0"  align="top" class="inline" />
-</a>
-
-<ww:url id="Open" action="Open" namespace="/Hello" />
-<ww:a href="%{Open}">
-    <img src="<ww:url value="/images/execute.gif"/>" alt="Open" hspace="4" border="0"  align="top" class="inline" />
-</ww:a>
+<ww:include value="/header-index.jsp"/>
 
 <h1>Source Code for Hello World</h1>
 <hr noshade="noshade"/>

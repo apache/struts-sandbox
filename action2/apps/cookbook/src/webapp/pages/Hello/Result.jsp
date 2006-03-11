@@ -2,12 +2,10 @@
 <html>
     <head>
         <title>Cookbook - Hello World</title>
+        <link rel="stylesheet" type="text/css" href="<ww:url value="/css/cookbook.css" />" >
     </head>
     <body>
-        <p>
-            <a href="<ww:url action="Home" />"><img src="<ww:url value="/images/return.gif"/>" alt="Home"  border="0"  hspace="4"align="top" class="inline" /></a>
-            <a href="<ww:url action="View"/>"><img src="<ww:url value="/images/code.gif"/>" alt="View" border="0" height="24" width="24"  class="icon" /></a>
-        </p>
+        <ww:include value="/header-result.jsp"/>
 
         <h1>Don't panic! Struts is mostly harmless ...</h1>
 

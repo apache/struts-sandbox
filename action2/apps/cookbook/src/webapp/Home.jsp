@@ -14,17 +14,17 @@
   is assumed. </p>
 <p>To navigate your way through the examples, the following icons will help: </p>
 <table border="0" cellspacing="5" width="85%" >
-  <tr valign="top">
-    <td width="30"><img alt="Home" src="<ww:url value="/images/return.gif"/>" height="24" width="24" /></td>
-    <td>Return to this screen</td>
-  </tr>
     <tr valign="top">
-      <td width="30"><img alt="Open" src="<ww:url value="/images/execute.gif"/>"></td>
+      <td width="30"><ww:include value="/icon-open.jsp" /></td>
       <td>Execute the example</td>
     </tr>
   <tr valign="top">
-    <td><img alt="View" src="<ww:url value="/images/code.gif"/>" height="24" width="24" /></td>
+    <td><ww:include value="/icon-view.jsp" /></td>
     <td>View the source code for the example</td>
+  </tr>
+  <tr valign="top">
+    <td width="30"><ww:include value="/icon-home.jsp" /></td>
+    <td>Return to this screen</td>
   </tr>
 </table>
 <br />
@@ -36,7 +36,7 @@
 
           <ww:url id="Hello_Open" action="Open" namespace="/Hello" />
           <ww:a href="%{Hello_Open}">
-              <img src="<ww:url value="/images/execute.gif"/>" alt="" hspace="4" border="0"  align="top" class="inline" />
+              <ww:include value="/icon-open.jsp" />
           </ww:a>
           <ww:a href="%{Hello_Open}">Execute</ww:a>
 
@@ -45,7 +45,7 @@
 
           <ww:url id="Hello_View" action="View" namespace="/Hello" />
           <ww:a href="%{Hello_View}">
-              <img src="<ww:url value="/images/code.gif"/>" alt="" hspace="4" border="0"  align="top" class="inline" />
+              <ww:include value="/icon-view.jsp" />
           </ww:a>
           <ww:a href="%{Hello_View}">
               View Source
@@ -61,7 +61,7 @@
 
         <ww:url id="Simple_Open" action="Open!input" namespace="/Simple" />
         <ww:a href="%{Simple_Open}">
-            <img src="<ww:url value="/images/execute.gif"/>" alt="" hspace="4" border="0"  align="top" class="inline" />
+            <ww:include value="/icon-open.jsp" />
         </ww:a>
         <ww:a href="%{Simple_Open}">Execute</ww:a>
 
@@ -70,7 +70,7 @@
 
         <ww:url id="Simple_View" action="View" namespace="/Simple" />
         <ww:a href="%{Simple_View}">
-            <img src="<ww:url value="/images/code.gif"/>" alt="" hspace="4" border="0"  align="top" class="inline" />
+            <ww:include value="/icon-view.jsp" />
         </ww:a>
         <ww:a href="%{Simple_View}">
             View Source
@@ -96,7 +96,7 @@
 
           <ww:url id="Select_Open" action="Open!input" namespace="/Select" />
           <ww:a href="%{Select_Open}">
-              <img src="<ww:url value="/images/execute.gif"/>" alt="" hspace="4" border="0"  align="top" class="inline" />
+              <ww:include value="/icon-open.jsp" />
           </ww:a>
           <ww:a href="%{Select_Open}">Execute</ww:a>
 
@@ -105,7 +105,7 @@
 
           <ww:url id="Select_View" action="View" namespace="/Select" />
           <ww:a href="%{Select_View}">
-              <img src="<ww:url value="/images/code.gif"/>" alt="" hspace="4" border="0"  align="top" class="inline" />
+              <ww:include value="/icon-view.jsp" />
           </ww:a>
           <ww:a href="%{Select_View}">
               View Source
