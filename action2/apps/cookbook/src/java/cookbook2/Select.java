@@ -254,7 +254,6 @@ public class Select extends ActionSupport implements Validateable {
 
     }
 
-
     public static class VehicalType {
     	String key;
     	String description;

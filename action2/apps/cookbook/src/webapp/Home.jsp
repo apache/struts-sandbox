@@ -8,11 +8,14 @@
 <link href="<ww:url value="/css/cookbook.css"/>" rel="stylesheet" type="text/css" />
 </head>
 <body>
-<h2>Struts Cookbook -- Examples with Code</h2>
-<p>This is a collection of examples which demonstrate some of the more frequently
-  used Struts Use Cases. Familiarity with the Java(tm) Programming Language and HTML
-  is assumed. </p>
-<p>To navigate your way through the examples, the following icons will help: </p>
+<h2>Struts Action 2 Cookbook -- Examples with Code</h2>
+<p>
+    This is a collection of working examples which demonstrate how to code
+    some common web application use cases.
+</p>
+<p>
+    To navigate your way through the examples, the following icons will help:
+</p>
 <table border="0" cellspacing="5" width="85%" >
     <tr valign="top">
       <td width="30"><ww:include value="/icon-open.jsp" /></td>
@@ -113,6 +116,30 @@
 
       </td>
     </tr>
+
+    <tr valign="top">
+          <td>Action as Page Controllers</td>
+          <td>
+
+              <ww:url id="ActionTag_Open" action="Open!input" namespace="/ActionTag" />
+              <ww:a href="%{ActionTag_Open}">
+                  <ww:include value="/icon-open.jsp" />
+              </ww:a>
+              <ww:a href="%{ActionTag_Open}">Execute</ww:a>
+
+          </td>
+          <td>
+
+              <ww:url id="ActionTag_View" action="View" namespace="/ActionTag" />
+              <ww:a href="%{ActionTag_View}">
+                  <ww:include value="/icon-view.jsp" />
+              </ww:a>
+              <ww:a href="%{ActionTag_View}">
+                  View Source
+              </ww:a>
+
+          </td>
+        </tr>
 
 </table>
 <p><img src="<ww:url value="/images/valid-xhtml10.png"/>" alt="Valid XHTML 1.0!" height="31" width="88" /></p>

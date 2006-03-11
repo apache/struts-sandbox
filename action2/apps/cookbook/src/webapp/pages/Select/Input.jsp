@@ -69,7 +69,7 @@
             emptyOption="true" />
 
     <ww:doubleselect
-    		tooltip="Choose your Vehical"
+    		tooltip="Choose your Vehicle"
     		label="Favourite Vehical"
     		name="favouriteVehicalType"
     		list="vehicalTypeList"
