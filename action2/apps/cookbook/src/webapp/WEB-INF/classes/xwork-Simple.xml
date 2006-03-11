@@ -2,14 +2,14 @@
 
 <xwork>
 
-    <package name="Simple" extends="webwork-default" >
+    <package name="Simple" namespace="/Simple" extends="webwork-default" >
 
-        <action name="Simple" class="cookbook2.Simple">
+        <action name="Open" class="cookbook2.Simple">
             <result>/pages/Simple/Result.jsp</result>
             <result name="input">/pages/Simple/Input.jsp</result>
         </action>
 
-        <action name="SimpleView">
+        <action name="View">
             <result>/pages/Simple/index.jsp</result>
         </action>
 

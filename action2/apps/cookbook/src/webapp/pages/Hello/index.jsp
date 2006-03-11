@@ -8,13 +8,13 @@
 </head>
 <body>
 
-<a href="<ww:url action="Home" />" >
-    <img src="<ww:url value="/images/return.gif"/>" alt="" hspace="4" border="0"  align="top" class="inline" />
+<a href="<ww:url action="Home" />">
+    <img src="<ww:url value="/images/return.gif"/>" alt="Home" hspace="4" border="0"  align="top" class="inline" />
 </a>
 
-<ww:url id="input_exe" action="Hello" />
-<ww:a href="%{input_exe}">
-    <img src="<ww:url value="/images/execute.gif"/>" alt="" hspace="4" border="0"  align="top" class="inline" />
+<ww:url id="Open" action="Open" namespace="/Hello" />
+<ww:a href="%{Open}">
+    <img src="<ww:url value="/images/execute.gif"/>" alt="Open" hspace="4" border="0"  align="top" class="inline" />
 </ww:a>
 
 <h1>Source Code for Hello World</h1>

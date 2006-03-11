@@ -2,13 +2,13 @@
 
 <xwork>
 
-    <package name="Hello" extends="webwork-default" >
+    <package name="Hello" namespace="/Hello" extends="webwork-default">
 
-        <action name="Hello">
+        <action name="Open">
             <result>/pages/Hello/Result.jsp</result>
         </action>
 
-        <action name="HelloView">
+        <action name="View">
             <result>/pages/Hello/index.jsp</result>
         </action>
 

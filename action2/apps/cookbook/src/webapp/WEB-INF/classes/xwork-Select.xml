@@ -2,14 +2,14 @@
 
 <xwork>
 
-    <package name="Select" extends="webwork-default" >
+    <package name="Select" namespace="/Select" extends="webwork-default">
 
-        <action name="Select" class="cookbook2.Select">
+        <action name="Open" class="cookbook2.Select">
             <result>/pages/Select/Result.jsp</result>
             <result name="input">/pages/Select/Input.jsp</result>
         </action>
 
-        <action name="SelectView">
+        <action name="View">
             <result>/pages/Select/index.jsp</result>
         </action>
 
