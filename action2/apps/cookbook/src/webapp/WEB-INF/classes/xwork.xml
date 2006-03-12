@@ -4,14 +4,16 @@
 
     <include file="webwork-default.xml"/>
 
-    <include file="xwork-Home.xml"/>
+    <include file="Home-config.xml"/>
 
-    <include file="xwork-Hello.xml"/>
+    <include file="Hello-config.xml"/>
 
-    <include file="xwork-Simple.xml"/>
+    <include file="Simple-config.xml"/>
 
-    <include file="xwork-Select.xml"/>
+    <include file="Pojo-config.xml"/>
 
-    <include file="xwork-ActionTag.xml"/>
+    <include file="Select-config.xml"/>
+
+    <include file="ActionTag-config.xml" />
 
 </xwork>

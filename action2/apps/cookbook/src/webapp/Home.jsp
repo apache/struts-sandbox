@@ -84,13 +84,27 @@
 
 
   <tr valign="top">
-    <td>Simple Form using a POJO</td>
-    <td>
-        [TODO]
-	</td>
-    <td>
-        [TODO]
-	</td>
+    <td>Input Form using a POJO</td>
+      <td>
+
+          <ww:url id="Pojo_Open" action="Open!input" namespace="/Pojo" />
+          <ww:a href="%{Pojo_Open}">
+              <ww:include value="/icon-open.jsp" />
+          </ww:a>
+          <ww:a href="%{Pojo_Open}">Execute</ww:a>
+
+      </td>
+      <td>
+
+          <ww:url id="Pojo_View" action="View" namespace="/Pojo" />
+          <ww:a href="%{Pojo_View}">
+              <ww:include value="/icon-view.jsp" />
+          </ww:a>
+          <ww:a href="%{Pojo_View}">
+              View Source
+          </ww:a>
+
+      </td>
   </tr>
 
   <tr valign="top">

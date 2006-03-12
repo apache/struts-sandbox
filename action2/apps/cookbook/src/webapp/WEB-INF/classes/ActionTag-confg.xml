@@ -1,0 +1,55 @@
+<!DOCTYPE xwork PUBLIC "-//OpenSymphony Group//XWork 1.1.1//EN" "http://www.opensymphony.com/xwork/xwork-1.1.1.dtd">
+
+<xwork>
+
+    <package name="ActionTag" extends="webwork-default" namespace="/ActionTag">
+
+        <action name="Open" class="cookbook2.actiontag.Result">
+            <result>/pages/ActionTag/Result.jsp</result>
+            <result name="input">/pages/ActionTag/Input.jsp</result>
+        </action>
+
+        <action name="View">
+            <result>/pages/ActionTag/index.jsp</result>
+        </action>
+
+        <action name="View-Input">
+            <result type="plaintext">/pages/ActionTag/Input.jsp</result>
+        </action>
+
+        <action name="languages" class="cookbook2.actiontag.Languages">
+            <result>/pages/ActionTag/languages.jsp</result>
+        </action>
+
+        <action name="colors">
+            <result>/pages/ActionTag/colors.jsp</result>
+        </action>
+
+        <action name="View-Result">
+            <result type="plaintext">/pages/ActionTag/Result.jsp</result>
+        </action>
+
+        <action name="View-Colors">
+            <result type="plaintext">/pages/ActionTag/colors.jsp</result>
+        </action>
+
+        <action name="View-Languages">
+            <result type="plaintext">/pages/ActionTag/languages.jsp</result>
+        </action>
+
+        <action name="View-Action">
+            <result type="plaintext">/WEB-INF/src/java/cookbook2/actiontag/Result.java</result>
+        </action>
+
+        <action name="View-Action-Languages">
+            <result type="plaintext">/WEB-INF/src/java/cookbook2/actiontag/Languages.java</result>
+        </action>
+
+        <action name="View-Config">
+            <result type="plaintext">/WEB-INF/classes/xwork-ActionTag.xml</result>
+        </action>
+
+    </package>
+
+</xwork>
+
