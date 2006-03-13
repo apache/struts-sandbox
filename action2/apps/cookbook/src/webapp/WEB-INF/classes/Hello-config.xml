@@ -1,0 +1,24 @@
+<!DOCTYPE xwork PUBLIC "-//OpenSymphony Group//XWork 1.1.1//EN" "http://www.opensymphony.com/xwork/xwork-1.1.1.dtd">
+
+<xwork>
+
+    <package name="Hello" namespace="/Hello" extends="webwork-default">
+
+        <action name="Open">
+            <result>/pages/Hello/Result.jsp</result>
+        </action>
+
+        <action name="View">
+            <result>/pages/Hello/index.jsp</result>
+        </action>
+
+        <action name="View-Result">
+            <result type="plaintext">/pages/Hello/Result.jsp</result>
+        </action>
+
+        <action name="View-Config">
+            <result type="plaintext">/WEB-INF/classes/xwork-Hello.xml</result>
+        </action>
+
+    </package>
+</xwork>
