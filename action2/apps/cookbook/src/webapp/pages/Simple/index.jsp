@@ -27,9 +27,9 @@
 
 <h2>Configuration files</h2>
 <ul><li>
-    <a href="<ww:url action="View-Config"/>">xwork-Simple.xml</a>
+    <a href="<ww:url action="View-Config"/>">Simple-config.xml</a>
 </li><li>
-    <a href="<ww:url action="View-Validation"/>">validation-Simple.xml</a>
+    <a href="<ww:url action="View-Validation"/>">Simple-validation.xml</a>
 </li></ul>
 
 <h2>Other source files</h2>

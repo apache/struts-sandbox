@@ -1,0 +1,49 @@
+<!DOCTYPE validators PUBLIC "-//OpenSymphony Group//XWork Validator 1.0.2//EN" "http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
+
+<validators>
+    <field name="firstname">
+        <field-validator type="requiredstring">
+            <message>You must enter a first name</message>
+        </field-validator>
+    </field>
+
+    <field name="lastname">
+        <field-validator type="requiredstring">
+            <message>You must enter a last name</message>
+        </field-validator>
+    </field>
+
+    <field name="username">
+        <field-validator type="email">
+            <message>You must enter a valid email address</message>
+        </field-validator>
+    </field>
+
+    <field name="extension">
+        <field-validator type="requiredstring">
+            <message>You must enter a telephone extension</message>
+        </field-validator>
+    </field>
+
+    <field name="hired">
+        <field-validator type="date">
+            <param name="min">07/25/2005</param>
+            <message>Hire date must be after 27 Jan 2005</message>
+        </field-validator>
+    </field>
+
+    <field name="hours">
+        <field-validator type="int">
+            <param name="min">1</param>
+            <param name="max">40</param>
+            <message>Hours must between 1 and 40, inclusive></message>
+        </field-validator>
+    </field>
+
+    <field name="editor">
+        <field-validator type="bool">
+            <message>Editor must be TRUE or FALSE</message>
+        </field-validator>
+    </field>
+
+</validators>

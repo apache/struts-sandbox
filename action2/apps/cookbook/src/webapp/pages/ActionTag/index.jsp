@@ -33,7 +33,7 @@
 
 <h2>Configuration files</h2>
 <ul><li>
-    <a href="<ww:url action="View-Config"/>">xwork-ActionTag.xml</a>
+    <a href="<ww:url action="View-Config"/>">ActionTag-config.xml</a>
 </li></ul>
 
 <h2>Other source files</h2>

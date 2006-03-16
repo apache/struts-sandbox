@@ -30,7 +30,7 @@
         </action>
 
         <action name="View-Validation">
-            <result type="plaintext">/WEB-INF/src/java/cookbook2/validation-Simple.xml</result>
+            <result type="plaintext">/WEB-INF/src/java/cookbook2/Simple-validation.xml</result>
         </action>
 
     </package>
