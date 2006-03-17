@@ -45,6 +45,10 @@
             <result type="plaintext">/WEB-INF/src/java/cookbook2/actiontag/Languages.java</result>
         </action>
 
+        <action name="View-Test-Languages">
+            <result type="plaintext">/WEB-INF/src/test/cookbook2/actiontag/LanguagesTest.java</result>
+        </action>
+
         <action name="View-Config">
             <result type="plaintext">/WEB-INF/classes/ActionTag-config.xml</result>
         </action>

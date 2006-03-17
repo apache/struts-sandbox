@@ -31,6 +31,13 @@
     <a href="<ww:url action="View-Action-Languages"/>">Languages.java</a>
 </li></ul>
 
+
+<h2>Tests</h2>
+<ul><li>
+    <a href="<ww:url action="View-Test-Languages"/>">LanguagesTest.java</a>
+</li></ul>
+
+
 <h2>Configuration files</h2>
 <ul><li>
     <a href="<ww:url action="View-Config"/>">ActionTag-config.xml</a>
