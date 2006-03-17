@@ -1,0 +1,19 @@
+<!DOCTYPE xwork PUBLIC "-//OpenSymphony Group//XWork 1.1.1//EN" "http://www.opensymphony.com/xwork/xwork-1.1.1.dtd">
+
+<xwork>
+
+    <include file="webwork-default.xml"/>
+
+    <include file="cookbook2/Home-config.xml"/>
+
+    <include file="cookbook2/Hello-config.xml"/>
+
+    <include file="cookbook2/Simple-config.xml"/>
+
+    <include file="cookbook2/pojo/Pojo-config.xml"/>
+
+    <include file="cookbook2/Select-config.xml"/>
+
+    <include file="cookbook2/actiontag/ActionTag-config.xml" />
+
+</xwork>

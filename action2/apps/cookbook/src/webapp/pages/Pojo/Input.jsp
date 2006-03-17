@@ -44,6 +44,7 @@
             tooltip="Are you authorized to edit directory entries?"/>
 
     <ww:submit />
+    <ww:submit value="Metdod 1" action="Open!method1" />
 
 </ww:form>
 
