@@ -11,10 +11,4 @@ public class Result extends ActionSupport implements ModelDriven {
         return directoryEntry;
     }
 
-    public String method1() {
-
-        directoryEntry.setHours(new Integer(37));
-
-        return SUCCESS;
-    }
 }

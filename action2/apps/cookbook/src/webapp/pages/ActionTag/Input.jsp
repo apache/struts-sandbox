@@ -17,7 +17,7 @@
         Accordingly, each control could be re-used on any number of pages.
     </p>
 
-<ww:form>
+<ww:form method="POST">
 
     <ww:action name="languages" namespace="/ActionTag" executeResult="true" />
 

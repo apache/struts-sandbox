@@ -7,7 +7,7 @@
 
 <body>
 
-<ww:form>
+<ww:form method="POST">
     <ww:textfield
     		label="Name"
     		name="name"

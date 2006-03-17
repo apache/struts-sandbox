@@ -5,7 +5,7 @@
         <ww:head/>
     </head>
     <body>
-        <ww:form>
+        <ww:form method="POST">
             <ww:textfield label="Please enter your name" name="name" />
             <ww:submit />
         </ww:form>
