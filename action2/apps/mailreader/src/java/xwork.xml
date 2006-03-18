@@ -11,7 +11,31 @@
             <result>/pages/Welcome.jsp</result>
         </action>
 
-        <!-- Add your actions here -->
+        <action name="Logon"
+                class="mailreader2.Logon">
+            <exception-mapping
+                    exception="org.apache.struts.apps.mailreader.dao.ExpiredPasswordException"
+                    result="expired"/>
+            <result name="input">/pages/Logon.jsp</result>
+            <result name="expired" type="chain">Password!input</result>
+            <result>/pages/MainMenu.jsp</result>
+        </action>
 
+        <action name="Password">
+            <result name="input">/pages/ChangePassword.jsp</result>
+        </action>
+
+        <action name="MainMenu">
+            <result>/pages/MainMenu.jsp</result>
+        </action>
+
+        <action name="Registration">
+            <result name="edit">/pages/Registration.jsp</result>
+        </action>
+
+        <action name="Logoff">
+            <result type="chain">MainMenu</result>
+        </action>
+        
     </package>
 </xwork>
