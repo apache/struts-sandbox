@@ -7,10 +7,15 @@
     </head>
     <body>
 
-    <ww:text name="change.message"/>
-    <a href="<ww:url action="Logon"/>">
-        <ww:text name="change.try"/>
-    </a>
+    <p>
+       <ww:text name="change.message"/>
+    </p>
+
+    <p>
+        <a href="<ww:url action="Logon!input"/>">
+            <ww:text name="change.try"/>
+        </a>
+    </p>
 
     </body>
 </html>

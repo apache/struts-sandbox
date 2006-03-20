@@ -18,13 +18,13 @@
 
 package mailreader2;
 
-import javax.servlet.ServletException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.opensymphony.xwork.ActionSupport;
+import com.opensymphony.xwork.ModelDriven;
 import com.opensymphony.webwork.interceptor.SessionAware;
+import com.opensymphony.webwork.interceptor.ApplicationAware;
 import org.apache.struts.apps.mailreader.dao.User;
 import org.apache.struts.apps.mailreader.dao.Subscription;
 import org.apache.struts.apps.mailreader.dao.ExpiredPasswordException;
@@ -45,7 +45,19 @@ import java.util.Map;
  *
  * @version $Rev: 360442 $ $Date: 2005-12-31 15:10:04 -0500 (Sat, 31 Dec 2005) $
  */
-public abstract class MailreaderSupport extends ActionSupport implements SessionAware {
+public abstract class MailreaderSupport extends ActionSupport implements ModelDriven, SessionAware, ApplicationAware {
+
+    // ---- ApplicationAware ----
+
+    private Map application;
+
+    public void setApplication(Map application) {
+        this.application = application;
+    }
+
+    public Map getApplication() {
+        return this.application;
+    }
 
     // ---- SessionAware ----
 
@@ -59,126 +71,13 @@ public abstract class MailreaderSupport extends ActionSupport implements Session
         return session;
     }
 
-    // ---- Fields ----
+    // ---- ModelDriven ----
 
-    /**
-     * <p>
-     * Name of username field ["username"].
-     * </p>
-     */
-    public static String USERNAME = "username";
-
-    /**
-     * <p>
-     * Name of password field ["password"].
-     * </p>
-     */
-    public static String PASSWORD = "password";
-
-    /**
-     * <p>
-     * Name of task field ["task"].
-     * </p>
-     */
-    public final static String TASK = "task";
-
-    // ---- Protected Methods ----
-
-    /**
-     * <p>
-     * Store User object in client session.
-     * If user object is null, any existing user object is removed.
-     * </p>
-     *
-     * @param user    The user object returned from the database
-     */
-    void doCacheUser(User user) {
-        getSession().put(Constants.USER_KEY, user);
+    public Object getModel () {
+        return getSession().get(Constants.USER_KEY);
     }
 
-    /**
-     * <p>
-     * Helper method to log event and cancel transaction.
-     * </p>
-     *
-     * @param method  Method being processed
-     * @param key     Attrkibute to remove from session, if any
-     */
-    protected void doCancel(String method, String key) {
-        if (key != null) {
-            getSession().remove(key);
-        }
-    }
-
-    /**
-     * <p>
-     * Obtain the cached Subscription object, if any.
-     * </p>
-     *
-     * @return Cached Subscription object or null
-     */
-    protected Subscription doGetSubscription() {
-        return (Subscription) getSession().get(Constants.SUBSCRIPTION_KEY);
-    }
-
-    /**
-     * <p>
-     * Confirm user credentials. Post any errors and return User object
-     * (or null).
-     * </p>
-     *
-     * @param database Database in which to look up the user
-     * @param username Username specified on the logon form
-     * @param password Password specified on the logon form
-     * @return Validated User object or null
-     * @throws org.apache.struts.apps.mailreader.dao.ExpiredPasswordException
-     *          to be handled by Struts exception
-     *          processor via the action-mapping
-     */
-    User doGetUser(UserDatabase database, String username,
-                   String password)
-            throws ExpiredPasswordException {
-
-        User user = null;
-        if (database == null) {
-            // FIXME: errors.add( ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.database.missing"));
-        } else {
-
-            if (username.equals("Hermes")) {
-                throw new ExpiredPasswordException("Hermes");
-            }
-
-            user = database.findUser(username);
-            if ((user != null) && !user.getPassword().equals(password)) {
-                user = null;
-            }
-            if (user == null) {
-                // FIXME: errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.password.mismatch"));
-            }
-        }
-
-        return user;
-    }
-
-    /**
-     * <p>
-     * Confirm user credentials. Post any errors and return User object
-     * (or null).
-     * </p>
-     *
-     * @param username Username specified on the logon form
-     * @param password Password specified on the logon form
-     * @return Validated User object or null
-     * @throws org.apache.struts.apps.mailreader.dao.ExpiredPasswordException
-     *          to be handled by Struts exception
-     *          processor via the action-mapping
-     */
-    User doGetUser(String username,
-                   String password)
-            throws ExpiredPasswordException {
-
-        return doGetUser(doGetUserDatabase(), username, password);
-    }
+    // ---- Database property ----
 
     /**
      * <p>
@@ -189,19 +88,41 @@ public abstract class MailreaderSupport extends ActionSupport implements Session
      * @return a reference to the UserDatabase or null if the database is not
      *         available
      */
-    protected UserDatabase doGetUserDatabase() {
-        return (UserDatabase) getSession().get(Constants.DATABASE_KEY);
+    protected UserDatabase getDatabase() {
+        Object db = getApplication().get(Constants.DATABASE_KEY);
+        if (db==null)
+            this.addActionError("error.database.missing");
+        return (UserDatabase) db;
     }
 
-    /**
-     * <p>
-     * Helper method to obtain User form session (if any).
-     * </p>
-     *
-     * @return User object, or null if there is no user.
-     */
-    protected User doGetUser() {
-        return (User) getSession().get(Constants.USER_KEY);
+    protected void setDatabase(UserDatabase database) {
+        getApplication().put(Constants.DATABASE_KEY,database);
+    }
+
+    // ---- User property ----
+
+    public User getUser() {
+        return  (User) getModel();
+    }
+
+    public void setUser(User user) {
+        getSession().put(Constants.USER_KEY,user);
+    }
+
+    public User findUser(String username, String password) throws ExpiredPasswordException
+    {
+        // FIXME: Stupid hack to compensate for inadequate DAO layer
+        if (username.equals("Hermes"))
+            throw new ExpiredPasswordException("Hermes");
+
+        User user = getDatabase().findUser(username);
+        if ((user != null) && !user.getPassword().equals(password)) {
+            user = null;
+        }
+        if (user == null) {
+            this.addFieldError("password","error.password.mismatch");
+        }
+        return user;
     }
 
     /**
@@ -216,18 +137,48 @@ public abstract class MailreaderSupport extends ActionSupport implements Session
      * Persist the User object, including subscriptions, to the database.
      * </p>
      *
-     * @param user Our User object
      * @throws javax.servlet.ServletException On any error
      */
-    protected void doSaveUser(User user) throws ServletException {
-
+    protected void saveUser() throws Exception {
         try {
-            UserDatabase database = doGetUserDatabase();
-            database.save();
+            getDatabase().save();
         } catch (Exception e) {
-            String message = Constants.LOG_DATABASE_SAVE_ERROR + user.getUsername();
+            String message = Constants.LOG_DATABASE_SAVE_ERROR + getUser().getUsername();
             log.error(message, e);
-            throw new ServletException(message, e);
+            throw new Exception(message, e);
+        }
+    }
+
+    // ---- Subscription property ----
+
+    /**
+     * <p>
+     * Obtain the cached Subscription object, if any.
+     * </p>
+     *
+     * @return Cached Subscription object or null
+     */
+    protected Subscription getSubscription() {
+        return (Subscription) getSession().get(Constants.SUBSCRIPTION_KEY);
+    }
+
+    protected void getSubscriprtion(Subscription subscription) {
+        getSession().put(Constants.SUBSCRIPTION_KEY,subscription);
+    }
+
+    // ---- Control methods ----
+
+    /**
+     * <p>
+     * Helper method to log event and cancel transaction.
+     * </p>
+     *
+     * @param method  Method being processed
+     * @param key     Attrkibute to remove from session, if any
+     */
+    protected void doCancel(String method, String key) {
+        if (key != null) {
+            getSession().remove(key);
         }
     }
 

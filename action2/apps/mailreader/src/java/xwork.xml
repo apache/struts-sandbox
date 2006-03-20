@@ -3,9 +3,9 @@
 <xwork>
     <include file="webwork-default.xml"/>
 
-    <package name="default" extends="webwork-default">
+    <package name="default" namespace="/" extends="webwork-default">
 
-        <default-action-ref name="Welcome"/>
+        <!-- default-action-ref name="Welcome"/ -->
 
         <action name="Welcome">
             <result>/pages/Welcome.jsp</result>
@@ -16,13 +16,13 @@
             <exception-mapping
                     exception="org.apache.struts.apps.mailreader.dao.ExpiredPasswordException"
                     result="expired"/>
-            <result name="input">/pages/Logon.jsp</result>
-            <result name="expired" type="chain">Password!input</result>
             <result>/pages/MainMenu.jsp</result>
+            <result name="input">/pages/Logon.jsp</result>
+            <result name="expired" type="chain">ChangePassword</result>
         </action>
 
-        <action name="Password">
-            <result name="input">/pages/ChangePassword.jsp</result>
+        <action name="ChangePassword">
+            <result>/pages/ChangePassword.jsp</result>
         </action>
 
         <action name="MainMenu">
@@ -34,7 +34,7 @@
         </action>
 
         <action name="Logoff">
-            <result type="chain">MainMenu</result>
+            <result type="chain">Welcome</result>
         </action>
         
     </package>

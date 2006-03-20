@@ -18,6 +18,13 @@
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
+    <!-- Application Listener for Mailreader database -->
+    <listener>
+      <listener-class>
+        mailreader2.ApplicationListener
+      </listener-class>
+    </listener>
+
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
         <welcome-file>index.html</welcome-file>

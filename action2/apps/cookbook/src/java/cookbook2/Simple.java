@@ -13,5 +13,15 @@ public class Simple extends ActionSupport {
     public String getName() {
         return this.name;
     }
-    
+
+
+    public String execute() {
+
+        if (this.hasErrors()) {
+            return INPUT;
+        }
+
+        return SUCCESS;
+    }
+
 }

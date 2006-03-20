@@ -8,17 +8,12 @@
 
 <body>
 
-<ww:form action="Logon"  method="POST">
-    <table border="0" width="100%">
+<ww:form method="POST">
+        <ww:textfield label="%{getText('prompt.username')}" name="username" />
 
-        <ww:textfield label="%{getText('prompt.username'}" name="username" size="16" maxlength="18"/>
-
-        <ww:textfield label="%{getText('prompt.password'}" name="password" size="16" maxlength="18"/>
+        <ww:textfield label="%{getText('prompt.password')}" name="password" />
 
         <ww:submit />
-
-    </table>
-
 </ww:form>
 
 <jsp:include page="Footer.jsp"/>

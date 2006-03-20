@@ -3,18 +3,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
     <title><ww:text name="mainMenu.title"/></title>
-    <link rel="stylesheet" type="text/css" href="base.css"/>
+    <link href="<ww:url value="/css/mailreader.css"/>" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
-<h3><ww:text name="mainMenu.heading"/> <bean:write name="user"
-                                                       property="fullName"/></h3>
+<h3><ww:text name="mainMenu.heading"/> <ww:property value="user.fullName"/></h3>
 <ul>
     <li><a href="<ww:url action="Registration!edit" />"> 
         <ww:text name="mainMenu.registration" />
     </a>
     </li>
-    <li><a href="<ww:url action="Loggoff"/>">
+    <li><a href="<ww:url action="Logoff"/>">
         <ww:text name="mainMenu.logoff" />
     </a>
 </ul>
