@@ -36,6 +36,6 @@
         <action name="Logoff">
             <result type="chain">Welcome</result>
         </action>
-        
+
     </package>
 </xwork>

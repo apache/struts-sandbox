@@ -2,7 +2,7 @@
 
 <xwork>
 
-    <package name="Simple" namespace="/Simple" extends="webwork-default" >
+    <package name="Simple" namespace="/Simple" extends="webwork-default">
 
         <action name="Open" class="cookbook2.Simple">
             <result>/pages/Simple/Result.jsp</result>

@@ -2,7 +2,7 @@
 
 <xwork>
 
-    <package name="Home" extends="webwork-default" >
+    <package name="Home" extends="webwork-default">
 
         <action name="Home">
             <result>/Home.jsp</result>

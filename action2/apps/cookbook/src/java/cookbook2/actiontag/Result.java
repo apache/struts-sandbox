@@ -7,11 +7,11 @@ public class Result extends ActionSupport {
     String favoriteLanguage;
 
     public void setFavoriteLanguage(String favouriteLanguage) {
-    	this.favoriteLanguage = favouriteLanguage;
+        this.favoriteLanguage = favouriteLanguage;
     }
 
     public String getFavoriteLanguage() {
-    	return favoriteLanguage;
+        return favoriteLanguage;
     }
 
     String favoriteColor;

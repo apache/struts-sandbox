@@ -5,12 +5,12 @@ import com.opensymphony.xwork.ActionSupport;
 import com.opensymphony.xwork.Validateable;
 import com.opensymphony.xwork.util.OgnlValueStack;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.io.File;
 
 public class Select extends ActionSupport implements Validateable {
 
@@ -42,48 +42,46 @@ public class Select extends ActionSupport implements Validateable {
      * The constructor pre-populates the controsl for us.
      */
     public Select() {
-    	favouriteLanguages.add(new Language("EnglishKey", "English Language"));
-    	favouriteLanguages.add(new Language("FrenchKey", "French Language"));
-    	favouriteLanguages.add(new Language("SpanishKey", "Spanish Language"));
+        favouriteLanguages.add(new Language("EnglishKey", "English Language"));
+        favouriteLanguages.add(new Language("FrenchKey", "French Language"));
+        favouriteLanguages.add(new Language("SpanishKey", "Spanish Language"));
 
-    	VehicalType car = new VehicalType("CarKey", "Car");
-    	VehicalType motorcycle = new VehicalType("MotorcycleKey", "Motorcycle");
-    	vehicalTypeList.add(car);
-    	vehicalTypeList.add(motorcycle);
+        VehicalType car = new VehicalType("CarKey", "Car");
+        VehicalType motorcycle = new VehicalType("MotorcycleKey", "Motorcycle");
+        vehicalTypeList.add(car);
+        vehicalTypeList.add(motorcycle);
 
-    	List cars = new ArrayList();
-    	cars.add(new VehicalSpecific("MercedesKey", "Mercedes"));
-    	cars.add(new VehicalSpecific("HondaKey", "Honda"));
-    	cars.add(new VehicalSpecific("FordKey", "Ford"));
+        List cars = new ArrayList();
+        cars.add(new VehicalSpecific("MercedesKey", "Mercedes"));
+        cars.add(new VehicalSpecific("HondaKey", "Honda"));
+        cars.add(new VehicalSpecific("FordKey", "Ford"));
 
-    	List motorcycles = new ArrayList();
-    	motorcycles.add(new VehicalSpecific("SuzukiKey", "Suzuki"));
-    	motorcycles.add(new VehicalSpecific("YamahaKey", "Yamaha"));
+        List motorcycles = new ArrayList();
+        motorcycles.add(new VehicalSpecific("SuzukiKey", "Suzuki"));
+        motorcycles.add(new VehicalSpecific("YamahaKey", "Yamaha"));
 
-    	vehicalSpecificMap.put(car, cars);
-    	vehicalSpecificMap.put(motorcycle, motorcycles);
+        vehicalSpecificMap.put(car, cars);
+        vehicalSpecificMap.put(motorcycle, motorcycles);
     }
 
     /**
      * Prepare form for display.
      *
-     * <p>
-     * In this example, all the work is done in the constructor.
-     * Other cases may need to consult data access logic to populate the controls.
-     * </p>
+     * <p> In this example, all the work is done in the constructor. Other cases may need to consult data access logic
+     * to populate the controls. </p>
+     *
      * @return Result
      */
     public String setup() {
-    	return SUCCESS;
+        return SUCCESS;
     }
 
     /**
      * Execute the "Select" action.
      *
-     * <p>
-     * In this example, we are simply displaying the input.
-     * Other cases may need to consult business or data access logic.
-     * </p>
+     * <p> In this example, we are simply displaying the input. Other cases may need to consult business or data access
+     * logic. </p>
+     *
      * @return Result
      * @throws Exception on any error
      */
@@ -94,51 +92,53 @@ public class Select extends ActionSupport implements Validateable {
     // -- Methods that populate controls from data prepared in the constructor --
 
     public List getLeftSideCartoonCharacters() {
-    	return leftSideCartoonCharacters;
+        return leftSideCartoonCharacters;
     }
+
     public void setLeftSideCartoonCharacters(List leftSideCartoonCharacters) {
-    	this.leftSideCartoonCharacters = leftSideCartoonCharacters;
+        this.leftSideCartoonCharacters = leftSideCartoonCharacters;
     }
 
 
     public List getRightSideCartoonCharacters() {
-    	return rightSideCartoonCharacters;
+        return rightSideCartoonCharacters;
     }
+
     public void setRightSideCartoonCharacters(List rightSideCartoonCharacters) {
-    	this.rightSideCartoonCharacters = rightSideCartoonCharacters;
+        this.rightSideCartoonCharacters = rightSideCartoonCharacters;
     }
 
 
     public String getFavouriteVehicalType() {
-    	return favouriteVehicalType;
+        return favouriteVehicalType;
     }
 
     public void setFavouriteVehicalType(String favouriteVehicalType) {
-    	this.favouriteVehicalType = favouriteVehicalType;
+        this.favouriteVehicalType = favouriteVehicalType;
     }
 
     public String getFavouriteVehicalSpecific() {
-    	return favouriteVehicalSpecific;
+        return favouriteVehicalSpecific;
     }
 
     public void setFavouriteVehicalSpecific(String favouriteVehicalSpecific) {
-    	this.favouriteVehicalSpecific = favouriteVehicalSpecific;
+        this.favouriteVehicalSpecific = favouriteVehicalSpecific;
     }
 
 
     public List getVehicalTypeList() {
-    	return vehicalTypeList;
+        return vehicalTypeList;
     }
 
     public List getVehicalSpecificList() {
-    	OgnlValueStack stack = ServletActionContext.getValueStack(ServletActionContext.getRequest());
-    	VehicalType vehicalType = (VehicalType) stack.findValue("top");
-    	System.out.println("vehicalType.getKey()"+vehicalType.getKey());
-    	return (List) vehicalSpecificMap.get(vehicalType);
+        OgnlValueStack stack = ServletActionContext.getValueStack(ServletActionContext.getRequest());
+        VehicalType vehicalType = (VehicalType) stack.findValue("top");
+        System.out.println("vehicalType.getKey()" + vehicalType.getKey());
+        return (List) vehicalSpecificMap.get(vehicalType);
     }
 
     public List getFavouriteLanguages() {
-    	return favouriteLanguages;
+        return favouriteLanguages;
     }
 
     public String getName() {
@@ -218,90 +218,101 @@ public class Select extends ActionSupport implements Validateable {
     }
 
     public void setFavouriteLanguage(String favouriteLanguage) {
-    	this.favouriteLanguage = favouriteLanguage;
+        this.favouriteLanguage = favouriteLanguage;
     }
 
     public String getFavouriteLanguage() {
-    	return favouriteLanguage;
+        return favouriteLanguage;
     }
 
 
     public void setThoughts(String thoughts) {
-    	this.thoughts = thoughts;
+        this.thoughts = thoughts;
     }
 
     public String getThoughts() {
-    	return this.thoughts;
+        return this.thoughts;
     }
 
     // -- inner classes --
 
     public static class Language {
-    	String description;
-    	String key;
+        String description;
+        String key;
 
-    	public Language(String key, String description) {
-    		this.key = key;
-    		this.description = description;
-    	}
+        public Language(String key, String description) {
+            this.key = key;
+            this.description = description;
+        }
 
-    	public String getKey() {
-    		return key;
-    	}
-    	public String getDescription() {
-    		return description;
-    	}
+        public String getKey() {
+            return key;
+        }
+
+        public String getDescription() {
+            return description;
+        }
 
     }
 
     public static class VehicalType {
-    	String key;
-    	String description;
-    	public VehicalType(String key, String description) {
-    		this.key = key;
-    		this.description = description;
-    	}
+        String key;
+        String description;
 
-    	public String getKey() { return this.key; }
-    	public String getDescription() { return this.description; }
+        public VehicalType(String key, String description) {
+            this.key = key;
+            this.description = description;
+        }
 
-    	public boolean equals(Object obj) {
-    		if (! (obj instanceof VehicalType)) {
-    			return false;
-    		}
-    		else {
-    			return key.equals(((VehicalType)obj).getKey());
-    		}
-    	}
+        public String getKey() {
+            return this.key;
+        }
 
-    	public int hashCode() {
-    		return key.hashCode();
-    	}
+        public String getDescription() {
+            return this.description;
+        }
+
+        public boolean equals(Object obj) {
+            if (! (obj instanceof VehicalType)) {
+                return false;
+            } else {
+                return key.equals(((VehicalType) obj).getKey());
+            }
+        }
+
+        public int hashCode() {
+            return key.hashCode();
+        }
     }
 
 
     public static class VehicalSpecific {
-    	String key;
-    	String description;
-    	public VehicalSpecific(String key, String description) {
-    		this.key = key;
-    		this.description = description;
-    	}
+        String key;
+        String description;
 
-    	public String getKey() { return this.key; }
-    	public String getDescription() { return this.description; }
+        public VehicalSpecific(String key, String description) {
+            this.key = key;
+            this.description = description;
+        }
 
-    	public boolean equals(Object obj) {
-    		if (! (obj instanceof VehicalSpecific)) {
-    			return false;
-    		}
-    		else {
-    			return key.equals(((VehicalSpecific)obj).getKey());
-    		}
-    	}
+        public String getKey() {
+            return this.key;
+        }
 
-    	public int hashCode() {
-    		return key.hashCode();
-    	}
+        public String getDescription() {
+            return this.description;
+        }
+
+        public boolean equals(Object obj) {
+            if (! (obj instanceof VehicalSpecific)) {
+                return false;
+            } else {
+                return key.equals(((VehicalSpecific) obj).getKey());
+            }
+        }
+
+        public int hashCode() {
+            return key.hashCode();
+        }
     }
 }

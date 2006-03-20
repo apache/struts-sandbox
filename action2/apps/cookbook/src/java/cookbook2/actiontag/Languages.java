@@ -1,17 +1,17 @@
 package cookbook2.actiontag;
 
 import com.opensymphony.xwork.ActionSupport;
+import cookbook2.Select;
 
 import java.util.ArrayList;
 import java.util.List;
-import cookbook2.Select;
 
 public class Languages extends ActionSupport {
 
     List favoriteLanguages = new ArrayList();
 
     public List getFavoriteLanguages() {
-    	return favoriteLanguages;
+        return favoriteLanguages;
     }
 
     public String execute() {

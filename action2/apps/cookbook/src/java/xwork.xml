@@ -14,6 +14,6 @@
 
     <include file="cookbook2/Select-config.xml"/>
 
-    <include file="cookbook2/actiontag/ActionTag-config.xml" />
+    <include file="cookbook2/actiontag/ActionTag-config.xml"/>
 
 </xwork>

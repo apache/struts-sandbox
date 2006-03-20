@@ -17,13 +17,11 @@
  */
 package mailreader2;
 
-import org.apache.struts.apps.mailreader.dao.User;
 import org.apache.struts.apps.mailreader.dao.ExpiredPasswordException;
+import org.apache.struts.apps.mailreader.dao.User;
 
 /**
- * <p>
- * Validate a user logon.
- * </p>
+ * <p> Validate a user logon. </p>
  *
  * @version $Rev: 360442 $ $Date: 2005-12-31 15:10:04 -0500 (Sat, 31 Dec 2005) $
  */
@@ -72,20 +70,20 @@ public final class Logon extends MailreaderSupport {
     }
 
     /**
-     * <p>
-     * Use "username" and "password" fields to retrieve a User
-     * object from the database. If credentials are not valid, or database
-     * has disappeared, post error messages and forward to input.
-     * </p>
-     *
+     * <p> Use "username" and "password" fields to retrieve a User object from the database. If credentials are not
+     * valid, or database has disappeared, post error messages and forward to input. </p>
      */
     public String execute() throws ExpiredPasswordException {
 
-        User user = findUser(getUsername(),getPassword());
+        User user = findUser(getUsername(), getPassword());
 
-        if (user!=null) setUser(user);
+        if (user != null) {
+            setUser(user);
+        }
 
-        if (this.hasErrors()) return INPUT;
+        if (this.hasErrors()) {
+            return INPUT;
+        }
 
         return SUCCESS;
 

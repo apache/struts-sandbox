@@ -1,9 +1,9 @@
 package cookbook2.actiontag;
 
-import junit.framework.TestCase;
-import java.util.List;
-
 import cookbook2.Select;
+import junit.framework.TestCase;
+
+import java.util.List;
 
 public class LanguagesTest extends TestCase {
 
@@ -18,17 +18,17 @@ public class LanguagesTest extends TestCase {
     public void testContents() throws Exception {
 
         List list = action.getFavoriteLanguages();
-        assertNotNull("List is null!",list);
-        assertTrue("List is not empty",list.size()==0);
+        assertNotNull("List is null!", list);
+        assertTrue("List is not empty", list.size() == 0);
 
         action.execute();
 
         List list2 = action.getFavoriteLanguages();
-        assertNotNull("List is null!",list2);
-        assertTrue("List is empty!",list.size()>0);
+        assertNotNull("List is null!", list2);
+        assertTrue("List is empty!", list.size() > 0);
         Select.Language entry = (Select.Language) list.get(0);
-        assertNotNull("Entry is null",entry);
-        assertTrue("Entry is empty",entry.getDescription().length()>0);
+        assertNotNull("Entry is null", entry);
+        assertTrue("Entry is empty", entry.getDescription().length() > 0);
     }
 
 }

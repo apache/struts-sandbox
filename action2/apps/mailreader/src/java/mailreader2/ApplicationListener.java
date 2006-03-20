@@ -18,34 +18,28 @@
 
 package mailreader2;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.struts.apps.mailreader.dao.impl.memory.MemoryUserDatabase;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import org.apache.struts.apps.mailreader.dao.impl.memory.MemoryUserDatabase;
-
 /**
- * <p><code>ServletContextListener</code> that initializes and finalizes the
- * persistent storage of User and Subscription information for the Struts
- * Demonstration Application, using an in-memory database backed by an
- * XML file.</p>
+ * <p><code>ServletContextListener</code> that initializes and finalizes the persistent storage of User and Subscription
+ * information for the Struts Demonstration Application, using an in-memory database backed by an XML file.</p>
  *
- * <p><strong>IMPLEMENTATION WARNING</strong> - If this web application is run
- * from a WAR file, or in another environment where reading and writing of the
- * web application resource is impossible, the initial contents will be copied
- * to a file in the web application temporary directory provided by the
- * container.  This is for demonstration purposes only - you should
- * <strong>NOT</strong> assume that files written here will survive a restart
- * of your servlet container.</p>
+ * <p><strong>IMPLEMENTATION WARNING</strong> - If this web application is run from a WAR file, or in another
+ * environment where reading and writing of the web application resource is impossible, the initial contents will be
+ * copied to a file in the web application temporary directory provided by the container.  This is for demonstration
+ * purposes only - you should <strong>NOT</strong> assume that files written here will survive a restart of your servlet
+ * container.</p>
  *
  * <p>This class was borrowed from the Shale Mailreader. Changes were:</p>
  *
@@ -60,23 +54,20 @@ import org.apache.struts.apps.mailreader.dao.impl.memory.MemoryUserDatabase;
 
 public final class ApplicationListener implements ServletContextListener {
 
-
     // ------------------------------------------------------ Manifest Constants
 
 
     /**
-     * <p>Appication scope attribute key under which the in-memory
-     * version of our database is stored.</p>
+     * <p>Appication scope attribute key under which the in-memory version of our database is stored.</p>
      */
     public static final String DATABASE_KEY = "database";
 
 
     /**
-     * <p>Application scope attribute key under which the valid
-     * selection items for the protocol property is stored.</p>
+     * <p>Application scope attribute key under which the valid selection items for the protocol property is
+     * stored.</p>
      */
     public static final String PROTOCOLS_KEY = "protocols";
-
 
     // ------------------------------------------------------ Instance Variables
 
@@ -98,13 +89,11 @@ public final class ApplicationListener implements ServletContextListener {
      */
     private Log log = LogFactory.getLog(this.getClass());
 
-
     // ------------------------------------------------------------- Properties
 
 
     /**
-     * The web application resource path of our persistent database
-     * storage file.
+     * The web application resource path of our persistent database storage file.
      */
     private String pathname = "/WEB-INF/classes/database.xml";
 
@@ -116,13 +105,11 @@ public final class ApplicationListener implements ServletContextListener {
         this.pathname = pathname;
     }
 
-
     // ------------------------------------------ ServletContextListener Methods
 
 
     /**
-     * <p>Gracefully shut down this database, releasing any resources
-     * that were allocated at initialization.</p>
+     * <p>Gracefully shut down this database, releasing any resources that were allocated at initialization.</p>
      *
      * @param event ServletContextEvent to process
      */
@@ -138,7 +125,7 @@ public final class ApplicationListener implements ServletContextListener {
             }
         }
 
-	context.removeAttribute(DATABASE_KEY);
+        context.removeAttribute(DATABASE_KEY);
         context.removeAttribute(PROTOCOLS_KEY);
         database = null;
         context = null;
@@ -150,12 +137,11 @@ public final class ApplicationListener implements ServletContextListener {
      * <p>Initialize and load our initial database from persistent storage.</p>
      *
      * @param event The context initialization event
-     *
      */
     public void contextInitialized(ServletContextEvent event) {
 
         log.info("Initializing memory database plug in from '" +
-                 pathname + "'");
+                pathname + "'");
 
         // Remember our associated ServletContext
         this.context = event.getServletContext();
@@ -172,29 +158,27 @@ public final class ApplicationListener implements ServletContextListener {
         } catch (Exception e) {
             log.error("Opening memory database", e);
             throw new IllegalStateException("Cannot load database from '" +
-                                            pathname + "': " + e);
+                    pathname + "': " + e);
         }
         context.setAttribute(DATABASE_KEY, database);
 
         // Cache the selection items for protocols
-        String[][] protocols = new String[][]{
-                {"imap", "IMAP Protocol"},
-                {"pop3", "POP3 Protocol"}
+        String[][] protocols = new String[][] {
+                { "imap", "IMAP Protocol" },
+                { "pop3", "POP3 Protocol" }
         };
 
         context.setAttribute(PROTOCOLS_KEY, protocols);
 
     }
 
-
     // -------------------------------------------------------- Private Methods
 
 
     /**
-     * Calculate and return an absolute pathname to the XML file to contain
-     * our persistent storage information.
+     * Calculate and return an absolute pathname to the XML file to contain our persistent storage information.
      *
-     * @exception Exception if an input/output error occurs
+     * @throws Exception if an input/output error occurs
      */
     private String calculatePath() throws Exception {
 
@@ -206,7 +190,7 @@ public final class ApplicationListener implements ServletContextListener {
 
         // Does a copy of this file already exist in our temporary directory
         File dir = (File)
-            context.getAttribute("javax.servlet.context.tempdir");
+                context.getAttribute("javax.servlet.context.tempdir");
         File file = new File(dir, "struts-example-database.xml");
         if (file.exists()) {
             return (file.getAbsolutePath());
@@ -214,10 +198,10 @@ public final class ApplicationListener implements ServletContextListener {
 
         // Copy the static resource to a temporary file and return its path
         InputStream is =
-            context.getResourceAsStream(pathname);
+                context.getResourceAsStream(pathname);
         BufferedInputStream bis = new BufferedInputStream(is, 1024);
         FileOutputStream os =
-            new FileOutputStream(file);
+                new FileOutputStream(file);
         BufferedOutputStream bos = new BufferedOutputStream(os, 1024);
         byte buffer[] = new byte[1024];
         while (true) {

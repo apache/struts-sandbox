@@ -18,30 +18,23 @@
 
 package mailreader2;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
+import com.opensymphony.webwork.interceptor.ApplicationAware;
+import com.opensymphony.webwork.interceptor.SessionAware;
 import com.opensymphony.xwork.ActionSupport;
 import com.opensymphony.xwork.ModelDriven;
-import com.opensymphony.webwork.interceptor.SessionAware;
-import com.opensymphony.webwork.interceptor.ApplicationAware;
-import org.apache.struts.apps.mailreader.dao.User;
-import org.apache.struts.apps.mailreader.dao.Subscription;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.struts.apps.mailreader.dao.ExpiredPasswordException;
+import org.apache.struts.apps.mailreader.dao.Subscription;
+import org.apache.struts.apps.mailreader.dao.User;
 import org.apache.struts.apps.mailreader.dao.UserDatabase;
 
 import java.util.Map;
 
 /**
- * <p>
- * Base Action for MailreaderSupport application.
- * </p><p>
- * All the BaseAction helper methods are prefixed with "do"
- * so that they can be easily distinguished from Struts and Servlet API methods.
- * BaseAction subclasses may also have prive "do" helpers of their own.
- * </p><p>
- * Methods are kept in alphabetical order, to make them easier to find.
- * </p>
+ * <p> Base Action for MailreaderSupport application. </p><p> All the BaseAction helper methods are prefixed with "do"
+ * so that they can be easily distinguished from Struts and Servlet API methods. BaseAction subclasses may also have
+ * prive "do" helpers of their own. </p><p> Methods are kept in alphabetical order, to make them easier to find. </p>
  *
  * @version $Rev: 360442 $ $Date: 2005-12-31 15:10:04 -0500 (Sat, 31 Dec 2005) $
  */
@@ -73,69 +66,62 @@ public abstract class MailreaderSupport extends ActionSupport implements ModelDr
 
     // ---- ModelDriven ----
 
-    public Object getModel () {
+    public Object getModel() {
         return getSession().get(Constants.USER_KEY);
     }
 
     // ---- Database property ----
 
     /**
-     * <p>
-     * Return a reference to the UserDatabase
-     * or null if the database is not available.
-     * </p>
+     * <p> Return a reference to the UserDatabase or null if the database is not available. </p>
      *
-     * @return a reference to the UserDatabase or null if the database is not
-     *         available
+     * @return a reference to the UserDatabase or null if the database is not available
      */
     protected UserDatabase getDatabase() {
         Object db = getApplication().get(Constants.DATABASE_KEY);
-        if (db==null)
+        if (db == null) {
             this.addActionError("error.database.missing");
+        }
         return (UserDatabase) db;
     }
 
     protected void setDatabase(UserDatabase database) {
-        getApplication().put(Constants.DATABASE_KEY,database);
+        getApplication().put(Constants.DATABASE_KEY, database);
     }
 
     // ---- User property ----
 
     public User getUser() {
-        return  (User) getModel();
+        return (User) getModel();
     }
 
     public void setUser(User user) {
-        getSession().put(Constants.USER_KEY,user);
+        getSession().put(Constants.USER_KEY, user);
     }
 
-    public User findUser(String username, String password) throws ExpiredPasswordException
-    {
+    public User findUser(String username, String password) throws ExpiredPasswordException {
         // FIXME: Stupid hack to compensate for inadequate DAO layer
-        if (username.equals("Hermes"))
+        if (username.equals("Hermes")) {
             throw new ExpiredPasswordException("Hermes");
+        }
 
         User user = getDatabase().findUser(username);
         if ((user != null) && !user.getPassword().equals(password)) {
             user = null;
         }
         if (user == null) {
-            this.addFieldError("password","error.password.mismatch");
+            this.addFieldError("password", "error.password.mismatch");
         }
         return user;
     }
 
     /**
-     * <p>
-     * The <code>Log</code> instance for this application.
-     * </p>
+     * <p> The <code>Log</code> instance for this application. </p>
      */
     protected Log log = LogFactory.getLog(Constants.PACKAGE);
 
     /**
-     * <p>
-     * Persist the User object, including subscriptions, to the database.
-     * </p>
+     * <p> Persist the User object, including subscriptions, to the database. </p>
      *
      * @throws javax.servlet.ServletException On any error
      */
@@ -152,9 +138,7 @@ public abstract class MailreaderSupport extends ActionSupport implements ModelDr
     // ---- Subscription property ----
 
     /**
-     * <p>
-     * Obtain the cached Subscription object, if any.
-     * </p>
+     * <p> Obtain the cached Subscription object, if any. </p>
      *
      * @return Cached Subscription object or null
      */
@@ -163,18 +147,16 @@ public abstract class MailreaderSupport extends ActionSupport implements ModelDr
     }
 
     protected void getSubscriprtion(Subscription subscription) {
-        getSession().put(Constants.SUBSCRIPTION_KEY,subscription);
+        getSession().put(Constants.SUBSCRIPTION_KEY, subscription);
     }
 
     // ---- Control methods ----
 
     /**
-     * <p>
-     * Helper method to log event and cancel transaction.
-     * </p>
+     * <p> Helper method to log event and cancel transaction. </p>
      *
-     * @param method  Method being processed
-     * @param key     Attrkibute to remove from session, if any
+     * @param method Method being processed
+     * @param key    Attrkibute to remove from session, if any
      */
     protected void doCancel(String method, String key) {
         if (key != null) {

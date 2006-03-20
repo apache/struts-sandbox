@@ -20,9 +20,9 @@
 
     <!-- Application Listener for Mailreader database -->
     <listener>
-      <listener-class>
-        mailreader2.ApplicationListener
-      </listener-class>
+        <listener-class>
+            mailreader2.ApplicationListener
+        </listener-class>
     </listener>
 
     <welcome-file-list>

@@ -1,4 +1,4 @@
-<%@taglib prefix="ww" uri="/webwork" %>
+<%@ taglib prefix="ww" uri="/webwork" %>
 <ww:select
         tooltip="Choose Your Favorite Language"
         label="Favorite Language"

@@ -8,7 +8,7 @@
     </field>
     <field name="password">
         <field-validator type="requiredstring">
-            <message key="error.password.required" />
+            <message key="error.password.required"/>
         </field-validator>
     </field>
 </validators>
