@@ -101,7 +101,7 @@ public abstract class MailreaderSupport extends ActionSupport implements ModelDr
 
     public User findUser(String username, String password) throws ExpiredPasswordException {
         // FIXME: Stupid hack to compensate for inadequate DAO layer
-        if (username.equals("Hermes")) {
+        if ("Hermes".equals(username)) {
             throw new ExpiredPasswordException("Hermes");
         }
 
@@ -150,18 +150,25 @@ public abstract class MailreaderSupport extends ActionSupport implements ModelDr
         getSession().put(Constants.SUBSCRIPTION_KEY, subscription);
     }
 
-    // ---- Control methods ----
+    /**
+     * <p>The task input field.</p>
+     */
+    private String task = null;
+
 
     /**
-     * <p> Helper method to log event and cancel transaction. </p>
-     *
-     * @param method Method being processed
-     * @param key    Attrkibute to remove from session, if any
+     * @return Returns the task.
      */
-    protected void doCancel(String method, String key) {
-        if (key != null) {
-            getSession().remove(key);
-        }
+    public String getTask() {
+        return this.task;
     }
+
+    /**
+     * @param task The task to set.
+     */
+    public void setTask(String task) {
+        this.task = task;
+    }
+
 
 }

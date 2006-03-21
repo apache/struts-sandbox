@@ -10,7 +10,7 @@
 <body>
 <h3><ww:text name="mainMenu.heading"/> <ww:property value="user.fullName"/></h3>
 <ul>
-    <li><a href="<ww:url action="Registration!edit" />">
+    <li><a href="<ww:url action="Registration!input" />">
         <ww:text name="mainMenu.registration"/>
     </a>
     </li>

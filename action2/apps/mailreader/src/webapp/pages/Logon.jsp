@@ -9,12 +9,16 @@
 
 <body>
 
-<ww:form method="POST">
+<ww:form method="POST" validate="true">
     <ww:textfield label="%{getText('prompt.username')}" name="username"/>
 
     <ww:textfield label="%{getText('prompt.password')}" name="password"/>
 
     <ww:submit/>
+
+    <ww:reset/>
+
+    <ww:submit action="Welcome" value="%{getText('button.cancel')}" onclick="form.onsubmit=null"/>
 </ww:form>
 
 <jsp:include page="Footer.jsp"/>

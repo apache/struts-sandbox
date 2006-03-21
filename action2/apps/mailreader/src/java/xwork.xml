@@ -25,15 +25,17 @@
             <result>/pages/ChangePassword.jsp</result>
         </action>
 
-        <action name="MainMenu">
+        <action name="MainMenu" class="mailreader2.MainMenu">
             <result>/pages/MainMenu.jsp</result>
+            <result name="input">/pages/MainMenu.jsp</result>
         </action>
 
-        <action name="Registration">
-            <result name="edit">/pages/Registration.jsp</result>
+        <action name="Registration" class="mailreader2.Registration">
+            <result name="input">/pages/Registration.jsp</result>
+            <result type="chain">MainMenu</result>
         </action>
 
-        <action name="Logoff">
+        <action name="Logoff" class="mailreader2.Logoff">
             <result type="chain">Welcome</result>
         </action>
 

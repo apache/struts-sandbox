@@ -12,7 +12,7 @@
 <h3><ww:text name="index.heading"/></h3>
 
 <ul>
-    <li><a href="<ww:url action="Registration!edit"/>"><ww:text name="index.registration"/></a></li>
+    <li><a href="<ww:url action="Registration!input"/>"><ww:text name="index.registration"/></a></li>
     <li><a href="<ww:url action="Logon!input"/>"><ww:text name="index.logon"/></a></li>
 </ul>
 
