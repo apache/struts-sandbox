@@ -12,7 +12,7 @@
 
 <body>
 
-<ww:form method="POST" validate="true">
+<ww:form method="POST" validate="false">
     <ww:hidden name="task"/>
     <ww:if test="task == 'Create'">
         <ww:textfield label="%{getText('prompt.username')}" name="username"/>
@@ -26,17 +26,22 @@
 
     <ww:textfield label="%{getText('prompt.password2')}" name="password2"/>
 
-    <ww:textfield label="%{getText('prompt.fullName')}" name="fullName"/>
+    <ww:textfield label="%{getText('prompt.fullName')}" name="user.fullName"/>
 
-    <ww:textfield label="%{getText('prompt.fromAddress')}" name="fromAddress"/>
+    <ww:textfield label="%{getText('prompt.fromAddress')}" name="user.fromAddress"/>
 
-    <ww:textfield label="%{getText('prompt.replyToAddress')}" name="replyToAddress"/>
+    <ww:textfield label="%{getText('prompt.replyToAddress')}" name="user.replyToAddress"/>
 
     <ww:submit/>
 
     <ww:reset/>
 
-    <ww:submit action="Welcome" value="%{getText('button.cancel')}" onclick="form.onsubmit=null"/>
+    <ww:if test="task == 'Create'">
+        <ww:submit action="Welcome" value="%{getText('button.cancel')}" onclick="form.onsubmit=null"/>
+    </ww:if>
+    <ww:else>
+        <ww:submit action="MainMenu" value="%{getText('button.cancel')}" onclick="form.onsubmit=null"/>
+    </ww:else>
 
 </ww:form>
 

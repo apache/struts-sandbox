@@ -14,47 +14,6 @@ import org.apache.struts.apps.mailreader.dao.impl.memory.MemoryUser;
  */
 public final class Registration extends MailreaderSupport {
 
-    /**
-     * <p>The confirmation password input field.</p>
-     */
-    private String password2 = null;
-
-
-    /**
-     * @return Returns the confirmationpassword.
-     */
-    public String getPassword2() {
-        return this.password2;
-    }
-
-    /**
-     * @param password2 The confirmation password to set.
-     */
-    public void setPassword2(String password2) {
-        this.password2 = password2;
-    }
-
-
-    /**
-     * <p>The username input field.</p>
-     */
-    private String username = null;
-
-
-    /**
-     * @return Returns the username.
-     */
-    public String getUsername() {
-        return this.username;
-    }
-
-    /**
-     * @param username The username to set.
-     */
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     // ---- Private Methods ----
 
     /**
@@ -86,13 +45,9 @@ public final class Registration extends MailreaderSupport {
 
     // ----- Public Methods ----
 
-
     private boolean isCreating() {
         User user = getUser();
-        if (null == user) {
-            return true;
-        }
-        return (null == user.getDatabase());
+        return (null == user) || (null == user.getDatabase());
     }
 
     /**
@@ -110,6 +65,9 @@ public final class Registration extends MailreaderSupport {
             setTask(Constants.CREATE);
         } else {
             setTask(Constants.EDIT);
+            setUsername(getUser().getUsername());
+            setPassword(getUser().getPassword());
+            setPassword2(getUser().getPassword());
         }
 
         return INPUT;
@@ -125,16 +83,17 @@ public final class Registration extends MailreaderSupport {
     public String execute()
             throws Exception {
 
-        boolean editing = Constants.EDIT.equals(getTask());
-        // Double check for user and database
-        editing = editing && (null != getUser()) && (null != getUser().getDatabase());
+        boolean creating = Constants.CREATE.equals(getTask());
+        creating = creating && isCreating(); // trust but verify
 
         User user;
-        if (!editing) {
+        if (creating) {
             User input = getUser();
-            // Since user.username is immutable, we have to use a local property
-            user = createUser(getUsername(), input.getPassword());
+            // Since user.username is immutable, we have to use some local properties
+            user = createUser(getUsername(), getPassword());
+            input.setPassword(getPassword());
             BeanUtils.setValues(user, input, null);
+            setUser(user);
         }
 
         saveUser();

@@ -21,7 +21,6 @@ package mailreader2;
 import com.opensymphony.webwork.interceptor.ApplicationAware;
 import com.opensymphony.webwork.interceptor.SessionAware;
 import com.opensymphony.xwork.ActionSupport;
-import com.opensymphony.xwork.ModelDriven;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts.apps.mailreader.dao.ExpiredPasswordException;
@@ -32,13 +31,16 @@ import org.apache.struts.apps.mailreader.dao.UserDatabase;
 import java.util.Map;
 
 /**
- * <p> Base Action for MailreaderSupport application. </p><p> All the BaseAction helper methods are prefixed with "do"
- * so that they can be easily distinguished from Struts and Servlet API methods. BaseAction subclasses may also have
- * prive "do" helpers of their own. </p><p> Methods are kept in alphabetical order, to make them easier to find. </p>
+ * <p> Base Action for MailreaderSupport application. </p>
+ *
+ * <p> Note that this class does NOT implement model driven because of issues with the pre-existing model. The
+ * MailReader DAO does not provide a setter for username and does not provide a default constructor, making it difficult
+ * to use as a POJO or to extend. As an alternative, the username and password properties are provided on the Action and
+ * then passed to the user class as needed. </p>
  *
  * @version $Rev: 360442 $ $Date: 2005-12-31 15:10:04 -0500 (Sat, 31 Dec 2005) $
  */
-public abstract class MailreaderSupport extends ActionSupport implements ModelDriven, SessionAware, ApplicationAware {
+public class MailreaderSupport extends ActionSupport implements SessionAware, ApplicationAware {
 
     // ---- ApplicationAware ----
 
@@ -64,10 +66,92 @@ public abstract class MailreaderSupport extends ActionSupport implements ModelDr
         return session;
     }
 
-    // ---- ModelDriven ----
+    // ---- Task property (utilized by UI) ----
 
-    public Object getModel() {
-        return getSession().get(Constants.USER_KEY);
+    /**
+     * <p>The task input field.</p>
+     */
+    private String task = null;
+
+
+    /**
+     * @return Returns the task.
+     */
+    public String getTask() {
+        return this.task;
+    }
+
+    /**
+     * @param task The task to set.
+     */
+    public void setTask(String task) {
+        this.task = task;
+    }
+
+    // ---- Password property ----
+
+    /**
+     * <p>The password input field.</p>
+     */
+    private String password = null;
+
+
+    /**
+     * @return Returns the password.
+     */
+    public String getPassword() {
+        return this.password;
+    }
+
+    /**
+     * @param password The password to set.
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    // ---- Password2 property (confirmation) ----
+
+    /**
+     * <p>The confirmation password input field.</p>
+     */
+    private String password2 = null;
+
+
+    /**
+     * @return Returns the confirmationpassword.
+     */
+    public String getPassword2() {
+        return this.password2;
+    }
+
+    /**
+     * @param password2 The confirmation password to set.
+     */
+    public void setPassword2(String password2) {
+        this.password2 = password2;
+    }
+
+    // ---- Username property ----
+
+    /**
+     * <p>The username input field.</p>
+     */
+    private String username = null;
+
+
+    /**
+     * @return Returns the username.
+     */
+    public String getUsername() {
+        return this.username;
+    }
+
+    /**
+     * @param username The username to set.
+     */
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     // ---- Database property ----
@@ -92,7 +176,7 @@ public abstract class MailreaderSupport extends ActionSupport implements ModelDr
     // ---- User property ----
 
     public User getUser() {
-        return (User) getModel();
+        return (User) getSession().get(Constants.USER_KEY);
     }
 
     public void setUser(User user) {
@@ -148,26 +232,6 @@ public abstract class MailreaderSupport extends ActionSupport implements ModelDr
 
     protected void getSubscriprtion(Subscription subscription) {
         getSession().put(Constants.SUBSCRIPTION_KEY, subscription);
-    }
-
-    /**
-     * <p>The task input field.</p>
-     */
-    private String task = null;
-
-
-    /**
-     * @return Returns the task.
-     */
-    public String getTask() {
-        return this.task;
-    }
-
-    /**
-     * @param task The task to set.
-     */
-    public void setTask(String task) {
-        this.task = task;
     }
 
 

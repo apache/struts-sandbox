@@ -27,48 +27,6 @@ import org.apache.struts.apps.mailreader.dao.User;
  */
 public final class Logon extends MailreaderSupport {
 
-    // -------------------------------------------------------------- Properties
-
-    /**
-     * <p>The password input field.</p>
-     */
-    private String password = null;
-
-
-    /**
-     * @return Returns the password.
-     */
-    public String getPassword() {
-        return this.password;
-    }
-
-    /**
-     * @param password The password to set.
-     */
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    /**
-     * <p>The username input field.</p>
-     */
-    private String username = null;
-
-
-    /**
-     * @return Returns the username.
-     */
-    public String getUsername() {
-        return this.username;
-    }
-
-    /**
-     * @param username The username to set.
-     */
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     /**
      * <p> Use "username" and "password" fields to retrieve a User object from the database. If credentials are not
      * valid, or database has disappeared, post error messages and forward to input. </p>
