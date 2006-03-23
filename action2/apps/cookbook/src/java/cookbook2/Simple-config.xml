@@ -26,11 +26,11 @@
         </action>
 
         <action name="View-Config">
-            <result type="plaintext">/WEB-INF/classes/Simple-config.xml</result>
+            <result type="plaintext">/WEB-INF/classes/cookbook2/Simple-config.xml</result>
         </action>
 
         <action name="View-Validation">
-            <result type="plaintext">/WEB-INF/src/java/cookbook2/Simple-validation.xml</result>
+            <result type="plaintext">/WEB-INF/classes/cookbook2/Simple-validation.xml</result>
         </action>
 
     </package>

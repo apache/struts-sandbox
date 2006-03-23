@@ -14,9 +14,9 @@
             name="message"
             tooltip="Enter your text message here"/>
 
-    <input type="submit" name="ford" value="Send Message to Ford">
-    <input type="submit" name="marvin" value="Send Message to Marvin">
-    <input type="submit" name="trillian" value="Send Message to Trillian">
+    <ww:submit name="ford" value="Send Message to Ford"/>
+    <ww:submit name="marvin" value="Send Message to Marvin"/>
+    <ww:submit name="trillian" value="Send Message to Trillian"/>
 
 </ww:form>
 

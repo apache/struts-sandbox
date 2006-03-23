@@ -17,7 +17,7 @@
         </action>
 
         <action name="View-Config">
-            <result type="plaintext">/WEB-INF/classes/Hello-config.xml</result>
+            <result type="plaintext">/WEB-INF/classes/cookbook2/Hello-config.xml</result>
         </action>
 
     </package>

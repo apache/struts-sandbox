@@ -24,18 +24,15 @@ public class Buttons extends ActionSupport {
         message = value;
     }
 
-    public void setFord(boolean value) {
-        if (value) return;
+    public void setFord(String value) {
         setRecipient("Ford");
     }
 
-    public void setMarvin(boolean value) {
-        if (value) return;
+    public void setMarvin(String value) {
         setRecipient("Marvin");
     }
 
-    public void setTrillian(boolean value) {
-        if (value) return;
+    public void setTrillian(String value) {
         setRecipient("Trillian");
     }
 

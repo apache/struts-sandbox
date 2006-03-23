@@ -50,7 +50,7 @@
         </action>
 
         <action name="View-Config">
-            <result type="plaintext">/WEB-INF/classes/ActionTag-config.xml</result>
+            <result type="plaintext">/WEB-INF/classes/cookbook2/actiontag/ActionTag-config.xml</result>
         </action>
 
     </package>
