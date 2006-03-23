@@ -6,8 +6,8 @@ public class Result extends ActionSupport {
 
     String favoriteLanguage;
 
-    public void setFavoriteLanguage(String favouriteLanguage) {
-        this.favoriteLanguage = favouriteLanguage;
+    public void setFavoriteLanguage(String value) {
+        favoriteLanguage = value;
     }
 
     public String getFavoriteLanguage() {
@@ -20,8 +20,8 @@ public class Result extends ActionSupport {
         return favoriteColor;
     }
 
-    public void setFavoriteColor(String favoriteColor) {
-        this.favoriteColor = favoriteColor;
+    public void setFavoriteColor(String value) {
+        favoriteColor = value;
     }
 
 }

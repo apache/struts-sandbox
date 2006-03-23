@@ -1,0 +1,33 @@
+<!DOCTYPE xwork PUBLIC "-//OpenSymphony Group//XWork 1.1.1//EN" "http://www.opensymphony.com/xwork/xwork-1.1.1.dtd">
+
+<xwork>
+
+    <package name="Buttons" namespace="/Buttons" extends="webwork-default">
+
+        <action name="Open" class="cookbook2.Buttons">
+            <result>/pages/Buttons/Result.jsp</result>
+            <result name="input">/pages/Buttons/Input.jsp</result>
+        </action>
+
+        <action name="View">
+            <result>/pages/Buttons/index.jsp</result>
+        </action>
+
+        <action name="View-Input">
+            <result type="plaintext">/pages/Buttons/Input.jsp</result>
+        </action>
+
+        <action name="View-Result">
+            <result type="plaintext">/pages/Buttons/Result.jsp</result>
+        </action>
+
+        <action name="View-Action">
+            <result type="plaintext">/WEB-INF/src/java/cookbook2/Buttons.java</result>
+        </action>
+
+        <action name="View-Config">
+            <result type="plaintext">/WEB-INF/classes/Buttons-config.xml</result>
+        </action>
+
+    </package>
+</xwork>

@@ -22,56 +22,56 @@ public class DirectoryEntry {
         return firstname;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setFirstname(String value) {
+        firstname = value;
     }
 
     public String getLastname() {
         return lastname;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setLastname(String value) {
+        lastname = value;
     }
 
     public String getExtension() {
         return extension;
     }
 
-    public void setExtension(String extension) {
-        this.extension = extension;
+    public void setExtension(String value) {
+        extension = value;
     }
 
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUsername(String value) {
+        username = value;
     }
 
     public Date getHired() {
         return hired;
     }
 
-    public void setHired(Date hired) {
-        this.hired = hired;
+    public void setHired(Date value) {
+        hired = value;
     }
 
     public Integer getHours() {
         return hours;
     }
 
-    public void setHours(Integer hours) {
-        this.hours = hours;
+    public void setHours(Integer value) {
+        hours = value;
     }
 
     public Boolean getEditor() {
         return editor;
     }
 
-    public void setEditor(Boolean editor) {
-        this.editor = editor;
+    public void setEditor(Boolean value) {
+        editor = value;
     }
 
 }

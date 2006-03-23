@@ -159,6 +159,31 @@
     </td>
 </tr>
 
+<tr valign="top">
+    <td>Detecting Buttons</td>
+    <td>
+
+        <ww:url id="Buttons_Open" action="Open!input" namespace="/Buttons"/>
+        <ww:a href="%{Buttons_Open}">
+            <ww:include value="/icon-open.jsp"/>
+        </ww:a>
+        <ww:a href="%{Buttons_Open}">Execute</ww:a>
+
+    </td>
+    <td>
+
+        <ww:url id="Buttons_View" action="View" namespace="/Buttons"/>
+        <ww:a href="%{Buttons_View}">
+            <ww:include value="/icon-view.jsp"/>
+        </ww:a>
+        <ww:a href="%{Buttons_View}">
+            View Source
+        </ww:a>
+
+    </td>
+</tr>
+
+
 </table>
 <p><img src="<ww:url value="/images/valid-xhtml10.png"/>" alt="Valid XHTML 1.0!" height="31" width="88"/></p>
 </body>
