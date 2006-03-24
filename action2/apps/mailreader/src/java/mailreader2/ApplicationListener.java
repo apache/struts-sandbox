@@ -162,14 +162,6 @@ public final class ApplicationListener implements ServletContextListener {
         }
         context.setAttribute(DATABASE_KEY, database);
 
-        // Cache the selection items for protocols
-        String[][] protocols = new String[][] {
-                { "imap", "IMAP Protocol" },
-                { "pop3", "POP3 Protocol" }
-        };
-
-        context.setAttribute(PROTOCOLS_KEY, protocols);
-
     }
 
     // -------------------------------------------------------- Private Methods

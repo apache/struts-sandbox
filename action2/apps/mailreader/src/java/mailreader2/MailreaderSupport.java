@@ -234,5 +234,4 @@ public class MailreaderSupport extends ActionSupport implements SessionAware, Ap
         getSession().put(Constants.SUBSCRIPTION_KEY, subscription);
     }
 
-
 }

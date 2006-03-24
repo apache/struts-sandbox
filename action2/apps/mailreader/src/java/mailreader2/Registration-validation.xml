@@ -47,11 +47,9 @@
         </field-validator>
     </field>
 
-    <!--
     <validator type="expression">
         <param name="expression">password eq password2</param>
         <message key="error.password.match"/>
     </validator>
-     -->
 
 </validators>
