@@ -1,53 +1,53 @@
-<%@ taglib uri="/webwork" prefix="ww" %>
+<%@ taglib uri="/webwork" prefix="a2" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-    <ww:if test="task=='Create'">
-        <title><ww:text name="subscription.title.create"/></title>
-    </ww:if>
-    <ww:if test="task=='Edit'">
-        <title><ww:text name="subscription.title.edit"/></title>
-    </ww:if>
-    <ww:if test="task=='Edit'">
-        <title><ww:text name="subscription.title.edit"/></title>
-    </ww:if>
+    <a2:if test="task=='Create'">
+        <title><a2:text name="subscription.title.create"/></title>
+    </a2:if>
+    <a2:if test="task=='Edit'">
+        <title><a2:text name="subscription.title.edit"/></title>
+    </a2:if>
+    <a2:if test="task=='Edit'">
+        <title><a2:text name="subscription.title.edit"/></title>
+    </a2:if>
 </head>
 
 <body>
-<ww:form method="POST" validate="true">
-    <ww:hidden name="task"/>
-    <ww:hidden name="username"/>
+<a2:form method="POST" validate="true">
+    <a2:hidden name="task"/>
+    <a2:hidden name="username"/>
 
-    <ww:label label="%{getText('prompt.username')}" name="user.username"/>
+    <a2:label label="%{getText('prompt.username')}" name="user.username"/>
 
-    <ww:if test="task == 'Create'">
-        <ww:textfield label="%{getText('prompt.mailHostname')}" name="subscription.host"/>
-    </ww:if>
-    <ww:else>
-        <ww:label label="%{getText('prompt.mailHostname')}" name="subscription.host"/>
-        <ww:hidden name="subscription.host"/>
-    </ww:else>
+    <a2:if test="task == 'Create'">
+        <a2:textfield label="%{getText('prompt.mailHostname')}" name="subscription.host"/>
+    </a2:if>
+    <a2:else>
+        <a2:label label="%{getText('prompt.mailHostname')}" name="subscription.host"/>
+        <a2:hidden name="subscription.host"/>
+    </a2:else>
 
-    <ww:textfield label="%{getText('prompt.mailUsername')}" name="subscription.username"/>
+    <a2:textfield label="%{getText('prompt.mailUsername')}" name="subscription.username"/>
 
-    <ww:textfield label="%{getText('prompt.mailPassword')}" name="subscription.password"/>
+    <a2:textfield label="%{getText('prompt.mailPassword')}" name="subscription.password"/>
 
-    <ww:select label="%{getText('prompt.mailServerType')}" name="subscription.type"
+    <a2:select label="%{getText('prompt.mailServerType')}" name="subscription.type"
                list="servers"/>
 
-    <ww:checkbox label="%{getText('prompt.autoConnect')}" name="subscription.autoConnect"/>
+    <a2:checkbox label="%{getText('prompt.autoConnect')}" name="subscription.autoConnect"/>
 
-    <ww:if test="task == 'Delete'">
-        <ww:submit value="%{getText('button.confirm')}"/>
-        <ww:reset value="%{getText('button.reset')}"/>
-    </ww:if>
-    <ww:else>
-        <ww:submit value="%{getText('button.save')}"/>
-    </ww:else>
+    <a2:if test="task == 'Delete'">
+        <a2:submit value="%{getText('button.confirm')}"/>
+        <a2:reset value="%{getText('button.reset')}"/>
+    </a2:if>
+    <a2:else>
+        <a2:submit value="%{getText('button.save')}"/>
+    </a2:else>
 
-    <ww:submit action="MainMenu" value="%{getText('button.cancel')}" onclick="form.onsubmit=null"/>
-</ww:form>
+    <a2:submit action="MainMenu" value="%{getText('button.cancel')}" onclick="form.onsubmit=null"/>
+</a2:form>
 
 <jsp:include page="Footer.jsp"/>
 

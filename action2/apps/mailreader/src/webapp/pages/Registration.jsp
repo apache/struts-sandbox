@@ -1,108 +1,108 @@
-<%@ taglib uri="/webwork" prefix="ww" %>
+<%@ taglib uri="/webwork" prefix="a2" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-    <ww:if test="task=='Create'">
-        <title><ww:text name="registration.title.create"/></title>
-    </ww:if>
-    <ww:if test="task=='Edit'">
-        <title><ww:text name="registration.title.edit"/></title>
-    </ww:if>
+    <a2:if test="task=='Create'">
+        <title><a2:text name="registration.title.create"/></title>
+    </a2:if>
+    <a2:if test="task=='Edit'">
+        <title><a2:text name="registration.title.edit"/></title>
+    </a2:if>
 </head>
 
 <body>
 
-<ww:form method="POST" validate="true">
-    <ww:hidden name="task"/>
-    <ww:if test="task == 'Create'">
-        <ww:textfield label="%{getText('prompt.username')}" name="username"/>
-    </ww:if>
-    <ww:else>
-        <ww:label label="%{getText('prompt.username')}" name="username"/>
-        <ww:hidden name="username"/>
-    </ww:else>
+<a2:form method="POST" validate="true">
+    <a2:hidden name="task"/>
+    <a2:if test="task == 'Create'">
+        <a2:textfield label="%{getText('prompt.username')}" name="username"/>
+    </a2:if>
+    <a2:else>
+        <a2:label label="%{getText('prompt.username')}" name="username"/>
+        <a2:hidden name="username"/>
+    </a2:else>
 
-    <ww:textfield label="%{getText('prompt.password')}" name="password"/>
+    <a2:textfield label="%{getText('prompt.password')}" name="password"/>
 
-    <ww:textfield label="%{getText('prompt.password2')}" name="password2"/>
+    <a2:textfield label="%{getText('prompt.password2')}" name="password2"/>
 
-    <ww:textfield label="%{getText('prompt.fullName')}" name="user.fullName"/>
+    <a2:textfield label="%{getText('prompt.fullName')}" name="user.fullName"/>
 
-    <ww:textfield label="%{getText('prompt.fromAddress')}" name="user.fromAddress"/>
+    <a2:textfield label="%{getText('prompt.fromAddress')}" name="user.fromAddress"/>
 
-    <ww:textfield label="%{getText('prompt.replyToAddress')}" name="user.replyToAddress"/>
+    <a2:textfield label="%{getText('prompt.replyToAddress')}" name="user.replyToAddress"/>
 
-    <ww:submit/>
+    <a2:submit/>
 
-    <ww:reset/>
+    <a2:reset/>
 
-    <ww:if test="task == 'Create'">
-        <ww:submit action="Welcome" value="%{getText('button.cancel')}" onclick="form.onsubmit=null"/>
-    </ww:if>
-    <ww:else>
-        <ww:submit action="MainMenu" value="%{getText('button.cancel')}" onclick="form.onsubmit=null"/>
-    </ww:else>
+    <a2:if test="task == 'Create'">
+        <a2:submit action="Welcome" value="%{getText('button.cancel')}" onclick="form.onsubmit=null"/>
+    </a2:if>
+    <a2:else>
+        <a2:submit action="MainMenu" value="%{getText('button.cancel')}" onclick="form.onsubmit=null"/>
+    </a2:else>
 
-</ww:form>
+</a2:form>
 
-<ww:if test="task == 'Edit'">
+<a2:if test="task == 'Edit'">
     <div align="center">
-        <h3><ww:text name="heading.subscriptions"/></h3>
+        <h3><a2:text name="heading.subscriptions"/></h3>
     </div>
 
     <table border="1" width="100%">
 
         <tr>
             <th align="center" width="30%">
-                <ww:text name="heading.host"/>
+                <a2:text name="heading.host"/>
             </th>
             <th align="center" width="25%">
-                <ww:text name="heading.user"/>
+                <a2:text name="heading.user"/>
             </th>
             <th align="center" width="10%">
-                <ww:text name="heading.type"/>
+                <a2:text name="heading.type"/>
             </th>
             <th align="center" width="10%">
-                <ww:text name="heading.autoConnect"/>
+                <a2:text name="heading.autoConnect"/>
             </th>
             <th align="center" width="15%">
-                <ww:text name="heading.action"/>
+                <a2:text name="heading.action"/>
             </th>
         </tr>
 
-        <ww:iterator value="user.subscriptions">
+        <a2:iterator value="user.subscriptions">
             <tr>
                 <td align="left">
-                    <ww:property value="host"/>
+                    <a2:property value="host"/>
                 </td>
                 <td align="left">
-                    <ww:property value="username"/>
+                    <a2:property value="username"/>
                 </td>
                 <td align="center">
-                    <ww:property value="type"/>
+                    <a2:property value="type"/>
                 </td>
                 <td align="center">
-                    <ww:property value="autoConnect"/>
+                    <a2:property value="autoConnect"/>
                 </td>
                 <td align="center">
 
-                    <a href="<ww:url action="Subscription!delete"><ww:param name="host" value="#host"/></ww:url>">
-                        <ww:text name="registration.deleteSubscription"/>
+                    <a href="<a2:url action="Subscription!delete"><a2:param name="host" value="#host"/></a2:url>">
+                        <a2:text name="registration.deleteSubscription"/>
                     </a>
                     &nbsp;
-                    <a href="<ww:url action="Subscription!edit"><ww:param name="host" value="#host"/></ww:url>">
-                        <ww:text name="registration.editSubscription"/>
+                    <a href="<a2:url action="Subscription!edit"><a2:param name="host" value="#host"/></a2:url>">
+                        <a2:text name="registration.editSubscription"/>
                     </a>
 
                 </td>
             </tr>
-        </ww:iterator>
+        </a2:iterator>
 
     </table>
 
-    <ww:action name="Subscription.edit"><ww:text name="registration.addSubscription"/></ww:action>
-</ww:if>
+    <a2:action name="Subscription.edit"><a2:text name="registration.addSubscription"/></a2:action>
+</a2:if>
 
 <jsp:include page="Footer.jsp"/>
 
