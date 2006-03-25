@@ -12,6 +12,7 @@
     <ui:if test="task=='Delete'">
         <title><ui:text name="subscription.title.delete"/></title>
     </ui:if>
+    <link href="<ui:url value="/css/mailreader.css"/>" rel="stylesheet" type="text/css"/>
 </head>
 
 <body>
@@ -20,31 +21,30 @@
     <ui:label label="%{getText('prompt.username')}" name="user.username"/>
 
     <ui:if test="task == 'Create'">
-        <ui:textfield label="%{getText('prompt.mailHostname')}" name="subscription.host"/>
+        <ui:textfield label="%{getText('prompt.mailHostname')}" name="host"/>
     </ui:if>
     <ui:else>
         <ui:label label="%{getText('prompt.mailHostname')}" name="host"/>
         <ui:hidden name="host"/>
     </ui:else>
 
-    <ui:textfield label="%{getText('prompt.mailUsername')}" name="subscription.username"/>
-
-    <ui:textfield label="%{getText('prompt.mailPassword')}" name="subscription.password"/>
-
-    <ui:select label="%{getText('prompt.mailServerType')}" name="subscription.type"
-               list="types"/>
-
-    <ui:checkbox label="%{getText('prompt.autoConnect')}" name="subscription.autoConnect"/>
-
     <ui:if test="task == 'Delete'">
+        <ui:label label="%{getText('prompt.mailUsername')}" name="subscription.username"/>
+        <ui:label label="%{getText('prompt.mailPassword')}" name="subscription.password"/>
+        <ui:label label="%{getText('prompt.mailServerType')}" name="subscription.type"/>
+        <ui:label label="%{getText('prompt.autoConnect')}" name="subscription.autoConnect"/>
         <ui:submit value="%{getText('button.confirm')}"/>
-        <ui:reset value="%{getText('button.reset')}"/>
     </ui:if>
     <ui:else>
+        <ui:textfield label="%{getText('prompt.mailUsername')}" name="subscription.username"/>
+        <ui:textfield label="%{getText('prompt.mailPassword')}" name="subscription.password"/>
+        <ui:select label="%{getText('prompt.mailServerType')}" name="subscription.type" list="types"/>
+        <ui:checkbox label="%{getText('prompt.autoConnect')}" name="subscription.autoConnect"/>
         <ui:submit value="%{getText('button.save')}"/>
+        <ui:reset value="%{getText('button.reset')}"/>
     </ui:else>
 
-    <ui:submit action="MainMenu" value="%{getText('button.cancel')}" onclick="form.onsubmit=null"/>
+    <ui:submit action="Registration!input" value="%{getText('button.cancel')}" onclick="form.onsubmit=null"/>
 </ui:form>
 
 <jsp:include page="Footer.jsp"/>

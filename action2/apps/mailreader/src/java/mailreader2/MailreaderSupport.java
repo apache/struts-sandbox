@@ -18,6 +18,7 @@
 
 package mailreader2;
 
+import com.opensymphony.util.BeanUtils;
 import com.opensymphony.webwork.interceptor.ApplicationAware;
 import com.opensymphony.webwork.interceptor.SessionAware;
 import com.opensymphony.xwork.ActionSupport;
@@ -27,6 +28,8 @@ import org.apache.struts.apps.mailreader.dao.ExpiredPasswordException;
 import org.apache.struts.apps.mailreader.dao.Subscription;
 import org.apache.struts.apps.mailreader.dao.User;
 import org.apache.struts.apps.mailreader.dao.UserDatabase;
+import org.apache.struts.apps.mailreader.dao.impl.memory.MemorySubscription;
+import org.apache.struts.apps.mailreader.dao.impl.memory.MemoryUser;
 
 import java.util.Map;
 
@@ -231,6 +234,49 @@ public class MailreaderSupport extends ActionSupport implements SessionAware, Ap
         }
     }
 
+    public void createInputUser() {
+        User user = new MemoryUser(null, null);
+        setUser(user);
+    }
+
+    /**
+     * <p> Verify input for creating a new user, create the user, and process the login. </p>
+     *
+     * @return A new User and empty Errors if create succeeds, or null and Errors if create fails
+     */
+    public User createUser(String username, String password) {
+
+        UserDatabase database = getDatabase();
+        User user;
+
+        try {
+
+            user = findUser(username, password);
+        }
+
+        catch (ExpiredPasswordException e) {
+            user = getUser(); // Just so that it is not null
+        }
+
+        if (user != null) {
+            this.addFieldError("username", "error.username.unique");
+            return null;
+        }
+
+        return database.createUser(username);
+    }
+
+    // Since user.username is immutable, we have to use some local properties
+    public void copyUser(String _username, String _password) {
+        User input = getUser();
+        input.setPassword(_password);
+        User user = createUser(_username, _password);
+        if (null != user) {
+            BeanUtils.setValues(user, input, null);
+            setUser(user);
+        }
+    }
+
     // ---- Subscription property ----
 
     /**
@@ -251,12 +297,12 @@ public class MailreaderSupport extends ActionSupport implements SessionAware, Ap
      *
      * @return The matching Subscription or null
      */
-    public Subscription findSubscription() {
+    public Subscription findSubscription(String host) {
 
         Subscription subscription;
 
         try {
-            subscription = getUser().findSubscription(getHost());
+            subscription = getUser().findSubscription(host);
         }
         catch (NullPointerException e) {
             subscription = null;
@@ -265,11 +311,45 @@ public class MailreaderSupport extends ActionSupport implements SessionAware, Ap
         return subscription;
     }
 
+    public Subscription findSubscription() {
+
+        return findSubscription(getHost());
+    }
+
+    public void createInputSubscription() {
+        Subscription sub = new MemorySubscription(getUser(), null);
+        setSubscription(sub);
+        setHost(sub.getHost());
+    }
+
+    public Subscription createSubscription(String host) {
+
+        Subscription sub;
+
+        sub = findSubscription(host);
+
+        if (null != sub) {
+            this.addFieldError("host", "error.host.unique");
+            return null;
+        }
+
+        return getUser().createSubscription(host);
+    }
+
+    public void copySubscription(String host) {
+        Subscription input = getSubscription();
+        Subscription sub = createSubscription(host);
+        if (null != sub) {
+            BeanUtils.setValues(sub, input, null);
+            setSubscription(sub);
+            setHost(sub.getHost());
+        }
+    }
+
     public void removeSubscription() throws Exception {
         getUser().removeSubscription(getSubscription());
         getSession().remove(Constants.SUBSCRIPTION_KEY);
     }
-
 
     public String getSubscriptionHost() {
         Subscription sub = getSubscription();

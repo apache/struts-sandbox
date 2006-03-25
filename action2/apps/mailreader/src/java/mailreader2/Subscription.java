@@ -34,20 +34,12 @@ public final class Subscription extends MailreaderSupport implements Preparable 
     }
 
     public String input() {
-
+        createInputSubscription();
         setTask(Constants.CREATE);
         return INPUT;
     }
 
-    public String delete() {
-
-        setTask(Constants.DELETE);
-        return INPUT;
-    }
-
-    public String edit() {
-
-        setTask(Constants.EDIT);
+    public String find() {
 
         org.apache.struts.apps.mailreader.dao.Subscription
                 sub = findSubscription();
@@ -59,12 +51,29 @@ public final class Subscription extends MailreaderSupport implements Preparable 
         setSubscription(sub);
 
         return INPUT;
+
+    }
+
+    public String delete() {
+
+        setTask(Constants.DELETE);
+        return find();
+    }
+
+    public String edit() {
+
+        setTask(Constants.EDIT);
+        return find();
     }
 
     public String execute() throws Exception {
 
         if (Constants.DELETE.equals(getTask())) {
             removeSubscription();
+        }
+
+        if (Constants.CREATE.equals(getTask())) {
+            copySubscription(getHost());
         }
 
         saveUser();

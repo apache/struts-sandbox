@@ -9,6 +9,7 @@
     <a2:if test="task=='Edit'">
         <title><a2:text name="registration.title.edit"/></title>
     </a2:if>
+    <link href="<a2:url value="/css/mailreader.css"/>" rel="stylesheet" type="text/css"/>
 </head>
 
 <body>

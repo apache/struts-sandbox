@@ -1,10 +1,6 @@
 package mailreader2;
 
-import com.opensymphony.util.BeanUtils;
-import org.apache.struts.apps.mailreader.dao.ExpiredPasswordException;
 import org.apache.struts.apps.mailreader.dao.User;
-import org.apache.struts.apps.mailreader.dao.UserDatabase;
-import org.apache.struts.apps.mailreader.dao.impl.memory.MemoryUser;
 
 
 /**
@@ -13,37 +9,6 @@ import org.apache.struts.apps.mailreader.dao.impl.memory.MemoryUser;
  * additional validations ensure input is nominal. When a user is created, Save also handles the initial logon. </p>
  */
 public final class Registration extends MailreaderSupport {
-
-    // ---- Private Methods ----
-
-    /**
-     * <p> Verify input for creating a new user, create the user, and process the login. </p>
-     *
-     * @return A new User and empty Errors if create succeeds, or null and Errors if create fails
-     */
-    private User createUser(String username, String password) {
-
-        UserDatabase database = getDatabase();
-        User user;
-
-        try {
-
-            user = findUser(username, password);
-        }
-
-        catch (ExpiredPasswordException e) {
-            user = getUser(); // Just so that it is not null
-        }
-
-        if (user != null) {
-            this.addFieldError("username", "error.username.unique");
-            return null;
-        }
-
-        return database.createUser(username);
-    }
-
-    // ----- Public Methods ----
 
     private boolean isCreating() {
         User user = getUser();
@@ -60,8 +25,7 @@ public final class Registration extends MailreaderSupport {
     public String input() throws Exception {
 
         if (isCreating()) {
-            User user = new MemoryUser(null, null);
-            setUser(user);
+            createInputUser();
             setTask(Constants.CREATE);
         } else {
             setTask(Constants.EDIT);
@@ -86,14 +50,8 @@ public final class Registration extends MailreaderSupport {
         boolean creating = Constants.CREATE.equals(getTask());
         creating = creating && isCreating(); // trust but verify
 
-        User user;
         if (creating) {
-            User input = getUser();
-            // Since user.username is immutable, we have to use some local properties
-            user = createUser(getUsername(), getPassword());
-            input.setPassword(getPassword());
-            BeanUtils.setValues(user, input, null);
-            setUser(user);
+            copyUser(getUsername(), getPassword());
         }
 
         saveUser();

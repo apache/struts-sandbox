@@ -7,18 +7,6 @@
 
         <!-- default-action-ref name="Welcome"/ -->
 
-        <global-results>
-            <result name="error">/pages/Error.jsp</result>
-        </global-results>
-
-        <global-exception-mappings>
-
-            <exception-mapping
-                    result="error"
-                    exception="java.lang.Exception"/>
-
-        </global-exception-mappings>
-
         <action name="Welcome">
             <result>/pages/Welcome.jsp</result>
         </action>
