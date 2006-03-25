@@ -10,7 +10,6 @@
         <title><a2:text name="registration.title.edit"/></title>
     </a2:if>
 </head>
-
 <body>
 
 <a2:form method="POST" validate="true">
