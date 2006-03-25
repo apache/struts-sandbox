@@ -88,6 +88,18 @@ public class MailreaderSupport extends ActionSupport implements SessionAware, Ap
         this.task = task;
     }
 
+    // ---- Host property ----
+
+    private String host;
+
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String value) {
+        host = value;
+    }
+
     // ---- Password property ----
 
     /**
@@ -161,7 +173,7 @@ public class MailreaderSupport extends ActionSupport implements SessionAware, Ap
      *
      * @return a reference to the UserDatabase or null if the database is not available
      */
-    protected UserDatabase getDatabase() {
+    public UserDatabase getDatabase() {
         Object db = getApplication().get(Constants.DATABASE_KEY);
         if (db == null) {
             this.addActionError("error.database.missing");
@@ -169,7 +181,7 @@ public class MailreaderSupport extends ActionSupport implements SessionAware, Ap
         return (UserDatabase) db;
     }
 
-    protected void setDatabase(UserDatabase database) {
+    public void setDatabase(UserDatabase database) {
         getApplication().put(Constants.DATABASE_KEY, database);
     }
 
@@ -209,7 +221,7 @@ public class MailreaderSupport extends ActionSupport implements SessionAware, Ap
      *
      * @throws javax.servlet.ServletException On any error
      */
-    protected void saveUser() throws Exception {
+    public void saveUser() throws Exception {
         try {
             getDatabase().save();
         } catch (Exception e) {
@@ -226,12 +238,36 @@ public class MailreaderSupport extends ActionSupport implements SessionAware, Ap
      *
      * @return Cached Subscription object or null
      */
-    protected Subscription getSubscription() {
+    public Subscription getSubscription() {
         return (Subscription) getSession().get(Constants.SUBSCRIPTION_KEY);
     }
 
-    protected void getSubscriprtion(Subscription subscription) {
+    public void setSubscription(Subscription subscription) {
         getSession().put(Constants.SUBSCRIPTION_KEY, subscription);
+    }
+
+    /**
+     * <p> Obtain subscription matching host for our User, or return null if not found. </p>
+     *
+     * @return The matching Subscription or null
+     */
+    public Subscription findSubscription() {
+
+        Subscription subscription;
+
+        try {
+            subscription = getUser().findSubscription(getHost());
+        }
+        catch (NullPointerException e) {
+            subscription = null;
+        }
+
+        return subscription;
+    }
+
+    public void removeSubscription() throws Exception {
+        getUser().removeSubscription(getSubscription());
+        getSession().remove(Constants.SUBSCRIPTION_KEY);
     }
 
 }

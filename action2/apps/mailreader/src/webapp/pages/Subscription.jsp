@@ -9,16 +9,14 @@
     <a2:if test="task=='Edit'">
         <title><a2:text name="subscription.title.edit"/></title>
     </a2:if>
-    <a2:if test="task=='Edit'">
-        <title><a2:text name="subscription.title.edit"/></title>
+    <a2:if test="task=='Delete'">
+        <title><a2:text name="subscription.title.delete"/></title>
     </a2:if>
 </head>
 
 <body>
-<a2:form method="POST" validate="true">
+<a2:form method="POST" action="Subscription" validate="true">
     <a2:hidden name="task"/>
-    <a2:hidden name="username"/>
-
     <a2:label label="%{getText('prompt.username')}" name="user.username"/>
 
     <a2:if test="task == 'Create'">
@@ -34,7 +32,7 @@
     <a2:textfield label="%{getText('prompt.mailPassword')}" name="subscription.password"/>
 
     <a2:select label="%{getText('prompt.mailServerType')}" name="subscription.type"
-               list="servers"/>
+               list="types"/>
 
     <a2:checkbox label="%{getText('prompt.autoConnect')}" name="subscription.autoConnect"/>
 

@@ -1,30 +1,62 @@
 package mailreader2;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.opensymphony.xwork.Preparable;
 
-public final class Subscription extends MailreaderSupport {
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-    List types = new ArrayList();
+public final class Subscription extends MailreaderSupport implements Preparable {
 
-    List getTypes() {
+    private Map types = null;
+
+    public Map getTypes() {
         return types;
+    }
+
+    public void prepare() {
+        Map m = new LinkedHashMap();
+        m.put("imap", "IMAP Protocol");
+        m.put("pop3", "POP3 Protocol");
+        types = m;
     }
 
     public String input() {
 
-        types.add(new KeyValue("imap", "IMAP Protocol"));
-        types.add(new KeyValue("pop3", "POP3 Protocol"));
+        setTask(Constants.CREATE);
+        return INPUT;
+    }
+
+    public String delete() {
+
+        setTask(Constants.DELETE);
+        return INPUT;
+    }
+
+    public String edit() {
+
+        setTask(Constants.EDIT);
+
+        org.apache.struts.apps.mailreader.dao.Subscription
+                sub = findSubscription();
+
+        if (sub == null) {
+            return ERROR;
+        }
+
+        setSubscription(sub);
 
         return INPUT;
     }
 
-    public String execute() {
+    public String execute() throws Exception {
 
+        if (Constants.DELETE.equals(getTask())) {
+            removeSubscription();
+        }
 
+        saveUser();
         return SUCCESS;
     }
-
 
     public static class KeyValue {
         String key;

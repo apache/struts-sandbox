@@ -7,6 +7,18 @@
 
         <!-- default-action-ref name="Welcome"/ -->
 
+        <global-results>
+            <result name="error" type="chain">Error</result>
+        </global-results>
+
+        <global-exception-mappings>
+
+            <exception-mapping
+                    result="Error"
+                    exception="Exception"/>
+
+        </global-exception-mappings>
+
         <action name="Welcome">
             <result>/pages/Welcome.jsp</result>
         </action>
@@ -32,6 +44,11 @@
 
         <action name="Registration" class="mailreader2.Registration">
             <result name="input">/pages/Registration.jsp</result>
+            <result type="chain">MainMenu</result>
+        </action>
+
+        <action name="Subscription" class="mailreader2.Subscription">
+            <result name="input">/pages/Subscription.jsp</result>
             <result type="chain">MainMenu</result>
         </action>
 

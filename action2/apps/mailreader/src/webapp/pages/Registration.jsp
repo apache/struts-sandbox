@@ -87,11 +87,11 @@
                 </td>
                 <td align="center">
 
-                    <a href="<a2:url action="Subscription!delete"><a2:param name="host" value="#host"/></a2:url>">
+                    <a href="<a2:url action="Subscription!delete"><a2:param name="host" value="host"/></a2:url>">
                         <a2:text name="registration.deleteSubscription"/>
                     </a>
                     &nbsp;
-                    <a href="<a2:url action="Subscription!edit"><a2:param name="host" value="#host"/></a2:url>">
+                    <a href="<a2:url action="Subscription!edit"><a2:param name="host" value="host"/></a2:url>">
                         <a2:text name="registration.editSubscription"/>
                     </a>
 
@@ -101,7 +101,8 @@
 
     </table>
 
-    <a2:action name="Subscription.edit"><a2:text name="registration.addSubscription"/></a2:action>
+    <a href="<a2:url action="Subscription!input"/>"><a2:text name="registration.addSubscription"/></a>
+
 </a2:if>
 
 <jsp:include page="Footer.jsp"/>
