@@ -13,11 +13,24 @@ public final class Subscription extends MailreaderSupport implements Preparable 
         return types;
     }
 
+    private String host;
+
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String value) {
+        host = value;
+    }
+
     public void prepare() {
+
         Map m = new LinkedHashMap();
         m.put("imap", "IMAP Protocol");
         m.put("pop3", "POP3 Protocol");
         types = m;
+
+        setHost(getSubscriptionHost());
     }
 
     public String input() {

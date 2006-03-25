@@ -270,4 +270,12 @@ public class MailreaderSupport extends ActionSupport implements SessionAware, Ap
         getSession().remove(Constants.SUBSCRIPTION_KEY);
     }
 
+
+    public String getSubscriptionHost() {
+        Subscription sub = getSubscription();
+        if (null == sub) {
+            return null;
+        }
+        return sub.getHost();
+    }
 }

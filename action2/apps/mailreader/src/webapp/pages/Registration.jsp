@@ -10,9 +10,10 @@
         <title><a2:text name="registration.title.edit"/></title>
     </a2:if>
 </head>
+
 <body>
 
-<a2:form method="POST" validate="true">
+<a2:form method="POST" validate="false">
     <a2:hidden name="task"/>
     <a2:if test="task == 'Create'">
         <a2:textfield label="%{getText('prompt.username')}" name="username"/>

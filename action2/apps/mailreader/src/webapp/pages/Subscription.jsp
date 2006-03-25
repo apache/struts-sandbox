@@ -23,8 +23,8 @@
         <ui:textfield label="%{getText('prompt.mailHostname')}" name="subscription.host"/>
     </ui:if>
     <ui:else>
-        <ui:label label="%{getText('prompt.mailHostname')}" name="subscription.host"/>
-        <ui:hidden name="subscription.host"/>
+        <ui:label label="%{getText('prompt.mailHostname')}" name="host"/>
+        <ui:hidden name="host"/>
     </ui:else>
 
     <ui:textfield label="%{getText('prompt.mailUsername')}" name="subscription.username"/>

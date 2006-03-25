@@ -8,14 +8,14 @@
         <!-- default-action-ref name="Welcome"/ -->
 
         <global-results>
-            <result name="error" type="chain">Error</result>
+            <result name="error">/pages/Error.jsp</result>
         </global-results>
 
         <global-exception-mappings>
 
             <exception-mapping
-                    result="Error"
-                    exception="Exception"/>
+                    result="error"
+                    exception="java.lang.Exception"/>
 
         </global-exception-mappings>
 
@@ -44,16 +44,16 @@
 
         <action name="Registration" class="mailreader2.Registration">
             <result name="input">/pages/Registration.jsp</result>
-            <result type="chain">MainMenu</result>
+            <result type="redirect-action">MainMenu</result>
         </action>
 
         <action name="Subscription" class="mailreader2.Subscription">
             <result name="input">/pages/Subscription.jsp</result>
-            <result type="chain">MainMenu</result>
+            <result type="redirect-action">Registration!input</result>
         </action>
 
         <action name="Logoff" class="mailreader2.Logoff">
-            <result type="chain">Welcome</result>
+            <result type="redirect-action">Welcome</result>
         </action>
 
     </package>
