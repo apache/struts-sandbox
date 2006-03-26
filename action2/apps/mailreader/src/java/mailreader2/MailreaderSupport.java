@@ -36,35 +36,70 @@ import java.util.Map;
 /**
  * <p> Base Action for MailreaderSupport application. </p>
  *
- * <p> Note that this class does NOT implement model driven because of issues with the pre-existing model. The
- * MailReader DAO does not provide a setter for username and does not provide a default constructor, making it difficult
- * to use as a POJO or to extend. As an alternative, the username and password properties are provided on the Action and
- * then passed to the user class as needed. </p>
- *
- * @version $Rev: 360442 $ $Date: 2005-12-31 15:10:04 -0500 (Sat, 31 Dec 2005) $
+ * <p> Note that this class does NOT implement model driven because of the way
+ * the pre-existing model is designed. The MailReader DAO includes immutable
+ * fields that can only be set on construction, and some objects do not have a
+ * default construction. One approach would be to mirror all the DAO
+ * properties on the Actions. As an alternative, this implementations uses the
+ * DAO properties where possible, and uses local Action properties only as
+ * needed. To create new objects, a blank temporary object is constructed, and
+ * the page uses a mix of local Action properties and DAO properties. When the
+ * new object is to be saved, the local Action properties are used to create
+ * the object using the DAO factory methods, the input values are copied from
+ * the temporary object, and the new object is saved. It's kludge, but it
+ * avoids creating unnecessary local properties. Pick your poison.</p>
  */
-public class MailreaderSupport extends ActionSupport implements SessionAware, ApplicationAware {
+public class MailreaderSupport extends ActionSupport
+        implements SessionAware, ApplicationAware {
 
     // ---- ApplicationAware ----
 
+    /**
+     * <p>Field to store application context or its proxy.</p>
+     *
+     * <p>The application context lasts for the life of the application. A
+     * reference to the database is stored in the application context at
+     * startup.</p>
+     */
     private Map application;
 
+    /**
+     * <p>Store a new application context.</p>
+     *
+     * @param application
+     */
     public void setApplication(Map application) {
         this.application = application;
     }
 
+    /**
+     * <p>Provide application context.</p>
+     */
     public Map getApplication() {
         return this.application;
     }
 
     // ---- SessionAware ----
 
+    /**
+     * <p>Field to store session context, or its proxy.</p>
+     */
     private Map session;
 
+    /**
+     * <p>Store a new session context.</p>
+     *
+     * @param session
+     */
     public void setSession(Map session) {
         this.session = session;
     }
 
+    /**
+     * <p>Provide session context.</p>
+     *
+     * @return session context
+     */
     public Map getSession() {
         return session;
     }
@@ -72,12 +107,18 @@ public class MailreaderSupport extends ActionSupport implements SessionAware, Ap
     // ---- Task property (utilized by UI) ----
 
     /**
-     * <p>The task input field.</p>
+     * <p>Field to store workflow task.</p>
+     *
+     * <p>The Task is used to track the state of the CRUD workflows. It can be
+     * set to Constant.CREATE, Constant.EDIT, or Constant.DELETE as
+     * needed.</p>
      */
     private String task = null;
 
 
     /**
+     * <p>Provide worklow task.</p>
+     *
      * @return Returns the task.
      */
     public String getTask() {
@@ -85,6 +126,8 @@ public class MailreaderSupport extends ActionSupport implements SessionAware, Ap
     }
 
     /**
+     * <p>Store new workflow task.</p>
+     *
      * @param task The task to set.
      */
     public void setTask(String task) {
@@ -93,12 +136,29 @@ public class MailreaderSupport extends ActionSupport implements SessionAware, Ap
 
     // ---- Host property ----
 
+    /**
+     * <p>Field to store Subscription host.</p>
+     *
+     * <p> The host is an immutable property of the Subscrtion DAP object, so
+     * we need to store it locally until we are ready to create the
+     * Subscription. </p>
+     */
     private String host;
 
+    /**
+     * <p>Provide tSubscription host.</p>
+     *
+     * @return host property
+     */
     public String getHost() {
         return host;
     }
 
+    /**
+     * <p>Store new Subscription host.</p>
+     *
+     * @param value
+     */
     public void setHost(String value) {
         host = value;
     }
@@ -106,12 +166,17 @@ public class MailreaderSupport extends ActionSupport implements SessionAware, Ap
     // ---- Password property ----
 
     /**
-     * <p>The password input field.</p>
+     * <p>Field to store User password property.</p>
+     *
+     * <p>The User DAO object password proerty is immutable, so we store it
+     * locally until we are ready to create the object.</p>
      */
     private String password = null;
 
 
     /**
+     * <p>Provide User password</p>
+     *
      * @return Returns the password.
      */
     public String getPassword() {
@@ -119,6 +184,8 @@ public class MailreaderSupport extends ActionSupport implements SessionAware, Ap
     }
 
     /**
+     * <p>Store new User Password</p>
+     *
      * @param password The password to set.
      */
     public void setPassword(String password) {
@@ -128,12 +195,18 @@ public class MailreaderSupport extends ActionSupport implements SessionAware, Ap
     // ---- Password2 property (confirmation) ----
 
     /**
-     * <p>The confirmation password input field.</p>
+     * <p>Field to store the User password confirmation.</p>
+     *
+     * <p>When a User object is created, we ask the client to enter the
+     * password twice, to help ensure the password is being typed
+     * correctly.</p>
      */
     private String password2 = null;
 
 
     /**
+     * <p>Provide the User password confirmation.</p>
+     *
      * @return Returns the confirmationpassword.
      */
     public String getPassword2() {
@@ -141,6 +214,8 @@ public class MailreaderSupport extends ActionSupport implements SessionAware, Ap
     }
 
     /**
+     * <p>Store a new User password confirmation.</p>
+     *
      * @param password2 The confirmation password to set.
      */
     public void setPassword2(String password2) {
@@ -150,19 +225,26 @@ public class MailreaderSupport extends ActionSupport implements SessionAware, Ap
     // ---- Username property ----
 
     /**
-     * <p>The username input field.</p>
+     * <p>Field to store User username.</p>
+     *
+     * <p>The User DAO object password proerty is immutable, so we store it
+     * locally until we are ready to create the object.</p>
      */
     private String username = null;
 
 
     /**
-     * @return Returns the username.
+     * <p>Provide User username.</p>
+     *
+     * @return Returns the User username.
      */
     public String getUsername() {
         return this.username;
     }
 
     /**
+     * <p>Store new User username</p>
+     *
      * @param username The username to set.
      */
     public void setUsername(String username) {
@@ -172,9 +254,11 @@ public class MailreaderSupport extends ActionSupport implements SessionAware, Ap
     // ---- Database property ----
 
     /**
-     * <p> Return a reference to the UserDatabase or null if the database is not available. </p>
+     * <p>Provide reference to UserDatabase, or null if the database is not
+     * available. </p>
      *
-     * @return a reference to the UserDatabase or null if the database is not available
+     * @return a reference to the UserDatabase or null if the database is not
+     *         available
      */
     public UserDatabase getDatabase() {
         Object db = getApplication().get(Constants.DATABASE_KEY);
@@ -184,22 +268,47 @@ public class MailreaderSupport extends ActionSupport implements SessionAware, Ap
         return (UserDatabase) db;
     }
 
+    /**
+     * <p>Store a new reference to UserDatabase</p>
+     *
+     * @param database
+     */
     public void setDatabase(UserDatabase database) {
         getApplication().put(Constants.DATABASE_KEY, database);
     }
 
     // ---- User property ----
 
+    /**
+     * <p>Provide reference to User object for authenticated user.</p>
+     *
+     * @return User object for authenticated user.
+     */
     public User getUser() {
         return (User) getSession().get(Constants.USER_KEY);
     }
 
+    /**
+     * <p>Store new reference to User Object.</p>
+     *
+     * @param user User object for authenticated user
+     */
     public void setUser(User user) {
         getSession().put(Constants.USER_KEY, user);
     }
 
-    public User findUser(String username, String password) throws ExpiredPasswordException {
-        // FIXME: Stupid hack to compensate for inadequate DAO layer
+    /**
+     * <p>Obtain User object from database, or return null if the credentials
+     * are not found or invalid.</p>
+     *
+     * @param username User username
+     * @param password User password
+     * @return User object or null if not found
+     * @throws ExpiredPasswordException
+     */
+    public User findUser(String username, String password)
+            throws ExpiredPasswordException {
+        // FIXME: Stupid testing hack to compensate for inadequate DAO layer
         if ("Hermes".equals(username)) {
             throw new ExpiredPasswordException("Hermes");
         }
@@ -215,12 +324,13 @@ public class MailreaderSupport extends ActionSupport implements SessionAware, Ap
     }
 
     /**
-     * <p> The <code>Log</code> instance for this application. </p>
+     * <p><code>Log</code> instance for this application. </p>
      */
     protected Log log = LogFactory.getLog(Constants.PACKAGE);
 
     /**
-     * <p> Persist the User object, including subscriptions, to the database. </p>
+     * <p> Persist the User object, including subscriptions, to the database.
+     * </p>
      *
      * @throws javax.servlet.ServletException On any error
      */
@@ -228,7 +338,8 @@ public class MailreaderSupport extends ActionSupport implements SessionAware, Ap
         try {
             getDatabase().save();
         } catch (Exception e) {
-            String message = Constants.LOG_DATABASE_SAVE_ERROR + getUser().getUsername();
+            String message = Constants.LOG_DATABASE_SAVE_ERROR + getUser()
+                    .getUsername();
             log.error(message, e);
             throw new Exception(message, e);
         }
@@ -240,9 +351,11 @@ public class MailreaderSupport extends ActionSupport implements SessionAware, Ap
     }
 
     /**
-     * <p> Verify input for creating a new user, create the user, and process the login. </p>
+     * <p> Verify input for creating a new user, create the user, and process
+     * the login. </p>
      *
-     * @return A new User and empty Errors if create succeeds, or null and Errors if create fails
+     * @return A new User and empty Errors if create succeeds, or null and
+     *         Errors if create fails
      */
     public User createUser(String username, String password) {
 
@@ -267,6 +380,17 @@ public class MailreaderSupport extends ActionSupport implements SessionAware, Ap
     }
 
     // Since user.username is immutable, we have to use some local properties
+
+    /**
+     * <p>Use the current User object to create a new User object, and make
+     * the new User object the authenticated user.</p>
+     *
+     * <p>The "current" User object is usually a temporary object being used
+     * to capture input.</p>
+     *
+     * @param _username User username
+     * @param _password User password
+     */
     public void copyUser(String _username, String _password) {
         User input = getUser();
         input.setPassword(_password);
@@ -280,7 +404,7 @@ public class MailreaderSupport extends ActionSupport implements SessionAware, Ap
     // ---- Subscription property ----
 
     /**
-     * <p> Obtain the cached Subscription object, if any. </p>
+     * <p>Obtain the cached Subscription object, if any. </p>
      *
      * @return Cached Subscription object or null
      */
@@ -288,12 +412,18 @@ public class MailreaderSupport extends ActionSupport implements SessionAware, Ap
         return (Subscription) getSession().get(Constants.SUBSCRIPTION_KEY);
     }
 
+    /**
+     * <p>Store new User Subscription.</p>
+     *
+     * @param subscription
+     */
     public void setSubscription(Subscription subscription) {
         getSession().put(Constants.SUBSCRIPTION_KEY, subscription);
     }
 
     /**
-     * <p> Obtain subscription matching host for our User, or return null if not found. </p>
+     * <p> Obtain User Subscription object for the given host, or return null
+     * if not found. </p>
      *
      * @return The matching Subscription or null
      */
@@ -311,17 +441,36 @@ public class MailreaderSupport extends ActionSupport implements SessionAware, Ap
         return subscription;
     }
 
+    /**
+     * <p>Obtain uSER Subscription for the local Host property.</p>
+     *
+     * <p>Usually, the host property will be set from the client request,
+     * because it was embedded in a link to the Subcription action.
+     *
+     * @return Subscription or null if not found
+     */
     public Subscription findSubscription() {
 
         return findSubscription(getHost());
     }
 
+    /**
+     * <p>Provide a "temporary" User Subscription object that can be used to
+     * capture input values.</p>
+     */
     public void createInputSubscription() {
         Subscription sub = new MemorySubscription(getUser(), null);
         setSubscription(sub);
         setHost(sub.getHost());
     }
 
+    /**
+     * <p>Provide new User Subscription object for the given host, or null if
+     * the host is not unique.</p>
+     *
+     * @param host
+     * @return New User Subscription object or null
+     */
     public Subscription createSubscription(String host) {
 
         Subscription sub;
@@ -336,6 +485,15 @@ public class MailreaderSupport extends ActionSupport implements SessionAware, Ap
         return getUser().createSubscription(host);
     }
 
+    /**
+     * <p>Create a new Subscription from the current Subscription object,
+     * making the new Subscription the current Subscription. </p>
+     *
+     * <p>Usually, the "current" Subscription is a temporary object being used
+     * to capture input values.</p>
+     *
+     * @param host
+     */
     public void copySubscription(String host) {
         Subscription input = getSubscription();
         Subscription sub = createSubscription(host);
@@ -346,11 +504,21 @@ public class MailreaderSupport extends ActionSupport implements SessionAware, Ap
         }
     }
 
+    /**
+     * <p>Delete the current Subscription object from the database.</p>
+     *
+     * @throws Exception
+     */
     public void removeSubscription() throws Exception {
         getUser().removeSubscription(getSubscription());
         getSession().remove(Constants.SUBSCRIPTION_KEY);
     }
 
+    /**
+     * <p>Provide MailServer Host for current User Subscription.</p>
+     *
+     * @return MailServer Host for current User Subscription
+     */
     public String getSubscriptionHost() {
         Subscription sub = getSubscription();
         if (null == sub) {

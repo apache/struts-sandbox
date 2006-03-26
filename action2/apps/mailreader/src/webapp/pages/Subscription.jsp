@@ -12,7 +12,8 @@
     <saf:if test="task=='Delete'">
         <title><saf:text name="subscription.title.delete"/></title>
     </saf:if>
-    <link href="<saf:url value="/css/mailreader.css"/>" rel="stylesheet" type="text/css"/>
+    <link href="<saf:url value="/css/mailreader.css"/>" rel="stylesheet"
+          type="text/css"/>
 </head>
 
 <body>
@@ -29,22 +30,32 @@
     </saf:else>
 
     <saf:if test="task == 'Delete'">
-        <saf:label label="%{getText('prompt.mailUsername')}" name="subscription.username"/>
-        <saf:label label="%{getText('prompt.mailPassword')}" name="subscription.password"/>
-        <saf:label label="%{getText('prompt.mailServerType')}" name="subscription.type"/>
-        <saf:label label="%{getText('prompt.autoConnect')}" name="subscription.autoConnect"/>
+        <saf:label label="%{getText('prompt.mailUsername')}"
+                   name="subscription.username"/>
+        <saf:label label="%{getText('prompt.mailPassword')}"
+                   name="subscription.password"/>
+        <saf:label label="%{getText('prompt.mailServerType')}"
+                   name="subscription.type"/>
+        <saf:label label="%{getText('prompt.autoConnect')}"
+                   name="subscription.autoConnect"/>
         <saf:submit value="%{getText('button.confirm')}"/>
     </saf:if>
     <saf:else>
-        <saf:textfield label="%{getText('prompt.mailUsername')}" name="subscription.username"/>
-        <saf:textfield label="%{getText('prompt.mailPassword')}" name="subscription.password"/>
-        <saf:select label="%{getText('prompt.mailServerType')}" name="subscription.type" list="types"/>
-        <saf:checkbox label="%{getText('prompt.autoConnect')}" name="subscription.autoConnect"/>
+        <saf:textfield label="%{getText('prompt.mailUsername')}"
+                       name="subscription.username"/>
+        <saf:textfield label="%{getText('prompt.mailPassword')}"
+                       name="subscription.password"/>
+        <saf:select label="%{getText('prompt.mailServerType')}"
+                    name="subscription.type" list="types"/>
+        <saf:checkbox label="%{getText('prompt.autoConnect')}"
+                      name="subscription.autoConnect"/>
         <saf:submit value="%{getText('button.save')}"/>
         <saf:reset value="%{getText('button.reset')}"/>
     </saf:else>
 
-    <saf:submit action="Registration!input" value="%{getText('button.cancel')}" onclick="form.onsubmit=null"/>
+    <saf:submit action="Registration!input"
+                value="%{getText('button.cancel')}"
+                onclick="form.onsubmit=null"/>
 </saf:form>
 
 <jsp:include page="Footer.jsp"/>

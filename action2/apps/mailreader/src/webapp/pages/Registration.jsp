@@ -9,7 +9,8 @@
     <saf:if test="task=='Edit'">
         <title><saf:text name="registration.title.edit"/></title>
     </saf:if>
-    <link href="<saf:url value="/css/mailreader.css"/>" rel="stylesheet" type="text/css"/>
+    <link href="<saf:url value="/css/mailreader.css"/>" rel="stylesheet"
+          type="text/css"/>
 </head>
 
 <body>
@@ -28,21 +29,26 @@
 
     <saf:textfield label="%{getText('prompt.password2')}" name="password2"/>
 
-    <saf:textfield label="%{getText('prompt.fullName')}" name="user.fullName"/>
+    <saf:textfield label="%{getText('prompt.fullName')}"
+                   name="user.fullName"/>
 
-    <saf:textfield label="%{getText('prompt.fromAddress')}" name="user.fromAddress"/>
+    <saf:textfield label="%{getText('prompt.fromAddress')}"
+                   name="user.fromAddress"/>
 
-    <saf:textfield label="%{getText('prompt.replyToAddress')}" name="user.replyToAddress"/>
+    <saf:textfield label="%{getText('prompt.replyToAddress')}"
+                   name="user.replyToAddress"/>
 
     <saf:submit/>
 
     <saf:reset/>
 
     <saf:if test="task == 'Create'">
-        <saf:submit action="Welcome" value="%{getText('button.cancel')}" onclick="form.onsubmit=null"/>
+        <saf:submit action="Welcome" value="%{getText('button.cancel')}"
+                    onclick="form.onsubmit=null"/>
     </saf:if>
     <saf:else>
-        <saf:submit action="MainMenu" value="%{getText('button.cancel')}" onclick="form.onsubmit=null"/>
+        <saf:submit action="MainMenu" value="%{getText('button.cancel')}"
+                    onclick="form.onsubmit=null"/>
     </saf:else>
 
 </saf:form>
@@ -102,7 +108,8 @@
 
     </table>
 
-    <a href="<saf:url action="Subscription!input"/>"><saf:text name="registration.addSubscription"/></a>
+    <a href="<saf:url action="Subscription!input"/>"><saf:text
+            name="registration.addSubscription"/></a>
 
 </saf:if>
 

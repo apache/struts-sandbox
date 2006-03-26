@@ -134,7 +134,8 @@ Norminal
 Subscription Add
 + Cancel 
 + Submit 
-  Submit (bad data)
++ Submit (bad data)
+  Double submit
 
 ----
 
@@ -158,6 +159,7 @@ Nominal
 + Submit (invalid data)
 + Submit (data)
 - Submit (duplicate data) (*)
+  Double submit
 
 Issues (*)
 * Submit

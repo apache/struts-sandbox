@@ -4,20 +4,23 @@ import org.apache.struts.apps.mailreader.dao.User;
 
 
 /**
- * <p> Provide an Edit method for retrieving an existing user, and a Save method for updating or inserting a user.
- * </p><p> Both methods utilize a RegistrationForm to obtain or expose User details. If Save is used to create a user,
- * additional validations ensure input is nominal. When a user is created, Save also handles the initial logon. </p>
+ * <p> Provide an Edit method for retrieving an existing user, and a Save
+ * method for updating or inserting a user. </p>
  */
 public final class Registration extends MailreaderSupport {
 
+    /**
+     * <p>Double check that there is not a valid User logon. </p>
+     *
+     * @return True if there is not a valid User logon
+     */
     private boolean isCreating() {
         User user = getUser();
         return (null == user) || (null == user.getDatabase());
     }
 
     /**
-     * <p> Retrieve the User object to edit or null if the User does not exist, and set an transactional token to later
-     * detect multiple Save commands. </p>
+     * <p> Retrieve User object to edit or null if User does not exist. </p>
      *
      * @return The "Success" result for this mapping
      * @throws Exception on any error
@@ -38,8 +41,10 @@ public final class Registration extends MailreaderSupport {
     }
 
     /**
-     * <p> Insert or update a User object to the persistent store. </p><p> If a User is not logged in, then a new User
-     * is created and automatically logged in. Otherwise, the existing User is updated. </p>
+     * <p> Insert or update a User object to the persistent store. </p>
+     *
+     * <p> If a User is not logged in, then a new User is created and
+     * automatically logged in. Otherwise, the existing User is updated. </p>
      *
      * @return The "Success" result for this mapping
      * @throws Exception on any error

@@ -4,22 +4,24 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
     <title><saf:text name="logon.title"/></title>
-    <link href="<saf:url value="/css/mailreader.css"/>" rel="stylesheet" type="text/css"/>
+    <link href="<saf:url value="/css/mailreader.css"/>" rel="stylesheet"
+          type="text/css"/>
 </head>
 
 <body>
 
-<a2:form method="POST" validate="true">
-    <a2:textfield label="%{getText('prompt.username')}" name="username"/>
+<saf:form method="POST" validate="true">
+    <saf:textfield label="%{getText('prompt.username')}" name="username"/>
 
-    <a2:textfield label="%{getText('prompt.password')}" name="password"/>
+    <saf:textfield label="%{getText('prompt.password')}" name="password"/>
 
-    <a2:submit/>
+    <saf:submit/>
 
-    <a2:reset/>
+    <saf:reset/>
 
-    <a2:submit action="Welcome" value="%{getText('button.cancel')}" onclick="form.onsubmit=null"/>
-</a2:form>
+    <saf:submit action="Welcome" value="%{getText('button.cancel')}"
+               onclick="form.onsubmit=null"/>
+</saf:form>
 
 <jsp:include page="Footer.jsp"/>
 </body>

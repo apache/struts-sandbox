@@ -4,7 +4,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
     <title><saf:text name="change.title"/></title>
-    <link href="<saf:url value="/css/mailreader.css"/>" rel="stylesheet" type="text/css"/>
+    <link href="<saf:url value="/css/mailreader.css"/>" rel="stylesheet"
+          type="text/css"/>
 </head>
 
 <body>

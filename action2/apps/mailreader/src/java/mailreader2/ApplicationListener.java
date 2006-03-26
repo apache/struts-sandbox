@@ -32,14 +32,18 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 
 /**
- * <p><code>ServletContextListener</code> that initializes and finalizes the persistent storage of User and Subscription
- * information for the Struts Demonstration Application, using an in-memory database backed by an XML file.</p>
+ * <p><code>ServletContextListener</code> that initializes and finalizes the
+ * persistent storage of User and Subscription information for the Struts
+ * Demonstration Application, using an in-memory database backed by an XML
+ * file.</p>
  *
- * <p><strong>IMPLEMENTATION WARNING</strong> - If this web application is run from a WAR file, or in another
- * environment where reading and writing of the web application resource is impossible, the initial contents will be
- * copied to a file in the web application temporary directory provided by the container.  This is for demonstration
- * purposes only - you should <strong>NOT</strong> assume that files written here will survive a restart of your servlet
- * container.</p>
+ * <p><strong>IMPLEMENTATION WARNING</strong> - If this web application is run
+ * from a WAR file, or in another environment where reading and writing of the
+ * web application resource is impossible, the initial contents will be copied
+ * to a file in the web application temporary directory provided by the
+ * container.  This is for demonstration purposes only - you should
+ * <strong>NOT</strong> assume that files written here will survive a restart
+ * of your servlet container.</p>
  *
  * <p>This class was borrowed from the Shale Mailreader. Changes were:</p>
  *
@@ -58,14 +62,15 @@ public final class ApplicationListener implements ServletContextListener {
 
 
     /**
-     * <p>Appication scope attribute key under which the in-memory version of our database is stored.</p>
+     * <p>Appication scope attribute key under which the in-memory version of
+     * our database is stored.</p>
      */
     public static final String DATABASE_KEY = "database";
 
 
     /**
-     * <p>Application scope attribute key under which the valid selection items for the protocol property is
-     * stored.</p>
+     * <p>Application scope attribute key under which the valid selection
+     * items for the protocol property is stored.</p>
      */
     public static final String PROTOCOLS_KEY = "protocols";
 
@@ -85,7 +90,7 @@ public final class ApplicationListener implements ServletContextListener {
 
 
     /**
-     * Logging output for this plug in instance.
+     * <p>Logging output for this plug in instance.</p>
      */
     private Log log = LogFactory.getLog(this.getClass());
 
@@ -93,14 +98,25 @@ public final class ApplicationListener implements ServletContextListener {
 
 
     /**
-     * The web application resource path of our persistent database storage file.
+     * <p>The web application resource path of our persistent database storage
+     * file.</p>
      */
     private String pathname = "/WEB-INF/classes/database.xml";
 
+    /**
+     * <p>Return the application resource path to the database.</p>
+     *
+     * @return application resource path path to the database
+     */
     public String getPathname() {
         return (this.pathname);
     }
 
+    /**
+     * <p>Set the application resource path to the database.</p>
+     *
+     * @param pathname to the database
+     */
     public void setPathname(String pathname) {
         this.pathname = pathname;
     }
@@ -109,7 +125,8 @@ public final class ApplicationListener implements ServletContextListener {
 
 
     /**
-     * <p>Gracefully shut down this database, releasing any resources that were allocated at initialization.</p>
+     * <p>Gracefully shut down this database, releasing any resources that
+     * were allocated at initialization.</p>
      *
      * @param event ServletContextEvent to process
      */
@@ -134,7 +151,8 @@ public final class ApplicationListener implements ServletContextListener {
 
 
     /**
-     * <p>Initialize and load our initial database from persistent storage.</p>
+     * <p>Initialize and load our initial database from persistent
+     * storage.</p>
      *
      * @param event The context initialization event
      */
@@ -168,7 +186,8 @@ public final class ApplicationListener implements ServletContextListener {
 
 
     /**
-     * Calculate and return an absolute pathname to the XML file to contain our persistent storage information.
+     * <p>Calculate and return an absolute pathname to the XML file to contain
+     * our persistent storage information.</p>
      *
      * @throws Exception if an input/output error occurs
      */

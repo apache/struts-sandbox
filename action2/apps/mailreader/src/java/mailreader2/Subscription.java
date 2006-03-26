@@ -5,24 +5,31 @@ import com.opensymphony.xwork.Preparable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public final class Subscription extends MailreaderSupport implements Preparable {
+/**
+ * <p> Provide an Edit method for retrieving an existing subscription, and a
+ * Save method for updating or inserting a subscription. </p>
+ */
+public final class Subscription extends MailreaderSupport
+        implements Preparable {
 
+    /**
+     * <p>Field to store list of MailServer types</p>
+     */
     private Map types = null;
 
+    /**
+     * <p>Provide the list of MailServer types.</p>
+     *
+     * @return List of MailServer types
+     */
     public Map getTypes() {
         return types;
     }
 
-    private String host;
-
-    public String getHost() {
-        return host;
-    }
-
-    public void setHost(String value) {
-        host = value;
-    }
-
+    /**
+     * <p>Setup the MailerServer types and set the local Host property from
+     * the User Subscription (if any). </p>
+     */
     public void prepare() {
 
         Map m = new LinkedHashMap();
@@ -33,12 +40,26 @@ public final class Subscription extends MailreaderSupport implements Preparable 
         setHost(getSubscriptionHost());
     }
 
+    /**
+     * <p>Setup a temporary User Subscription object to capture input
+     * values.</p>
+     *
+     * @return INPUT
+     */
     public String input() {
         createInputSubscription();
         setTask(Constants.CREATE);
         return INPUT;
     }
 
+    /**
+     * <p>Load User Subscription for the local Host property.</p>
+     *
+     * <p>Usually, the Host is being set from the request by a link to an Edit
+     * or Delete task.</p>
+     *
+     * @return INPUT or Error, if Subscription is not found
+     */
     public String find() {
 
         org.apache.struts.apps.mailreader.dao.Subscription
@@ -54,18 +75,36 @@ public final class Subscription extends MailreaderSupport implements Preparable 
 
     }
 
+    /**
+     * <p>Prepare to present a confirmation page before removing
+     * Subscription.</p>
+     *
+     * @return INPUT or Error, if Subscription is not found
+     */
     public String delete() {
 
         setTask(Constants.DELETE);
         return find();
     }
 
+    /**
+     * <p>Prepare to edit User Subscription.</p>
+     *
+     * @return INPUT or Error, if Subscription is not found
+     */
     public String edit() {
 
         setTask(Constants.EDIT);
         return find();
     }
 
+    /**
+     * <p> Examine the Task property and DELETE, CREATE, or save the User
+     * Subscription, as appropriate. </p>
+     *
+     * @return SUCCESS
+     * @throws Exception on a database error
+     */
     public String execute() throws Exception {
 
         if (Constants.DELETE.equals(getTask())) {
@@ -78,36 +117,6 @@ public final class Subscription extends MailreaderSupport implements Preparable 
 
         saveUser();
         return SUCCESS;
-    }
-
-    public static class KeyValue {
-        String key;
-        String value;
-
-        public KeyValue(String key, String value) {
-            this.key = key;
-            this.value = value;
-        }
-
-        public String getKey() {
-            return this.key;
-        }
-
-        public String getValue() {
-            return this.value;
-        }
-
-        public boolean equals(Object obj) {
-            if (! (obj instanceof KeyValue)) {
-                return false;
-            } else {
-                return key.equals(((KeyValue) obj).getKey());
-            }
-        }
-
-        public int hashCode() {
-            return key.hashCode();
-        }
     }
 
 }
