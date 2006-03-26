@@ -117,25 +117,24 @@ Issues
 Subscription Edit
 
 Nominal
-+ Cancel (*)
++ Cancel
 + Save (no changes)
 + Save (changes)
-
-Issues
-* Cancel
-** Goes to MainMenu rather than (back to) Registration
 
 ----
 
 Subscription Delete
 
 Norminal
-  Cancel
-  Confirm
++ Cancel
++ Confirm
 
 ----
 
 Subscription Add
++ Cancel 
++ Submit 
+  Submit (bad data)
 
 ----
 

@@ -1,6 +1,6 @@
-<%@ taglib uri="/webwork" prefix="a2" %>
+<%@ taglib uri="/webwork" prefix="saf" %>
 <hr/>
 
 <p>
-    <a href="<a2:url action="Welcome" />"><a2:text name="index.title"/></a>
+    <a href="<saf:url action="Welcome" />"><saf:text name="index.title"/></a>
 </p>
