@@ -9,7 +9,7 @@ import java.util.Map;
  * <p> Provide an Edit method for retrieving an existing subscription, and a
  * Save method for updating or inserting a subscription. </p>
  */
-public final class Subscription extends MailreaderSupport
+public class Subscription extends MailreaderSupport
         implements Preparable {
 
     /**
@@ -105,7 +105,7 @@ public final class Subscription extends MailreaderSupport
      * @return SUCCESS
      * @throws Exception on a database error
      */
-    public String execute() throws Exception {
+    public String save() throws Exception {
 
         if (Constants.DELETE.equals(getTask())) {
             removeSubscription();

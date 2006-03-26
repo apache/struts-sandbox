@@ -17,7 +17,7 @@
 </head>
 
 <body>
-<saf:form method="POST" action="Subscription" validate="true">
+<saf:form method="POST" action="SubscriptionSave" validate="true">
     <saf:hidden name="task"/>
     <saf:label label="%{getText('prompt.username')}" name="user.username"/>
 
