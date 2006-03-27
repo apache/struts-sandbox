@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="/webwork" prefix="saf" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -24,15 +25,10 @@
 <hr/>
 
 <ul>
-    <li><a href="<saf:url action="Locale?language=en"/>">English</a></li>
-    <li><a href="<saf:url action="Locale?language=ja"/>">Japanese</a></li>
-    <li><a href="<saf:url action="Locale?language=ru"/>">Russian</a></li>
+    <li><a href="<saf:url action="Welcome?request_locale=en"/>">English</a></li>
+    <li><a href="<saf:url action="Welcome?request_locale=ja"/>">Japanese</a></li>
+    <li><a href="<saf:url action="Welcome?request_locale=ru"/>">Russian</a></li>
 </ul>
-
-<p><saf:i18n name="alternate">
-    <img src="<saf:url><saf:text name="struts.logo.path"/></saf:url>"
-         alt="<saf:text name="struts.logo.alt"/>"/>
-</saf:i18n></p>
 
 <p><a href="<saf:url action="Tour" />"><saf:text name="index.tour"/></a></p>
 

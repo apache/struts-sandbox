@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="/webwork" prefix="saf" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -15,9 +16,9 @@
 
     <saf:textfield label="%{getText('prompt.password')}" name="password"/>
 
-    <saf:submit/>
+    <saf:submit value="%{getText('button.save')}"/>
 
-    <saf:reset/>
+    <saf:reset value="%{getText('button.reset')}"/>
 
     <saf:submit action="Welcome" value="%{getText('button.cancel')}"
                onclick="form.onsubmit=null"/>

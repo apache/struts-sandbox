@@ -33,16 +33,6 @@
             <result name="expired" type="chain">ChangePassword</result>
         </action>
 
-        <action name="Something"
-                class="mailreader2.Logon">
-            <exception-mapping
-                    exception="org.apache.struts.apps.mailreader.dao.ExpiredPasswordException"
-                    result="expired"/>
-            <result>/pages/MainMenu.jsp</result>
-            <result name="input">/pages/Logon.jsp</result>
-            <result name="expired" type="chain">ChangePassword</result>
-        </action>
-
         <action name="ChangePassword">
             <result>/pages/ChangePassword.jsp</result>
         </action>

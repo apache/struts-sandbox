@@ -72,9 +72,6 @@ Nominal
 + Logon - Cancel
 + Register - Cancel
 
-Issues
-* Powered image not displaying.
-
 ----
 
 Logon
@@ -173,7 +170,8 @@ Issues (*)
 ----
 
 Locale change
-* TODO
++ Change locale from Welcome page.
++ Buttons and Labels reflect changed locale
 
 ----
 

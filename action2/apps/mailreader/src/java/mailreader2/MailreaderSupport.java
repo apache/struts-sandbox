@@ -332,7 +332,7 @@ public class MailreaderSupport extends ActionSupport
      * <p> Persist the User object, including subscriptions, to the database.
      * </p>
      *
-     * @throws javax.servlet.ServletException On any error
+     * @throws java.lang.Exception on database error
      */
     public void saveUser() throws Exception {
         try {

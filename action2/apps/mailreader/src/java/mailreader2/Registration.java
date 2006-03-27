@@ -4,8 +4,7 @@ import org.apache.struts.apps.mailreader.dao.User;
 
 
 /**
- * <p> Provide an Edit method for retrieving an existing user, and a Save
- * method for updating or inserting a user. </p>
+ * <p>Insert or update a User object to the persistent store. </p>
  */
 public final class Registration extends MailreaderSupport {
 
