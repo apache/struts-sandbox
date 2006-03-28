@@ -77,13 +77,16 @@ Nominal
 Logon
 
 Nominal
-+ Cancel
+- Cancel (*)
 + Reset
 - Submit (invalid) (*)
 + Submit (incorrect)
 + Submit
 
 Issues
+* Cancel
+** Cancel logs exceptions since the target properties on not on cancel action
+
 * Submit (invalid)
 ** The "errors.password.mismatch" is not being resolved as message
 

@@ -18,6 +18,8 @@
 </head>
 
 <body>
+
+<saf:actionerror />
 <saf:form method="POST" action="SubscriptionSave" validate="true">
     <saf:hidden name="task"/>
     <saf:label label="%{getText('username')}" name="user.username"/>

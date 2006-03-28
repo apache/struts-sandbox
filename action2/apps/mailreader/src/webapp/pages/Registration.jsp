@@ -16,6 +16,7 @@
 
 <body>
 
+<saf:actionerror />
 <saf:form method="POST" validate="false">
     <saf:hidden name="task"/>
     <saf:if test="task == 'Create'">

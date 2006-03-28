@@ -11,6 +11,7 @@
 
 <body>
 
+<saf:actionerror />
 <saf:form method="POST" validate="true">
     <saf:textfield label="%{getText('username')}" name="username"/>
 
