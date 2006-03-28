@@ -12,9 +12,9 @@
 <body>
 
 <saf:form method="POST" validate="true">
-    <saf:textfield label="%{getText('prompt.username')}" name="username"/>
+    <saf:textfield label="%{getText('username')}" name="username"/>
 
-    <saf:textfield label="%{getText('prompt.password')}" name="password"/>
+    <saf:textfield label="%{getText('password')}" name="password"/>
 
     <saf:submit value="%{getText('button.save')}"/>
 

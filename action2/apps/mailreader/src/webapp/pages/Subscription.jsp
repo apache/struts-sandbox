@@ -20,35 +20,35 @@
 <body>
 <saf:form method="POST" action="SubscriptionSave" validate="true">
     <saf:hidden name="task"/>
-    <saf:label label="%{getText('prompt.username')}" name="user.username"/>
+    <saf:label label="%{getText('username')}" name="user.username"/>
 
     <saf:if test="task == 'Create'">
-        <saf:textfield label="%{getText('prompt.mailHostname')}" name="host"/>
+        <saf:textfield label="%{getText('mailHostname')}" name="host"/>
     </saf:if>
     <saf:else>
-        <saf:label label="%{getText('prompt.mailHostname')}" name="host"/>
+        <saf:label label="%{getText('mailHostname')}" name="host"/>
         <saf:hidden name="host"/>
     </saf:else>
 
     <saf:if test="task == 'Delete'">
-        <saf:label label="%{getText('prompt.mailUsername')}"
+        <saf:label label="%{getText('mailUsername')}"
                    name="subscription.username"/>
-        <saf:label label="%{getText('prompt.mailPassword')}"
+        <saf:label label="%{getText('mailPassword')}"
                    name="subscription.password"/>
-        <saf:label label="%{getText('prompt.mailServerType')}"
+        <saf:label label="%{getText('mailServerType')}"
                    name="subscription.type"/>
-        <saf:label label="%{getText('prompt.autoConnect')}"
+        <saf:label label="%{getText('autoConnect')}"
                    name="subscription.autoConnect"/>
         <saf:submit value="%{getText('button.confirm')}"/>
     </saf:if>
     <saf:else>
-        <saf:textfield label="%{getText('prompt.mailUsername')}"
+        <saf:textfield label="%{getText('mailUsername')}"
                        name="subscription.username"/>
-        <saf:textfield label="%{getText('prompt.mailPassword')}"
+        <saf:textfield label="%{getText('mailPassword')}"
                        name="subscription.password"/>
-        <saf:select label="%{getText('prompt.mailServerType')}"
+        <saf:select label="%{getText('mailServerType')}"
                     name="subscription.type" list="types"/>
-        <saf:checkbox label="%{getText('prompt.autoConnect')}"
+        <saf:checkbox label="%{getText('autoConnect')}"
                       name="subscription.autoConnect"/>
         <saf:submit value="%{getText('button.save')}"/>
         <saf:reset value="%{getText('button.reset')}"/>

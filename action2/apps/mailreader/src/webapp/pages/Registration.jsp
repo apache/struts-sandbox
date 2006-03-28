@@ -19,24 +19,24 @@
 <saf:form method="POST" validate="false">
     <saf:hidden name="task"/>
     <saf:if test="task == 'Create'">
-        <saf:textfield label="%{getText('prompt.username')}" name="username"/>
+        <saf:textfield label="%{getText('username')}" name="username"/>
     </saf:if>
     <saf:else>
-        <saf:label label="%{getText('prompt.username')}" name="username"/>
+        <saf:label label="%{getText('username')}" name="username"/>
         <saf:hidden name="username"/>
     </saf:else>
 
-    <saf:textfield label="%{getText('prompt.password')}" name="password"/>
+    <saf:textfield label="%{getText('password')}" name="password"/>
 
-    <saf:textfield label="%{getText('prompt.password2')}" name="password2"/>
+    <saf:textfield label="%{getText('password2')}" name="password2"/>
 
-    <saf:textfield label="%{getText('prompt.fullName')}"
+    <saf:textfield label="%{getText('fullName')}"
                    name="user.fullName"/>
 
-    <saf:textfield label="%{getText('prompt.fromAddress')}"
+    <saf:textfield label="%{getText('fromAddress')}"
                    name="user.fromAddress"/>
 
-    <saf:textfield label="%{getText('prompt.replyToAddress')}"
+    <saf:textfield label="%{getText('replyToAddress')}"
                    name="user.replyToAddress"/>
 
     <saf:submit value="%{getText('button.save')}"/>
