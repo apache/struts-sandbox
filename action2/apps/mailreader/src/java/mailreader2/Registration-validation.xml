@@ -8,24 +8,6 @@
         </field-validator>
     </field>
 
-    <field name="password">
-        <field-validator type="requiredstring">
-            <message key="error.password.required"/>
-        </field-validator>
-        <field-validator type="stringlength">
-            <param name="trim">true</param>
-            <param name="minLength">4</param>
-            <param name="maxLength">10</param>
-            <message key="errors.range"/>
-        </field-validator>
-    </field>
-
-    <field name="password2">
-        <field-validator type="requiredstring">
-            <message key="error.password2.required"/>
-        </field-validator>
-    </field>
-
     <field name="user.fullName">
         <field-validator type="requiredstring">
             <message key="error.fullName.required"/>
@@ -46,10 +28,5 @@
             <message key="errors.email"/>
         </field-validator>
     </field>
-
-    <validator type="expression">
-        <param name="expression">password eq password2</param>
-        <message key="error.password.match"/>
-    </validator>
 
 </validators>

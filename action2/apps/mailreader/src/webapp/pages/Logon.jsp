@@ -9,13 +9,13 @@
           type="text/css"/>
 </head>
 
-<body>
+<body onLoad="self.focus();document.Logon.username.focus()"  >
 
 <saf:actionerror />
 <saf:form method="POST" validate="true">
     <saf:textfield label="%{getText('username')}" name="username"/>
 
-    <saf:textfield label="%{getText('password')}" name="password"/>
+    <saf:password label="%{getText('password')}" name="password"/>
 
     <saf:submit value="%{getText('button.save')}"/>
 

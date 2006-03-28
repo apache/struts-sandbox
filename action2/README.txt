@@ -77,16 +77,13 @@ Nominal
 Logon
 
 Nominal
-- Cancel (*)
++ Cancel
 + Reset
 - Submit (invalid) (*)
 + Submit (incorrect)
 + Submit
 
 Issues
-* Cancel
-** Cancel logs exceptions since the target properties on not on cancel action
-
 * Submit (invalid)
 ** The "errors.password.mismatch" is not being resolved as message
 
@@ -104,7 +101,7 @@ Nominal
 Issues
 * Submit - no change
 ** Password is displayed in plain text
-** Is there a WW way to set the focus?
+** Is there a WW way to set the focus? (Asked in forum)
 * Edit - Submit (change)
 ** Password doesn't change when edited
 ** Password Confirmation message not displayed
@@ -142,11 +139,8 @@ Subscription Add
 Logoff
 
 Nominal
-* Logoff - Refresh
-* Logoff - Skip to Registeration page (*)
-
-Issues
-* Skip to Registration - Displays blank Main Menu; Edit defaults to Create
++ Logoff - Refresh
++ Logoff - Skip to Registeration page
 
 ----
 
@@ -155,20 +149,17 @@ Registration Create
 Nominal
 + Cancel
 + Reset
-- Submit (no data)  (*)
-+ Submit (invalid data)
++ Submit (no data)
++ Submit (invalid data) (*)
 + Submit (data)
 - Submit (duplicate data) (*)
   Double submit
 
 Issues (*)
-* Submit
-** Not parsing message variables: {0} in the range {1}
-* Submit (duplidate data)
-** Fails silently for duplicate user name
-** Password Confirmation message not displayed
 * Submit (invalid data)
 ** When client-side validation is enabled, messages stack up on multiple invalid submits. Sever-side only OK.
+* Submit (duplidate data)
+** Fails silently for duplicate user name
 
 ----
 

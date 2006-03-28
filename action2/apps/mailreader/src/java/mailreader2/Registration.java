@@ -6,7 +6,7 @@ import org.apache.struts.apps.mailreader.dao.User;
 /**
  * <p>Insert or update a User object to the persistent store. </p>
  */
-public final class Registration extends MailreaderSupport {
+public class Registration extends MailreaderSupport {
 
     /**
      * <p>Double check that there is not a valid User logon. </p>
@@ -56,6 +56,21 @@ public final class Registration extends MailreaderSupport {
 
         if (creating) {
             copyUser(getUsername(), getPassword());
+        }
+        else {
+            // FIXME: Any way to call the RegisrationSave validators from here?
+            String pw = getPassword();
+            if (pw!=null) {
+                String pw2 = getPassword2();
+                boolean matches = ((null!=pw2) && (pw2.equals(pw)));
+                if (matches) {
+                    getUser().setPassword(pw);
+                }
+                else {
+                    addActionError(getText("error.password.match"));
+                    return INPUT;
+                }
+            }
         }
 
         saveUser();

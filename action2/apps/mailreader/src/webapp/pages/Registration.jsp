@@ -14,7 +14,7 @@
           type="text/css"/>
 </head>
 
-<body>
+<body onLoad="self.focus();document.Registration.username.focus()"  >
 
 <saf:actionerror />
 <saf:form method="POST" validate="false">
@@ -27,9 +27,9 @@
         <saf:hidden name="username"/>
     </saf:else>
 
-    <saf:textfield label="%{getText('password')}" name="password"/>
+    <saf:password label="%{getText('password')}" name="password"/>
 
-    <saf:textfield label="%{getText('password2')}" name="password2"/>
+    <saf:password label="%{getText('password2')}" name="password2"/>
 
     <saf:textfield label="%{getText('fullName')}"
                    name="user.fullName"/>
@@ -40,15 +40,19 @@
     <saf:textfield label="%{getText('replyToAddress')}"
                    name="user.replyToAddress"/>
 
-    <saf:submit value="%{getText('button.save')}"/>
-
-    <saf:reset value="%{getText('button.reset')}"/>
-
     <saf:if test="task == 'Create'">
+        <saf:submit value="%{getText('button.save')}" action="RegistrationSave"/>
+
+        <saf:reset value="%{getText('button.reset')}"/>
+
         <saf:submit action="Welcome" value="%{getText('button.cancel')}"
                     onclick="form.onsubmit=null"/>
     </saf:if>
     <saf:else>
+        <saf:submit value="%{getText('button.save')}" action="Registration"/>
+
+        <saf:reset value="%{getText('button.reset')}"/>
+
         <saf:submit action="MainMenu" value="%{getText('button.cancel')}"
                     onclick="form.onsubmit=null"/>
     </saf:else>

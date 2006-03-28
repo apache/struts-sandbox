@@ -17,10 +17,10 @@
           type="text/css"/>
 </head>
 
-<body>
+<body onLoad="self.focus();document.Subscription.username.focus()"  >
 
 <saf:actionerror />
-<saf:form method="POST" action="SubscriptionSave" validate="true">
+<saf:form method="POST" action="SubscriptionSave" validate="false">
     <saf:hidden name="task"/>
     <saf:label label="%{getText('username')}" name="user.username"/>
 

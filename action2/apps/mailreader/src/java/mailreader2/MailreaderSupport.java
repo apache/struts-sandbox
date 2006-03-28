@@ -318,7 +318,7 @@ public class MailreaderSupport extends ActionSupport
             user = null;
         }
         if (user == null) {
-            this.addFieldError("password", "error.password.mismatch");
+            this.addFieldError("password", getText("error.password.mismatch"));
         }
         return user;
     }

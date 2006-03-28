@@ -19,7 +19,13 @@
 
         </global-exception-mappings>
 
-        <action name="Welcome">
+        <!--
+          The reference to MailReaderSupport is only needed because
+          we use Welcome as a target for Cancel actions.
+         If the page doesn't have the appropriate input properties,
+         the framework logs an exception.
+        -->
+        <action name="Welcome" class="mailreader2.MailreaderSupport">
             <result>/pages/Welcome.jsp</result>
         </action>
 
@@ -37,12 +43,18 @@
             <result>/pages/ChangePassword.jsp</result>
         </action>
 
+        <!-- See note for Welcome -->
         <action name="MainMenu" class="mailreader2.MailreaderSupport">
             <result>/pages/MainMenu.jsp</result>
             <result name="input">/pages/MainMenu.jsp</result>
         </action>
 
         <action name="Registration" class="mailreader2.Registration">
+            <result name="input">/pages/Registration.jsp</result>
+            <result type="redirect-action">MainMenu</result>
+        </action>
+
+        <action name="RegistrationSave" class="mailreader2.RegistrationSave">
             <result name="input">/pages/Registration.jsp</result>
             <result type="redirect-action">MainMenu</result>
         </action>
