@@ -35,7 +35,7 @@ import java.util.Map;
 
 /**
  * <p> Base Action for MailreaderSupport application. </p>
- *
+ * <p/>
  * <p> Note that this class does NOT implement model driven because of the way
  * the pre-existing model is designed. The MailReader DAO includes immutable
  * fields that can only be set on construction, and some objects do not have a
@@ -56,7 +56,7 @@ public class MailreaderSupport extends ActionSupport
 
     /**
      * <p>Field to store application context or its proxy.</p>
-     *
+     * <p/>
      * <p>The application context lasts for the life of the application. A
      * reference to the database is stored in the application context at
      * startup.</p>
@@ -108,7 +108,7 @@ public class MailreaderSupport extends ActionSupport
 
     /**
      * <p>Field to store workflow task.</p>
-     *
+     * <p/>
      * <p>The Task is used to track the state of the CRUD workflows. It can be
      * set to Constant.CREATE, Constant.EDIT, or Constant.DELETE as
      * needed.</p>
@@ -138,7 +138,7 @@ public class MailreaderSupport extends ActionSupport
 
     /**
      * <p>Field to store Subscription host.</p>
-     *
+     * <p/>
      * <p> The host is an immutable property of the Subscrtion DAP object, so
      * we need to store it locally until we are ready to create the
      * Subscription. </p>
@@ -167,7 +167,7 @@ public class MailreaderSupport extends ActionSupport
 
     /**
      * <p>Field to store User password property.</p>
-     *
+     * <p/>
      * <p>The User DAO object password proerty is immutable, so we store it
      * locally until we are ready to create the object.</p>
      */
@@ -196,7 +196,7 @@ public class MailreaderSupport extends ActionSupport
 
     /**
      * <p>Field to store the User password confirmation.</p>
-     *
+     * <p/>
      * <p>When a User object is created, we ask the client to enter the
      * password twice, to help ensure the password is being typed
      * correctly.</p>
@@ -226,7 +226,7 @@ public class MailreaderSupport extends ActionSupport
 
     /**
      * <p>Field to store User username.</p>
-     *
+     * <p/>
      * <p>The User DAO object password proerty is immutable, so we store it
      * locally until we are ready to create the object.</p>
      */
@@ -384,7 +384,7 @@ public class MailreaderSupport extends ActionSupport
     /**
      * <p>Use the current User object to create a new User object, and make
      * the new User object the authenticated user.</p>
-     *
+     * <p/>
      * <p>The "current" User object is usually a temporary object being used
      * to capture input.</p>
      *
@@ -443,7 +443,7 @@ public class MailreaderSupport extends ActionSupport
 
     /**
      * <p>Obtain uSER Subscription for the local Host property.</p>
-     *
+     * <p/>
      * <p>Usually, the host property will be set from the client request,
      * because it was embedded in a link to the Subcription action.
      *
@@ -488,7 +488,7 @@ public class MailreaderSupport extends ActionSupport
     /**
      * <p>Create a new Subscription from the current Subscription object,
      * making the new Subscription the current Subscription. </p>
-     *
+     * <p/>
      * <p>Usually, the "current" Subscription is a temporary object being used
      * to capture input values.</p>
      *

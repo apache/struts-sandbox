@@ -68,7 +68,7 @@
             <result name="input">/pages/Subscription.jsp</result>
             <result type="redirect-action">Registration!input</result>
         </action>
-        
+
         <action name="Logoff" class="mailreader2.Logoff">
             <result type="redirect-action">Welcome</result>
         </action>

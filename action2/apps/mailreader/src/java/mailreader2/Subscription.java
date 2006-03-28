@@ -54,7 +54,7 @@ public class Subscription extends MailreaderSupport
 
     /**
      * <p>Load User Subscription for the local Host property.</p>
-     *
+     * <p/>
      * <p>Usually, the Host is being set from the request by a link to an Edit
      * or Delete task.</p>
      *

@@ -41,7 +41,7 @@ public class Registration extends MailreaderSupport {
 
     /**
      * <p> Insert or update a User object to the persistent store. </p>
-     *
+     * <p/>
      * <p> If a User is not logged in, then a new User is created and
      * automatically logged in. Otherwise, the existing User is updated. </p>
      *
@@ -55,18 +55,28 @@ public class Registration extends MailreaderSupport {
         creating = creating && isCreating(); // trust but verify
 
         if (creating) {
+
+            User user = findUser(getUsername(), getPassword());
+            boolean haveUser = (user != null);
+
+            if (haveUser) {
+                addActionError(getText("error.username.unique"));
+                return INPUT;
+            }
+
             copyUser(getUsername(), getPassword());
-        }
-        else {
+
+        } else {
+
             // FIXME: Any way to call the RegisrationSave validators from here?
-            String pw = getPassword();
-            if (pw!=null) {
-                String pw2 = getPassword2();
-                boolean matches = ((null!=pw2) && (pw2.equals(pw)));
+            String newPassword = getPassword();
+            if (newPassword != null) {
+                String confirmPassword = getPassword2();
+                boolean matches = ((null != confirmPassword)
+                        && (confirmPassword.equals(newPassword)));
                 if (matches) {
-                    getUser().setPassword(pw);
-                }
-                else {
+                    getUser().setPassword(newPassword);
+                } else {
                     addActionError(getText("error.password.match"));
                     return INPUT;
                 }

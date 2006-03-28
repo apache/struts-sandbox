@@ -9,9 +9,9 @@
           type="text/css"/>
 </head>
 
-<body onLoad="self.focus();document.Logon.username.focus()"  >
+<body onLoad="self.focus();document.Logon.username.focus()">
 
-<saf:actionerror />
+<saf:actionerror/>
 <saf:form method="POST" validate="true">
     <saf:textfield label="%{getText('username')}" name="username"/>
 
@@ -22,7 +22,7 @@
     <saf:reset value="%{getText('button.reset')}"/>
 
     <saf:submit action="Welcome" value="%{getText('button.cancel')}"
-               onclick="form.onsubmit=null"/>
+                onclick="form.onsubmit=null"/>
 </saf:form>
 
 <jsp:include page="Footer.jsp"/>

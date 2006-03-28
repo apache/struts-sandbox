@@ -14,9 +14,9 @@
           type="text/css"/>
 </head>
 
-<body onLoad="self.focus();document.Registration.username.focus()"  >
+<body onLoad="self.focus();document.Registration.username.focus()">
 
-<saf:actionerror />
+<saf:actionerror/>
 <saf:form method="POST" validate="false">
     <saf:hidden name="task"/>
     <saf:if test="task == 'Create'">

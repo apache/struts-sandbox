@@ -58,6 +58,20 @@ Select control.
 
 * Other examples can be added at will.
 
+Example idea jar
+
+* See http://www.niallp.pwp.blueyonder.co.uk/strutsvalidatorextends.html
+for some validation use cases.
+
+* How do we set checkboxes false (on uncheck)?
+** http://forums.opensymphony.com/thread.jspa?threadID=23601&tstart=0
+
+* How to set the focus on a form field?
+** http://forums.opensymphony.com/thread.jspa?threadID=23777&tstart=0
+
+* Display an unexpected exception on an error page. 
+
+
 ----------------------------------------------------------------------------
 
 STATUS - MAILREADER
@@ -79,13 +93,9 @@ Logon
 Nominal
 + Cancel
 + Reset
-- Submit (invalid) (*)
+- Submit (invalid) 
 + Submit (incorrect)
 + Submit
-
-Issues
-* Submit (invalid)
-** The "errors.password.mismatch" is not being resolved as message
 
 ----
 
@@ -94,20 +104,14 @@ Registraton Edit
 Nominal
 + Cancel
 + Reset
-- Submit (no change) (*)
-- Submit (change) (*)
-- Submit (invalid change) (*)
++ Submit (no change)
++ Submit (change) 
++ Submit (invalid change) 
 
 Issues
-* Submit - no change
-** Password is displayed in plain text
-** Is there a WW way to set the focus? (Asked in forum)
-* Edit - Submit (change)
-** Password doesn't change when edited
-** Password Confirmation message not displayed
-* Edit = Submit (invalid change) (*)
-** When client-side validation is enabled, messages stack up on multiple invalid submits. Sever-side only OK.
-*** This doesn't happen with Logon page
+* When client-side validation is enabled, messages stack up on multiple invalid submits. Sever-side only OK.
+*** This doesn't happen with Logon page, only Registration and Subscription (!?)(
+*** Asked on forum - http://forums.opensymphony.com/thread.jspa?threadID=23871&tstart=0
 
 ----
 
@@ -150,16 +154,10 @@ Nominal
 + Cancel
 + Reset
 + Submit (no data)
-+ Submit (invalid data) (*)
++ Submit (invalid data)
 + Submit (data)
-- Submit (duplicate data) (*)
++ Submit (duplicate data)
   Double submit
-
-Issues (*)
-* Submit (invalid data)
-** When client-side validation is enabled, messages stack up on multiple invalid submits. Sever-side only OK.
-* Submit (duplidate data)
-** Fails silently for duplicate user name
 
 ----
 
@@ -175,7 +173,20 @@ Tour
 ----
 
 Error
-* Need to log and present unexpected exceptions
++ Need to log and present unexpected exceptions
 
-----
+
+Issue 
+* It would be nice to omit the message markup if there is not message. 
+** http://forums.opensymphony.com/thread.jspa?threadID=7480&messageID=16618#16618
+
+Things that didn't work:
+
+<saf:if test=" %(exception.message}?exists">
+
+<saf:if test=" %this.exception.message?exists">
+
+<saf:if test=" #(exception.message} != null ">
+
+
 ====

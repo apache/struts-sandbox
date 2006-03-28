@@ -25,18 +25,14 @@ import org.apache.struts.apps.mailreader.dao.impl.memory.MemoryUserDatabase;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
+import java.io.*;
 
 /**
  * <p><code>ServletContextListener</code> that initializes and finalizes the
  * persistent storage of User and Subscription information for the Struts
  * Demonstration Application, using an in-memory database backed by an XML
  * file.</p>
- *
+ * <p/>
  * <p><strong>IMPLEMENTATION WARNING</strong> - If this web application is run
  * from a WAR file, or in another environment where reading and writing of the
  * web application resource is impossible, the initial contents will be copied
@@ -44,15 +40,15 @@ import java.io.InputStream;
  * container.  This is for demonstration purposes only - you should
  * <strong>NOT</strong> assume that files written here will survive a restart
  * of your servlet container.</p>
- *
+ * <p/>
  * <p>This class was borrowed from the Shale Mailreader. Changes were:</p>
- *
+ * <p/>
  * <ul>
- *
+ * <p/>
  * <li>Path to database.xml (under classes here). </li>
- *
+ * <p/>
  * <li>Class to store protocol list (an array here). </li>
- *
+ * <p/>
  * </ul>
  */
 
