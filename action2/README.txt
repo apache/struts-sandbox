@@ -38,7 +38,7 @@ The goal of the Mailreader is to provide a simple application that
 demonstrates best practices.
 
 The Mailreader is a simple parent/child workflow, where visitors can register
-with the application and the create child records related to the user's
+with the application and create child records related to the user's
 master account.
 
 Other new applications may include the iBATIS JPetstore example,
