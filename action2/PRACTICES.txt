@@ -13,7 +13,7 @@ Action2 Apps Best Practices
  ** If you using templates, bundle the templates with the Actions.
  ** Remember, if the namespace needs to change, you do not need to change packages or JSP folders, if you don't want to.
 
-* Within a namespace, resuse names for common concepts. If each namespace has an entry page, use the same action name in each namespace. For example, each namespace in the Cookbook has an "Open" action.
+* Within a namespace, reuse names for common concepts. If each namespace has an entry page, use the same action name in each namespace. For example, each namespace in the Cookbook has an "Open" action.
 
 * Unit test actions before trying them in a web application.
   ** Since JUnit is integrated in most IDEs now, there is no excuse.
@@ -22,7 +22,7 @@ Action2 Apps Best Practices
 
 * Use SiteMesh, or the equivalent, to separate application "chrome" from the core utility of the server pages.
 
-* Specify the POST method for forums, unless there is a reason to use the default GET method.
+* Specify the POST method for forms, unless there is a reason to use the default GET method.
 
 * If an image, or other swatch of markup, is being used by multiple pages, remove it to its own server page and include it where necessary.
  ** Better yet, encapsulate the markup in its own UI tag.
@@ -30,7 +30,7 @@ Action2 Apps Best Practices
 * Extend the UI tags as needed.
 
 * Consider using the message resources for page titles, control labels, and so forth, even if the application is not being localized.
- ** It is often useful to seperate the concern of what message to display form the concern of where to display it.
+ ** It is often useful to seperate the concern of what message to display from the concern of where to display it.
 
 * Use the XML framework to validate input.
 
