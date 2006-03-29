@@ -70,13 +70,14 @@ for some validation use cases.
 ** http://forums.opensymphony.com/thread.jspa?threadID=23777&tstart=0
 
 * Display an unexpected exception on an error page. 
-
+** What's the conditional logic using JSP tags?
 
 ----------------------------------------------------------------------------
 
 STATUS - MAILREADER
 
-* Work in progress.
+* Feature complete, but some marginal issue remain. 
+* Working on Tour
 
 ----
 
@@ -168,7 +169,7 @@ Locale change
 ----
 
 Tour
-* TODO
+* In progress
 
 ----
 
@@ -187,6 +188,11 @@ Things that didn't work:
 <saf:if test=" %this.exception.message?exists">
 
 <saf:if test=" #(exception.message} != null ">
+
+----
+
+ApplicationListener
+* Another approach would be to instantiate the database via Spring.
 
 
 ====

@@ -40,3 +40,18 @@ Action2 Apps Best Practices
 
 * Centralize other application and business logic into a base class that action can share. 
 
+
+----
+
+Other Best Practice Resources 
+
+* Showcase Best Practices thread - http://forums.opensymphony.com/thread.jspa?messageID=24691&#24691
+
+* Original "Action 1" Catalog - http://husted.com/struts/catalog.html
+
+* Wiki version - http://wiki.apache.org/struts/StrutsCatalog
+
+* "Action 1" Best Practices - http://opensource.atlassian.com/confluence/oss/pages/viewpageattachments.action?pageId=829
+
+
+
