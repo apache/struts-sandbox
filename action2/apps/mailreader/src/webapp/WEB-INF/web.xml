@@ -5,13 +5,13 @@
     <display-name>Action2 Mailreader</display-name>
 
     <filter>
-        <filter-name>webwork</filter-name>
+        <filter-name>action2</filter-name>
         <filter-class>
             com.opensymphony.webwork.dispatcher.FilterDispatcher</filter-class>
     </filter>
 
     <filter-mapping>
-        <filter-name>webwork</filter-name>
+        <filter-name>action2</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
@@ -28,17 +28,7 @@
     </listener>
 
     <welcome-file-list>
-        <welcome-file>index.jsp</welcome-file>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
 
-    <!--
-        This typically isn't required, as the taglib is included in webwork.jar.
-        If you really need a taglib configuration within web.xml, copy webwork/src/java/META-INF/taglib.tld
-        to the WEB-INF directory as webwork.tld.
-     -->
-    <!--taglib>
-        <taglib-uri>webwork</taglib-uri>
-        <taglib-location>/WEB-INF/webwork.tld</taglib-location>
-    </taglib-->
 </web-app>

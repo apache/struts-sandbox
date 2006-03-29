@@ -50,6 +50,9 @@ import java.io.*;
  * <li>Class to store protocol list (an array here). </li>
  * <p/>
  * </ul>
+ * <p>
+ * DEVELOPMENT NOTE - Another approach would be to instantiate the database via Spring.
+ * </p>
  */
 
 public final class ApplicationListener implements ServletContextListener {
