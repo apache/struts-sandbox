@@ -363,9 +363,8 @@ public class MailreaderSupport extends ActionSupport
         User user;
 
         try {
-
-            user = findUser(username, password);
-        }
+            user = database.findUser(username);
+         }
 
         catch (ExpiredPasswordException e) {
             user = getUser(); // Just so that it is not null

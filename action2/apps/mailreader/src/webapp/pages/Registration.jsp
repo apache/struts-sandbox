@@ -18,6 +18,7 @@
 
 <saf:actionerror/>
 <saf:form method="POST" validate="false">
+    <saf:token />
     <saf:hidden name="task"/>
     <saf:if test="task == 'Create'">
         <saf:textfield label="%{getText('username')}" name="username"/>

@@ -37,3 +37,6 @@ Action2 Apps Best Practices
 * Do not embed business logic in action classes.
  ** Remove business logic to a business facade that the actions can call. (Spring is an excellent way to build a business facade.)
  ** Actions are a necessary evil. Every line of code in an Action is guilty until proven innocent. Ideally, there should be one line of code that calls the business facade, and every other line of a code in an action should be bound to the framework.
+
+* Centralize other application and business logic into a base class that action can share. 
+

@@ -20,6 +20,8 @@
 
 <h3>Error Message</h3>
 
+<saf:actionerror />
+
 <p>
     <saf:property value="%{exception.message}"/>
 </p>

@@ -21,6 +21,7 @@
 
 <saf:actionerror/>
 <saf:form method="POST" action="SubscriptionSave" validate="false">
+    <saf:token />
     <saf:hidden name="task"/>
     <saf:label label="%{getText('username')}" name="user.username"/>
 

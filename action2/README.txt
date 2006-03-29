@@ -136,7 +136,7 @@ Subscription Add
 + Cancel 
 + Submit 
 + Submit (bad data)
-  Double submit
++ Double submit
 
 ----
 
@@ -157,7 +157,7 @@ Nominal
 + Submit (invalid data)
 + Submit (data)
 + Submit (duplicate data)
-  Double submit
++ Double submit
 
 ----
 

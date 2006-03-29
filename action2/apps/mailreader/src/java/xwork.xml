@@ -5,10 +5,30 @@
 
     <package name="default" namespace="/" extends="webwork-default">
 
+        <interceptors>
+
+            <interceptor name="authenticate" class="mailreader2.AuthenticationInterceptor"/>
+
+            <interceptor-stack name="access" >
+                <interceptor-ref name="authenticate" />
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+
+            <interceptor-stack name="submit">
+                <interceptor-ref name="token-session" />
+                <interceptor-ref name="authenticate-access" />
+            </interceptor-stack>
+
+        </interceptors>
+
+        <default-interceptor-ref name="access"/>
+        
         <!-- default-action-ref name="Welcome"/ -->
 
         <global-results>
             <result name="error">/pages/Error.jsp</result>
+            <result name="invalid.token">/pages/Error.jsp</result>
+            <result name="login" type="redirect-action">Logon!input</result>
         </global-results>
 
         <global-exception-mappings>
@@ -26,15 +46,16 @@
          the framework logs an exception.
         -->
         <action name="Welcome" class="mailreader2.MailreaderSupport">
+            <interceptor-ref name="defaultStack"/>
             <result>/pages/Welcome.jsp</result>
         </action>
 
-        <action name="Logon"
-                class="mailreader2.Logon">
+        <action name="Logon" class="mailreader2.Logon">
+            <interceptor-ref name="defaultStack"/>
             <exception-mapping
                     exception="org.apache.struts.apps.mailreader.dao.ExpiredPasswordException"
                     result="expired"/>
-            <result>/pages/MainMenu.jsp</result>
+            <result type="redirect-action">MainMenu</result>
             <result name="input">/pages/Logon.jsp</result>
             <result name="expired" type="chain">ChangePassword</result>
         </action>
@@ -55,6 +76,7 @@
         </action>
 
         <action name="RegistrationSave" class="mailreader2.RegistrationSave">
+            <interceptor-ref name="submit" />
             <result name="input">/pages/Registration.jsp</result>
             <result type="redirect-action">MainMenu</result>
         </action>
@@ -65,6 +87,7 @@
         </action>
 
         <action name="SubscriptionSave" class="mailreader2.SubscriptionSave">
+            <interceptor-ref name="submit" />
             <result name="input">/pages/Subscription.jsp</result>
             <result type="redirect-action">Registration!input</result>
         </action>
