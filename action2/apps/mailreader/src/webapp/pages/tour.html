@@ -24,7 +24,7 @@
 
 <p>
     <i>
-        The Action2 MailReader application is based on the 2.2.2 release of WebWork
+        The Action2 MailReader application is based on the 2.2.2 release of OpenSymphony WebWork
         (now known as Struts Action 2).
         To follow along, you should install the MailReader application on your
         own development workstation (e.g. localhost).
@@ -37,7 +37,7 @@
         language, JavaBeans, web applications, and JavaServer Pages. For background on
         these technologies, see the
         <a href="http://struts.apache.org/struts-action/userGuide/preface.html">
-            Preface to the Struts Action 1 User Guide</a>.
+            Preface to the Action 1 User Guide</a>.
     </i>
 </p>
 
@@ -141,7 +141,7 @@
         Service (JAAS) is recommended for most applications.
         (See the <a
             href="http://struts.apache.org/struts-action/userGuide/preface.html">
-        Preface to the Struts Action 1 User Guide</a> for more about
+        Preface to the Action 1 User Guide</a> for more about
         authentification technologies.)
     </font></p>
 </blockquote>
@@ -168,44 +168,45 @@
     When a web application loads,
     the container reads and parses the "Web Application Deployment
     Descriptor", or web.xml file.
-    The Struts Action 2 Framework plugs into a web application via a servlet filter.
+    Action 2 plugs into a web application via a servlet filter.
     Like any filter, the Action servlet is deployed via the web.xml.
 </p>
 
 <hr/>
 <h5>web.xml - The Web Application Deployment Descriptor</h5>
 <pre><code>&lt;?xml version="1.0" encoding="ISO-8859-1"?>
-&lt;!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
-&lt;web-app>%lt;display-name>Action2 Mailreader%lt;/display-name>
+    &lt;!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+    &lt;web-app>%lt;display-name>Action2 Mailreader%lt;/display-name>
 
     %lt;filter>
-        %lt;filter-name>action2%lt;/filter-name>
-        %lt;filter-class>
-            com.opensymphony.webwork.dispatcher.FilterDispatcher%lt;/filter-class>
+    %lt;filter-name>action2%lt;/filter-name>
+    %lt;filter-class>
+    com.opensymphony.webwork.dispatcher.FilterDispatcher%lt;/filter-class>
     %lt;/filter>
 
     %lt;filter-mapping>
-        %lt;filter-name>action2%lt;/filter-name>
-        %lt;url-pattern>/*%lt;/url-pattern>
+    %lt;filter-name>action2%lt;/filter-name>
+    %lt;url-pattern>/*%lt;/url-pattern>
     %lt;/filter-mapping>
 
     %lt;listener>
-        %lt;listener-class>
-            org.springframework.web.context.ContextLoaderListener%lt;/listener-class>
+    %lt;listener-class>
+    org.springframework.web.context.ContextLoaderListener%lt;/listener-class>
     %lt;/listener>
 
     %lt;!-- Application Listener for Mailreader database -->
     %lt;listener>
-        %lt;listener-class>
-            mailreader2.ApplicationListener
-        %lt;/listener-class>
+    %lt;listener-class>
+    mailreader2.ApplicationListener
+    %lt;/listener-class>
     %lt;/listener>
 
     %lt;welcome-file-list>
-        %lt;welcome-file>index.html%lt;/welcome-file>
+    %lt;welcome-file>index.html%lt;/welcome-file>
     %lt;/welcome-file-list>
 
-%lt;/web-app>
+    %lt;/web-app>
 </code></pre>
 <hr/>
 
@@ -218,9 +219,8 @@
 </p>
 
 <p>
-    Albeit, most Struts Action Framework applications do not refer to physical pages,
+    Albeit, most Action 2 applications do not refer to physical pages,
     but to "virtual pages" called <i>actions</i>.
-    The actions are listed in a configuration file.
     Actions contain code that we want to be run before a page is displayed.
     An accepted practice is to never link directly to server pages,
     but only to logical action mappings.
@@ -236,10 +236,22 @@
 <hr/>
 
 <p>
+    The actions are listed in one or more XML configuration files,
+    the default configuration file being named "xwork.xml".
+    XWork is a command processing framework that underlies Action 2.
+    XWork is not bound to the web layer, making it easier to test.
+    Among other things, XWork handles the mapping of a request for a certain
+    page to a certain action mapping.
+</p>
+
+<p>
+    Most applications specify one or more "Welcome" pages that can be
+    opened when a client specifies a path that maps to directory without
+    specifying which file is to be opened.
     Unless you are using Java 1.5, actions cannot be specified as a welcome
     page.
-    So, in the case of a welcome page,
-    how do we follow the Struts best practice of navigating through actions
+    So, in the case of a Welcome page,
+    how do we follow the Action 2 best practice of navigating through actions
     rather than pages?
 </p>
 
@@ -256,7 +268,7 @@
 <pre><code>
     %lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
     %lt;html>%lt;head>
-        %lt;META HTTP-EQUIV="Refresh" CONTENT="0;URL=Welcome.do">
+    %lt;META HTTP-EQUIV="Refresh" CONTENT="0;URL=Welcome.do">
     %lt;/head>
     %lt;body>
     %lt;p>Loading ...%lt;/p>
@@ -273,18 +285,18 @@
 <h4><a name="Welcome.do" id="Welcome.do">Welcome.do</a></h4>
 
 <p>
-    The list of actions, along with other components,
-    are registered through one or more Struts Action configuration files.
-    The configuration files are written as XML documents and processed when
-    the application starts.
+    When the client requests "Welcome.do", the request is passed to the FilterDispatcher
+    registered in the web.xml file.
+    The FilterDispatcher passes the request back to XWork to retrieve the appropriate
+    action mapping.
     If we just wanted to forward to the Welcome page, we could use a simple
     configuration element.
 </p>
 <hr/>
 <h5>A simple "forward thru" action element</h5>
-<pre><code>        %lt;action name="Welcome">
-            %lt;result>/pages/Welcome.jsp%lt;/result>
-        %lt;/action>
+<pre><code> %lt;action name="Welcome">
+    %lt;result>/pages/Welcome.jsp%lt;/result>
+    %lt;/action>
 </code></pre>
 <hr/>
 
@@ -297,49 +309,47 @@
 </p>
 
 <p>
-    Though, in the application, the Welcome mapping does more than route control
-    to the Welcome server page.
-    We also use the Welcome mapping to verify that some system resources were
-    loaded at startup.
-    The MailReader expects a database object to be available in application scope.
-    We also expect that several standard text messages would loaded from a
-    resource bundle.
+    But if we peek at the configuration file for the MailReader,
+    we find a slightly more complicated XML element for the Welcome action.
 </p>
 
-<p>
-    The Welcome mapping verifies these resources using a custom Interceptor.
-    An Interceptors
-</p>
 <hr/>
 <h5>The Welcome action element</h5>
-<pre><code>        %lt;action name="Welcome" class="mailreader2.MailreaderSupport">
-            %lt;interceptor-ref name="welcome"/>
-            %lt;result>/pages/Welcome.jsp%lt;/result>
-        %lt;/action>
+<pre><code> %lt;action name="Welcome" <b>class="mailreader2.Welcome"</b>>
+    <b>%lt;interceptor-ref name="defaultStack"/></b>
+    %lt;result>/pages/Welcome.jsp%lt;/result>
+    %lt;/action>
 </code></pre>
 <hr/>
 
 <p>
-    Here, the <strong>MailreaderSupport</strong> Java class executes whenever
+    Here, the <strong>Welcome</strong> Java class executes whenever
     someone asks for the Welcome action.
-    The MailreaderSupport class provides a lot of functionality to
-    application, but in this case, it will simply return the token
-
-    The MailreaderSupport class
     As it completes, the Action class can select which "result" is displayed.
-    One available result is "Success".
-    Another available result, defined at a global scope, is "Failure".
-    But the Action class doesn't need to know the path to the result, or even
-    if they are server pages.
-    The Action class can select the appropriate result just by using names
-    like "Success" or "Failure".
+    The default result name is "success".
+    Another available result, defined at a global scope, is "error".
+</p>
+
+<p>
+    The essential point is that the Action class doesn't need to know
+    what result type is needed for "success" or "error".
+    The Action can just return the logical name for a result,
+    without knowing how it is implented.
+</p>
+
+<p>
+    The net effect is that all of the result details,
+    including the paths to server pages,
+    can be maintained in the configuration file,
+    and not scattered all over the application.
 </p>
 
 <h4><a name="welcomeaction" id="welcomeaction">WelcomeAction</a></h4>
 
 <p>
-    OK ... but why would a WelcomeAction want to choose between Success and
-    Failure?
+    OK ... but why would a Welcome Action want to choose between Success and
+    "error"?
+
 </p>
 
 <p>
@@ -348,43 +358,40 @@
     The application stores this information in a database.
     If the application can't connect to the database, the application can't do
     its job.
-    So before displaying the welcome page, the class checks to see if the
+    So before displaying the Welcome page, the Welcome class checks to see if the
     database is available.
+</p>
+
+<p>
     The MailReader is also an internationalized application.
-    So, the WelcomeAction checks to see if the message resources are available
+    So, the Welcome Action checks to see if the message resources are available
     too.
-    If both resources are available, the class forwards to the "Success" path.
-    Otherwise, it forwards to the "Failure" path so that the appropriate error
-    messages can be displayed.
+    If both resources are available, the class passes back the "success" token.
+    Otherwise, the class passes back the "error" token,
+    so that the appropriate messages can be displayed.
 </p>
 
 <h4><a name="global-forwards" id="global-forwards">global-forwards</a></h4>
 
 <hr/>
 <h5>MailReader's global-forward element</h5>
-<pre><code>    &lt;!-- ==== Global Forward Definitions ==== -->
-    <strong>&lt;global-forwards></strong>
-    &lt;forward
-    name="Logoff"
-    path="/Logoff.do"/>
-    &lt;forward
-    name="Logon"
-    path="/Logon.do"/>
-    &lt;forward
-    name="Failure"
-    path="/Error.jsp" />
-    &lt;/global-forwards></code></pre>
+<pre><code> %lt;global-results>
+    %lt;result name="error">/pages/Error.jsp%lt;/result>
+    %lt;result name="invalid.token">/pages/Error.jsp%lt;/result>
+    %lt;result name="login" type="redirect-action">Logon!input%lt;/result>
+    %lt;/global-results>
+</code></pre>
 <hr/>
 
 <p>
-    As mentioned, "Failure" is defined in a global scope.
+    As mentioned, "error" is defined in a global scope.
     Other actions may have trouble connecting to the database later, or other
     unexpected errors may occur.
-    The MailReader defines the "Failure" result as a Global Forward, so that
+    The MailReader defines the "error" result as a Global Result, so that
     any action can use it.
 </p>
 
-<h4><a name="MemoryDatabasePlugIn.java" id="MemoryDatabasePlugIn.java">MemoryDatabasePlugIn.java</a>
+<h4><a name="ApplicationListener.java" id="ApplicationListener.java">ApplicationListener.java</a>
 </h4>
 
 <p>
@@ -396,38 +403,18 @@
 </p>
 
 <p>
-    One section of the Struts configuration is devoted to "PlugIns".
-    When a Struts application loads, it also loads whatever PlugIns are
-    specified in its configuration.
-    The PlugIn interface is quite simple.
+    In the web.xml,
+    a listener is specified that we use to create the database object.
 </p>
 
 <hr/>
-<h5>org.apache.struts.action.PlugIn</h5>
-<pre><code>public interface PlugIn {
+<h5>mailreader2.ApplicationListener</h5>
+<pre><code> %lt;listener>
+    %lt;listener-class>
+    mailreader2.ApplicationListener
+    %lt;/listener-class>
+    %lt;/listener>
 
-    void <strong>destroy</strong>();
-
-    void <strong>init</strong>(ActionServlet servlet, ModuleConfig config)
-    throws ServletException;
-    }</code></pre>
-<hr/>
-
-<p>
-    You can use PlugIns to do anything that might need to be done when your
-    application loads.
-    The PlugIn is also notified when the application shuts down, so you can
-    release any allocated resources.
-</p>
-<hr/>
-<h5>The Database PlugIn element</h5>
-<pre><code>    &lt;plug-in
-    className="org.apache.struts.apps.mailreader.plugin.<strong>
-    MemoryDatabasePlugIn</strong>">
-    &lt;set-property
-    property="pathname"
-    value="/WEB-INF/database.xml"/>
-    &lt;/plug-in>
 </code></pre>
 <hr/>
 
@@ -444,7 +431,7 @@
 
 <p>
     The database comes seeded with a sample user.
-    If you check the database.xml file under WEB-INF, you'll see the sample
+    If you check the database.xml file under WEB-INF/src/java, you'll see the sample
     user described in XML.
 </p>
 
@@ -471,68 +458,51 @@
 </h4>
 
 <p>
-    Another section of the Struts configuration loads the message resources
-    for the application.
-    If you change a message in the resource, and then reload the application,
-    the change will appear throughout the application.
-    If you provide message resources for additional locales, you can
-    internationalize your application.
+    As mentioned, MailReader is an internationlized application.
+    The message resources for the application are loaded through a reference in the webwork.properites file.
+    Like the database contents, the webwork.properites file is kept under
+    /src/java/webwork.properties.
 </p>
 
 <hr/>
-<h5>The MailReader message-resources element</h5>
-<pre><code>    &lt;message-resources
-    parameter="org.apache.struts.apps.mailreader.resources.ApplicationResources"/></code>
+<h5>webwork.properties</h5>
+<pre><code>webwork.custom.i18n.resources = resources
+    webwork.action.extension = do
+
+</code>
 </pre>
 <hr/>
 
 <p>
-    The "ApplicationResources" parameter refers to a standard properties text
-    file.
-    The resource might be embedded in a JAR or kept under the WEB-INF/classes
+    When we specify "resources" here, we are telling Action 2 to scan the classpath
+    for a resource bundle named "resource.properties".
+    The resource might be embedded in a JAR or found in the WEB-INF/classes
     folder.
-    MailReader uses the classes folder, which means its working copy of the
-    ApplicationResources can be found at
-    <code>
-        ./WEB-INF/classes/org/apache./struts/apps/mailreader/resources/ApplicationResources"</code>
+    In the MailReader, we keep the original bundle in the source tree under
+    "src/java/" where it is copied to "WEB-INF/classes" at deployment.
 </p>
 
 <p>
-    The first time a page needs one of the resources, Struts Action loads and
-    caches the properties file,
-    so that the framework does not need to read the text file a second time.
+    If you change a message in the resource, and then reload the application,
+    the change will appear throughout the application.
+    If you provide message resources for additional locales, you can
+    internationalize your application.
+    The MailReader provides resources for English, Russian, and Japanese.
 </p>
+
 <hr/>
-<h5>ApplicationResource entries used by the Welcome page</h5>
-<pre><code><strong>index.heading=</strong>MailReader Demonstration Application
+<h5>Message Resource entries used by the Welcome page</h5>
+<pre><code><strong>index.heading=</strong>MailReader Application
     Options
-    <strong>index.logon=</strong>Log on to the MailReader Demonstration
-    Application
+    <strong>index.logon=</strong>Log on to the MailReader Application
     <strong>index.registration=</strong>Register with the MailReader
-    Demonstration Application
+    Application
     <strong>index.title=</strong>MailReader Demonstration Application
     <strong>index.tour=</strong>A Walking Tour of the MailReader Demonstration
     Application</code></pre>
 <hr/>
 
-<p>
-    The MailReader application uses a second set of message resources for
-    non-text elements.
-</p>
-
-<hr/>
-<h5>The MailReader <em>alternate</em> message-resources element</h5>
-<pre><code>    &lt;message-resources
-    parameter="org.apache.struts.apps.mailreader.resources.AlternateApplicationResources"
-    key="alternate"/></code></pre>
-<hr/>
-
-<p>
-    The "key" element can be used to access this resource bundle rather than
-    the default bundle.
-</p>
-
-<h3><a name="welcome.jsp" id="welcome.jsp">Welcome page</a></h3>
+<h3><a name="Welcome.jsp" id="Welcome.jsp">Welcome page</a></h3>
 
 <p>
     After confirming that the necessary resources exist, the WelcomeAction
@@ -540,73 +510,71 @@
 </p>
 <hr/>
 <h5>Welcome.jsp</h5>
-<pre><code>&lt;%@ page contentType="text/html;charset=UTF-8" language="java" %&gt;
-    &lt;%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %&gt;
-    &lt;%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %&gt;
+<pre><code>&lt;%@ page contentType="text/html; charset=UTF-8" %>
+&lt;%@ taglib uri="/webwork" prefix="saf" %>
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+&lt;head>
+    &lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    &lt;title>&lt;saf:text name="index.title"/>&lt;/title>
+    &lt;link href="&lt;saf:url value="/css/mailreader.css"/>" rel="stylesheet"
+          type="text/css"/>
+&lt;/head>
 
-    &lt;html&gt;
-    &lt;head&gt;
-    &lt;title&gt;&lt;<strong>bean:message</strong> key="index.title"/&gt;&lt;/title&gt;
-    &lt;link rel="stylesheet" type="text/css" href="base.css" /&gt;
-    &lt;/head&gt;
+&lt;body>
+&lt;h3>&lt;saf:text name="index.heading"/>&lt;/h3>
 
-    &lt;h3&gt;&lt;bean:message key="index.heading"/&gt;&lt;/h3&gt;
-    &lt;ul&gt;
-    &lt;li&gt;&lt;<strong>html:link</strong> action="/EditRegistration"&gt;
-    &lt;bean:message key="index.registration"/&gt;&lt;/html:link&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;html:link action="/Logon"&gt;&lt;bean:message
-    key="index.logon"/&gt;&lt;/html:link&gt;&lt;/li&gt;
-    &lt;/ul&gt;
+&lt;ul>
+    &lt;li>&lt;a href="&lt;saf:url action="Registration!input"/>">&lt;saf:text
+            name="index.registration"/>&lt;/a>&lt;/li>
+    &lt;li>&lt;a href="&lt;saf:url action="Logon!input"/>">&lt;saf:text
+            name="index.logon"/>&lt;/a>&lt;/li>
+&lt;/ul>
 
-    &lt;h3&gt;Change Language&lt;/h3&gt;
-    &lt;ul&gt;
-    &lt;li&gt;&lt;html:link action="/Locale?language=en"&gt;English&lt;/html:link&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;html:link action="/Locale?language=ja"
-    useLocalEncoding="true"&gt;Japanese&lt;/html:link&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;html:link action="/Locale?language=ru"
-    useLocalEncoding="true"&gt;Russian&lt;/html:link&gt;&lt;/li&gt;
-    &lt;/ul&gt;
+&lt;h3>Language Options&lt;/h3>
+&lt;ul>
+    &lt;li>&lt;a href="&lt;saf:url action="Welcome?request_locale=en"/>">English&lt;/a>&lt;/li>
+    &lt;li>&lt;a href="&lt;saf:url action="Welcome?request_locale=ja"/>">Japanese&lt;/a>&lt;/li>
+    &lt;li>&lt;a href="&lt;saf:url action="Welcome?request_locale=ru"/>">Russian&lt;/a>&lt;/li>
+&lt;/ul>
 
-    &lt;hr /&gt;
+&lt;hr/>
 
-    &lt;p&gt;&lt;<strong>html:img</strong> bundle="alternate"
-    pageKey="struts.logo.path" altKey="struts.logo.alt"/&gt;&lt;/p&gt;
+&lt;p>&lt;saf:i18n name="alternate">
+    &lt;img src="&lt;saf:text name="struts.logo.path"/>"
+         alt="&lt;saf:text name="struts.logo.alt"/>"/>
+&lt;/saf:i18n>&lt;/p>
 
-    &lt;p&gt;&lt;html:link action="/Tour"&gt;&lt;bean:message
-    key="index.tour"/&gt;&lt;/html:link&gt;&lt;/p&gt;
+&lt;p>&lt;a href="&lt;saf:url action="Tour" />">&lt;saf:text name="index.tour"/>&lt;/a>&lt;/p>
 
-    &lt;/body&gt;
-    &lt;/html&gt;</code></pre>
+&lt;/body>
+&lt;/html>
+</code></pre>
 <hr/>
 
 <p>
     At the top of the Welcome page, there are several directives that load the
-    Struts tag libraries.
+    Action 2 tag libraries.
     These are just the usual red tape that goes with any JSP file.
-    The rest of the page utilizes three Struts JSP tags: "bean:message",
-    "html:link", and "html:img".
+    The rest of the page utilizes three Action three JSP tags:
+    "saf:text", "saf:url", and "saf:i18n".
 </p>
 
 <p>
-    The <strong>bean:message</strong> tag inserts a message from the
-    MessageResources we mentioned in the last section.
-    The MailReader comes with support for three locales: English (the
-    default), Russian, and Japanese.
-    If the Struts Action locale setting is changed for a user,
-    the bean:message tag will render messages from that locale's property
+    The <strong>saf:text</strong> tag inserts a message from the
+    resource bundle we mentioned in the last section.
+    If the Action 2 locale setting is changed for a user,
+    the saf:text tag will render messages from that locale's resource
     bundle instead.
 </p>
 
 <p>
-    The <strong>html:link</strong> tag does double duty.
-    First, you can refer to an action or forward stored in the Struts
-    configuration,
-    and the tag will insert the corresponding path when the page is rendered.
-    This makes it easy to "rewire" an application without touching all the
-    pages.
-    Second, the link tag will "URL encode" the hyperlink to maintain the
-    client session.
-    Your application can maintain client state without requiring cookies.
+    The <strong>saf:url</strong> tag can render a reference to an
+    action or any other web resource,
+    applying "URL encoding" to the hyperlinks as needed.
+    Java's URL encoding feature lets your application maintain client state
+    without requiring cookies.
 </p>
 
 <hr/>
@@ -625,15 +593,32 @@
 <hr/>
 
 <p>
-    The <strong>html:img</strong> tag renders an img tag.
-    When necessary, the src URI is encoded as it is with the link tag.
-    In this case, the tag inserts the src path from the "alternate"
-    MessageResource bundle,
-    along with the text for the alt element.
+    The <strong>saf:i18n</strong> tag provides access to multiple resource bundles.
+    The MailReader application uses a second set of message resources for
+    non-text elements.
+    When these are needed, we use the &lt;i18n> tag to specify a
+    different bundle.
 </p>
 
 <p>
-    In the span of a single request for the Welcome page, Struts has done
+    The "alternate" bundle is stored with the default "resources" bundle,
+    so that it ends up under classes, which is on the application's class path.
+</p>
+<hr/>
+<h5>The MailReader <em>alternate</em> message-resources element</h5>
+<pre><code>    &lt;message-resources
+    parameter="org.apache.struts.apps.mailreader.resources.AlternateApplicationResources"
+    key="alternate"/></code></pre>
+<hr/>
+
+<p>
+    The "key" element can be used to access this resource bundle rather than
+    the default bundle.
+</p>
+
+
+<p>
+    In the span of a single request for the Welcome page, Action 2 has done
     quite a bit already:
 </p>
 

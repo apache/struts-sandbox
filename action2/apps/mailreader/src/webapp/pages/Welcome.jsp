@@ -21,14 +21,18 @@
 </ul>
 
 <h3>Language Options</h3>
-
-<hr/>
-
 <ul>
     <li><a href="<saf:url action="Welcome?request_locale=en"/>">English</a></li>
     <li><a href="<saf:url action="Welcome?request_locale=ja"/>">Japanese</a></li>
     <li><a href="<saf:url action="Welcome?request_locale=ru"/>">Russian</a></li>
 </ul>
+
+<hr/>
+
+<p><saf:i18n name="alternate">
+    <img src="<saf:text name="struts.logo.path"/>"
+         alt="<saf:text name="struts.logo.alt"/>"/>
+</saf:i18n></p>
 
 <p><a href="<saf:url action="Tour" />"><saf:text name="index.tour"/></a></p>
 
