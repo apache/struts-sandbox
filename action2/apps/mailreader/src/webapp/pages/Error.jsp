@@ -12,7 +12,7 @@
 
 <p>
     Please report this error to your system administrator
-    or appropriate technical suppoert personnel.
+    or appropriate technical support personnel.
     Thank you for your cooperation.
 </p>
 

@@ -80,6 +80,31 @@ public final class Constants {
      */
     public static final String USER_KEY = "user";
 
+    // ---- Error Messages ----
+
+    /**
+     * <p>
+     * A static message in case message resource is not loaded.
+     * </p>
+     */
+    public static final String ERROR_MESSAGES_NOT_LOADED =
+            "ERROR:  Message resources not loaded -- check servlet container logs for error messages.";
+
+    /**
+     * <p>
+     * A static message in case database resource is not loaded.
+     * <p>
+     */
+    public static final String ERROR_DATABASE_NOT_LOADED =
+            "ERROR:  User database not loaded -- check servlet container logs for error messages.";
+
+    /**
+     * <p>
+     * A standard key from the message resources file, to test if it is available.
+     * <p>
+     */
+    public static final String ERRORS_REQUIRED = "errors.required";
+
     // ---- Log Messages ----
 
     /**

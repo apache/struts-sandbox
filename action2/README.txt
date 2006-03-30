@@ -195,4 +195,9 @@ ApplicationListener
 * Another approach would be to instantiate the database via Spring.
 
 
+----
+
+VerifyResourcesInterceptor
+* Could use a better test to detect whether message resources loaded
+
 ====

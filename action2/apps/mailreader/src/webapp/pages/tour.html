@@ -8,12 +8,12 @@
     <meta http-equiv="Content-Type" content="text/html; charset=us-ascii"/>
     <link rel="stylesheet" type="text/css" href="../mailreader.css"/>
 
-    <title>A Walking Tour of the Action2 MailReader Application</title>
+    <title>A Walking Tour of the Action 2 MailReader Application</title>
 </head>
 
 <body>
 <blockquote>
-<h2>A Walking Tour of theAction2 MailReader Application</h2>
+<h2>A Walking Tour of the Action 2 MailReader Application</h2>
 
 <p>
     <i>
@@ -289,31 +289,34 @@
 <hr/>
 
 <p>
-    If someone asked for the Welcome action ("/Welcome.do"), the welcome.jsp
-    page would be displayed in return.
+    If a client asks for the Welcome action ("/Welcome.do"), the /page/Welcome.jsp
+    page would be returned in response.
+    The client does not know, or need to know, that the physical resource is located at
+    "/pages/Welcome.jsp".
+    All the client knows is that it requested the resource "/Welcome.do".
 </p>
 
 <p>
-    But if we peek at the configuration file for the MailReader,
-    we find a slightly more complicated XML element for the Welcome action.
+    In the application, the Welcome action mapping is slightly
+    more complicated than this,
+    and we will come back to the Welcome action later in the tour.
 </p>
 <hr/>
 <h5>The Welcome action element</h5>
-<pre><code>        &lt;!-- Display welcome page -->
-    &lt;action
-    path="/Welcome"
-    <strong>
-        type="org.apache.struts.apps.mailreader.actions.WelcomeAction"</strong>
-    >
-    &lt;forward
-    name="Success"
-    path="/Welcome.jsp" />
-    &lt;/action></code></pre>
+<pre><code>        %lt;action name="Welcome" class="mailreader2.MailreaderSupport">
+            %lt;interceptor-ref name="defaultStack"/>
+            %lt;result>/pages/Welcome.jsp%lt;/result>
+        %lt;/action>
+</code></pre>
 <hr/>
 
 <p>
-    Here, the <strong>WelcomeAction</strong> Java class executes whenever
+    Here, the <strong>MailreaderSupport</strong> Java class executes whenever
     someone asks for the Welcome action.
+    The MailreaderSupport class provides a lot of functionality to
+    application, but in this case, it will simply return the token
+
+    The MailreaderSupport class
     As it completes, the Action class can select which "result" is displayed.
     One available result is "Success".
     Another available result, defined at a global scope, is "Failure".
