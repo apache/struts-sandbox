@@ -52,6 +52,7 @@
             <result type="redirect-action">MainMenu</result>
             <result name="input">/pages/Logon.jsp</result>
             <result name="expired" type="chain">ChangePassword</result>
+            <result name="cancel" type="redirect-action">Welcome</result>
         </action>
 
         <action name="ChangePassword">

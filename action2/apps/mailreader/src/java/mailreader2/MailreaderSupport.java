@@ -52,6 +52,15 @@ import java.util.Map;
 public class MailreaderSupport extends ActionSupport
         implements SessionAware, ApplicationAware {
 
+    /**
+     * Return CANCEL so apropriate result can be selected.
+     * @return "cancel" so apropriate result can be selected.
+     */
+    public String cancel() {
+        return Constants.CANCEL;
+    }
+
+
     // ---- ApplicationAware ----
 
     /**

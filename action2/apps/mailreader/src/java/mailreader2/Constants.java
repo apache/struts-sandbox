@@ -26,6 +26,11 @@ public final class Constants {
     // --- Tokens ----
 
     /**
+     * <p> The token representing a "cancel" request. </p>
+     */
+    public static final String CANCEL = "cancel";
+
+    /**
      * <p> The token representing a "create" task. </p>
      */
     public static final String CREATE = "Create";

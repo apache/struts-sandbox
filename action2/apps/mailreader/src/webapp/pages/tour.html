@@ -3,10 +3,8 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta name="generator"
-          content="HTML Tidy for Windows (vers 1st July 2003), see www.w3.org"/>
     <meta http-equiv="Content-Type" content="text/html; charset=us-ascii"/>
-    <link rel="stylesheet" type="text/css" href="../mailreader.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/mailreader.css"/>
 
     <title>A Walking Tour of the Action 2 MailReader Application</title>
 </head>
@@ -66,18 +64,16 @@
     </li>
 
     <li>
-        <a href="#Logon.jsp">Logon.jsp</a>
-    </li>
-
-    <li>
-        <a href="#Logon.jsp">Logon.jsp</a>
-
+        <a href="#Logon.jsp">Logon Page</a>
         <ul>
+
+            <li><a href="#Logon-validation.xml">Logon-validation.xml</a></li>
+
+            <li><a href="#Logon.java">Logon.java</a></li>
+
             <li><a href="#xwork.xml">xwork.xml</a></li>
 
             <li><a href="#MailreaderSupport">MailreaderSupport</a></li>
-
-            <li><a href="#Logon.java">Logon.java</a></li>
 
         </ul>
     </li>
@@ -190,42 +186,42 @@
 <hr/>
 <h5>web.xml - The Web Application Deployment Descriptor</h5>
 <pre><code>&lt;?xml version="1.0" encoding="ISO-8859-1"?>
-&lt;!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
-  "http://java.sun.com/dtd/web-app_2_3.dtd">
-&lt;web-app>
+    &lt;!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+    &lt;web-app>
 
-  &lt;display-name>Action2 Mailreader&lt;/display-name>
+    &lt;display-name>Action2 Mailreader&lt;/display-name>
 
-<strong>  &lt;filter>
-    &lt;filter-name>Action2&lt;/filter-name>
-    &lt;filter-class>
-      com.opensymphony.webwork.dispatcher.FilterDispatcher
-    &lt;/filter-class>
-  &lt;/filter></strong>
+    <strong>  &lt;filter>
+        &lt;filter-name>Action2&lt;/filter-name>
+        &lt;filter-class>
+        com.opensymphony.webwork.dispatcher.FilterDispatcher
+        &lt;/filter-class>
+        &lt;/filter></strong>
 
-  &lt;filter-mapping>
+    &lt;filter-mapping>
     &lt;filter-name><strong>Action2</strong>&lt;/filter-name>
     &lt;url-pattern>/*&lt;/url-pattern>
-  &lt;/filter-mapping>
+    &lt;/filter-mapping>
 
-  &lt;listener>
+    &lt;listener>
     &lt;listener-class>
-      org.springframework.web.context.ContextLoaderListener
+    org.springframework.web.context.ContextLoaderListener
     &lt;/listener-class>
-  &lt;/listener>
+    &lt;/listener>
 
-  &lt;!-- Application Listener for MailReader database -->
-  &lt;listener>
+    &lt;!-- Application Listener for MailReader database -->
+    &lt;listener>
     &lt;listener-class>
-      mailreader2.ApplicationListener
+    mailreader2.ApplicationListener
     &lt;/listener-class>
-  &lt;/listener>
+    &lt;/listener>
 
-  &lt;welcome-file-list>
+    &lt;welcome-file-list>
     &lt;welcome-file>index.html&lt;/welcome-file>
-  &lt;/welcome-file-list>
+    &lt;/welcome-file-list>
 
-&lt;/web-app></code></pre>
+    &lt;/web-app></code></pre>
 <hr/>
 
 <p>
@@ -283,12 +279,12 @@
 <hr/>
 <h5>MailReader's index.html</h5>
 <pre><code>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-&lt;html>&lt;head>
-  &lt;META HTTP-EQUIV="Refresh" CONTENT="0;<strong>URL=Welcome.do</strong>">
-&lt;/head>
-&lt;body>
-  &lt;p>Loading ...&lt;/p>
-&lt;/body>&lt;/html></code></pre>
+    &lt;html>&lt;head>
+    &lt;META HTTP-EQUIV="Refresh" CONTENT="0;<strong>URL=Welcome.do</strong>">
+    &lt;/head>
+    &lt;body>
+    &lt;p>Loading ...&lt;/p>
+    &lt;/body>&lt;/html></code></pre>
 <hr/>
 
 <p>
@@ -309,8 +305,8 @@
 <hr/>
 <h5>A simple "forward thru" action element</h5>
 <pre><code> &lt;action name="<strong>>Welcome</strong>">
-  &lt;result><strong>/pages/Welcome.jsp</strong>&lt;/result>
-&lt;/action></code></pre>
+    &lt;result><strong>/pages/Welcome.jsp</strong>&lt;/result>
+    &lt;/action></code></pre>
 <hr/>
 
 <p>
@@ -367,7 +363,6 @@
 <p>
     OK ... but why would a Welcome Action want to choose between "success" and
     "error"?
-
 </p>
 
 <p>
@@ -393,29 +388,29 @@
 <h5>The Welcome Action class</h5>
 <pre><code>package mailreader2;
 
-public class Welcome extends MailreaderSupport {
+    public class Welcome extends MailreaderSupport {
 
-  public String execute() throws Exception {
+    public String execute() throws Exception {
 
     // Confirm message resources loaded
     String message = getText(Constants.ERROR_DATABASE_MISSING);
     if (Constants.ERROR_DATABASE_MISSING.equals(message)) {
-      addActionError(Constants.ERROR_MESSAGES_NOT_LOADED);
+    addActionError(Constants.ERROR_MESSAGES_NOT_LOADED);
     }
 
     // Confirm database loaded
     if (null==getDatabase()) {
-      addActionError(Constants.ERROR_DATABASE_NOT_LOADED);
+    addActionError(Constants.ERROR_DATABASE_NOT_LOADED);
     }
 
     if (hasErrors()) {
-      return ERROR;
+    return ERROR;
     }
     else {
-      return SUCCESS;
+    return SUCCESS;
     }
-  }
-}</code></pre>
+    }
+    }</code></pre>
 <hr/>
 
 <p>
@@ -438,10 +433,10 @@ public class Welcome extends MailreaderSupport {
 <hr/>
 <h5>MailReader's global-result element</h5>
 <pre><code> &lt;global-results>
-  &lt;result name=<strong>"error"</strong>><strong>/pages/Error.jsp</strong>&lt;/result>
-  &lt;result name="invalid.token">/pages/Error.jsp&lt;/result>
-  &lt;result name="login" type="redirect-action">Logon!input&lt;/result>
-&lt;/global-results></code></pre>
+    &lt;result name=<strong>"error"</strong>><strong>/pages/Error.jsp</strong>&lt;/result>
+    &lt;result name="invalid.token">/pages/Error.jsp&lt;/result>
+    &lt;result name="login" type="redirect-action">Logon!input&lt;/result>
+    &lt;/global-results></code></pre>
 <hr/>
 
 <p>
@@ -467,10 +462,10 @@ public class Welcome extends MailreaderSupport {
 <hr/>
 <h5>mailreader2.ApplicationListener</h5>
 <pre><code> &lt;listener>
-  &lt;listener-class>
+    &lt;listener-class>
     <strong>mailreader2.ApplicationListener</strong>
-  &lt;/listener-class>
-&lt;/listener></code></pre>
+    &lt;/listener-class>
+    &lt;/listener></code></pre>
 <hr/>
 
 <p>
@@ -493,18 +488,18 @@ public class Welcome extends MailreaderSupport {
 <hr/>
 <h5>The "seed" user element from the MailReader database.xml</h5>
 <pre><code>&lt;user username="<strong>user</strong>" fromAddress="John.User@somewhere.com"
-  fullName="<strong>John Q. User</strong>" password="pass">
-  &lt;subscription host="mail.hotmail.com" autoConnect="false"
-      password="bar" type="pop3" username="user1234">
-  &lt;/subscription>
-  &lt;subscription host="mail.yahoo.com" autoConnect="false" password="foo"
+    fullName="<strong>John Q. User</strong>" password="pass">
+    &lt;subscription host="<strong>mail.hotmail.com"</strong> autoConnect="false"
+    password="bar" type="pop3" username="user1234">
+    &lt;/subscription>
+    &lt;subscription host="<strong>mail.yahoo.com</strong>" autoConnect="false" password="foo"
     type="imap" username="jquser">
-  &lt;/subscription>&lt;/user></code></pre>
+    &lt;/subscription>&lt;/user></code></pre>
 <hr/>
 
 <p>
     The "seed" user element creates a registration record for "John Q. User",
-    with the detail for his hotmail account (or "subscription").
+    with the subscription detail for his hotmail and yahoo accounts.
 </p>
 
 <h4><a name="resources.properties" id="resources.properties">Message Resources</a>
@@ -512,15 +507,16 @@ public class Welcome extends MailreaderSupport {
 
 <p>
     As mentioned, MailReader is an internationlized application.
-    The message resources for the application are loaded through a reference in the webwork.properites file.
-    Like the database contents, the webwork.propeties file is kept under
-    /src/java/webwork.properties.
+    The message resources for the application are loaded through a reference in the
+    webwork.properites file.
+    Like the database contents, the webwork.properties file is kept under
+    /src/java/ in the source tree.
 </p>
 
 <hr/>
 <h5>webwork.properties</h5>
 <pre><code>webwork.custom.i18n.resources = <strong>resources</strong>
-webwork.action.extension = <strong>do</strong></code></pre>
+    webwork.action.extension = <strong>do</strong></code></pre>
 <hr/>
 
 <p>
@@ -543,10 +539,10 @@ webwork.action.extension = <strong>do</strong></code></pre>
 <hr/>
 <h5>Message Resource entries used by the Welcome page</h5>
 <pre><code><strong>index.heading=</strong>MailReader Application Options
-<strong>index.logon=</strong>Log on to the MailReader Application
-<strong>index.registration=</strong>Register with the MailReader Application
-<strong>index.title=</strong>MailReader Demonstration Application
-<strong>index.tour=</strong>A Walking Tour of the MailReader Demonstration Application</code></pre>
+    <strong>index.logon=</strong>Log on to the MailReader Application
+    <strong>index.registration=</strong>Register with the MailReader Application
+    <strong>index.title=</strong>MailReader Demonstration Application
+    <strong>index.tour=</strong>A Walking Tour of the MailReader Demonstration Application</code></pre>
 <hr/>
 
 <h4><a name="Welcome.jsp" id="Welcome.jsp">Welcome Page</a></h4>
@@ -558,45 +554,45 @@ webwork.action.extension = <strong>do</strong></code></pre>
 <hr/>
 <h5>Welcome.jsp</h5>
 <pre><code>&lt;%@ page contentType="text/html; charset=UTF-8" %>
-<strong>&lt;%@ taglib uri="/webwork" prefix="saf" %></strong>
-&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-  &lt;head>
+    <strong>&lt;%@ taglib uri="/webwork" prefix="saf" %></strong>
+    &lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    &lt;head>
     &lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     &lt;title><strong>&lt;saf:text name="index.title"/></strong>&lt;/title>
     &lt;link href="<strong>&lt;saf:url value="/css/mailreader.css"/></strong>" rel="stylesheet"
     type="text/css"/>
-  &lt;/head>
+    &lt;/head>
 
-  &lt;body>
+    &lt;body>
     &lt;h3>&lt;saf:text name="index.heading"/>&lt;/h3>
 
     &lt;ul>
-      &lt;li>&lt;a href="&lt;saf:url action="Registration!input"/>">&lt;saf:text
-      name="index.registration"/>&lt;/a>&lt;/li>
-      &lt;li>&lt;a href="&lt;saf:url action="Logon!input"/>">&lt;saf:text
-        name="index.logon"/>&lt;/a>&lt;/li>
+    &lt;li>&lt;a href="&lt;saf:url action="Registration!input"/>">&lt;saf:text
+    name="index.registration"/>&lt;/a>&lt;/li>
+    &lt;li>&lt;a href="&lt;saf:url action="Logon!input"/>">&lt;saf:text
+    name="index.logon"/>&lt;/a>&lt;/li>
     &lt;/ul>
 
     &lt;h3>Language Options&lt;/h3>
     &lt;ul>
-      &lt;li>&lt;a href="&lt;saf:url action="Welcome?request_locale=en"/>">English&lt;/a>&lt;/li>
-      &lt;li>&lt;a href="&lt;saf:url action="Welcome?request_locale=ja"/>">Japanese&lt;/a>&lt;/li>
-      &lt;li>&lt;a href="&lt;saf:url action="Welcome?request_locale=ru"/>">Russian&lt;/a>&lt;/li>
+    &lt;li>&lt;a href="&lt;saf:url action="Welcome?request_locale=en"/>">English&lt;/a>&lt;/li>
+    &lt;li>&lt;a href="&lt;saf:url action="Welcome?request_locale=ja"/>">Japanese&lt;/a>&lt;/li>
+    &lt;li>&lt;a href="&lt;saf:url action="Welcome?request_locale=ru"/>">Russian&lt;/a>&lt;/li>
     &lt;/ul>
 
     &lt;hr/>
 
     &lt;p><strong>&lt;saf:i18n name="alternate"></strong>
-      &lt;img src="&lt;saf:text name="struts.logo.path"/>"
-        alt="&lt;saf:text name="struts.logo.alt"/>"/>
-    &lt;/saf:i18n>&lt;/p>
+    &lt;img src="&lt;saf:text name="struts.logo.path"/>"
+    alt="&lt;saf:text name="struts.logo.alt"/>"/>
+    <strong>&lt;/saf:i18n></strong>&lt;/p>
 
     &lt;p>&lt;a href="&lt;saf:url action="Tour" />">&lt;saf:text name="index.tour"/>&lt;/a>&lt;/p>
 
     &lt;/body>
-  &lt;/html></code></pre>
+    &lt;/html></code></pre>
 <hr/>
 
 <p>
@@ -696,356 +692,220 @@ webwork.action.extension = <strong>do</strong></code></pre>
 <p>
     Note that both the username and password are case sensitive.
     Better yet, try omitting or misspelling the username and password in
-    various combinations to
-    see how the application reacts.
+    various combinations to see how the application reacts.
 </p>
 
 <hr/>
 <h5>Login.jsp</h5>
-<pre><code>&lt;%@ page contentType="text/html;charset=UTF-8" language="java" %&gt;
-    &lt;%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %&gt;
-    &lt;%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %&gt;
+<pre><code>&lt;%@ page contentType="text/html; charset=UTF-8" %>
+&lt;%@ taglib uri="/webwork" prefix="saf" %>
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  &lt;head>
+    &lt;title>&lt;saf:text name="logon.title"/>&lt;/title>
+    &lt;link href="&lt;saf:url value="/css/mailreader.css"/>" rel="stylesheet"
+      type="text/css"/>
+  &lt;/head>
 
-    &lt;html:xhtml/&gt;
-    &lt;html&gt;
-    &lt;head&gt;
-    &lt;title&gt;&lt;bean:message key="logon.title"/&gt;&lt;/title&gt;
-    &lt;/head&gt;
+  &lt;body onLoad="self.focus();document.Logon.username.focus()">
 
-    &lt;<strong>html:errors</strong>/&gt;
+    <strong>&lt;saf:actionerror/></strong>
+    <strong>&lt;saf:form method="POST" validate="true"></strong>
 
-    &lt;<strong>html:form</strong> action="/SubmitLogon" focus="username"
-    onsubmit="return validateLogonForm(this);"&gt;
-    &lt;table border="0" width="100%"&gt;
+      <strong>&lt;saf:textfield label="%{getText('username')}" name="username"/></strong>
+      <strong>&lt;saf:password label="%{getText('password')}" name="password"/></strong>
+      <strong>&lt;saf:submit value="%{getText('button.save')}"/></strong>
+      <strong>&lt;saf:reset value="%{getText('button.reset')}"/></strong>
+      &lt;saf:submit <strong>action="Logon!cancel" onclick="form.onsubmit=null"</strong>
+        value="%{getText('button.cancel')}"/>
 
-    &lt;tr&gt;
-    &lt;th align="right"&gt;
-    &lt;bean:message key="prompt.username"/&gt;:
-    &lt;/th&gt;
-    &lt;td align="left"&gt;
-    &lt;<strong>html:text</strong> property="username" size="16"
-    maxlength="18"/&gt;
-    &lt;/td&gt;
-    &lt;/tr&gt;
+    &lt;/saf:form>
 
-    &lt;tr&gt;
-    &lt;th align="right"&gt;
-    &lt;bean:message key="prompt.password" bundle="alternate"/&gt;:
-    &lt;/th&gt;
-    &lt;td align="left"&gt;
-    &lt;<strong>html:password</strong> property="password" size="16"
-    maxlength="18"
-    redisplay="false"/&gt;
-    &lt;/td&gt;
-    &lt;/tr&gt;
-
-    &lt;tr&gt;
-    &lt;td align="right"&gt;
-    &lt;<strong>html:submit</strong> property="Submit" value="Submit"/&gt;
-    &lt;/td&gt;
-    &lt;td align="left"&gt;
-    &lt;<strong>html:reset</strong>/&gt;
-    &lt;/td&gt;
-    &lt;/tr&gt;
-
-    &lt;/table&gt;
-
-    &lt;/html:form&gt;
-
-    &lt;<strong>html:javascript</strong> formName="LogonForm"
-    dynamicJavascript="true"
-    staticJavascript="false"/&gt;
-    &lt;script language="Javascript1.1" src="StaticJavascript.jsp"&gt;&lt;/script&gt;
-
-    &lt;jsp:include page="Footer.jsp" /&gt;
-    &lt;/body&gt;
-    &lt;/html&gt;</code></pre>
+    &lt;jsp:include page="Footer.jsp"/>
+  &lt;/body>
+&lt;/html></code></pre>
 <hr/>
 
 <p>
-    We saw some of these tags on the Welcome page. Let's focus on the new
-    tags.
+    We already saw some of the tags used by the Logon page on the Welcome page.
+    Let's focus on the new tags.
 </p>
 
 <p>
-    The first new tag on the logon page is <strong>html:errors</strong>.
-    The credentials you entered are validated and processed by a "LogonAction"
-    class.
-    If the credentials are incorrect,
-    the LogonAction posts an appropriate error message and forwards back to
-    the input page.
-    If the html:errors tag sees that one or more messages were posted, the tag
-    ouputs the messages to the page.
-    The text of the messages can be specified in the MessageResource bundle,
-    making them easy to localize.
+    The first new tag on the Logon page is <strong>actionerrors</strong>.
+    Most of the possible validation errors are related to a single field.
+    If you don't enter a username,
+    the framework can place an error message near the tag prompting you to
+    enter a username.
+    But some messages are not related to a single field.
+    For example, the database might be down.
+    If the action returns an "Action Error", as opposed to a "Field Error",
+    the message is rendered in place of the "actionerror" tag.
+    The text for the validation errors, whether they are Action Errors or
+    Field Errors, can be specified in the resource bundle,
+    making the messages easy to localize.
 </p>
 
 <p>
-    The second new tag is <strong>html:form</strong>.
-    This tag renders a html form tag.
-    The "action" attribute tells the tag to use "SubmitLogon.do" for the
-    form's action.
-    The "focus" attribute tells the tag to generate a little Javascript into
-    the form that
-    sets its focus to the "username" field.
-    The "onsubmit" attribute tells the form to run a Javascript when the form
-    is submitted.
-    (Just like the corresponding attribute on the standard form tag.)
+    The second new tag is <strong>form</strong>.
+    This tag renders a HTML form tag.
+    By default, the form will submit back to whatever action invoked the page.
+    The "validate=true" setting enables client-side validation,
+    so that the form can be validated with Javascript before being sent
+    back to the server.
+    The framework will still validate the form again, just to be sure, but the
+    client-side validation can save a few round-trips to the server.
+    You can use the method attribute to designate "GET" or "POST",
+    just like the HTML form tag.
 </p>
 
 <p>
-    Within the html:form tag,
-    we see five more new tags: "html:text", "html:password", "html:submit",
-    "html:reset", and "html:javascript".
+    Within the form tag,
+    we see five more new tags: "textfield", "password", "submit",
+    and "reset". We also see a second form of "submit" that utilizes an
+    "action" attribute.
 </p>
 
 <p>
-    The <strong>html:text</strong> tag renders a "input type=text" tag.
-    The "property" attribute becomes the input tag's "name" attribute.
+    When we place a control on a form, we usually need to place a set of
+    HTML tags to do everything we want to do.
+    Usually, we do not just want a plain "input type=text" tag.
+    We want the input field to have a label too, and possibily
+    a tooltip. And, of course, a place to print a message
+    should invalid data be entered.
 </p>
 
 <p>
-    The <strong>html:password</strong> tag renders a "input type=password"
-    tag.
-    The "redisplay" attribute tell the tag not to render the password back
-    into the file, if the submit fails.
-    The <strong>html:submit</strong> and <strong>html:reset</strong> tags
+    The UI Tags support templates and themes so that a set of HTML tags can be
+    rendered from a single UI Tag. For example, the single tag
+</p>
+
+<pre><code>
+    &lt;saf:textfield label="%{getText('username')}" name="username"/>
+</code></pre>
+
+<p>
+    generates a wad of HTML markup.
+</p>
+
+<hr/>
+<pre><code>&lt;tr>
+    &lt;td class="tdLabel">&lt;label for="Logon_username" class="label">Username:&lt;/label>&lt;/td>
+    &lt;td>
+        &lt;input type="text" name="username" value="" id="Logon_username"/>
+    &lt;/td>
+&lt;/tr></code></pre>
+<hr/>
+
+<p>
+    If for some reason you don't like the markup generated by a UI Tag,
+    each tag is driven by an easy-to-edit template,
+    that can be updated on a tag-by-tag basis.
+    For example, here is the default template that generates the markup for the ActionErrors tag:
+</p>
+
+<hr/>
+<pre><code>&lt;#if (actionErrors?exists && actionErrors?size > 0)>
+	&lt;ul>
+	&lt;#list actionErrors as error>
+		&lt;li>&lt;span class="errorMessage">${error}&lt;/span>&lt;/li>
+	&lt;/#list>
+	&lt;/ul>
+&lt;/#if></code></pre>
+
+<p>
+    If you wanted ActionErrors displayed in a table instead of a list,
+    you could edit a copy of this file, save it under the file name "actionerror.ftl",
+    and place this one file somewhere on your classpath.
+</p>
+
+<hr/>
+<pre><code>&lt;#if (actionErrors?exists && actionErrors?size > 0)>
+	&lt;table>
+	&lt;#list actionErrors as error>
+		&lt;tr>&lt;td>&lt;span class="errorMessage">${error}&lt;/span>&lt;/td>&lt;/tr>
+	&lt;/#list>
+	&lt;/table>
+&lt;/#if></code></pre>
+<hr/>
+
+    <p>
+        Under the covers, Struts Action 2 uses
+        <a href="http://freemarker.sourceforge.net/">Freemarker</a>
+        for its standard templating language.
+        FreeMarker is similar to
+        <a href="http://jakarta.apache.org/velocity/">Velocity</a>,
+        but offers better error reporting and some additional features.
+        If you prefer, Velocity and JSP templates can also be used to create your own UI Tags.
+    </p>
+
+    <p>
+        The <strong>password</strong> tag renders a "input type=password"
+        tag, along with the usual template/theme markup.
+        By default, the password tag will not retain input if the submit fails.
+        If the username is wrong,
+        the client will have to enter the password again too.
+        If you did want to retain the password when validation fails,
+        you can set the tag's "showPassword" property to true.
+    </p>
+
+    <p>
+    Unsurprisingly, the <strong>submit</strong> and <strong>reset</strong> tags
     render buttons of the corresponding types.
-</p>
+    </p>
 
-<p>
-    Following the form is a <strong>html:javascript</strong> tag.
-    This tag works with the Struts Validator component to generate a
-    JavaScript that can validate input
-    before it is submitted to the LogonAction.
-</p>
+    <p>
+        The second submit button is more interesting.
+    </p>
+
+<pre><code>  &lt;saf:submit <strong>action="Logon!cancel" onclick="form.onsubmit=null"</strong>
+  value="%{getText('button.cancel')}"/>
+</code></pre>
+
+    <p>
+        Here we are creating the Cancel button for the form.
+        The button's attribute <em>action="Logon!cancel"</em> tells the framework to submit
+        to the Logon's "cancel" method instead of the usual "execute" method.
+        The <em>onclick="form.onsubmit=null"</em> script defeats client-side validation.
+        On the server side, "cancel" is on a special lists of aliases that bypass validation,
+        so the request will go directly to the Action's cancel method.
+        (Other special aliases on the bypass list include "input" and "back".)
+    </p>
 
 <hr/>
 <h5>Tip:</h5>
 <blockquote>
     <p><font class="hint">
-        Most of these tags have many more options than the ones we use in this
-        application.
-        For the complete documentation for each tag,
-        see the Tag Developer Guides in the Struts Taglib documentation
-        bundle.
+        The UI tags have options and capabilities beyond what we have shown here.
+        For more see, the <a href="http://wiki.opensymphony.com/display/WW/Tags">UI Tag documentation.</a>
     </font></p>
 </blockquote>
 <hr/>
 
 <p>
-    But, how do these tags know so much?
-    How does the Javascript tag know what scripts to write?
-    How do the text and password tags know what values to redisplay?
+    OK, but how do the UI Tags know that both of these fields are required?
+    How do they know what message to display when the fields are empty?
 </p>
 
 <p>
-    For the answers, we need to turn back to the Struts Action Framework
-    configuration files,
-    "struts-config.xml" and "validation.xml".
+    For the answers, we need to look at another flavor of Action 2 configuration file:
+    the "validation" file.
 </p>
 
-<h4><a name="struts-config.xml" id="struts-config.xml">struts-config.xml</a>
+<h4><a name="Logon-validation.xml" id="Logon-validation.xml">Logon-validation.xml</a>
 </h4>
 
 <p>
-    The Struts configuration file is parsed by the ActionServlet when the
-    application first load.
+    While it is not hard to code data-entry validation into an Action class,
+    the framework provides an even easier way to validate input.
 </p>
-
-<h5>web.xml -- Action Servlet Configuration</h5>
-<pre><code>
-    &lt;servlet>
-    &lt;servlet-name>action&lt;/servlet-name>
-    &lt;servlet-class>org.apache.struts.action.ActionServlet&lt;/servlet-class>
-    &lt;init-param>
-    &lt;param-name>config&lt;/param-name>
-    &lt;param-value><strong>/WEB-INF/struts-config.xml</strong>&lt;/param-value>
-    &lt;/init-param>
-    &lt;load-on-startup>1&lt;/load-on-startup>
-    &lt;/servlet>
-</code></pre>
-
-<hr/>
-<h5>The SubmitLogon action element</h5>
-<pre><code>        &lt;!-- Process a user logon -->
-    &lt;action
-    <strong>path="/SubmitLogon"</strong>
-    type="org.apache.struts.apps.mailreader.actions.LogonAction"
-    <strong>name</strong>="LogonForm"
-    <strong>scope</strong>="request"
-    <strong>validate</strong>="request"
-    <strong>input</strong>="Logon">
-    &lt;<strong>exception</strong>
-    key="expired.password"
-    type="org.apache.struts.apps.mailreader.dao.ExpiredPasswordException"
-    path="/ChangePassword.jsp"/>
-    &lt;forward
-    name="Success"
-    path="/MainMenu.do"/>
-    &lt;/action></code></pre>
-<hr/>
-
-<p>
-    We saw the path and type attributes in the Welcome action.
-    Let's look at the new attributes: "name", "scope", "input", and
-    "exception".
-</p>
-
-<h4>The "name" attribute</h4>
-
-<p>
-    The <strong>name</strong> attribute specifies something Struts Action
-    calls an "ActionForm".
-    The ActionForm buffers input from a form and delivers it to an Action
-    class as an object.
-    The ActionForm can also be used to validate input.
-    If validation fails, the tags can rewrite the input values from the
-    ActionForm.
-</p>
-
-<p>
-    The ActionForms are defined in the "form-beans" section of struts-config.
-</p>
-
-<p>
-    ActionForms can be "conventional" or "dynamic".
-    MailReader uses dynamic ActionForms.
-    Rather than cobble up an actual JavaBean class,
-    we specify the properties the ActionForm can accept in the configuration
-    file.
-</p>
-
-<hr/>
-<h5>The form-bean element for LogonForm</h5>
-<pre><code>        &lt;!-- LogonAction form bean -->
-    &lt;form-bean
-    name="LogonForm"
-    <strong>extends="BaseForm"/></strong></code></pre>
-<hr/>
-
-<p>
-    Hmmmm. That doesn't seem to tell us much.
-    The LogonForm "extends" the BaseForm, but doesn't add any attributes.
-    What about the BaseForm element that LogonForm extends?
-</p>
-
-<hr/>
-<h5>BaseForm - An "abstract" form-bean</h5>
-<pre><code>        &lt;!-- BaseAction form bean (abstract) -->
-    &lt;form-bean
-    name="BaseForm"
-    type="org.apache.struts.validator.DynaValidatorForm">
-    <strong>&lt;form-property</strong>
-    name="username"
-    type="java.lang.String"/>
-    &lt;form-property
-    name="password"
-    type="java.lang.String"/>
-    &lt;form-property
-    name="task"
-    type="java.lang.String"
-    initial="Create"/>
-    &lt;/form-bean></code></pre>
-<hr/>
-
-<h5>Note:</h5>
-<blockquote>
-    <p><font class="hint">
-        <strong>Extends</strong> - In the Struts configuration file,
-        we can use the "extends" attribute to adopt default settings from
-        another element.
-        Extends makes using XML elements more like object-orientated
-        programming.
-        You can setup a base element, and then only specify the behavior that
-        changes.
-    </font></p>
-</blockquote>
-<hr/>
-
-<p>
-    Struts creates the ActionForms automatically, regardless of whether the
-    form-bean is conventional or dynamic.
-    The ActionForm lets us specify which properties we want to extract from
-    the incoming request.
-    If a property is not specified by the ActionForm,
-    the value is not automatically transferred from the request, validated,
-    or passed to the Action class.
-</p>
-
-<h4>The "scope" attribute</h4>
-
-<p>
-    The <strong>scope</strong> attribute in the "SubmitLogon" action element
-    tells the controller whether to store the ActionForm in the request,
-    rather than in the user's session.
-</p>
-
-<hr/>
-<h5>Best Practice:</h5>
-<blockquote>
-    <p><font class="hint">
-        Use request scope for single-page forms that contain all the
-        properties needed by the Action.
-        There is usually no need to maintain form input across requests.
-    </font></p>
-</blockquote>
-<hr/>
-
-<h4>The "validate" attribute</h4>
-
-<p>
-    The <strong>validate</strong> attribute controls whether the framework
-    will automatically validate
-    the ActionForm.
-    Conventional ActionForms have a stub "validate" method that you can
-    implement.
-    MailReader uses the Validator framework instead,
-    so the validations are specified in another configuration file.
-</p>
-
-<h4>The "input" attribute</h4>
-
-<p>
-    If validation fails, Struts looks for the forward specified by the
-    <strong>input</strong> attribute.
-    In this case, invoking the global "Logon" forward sends control back to
-    the Logon page.
-</p>
-
-<h4>The "exception" element</h4>
-
-<p>
-    Within the SubmitLogon action element is another new element, <strong>
-    exception</strong>.
-    When a user logons on, it's possible that an "ExpiredPasswordException"
-    will be thrown.
-    Should this happen, Struts will catch the exception and send control to
-    the "ChangePassword" action.
-</p>
-
-<hr/>
-<h5>Change Password screen</h5>
-<blockquote>
-    <p>
-        Your password has expired. Please ask the system administrator to
-        change it. <u>Try Again</u>
-    </p>
-</blockquote>
-<hr/>
-
-<p>
-    OK, it's not the greatest "Change Password" screen -- but, remember, this
-    is still the first iteration!
-</p>
-
-<h4><a name="validations.xml" id="validations.xml">validations.xml</a></h4>
 
 <p>
     In the Logon page, we mentioned that the html:javascript tag confers with
     the Struts Validator components.
-    The Validator is configured through another XML document, the <strong>
-    validation.xml</strong>.
+    The validation framework is configured through another XML document, the <strong>
+    Logon-validation.xml</strong>.
 </p>
 
 <hr/>
@@ -1296,6 +1156,193 @@ webwork.action.extension = <strong>do</strong></code></pre>
     we can include a logging statement when trace is enabled,
     and be very sure that everyone knows how to spell "Success". :)
 </p>
+
+<h5>web.xml -- Action Servlet Configuration</h5>
+<pre><code>
+    &lt;servlet>
+    &lt;servlet-name>action&lt;/servlet-name>
+    &lt;servlet-class>org.apache.struts.action.ActionServlet&lt;/servlet-class>
+    &lt;init-param>
+    &lt;param-name>config&lt;/param-name>
+    &lt;param-value><strong>/WEB-INF/struts-config.xml</strong>&lt;/param-value>
+    &lt;/init-param>
+    &lt;load-on-startup>1&lt;/load-on-startup>
+    &lt;/servlet>
+</code></pre>
+
+<hr/>
+<h5>The SubmitLogon action element</h5>
+<pre><code>        &lt;!-- Process a user logon -->
+    &lt;action
+    <strong>path="/SubmitLogon"</strong>
+    type="org.apache.struts.apps.mailreader.actions.LogonAction"
+    <strong>name</strong>="LogonForm"
+    <strong>scope</strong>="request"
+    <strong>validate</strong>="request"
+    <strong>input</strong>="Logon">
+    &lt;<strong>exception</strong>
+    key="expired.password"
+    type="org.apache.struts.apps.mailreader.dao.ExpiredPasswordException"
+    path="/ChangePassword.jsp"/>
+    &lt;forward
+    name="Success"
+    path="/MainMenu.do"/>
+    &lt;/action></code></pre>
+<hr/>
+
+<p>
+    We saw the path and type attributes in the Welcome action.
+    Let's look at the new attributes: "name", "scope", "input", and
+    "exception".
+</p>
+
+<h4>The "name" attribute</h4>
+
+<p>
+    The <strong>name</strong> attribute specifies something Struts Action
+    calls an "ActionForm".
+    The ActionForm buffers input from a form and delivers it to an Action
+    class as an object.
+    The ActionForm can also be used to validate input.
+    If validation fails, the tags can rewrite the input values from the
+    ActionForm.
+</p>
+
+<p>
+    The ActionForms are defined in the "form-beans" section of struts-config.
+</p>
+
+<p>
+    ActionForms can be "conventional" or "dynamic".
+    MailReader uses dynamic ActionForms.
+    Rather than cobble up an actual JavaBean class,
+    we specify the properties the ActionForm can accept in the configuration
+    file.
+</p>
+
+<hr/>
+<h5>The form-bean element for LogonForm</h5>
+<pre><code>        &lt;!-- LogonAction form bean -->
+    &lt;form-bean
+    name="LogonForm"
+    <strong>extends="BaseForm"/></strong></code></pre>
+<hr/>
+
+<p>
+    Hmmmm. That doesn't seem to tell us much.
+    The LogonForm "extends" the BaseForm, but doesn't add any attributes.
+    What about the BaseForm element that LogonForm extends?
+</p>
+
+<hr/>
+<h5>BaseForm - An "abstract" form-bean</h5>
+<pre><code>        &lt;!-- BaseAction form bean (abstract) -->
+    &lt;form-bean
+    name="BaseForm"
+    type="org.apache.struts.validator.DynaValidatorForm">
+    <strong>&lt;form-property</strong>
+    name="username"
+    type="java.lang.String"/>
+    &lt;form-property
+    name="password"
+    type="java.lang.String"/>
+    &lt;form-property
+    name="task"
+    type="java.lang.String"
+    initial="Create"/>
+    &lt;/form-bean></code></pre>
+<hr/>
+
+<h5>Note:</h5>
+<blockquote>
+    <p><font class="hint">
+        <strong>Extends</strong> - In the Struts configuration file,
+        we can use the "extends" attribute to adopt default settings from
+        another element.
+        Extends makes using XML elements more like object-orientated
+        programming.
+        You can setup a base element, and then only specify the behavior that
+        changes.
+    </font></p>
+</blockquote>
+<hr/>
+
+<p>
+    Struts creates the ActionForms automatically, regardless of whether the
+    form-bean is conventional or dynamic.
+    The ActionForm lets us specify which properties we want to extract from
+    the incoming request.
+    If a property is not specified by the ActionForm,
+    the value is not automatically transferred from the request, validated,
+    or passed to the Action class.
+</p>
+
+<h4>The "scope" attribute</h4>
+
+<p>
+    The <strong>scope</strong> attribute in the "SubmitLogon" action element
+    tells the controller whether to store the ActionForm in the request,
+    rather than in the user's session.
+</p>
+
+<hr/>
+<h5>Best Practice:</h5>
+<blockquote>
+    <p><font class="hint">
+        Use request scope for single-page forms that contain all the
+        properties needed by the Action.
+        There is usually no need to maintain form input across requests.
+    </font></p>
+</blockquote>
+<hr/>
+
+<h4>The "validate" attribute</h4>
+
+<p>
+    The <strong>validate</strong> attribute controls whether the framework
+    will automatically validate
+    the ActionForm.
+    Conventional ActionForms have a stub "validate" method that you can
+    implement.
+    MailReader uses the Validator framework instead,
+    so the validations are specified in another configuration file.
+</p>
+
+<h4>The "input" attribute</h4>
+
+<p>
+    If validation fails, Struts looks for the forward specified by the
+    <strong>input</strong> attribute.
+    In this case, invoking the global "Logon" forward sends control back to
+    the Logon page.
+</p>
+
+<h4>The "exception" element</h4>
+
+<p>
+    Within the SubmitLogon action element is another new element, <strong>
+    exception</strong>.
+    When a user logons on, it's possible that an "ExpiredPasswordException"
+    will be thrown.
+    Should this happen, Struts will catch the exception and send control to
+    the "ChangePassword" action.
+</p>
+
+<hr/>
+<h5>Change Password screen</h5>
+<blockquote>
+    <p>
+        Your password has expired. Please ask the system administrator to
+        change it. <u>Try Again</u>
+    </p>
+</blockquote>
+<hr/>
+
+<p>
+    OK, it's not the greatest "Change Password" screen -- but, remember, this
+    is still the first iteration!
+</p>
+
 
 <h4><a name="MainMenu.do" id="MainMenu.do">MainMenu.do and MainMenu.jsp</a>
 </h4>
@@ -2239,9 +2286,9 @@ webwork.action.extension = <strong>do</strong></code></pre>
 <h3><a name="subcription.jsp" id="subcription.jsp">Subscription.jsp</a></h3>
 
 <p>
-    Saving the best for last, Subscription.jsp utilizes two interesting Struts
-    custom form tags,
-    "html:options" and "html:checkbox".
+Saving the best for last, Subscription.jsp utilizes two interesting Struts
+custom form tags,
+"html:options" and "html:checkbox".
 
 <p>
     In Registration.jsp, the Struts iteration tag was used to write a list of

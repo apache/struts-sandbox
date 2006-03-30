@@ -74,6 +74,25 @@ for some validation use cases.
 * Using proxy objects to restrict access to domain objects
 ** http://forums.opensymphony.com/thread.jspa?threadID=23750&tstart=0
 
+* Using an authentification interceptor. 
+** 
+
+* Overriding a bundled UI Tag. 
+
+* Creating a custom UI Tag.
+
+* Canceling a form with client-side validation.
+** (Should there be a "validate" attribute to generate the "form.onsubmit=null" script?)
+** (Should ActionSupport provide "public String cancel() {return CANCEL;} ?
+** (Should we support action="!cancel" to be consistent with form tag.)
+*** (Trying !cancel in WW2.2.2 carries cancel over to the next action.)
+
+* Setting form type to "POST"
+** (Should POST be the default?)
+
+* DRY UI Tags 
+** http://forums.opensymphony.com/thread.jspa?threadID=24140&tstart=0
+
 ----
 
 Examples that might involve new development

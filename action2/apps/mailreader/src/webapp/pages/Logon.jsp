@@ -15,13 +15,13 @@
 <saf:form method="POST" validate="true">
     <saf:textfield label="%{getText('username')}" name="username"/>
 
-    <saf:password label="%{getText('password')}" name="password"/>
+    <saf:password label="%{getText('password')}" name="password" showPassword="true"/>
 
     <saf:submit value="%{getText('button.save')}"/>
 
     <saf:reset value="%{getText('button.reset')}"/>
 
-    <saf:submit action="Welcome" value="%{getText('button.cancel')}"
+    <saf:submit action="Logon!cancel" value="%{getText('button.cancel')}"
                 onclick="form.onsubmit=null"/>
 </saf:form>
 
