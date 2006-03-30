@@ -58,10 +58,25 @@ Select control.
 
 * Other examples can be added at will.
 
+----
+
 Example idea jar
 
 * See http://www.niallp.pwp.blueyonder.co.uk/strutsvalidatorextends.html
 for some validation use cases.
+
+* Display an unexpected exception on an error page. 
+** What's the conditional logic using JSP tags?
+
+* "param->prepare->param interceptor pattern"
+** http://forums.opensymphony.com/thread.jspa?threadID=23750&tstart=0
+
+* Using proxy objects to restrict access to domain objects
+** http://forums.opensymphony.com/thread.jspa?threadID=23750&tstart=0
+
+----
+
+Examples that might involve new development
 
 * How do we set checkboxes false (on uncheck)?
 ** http://forums.opensymphony.com/thread.jspa?threadID=23601&tstart=0
@@ -69,8 +84,13 @@ for some validation use cases.
 * How to set the focus on a form field?
 ** http://forums.opensymphony.com/thread.jspa?threadID=23777&tstart=0
 
-* Display an unexpected exception on an error page. 
-** What's the conditional logic using JSP tags?
+*  Populating POJO that implements an Interface 
+** http://forums.opensymphony.com/thread.jspa?threadID=23750&tstart=0
+
+*  Wizard
+** http://forums.opensymphony.com/thread.jspa?threadID=23778&tstart=15
+
+
 
 ----------------------------------------------------------------------------
 

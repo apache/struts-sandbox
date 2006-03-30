@@ -103,7 +103,7 @@ public final class Constants {
      * A standard key from the message resources file, to test if it is available.
      * <p>
      */
-    public static final String ERRORS_REQUIRED = "errors.required";
+    public static final String ERROR_DATABASE_MISSING = "error.database.missing";
 
     // ---- Log Messages ----
 
