@@ -8,7 +8,6 @@
         <interceptors>
 
             <interceptor name="authenticate" class="mailreader2.AuthenticationInterceptor"/>
-            <interceptor name="verify" class="mailreader2.VerifyResourcesInterceptor"/>
 
             <interceptor-stack name="access" >
                 <interceptor-ref name="authenticate" />
@@ -20,16 +19,11 @@
                 <interceptor-ref name="access" />
             </interceptor-stack>
 
-            <interceptor-stack name="welcome">
-                <interceptor-ref name="defaultStack"/>
-                <interceptor-ref name="verify" />
-            </interceptor-stack>
-
         </interceptors>
 
         <default-interceptor-ref name="access"/>
         
-        <!-- default-action-ref name="Welcome"/ -->
+        <default-action-ref name="Welcome"/>
 
         <global-results>
             <result name="error">/pages/Error.jsp</result>
@@ -45,14 +39,8 @@
 
         </global-exception-mappings>
 
-        <!--
-          The reference to MailReaderSupport is only needed because
-          we use Welcome as a target for Cancel actions.
-         If the page doesn't have the appropriate input properties,
-         the framework logs an exception.
-        -->
-        <action name="Welcome" class="mailreader2.MailreaderSupport">
-            <interceptor-ref name="welcome"/>
+        <action name="Welcome" class="mailreader2.Welcome">
+            <interceptor-ref name="defaultStack"/>
             <result>/pages/Welcome.jsp</result>
         </action>
 

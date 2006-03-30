@@ -263,7 +263,7 @@ public class MailreaderSupport extends ActionSupport
     public UserDatabase getDatabase() {
         Object db = getApplication().get(Constants.DATABASE_KEY);
         if (db == null) {
-            this.addActionError("error.database.missing");
+            this.addActionError(getText("error.database.missing"));
         }
         return (UserDatabase) db;
     }

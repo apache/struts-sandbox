@@ -297,14 +297,23 @@
 </p>
 
 <p>
-    In the application, the Welcome action mapping is slightly
-    more complicated than this,
-    and we will come back to the Welcome action later in the tour.
+    Though, in the application, the Welcome mapping does more than route control
+    to the Welcome server page.
+    We also use the Welcome mapping to verify that some system resources were
+    loaded at startup.
+    The MailReader expects a database object to be available in application scope.
+    We also expect that several standard text messages would loaded from a
+    resource bundle.
+</p>
+
+<p>
+    The Welcome mapping verifies these resources using a custom Interceptor.
+    An Interceptors
 </p>
 <hr/>
 <h5>The Welcome action element</h5>
 <pre><code>        %lt;action name="Welcome" class="mailreader2.MailreaderSupport">
-            %lt;interceptor-ref name="defaultStack"/>
+            %lt;interceptor-ref name="welcome"/>
             %lt;result>/pages/Welcome.jsp%lt;/result>
         %lt;/action>
 </code></pre>
