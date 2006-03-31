@@ -19,13 +19,14 @@
 package mailreader2;
 
 import org.apache.struts.apps.mailreader.dao.User;
+import org.apache.struts.apps.mailreader.dao.ExpiredPasswordException;
 
 /**
  * <p> Validate a user logon. </p>
  */
 public final class Logon extends MailreaderSupport {
 
-    public String execute() throws Exception {
+    public String execute() throws ExpiredPasswordException {
 
         User user = findUser(getUsername(), getPassword());
 

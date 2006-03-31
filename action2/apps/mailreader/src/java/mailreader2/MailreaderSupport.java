@@ -75,17 +75,17 @@ public class MailreaderSupport extends ActionSupport
     /**
      * <p>Store a new application context.</p>
      *
-     * @param application
+     * @param value A Map representing application state
      */
-    public void setApplication(Map application) {
-        this.application = application;
+    public void setApplication(Map value) {
+        application = value;
     }
 
     /**
      * <p>Provide application context.</p>
      */
     public Map getApplication() {
-        return this.application;
+        return application;
     }
 
     // ---- SessionAware ----
@@ -98,10 +98,10 @@ public class MailreaderSupport extends ActionSupport
     /**
      * <p>Store a new session context.</p>
      *
-     * @param session
+     * @param value A Map representing session state
      */
-    public void setSession(Map session) {
-        this.session = session;
+    public void setSession(Map value) {
+        session = value;
     }
 
     /**
@@ -131,7 +131,7 @@ public class MailreaderSupport extends ActionSupport
      * @return Returns the task.
      */
     public String getTask() {
-        return this.task;
+        return task;
     }
 
     /**
@@ -140,7 +140,7 @@ public class MailreaderSupport extends ActionSupport
      * @param task The task to set.
      */
     public void setTask(String task) {
-        this.task = task;
+        task = task;
     }
 
     // ---- Host property ----
@@ -189,16 +189,16 @@ public class MailreaderSupport extends ActionSupport
      * @return Returns the password.
      */
     public String getPassword() {
-        return this.password;
+        return password;
     }
 
     /**
      * <p>Store new User Password</p>
      *
-     * @param password The password to set.
+     * @param value The password to set.
      */
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPassword(String value) {
+        password = value;
     }
 
     // ---- Password2 property (confirmation) ----
@@ -219,16 +219,16 @@ public class MailreaderSupport extends ActionSupport
      * @return Returns the confirmationpassword.
      */
     public String getPassword2() {
-        return this.password2;
+        return password2;
     }
 
     /**
      * <p>Store a new User password confirmation.</p>
      *
-     * @param password2 The confirmation password to set.
+     * @param value The confirmation password to set.
      */
-    public void setPassword2(String password2) {
-        this.password2 = password2;
+    public void setPassword2(String value) {
+        password2 = value;
     }
 
     // ---- Username property ----
@@ -248,16 +248,16 @@ public class MailreaderSupport extends ActionSupport
      * @return Returns the User username.
      */
     public String getUsername() {
-        return this.username;
+        return username;
     }
 
     /**
      * <p>Store new User username</p>
      *
-     * @param username The username to set.
+     * @param value The username to set.
      */
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUsername(String value) {
+        username = value;
     }
 
     // ---- Database property ----

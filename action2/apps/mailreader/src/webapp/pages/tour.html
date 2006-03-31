@@ -179,49 +179,49 @@
     When a web application loads,
     the container reads and parses the "Web Application Deployment
     Descriptor", or "web.xml" file.
-    Action 2 plugs into a web application via a servlet filter.
+    The framework plugs into a web application via a servlet filter.
     Like any filter, the Action servlet is deployed via the web.xml.
 </p>
 
 <hr/>
 <h5>web.xml - The Web Application Deployment Descriptor</h5>
 <pre><code>&lt;?xml version="1.0" encoding="ISO-8859-1"?>
-    &lt;!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
-    "http://java.sun.com/dtd/web-app_2_3.dtd">
-    &lt;web-app>
+&lt;!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+  "http://java.sun.com/dtd/web-app_2_3.dtd">
+&lt;web-app>
 
-    &lt;display-name>Action2 Mailreader&lt;/display-name>
+  &lt;display-name>Action2 Mailreader&lt;/display-name>
 
-    <strong>  &lt;filter>
-        &lt;filter-name>Action2&lt;/filter-name>
-        &lt;filter-class>
-        com.opensymphony.webwork.dispatcher.FilterDispatcher
-        &lt;/filter-class>
-        &lt;/filter></strong>
+  <strong>&lt;filter>
+    &lt;filter-name>Action2&lt;/filter-name>
+    &lt;filter-class>
+      com.opensymphony.webwork.dispatcher.FilterDispatcher
+    &lt;/filter-class>
+    &lt;/filter></strong>
 
-    &lt;filter-mapping>
+  &lt;filter-mapping>
     &lt;filter-name><strong>Action2</strong>&lt;/filter-name>
     &lt;url-pattern>/*&lt;/url-pattern>
-    &lt;/filter-mapping>
+  &lt;/filter-mapping>
 
-    &lt;listener>
-    &lt;listener-class>
+  &lt;listener>
+  &lt;listener-class>
     org.springframework.web.context.ContextLoaderListener
-    &lt;/listener-class>
-    &lt;/listener>
+  &lt;/listener-class>
+  &lt;/listener>
 
-    &lt;!-- Application Listener for MailReader database -->
-    &lt;listener>
-    &lt;listener-class>
+  &lt;!-- Application Listener for MailReader database -->
+  &lt;listener>
+  &lt;listener-class>
     mailreader2.ApplicationListener
-    &lt;/listener-class>
-    &lt;/listener>
+  &lt;/listener-class>
+  &lt;/listener>
 
-    &lt;welcome-file-list>
+  &lt;welcome-file-list>
     &lt;welcome-file>index.html&lt;/welcome-file>
-    &lt;/welcome-file-list>
+  &lt;/welcome-file-list>
 
-    &lt;/web-app></code></pre>
+&lt;/web-app></code></pre>
 <hr/>
 
 <p>
@@ -264,7 +264,7 @@
     Unless you are using Java 1.5, actions cannot be specified as a Welcome
     page.
     So, in the case of a Welcome page,
-    how do we follow the Action 2 best practice of navigating through actions
+    how do we follow the best practice of navigating through actions
     rather than pages?
 </p>
 
@@ -304,9 +304,9 @@
 </p>
 <hr/>
 <h5>A simple "forward thru" action element</h5>
-<pre><code> &lt;action name="<strong>>Welcome</strong>">
-    &lt;result><strong>/pages/Welcome.jsp</strong>&lt;/result>
-    &lt;/action></code></pre>
+<pre><code>&lt;action name="<strong>>Welcome</strong>">
+  &lt;result><strong>/pages/Welcome.jsp</strong>&lt;/result>
+&lt;/action></code></pre>
 <hr/>
 
 <p>
@@ -324,10 +324,10 @@
 
 <hr/>
 <h5>The Welcome action element</h5>
-<pre><code> &lt;action name="Welcome" <b>class="mailreader2.Welcome"</b>>
-    <b>&lt;interceptor-ref name="defaultStack"/></b>
-    &lt;result>/pages/Welcome.jsp&lt;/result>
-    &lt;/action></code></pre>
+<pre><code>&lt;action name="Welcome" <b>class="mailreader2.Welcome"</b>>
+  <strong>&lt;interceptor-ref name="defaultStack"/></strong>
+  &lt;result>/pages/Welcome.jsp&lt;/result>
+&lt;/action></code></pre>
 <hr/>
 
 <p>
@@ -342,8 +342,8 @@
 <h5>Key concept:</h5>
 <blockquote>
     <p>
-        The essential point is that the Action class doesn't need to know
-        what result type is needed for "success" or "error".
+        The Action class doesn't need to know what result type is needed
+        for "success" or "error".
         The Action can just return the logical name for a result,
         without knowing how the result is implemented.
     </p>
@@ -521,7 +521,7 @@ webwork.action.extension = <strong>do</strong></code></pre>
 <hr/>
 
 <p>
-    When we specify "resources" here, we are telling Action 2 to scan the classpath
+    When we specify "resources" here, we are telling the framework to scan the classpath
     for a Resource Bundle named "resources.properties".
     The bundle might be embedded in a JAR, or found in the WEB-INF/classes
     folder, or anywhere else on the runtime classpath.
@@ -612,7 +612,7 @@ webwork.action.extension = <strong>do</strong></code></pre>
 <p>
     The <strong>text</strong> tag inserts a message from and
     application's default resource bundle.
-    If the Action 2 locale setting is changed for a user,
+    If the framework's locale setting is changed for a user,
     the text tag will render messages from the new locale's resource
     bundle instead.
 </p>
@@ -654,7 +654,7 @@ webwork.action.extension = <strong>do</strong></code></pre>
 </p>
 
 <p>
-    In the span of a single request for the Welcome page, Action 2 has done
+    In the span of a single request for the Welcome page, the framework has done
     quite a bit already:
 </p>
 
@@ -832,7 +832,7 @@ webwork.action.extension = <strong>do</strong></code></pre>
 <hr/>
 
     <p>
-        Under the covers, Struts Action 2 uses
+        Under the covers, the framework uses
         <a href="http://freemarker.sourceforge.net/">Freemarker</a>
         for its standard templating language.
         FreeMarker is similar to
@@ -890,7 +890,7 @@ webwork.action.extension = <strong>do</strong></code></pre>
 </p>
 
 <p>
-    For the answers, we need to look at another flavor of Action 2 configuration file:
+    For the answers, we need to look at another flavor of configuration file:
     the "validation" file.
 </p>
 
@@ -911,14 +911,14 @@ webwork.action.extension = <strong>do</strong></code></pre>
 <h5>Validation file for Logon Action</h5>
 <pre><code>&lt;!DOCTYPE validators PUBLIC "-//OpenSymphony Group//XWork Validator 1.0.2//EN" "http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
 &lt;validators>
-    &lt;field name="username">
-        &lt;field-validator type="requiredstring">
-            &lt;message key="error.username.required"/>
+    &lt;field name="<strong>username</strong>">
+        &lt;field-validator type="<strong>requiredstring</strong>">
+            &lt;message key="<strong>error.username.required</strong>"/>
         &lt;/field-validator>
     &lt;/field>
-    &lt;field name="password">
-        &lt;field-validator type="requiredstring">
-            &lt;message key="error.password.required"/>
+    &lt;field name="<strong>password</strong>">
+        &lt;field-validator type="<strong>requiredstring</strong>">
+            &lt;message key="<strong>error.password.required</strong>"/>
         &lt;/field-validator>
     &lt;/field>
 &lt;/validators>
@@ -964,20 +964,20 @@ import org.apache.struts.apps.mailreader.dao.User;
 
 public final class <strong>Logon</strong> extends MailreaderSupport {
 
-    public String <strong>execute()</strong> throws Exception {
+  public String <strong>execute()</strong> throws ExpiredPasswordException {
 
-        User user = findUser(getUsername(), getPassword());
+    User user = <strong>findUser(getUsername(), getPassword());</strong>
 
-        if (user != null) {
-            setUser(user);
-        }
-
-        if (hasErrors()) {
-            return INPUT;
-        }
-
-        return SUCCESS;
+    if (user != null) {
+      <strong>setUser(user);</strong>
     }
+
+    if (<strong>hasErrors()</strong>) {
+      return INPUT;
+    }
+
+    return SUCCESS;
+}
 }</code></pre>
 <hr/>
 
@@ -991,18 +991,18 @@ public final class <strong>Logon</strong> extends MailreaderSupport {
 
 <p>
     Let's look at the relevant properties and methods from the MailreaderSupport and ActionSupport classes:
-    "getUsername", "getPassword", "findUser" and "hasErrors".
+    "getUsername", "getPassword", "findUser", "setUser", and "hasErrors".
 </p>
 
 <p>
-    Struts Action 2 lets you define
+    The framework lets you define
     <a href="http://struts.apache.org/struts-action/userGuide/preface.html#javabeans">JavaBean properties</a>
     directly on the Action.
     Any JavaBean property can be used, including rich objects.
     When a request comes in,
     any public properties on the Action class are matched with the request parameters.
     When the names match, the request parameter value is set to the JavaBean property.
-    Struts Action 2 will make its best effort to convert the data,
+    The framework will make its best effort to convert the data,
     and, if necessary, reporting any conversion errors.
 </p>
 
@@ -1038,261 +1038,187 @@ public void setPassword(String password) {
 <hr/>
 <h5>MailreaderSupport.findUser</h5>
 <pre><code>public User <strong>findUser</strong>(String username, String password)
-        throws ExpiredPasswordException {
+  throws ExpiredPasswordException {
 
-    User user = getDatabase().findUser(username);
-    if ((user != null) && !user.getPassword().equals(password)) {
-        user = null;
-    }
-    if (user == null) {
-       this.addFieldError("password", getText("error.password.mismatch"));
-    }
-    return user;}</code></pre>
-<hr/>
-
-<p>
-
-</p>
-
-<hr/>
-<h5>BaseAction.doGet and doSet</h5>
-<pre><code> protected String <strong>doGet</strong>(ActionForm form, String
-    property) {
-    String initial;
-    try {
-    initial = (String) PropertyUtils.getSimpleProperty(form, property);
-    } catch (Throwable t) {
-    initial = null;
-    }
-    String value = null;
-    if ((initial !=null) && (initial.length()>0)) {
-    value = initial.trim();
-    if (value.length()==0) value = null;
-    }
-    return value;
-    }
-
-    protected boolean <strong>doSet</strong>(ActionForm form, String property,
-    String value) {
-    try {
-    DynaActionForm dyna = (DynaActionForm) form;
-    dyna.set(property,value);
-    } catch (Throwable t) {
-    return false;
-    }
-    return true;
-    }</code></pre>
-<hr/>
-
-<p>
-    LogonAction uses two other BaseAction helpers: "doGetUser" and
-    "doFindSuccess".
-</p>
-
-<hr/>
-<h5>BaseAction.doGetUser</h5>
-<pre><code> User <strong>doGetUser</strong>(UserDatabase database, String
-    username,
-    String password, ActionMessages errors)
-    throws ExpiredPasswordException {
-
-    User user = null;
-    if (database == null){
-    errors.add(
-    ActionMessages.GLOBAL_MESSAGE,
-    new ActionMessage("error.database.missing"));
-    }
-    else {
-    user = <strong>database.</strong>findUser(username);
-    if ((user != null) && !user.getPassword().equals(password)) {
+  User user = <strong>getDatabase().findUser(username)</strong>;
+  if ((user != null) && !user.getPassword().equals(password)) {
     user = null;
-    }
-    if (user == null) {
-    errors.add(
-    ActionMessages.GLOBAL_MESSAGE,
-    new ActionMessage("error.password.mismatch"));
-    }
-    }
-
-    return user;
-    }
-</code></pre>
+  }
+  if (user == null) {
+    this.<strong>addFieldError</strong>("password", getText("error.password.mismatch"));
+  }
+  return user;
+}</code></pre>
 <hr/>
 
 <p>
-    The <strong>doGetUser</strong> helper does the real work of the
-    LogonAction.
-    The "doGetUser" method checks the tendered credentials against the
-    database,
-    If there are any issues, like there is not a user by that name, or the
-    password doesn't match, doGetUser passes back the appropriate messages.
-</p>
-
-<p>
-    The doGet user is another "facade" method.
-    A facade simplifies a complicated call to a business method.
-    Here, doGetUser wrapes the business method with the Error Handling needed
-    by the Mail Reader application.
-</p>
-
-<hr/>
-<h5>BaseAction.doFindSuccess</h5>
-<pre><code> protected ActionForward <strong>doFindSuccess</strong>
-    (ActionMapping mapping) {
-    if (log.isTraceEnabled()) {
-    log.trace(Constants.LOG_SUCCESS);
-    }
-    return mapping.findForward(Constants.SUCCESS);
-</code></pre>
-<hr/>
-
-<p>
-    The <strong>doFindSuccess</strong> method is a simple utility but often
-    used.
-    It just checks the mapping for a result named "Success".
-    By using a utility,
-    we can include a logging statement when trace is enabled,
-    and be very sure that everyone knows how to spell "Success". :)
-</p>
-
-<h5>web.xml -- Action Servlet Configuration</h5>
-<pre><code>
-    &lt;servlet>
-    &lt;servlet-name>action&lt;/servlet-name>
-    &lt;servlet-class>org.apache.struts.action.ActionServlet&lt;/servlet-class>
-    &lt;init-param>
-    &lt;param-name>config&lt;/param-name>
-    &lt;param-value><strong>/WEB-INF/struts-config.xml</strong>&lt;/param-value>
-    &lt;/init-param>
-    &lt;load-on-startup>1&lt;/load-on-startup>
-    &lt;/servlet>
-</code></pre>
-
-<hr/>
-<h5>The SubmitLogon action element</h5>
-<pre><code>        &lt;!-- Process a user logon -->
-    &lt;action
-    <strong>path="/SubmitLogon"</strong>
-    type="org.apache.struts.apps.mailreader.actions.LogonAction"
-    <strong>name</strong>="LogonForm"
-    <strong>scope</strong>="request"
-    <strong>validate</strong>="request"
-    <strong>input</strong>="Logon">
-    &lt;<strong>exception</strong>
-    key="expired.password"
-    type="org.apache.struts.apps.mailreader.dao.ExpiredPasswordException"
-    path="/ChangePassword.jsp"/>
-    &lt;forward
-    name="Success"
-    path="/MainMenu.do"/>
-    &lt;/action></code></pre>
-<hr/>
-
-<p>
-    We saw the path and type attributes in the Welcome action.
-    Let's look at the new attributes: "name", "scope", "input", and
-    "exception".
-</p>
-
-<h4>The "name" attribute</h4>
-
-<p>
-    The <strong>name</strong> attribute specifies something Struts Action
-    calls an "ActionForm".
-    The ActionForm buffers input from a form and delivers it to an Action
-    class as an object.
-    The ActionForm can also be used to validate input.
-    If validation fails, the tags can rewrite the input values from the
-    ActionForm.
-</p>
-
-<p>
-    The ActionForms are defined in the "form-beans" section of struts-config.
-</p>
-
-<p>
-    ActionForms can be "conventional" or "dynamic".
-    MailReader uses dynamic ActionForms.
-    Rather than cobble up an actual JavaBean class,
-    we specify the properties the ActionForm can accept in the configuration
-    file.
-</p>
-
-<hr/>
-<h5>The form-bean element for LogonForm</h5>
-<pre><code>        &lt;!-- LogonAction form bean -->
-    &lt;form-bean
-    name="LogonForm"
-    <strong>extends="BaseForm"/></strong></code></pre>
-<hr/>
-
-<p>
-    Hmmmm. That doesn't seem to tell us much.
-    The LogonForm "extends" the BaseForm, but doesn't add any attributes.
-    What about the BaseForm element that LogonForm extends?
-</p>
-
-<hr/>
-<h5>BaseForm - An "abstract" form-bean</h5>
-<pre><code>        &lt;!-- BaseAction form bean (abstract) -->
-    &lt;form-bean
-    name="BaseForm"
-    type="org.apache.struts.validator.DynaValidatorForm">
-    <strong>&lt;form-property</strong>
-    name="username"
-    type="java.lang.String"/>
-    &lt;form-property
-    name="password"
-    type="java.lang.String"/>
-    &lt;form-property
-    name="task"
-    type="java.lang.String"
-    initial="Create"/>
-    &lt;/form-bean></code></pre>
-<hr/>
-
-<h5>Note:</h5>
-<blockquote>
-    <p><font class="hint">
-        <strong>Extends</strong> - In the Struts configuration file,
-        we can use the "extends" attribute to adopt default settings from
-        another element.
-        Extends makes using XML elements more like object-orientated
-        programming.
-        You can setup a base element, and then only specify the behavior that
-        changes.
-    </font></p>
-</blockquote>
-<hr/>
-
-<p>
-    Struts creates the ActionForms automatically, regardless of whether the
-    form-bean is conventional or dynamic.
-    The ActionForm lets us specify which properties we want to extract from
-    the incoming request.
-    If a property is not specified by the ActionForm,
-    the value is not automatically transferred from the request, validated,
-    or passed to the Action class.
-</p>
-
-<h4>The "scope" attribute</h4>
-
-<p>
-    The <strong>scope</strong> attribute in the "SubmitLogon" action element
-    tells the controller whether to store the ActionForm in the request,
-    rather than in the user's session.
+    The findUser method dips into the MailReader Data Access Object layer,
+    which is represented by the <strong>Database</strong> property.
+    The code for the DAO layer is maintained as a seperate project.
+    The MailReader application imports the DAO JAR,
+    but it is not responsible for maintaining any of the DAO source.
+    Keeping the data access layer at "arms-length" is a very good habit.
+    It encourages a style of development where the data access layer
+    can be tested and developed independantly of a specific end-user application.
+    In fact, there are three versions of the MailReader application,
+    all which share the same MailReader DAO JAR!
 </p>
 
 <hr/>
 <h5>Best Practice:</h5>
 <blockquote>
-    <p><font class="hint">
-        Use request scope for single-page forms that contain all the
-        properties needed by the Action.
-        There is usually no need to maintain form input across requests.
-    </font></p>
+    <p><font class="hint">"Strongly separate data access and business logic from the rest of the application."</font>
+    </p>
 </blockquote>
 <hr/>
+
+<p>
+    When findUser returns, the Logon Action looks to see if a valid (non-null) User object is returned.
+    A valid User is passed to the <strong>User</strong> property.
+    The User property is not implemented in quite the same way as Username and Password.
+</p>
+
+<hr/>
+<h5>MailreaderSupport.setUser</h5>
+<pre><code>public User getUser() {
+    return (User) <strong>getSession().get(Constants.USER_KEY)</strong>;
+}
+public void setUser(User user) {
+    getSession().put(Constants.USER_KEY, user);
+}</code></pre>
+<hr/>
+
+<p>
+    Instead of using a field to store the property value,
+    setUser passes it to a <strong>Session</strong> property.
+</p>
+
+<h5>MailreaderSupport.getSession() and setSession()r</h5>
+<pre><code>private Map session;
+
+public Map <strong>getSession()</strong> {
+  return session;
+}
+
+public void <strong>setSession(Map value)</strong> {
+  session = value;
+}</code></pre>
+
+<p>
+    To look at the MailreaderSupport class, the Session property looks like a plain-old Map.
+    In fact, the Session property is an adapter that is backed by the servlet session object at runtime.
+    The MailreaderSupport class doesn't need to know that though.
+    It can treat Session like any other Map.
+    We can also test the MailreaderSupport class by passing it some other implementation of Map,
+    running the test,
+    and then looking to see what changes MailreaderSupport made to our "mock" Session object.
+</p>
+
+<p>
+    But, when MailreaderSupport is running inside a web application,
+    how does it acquire a reference to the servlet session?
+</p>
+
+<p>
+    Good question. If you were to look at just the MailreaderSupport class,
+    you would not see a single line of code that sets the session property.
+    But, yet, when we run the class, the session property is not null.
+    Hmmm.
+</p>
+
+<p>
+    The magic that provides the Session property a runtime value is called "dependency injection".
+    The MailreaderSupport class implements a interface called <strong>SessionAware</strong>.
+    SessionAware is bundled with the framework, and it defines a setter for the Session property.
+</p>
+
+<p>
+  <code>public void <strong>setSession</strong>(Map session);</code>
+</p>
+
+<p>
+    Also bundled with the framework is an object called the <strong>ServletConfigInterceptor</strong>.
+    If the ServletConfigInterceptor sees that an Action implements the SessionAware interface,
+    it automatically set the session property.
+</p>
+
+<pre><code>  if (action instanceof <code>SessionAware</code>) {
+  ((SessionAware) action).<code>setSession</code>(context.getSession());
+}</code></pre>
+
+<p>
+    The framework uses these "Interceptor" classes to create a "front controller"
+    for each action an application defines.
+    Each Interceptor can peek at the request before an Action class is invoked,
+    and then again after the Action class is invoked.
+    (If you have worked with Servlet
+    <a href="http://java.sun.com/products/servlet/Filters.html">Filters</a>,
+    you will recognize this pattern.
+    But, unlike Filters, Interceptors are not tied to HTTP.
+    Interceptors can be tested and developed outside of a web application.)
+</p>
+
+<p>
+    You can use the same set of Interceptors for all your actions,
+    or define a special set of Interceptors for any given action,
+    or define different sets of Interceptors to use with different types of actions.
+    The framework comes with a default set of Interceptors,
+    that it will use when another set is not specified,
+    but you can designate your own default Interceptor set (or "stack")
+    in the xwork.xml configuration file.
+</p>
+
+<p>
+    Most Interceptors provide a "utility" function, like setting the session property.
+    Others, like the ValidationInterceptor, can change the workflow of an action.
+    Interceptors are key feature of the framework,
+    and we will see a few more on the tour.
+</p>
+
+<p>
+    If a valid User is not found, or the password doesn't match,
+    the findUser method invokes the <strong>addFieldError</strong> method to note the problem.
+    When findUser returns, the Logon Action checks for errors,
+    and then returns either INPUT or SUCCESS.
+</p>
+
+<p>
+    The addFieldError method is provided by the ActionSupport class,
+    which is bundled with the framework.
+    The constants for INPUT and SUCCESS are also provided by ActionSupport.
+    While the ActionSupport class provides many useful utilities,
+    you are not required to use it as a base class.
+    Any Java class can be used as an Action, if you like.
+</p>
+
+<p>
+    But, it is a good practice to provide a base class with utilites
+    that can be shared by an application's Action classes.
+    The framework does this with ActionSupport,
+    and the MailReader application does the same with the MailreaderSupport class.
+</p>
+
+<hr/>
+<h5>Best Practice:</h5>
+<blockquote>
+    <p><font class="hint">"Use a base class to define common functionality."</font></p>
+</blockquote>
+<hr/>
+
+<p>
+    But, what happens if Logon returns INPUT instead of SUCCESS. How does the framework know what to do next?
+</p>
+
+<p>
+    To answer that question, we need to turn back to the xwork.xml configuration file.
+</p>
+
+
+<h4><a name="xwork.xml" id="xwork.xml">xwork.xml</a></h4>
+
+
+... TODO ...
+
 
 <h4>The "validate" attribute</h4>
 
