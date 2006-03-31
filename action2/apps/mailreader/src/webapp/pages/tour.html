@@ -345,7 +345,7 @@
         The essential point is that the Action class doesn't need to know
         what result type is needed for "success" or "error".
         The Action can just return the logical name for a result,
-        without knowing how the result is implented.
+        without knowing how the result is implemented.
     </p>
 </blockquote>
 <hr/>
@@ -507,9 +507,9 @@ public class Welcome extends MailreaderSupport {
 </h4>
 
 <p>
-    As mentioned, MailReader is an internationlized application.
+    As mentioned, MailReader is an internationalized application.
     The message resources for the application are loaded through a reference in the
-    webwork.properites file.
+    webwork.properties file.
     Like the database contents, the webwork.properties file is kept under
     /src/java/ in the source tree.
 </p>
@@ -753,7 +753,7 @@ webwork.action.extension = <strong>do</strong></code></pre>
     This tag renders a HTML form tag.
     By default, the form will submit back to whatever action invoked the page.
     The "validate=true" setting enables client-side validation,
-    so that the form can be validated with Javascript before being sent
+    so that the form can be validated with JavaScript before being sent
     back to the server.
     The framework will still validate the form again, just to be sure, but the
     client-side validation can save a few round-trips to the server.
@@ -772,7 +772,7 @@ webwork.action.extension = <strong>do</strong></code></pre>
     When we place a control on a form, we usually need to place a set of
     HTML tags to do everything we want to do.
     Usually, we do not just want a plain "input type=text" tag.
-    We want the input field to have a label too, and possibily
+    We want the input field to have a label too, and possibly
     a tooltip. And, of course, a place to print a message
     should invalid data be entered.
 </p>
@@ -927,7 +927,7 @@ webwork.action.extension = <strong>do</strong></code></pre>
 
 <p>
     The field elements correspond to the ActionForm properties.
-    The <strong>username</strong> and <strong>passowrd</strong> field elements
+    The <strong>username</strong> and <strong>password</strong> field elements
     say that each depends on the "requiredstring" validator.
     If the username is blank or absent, validation will fail and an error
     message is generated.
@@ -990,17 +990,17 @@ public final class <strong>Logon</strong> extends MailreaderSupport {
 </p>
 
 <p>
-    Let's look at the relevent propeties and methods from the MailreaderSupport and ActionSupport classes:
+    Let's look at the relevant properties and methods from the MailreaderSupport and ActionSupport classes:
     "getUsername", "getPassword", "findUser" and "hasErrors".
 </p>
 
 <p>
     Struts Action 2 lets you define
-    <a href="http://struts.apache.org/struts-action/userGuide/preface.html#javabeans">Javabean properties</a>
+    <a href="http://struts.apache.org/struts-action/userGuide/preface.html#javabeans">JavaBean properties</a>
     directly on the Action.
     Any JavaBean property can be used, including rich objects.
     When a request comes in,
-    any public properties on the Action class are matched with the requeset parameters.
+    any public properties on the Action class are matched with the request parameters.
     When the names match, the request parameter value is set to the JavaBean property.
     Struts Action 2 will make its best effort to convert the data,
     and, if necessary, reporting any conversion errors.
@@ -1012,7 +1012,7 @@ public final class <strong>Logon</strong> extends MailreaderSupport {
 </p>
 
 <hr/>
-<h5>MailreaderSupport.findUser</h5>
+<h5>MailreaderSupport.getUsername() and getPassword()</h5>
 <pre><code>private String username = null;
 public String <strong>getUsername()</strong> {
     return this.username;
@@ -1032,7 +1032,7 @@ public void setPassword(String password) {
 
 <p>
     We use these properties to capture the client's credentials,
-    and pass them to the more interesting findUser method.
+    and pass them to the more interesting <strong>findUser</strong> method.
 </p>
 
 <hr/>
