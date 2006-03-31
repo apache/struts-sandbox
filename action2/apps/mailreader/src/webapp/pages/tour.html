@@ -279,12 +279,12 @@
 <hr/>
 <h5>MailReader's index.html</h5>
 <pre><code>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-    &lt;html>&lt;head>
-    &lt;META HTTP-EQUIV="Refresh" CONTENT="0;<strong>URL=Welcome.do</strong>">
-    &lt;/head>
-    &lt;body>
-    &lt;p>Loading ...&lt;/p>
-    &lt;/body>&lt;/html></code></pre>
+&lt;html>&lt;head>
+  &lt;META HTTP-EQUIV="Refresh" CONTENT="0;<strong>URL=Welcome.do</strong>">
+&lt;/head>
+&lt;body>
+  &lt;p>Loading ...&lt;/p>
+&lt;/body>&lt;/html></code></pre>
 <hr/>
 
 <p>
@@ -388,29 +388,29 @@
 <h5>The Welcome Action class</h5>
 <pre><code>package mailreader2;
 
-    public class Welcome extends MailreaderSupport {
+public class Welcome extends MailreaderSupport {
 
-    public String execute() throws Exception {
+  public String execute() throws Exception {
 
     // Confirm message resources loaded
     String message = getText(Constants.ERROR_DATABASE_MISSING);
     if (Constants.ERROR_DATABASE_MISSING.equals(message)) {
-    addActionError(Constants.ERROR_MESSAGES_NOT_LOADED);
+      addActionError(Constants.ERROR_MESSAGES_NOT_LOADED);
     }
 
     // Confirm database loaded
     if (null==getDatabase()) {
-    addActionError(Constants.ERROR_DATABASE_NOT_LOADED);
+      addActionError(Constants.ERROR_DATABASE_NOT_LOADED);
     }
 
     if (hasErrors()) {
-    return ERROR;
+      return ERROR;
     }
     else {
-    return SUCCESS;
+      return SUCCESS;
     }
-    }
-    }</code></pre>
+  }
+}</code></pre>
 <hr/>
 
 <p>
@@ -433,10 +433,10 @@
 <hr/>
 <h5>MailReader's global-result element</h5>
 <pre><code> &lt;global-results>
-    &lt;result name=<strong>"error"</strong>><strong>/pages/Error.jsp</strong>&lt;/result>
-    &lt;result name="invalid.token">/pages/Error.jsp&lt;/result>
-    &lt;result name="login" type="redirect-action">Logon!input&lt;/result>
-    &lt;/global-results></code></pre>
+  &lt;result name=<strong>"error"</strong>><strong>/pages/Error.jsp</strong>&lt;/result>
+  &lt;result name="invalid.token">/pages/Error.jsp&lt;/result>
+  &lt;result name="login" type="redirect-action">Logon!input&lt;/result>
+&lt;/global-results></code></pre>
 <hr/>
 
 <p>
@@ -462,10 +462,10 @@
 <hr/>
 <h5>mailreader2.ApplicationListener</h5>
 <pre><code> &lt;listener>
-    &lt;listener-class>
+  &lt;listener-class>
     <strong>mailreader2.ApplicationListener</strong>
-    &lt;/listener-class>
-    &lt;/listener></code></pre>
+  &lt;/listener-class>
+&lt;/listener></code></pre>
 <hr/>
 
 <p>
@@ -490,11 +490,12 @@
 <pre><code>&lt;user username="<strong>user</strong>" fromAddress="John.User@somewhere.com"
     fullName="<strong>John Q. User</strong>" password="pass">
     &lt;subscription host="<strong>mail.hotmail.com"</strong> autoConnect="false"
-    password="bar" type="pop3" username="user1234">
+      password="bar" type="pop3" username="user1234">
     &lt;/subscription>
     &lt;subscription host="<strong>mail.yahoo.com</strong>" autoConnect="false" password="foo"
-    type="imap" username="jquser">
-    &lt;/subscription>&lt;/user></code></pre>
+      type="imap" username="jquser">
+  &lt;/subscription>
+&lt;/user></code></pre>
 <hr/>
 
 <p>
@@ -516,7 +517,7 @@
 <hr/>
 <h5>webwork.properties</h5>
 <pre><code>webwork.custom.i18n.resources = <strong>resources</strong>
-    webwork.action.extension = <strong>do</strong></code></pre>
+webwork.action.extension = <strong>do</strong></code></pre>
 <hr/>
 
 <p>
@@ -539,10 +540,10 @@
 <hr/>
 <h5>Message Resource entries used by the Welcome page</h5>
 <pre><code><strong>index.heading=</strong>MailReader Application Options
-    <strong>index.logon=</strong>Log on to the MailReader Application
-    <strong>index.registration=</strong>Register with the MailReader Application
-    <strong>index.title=</strong>MailReader Demonstration Application
-    <strong>index.tour=</strong>A Walking Tour of the MailReader Demonstration Application</code></pre>
+<strong>index.logon=</strong>Log on to the MailReader Application
+<strong>index.registration=</strong>Register with the MailReader Application
+<strong>index.title=</strong>MailReader Demonstration Application
+<strong>index.tour=</strong>A Walking Tour of the MailReader Demonstration Application</code></pre>
 <hr/>
 
 <h4><a name="Welcome.jsp" id="Welcome.jsp">Welcome Page</a></h4>
@@ -554,45 +555,45 @@
 <hr/>
 <h5>Welcome.jsp</h5>
 <pre><code>&lt;%@ page contentType="text/html; charset=UTF-8" %>
-    <strong>&lt;%@ taglib uri="/webwork" prefix="saf" %></strong>
-    &lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-    &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-    &lt;head>
+<strong>&lt;%@ taglib uri="/webwork" prefix="saf" %></strong>
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  &lt;head>
     &lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     &lt;title><strong>&lt;saf:text name="index.title"/></strong>&lt;/title>
     &lt;link href="<strong>&lt;saf:url value="/css/mailreader.css"/></strong>" rel="stylesheet"
     type="text/css"/>
-    &lt;/head>
+  &lt;/head>
 
-    &lt;body>
+  &lt;body>
     &lt;h3>&lt;saf:text name="index.heading"/>&lt;/h3>
 
     &lt;ul>
-    &lt;li>&lt;a href="&lt;saf:url action="Registration!input"/>">&lt;saf:text
-    name="index.registration"/>&lt;/a>&lt;/li>
-    &lt;li>&lt;a href="&lt;saf:url action="Logon!input"/>">&lt;saf:text
-    name="index.logon"/>&lt;/a>&lt;/li>
+      &lt;li>&lt;a href="&lt;saf:url action="Registration!input"/>">&lt;saf:text
+        name="index.registration"/>&lt;/a>&lt;/li>
+      &lt;li>&lt;a href="&lt;saf:url action="Logon!input"/>">&lt;saf:text
+        name="index.logon"/>&lt;/a>&lt;/li>
     &lt;/ul>
 
     &lt;h3>Language Options&lt;/h3>
     &lt;ul>
-    &lt;li>&lt;a href="&lt;saf:url action="Welcome?request_locale=en"/>">English&lt;/a>&lt;/li>
-    &lt;li>&lt;a href="&lt;saf:url action="Welcome?request_locale=ja"/>">Japanese&lt;/a>&lt;/li>
-    &lt;li>&lt;a href="&lt;saf:url action="Welcome?request_locale=ru"/>">Russian&lt;/a>&lt;/li>
+      &lt;li>&lt;a href="&lt;saf:url action="Welcome?request_locale=en"/>">English&lt;/a>&lt;/li>
+      &lt;li>&lt;a href="&lt;saf:url action="Welcome?request_locale=ja"/>">Japanese&lt;/a>&lt;/li>
+      &lt;li>&lt;a href="&lt;saf:url action="Welcome?request_locale=ru"/>">Russian&lt;/a>&lt;/li>
     &lt;/ul>
 
     &lt;hr/>
 
     &lt;p><strong>&lt;saf:i18n name="alternate"></strong>
-    &lt;img src="&lt;saf:text name="struts.logo.path"/>"
-    alt="&lt;saf:text name="struts.logo.alt"/>"/>
+      &lt;img src="&lt;saf:text name="struts.logo.path"/>"
+        alt="&lt;saf:text name="struts.logo.alt"/>"/>
     <strong>&lt;/saf:i18n></strong>&lt;/p>
 
     &lt;p>&lt;a href="&lt;saf:url action="Tour" />">&lt;saf:text name="index.tour"/>&lt;/a>&lt;/p>
 
-    &lt;/body>
-    &lt;/html></code></pre>
+  &lt;/body>
+&lt;/html></code></pre>
 <hr/>
 
 <p>
@@ -807,11 +808,11 @@
 
 <hr/>
 <pre><code>&lt;#if (actionErrors?exists && actionErrors?size > 0)>
-	&lt;ul>
+  &lt;ul>
 	&lt;#list actionErrors as error>
 		&lt;li>&lt;span class="errorMessage">${error}&lt;/span>&lt;/li>
 	&lt;/#list>
-	&lt;/ul>
+  &lt;/ul>
 &lt;/#if></code></pre>
 
 <p>
@@ -822,11 +823,11 @@
 
 <hr/>
 <pre><code>&lt;#if (actionErrors?exists && actionErrors?size > 0)>
-	&lt;table>
-	&lt;#list actionErrors as error>
-		&lt;tr>&lt;td>&lt;span class="errorMessage">${error}&lt;/span>&lt;/td>&lt;/tr>
-	&lt;/#list>
-	&lt;/table>
+  &lt;table>
+    &lt;#list actionErrors as error>
+      &lt;tr>&lt;td>&lt;span class="errorMessage">${error}&lt;/span>&lt;/td>&lt;/tr>
+    &lt;/#list>
+  lt;/table>
 &lt;/#if></code></pre>
 <hr/>
 
@@ -860,7 +861,7 @@
     </p>
 
 <pre><code>  &lt;saf:submit <strong>action="Logon!cancel" onclick="form.onsubmit=null"</strong>
-  value="%{getText('button.cancel')}"/>
+    value="%{getText('button.cancel')}"/>
 </code></pre>
 
     <p>
@@ -902,67 +903,39 @@
 </p>
 
 <p>
-    In the Logon page, we mentioned that the html:javascript tag confers with
-    the Struts Validator components.
     The validation framework is configured through another XML document, the <strong>
     Logon-validation.xml</strong>.
 </p>
 
 <hr/>
-<h5>Validator element for LogonForm</h5>
-<pre><code>        &lt;form
-    name="LogonForm">
-
-    &lt;field
-    property="<strong>username</strong>"
-    depends="required">
-    &lt;arg
-    key="prompt.username"/>
+<h5>Validation file for Logon Action</h5>
+<pre><code>&lt;!DOCTYPE validators PUBLIC "-//OpenSymphony Group//XWork Validator 1.0.2//EN" "http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
+&lt;validators>
+    &lt;field name="username">
+        &lt;field-validator type="requiredstring">
+            &lt;message key="error.username.required"/>
+        &lt;/field-validator>
     &lt;/field>
-
-    &lt;field
-    property="<strong>password</strong>"
-    depends="required, minlength,maxlength">
-    &lt;arg
-    key="prompt.password"/>
-    &lt;arg
-    key="${var:minlength}"
-    name="minlength"
-    resource="false"/>
-    &lt;arg
-    key="${var:maxlength}"
-    name="maxlength"
-    resource="false"/>
-
-    &lt;var>
-    &lt;var-name>
-    maxlength
-    &lt;/var-name>
-    &lt;var-value>
-    16
-    &lt;/var-value>
-    &lt;/var>
-    &lt;var>
-    &lt;var-name>
-    minlength
-    &lt;/var-name>
-    &lt;var-value>
-    3
-    &lt;/var-value>
-    &lt;/var>
+    &lt;field name="password">
+        &lt;field-validator type="requiredstring">
+            &lt;message key="error.password.required"/>
+        &lt;/field-validator>
     &lt;/field>
-
-    &lt;/form></code></pre>
+&lt;/validators>
+</code></pre>
 <hr/>
 
 <p>
     The field elements correspond to the ActionForm properties.
-    The <strong>username</strong> field element says it depends on the
-    "required" validator.
+    The <strong>username</strong> and <strong>passowrd</strong> field elements
+    say that each depends on the "requiredstring" validator.
     If the username is blank or absent, validation will fail and an error
-    message is automatically generated.
+    message is generated.
+    The messages would be based on the "error.username.required" or
+    "error.password.required" message templates, from the resource bundle.
 </p>
 
+<!--
 <p>
     The <strong>password</strong> field (or property) is also required.
     In addition, it must also pass the "maxlength" and "minlength"
@@ -974,86 +947,111 @@
     Of course, the messages are generated from the MessageResource bundles and
     are easy to localize.
 </p>
+-->
 
-<h4><a name="LogonAction.java" id="LogonAction.java">LogonAction.java</a></h4>
+<h4><a name="Logon.java" id="Logon.java">Logon Action</a></h4>
 
 <p>
-    If validation passes, the LogonForm object is passed to the LogonAction as
-    a parameter.
-    The LogonAction interacts with the database to see if the credentials are
-    valid.
-    If so, the user is logged on, and control passes to the "success" forward.
-    Otherwise, control is forwarded to the input page and the list of error
-    messages displayed.
+    If validation passes, the framework invokes the execute method of the Logon Action.
+    The actual Logon Action is brief, since most of the functionality derives
+    from the base class, MailreaderSupport.
 </p>
 
 <hr/>
-<h5>LogonAction.java</h5>
-<pre><code> public final class <strong>LogonAction</strong> extends BaseAction
-    {
-    public ActionForward execute(
-    ActionMapping mapping,
-    ActionForm form,
-    HttpServletRequest request,
-    HttpServletResponse response)
-    throws Exception {
+<h5>Logon.java</h5>
+<pre><code>package mailreader2;
+import org.apache.struts.apps.mailreader.dao.User;
 
-    // Retrieve user
-    String username = <strong>doGet</strong>(form, USERNAME);
-    String password = doGet(form, PASSWORD);
-    ActionMessages errors = new ActionMessages();
-    User user = <strong>doGetUser</strong>(username,password,errors);
+public final class <strong>Logon</strong> extends MailreaderSupport {
 
-    // Report back any errors, and exit if any
-    if (!errors.isEmpty()) {
-    this.saveErrors(request, errors);
-    return (mapping.getInputForward());
+    public String <strong>execute()</strong> throws Exception {
+
+        User user = findUser(getUsername(), getPassword());
+
+        if (user != null) {
+            setUser(user);
+        }
+
+        if (hasErrors()) {
+            return INPUT;
+        }
+
+        return SUCCESS;
     }
-
-    // Cache user object in session to signify logon
-    <strong>doCacheUser</strong>(request,user);
-
-    // Done
-    return <strong>doFindSuccess</strong>(mapping);
-    }
-    }</code></pre>
+}</code></pre>
 <hr/>
 
 <p>
-    LogonAction extends another Action class, BaseAction.
-    The BaseAction class provides a number of helper methods, all of which are
-    prefixed with "do".
-    The <strong>doCacheUser</strong> method, for example, stores the user
-    object in the session,
-    and logs the event, if the logging level is set to debug.
+    Logon lays out what we do to authenticate a user.
+    We try to find the user using the provided credentials.
+    If the user is found, we cache a reference.
+    If not user is not found, we return "input" so the client can try again.
+    Otherwise, we return "success", so that the client can access the rest of the application.
+</p>
+
+<p>
+    Let's look at the relevent propeties and methods from the MailreaderSupport and ActionSupport classes:
+    "getUsername", "getPassword", "findUser" and "hasErrors".
+</p>
+
+<p>
+    Struts Action 2 lets you define
+    <a href="http://struts.apache.org/struts-action/userGuide/preface.html#javabeans">Javabean properties</a>
+    directly on the Action.
+    Any JavaBean property can be used, including rich objects.
+    When a request comes in,
+    any public properties on the Action class are matched with the requeset parameters.
+    When the names match, the request parameter value is set to the JavaBean property.
+    Struts Action 2 will make its best effort to convert the data,
+    and, if necessary, reporting any conversion errors.
+</p>
+
+<p>
+    The <strong>Username</strong> and <strong>Password</strong> properties are nothing fancy,
+    just standard JavaBean properties.
 </p>
 
 <hr/>
-<h5>BaseAction.doCacheUser</h5>
-<pre><code> void <strong>doCacheUser</strong>(HttpServletRequest request, User
-    user) {
+<h5>MailreaderSupport.findUser</h5>
+<pre><code>private String username = null;
+public String <strong>getUsername()</strong> {
+    return this.username;
+}
+public void setUsername(String username) {
+   this.username = username;
+}
 
-    HttpSession session = request.getSession();
-    session.setAttribute(Constants.USER_KEY, user);
-    if (log.isDebugEnabled()) {
-    log.debug(
-    "LogonAction: User '"
-    + user.getUsername()
-    + "' logged on in session "
-    + session.getId());
-    }
-    }
-</code></pre>
+private String password = null;
+public String <strong>getPassword()</strong> {
+    return this.password;
+}
+public void setPassword(String password) {
+   this.password = password;
+}</code></pre>
 <hr/>
 
 <p>
-    Because our ActionForm is a DynaActionForm,
-    we can't access or change the properties directly using methods like
-    "getUsername".
-    To make working with DynaActionForm properties easier,
-    BaseAction provides two simple helper methods, <strong>doGet</strong> and
-    <strong>doSet</strong>.
-    These are utility methods that you caould use in any Struts application.
+    We use these properties to capture the client's credentials,
+    and pass them to the more interesting findUser method.
+</p>
+
+<hr/>
+<h5>MailreaderSupport.findUser</h5>
+<pre><code>public User <strong>findUser</strong>(String username, String password)
+        throws ExpiredPasswordException {
+
+    User user = getDatabase().findUser(username);
+    if ((user != null) && !user.getPassword().equals(password)) {
+        user = null;
+    }
+    if (user == null) {
+       this.addFieldError("password", getText("error.password.mismatch"));
+    }
+    return user;}</code></pre>
+<hr/>
+
+<p>
+
 </p>
 
 <hr/>

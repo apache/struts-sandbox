@@ -25,11 +25,6 @@ import org.apache.struts.apps.mailreader.dao.User;
  */
 public final class Logon extends MailreaderSupport {
 
-    /**
-     * <p> Use "username" and "password" fields to retrieve a User object from
-     * the database. If credentials are not valid, or database has
-     * disappeared, post error messages and forward to input. </p>
-     */
     public String execute() throws Exception {
 
         User user = findUser(getUsername(), getPassword());
@@ -38,7 +33,7 @@ public final class Logon extends MailreaderSupport {
             setUser(user);
         }
 
-        if (this.hasErrors()) {
+        if (hasErrors()) {
             return INPUT;
         }
 

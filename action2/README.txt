@@ -65,6 +65,9 @@ Example idea jar
 * See http://www.niallp.pwp.blueyonder.co.uk/strutsvalidatorextends.html
 for some validation use cases.
 
+* http://wiki.opensymphony.com/display/WW/Cookbook
+
+
 * Display an unexpected exception on an error page. 
 ** What's the conditional logic using JSP tags?
 
