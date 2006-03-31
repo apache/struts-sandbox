@@ -41,9 +41,11 @@
 
 <hr/>
 
+<p>Logging In</p>
+
 <ul>
     <li>
-        <a href="#howdy">Howdyl</a>
+        <a href="#Welcome">Welcome</a>
 
         <ul>
             <li><a href="#web.xml">web.xml and resources.properties</a></li>
@@ -62,22 +64,30 @@
 
         </ul>
     </li>
+</ul>
 
+<ul>
     <li>
-        <a href="#Logon.jsp">Logon Page</a>
+        <a href="#Logon">Logon</a>
         <ul>
+
+            <li><a href="#Logon.jsp">Logon Page</a></li>
 
             <li><a href="#Logon-validation.xml">Logon-validation.xml</a></li>
 
             <li><a href="#Logon.java">Logon.java</a></li>
 
-            <li><a href="#xwork.xml">xwork.xml</a></li>
+            <li><a href="#MailreaderSupport.java">MailreaderSupport.java</a></li>
 
-            <li><a href="#MailreaderSupport">MailreaderSupport</a></li>
+            <li><a href="#Logon.xml">Logon Configuration</a></li>
 
         </ul>
     </li>
+ </ul>
 
+<p>Adding and Editing Subscription</p>
+
+<ul>
     <li>
         <a href="#MainMenu.jsp">MainMenu.jsp</a>
 
@@ -85,13 +95,20 @@
             <li><a href=""></a></li>
         </ul>
     </li>
+</ul>
 
+<ul>
     <li>
         <a href="#MainMenu.jsp">Registration.do</a>
-    <ul>
-        <li><a href="#Registration.java">Registration.java</a>
-        </li>
-    </ul>
+        <ul>
+            <li><a href="#Registration.java">Registration.java</a></li>
+        </ul>
+    </li>
+</ul>
+
+<p>Creating a New Registration</p>
+
+<ul>
     <li>
         <a href="#Registeration.jsp">Registration.jsp</a>
 
@@ -164,11 +181,10 @@
     creating a new registration.
 </p>
 
-<h3><a name="howdy" id="howdy">Howdy</a></h3>
+<h3><a name="Welcome" id="Welcome">Welcome Page</a></h3>
 
 <p>
-    A web application, like any other web site, can specify a list of welcome
-    pages.
+    A web application, like any other web site, can specify a list of welcome pages.
     When you open a web application without specifying a particular page, a
     default "welcome page" is served as the response.
 </p>
@@ -549,7 +565,7 @@ webwork.action.extension = <strong>do</strong></code></pre>
 <h4><a name="Welcome.jsp" id="Welcome.jsp">Welcome Page</a></h4>
 
 <p>
-    After confirming that the necessary resources exist, the WelcomeAction
+    After confirming that the necessary resources exist, the Welcome action
     forwards to the Welcome page.
 </p>
 <hr/>
@@ -680,11 +696,15 @@ webwork.action.extension = <strong>do</strong></code></pre>
     Let's follow the Login link first.
 </p>
 
-<h3><a name="Logon.jsp" id="Logon.jsp">Logon Page</a></h3>
+<h3><a name="Logon" id="Logon">Logon</a></h3>
 
 <p>
     If you choose the Logon link, and all goes well, the Logon action forwards
-    control to the Logon.jsp page.
+    control to the Logon page.
+</p>
+
+<h4><a name="Logon.jsp" id="Logon.jsp">Logon Page</a></h4>
+<p>
     The Logon page displays a form that accepts a username and password.
     You can use the default username and password to logon (user and pass) if
     you like.
@@ -989,6 +1009,8 @@ public final class <strong>Logon</strong> extends MailreaderSupport {
     Otherwise, we return "success", so that the client can access the rest of the application.
 </p>
 
+<h4><a name="MailreaderSupport.java" id="MailreaderSupport.java">MailreaderSupport.java</a></h4>
+
 <p>
     Let's look at the relevant properties and methods from the MailreaderSupport and ActionSupport classes:
     "getUsername", "getPassword", "findUser", "setUser", and "hasErrors".
@@ -1210,63 +1232,142 @@ public void <strong>setSession(Map value)</strong> {
 </p>
 
 <p>
-    To answer that question, we need to turn back to the xwork.xml configuration file.
+    To answer that question,
+    we need to turn back to the xwork.xml file and look at how Logon is configured.
 </p>
 
 
-<h4><a name="xwork.xml" id="xwork.xml">xwork.xml</a></h4>
-
-
-... TODO ...
-
-
-<h4>The "validate" attribute</h4>
+<h4><a name="Logon.xml" id="Logon.xml">Logon Configuration</a></h4>
 
 <p>
-    The <strong>validate</strong> attribute controls whether the framework
-    will automatically validate
-    the ActionForm.
-    Conventional ActionForms have a stub "validate" method that you can
-    implement.
-    MailReader uses the Validator framework instead,
-    so the validations are specified in another configuration file.
-</p>
-
-<h4>The "input" attribute</h4>
-
-<p>
-    If validation fails, Struts looks for the forward specified by the
-    <strong>input</strong> attribute.
-    In this case, invoking the global "Logon" forward sends control back to
-    the Logon page.
-</p>
-
-<h4>The "exception" element</h4>
-
-<p>
-    Within the SubmitLogon action element is another new element, <strong>
-    exception</strong>.
-    When a user logons on, it's possible that an "ExpiredPasswordException"
-    will be thrown.
-    Should this happen, Struts will catch the exception and send control to
-    the "ChangePassword" action.
+    The Logon action element outlines how the Logon workflow operates,
+    including what to do when the Action returns "input",
+    or the default result name "success".
 </p>
 
 <hr/>
-<h5>Change Password screen</h5>
-<blockquote>
-    <p>
-        Your password has expired. Please ask the system administrator to
-        change it. <u>Try Again</u>
-    </p>
-</blockquote>
+<h5>xwork.xml Logon</h5>
+<pre><code>&lt;action name="<strong>Logon</strong>" class="mailreader2.Logon">
+  &lt;result name="<strong>input</strong>">/pages/Logon.jsp&lt;/result>
+  &lt;result name="<strong>cancel</strong>" type="redirect-action">Welcome&lt;/result>
+  &lt;result type="redirect-action">MainMenu&lt;/result>
+  &lt;result name="<strong>expired</strong>" type="chain">ChangePassword&lt;/result>
+  &lt;<strong>exception-mapping</strong>
+      exception="org.apache.struts.apps.mailreader.dao.ExpiredPasswordException"
+      result="<strong>expired</strong>"/>
+  &lt;interceptor-ref name="<strong>defaultStack</strong>"/>
+&lt;/action></code></pre>
 <hr/>
 
 <p>
-    OK, it's not the greatest "Change Password" screen -- but, remember, this
-    is still the first iteration!
+    In the Logon action element, the first result element is named "input".
+    If validation or the credentials fail,
+    the Action class will return "input" and the framework will transfer control to the Logon.jsp page.
 </p>
 
+<p>
+    The second result element is named "cancel".
+    If someone presses the cancel button on the Logon page,
+    the Action class will return "cancel", this result will be selected,
+    and the framework will issue a redirect to the Welcome action.
+</p>
+
+<p>
+    The third result has no name, so it will be called if the default "success" token is return.
+    So, if the Logon succeeds, control will transfer to the MainMenu action.
+</p>
+
+<p>
+    The MailReader DAO exposes a "ExpiredPasswordException".
+    If the DAO throws this exception when the User logs in,
+    the framework will process the exception-mapping
+    and transfer control the the "ChangePassword" action.
+</p>
+
+<p>
+    Finally, the Logon action specifies an InterceptorStack named "defaultStack".
+    If you've worked with Struts Action 2 or WebWork 2 before, that might seem strange,
+    since "defaultStack" is the factory default.
+</p>
+
+<p>
+    In the MailReader application, most of the actions are only available to authenticated users.
+    The exceptions are the "Welcome" action and the "Logon" action, which are available to everyone.
+    To authenticate clients, the MailReader uses a custom Interceptor and a custom Interceptor stack.
+</p>
+
+<hr/>
+<h5>mailreader2.AuthenticationInterceptor</h5>
+<pre><code>package mailreader2;
+import com.opensymphony.xwork.interceptor.Interceptor;
+import com.opensymphony.xwork.ActionInvocation;
+import com.opensymphony.xwork.Action;
+import java.util.Map;
+import org.apache.struts.apps.mailreader.dao.User;
+
+public class <strong>AuthenticationInterceptor</strong> implements Interceptor  {
+    public void destroy () {}
+    public void init() {}
+    public String <strong>intercept</strong>(ActionInvocation actionInvocation) throws Exception {
+        Map session = actionInvocation.getInvocationContext().getSession();
+        User user = (User) session.get(Constants.USER_KEY);
+        boolean isAuthenticated = (null!=user) && (null!=user.getDatabase());
+        if (<strong>isAuthenticated</strong>) {
+            return actionInvocation.invoke();
+        }
+        else {
+            return Action.LOGIN;
+        }
+    }
+}</code></pre>
+<hr/>
+
+<p>
+    The "AuthenticationInterceptor" looks to see if a User object
+    has been stored in the client's session state.
+    If so, it returns normally, and the next Interceptor in the set would be invoked.
+    If the User object is missing, the Interceptors returns "login".
+    The framework would match "login" to the global result,
+    and transfer control to the Logon action.
+</p>
+
+<p>
+    The MailReader defines two custom Interceptor stacks, <strong>access</strong>
+    and <strong>submit</strong>, and sets the default-interceptor to "access".
+</p>
+
+<hr/>
+<h5>xwork.xml interceptors</h5>
+<pre><code>&lt;interceptors>
+  &lt;interceptor name="<strong>authenticate</strong>" class="mailreader2.AuthenticationInterceptor"/>
+  &lt;interceptor-stack name="<strong>access</strong>" >
+    &lt;interceptor-ref name="authenticate" />
+    &lt;interceptor-ref name="defaultStack"/>
+  &lt;/interceptor-stack>
+  &lt;interceptor-stack name="<strong>submit</strong>">
+    &lt;interceptor-ref name="token-session" />
+    &lt;interceptor-ref name="<strong>access</strong>" />
+  &lt;/interceptor-stack>
+&lt;/interceptors>
+
+&lt;<strong>default-interceptor-ref</strong> name="access"/></code></pre>
+<hr/>
+
+<p>
+    The "submit" stack is to be used with actions that post forms.
+    It includes the "token-session" Interceptor which guards against double-submits,
+    and then goes to include the "access" interceptor stack.
+    The "access" stack includes the authenticate Interceptor,
+    and then falls back to the standard "defaultStack".
+</p>
+
+<p>
+    Because the default interceptor stack will now authenticate the client,
+    we need to specify the standard "defaultStack" for the two "anonymous actions",
+    Welcome and Logon.
+</p>
+
+<!-- TODO ... -->
 
 <h4><a name="MainMenu.do" id="MainMenu.do">MainMenu.do and MainMenu.jsp</a>
 </h4>

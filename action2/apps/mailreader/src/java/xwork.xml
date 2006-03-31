@@ -40,19 +40,19 @@
         </global-exception-mappings>
 
         <action name="Welcome" class="mailreader2.Welcome">
-            <interceptor-ref name="defaultStack"/>
             <result>/pages/Welcome.jsp</result>
+            <interceptor-ref name="defaultStack"/>
         </action>
 
         <action name="Logon" class="mailreader2.Logon">
-            <interceptor-ref name="defaultStack"/>
+            <result name="input">/pages/Logon.jsp</result>
+            <result name="cancel" type="redirect-action">Welcome</result>
+            <result type="redirect-action">MainMenu</result>
+            <result name="expired" type="chain">ChangePassword</result>
             <exception-mapping
                     exception="org.apache.struts.apps.mailreader.dao.ExpiredPasswordException"
                     result="expired"/>
-            <result type="redirect-action">MainMenu</result>
-            <result name="input">/pages/Logon.jsp</result>
-            <result name="expired" type="chain">ChangePassword</result>
-            <result name="cancel" type="redirect-action">Welcome</result>
+            <interceptor-ref name="defaultStack"/>
         </action>
 
         <action name="ChangePassword">
@@ -71,9 +71,9 @@
         </action>
 
         <action name="RegistrationSave" class="mailreader2.RegistrationSave">
-            <interceptor-ref name="submit" />
             <result name="input">/pages/Registration.jsp</result>
             <result type="redirect-action">MainMenu</result>
+            <interceptor-ref name="submit" />
         </action>
 
         <action name="Subscription" class="mailreader2.Subscription">
@@ -92,8 +92,8 @@
         </action>
 
         <action name="Tour">
-            <interceptor-ref name="defaultStack"/>
             <result>/pages/tour.html</result>
+            <interceptor-ref name="defaultStack"/>
         </action>
 
     </package>
