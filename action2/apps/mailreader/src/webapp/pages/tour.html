@@ -39,7 +39,7 @@
     </i>
 </p>
 
-<hr />
+<hr/>
 
 <p>Logging In</p>
 
@@ -83,7 +83,7 @@
 
         </ul>
     </li>
- </ul>
+</ul>
 
 <p>Adding and Editing Subscription</p>
 
@@ -133,7 +133,7 @@
 
     <li><a href="#Summary">Summary</a></li>
 </ul>
-<hr />
+<hr/>
 
 <p>
     The premise of the MailReader is that it is the first iteration of a
@@ -159,7 +159,7 @@
     Struts University MailReader site</a>.
 </p>
 
-<hr />
+<hr/>
 <blockquote>
     <p><font class="hint">
         <strong>JAAS</strong> -
@@ -173,7 +173,7 @@
         authentification technologies.)
     </font></p>
 </blockquote>
-<hr />
+<hr/>
 
 <p>
     The walkthrough starts with how the initial welcome page is displayed, and
@@ -199,46 +199,46 @@
     Like any filter, the Action servlet is deployed via the web.xml.
 </p>
 
-<hr />
+<hr/>
 <h5>web.xml - The Web Application Deployment Descriptor</h5>
 <pre><code>&lt;?xml version="1.0" encoding="ISO-8859-1"?>
-&lt;!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
-  "http://java.sun.com/dtd/web-app_2_3.dtd">
-&lt;web-app>
+    &lt;!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+    &lt;web-app>
 
-  &lt;display-name>Action2 Mailreader&lt;/display-name>
+    &lt;display-name>Action2 Mailreader&lt;/display-name>
 
-  <strong>&lt;filter>
-    &lt;filter-name>Action2&lt;/filter-name>
-    &lt;filter-class>
-      com.opensymphony.webwork.dispatcher.FilterDispatcher
-    &lt;/filter-class>
-    &lt;/filter></strong>
+    <strong>&lt;filter>
+        &lt;filter-name>Action2&lt;/filter-name>
+        &lt;filter-class>
+        com.opensymphony.webwork.dispatcher.FilterDispatcher
+        &lt;/filter-class>
+        &lt;/filter></strong>
 
-  &lt;filter-mapping>
+    &lt;filter-mapping>
     &lt;filter-name><strong>Action2</strong>&lt;/filter-name>
     &lt;url-pattern>/*&lt;/url-pattern>
-  &lt;/filter-mapping>
+    &lt;/filter-mapping>
 
-  &lt;listener>
-  &lt;listener-class>
+    &lt;listener>
+    &lt;listener-class>
     org.springframework.web.context.ContextLoaderListener
-  &lt;/listener-class>
-  &lt;/listener>
+    &lt;/listener-class>
+    &lt;/listener>
 
-  &lt;!-- Application Listener for MailReader database -->
-  &lt;listener>
-  &lt;listener-class>
+    &lt;!-- Application Listener for MailReader database -->
+    &lt;listener>
+    &lt;listener-class>
     mailreader2.ApplicationListener
-  &lt;/listener-class>
-  &lt;/listener>
+    &lt;/listener-class>
+    &lt;/listener>
 
-  &lt;welcome-file-list>
+    &lt;welcome-file-list>
     &lt;welcome-file>index.html&lt;/welcome-file>
-  &lt;/welcome-file-list>
+    &lt;/welcome-file-list>
 
-&lt;/web-app></code></pre>
-<hr />
+    &lt;/web-app></code></pre>
+<hr/>
 
 <p>
     Among other things,
@@ -259,12 +259,12 @@
     without editing the server pages.
 </p>
 
-<hr />
+<hr/>
 <h5>Best Practice:</h5>
 <blockquote>
     <p><font class="hint">"Link actions not pages."</font></p>
 </blockquote>
-<hr />
+<hr/>
 
 <p>
     The actions are listed in one or more XML configuration files,
@@ -292,16 +292,16 @@
     forward to a "Welcome" action.
 </p>
 
-<hr />
+<hr/>
 <h5>MailReader's index.html</h5>
 <pre><code>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-&lt;html>&lt;head>
-  &lt;META HTTP-EQUIV="Refresh" CONTENT="0;<strong>URL=Welcome.do</strong>">
-&lt;/head>
-&lt;body>
-  &lt;p>Loading ...&lt;/p>
-&lt;/body>&lt;/html></code></pre>
-<hr />
+    &lt;html>&lt;head>
+    &lt;META HTTP-EQUIV="Refresh" CONTENT="0;<strong>URL=Welcome.do</strong>">
+    &lt;/head>
+    &lt;body>
+    &lt;p>Loading ...&lt;/p>
+    &lt;/body>&lt;/html></code></pre>
+<hr/>
 
 <p>
     As an alternative, we could also have used a JSP page that issued the redirect with Action2 tags,
@@ -318,12 +318,12 @@
     If we just wanted to forward to the Welcome page, we could use a simple
     configuration element.
 </p>
-<hr />
+<hr/>
 <h5>A simple "forward thru" action element</h5>
 <pre><code>&lt;action name="<strong>>Welcome</strong>">
-  &lt;result><strong>/pages/Welcome.jsp</strong>&lt;/result>
-&lt;/action></code></pre>
-<hr />
+    &lt;result><strong>/pages/Welcome.jsp</strong>&lt;/result>
+    &lt;/action></code></pre>
+<hr/>
 
 <p>
     If a client asks for the Welcome action ("/Welcome.do"), the /page/Welcome.jsp
@@ -338,13 +338,13 @@
     we find a slightly more complicated XML element for the Welcome action.
 </p>
 
-<hr />
+<hr/>
 <h5>The Welcome action element</h5>
 <pre><code>&lt;action name="Welcome" <b>class="mailreader2.Welcome"</b>>
-  <strong>&lt;interceptor-ref name="defaultStack"/></strong>
-  &lt;result>/pages/Welcome.jsp&lt;/result>
-&lt;/action></code></pre>
-<hr />
+    <strong>&lt;interceptor-ref name="defaultStack"/></strong>
+    &lt;result>/pages/Welcome.jsp&lt;/result>
+    &lt;/action></code></pre>
+<hr/>
 
 <p>
     Here, the <strong>Welcome</strong> Java class executes whenever
@@ -354,7 +354,7 @@
     Another available result, defined at a global scope, is "error".
 </p>
 
-<hr />
+<hr/>
 <h5>Key concept:</h5>
 <blockquote>
     <p>
@@ -364,7 +364,7 @@
         without knowing how the result is implemented.
     </p>
 </blockquote>
-<hr />
+<hr/>
 
 <p>
     The net effect is that all of the result details,
@@ -400,34 +400,34 @@
     so that the appropriate messages can be displayed.
 </p>
 
-<hr />
+<hr/>
 <h5>The Welcome Action class</h5>
 <pre><code>package mailreader2;
 
-public class Welcome extends MailreaderSupport {
+    public class Welcome extends MailreaderSupport {
 
-  public String execute() {
+    public String execute() {
 
     // Confirm message resources loaded
     String message = getText(Constants.ERROR_DATABASE_MISSING);
     if (Constants.ERROR_DATABASE_MISSING.equals(message)) {
-      addActionError(Constants.ERROR_MESSAGES_NOT_LOADED);
+    addActionError(Constants.ERROR_MESSAGES_NOT_LOADED);
     }
 
     // Confirm database loaded
     if (null==getDatabase()) {
-      addActionError(Constants.ERROR_DATABASE_NOT_LOADED);
+    addActionError(Constants.ERROR_DATABASE_NOT_LOADED);
     }
 
     if (hasErrors()) {
-      return ERROR;
+    return ERROR;
     }
     else {
-      return SUCCESS;
+    return SUCCESS;
     }
-  }
-}</code></pre>
-<hr />
+    }
+    }</code></pre>
+<hr/>
 
 <p>
     Several common result name are predefined
@@ -446,14 +446,14 @@ public class Welcome extends MailreaderSupport {
     so that any action can use it.
 </p>
 
-<hr />
+<hr/>
 <h5>MailReader's global-result element</h5>
 <pre><code> &lt;global-results>
-  &lt;result name=<strong>"error"</strong>><strong>/pages/Error.jsp</strong>&lt;/result>
-  &lt;result name="invalid.token">/pages/Error.jsp&lt;/result>
-  &lt;result name="login" type="redirect-action">Logon!input&lt;/result>
-&lt;/global-results></code></pre>
-<hr />
+    &lt;result name=<strong>"error"</strong>><strong>/pages/Error.jsp</strong>&lt;/result>
+    &lt;result name="invalid.token">/pages/Error.jsp&lt;/result>
+    &lt;result name="login" type="redirect-action">Logon!input&lt;/result>
+    &lt;/global-results></code></pre>
+<hr/>
 
 <p>
     Of course, if an individual action mapping defines its own "error" result type,
@@ -475,14 +475,14 @@ public class Welcome extends MailreaderSupport {
     The database is created by a custom Listener that we configured in the web.xml.
 </p>
 
-<hr />
+<hr/>
 <h5>mailreader2.ApplicationListener</h5>
 <pre><code> &lt;listener>
-  &lt;listener-class>
+    &lt;listener-class>
     <strong>mailreader2.ApplicationListener</strong>
-  &lt;/listener-class>
-&lt;/listener></code></pre>
-<hr />
+    &lt;/listener-class>
+    &lt;/listener></code></pre>
+<hr/>
 
 <p>
     By default, our ApplicationListener loads a "MemoryDatabase"
@@ -501,18 +501,18 @@ public class Welcome extends MailreaderSupport {
     user described in XML.
 </p>
 
-<hr />
+<hr/>
 <h5>The "seed" user element from the MailReader database.xml</h5>
 <pre><code>&lt;user username="<strong>user</strong>" fromAddress="John.User@somewhere.com"
     fullName="<strong>John Q. User</strong>" password="pass">
     &lt;subscription host="<strong>mail.hotmail.com"</strong> autoConnect="false"
-      password="bar" type="pop3" username="user1234">
+    password="bar" type="pop3" username="user1234">
     &lt;/subscription>
     &lt;subscription host="<strong>mail.yahoo.com</strong>" autoConnect="false" password="foo"
-      type="imap" username="jquser">
-  &lt;/subscription>
-&lt;/user></code></pre>
-<hr />
+    type="imap" username="jquser">
+    &lt;/subscription>
+    &lt;/user></code></pre>
+<hr/>
 
 <p>
     The "seed" user element creates a registration record for "John Q. User",
@@ -530,11 +530,11 @@ public class Welcome extends MailreaderSupport {
     /src/java/ in the source tree.
 </p>
 
-<hr />
+<hr/>
 <h5>webwork.properties</h5>
 <pre><code>webwork.custom.i18n.resources = <strong>resources</strong>
-webwork.action.extension = <strong>do</strong></code></pre>
-<hr />
+    webwork.action.extension = <strong>do</strong></code></pre>
+<hr/>
 
 <p>
     When we specify "resources" here, we are telling the framework to scan the classpath
@@ -553,14 +553,14 @@ webwork.action.extension = <strong>do</strong></code></pre>
     The MailReader provides resources for English, Russian, and Japanese.
 </p>
 
-<hr />
+<hr/>
 <h5>Message Resource entries used by the Welcome page</h5>
 <pre><code><strong>index.heading=</strong>MailReader Application Options
-<strong>index.logon=</strong>Log on to the MailReader Application
-<strong>index.registration=</strong>Register with the MailReader Application
-<strong>index.title=</strong>MailReader Demonstration Application
-<strong>index.tour=</strong>A Walking Tour of the MailReader Demonstration Application</code></pre>
-<hr />
+    <strong>index.logon=</strong>Log on to the MailReader Application
+    <strong>index.registration=</strong>Register with the MailReader Application
+    <strong>index.title=</strong>MailReader Demonstration Application
+    <strong>index.tour=</strong>A Walking Tour of the MailReader Demonstration Application</code></pre>
+<hr/>
 
 <h4><a name="Welcome.jsp" id="Welcome.jsp">Welcome Page</a></h4>
 
@@ -568,49 +568,49 @@ webwork.action.extension = <strong>do</strong></code></pre>
     After confirming that the necessary resources exist, the Welcome action
     forwards to the Welcome page.
 </p>
-<hr />
+<hr/>
 <h5>Welcome.jsp</h5>
 <pre><code>&lt;%@ page contentType="text/html; charset=UTF-8" %>
-<strong>&lt;%@ taglib uri="/webwork" prefix="saf" %></strong>
-&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-  &lt;head>
+    <strong>&lt;%@ taglib uri="/webwork" prefix="saf" %></strong>
+    &lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    &lt;head>
     &lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     &lt;title><strong>&lt;saf:text name="index.title"/></strong>&lt;/title>
     &lt;link href="<strong>&lt;saf:url value="/css/mailreader.css"/></strong>" rel="stylesheet"
     type="text/css"/>
-  &lt;/head>
+    &lt;/head>
 
-  &lt;body>
+    &lt;body>
     &lt;h3>&lt;saf:text name="index.heading"/>&lt;/h3>
 
     &lt;ul>
-      &lt;li>&lt;a href="&lt;saf:url action="Registration!input"/>">&lt;saf:text
-        name="index.registration"/>&lt;/a>&lt;/li>
-      &lt;li>&lt;a href="&lt;saf:url action="Logon!input"/>">&lt;saf:text
-        name="index.logon"/>&lt;/a>&lt;/li>
+    &lt;li>&lt;a href="&lt;saf:url action="Registration!input"/>">&lt;saf:text
+    name="index.registration"/>&lt;/a>&lt;/li>
+    &lt;li>&lt;a href="&lt;saf:url action="Logon!input"/>">&lt;saf:text
+    name="index.logon"/>&lt;/a>&lt;/li>
     &lt;/ul>
 
     &lt;h3>Language Options&lt;/h3>
     &lt;ul>
-      &lt;li>&lt;a href="&lt;saf:url action="Welcome?request_locale=en"/>">English&lt;/a>&lt;/li>
-      &lt;li>&lt;a href="&lt;saf:url action="Welcome?request_locale=ja"/>">Japanese&lt;/a>&lt;/li>
-      &lt;li>&lt;a href="&lt;saf:url action="Welcome?request_locale=ru"/>">Russian&lt;/a>&lt;/li>
+    &lt;li>&lt;a href="&lt;saf:url action="Welcome?request_locale=en"/>">English&lt;/a>&lt;/li>
+    &lt;li>&lt;a href="&lt;saf:url action="Welcome?request_locale=ja"/>">Japanese&lt;/a>&lt;/li>
+    &lt;li>&lt;a href="&lt;saf:url action="Welcome?request_locale=ru"/>">Russian&lt;/a>&lt;/li>
     &lt;/ul>
 
     &lt;hr />
 
     &lt;p><strong>&lt;saf:i18n name="alternate"></strong>
-      &lt;img src="&lt;saf:text name="struts.logo.path"/>"
-        alt="&lt;saf:text name="struts.logo.alt"/>"/>
+    &lt;img src="&lt;saf:text name="struts.logo.path"/>"
+    alt="&lt;saf:text name="struts.logo.alt"/>"/>
     <strong>&lt;/saf:i18n></strong>&lt;/p>
 
     &lt;p>&lt;a href="&lt;saf:url action="Tour" />">&lt;saf:text name="index.tour"/>&lt;/a>&lt;/p>
 
-  &lt;/body>
-&lt;/html></code></pre>
-<hr />
+    &lt;/body>
+    &lt;/html></code></pre>
+<hr/>
 
 <p>
     At the top of the Welcome page, there are several directives that load the
@@ -641,7 +641,7 @@ webwork.action.extension = <strong>do</strong></code></pre>
     without requiring cookies.
 </p>
 
-<hr />
+<hr/>
 <h5>Tip:</h5>
 <blockquote>
     <p><font class="hint">
@@ -654,7 +654,7 @@ webwork.action.extension = <strong>do</strong></code></pre>
         and that you disallow "per-session" cookies.)
     </font></p>
 </blockquote>
-<hr />
+<hr/>
 
 <p>
     The <strong>i18n</strong> tag provides access to multiple resource bundles.
@@ -704,6 +704,7 @@ webwork.action.extension = <strong>do</strong></code></pre>
 </p>
 
 <h4><a name="Logon.jsp" id="Logon.jsp">Logon Page</a></h4>
+
 <p>
     The Logon page displays a form that accepts a username and password.
     You can use the default username and password to logon (user and pass) if
@@ -716,37 +717,37 @@ webwork.action.extension = <strong>do</strong></code></pre>
     various combinations to see how the application reacts.
 </p>
 
-<hr />
+<hr/>
 <h5>Login.jsp</h5>
 <pre><code>&lt;%@ page contentType="text/html; charset=UTF-8" %>
-&lt;%@ taglib uri="/webwork" prefix="saf" %>
-&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-  &lt;head>
+    &lt;%@ taglib uri="/webwork" prefix="saf" %>
+    &lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    &lt;head>
     &lt;title>&lt;saf:text name="logon.title"/>&lt;/title>
     &lt;link href="&lt;saf:url value="/css/mailreader.css"/>" rel="stylesheet"
-      type="text/css"/>
-  &lt;/head>
+    type="text/css"/>
+    &lt;/head>
 
-  &lt;body onLoad="self.focus();document.Logon.username.focus()">
+    &lt;body onLoad="self.focus();document.Logon.username.focus()">
 
     <strong>&lt;saf:actionerror/></strong>
     <strong>&lt;saf:form method="POST" validate="true"></strong>
 
-      <strong>&lt;saf:textfield label="%{getText('username')}" name="username"/></strong>
-      <strong>&lt;saf:password label="%{getText('password')}" name="password"/></strong>
-      <strong>&lt;saf:submit value="%{getText('button.save')}"/></strong>
-      <strong>&lt;saf:reset value="%{getText('button.reset')}"/></strong>
-      &lt;saf:submit <strong>action="Logon!cancel" onclick="form.onsubmit=null"</strong>
-        value="%{getText('button.cancel')}"/>
+    <strong>&lt;saf:textfield label="%{getText('username')}" name="username"/></strong>
+    <strong>&lt;saf:password label="%{getText('password')}" name="password"/></strong>
+    <strong>&lt;saf:submit value="%{getText('button.save')}"/></strong>
+    <strong>&lt;saf:reset value="%{getText('button.reset')}"/></strong>
+    &lt;saf:submit <strong>action="Logon!cancel" onclick="form.onsubmit=null"</strong>
+    value="%{getText('button.cancel')}"/>
 
     &lt;/saf:form>
 
     &lt;jsp:include page="Footer.jsp"/>
-  &lt;/body>
-&lt;/html></code></pre>
-<hr />
+    &lt;/body>
+    &lt;/html></code></pre>
+<hr/>
 
 <p>
     We already saw some of the tags used by the Logon page on the Welcome page.
@@ -810,14 +811,14 @@ webwork.action.extension = <strong>do</strong></code></pre>
     generates a wad of HTML markup.
 </p>
 
-<hr />
+<hr/>
 <pre><code>&lt;tr>
     &lt;td class="tdLabel">&lt;label for="Logon_username" class="label">Username:&lt;/label>&lt;/td>
     &lt;td>
-        &lt;input type="text" name="username" value="" id="Logon_username"/>
+    &lt;input type="text" name="username" value="" id="Logon_username"/>
     &lt;/td>
-&lt;/tr></code></pre>
-<hr />
+    &lt;/tr></code></pre>
+<hr/>
 
 <p>
     If for some reason you don't like the markup generated by a UI Tag,
@@ -826,14 +827,14 @@ webwork.action.extension = <strong>do</strong></code></pre>
     For example, here is the default template that generates the markup for the ActionErrors tag:
 </p>
 
-<hr />
+<hr/>
 <pre><code>&lt;#if (actionErrors?exists && actionErrors?size > 0)>
-  &lt;ul>
-	&lt;#list actionErrors as error>
-		&lt;li>&lt;span class="errorMessage">${error}&lt;/span>&lt;/li>
-	&lt;/#list>
-  &lt;/ul>
-&lt;/#if></code></pre>
+    &lt;ul>
+    &lt;#list actionErrors as error>
+    &lt;li>&lt;span class="errorMessage">${error}&lt;/span>&lt;/li>
+    &lt;/#list>
+    &lt;/ul>
+    &lt;/#if></code></pre>
 
 <p>
     If you wanted ActionErrors displayed in a table instead of a list,
@@ -841,60 +842,60 @@ webwork.action.extension = <strong>do</strong></code></pre>
     and place this one file somewhere on your classpath.
 </p>
 
-<hr />
+<hr/>
 <pre><code>&lt;#if (actionErrors?exists && actionErrors?size > 0)>
-  &lt;table>
+    &lt;table>
     &lt;#list actionErrors as error>
-      &lt;tr>&lt;td>&lt;span class="errorMessage">${error}&lt;/span>&lt;/td>&lt;/tr>
+    &lt;tr>&lt;td>&lt;span class="errorMessage">${error}&lt;/span>&lt;/td>&lt;/tr>
     &lt;/#list>
-  lt;/table>
-&lt;/#if></code></pre>
-<hr />
+    lt;/table>
+    &lt;/#if></code></pre>
+<hr/>
 
-    <p>
-        Under the covers, the framework uses
-        <a href="http://freemarker.sourceforge.net/">Freemarker</a>
-        for its standard templating language.
-        FreeMarker is similar to
-        <a href="http://jakarta.apache.org/velocity/">Velocity</a>,
-        but offers better error reporting and some additional features.
-        If you prefer, Velocity and JSP templates can also be used to create your own UI Tags.
-    </p>
+<p>
+    Under the covers, the framework uses
+    <a href="http://freemarker.sourceforge.net/">Freemarker</a>
+    for its standard templating language.
+    FreeMarker is similar to
+    <a href="http://jakarta.apache.org/velocity/">Velocity</a>,
+    but offers better error reporting and some additional features.
+    If you prefer, Velocity and JSP templates can also be used to create your own UI Tags.
+</p>
 
-    <p>
-        The <strong>password</strong> tag renders a "input type=password"
-        tag, along with the usual template/theme markup.
-        By default, the password tag will not retain input if the submit fails.
-        If the username is wrong,
-        the client will have to enter the password again too.
-        If you did want to retain the password when validation fails,
-        you can set the tag's "showPassword" property to true.
-    </p>
+<p>
+    The <strong>password</strong> tag renders a "input type=password"
+    tag, along with the usual template/theme markup.
+    By default, the password tag will not retain input if the submit fails.
+    If the username is wrong,
+    the client will have to enter the password again too.
+    If you did want to retain the password when validation fails,
+    you can set the tag's "showPassword" property to true.
+</p>
 
-    <p>
+<p>
     Unsurprisingly, the <strong>submit</strong> and <strong>reset</strong> tags
     render buttons of the corresponding types.
-    </p>
+</p>
 
-    <p>
-        The second submit button is more interesting.
-    </p>
+<p>
+    The second submit button is more interesting.
+</p>
 
 <pre><code>  &lt;saf:submit <strong>action="Logon!cancel" onclick="form.onsubmit=null"</strong>
     value="%{getText('button.cancel')}"/>
 </code></pre>
 
-    <p>
-        Here we are creating the Cancel button for the form.
-        The button's attribute <em>action="Logon!cancel"</em> tells the framework to submit
-        to the Logon's "cancel" method instead of the usual "execute" method.
-        The <em>onclick="form.onsubmit=null"</em> script defeats client-side validation.
-        On the server side, "cancel" is on a special lists of aliases that bypass validation,
-        so the request will go directly to the Action's cancel method.
-        (Other special aliases on the bypass list include "input" and "back".)
-    </p>
+<p>
+    Here we are creating the Cancel button for the form.
+    The button's attribute <em>action="Logon!cancel"</em> tells the framework to submit
+    to the Logon's "cancel" method instead of the usual "execute" method.
+    The <em>onclick="form.onsubmit=null"</em> script defeats client-side validation.
+    On the server side, "cancel" is on a special lists of aliases that bypass validation,
+    so the request will go directly to the Action's cancel method.
+    (Other special aliases on the bypass list include "input" and "back".)
+</p>
 
-<hr />
+<hr/>
 <h5>Tip:</h5>
 <blockquote>
     <p><font class="hint">
@@ -902,7 +903,7 @@ webwork.action.extension = <strong>do</strong></code></pre>
         For more see, the <a href="http://wiki.opensymphony.com/display/WW/Tags">UI Tag documentation.</a>
     </font></p>
 </blockquote>
-<hr />
+<hr/>
 
 <p>
     OK, but how do the UI Tags know that both of these fields are required?
@@ -927,23 +928,24 @@ webwork.action.extension = <strong>do</strong></code></pre>
     Logon-validation.xml</strong>.
 </p>
 
-<hr />
+<hr/>
 <h5>Validation file for Logon Action</h5>
-<pre><code>&lt;!DOCTYPE validators PUBLIC "-//OpenSymphony Group//XWork Validator 1.0.2//EN" "http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
-&lt;validators>
+<pre><code>&lt;!DOCTYPE validators PUBLIC "-//OpenSymphony Group//XWork Validator 1.0.2//EN"
+    "http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
+    &lt;validators>
     &lt;field name="<strong>username</strong>">
-        &lt;field-validator type="<strong>requiredstring</strong>">
-            &lt;message key="<strong>error.username.required</strong>"/>
-        &lt;/field-validator>
+    &lt;field-validator type="<strong>requiredstring</strong>">
+    &lt;message key="<strong>error.username.required</strong>"/>
+    &lt;/field-validator>
     &lt;/field>
     &lt;field name="<strong>password</strong>">
-        &lt;field-validator type="<strong>requiredstring</strong>">
-            &lt;message key="<strong>error.password.required</strong>"/>
-        &lt;/field-validator>
+    &lt;field-validator type="<strong>requiredstring</strong>">
+    &lt;message key="<strong>error.password.required</strong>"/>
+    &lt;/field-validator>
     &lt;/field>
-&lt;/validators>
+    &lt;/validators>
 </code></pre>
-<hr />
+<hr/>
 
 <p>
     The field elements correspond to the ActionForm properties.
@@ -977,29 +979,29 @@ webwork.action.extension = <strong>do</strong></code></pre>
     from the base class, MailreaderSupport.
 </p>
 
-<hr />
+<hr/>
 <h5>Logon.java</h5>
 <pre><code>package mailreader2;
-import org.apache.struts.apps.mailreader.dao.User;
+    import org.apache.struts.apps.mailreader.dao.User;
 
-public final class <strong>Logon</strong> extends MailreaderSupport {
+    public final class <strong>Logon</strong> extends MailreaderSupport {
 
-  public String <strong>execute()</strong> throws ExpiredPasswordException {
+    public String <strong>execute()</strong> throws ExpiredPasswordException {
 
     User user = <strong>findUser(getUsername(), getPassword());</strong>
 
     if (user != null) {
-      <strong>setUser(user);</strong>
+    <strong>setUser(user);</strong>
     }
 
     if (<strong>hasErrors()</strong>) {
-      return INPUT;
+    return INPUT;
     }
 
     return SUCCESS;
-}
-}</code></pre>
-<hr />
+    }
+    }</code></pre>
+<hr/>
 
 <p>
     Logon lays out what we do to authenticate a user.
@@ -1033,45 +1035,45 @@ public final class <strong>Logon</strong> extends MailreaderSupport {
     just standard JavaBean properties.
 </p>
 
-<hr />
+<hr/>
 <h5>MailreaderSupport.getUsername() and getPassword()</h5>
 <pre><code>private String username = null;
-public String <strong>getUsername()</strong> {
+    public String <strong>getUsername()</strong> {
     return this.username;
-}
-public void setUsername(String username) {
-   this.username = username;
-}
+    }
+    public void setUsername(String username) {
+    this.username = username;
+    }
 
-private String password = null;
-public String <strong>getPassword()</strong> {
+    private String password = null;
+    public String <strong>getPassword()</strong> {
     return this.password;
-}
-public void setPassword(String password) {
-   this.password = password;
-}</code></pre>
-<hr />
+    }
+    public void setPassword(String password) {
+    this.password = password;
+    }</code></pre>
+<hr/>
 
 <p>
     We use these properties to capture the client's credentials,
     and pass them to the more interesting <strong>findUser</strong> method.
 </p>
 
-<hr />
+<hr/>
 <h5>MailreaderSupport.findUser</h5>
 <pre><code>public User <strong>findUser</strong>(String username, String password)
-  throws <strong>ExpiredPasswordException</strong> {
+    throws <strong>ExpiredPasswordException</strong> {
 
-  User user = <strong>getDatabase().findUser(username)</strong>;
-  if ((user != null) && !user.getPassword().equals(password)) {
+    User user = <strong>getDatabase().findUser(username)</strong>;
+    if ((user != null) && !user.getPassword().equals(password)) {
     user = null;
-  }
-  if (user == null) {
+    }
+    if (user == null) {
     this.<strong>addFieldError</strong>("password", getText("error.password.mismatch"));
-  }
-  return user;
-}</code></pre>
-<hr />
+    }
+    return user;
+    }</code></pre>
+<hr/>
 
 <p>
     The findUser method dips into the MailReader Data Access Object layer,
@@ -1086,13 +1088,13 @@ public void setPassword(String password) {
     all which share the same MailReader DAO JAR!
 </p>
 
-<hr />
+<hr/>
 <h5>Best Practice:</h5>
 <blockquote>
     <p><font class="hint">"Strongly separate data access and business logic from the rest of the application."</font>
     </p>
 </blockquote>
-<hr />
+<hr/>
 
 <p>
     When findUser returns, the Logon Action looks to see if a valid (non-null) User object is returned.
@@ -1100,15 +1102,15 @@ public void setPassword(String password) {
     The User property is not implemented in quite the same way as Username and Password.
 </p>
 
-<hr />
+<hr/>
 <h5>MailreaderSupport.setUser</h5>
 <pre><code>public User getUser() {
     return (User) <strong>getSession().get(Constants.USER_KEY)</strong>;
-}
-public void setUser(User user) {
+    }
+    public void setUser(User user) {
     getSession().put(Constants.USER_KEY, user);
-}</code></pre>
-<hr />
+    }</code></pre>
+<hr/>
 
 <p>
     Instead of using a field to store the property value,
@@ -1118,13 +1120,13 @@ public void setUser(User user) {
 <h5>MailreaderSupport.getSession() and setSession()r</h5>
 <pre><code>private Map session;
 
-public Map <strong>getSession()</strong> {
-  return session;
-}
+    public Map <strong>getSession()</strong> {
+    return session;
+    }
 
-public void <strong>setSession(Map value)</strong> {
-  session = value;
-}</code></pre>
+    public void <strong>setSession(Map value)</strong> {
+    session = value;
+    }</code></pre>
 
 <p>
     To look at the MailreaderSupport class, the Session property looks like a plain-old Map.
@@ -1155,7 +1157,7 @@ public void <strong>setSession(Map value)</strong> {
 </p>
 
 <p>
-  <code>public void <strong>setSession</strong>(Map session);</code>
+    <code>public void <strong>setSession</strong>(Map session);</code>
 </p>
 
 <p>
@@ -1164,9 +1166,9 @@ public void <strong>setSession(Map value)</strong> {
     it automatically set the session property.
 </p>
 
-<pre><code>  if (action instanceof <code>SessionAware</code>) {
-  ((SessionAware) action).<code>setSession</code>(context.getSession());
-}</code></pre>
+<pre><code> if (action instanceof <code>SessionAware</code>) {
+    ((SessionAware) action).<code>setSession</code>(context.getSession());
+    }</code></pre>
 
 <p>
     The framework uses these "Interceptor" classes to create a "front controller"
@@ -1220,12 +1222,12 @@ public void <strong>setSession(Map value)</strong> {
     and the MailReader application does the same with the MailreaderSupport class.
 </p>
 
-<hr />
+<hr/>
 <h5>Best Practice:</h5>
 <blockquote>
     <p><font class="hint">"Use a base class to define common functionality."</font></p>
 </blockquote>
-<hr />
+<hr/>
 
 <p>
     But, what happens if Logon returns INPUT instead of SUCCESS. How does the framework know what to do next?
@@ -1245,19 +1247,19 @@ public void <strong>setSession(Map value)</strong> {
     or the default result name "success".
 </p>
 
-<hr />
+<hr/>
 <h5>xwork.xml Logon</h5>
 <pre><code>&lt;action name="<strong>Logon</strong>" class="mailreader2.Logon">
-  &lt;result name="<strong>input</strong>">/pages/Logon.jsp&lt;/result>
-  &lt;result name="<strong>cancel</strong>" type="redirect-action">Welcome&lt;/result>
-  &lt;result type="redirect-action">MainMenu&lt;/result>
-  &lt;result name="<strong>expired</strong>" type="chain">ChangePassword&lt;/result>
-  &lt;<strong>exception-mapping</strong>
-      exception="org.apache.struts.apps.mailreader.dao.ExpiredPasswordException"
-      result="<strong>expired</strong>"/>
-  &lt;interceptor-ref name="<strong>defaultStack</strong>"/>
-&lt;/action></code></pre>
-<hr />
+    &lt;result name="<strong>input</strong>">/pages/Logon.jsp&lt;/result>
+    &lt;result name="<strong>cancel</strong>" type="redirect-action">Welcome&lt;/result>
+    &lt;result type="redirect-action">MainMenu&lt;/result>
+    &lt;result name="<strong>expired</strong>" type="chain">ChangePassword&lt;/result>
+    &lt;<strong>exception-mapping</strong>
+    exception="org.apache.struts.apps.mailreader.dao.ExpiredPasswordException"
+    result="<strong>expired</strong>"/>
+    &lt;interceptor-ref name="<strong>defaultStack</strong>"/>
+    &lt;/action></code></pre>
+<hr/>
 
 <p>
     In the Logon action element, the first result element is named "input".
@@ -1273,8 +1275,10 @@ public void <strong>setSession(Map value)</strong> {
 </p>
 
 <p>
-    The third result has no name, so it will be called if the default "success" token is return.
-    So, if the Logon succeeds, control will transfer to the MainMenu action.
+    The third result has no name,
+    so it will be called if the default "success" token is returned.
+    So, if the Logon succeeds,
+    control will transfer to the MainMenu action.
 </p>
 
 <p>
@@ -1289,14 +1293,14 @@ public void <strong>setSession(Map value)</strong> {
     the MailReader application also defines a global handler.
 </p>
 
-<hr />
+<hr/>
 <h5>xwork.xml exception-mapping</h5>
 <pre><code>&lt;global-exception-mappings>
-  &lt;exception-mapping
+    &lt;exception-mapping
     result="error"
     exception="java.lang.Exception"/>
-&lt;/global-exception-mappings></code></pre>
-<hr />
+    &lt;/global-exception-mappings></code></pre>
+<hr/>
 
 <p>
     If an unexpected Exception is thrown,
@@ -1307,38 +1311,38 @@ public void <strong>setSession(Map value)</strong> {
     that can display the error message.
 </p>
 
-<hr />
+<hr/>
 <h5>Error.jsp</h5>
 <pre><code>&lt;%@ page contentType="text/html; charset=UTF-8" %>
-&lt;%@ taglib uri="/webwork" prefix="saf" %>
-&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-&lt;head>
+    &lt;%@ taglib uri="/webwork" prefix="saf" %>
+    &lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    &lt;head>
     &lt;title>Unexpected Error&lt;/title>
-&lt;/head>
-&lt;body>
-&lt;h2>An unexpected error has occured&lt;/h2>
-&lt;p>
+    &lt;/head>
+    &lt;body>
+    &lt;h2>An unexpected error has occured&lt;/h2>
+    &lt;p>
     Please report this error to your system administrator
     or appropriate technical support personnel.
     Thank you for your cooperation.
-&lt;/p>
-&lt;hr />
-&lt;h3>Error Message&lt;/h3>
-<strong>&lt;saf:actionerror /></strong>
-&lt;p>
+    &lt;/p>
+    &lt;hr />
+    &lt;h3>Error Message&lt;/h3>
+    <strong>&lt;saf:actionerror /></strong>
+    &lt;p>
     <strong>&lt;saf:property value="%{exception.message}"/></strong>
-&lt;/p>
-&lt;hr />
-&lt;h3>Technical Details&lt;/h3>
-&lt;p>
+    &lt;/p>
+    &lt;hr />
+    &lt;h3>Technical Details&lt;/h3>
+    &lt;p>
     <strong>&lt;saf:property value="%{exceptionStack}"/></strong>
-&lt;/p>
-&lt;jsp:include page="Footer.jsp"/>
-&lt;/body>
-&lt;/html></code></pre>
-<hr />
+    &lt;/p>
+    &lt;jsp:include page="Footer.jsp"/>
+    &lt;/body>
+    &lt;/html></code></pre>
+<hr/>
 
 <p>
     The Error page uses <strong>property</strong> tags to expose
@@ -1360,31 +1364,31 @@ public void <strong>setSession(Map value)</strong> {
     the MailReader uses a custom Interceptor and a custom Interceptor stack.
 </p>
 
-<hr />
+<hr/>
 <h5>mailreader2.AuthenticationInterceptor</h5>
 <pre><code>package mailreader2;
-import com.opensymphony.xwork.interceptor.Interceptor;
-import com.opensymphony.xwork.ActionInvocation;
-import com.opensymphony.xwork.Action;
-import java.util.Map;
-import org.apache.struts.apps.mailreader.dao.User;
+    import com.opensymphony.xwork.interceptor.Interceptor;
+    import com.opensymphony.xwork.ActionInvocation;
+    import com.opensymphony.xwork.Action;
+    import java.util.Map;
+    import org.apache.struts.apps.mailreader.dao.User;
 
-public class <strong>AuthenticationInterceptor</strong> implements Interceptor  {
+    public class <strong>AuthenticationInterceptor</strong> implements Interceptor {
     public void destroy () {}
     public void init() {}
     public String <strong>intercept</strong>(ActionInvocation actionInvocation) throws Exception {
-        Map session = actionInvocation.getInvocationContext().getSession();
-        User user = (User) session.get(Constants.USER_KEY);
-        boolean isAuthenticated = (null!=user) && (null!=user.getDatabase());
-        if (<strong>isAuthenticated</strong>) {
-            return actionInvocation.invoke();
-        }
-        else {
-            return Action.LOGIN;
-        }
+    Map session = actionInvocation.getInvocationContext().getSession();
+    User user = (User) session.get(Constants.USER_KEY);
+    boolean isAuthenticated = (null!=user) && (null!=user.getDatabase());
+    if (<strong>isAuthenticated</strong>) {
+    return actionInvocation.invoke();
     }
-}</code></pre>
-<hr />
+    else {
+    return Action.LOGIN;
+    }
+    }
+    }</code></pre>
+<hr/>
 
 <p>
     The "AuthenticationInterceptor" looks to see if a User object
@@ -1400,22 +1404,22 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor  
     and <strong>submit</strong>, and sets the default-interceptor to "access".
 </p>
 
-<hr />
+<hr/>
 <h5>xwork.xml interceptors</h5>
 <pre><code>&lt;interceptors>
-  &lt;interceptor name="<strong>authenticate</strong>" class="mailreader2.AuthenticationInterceptor"/>
-  &lt;interceptor-stack name="<strong>access</strong>" >
+    &lt;interceptor name="<strong>authenticate</strong>" class="mailreader2.AuthenticationInterceptor"/>
+    &lt;interceptor-stack name="<strong>access</strong>" >
     &lt;interceptor-ref name="authenticate" />
     &lt;interceptor-ref name="defaultStack"/>
-  &lt;/interceptor-stack>
-  &lt;interceptor-stack name="<strong>submit</strong>">
+    &lt;/interceptor-stack>
+    &lt;interceptor-stack name="<strong>submit</strong>">
     &lt;interceptor-ref name="token-session" />
     &lt;interceptor-ref name="<strong>access</strong>" />
-  &lt;/interceptor-stack>
-&lt;/interceptors>
+    &lt;/interceptor-stack>
+    &lt;/interceptors>
 
-&lt;<strong>default-interceptor-ref</strong> name="access"/></code></pre>
-<hr />
+    &lt;<strong>default-interceptor-ref</strong> name="access"/></code></pre>
+<hr/>
 
 <p>
     The "submit" stack is to be used with actions that post forms.
@@ -1423,6 +1427,42 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor  
     and then goes to include the "access" interceptor stack.
     The "access" stack includes the authenticate Interceptor,
     and then falls back to the standard "defaultStack".
+</p>
+
+<h5>Double Submits</h5>
+
+<p>
+    A common problem with designing web applications is that response times
+    can vary and users are impatient.
+    Sometimes, people will press a submit button a second time.
+    When this happens, the browser submits the request again,
+    so that we now have two requests for the same thing.
+    In the case of registering a user, if someone does press the submit button
+    again, and their timing is bad,
+    it could result in the system reporting that the username has already been
+    used.
+    (The first time the button was pressed.)
+    In practice, this would probably never happen, but for a longer running
+    process, like checking out a shopping cart,
+    it's easier for a double submit to occur.
+</p>
+
+<p>
+    To forestall double submits and "back button" resubmit,
+    the framework can generate a token that is embedded in the form
+    and also kept in the session.
+    If the value of the tokens do not compare,
+    then we know that there has been a problem,
+    and a form has been submitted twice or out of sequence.
+</p>
+
+<p>
+    The Token Session Interceptor will also attempt to provide intelligent
+    fail-over in the event of multiple requests using the same session.
+    That is, it will block subsequent requests until the first request is complete,
+    and then instead of returning the invalid. token code,
+    it will attempt to display the same response that the
+    original, valid action invocation would have displayed
 </p>
 
 <p>
@@ -1454,46 +1494,44 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor  
     and the "MainMenu.jsp".
 </p>
 
-<hr />
+<hr/>
 <h5>Action mapping element for MainMenu</h5>
 <pre><code>&lt;action name="MainMenu" class="mailreader2.MailreaderSupport">
-  &lt;result>/pages/MainMenu.jsp&lt;/result>
-&lt;/action></code></pre>
+    &lt;result>/pages/MainMenu.jsp&lt;/result>
+    &lt;/action></code></pre>
 
 <h5>MainMenu.jsp</h5>
 <pre><code>&lt;%@ page contentType="text/html; charset=UTF-8" %>
-&lt;%@ taglib uri="/webwork" prefix="saf" %>
-&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-&lt;head>
+    &lt;%@ taglib uri="/webwork" prefix="saf" %>
+    &lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    &lt;head>
     &lt;title>&lt;saf:text name="mainMenu.title"/>&lt;/title>
     &lt;link href="&lt;saf:url value="/css/mailreader.css"/>" rel="stylesheet"
-          type="text/css"/>
-&lt;/head>
+    type="text/css"/>
+    &lt;/head>
 
-&lt;body>
-&lt;h3>&lt;saf:text name="mainMenu.heading"/> <strong>&lt;saf:property
-        value="user.fullName"/></strong>&lt;/h3>
-&lt;ul>
-    &lt;li>&lt;a href="&lt;saf:url action="Registration!input" />">
-        &lt;saf:text name="mainMenu.registration"/>
+    &lt;body>
+    &lt;h3>&lt;saf:text name="mainMenu.heading"/> <strong>&lt;saf:property
+    value="user.fullName"/></strong>&lt;/h3>
+    &lt;ul>
+    &lt;li>&lt;a href="&lt;saf:url <strong>action="Registration!input"</strong> />">
+    &lt;saf:text name="mainMenu.registration"/>
     &lt;/a>
     &lt;/li>
-    &lt;li>&lt;a href="&lt;saf:url action="Logoff"/>">
-        &lt;saf:text name="mainMenu.logoff"/>
+    &lt;li>&lt;a href="&lt;saf:url <strong>action="Logoff"</strong> />">
+    &lt;saf:text name="mainMenu.logoff"/>
     &lt;/a>
-&lt;/ul>
-&lt;/body>
-&lt;/html></code></pre>
-<hr />
+    &lt;/ul>
+    &lt;/body>
+    &lt;/html></code></pre>
+<hr/>
 
 <p>
     The source for MainMenu.jsp also contains a new tag, <strong>
     property</strong>, which we use to customize the page with the
     full name property of the authenticated user.
-    The property tag checks the value stack for a property
-    or an object's property.
 </p>
 
 <p>
@@ -1508,61 +1546,8 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor  
 
 <p>
     The customized MainMenu page offers two standard links.
-    One link is to the "Logoff" action.
-    The other is to "EditRegistration".
-</p>
-
-
-
-<!-- TODO ... -->
-
-
-
-<hr />
-<h5>BaseAction.doSaveToken</h5>
-<pre><code> protected void doSaveToken(HttpServletRequest request) {
-    if (log.isTraceEnabled()) {
-    log.trace(Constants.LOG_TOKEN);
-    }
-    saveToken(request);
-    }</code></pre>
-<hr />
-
-<p>
-    A common problem with designing web applications is that response times
-    can vary and users are impatient.
-    Sometimes, people will press a submit button a second time.
-    When this happens, the browser submits the request again,
-    so that we now have two requests for the same thing.
-    In the case of registering a user, if someone does press the submit button
-    again, and their timing is bad,
-    it could result in the system reporting that the username has already been
-    used.
-    (The first time the button was pressed.)
-    In practice, this would probably never happen, but for a longer running
-    process, like verifying a
-    credit card transaction, it's easier for a double submit to occur.
-</p>
-
-<p>
-    To forestall double submits, the framework can generate a token that is
-    embedded in the form
-    and also kept in the session.
-    If the value of the tokens do not compare, then we know that there has
-    been a problem,
-    and a form has been submitted twice or out of sequence.
-</p>
-
-<p>
-    The <strong>doSaveToken</strong> helper, logs the event for tracking,
-    and then calls the framework method.
-    Later, when we Save the registration, we will check to see if the token is
-    valid.
-</p>
-
-<p>
-    After the token has been saved,
-    Edit calls "doFindSuccess and" control flows to the Registration page.
+    One is to "Edit your user registration profile".
+    The other is to "Logoff the MailReader Demonstration Application".
 </p>
 
 <h3><a name="Registration.jsp" id="Registration.jsp">Registration page</a>
@@ -1573,36 +1558,51 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor  
     Menu page,
     we will finally reach the heart of the MailReader application: the
     Registration, or "Profile", page.
-    This page displays everything MailReader knows about you (or at least your
-    login),
+    This page displays everything MailReader knows about you
+    (or at least your login),
     while utilizing several interesting techniques.
 </p>
 
 <p>
-    To do double duty as the "Create" Registration page and the "Edit"
+    To do double duty as the "Create" Registration page" and the "Edit"
     Registration page,
-    the Registation.jsp makes good use of logic tags,
+    the Registration.jsp makes extensive use of the test tags,
     to make it appears as though there are two distinct pages.
-    For example, if you are editing the form (task == "Edit"),
-    the page inserts your username from the RegistrationForm bean.
-    If you are new user (task == "Create"), the page creates an empty field,
-    so you can pick your username.
 </p>
 
-<hr />
+<h5>MainMenu.jsp - head element</h5>
+<pre><code>&lt;head>
+  &lt;saf:if test="task=='Create'">
+    &lt;title>&lt;saf:text name="registration.title.create"/>&lt;/title>
+  &lt;/saf:if>
+  &lt;saf:if test="task=='Edit'">
+    &lt;title>&lt;saf:text name="registration.title.edit"/>&lt;/title>
+  &lt;/saf:if>
+  &lt;link href="&lt;saf:url value="/css/mailreader.css"/>" rel="stylesheet"
+    type="text/css"/>
+&lt;/head></code></pre>
+
+<p>
+    For example, if you are editing the form (task == 'Edit'),
+    the page inserts your username from the RegistrationForm bean.
+    If you are new user (task == 'Create'), the page creates an empty field,
+    so you can pick your username.
+
+</p>
+
+<hr/>
 <h5>Note:</h5>
 <blockquote>
     <p><font class="hint">
         <strong>Presention Logic</strong> -
-        The Struts logic tags are a convenient way to express presentation
+        The "test" tag is a convenient way to express presentation
         logic within your pages.
         Customized pages help to prevent user error,
         and dynamic customization reduces the number of JSPs your application
-        needs to maintain,
-        among other benefits.
+        needs to maintain, among other benefits.
     </font></p>
 </blockquote>
-<hr />
+<hr/>
 
 <p>
     The page also uses logic tags to display a list of subscriptions for the
@@ -1611,31 +1611,29 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor  
     the lower part of the page that lists the subscriptions is exposed.
 </p>
 
-<hr />
+<hr/>
 <h5></h5>
-<pre><code>&lt;logic:equal name="RegistrationForm" <strong>
-    property="task"</strong>
-    scope="request" <strong>value="Edit"</strong>>
-    &lt;h3>&lt;bean:message key="heading.subscriptions"/>&lt;/h3>
+<pre><code>&lt;saf:if test=<strong>"task == 'Edit'"</strong>>
+  &lt;div align="center">
+    &lt;h3>&lt;saf:text name="heading.subscriptions"/>&lt;/h3>
+  &lt;/div>
     &lt;!-- ... -->
-    &lt;html:link action="/EditSubscription">
-    &lt;bean:message key="registration.addSubscription"/>
-    &lt;/html:link>
-    &lt;/logic:equal></code></pre>
-<hr />
+  &lt;/saf:if>
+&lt;jsp:include page="Footer.jsp"/>
+&lt;/body>&lt;/html></code></pre>
+<hr/>
 
 <p>
     Otherwise, the page contains just the top portion --
-    a blank data-entry form for creating the user's registration.
+    a data-entry form for managing the user's registration.
 </p>
 
-<h4><a name="logic:iterate" id="logic:iterate">logic:iterate</a></h4>
+<h4><a name="iterator" id="iterator">iterator</a></h4>
 
 <p>
-    Beside making the usual conditional tests,
-    you can also use logic tags to forward control to other actions,
-    to redirect control to another path, and to iterate over collections.
-    The Registration page includes a good example of using the logic:iterate
+    Besides "if" there are several other control tags that you can use
+    to sort, filter, or iterate over data.
+    The Registration page includes a good example of using the <strong>iterator</strong>
     tag to display the user's subscriptions.
 </p>
 
@@ -1644,64 +1642,203 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor  
     stored in the user object.
     So to display each subscription, we have to reach into the user object,
     and loop through the members of the subscription collection.
-    Using the iterate tag, you can code it the way it sounds.
-</p>
+    Using the iterator tag, you can code it the way it sounds.
+ /p>
 
-<hr />
-<h5>Using logic:iterate to list the Subscriptions</h5>
-<pre><code>    &lt;logic:iterate <strong>name</strong>="user" <strong>
-    property</strong>="subscriptions" <strong>id</strong>="subscription">
-    &lt;tr>
+<hr/>
+<h5>Using iterator to list the Subscriptions</h5>
+<pre><code>&lt;saf:iterator value="<strong>user.subscriptions</strong>">
+  &lt;tr>
     &lt;td align="left">
-    &lt;bean:write name="subscription" property="host"/>
+      &lt;saf:property value="host"/>
     &lt;/td>
     &lt;td align="left">
-    &lt;bean:write name="subscription" property="username"/>
-    &lt;/td>
-    &lt;td align="center">
-    &lt;bean:write name="subscription" property="type"/>
-    &lt;/td>
-    &lt;td align="center">
-    &lt;bean:write name="subscription" property="autoConnect"/>
-    &lt;/td>
-    &lt;td align="center">
-    &lt;html:link action="/DeleteSubscription"
-    <strong>paramName</strong>="subscription" <strong>paramProperty</strong>
-    ="host" <strong>paramId</strong>="host">
-    &lt;bean:message key="registration.deleteSubscription"/>
-    &lt;/html:link>
-    &nbsp;
-    &lt;html:link action="/EditSubscription"
-    paramName="subscription" paramProperty="host" paramId="host">
-    &lt;bean:message key="registration.editSubscription"/>
-    &lt;/html:link>
-    &lt;/td>
-    &lt;/tr>
-    &lt;/logic:iterate></code></pre>
-<hr />
+       &lt;saf:property value="username"/>
+   &lt;/td>
+  &lt;td align="center">
+      &lt;saf:property value="type"/>
+  &lt;/td>
+  &lt;td align="center">
+     &lt;saf:property value="autoConnect"/>
+  &lt;/td>
+  &lt;td align="center">
+    &lt;a href="&lt;saf:url action="<strong>Subscription!delete</strong>">&lt;saf:param name="<strong>host</strong>" value="host"/>&lt;/saf:url>">
+      &lt;saf:text name="registration.deleteSubscription"/>
+    &lt;/a>&nbsp;
+    &lt;a href="&lt;saf:url action="<strong>Subscription!edit</strong>">&lt;saf:param name="<strong>host</strong>" value="host"/>&lt;/saf:url>">
+      &lt;saf:text name="registration.editSubscription"/>
+     &lt;/a>
+   &lt;/td>
+ &lt;/tr>
+&lt;/saf:iterator></code></pre>
+<hr/>
 
 <p>
-    The three parameters to the iterate tag (name, property, and id) tell it
-    to
+    When the iterator renders, it generates a list of subscriptions for the current user.
 </p>
 
-<ol>
-    <li>
-        <em>name</em> - Check this context for an attribute (e.g. object)
-        named <strong>user</strong>,
-    </li>
+<hr />
 
-    <li>
-        <em>property</em> - Snag the property of user named <strong>
-        subscriptions</strong>,
-    </li>
+    <div align="center">
+        <h3>Current Subscriptions</h3>
+    </div>
 
-    <li>
-        <em>id</em> - In the block to iterate,
-        use <strong>subscription</strong> (singular) as the name for each
-        member of the collection.
-    </li>
-</ol>
+    <table border="1" width="100%">
+        <tr>
+            <th align="center" width="30%">
+                Host Name
+            </th>
+            <th align="center" width="25%">
+                User Name
+            </th>
+
+            <th align="center" width="10%">
+                Server Type
+            </th>
+            <th align="center" width="10%">
+                Auto
+            </th>
+            <th align="center" width="15%">
+                Action
+            </th>
+        </tr>
+            <tr>
+                <td align="left">
+                    mail.hotmail.com
+                </td>
+                <td align="left">
+                    user1234
+                </td>
+                <td align="center">
+                    pop3
+                </td>
+
+                <td align="center">
+                    false
+                </td>
+                <td align="center">
+                    <a href="/action2-mailreader/Subscription!delete.do?host=mail.hotmail.com">
+                        Delete
+                    </a>
+                    &nbsp;
+                    <a href="/action2-mailreader/Subscription!edit.do?host=mail.hotmail.com">
+                        Edit
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <td align="left">
+                    mail.yahoo.com
+                </td>
+                <td align="left">
+                    jquser
+                </td>
+                <td align="center">
+                    imap
+                </td>
+                <td align="center">
+                    false
+                </td>
+                <td align="center">
+                    <a href="/action2-mailreader/Subscription!delete.do?host=mail.yahoo.com">
+                        Delete
+                    </a>
+                    &nbsp;
+                    <a href="/action2-mailreader/Subscription!edit.do?host=mail.yahoo.com">
+                        Edit
+                    </a>
+                </td>
+            </tr>
+    </table>
+    <a href="/action2-mailreader/Subscription!input.do">Add</a>
+
+<hr />
+
+    <p>
+        Now look back at the code used to generate this block.
+    </p>
+    <p>
+        Notice anything nifty?
+    </p>
+    <p>
+        How about that the markup between the iterator tag is
+        actually <em>simpler</em> than the markup that we would use to render one row of the table?
+    </p>
+    <p>
+        Instead of using a qualified reference  like "value=user.subscription[0].host",
+        we use the simplest possible reference: "value=host".
+        We didn't have to define a local variable, and reference that local in the loop code.
+        The reference to each item in the list is automatically resolved, no fuss, no muss.
+    </p>
+    <p>
+        Hmmm. Nice trick!
+    </p>
+
+<p>
+    The secret to this magic is the <strong>value stack</strong>.
+    Next to Interceptors, the value stack is probably the coolest thing there is about the framework.
+    To explain the value stack, let's step back and start from the beginning.
+</p>
+
+<p>
+    Merging dynamic data into static web pages is a primary reason
+    we create web applications.
+    The JavaServer Pages API has a mechanism that allows you to
+    place objects in a servlet scope (page, request, session, or
+    application), and then retrieve them using a scriplet.
+    If the object is placed directly in one of the scopes,
+    a JSP tag can find that object by searching page scope  and
+    then request scope, and session scope, and finally application scope.
+</p>
+
+<p>
+    The value stack works much the same way, only better.
+    When you push an object on the value stack,
+    the public properties of that object become first-class properties of the stack.
+    The object's properties become the stack's properties.
+    If another object on the stack has properties of the same name,
+    the last object pushed onto the stack wins.
+</p>
+
+<p>
+    When the iterator tag loops through a collection,
+    it pushes each item in the collection onto the stack.
+    The item's properties become the stack's property.
+    In the case of the subscriptions,
+    if the subscription has a public "host" property,
+    then during that iteration,
+    the stack can access the same property.
+</p>
+
+<p>
+    Of course, at the end of each iteration, the tag "pops" the item off the stack.
+    If we were to try and access the host property later in the page,
+    it won't be there.
+</p>
+
+<p>
+    When an Action is invoked, the Action class is pushed onto the value stack.
+    Since the Action is on the value stack,
+    our tags can access any property of the Action as if it were an implicit property of the page.
+    The tags don't access the Action directly.
+    If a textfield tag is told to render the "username" property,
+    the tag asks the value stack for the value of "username", 
+    and the value stack returns the first property it finds by that name.
+</p>
+
+<p>
+    The Validators also use the stack.
+    When validation fails on a field,
+    the value for the field is pushed onto the value stack.
+    As a result, if the client enters text into an Integer field,
+    the framework can still redisplay whatever was entered.
+</p>
+
+<p>
+    The Subscription list uses another new tag: the <strong>param</strong> tag.
+</p>
+
+<!-- TODO ... -->
 
 <p>
     Next to each entry in the subscription list are links to Delete and Edit
@@ -1718,7 +1855,7 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor  
     the command links would translate to HTML links like these:
 </p>
 
-<hr />
+<hr/>
 <h5>The Delete and Edit links for mail.yahoo.com</h5>
 <pre><code>      &lt;a
     href="/struts-mailreader/DeleteSubscription.do?host=mail.yahoo.com">Delete&lt;/a>
@@ -1726,7 +1863,7 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor  
     &lt;a
     href="/struts-mailreader/EditSubscription.do?host=mail.yahoo.com">Edit&lt;/a></code>
 </pre>
-<hr />
+<hr/>
 
 <p>
     At the foot of the Register page is a link for adding a subscription.
@@ -1734,6 +1871,9 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor  
     Like the link for creating a Registration, Add points to an "Edit" action,
     namely "EditSubscription".
 </p>
+
+
+
 
 <h4>
     <a name="SubscriptionAction.java" id="SubscriptionAction.java">SubscriptionAction.java</a>
@@ -1746,7 +1886,7 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor  
     the "{1}Form" attribute maps to <strong>SubscriptionForm</strong>.
 </p>
 
-<hr />
+<hr/>
 <h5>The SubscriptionAction form-bean element</h5>
 <pre><code>        &lt;form-bean
     name="SubscriptionForm"
@@ -1763,7 +1903,7 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor  
     name="type"
     type="java.lang.String" />
     &lt;/form-bean></code></pre>
-<hr />
+<hr/>
 
 <p>
     The other DynaActionForms we've seen used only String properties.
@@ -1773,7 +1913,7 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor  
     and checkboxes need to be handled differently that other controls.
 </p>
 
-<hr />
+<hr/>
 <h5>Tip:</h5>
 <blockquote>
     <p class="hint">
@@ -1800,7 +1940,7 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor  
         checkbox will remain unchecked ("false").
     </p>
 </blockquote>
-<hr />
+<hr/>
 
 <p>
     To be sure the autoConnect checkbox is handled correctly,
@@ -1814,7 +1954,7 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor  
     few twists of its own.
 </p>
 
-<hr />
+<hr/>
 <h5>SubscriptionAction.Edit</h5>
 <pre><code>public ActionForward Edit(
     ActionMapping mapping,
@@ -1844,7 +1984,7 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor  
 
     return doFindSuccess(mapping);
     }</code></pre>
-<hr />
+<hr/>
 
 <p>
     In RegistrationAction.Edit, we looked for the user object to decide if we
@@ -1861,7 +2001,7 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor  
     If it is an update, we fetch the Subscription from the database.
 </p>
 
-<hr />
+<hr/>
 <h5>SubscriptionAction.doFindSubscription</h5>
 <pre><code> private Subscription <strong>doFindSubscription</strong>(User
     user, String host) {
@@ -1885,7 +2025,7 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor  
 
     return subscription;
     }</code></pre>
-<hr />
+<hr/>
 
 <p>
     If we can't find the subscription,
@@ -1893,7 +2033,7 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor  
     (Error.jsp).
 </p>
 
-<hr />
+<hr/>
 <h5>BaseAction.doFindFailure</h5>
 <pre><code> protected ActionForward <strong>doFindFailure</strong>
     (ActionMapping mapping) {
@@ -1903,7 +2043,7 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor  
     return (mapping.findForward(Constants.FAILURE));
     }
 </code></pre>
-<hr />
+<hr/>
 
 <p>
     In the normal course, the subscription should always be found,
@@ -1919,7 +2059,7 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor  
     object. In this case, a Subscription object.
 </p>
 
-<hr />
+<hr/>
 <h5>SubscriptionAction.doPopulate</h5>
 <pre><code> private void <strong>doPopulate</strong>(ActionForm form,
     Subscription subscription) throws ServletException {
@@ -1943,7 +2083,7 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor  
     throw new ServletException(LOG_SUBSCRIPTION_POPULATE, t);
     }
     }</code></pre>
-<hr />
+<hr/>
 
 <p>
     Most of the code in "doPopulate" is window dressing for the call to
@@ -2006,9 +2146,9 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor  
 <h3><a name="subcription.jsp" id="subcription.jsp">Subscription.jsp</a></h3>
 
 <p>
-Saving the best for last, Subscription.jsp utilizes two interesting Struts
-custom form tags,
-"html:options" and "html:checkbox".
+    Saving the best for last, Subscription.jsp utilizes two interesting Struts
+    custom form tags,
+    "html:options" and "html:checkbox".
 
 <p>
     In Registration.jsp, the Struts iteration tag was used to write a list of
@@ -2053,7 +2193,7 @@ custom form tags,
     of server types.
 </p>
 
-<hr />
+<hr/>
 <h5>Tip:</h5>
 <blockquote>
     <p><font class="hint">
@@ -2063,7 +2203,7 @@ custom form tags,
         [org.apache.struts.util.LabelValueBean].
     </font></p>
 </blockquote>
-<hr />
+<hr/>
 
 <p>
     The plugin stores the list is stored in application scope.
@@ -2125,7 +2265,7 @@ custom form tags,
     own, to pickup the finer points.
 </p>
 
-<hr />
+<hr/>
 <h5>SubscriptionAction.Save</h5>
 <pre><code> public ActionForward <strong>Save</strong>(
     ActionMapping mapping,
@@ -2167,7 +2307,7 @@ custom form tags,
 
     return doFindSuccess(mapping);
     }</code></pre>
-<hr />
+<hr/>
 
 <p>
     This concludes our tour.
@@ -2211,7 +2351,7 @@ custom form tags,
         Alternate message resources can be provided to internationalize an
         application.</li>
 </ul>
-<hr />
+<hr/>
 </blockquote>
 </body>
 </html>
