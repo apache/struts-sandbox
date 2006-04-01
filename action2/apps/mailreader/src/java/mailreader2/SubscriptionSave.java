@@ -5,8 +5,15 @@ package mailreader2;
  */
 public final class SubscriptionSave extends Subscription {
 
+    public void prepare() {
+        super.prepare();
+            // checkbox workaround
+    }
+
     public String execute() throws Exception {
         return save();
     }
+
+
 
 }

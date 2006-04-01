@@ -232,6 +232,8 @@ Error
 
 
 Issue 
+* If the error page is fired by a global exception handler, is the exception going to be logged. Do we need to use a chain result to an action that would log the exception? What would be the Java syntax?
+
 * It would be nice to omit the message markup if there is not message. 
 ** http://forums.opensymphony.com/thread.jspa?threadID=7480&messageID=16618#16618
 

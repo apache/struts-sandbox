@@ -143,6 +143,33 @@ public class MailreaderSupport extends ActionSupport
         task =  value;
     }
 
+    // ---- Token property (utilized by UI) ----
+
+    /**
+     * <p>Field to store double-submit guard.</p>
+     */
+    private String token = null;
+
+
+    /**
+     * <p>Provide Token.</p>
+     *
+     * @return Returns the token.
+     */
+    public String getToken() {
+        return token;
+    }
+
+    /**
+     * <p>Store new Token.</p>
+     *
+     * @param value The token to set.
+     */
+    public void setToken(String value) {
+        token =  value;
+    }
+
+
     // ---- Host property ----
 
     /**
@@ -433,19 +460,14 @@ public class MailreaderSupport extends ActionSupport
      * <p> Obtain User Subscription object for the given host, or return null
      * if not found. </p>
      *
+     * <p>It would be possible for this code to throw a NullPointerException,
+     * but the ExceptionHandler in the xwork.xml will catch that for us.</p>
+     *
      * @return The matching Subscription or null
      */
     public Subscription findSubscription(String host) {
-
         Subscription subscription;
-
-        try {
-            subscription = getUser().findSubscription(host);
-        }
-        catch (NullPointerException e) {
-            subscription = null;
-        }
-
+        subscription = getUser().findSubscription(host);
         return subscription;
     }
 
@@ -458,7 +480,6 @@ public class MailreaderSupport extends ActionSupport
      * @return Subscription or null if not found
      */
     public Subscription findSubscription() {
-
         return findSubscription(getHost());
     }
 

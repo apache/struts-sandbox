@@ -177,8 +177,7 @@
 
 <p>
     The walkthrough starts with how the initial welcome page is displayed, and
-    then steps through logging in, adding and editing subscriptions, and
-    creating a new registration.
+    then steps through logging into the application and editing a subscription.
 </p>
 
 <h3><a name="Welcome" id="Welcome">Welcome Page</a></h3>
@@ -890,7 +889,7 @@
     The button's attribute <em>action="Logon!cancel"</em> tells the framework to submit
     to the Logon's "cancel" method instead of the usual "execute" method.
     The <em>onclick="form.onsubmit=null"</em> script defeats client-side validation.
-    On the server side, "cancel" is on a special lists of aliases that bypass validation,
+    On the server side, "cancel" is on a special list of methods that bypass validation,
     so the request will go directly to the Action's cancel method.
     (Other special aliases on the bypass list include "input" and "back".)
 </p>
@@ -1822,7 +1821,7 @@
     our tags can access any property of the Action as if it were an implicit property of the page.
     The tags don't access the Action directly.
     If a textfield tag is told to render the "username" property,
-    the tag asks the value stack for the value of "username", 
+    the tag asks the value stack for the value of "username",
     and the value stack returns the first property it finds by that name.
 </p>
 
@@ -1836,74 +1835,443 @@
 
 <p>
     The Subscription list uses another new tag: the <strong>param</strong> tag.
-</p>
-
-<!-- TODO ... -->
-
-<p>
-    Next to each entry in the subscription list are links to Delete and Edit
-    commands.
-    These links use the same name/property/id trinity as the interator,
-    except that the attributes are used to create a hyperlink with a single
-    parameter.
-    (Multiple parameters are possible too, but if the code is well-factored,
-    one should be sufficient.)
+    As tags go, param takes very few parameters of it's own: just "name" and "value", and neither is required.
+    Although, simple param is one of the most powerful tags the framework provides.
+    Not so much because of what it does, but because of what it allows the other tags to do.
 </p>
 
 <p>
-    Given a subscription to "mail.yahoo.com",
-    the command links would translate to HTML links like these:
+    Essentially, the "param" tag provides parameters to other tags.
+    A tag like "text" might be retrieving a message template with several replaceable parameters.
+    No matter how many parameters are in the template, and no matter what they are named,
+    you can use the "param: tag to pass in whatever you need.
 </p>
 
-<hr/>
-<h5>The Delete and Edit links for mail.yahoo.com</h5>
-<pre><code>      &lt;a
-    href="/struts-mailreader/DeleteSubscription.do?host=mail.yahoo.com">Delete&lt;/a>
-    &nbsp;
-    &lt;a
-    href="/struts-mailreader/EditSubscription.do?host=mail.yahoo.com">Edit&lt;/a></code>
-</pre>
-<hr/>
+<pre><code>pager.legend = Displaying {current} of {count} items matching {criteria}.
+...
+&lt;saf:text name="pager.legend">
+    &lt;saf:param name="current" value="42" />
+    &lt;saf:param name="count" value="314" />
+    &lt;saf:param name="criteria" value="Life, the Universe, and Everything" />
+&lt;/saf:text></code></pre>
 
+<p>
+    In the case of an "url" tag,
+    we can use "param" to create the query string.
+    A statement like this:
+</p>
+
+<pre><code>
+  &lt;saf:url action="Subscription!edit">&lt;saf:param name="host" value="host"/>&lt;/saf:url>">
+</code></pre>
+
+<p>
+  can render a hyperlink like this:
+</p>
+
+<pre><code>
+  <a href="/action2-mailreader/Subscription!edit.do?host=mail.yahoo.com">Edit</a>
+</code></pre>
+
+
+<!--
 <p>
     At the foot of the Register page is a link for adding a subscription.
     Let's wind up the tour by following the Add link and then logging off.
     Like the link for creating a Registration, Add points to an "Edit" action,
     namely "EditSubscription".
 </p>
+-->
 
 
+<h3>
+    <a name="Subscription" id="Subscription">Subscription</a>
+</h3>
 
+<p>
+    If we follow one of the "Edit" subscription links on the Registration page,
+    we come to the "Subscriptions" page,
+    which displays the details of our description in a data-entry form.
+    Let's have a look a the Subscription configuration in xwork.xml
+    and follow the bouncing ball from page to action to page.
+</p>
+
+<hr />
+<h5>xwork.xml Subscription element</h5>
+<pre><code>&lt;action name="Subscription" class="mailreader2.Subscription">
+  &lt;result name="input">/pages/Subscription.jsp&lt;/result>
+  &lt;result type="redirect-action">Registration!input&lt;/result>
+&lt;/action></code></pre>
+<hr />
+
+<p>
+    The Edit link specified the Subscription action,
+    but also includes the qualifier <strong>!edit</strong>.
+    The <strong>!</strong> idiom tells the framework to invoke the
+    "edit" method of the Subscription action,
+    instead of the default "execute" method
+    The "alternate" execute methods are called <strong>alias</strong> methods.
+</p>
+
+<hr />
+<h5>Subscription edit alias</h5>
+<pre><code>public String <strong>edit()</strong> {
+  <strong>setTask(Constants.EDIT);</strong>>
+  return find();
+}
+
+public String find() {
+  org.apache.struts.apps.mailreader.dao.Subscription
+    sub = findSubscription();
+   if (sub == null) {
+       return ERROR;
+   }
+   <strong>setSubscription(sub);</strong>
+   return INPUT;
+}</code></pre>
+<hr />
+
+<p>
+    The "edit" alias has two responsiblities.
+    First, it must set the Task property to "Edit".
+    The Subscription page will render itself differently
+    depending on the value of the Task property.
+    Second, edit must locate the relevent Subscription
+    and set it to the Subscription property.
+    If all goes well, edit returns the "input" token,
+    so that the "input" result will be invoked.
+</p>
+
+<p>
+    In the normal course, the subscription should always be found,
+    since we selected the host from a system-generated list.
+    If the subscription is not found,
+    it would be because the database disappeared
+    or the request is being spoofed.
+    If the subscription is not found,
+    edit returns the token for the global "error" result,
+    because this condition is unexpected.
+</p>
+
+<p>
+    The business logic for the edit alias is a simple wrapper
+    around the MailReader DAO classes.
+</p>
+
+<hr />
+<h5>MailreaderSupport findSubscription()</h5>
+<pre><code>public Subscription <strong>findSubscription()</strong> {
+    return findSubscription(getHost());
+}
+
+public Subscription findSubscription(String host) {
+    Subscription subscription;
+    subscription = <strong>getUser().findSubscription(host);</strong>
+    return subscription;
+}</code></pre>
+<hr />
+
+<p>
+    This code is very simple
+    and doesn't seem to provide much in the way of error handling.
+    But, that's OK.
+    Since the page is suppose to be entered from a link that we created,
+    we do expect everything to go right here.
+    But, if it doesn't, the global exception handler we defined in xwork.xml
+    will trap the exception for us.
+</p>
+
+<p>
+    Likewise, the AuthentificationInterceptor will ensure that only clients
+    with a valid User object can try to edit a Subscription.
+    If the session expired, or someone bookmarked the page,
+    the client will be redirected to the Logon page.
+</p>
+
+<p>
+    As a final layer of defines, we also configured a validation for Subscription,
+    to ensure that we are passed a Host parameter.
+</p>
+
+<hr />
+<h5>Subscription-validation.xml</h5>
+<pre><code>&lt;!DOCTYPE validators PUBLIC "-//OpenSymphony Group//XWork Validator 1.0.2//EN" "http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
+&lt;validators>
+  &lt;field name="<strong>host</strong>">
+    &lt;field-validator type="<strong>requiredstring</strong>">
+        &lt;message key="error.host.required"/>
+    &lt;/field-validator>
+  &lt;/field>
+&lt;/validators></code></pre>
+<hr />
+
+<p>
+    By keeping these types of routine safety precautions out of the Action class,
+    the all-important Actions becomes smaller and easier to maintain.
+</p>
+
+<p>
+    After setting the relevent Subscription object to the Subscription property,
+    the framework transfers control to the (you guessed it) Subscription page.
+</p>
+
+<hr />
+<h5>Subscription.jsp</h5>
+<pre><code>&lt;%@ page contentType="text/html; charset=UTF-8" %>
+&lt;%@ taglib uri="/webwork" prefix="saf" %>
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  &lt;head>
+    &lt;saf:if test="task=='Create'">
+        &lt;title>&lt;saf:text name="subscription.title.create"/>&lt;/title>
+    &lt;/saf:if>
+    &lt;saf:if test="task=='Edit'">
+        &lt;title>&lt;saf:text name="subscription.title.edit"/>&lt;/title>
+    &lt;/saf:if>
+    &lt;saf:if test="task=='Delete'">
+        &lt;title>&lt;saf:text name="subscription.title.delete"/>&lt;/title>
+    &lt;/saf:if>
+    &lt;link href="&lt;saf:url value="/css/mailreader.css"/>" rel="stylesheet"
+          type="text/css"/>
+  &lt;/head>
+  &lt;body onLoad="self.focus();document.Subscription.username.focus()">
+
+    &lt;saf:actionerror/>
+    &lt;saf:form method="POST" <strong>action="SubscriptionSave"</strong> validate="false">
+      <strong>&lt;saf:token /></strong>
+      <strong>&lt;saf:hidden name="task"/></strong>
+      <strong>&lt;saf:label label="%{getText('username')}" name="user.username"/></strong>
+
+      &lt;saf:if test="task == 'Create'">
+        &lt;saf:textfield label="%{getText('mailHostname')}" name="host"/>
+      &lt;/saf:if>
+      &lt;saf:else>
+        &lt;saf:label label="%{getText('mailHostname')}" name="host"/>
+        &lt;saf:hidden name="host"/>
+      &lt;/saf:else>
+
+      &lt;saf:if test="task == 'Delete'">
+        &lt;saf:label label="%{getText('mailUsername')}"
+                   name="subscription.username"/>
+        &lt;saf:label label="%{getText('mailPassword')}"
+                   name="subscription.password"/>
+        &lt;saf:label label="%{getText('mailServerType')}"
+                   name="subscription.type"/>
+        &lt;saf:label label="%{getText('autoConnect')}"
+                   name="subscription.autoConnect"/>
+        &lt;saf:submit value="%{getText('button.confirm')}"/>
+      &lt;/saf:if>
+      &lt;saf:else>
+        &lt;saf:textfield label="%{getText('mailUsername')}"
+                       name="subscription.username"/>
+        &lt;saf:textfield label="%{getText('mailPassword')}"
+                       name="subscription.password"/>
+        <strong>&lt;saf:select label="%{getText('mailServerType')}"
+                    name="subscription.type" list="types"/></strong>
+        <strong>&lt;saf:checkbox label="%{getText('autoConnect')}"
+                      name="subscription.autoConnect"/></strong>
+        &lt;saf:submit value="%{getText('button.save')}"/>
+        &lt;saf:reset value="%{getText('button.reset')}"/>
+      &lt;/saf:else>
+
+      &lt;saf:submit action="Registration!input"
+                value="%{getText('button.cancel')}"
+                onclick="form.onsubmit=null"/>
+  &lt;/saf:form>
+
+  &lt;jsp:include page="Footer.jsp"/>
+  &lt;/body>
+&lt;/html></code></pre>
+
+<p>
+    As before, we'll discuss the tags and attributes that are new to this page:
+    "token", "hidden", "label", "select", and "checkbox".
+</p>
+
+<p>
+    When we looked at the form tag for the Logon page,
+    it did not specify a target for the submit.
+    Instead, it just posted back to the Logon action.
+    In this <strong>form</strong> tag, we are specifying a different action,
+    <strong>SubscriptionSave</strong>
+    to be the target of the submit,
+</p>
+
+<p>
+    The main reason we use another action is so that we can use a different set of validations.
+    When we retrieve the Subscription for editing, all we need is the Host property.
+    When we save the Subscription, we want to validate additional properties.
+    Since the validation files are coupled to the classes,
+    we created a new Action class for saving a Subscription.
+</p>
+
+<hr />
+<h5>Subscription-validation.xml</h5>
+<pre><code>&lt;!DOCTYPE validators PUBLIC "-//OpenSymphony Group//XWork Validator 1.0.2//EN"
+    "http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
+&lt;validators>
+  &lt;field name="<strong>host</strong>">
+    &lt;field-validator type="<strong>requiredstring</strong>">
+        &lt;message key="error.host.required"/>
+    &lt;/field-validator>
+  &lt;/field>
+&lt;/validators></code></pre>
+<hr />
+
+<p>
+    The validators follow the same type of inheritance path as the classes.
+    SubscriptionSave.java extends Subscription.java,
+    so when SubscriptionSave is validated,
+    the Host property specified by "Subscription-validation.xml" will also be required.
+</p>
+
+<p>
+    The <strong>token</strong> tag works with the Token Session Interceptor to foil double submits.
+    The tag generates a key that is embedded in the form and cached in the session.
+    Without this tag, the Interceptor can't work it's magic.
+</p>
+
+<p>
+    The <strong>hidden</strong> tag embeds the Task property into the form.
+    When the form is submitted,
+    the SubscriptionSave action wil use the Task property to decide
+    whether to insert or update the form.
+</p>
+
+<p>
+    The <strong>label</strong> renders a "read only" version of a property,
+    suitable for placement in the form.
+    In Edit or Delete mode, we want the Host property to be immutable,
+    since it is used as a key. (As unwise as that might sound.)
+    In Delete mode, all of the properties are immutable,
+    since we are simply confirming the delete operation.
+</p>
+
+<p>
+    Saving the best for last, the Subscription utilizes two more interesting
+    tags, "select" and "checkbox".
+</p>
+
+
+<p>
+    Unsuprisingly, the <strong>select</strong> tag renders a select control,
+    but the tag goes so without requiring a lot of markup or redtape.
+</p>
+
+<pre><code>&lt;saf:select label="%{getText('mailServerType')}"
+  name="subscription.type" <strong>list="types"</strong> />
+</code></pre>
+
+<p>
+    The interesting attribute of the "select" tag is "list",
+    which, in our case, specifies a value of "types".
+    If we take another look at the Subscription action,
+    we can see that it implements an interface named "Preparable"
+    and populates a "types" property in a method named "prepare".
+</p>
+
+<hr />
+<h5>Subscription-validation.xml</h5>
+<pre><code>public class <strong>Subscription</strong> extends MailreaderSupport
+  <strong>implements Preparable</strong> {
+
+  private Map types = null;
+  public Map <strong>getTypes()</strong> {
+    return types;
+   }
+
+   public void <strong>prepare()</strong> {
+     Map m = new LinkedHashMap();
+       m.put("imap", "IMAP Protocol");
+       m.put("pop3", "POP3 Protocol");
+       types = m;
+       setHost(getSubscriptionHost());
+    }
+
+    // ... </code></pre>
+<hr />
+
+<p>
+    The default Interceptor stack includes the PrepareInterceptor,
+    which observes the Preparable interface.
+</p>
+
+<hr />
+<h5>PrepareInterceptor</h5>
+<pre><code>public class <strong>PrepareInterceptor</strong> extends AroundInterceptor {
+
+  protected void after(ActionInvocation dispatcher, String result) throws Exception {
+  }
+
+  protected void before(ActionInvocation invocation) throws Exception {
+    Object action = invocation.getAction();
+     <strong>if (action instanceof Preparable) {
+        ((Preparable) action).prepare();</strong>
+    }
+  }
+}</code></pre>
+
+<p>
+    The PrepareInterceptor ensures that the "prepare" method will always be called
+    before "execute" or an alias method is invoked.
+    We use prepare to setup the list of items for the select list to display.
+    We also transfer the Host property from our Subscription object
+    to a local property, where it is easier to manage.
+</p>
+
+<p>
+    The <strong>checkbox</strong> starts out as a simple enough control.
+</p>
+
+<pre><code>&lt;saf:checkbox label="%{getText('autoConnect')}"
+  name="subscription.autoConnect"/></code></pre>
+
+<p>
+    The Subscription object has a boolean AutoConnect property,
+    and the checkbox simply has to represent its state.
+    The problem is, if you clear a checkbox, the browser client will not submit <em>anything</em>.
+    Nada. Zip.
+    It is as if the checkbox control never existed.
+    The HTTP protocol has no way to affirm "false".
+    if the control is missing, we need to figure out it's been unclicked.
+</p>
+
+<p>
+    If you are backing the form with an object in session state, as MailReader does,
+    the behavior is problematic because, without some extra work,
+    the client cannot uncheck the box.
+    If the session-state property is set to true, and the client unchecks the box,
+    the control is not submitted.
+    There is no trigger to change state, and so state remains true.
+</p>
+
+<p>
+    The simplest solution is to employ our old friend Prepare again.
+    In the "prepare" method for SubscriptionSave,
+    we can set the property represented by the checkbox to false.
+    If the control is not submitted, then the property remains false.
+    If the control is submitted, then the property is set to true.
+</p>
+
+<hr />
+<h5>SubscriptionSave</h5>
+<pre><code>public final class SubscriptionSave extends Subscription {
+
+  public void prepare() {
+    super.prepare();
+    // checkbox workaround
+    <strong>getSubscription().setAutoConnect(false);</strong>
+  }
+
+  public String execute() throws Exception {
+    return save();
+  }
+}</code></pre>
 
 <h4>
     <a name="SubscriptionAction.java" id="SubscriptionAction.java">SubscriptionAction.java</a>
 </h4>
-
-<p>
-    The EditSubscription link shares the Wildcard "/Edit*" mapping we saw with
-    EditRegistration.
-    As before, in the case of "Edit<em>Subscription</em>",
-    the "{1}Form" attribute maps to <strong>SubscriptionForm</strong>.
-</p>
-
-<hr/>
-<h5>The SubscriptionAction form-bean element</h5>
-<pre><code>        &lt;form-bean
-    name="SubscriptionForm"
-    extends="BaseForm">
-    &lt;form-property
-    name="autoConnect"
-    <strong>type="java.lang.Boolean"
-        initial="FALSE"
-        reset="true"</strong>/>
-    &lt;form-property
-    name="host"
-    type="java.lang.String" />
-    &lt;form-property
-    name="type"
-    type="java.lang.String" />
-    &lt;/form-bean></code></pre>
-<hr/>
 
 <p>
     The other DynaActionForms we've seen used only String properties.
@@ -1943,415 +2311,110 @@
 <hr/>
 
 <p>
-    To be sure the autoConnect checkbox is handled correctly,
-    the SubscriptionForm initializes the property to FALSE,
-    and enables "reset" so that before autopopulation the property is set back
-    to FALSE.
+    If we press the SAVE button,
+    the form will be submitted to the SubscriptionSave action.
+    If the validation succeeds, as we've seen,
+    SubscriptionSave will invoke the Subscription.Save method.
+</p>
+
+<hr />
+<h5>Subscription save</h5>
+<pre><code>public String save() throws Exception {
+
+  if (Constants.DELETE.equals(getTask())) {
+   removeSubscription();
+  }
+
+  if (Constants.CREATE.equals(getTask())) {
+    copySubscription(getHost());
+  }
+
+  saveUser();
+  return SUCCESS;
+}</code></pre>
+<hr />
+
+<p>
+    The <strong>save</strong> method uses the Task property to handle
+    the special cases of deleting and creating,
+    and then updates the state of the User object.
 </p>
 
 <p>
-    The SubscriptionAction Edit method should look familiar, but it also has a
-    few twists of its own.
+    The <strong>removeSubscription</strong> method calls the DAO facade,
+    and then updates the application state.
 </p>
 
-<hr/>
-<h5>SubscriptionAction.Edit</h5>
-<pre><code>public ActionForward Edit(
-    ActionMapping mapping,
-    ActionForm form,
-    HttpServletRequest request,
-    HttpServletResponse response)
-    throws Exception {
-
-    final String method = Constants.EDIT;
-    doLogProcess(mapping,method);
-
-    HttpSession session = request.getSession();
-    User user = doGetUser(session);
-    <strong>if (user==null) return doFindLogon(mapping);</strong>
-
-    // Retrieve the subscription, if there is one
-    Subscription subscription;
-    <strong>String host = doGet(form,HOST);
-        boolean updating = (host!=null);</strong>
-    if (updating) {
-    subscription = <strong>doFindSubscription</strong>(user,host);
-    if (subscription==null) return <strong>doFindFailure</strong>(mapping);
-    session.setAttribute(Constants.SUBSCRIPTION_KEY, subscription);
-    <strong>doPopulate</strong>(form,subscription);
-    doSet(form,TASK,method);
-    }
-
-    return doFindSuccess(mapping);
-    }</code></pre>
-<hr/>
+<hr />
+<h5>removeSubscription</h5>
+<pre><code>public void removeSubscription() throws Exception {
+    getUser().removeSubscription(getSubscription());
+    getSession().remove(Constants.SUBSCRIPTION_KEY);
+}</code></pre>
+<hr />
 
 <p>
-    In RegistrationAction.Edit, we looked for the user object to decide if we
-    were updating or inserting.
-    In SubscriptionAction.Edit, the user object is required (and we trot off
-    to the Login page if it is missing).
-    This could happen because a session expired, or because someone bookmarked
-    a page.
+    The <strong>copySubscription</strong> method is a bit more intertesting.
+    The MailReader DAO layer API includes some immutable fields
+    that can't be set once the object is created.
+    Because key fields are immutable,
+    We can't just create a Subscription, let the framework populate all the fields,
+    and jsut save it when we are done, because some fields can't be populated,
+    except at construction.
 </p>
 
 <p>
-    To decide if we are inserting or updating a subscription,
-    we look to see if the <strong>host</strong> is set to the ActionForm.
-    If it is an update, we fetch the Subscription from the database.
-</p>
-
-<hr/>
-<h5>SubscriptionAction.doFindSubscription</h5>
-<pre><code> private Subscription <strong>doFindSubscription</strong>(User
-    user, String host) {
-
-    Subscription subscription;
-
-    try {
-    subscription = user.findSubscription(host);
-    }
-    catch (NullPointerException e) {
-    subscription = null;
-    }
-
-    if ((subscription == null) && (log.isTraceEnabled())) {
-    log.trace(
-    " No subscription for user "
-    + user.getUsername()
-    + " and host "
-    + host);
-    }
-
-    return subscription;
-    }</code></pre>
-<hr/>
-
-<p>
-    If we can't find the subscription,
-    we use <strong>doFindFailure</strong> to forward to the Failure result
-    (Error.jsp).
-</p>
-
-<hr/>
-<h5>BaseAction.doFindFailure</h5>
-<pre><code> protected ActionForward <strong>doFindFailure</strong>
-    (ActionMapping mapping) {
-    if (log.isTraceEnabled()) {
-    log.trace(Constants.LOG_FAILURE);
-    }
-    return (mapping.findForward(Constants.FAILURE));
-    }
-</code></pre>
-<hr/>
-
-<p>
-    In the normal course, the subscription should always be found,
-    since we selected the host from a system-generated list.
-    If the subscription is not found,
-    it would be because the database disappeared or the request is being
-    spoofed.
+    Once workaround would be to declare properties on the Action
+    for all the properties we need to pass to the Subscription or User objects.
+    When we are ready to create the object, we can pass it values from the Action.
 </p>
 
 <p>
-    Like the RegisterAction, the <strong>doPopulate</strong> method transfers
-    data from the form to the domain
-    object. In this case, a Subscription object.
-</p>
-
-<hr/>
-<h5>SubscriptionAction.doPopulate</h5>
-<pre><code> private void <strong>doPopulate</strong>(ActionForm form,
-    Subscription subscription) throws ServletException {
-
-    final String title = Constants.EDIT;
-
-    if (log.isTraceEnabled()) {
-    log.trace(Constants.LOG_POPULATE_FORM + subscription.getHost());
-    }
-
-    try {
-    <strong>PropertyUtils.copyProperties(form, subscription);</strong>
-    doSet(form,TASK,title);
-    } catch (InvocationTargetException e) {
-    Throwable t = e.getTargetException();
-    if (t == null) t = e;
-    log.error(LOG_SUBSCRIPTION_POPULATE, t);
-    throw new ServletException(LOG_SUBSCRIPTION_POPULATE, t);
-    } catch (Throwable t) {
-    log.error(LOG_SUBSCRIPTION_POPULATE, t);
-    throw new ServletException(LOG_SUBSCRIPTION_POPULATE, t);
-    }
-    }</code></pre>
-<hr/>
-
-<p>
-    Most of the code in "doPopulate" is window dressing for the call to
-    <strong>PropertyUtils.copyProperties</strong>, which does the heavy
-    lifting.
+    Another workaround is to declare only the immutable properties on the Action,
+    and then use what we can from the domain object.
 </p>
 
 <p>
-    But before turning to our final JSP, a word about our database model ...
-</p>
-
-<h4>
-    <a name="User.java" id="User.java">User.java</a> and <a
-        name="Subscription.java" id="Subscription.java">Subscription.java</a>
-</h4>
-
-<p>
-    If you're used to working with relational databases,
-    the links between the user and subscription objects may be confusing.
-    A conventional relational database would create two distinct tables,
-    one for the users and another for the subscriptions,
-    and link them together with a user ID.
-    The MailReader application implements a different model, a hierarchical
-    database.
-    Here a "table" of subscriptions is stored within each user object,
-    something like the way a filing system stores documents within folders.
+    This implementation of the MailReader utilizes the second alternative.
+    We define User and Subscription objects on our base Action,
+    and add other properties only as needed.
 </p>
 
 <p>
-    Development teams often use frameworks like <a
-        href="http://www.objectstyle.org/cayenne/">Cayenne</a>
-    to map a relational database to a hierarchy of objects,
-    like the one used by MailReader.
-    For simplicity, the MailReader doesn't use a conventional database, but
-    saves its data as an XML file.
-    While the MailReader is running, the database is kept in main memory, and
-    written to back to disk when changed.
+    To add a new Subscription or User,
+    we create a blank object to capture whatever fields we can.
+    When this "input" object returns, we create a new object,
+    setting the immutable fields to appropriate values,
+    and copy over the rest of the properties.
 </p>
 
+<hr />
+<h5>copySubscription</h5>
+<pre><code>public void copySubscription(String host) {
+  Subscription input = getSubscription();
+  Subscription sub = createSubscription(host);
+  if (null != sub) {
+    BeanUtils.setValues(sub, input, null);
+    setSubscription(sub);
+    setHost(sub.getHost());
+  }
+}</code></pre>
+
 <p>
-    In addition to the usual getters and setters,
-    the user object also has two methods for working with subscription
-    objects.
-    The <strong>findSubscription</strong> method takes a hostname and returns
-    the subscription object for that host.
-    The <strong>getSubscriptions</strong> method returns an array of all the
-    subscriptions for the user
-    (ready-made for the iterate tag!).
-    Besides the fields needed to manage the SubscriptionForm data,
-    the object also maintains a runtime link to its own user object.
+    Of course, this is not a preferred solution,
+    but merely a way to work around an issue in the MailReader DAO API
+    that would not be easy for us change.
 </p>
 
+<h3>Summary</h3>
 <p>
-    To create a new subscription,
-    SubscriptionAction.java simply creates a new subscription object,
-    and sets its user to the object found in the request,
-    and then forwards control to its input form, Subscription.jsp.
+    At this point, we've booted the application, logged on,
+    reviewed a Registeration record, and edited a Subscription.
+    Of course, there's more, but from here on, it is mostly more of the same.
+    The full source code for MailReader is
+    <a href="http://svn.apache.org/viewcvs.cgi/struts/sandbox/trunk/action2/apps/mailreader/">available online</a>
+    and in the distribution.
 </p>
 
-<h3><a name="subcription.jsp" id="subcription.jsp">Subscription.jsp</a></h3>
-
-<p>
-    Saving the best for last, Subscription.jsp utilizes two interesting Struts
-    custom form tags,
-    "html:options" and "html:checkbox".
-
-<p>
-    In Registration.jsp, the Struts iteration tag was used to write a list of
-    subscriptions.
-    Another place where iterations and collections are handy is the option
-    list for a HTML select tag.
-    Since this is such a common situation, Struts offers a html:options
-    (plural) tag
-    that can take an array of objects as a parameter.
-    The tag then iterates over the members of the array (beans) to place each
-    one inside an standard option tag.
-    So given a block like</p>
-
-<pre><code>&lt;html:select property="type"&gt;
-    &lt;html:options
-    collection="serverTypes"
-    property="value"
-    labelProperty="label" /&gt;
-    &lt;/html:select&gt;</code></pre>
-
-<p>The tag outputs a block like</p>
-
-<pre><code>&lt;select name="type"&gt;
-    &lt;option value="imap" selected&gt;IMAP Protocol&lt;/option&gt;
-    &lt;option value="pop3"&gt;POP3 Protocol&lt;/option&gt;
-    &lt;/select&gt;</code></pre>
-
-<p>
-    Here, one collection contained both the labels and the values, from
-    properties of the same name.
-    Options can also use a second array for the labels, if they do not match
-    the values.
-    Options can use a Collection, Iterator, or Map for the source of the list.
-</p>
-
-<p>
-    Unlike other data, the serverTypes array is not fetched from the database.
-    Instead, it is loaded by a Struts plugin.
-    The <strong>DigestingPlugin</strong> parses an XML document using a given
-    set of Digester rules.
-    The MailReader uses a set of rules for "LabelValueBeans" to create a list
-    of server types.
-</p>
-
-<hr/>
-<h5>Tip:</h5>
-<blockquote>
-    <p><font class="hint">
-        <strong>LabelValueBeans</strong> -
-        Many developers find the LabelValueBeans useful,
-        so the class is available in the Struts Action distribution as
-        [org.apache.struts.util.LabelValueBean].
-    </font></p>
-</blockquote>
-<hr/>
-
-<p>
-    The plugin stores the list is stored in application scope.
-    Since the Struts custom tags, like standard JSP tags, search the scopes in
-    succession,
-    the tag finds the list in application scope and uses it to write out the
-    options.
-</p>
-
-
-<h4><a name="SubscriptionForm.java" id="SubscriptionForm.java">SubscriptionForm.java</a>
-</h4>
-
-<p>
-    Back in Subscription.jsp, we have one more block to cover.
-    Although the same basic form can be used to created, edit, or delete a
-    subscription,
-    people might expect the buttons to be labeled differently in each case.
-    Like the Registration page, the Subscription page handles customization
-    by using a logic tag to output a different set of buttons for each case.
-    Changing buttons doesn't really change the way the Subscription page
-    works,
-    but customizing the buttons does make things less confusing for the user.
-</p>
-
-<pre><code>&lt;logic:equal
-    name="SubscriptionForm"
-    <strong>property="task"</strong>
-    scope="request"
-    value="Create"&gt;
-    &lt;html:submit&gt;
-    <b>&lt;bean:message key="button.save"/&gt;<br/></b> &lt;/html:submit&gt;
-    &lt;/logic:equal&gt;</code></pre>
-
-<p>
-    In the case of a request to delete a subscription,
-    the submit button is labeled "Confirm", since this view is meant to give
-    the user a last chance to cancel,
-    before sending that task along to SaveSubscriptionAction.java.
-</p>
-
-<p>
-    The actual task property is placed into the form as a hidden field,
-    and SaveSubscriptionAction uses that property to execute the appropriate
-    task.
-</p>
-
-<h4><a name="SubscriptionAction.java" id="SubscriptionAction.java">SubscriptionAction.java</a>
-</h4>
-
-<p>
-    Our final stop has the job of finishing what SubscriptionAction.Edit
-    started.
-    After the usual logic and error checking,
-    The SubscriptionAction.Save method either deletes or updates
-    the subscription object being handled by this request,
-    and cleans up the bean, just to be tidy.
-    By now, you should be very comfortable reading through the source on your
-    own, to pickup the finer points.
-</p>
-
-<hr/>
-<h5>SubscriptionAction.Save</h5>
-<pre><code> public ActionForward <strong>Save</strong>(
-    ActionMapping mapping,
-    ActionForm form,
-    HttpServletRequest request,
-    HttpServletResponse response)
-    throws Exception {
-
-    final String method = Constants.SAVE;
-    doLogProcess(mapping,method);
-
-    User user = doGetUser(request);
-    if (user == null) {
-    return doFindLogon(mapping);
-    }
-
-    HttpSession session = request.getSession();
-    if (isCancelled(request)) {
-    <strong>doCancel</strong>(session,method,Constants.SUBSCRIPTION_KEY);
-    return doFindSuccess(mapping);
-    }
-
-    String action = doGet(form,TASK);
-    Subscription subscription = <strong>doGetSubscription</strong>(request);
-    boolean isDelete = action.equals(Constants.DELETE);
-    if (isDelete) {
-    return <strong>doRemoveSubscription</strong>
-    (mapping,session,user,subscription);
-    }
-
-    if (subscription==null) {
-    subscription = <strong>user.createSubscription</strong>(doGet(form,HOST));
-    session.setAttribute(Constants.SUBSCRIPTION_KEY,subscription);
-    }
-
-    doPopulate(subscription,form);
-    <strong>doSaveUser</strong>(user);
-    session.removeAttribute(Constants.SUBSCRIPTION_KEY);
-
-    return doFindSuccess(mapping);
-    }</code></pre>
-<hr/>
-
-<p>
-    This concludes our tour.
-    To review, you may wish to trace the path a new user takes
-    when they register with the application for the first time.
-    You should also read over each of the .java and JSP files carefully,
-    since we only covered the high points here.
-</p>
-
-<h3><a name="Review" id="Review">Review</a></h3>
-
-<ul>
-    <li>Struts uses a single controller servlet to route HTTP requests.</li>
-
-    <li>The requests are routed to action objects according to path (or
-        URI).</li>
-
-    <li>Each request is handled as a separate thread</li>
-
-    <li>There is only one object for each action (URI), so your action objects
-        must be multi-thread safe.</li>
-
-    <li>The configuration of action objects are loaded from a XML resource
-        file, rather than hardcoded.</li>
-
-    <li>Action objects can respond to the request, or ask the controller to
-        forward the request to another object or to another page, such as an
-        input form.</li>
-
-    <li>A library of custom tags works with the rest of the framework to
-        enhance use of JavaServer Pages.</li>
-
-    <li>The Struts form tag can work closely with an action objects via a
-        Struts ActionFormBean to retain the state of a data-entry form, and
-        validate the data entered.</li>
-
-    <li>ActionForm beans can be automatically created by the JSP form or
-        controller servlet.</li>
-
-    <li>Struts supports a message resource for loading constants strings.
-        Alternate message resources can be provided to internationalize an
-        application.</li>
-</ul>
-<hr/>
-</blockquote>
 </body>
 </html>
