@@ -5,7 +5,7 @@ package mailreader2;
  */
 public class Welcome extends MailreaderSupport {
 
-    public String execute() throws Exception {
+    public String execute() {
 
         // Confirm message resources loaded
         String message = getText(Constants.ERROR_DATABASE_MISSING);

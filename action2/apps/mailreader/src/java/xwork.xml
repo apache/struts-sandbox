@@ -32,11 +32,9 @@
         </global-results>
 
         <global-exception-mappings>
-
             <exception-mapping
                     result="error"
-                    exception="java.lang.Exception"/>
-
+                    exception="java.lang.Throwable"/>
         </global-exception-mappings>
 
         <action name="Welcome" class="mailreader2.Welcome">
@@ -59,10 +57,8 @@
             <result>/pages/ChangePassword.jsp</result>
         </action>
 
-        <!-- See note for Welcome -->
         <action name="MainMenu" class="mailreader2.MailreaderSupport">
             <result>/pages/MainMenu.jsp</result>
-            <result name="input">/pages/MainMenu.jsp</result>
         </action>
 
         <action name="Registration" class="mailreader2.Registration">

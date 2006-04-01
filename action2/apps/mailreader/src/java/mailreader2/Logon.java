@@ -26,7 +26,7 @@ import org.apache.struts.apps.mailreader.dao.ExpiredPasswordException;
  */
 public final class Logon extends MailreaderSupport {
 
-    public String execute() throws ExpiredPasswordException {
+    public String execute() throws ExpiredPasswordException  {
 
         User user = findUser(getUsername(), getPassword());
 
@@ -38,7 +38,7 @@ public final class Logon extends MailreaderSupport {
             return INPUT;
         }
 
-        return SUCCESS;
+       return SUCCESS;
 
     }
 

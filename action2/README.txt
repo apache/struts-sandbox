@@ -60,6 +60,13 @@ Select control.
 
 ----
 
+Hmmmm ... 
+
+* Are the validator objects singletons?
+
+
+----
+
 Example idea jar
 
 * See http://www.niallp.pwp.blueyonder.co.uk/strutsvalidatorextends.html
@@ -93,8 +100,8 @@ for some validation use cases.
 * Setting form type to "POST"
 ** (Should POST be the default?)
 
-* DRY UI Tags 
-** http://forums.opensymphony.com/thread.jspa?threadID=24140&tstart=0
+* Proxy Result 
+** http://forums.opensymphony.com/thread.jspa?threadID=23621&tstart=0
 
 ----
 
@@ -112,7 +119,12 @@ Examples that might involve new development
 *  Wizard
 ** http://forums.opensymphony.com/thread.jspa?threadID=23778&tstart=15
 
+* DRY UI Tags 
+** http://forums.opensymphony.com/thread.jspa?threadID=24140&tstart=0
 
+* Default package names 
+** Allow a default package name to be set for Action classes
+   so that .MyAction could resolve to org.mycorp.myapp.mypackage.MyAction 
 
 ----------------------------------------------------------------------------
 

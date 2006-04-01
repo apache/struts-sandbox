@@ -137,10 +137,10 @@ public class MailreaderSupport extends ActionSupport
     /**
      * <p>Store new workflow task.</p>
      *
-     * @param task The task to set.
+     * @param value The task to set.
      */
-    public void setTask(String task) {
-        task = task;
+    public void setTask(String value) {
+        task =  value;
     }
 
     // ---- Host property ----
