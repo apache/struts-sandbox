@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<document url="guess-example.html">
+
+  <properties>
+    <title>Struts Flow - Number Guess Example</title>
+  </properties>
+
+  <body>
+      <section name="Number Guessing Game Example">
+      <a name="overview"/>
+        <p>This example shows a number guessing game implemented with Struts Flow.  The goal is to show the basic concepts of continuations, so the example is kept simple.
+        There are basically three parts to the example: the flow code, the Struts config, and the JSP's that display the output.  
+        </p>
+      </section>
+      
+      <section name="Flow Code">
+      <a name="flow"/>
+        <p>The core of the number guessing game application is the NumberGuess controller.  This controller defines two actions, <code>play</code> and <code>endGame</code>.  Here is what the flow code looks like:
+        </p>
+<pre>
+GuessController = function() {
+  
+  this.play = function() {
+    this.random =  Math.round( Math.random() * 9 ) + 1;
+    this.hint = "No hint for you!"
+    this.guesses = 0;
+  
+    while (true) {
+      // send guess page to user and wait for response
+      flow.wait();
+    
+      // process user's guess
+      this.guess = parseInt( params.guess );
+      this.guesses++;
+      if (this.guess) {
+        if (this.guess > this.random) {
+          this.hint = "Nope, lower!"
+        } 
+        else if (this.guess &lt; this.random) {
+          this.hint = "Nope, higher!"
+        } 
+        else {
+          // correct guess
+          break;
+        }
+      }
+    }
+  
+    // send success page to user
+    flash.guesses = this.guesses;
+    flash.random = this.random;
+    flow.redirect( { "action" : "endGame" } );
+  }
+
+  this.endGame = function() {}
+}
+</pre>
+        <p>Notice in the <code>play()</code> function how the program loops until the number is guessed, even though pages are being sent to the 
+        browser to gather user input.  Once the number is guessed correctly, the number of guesses and correct number are stored in the "flash" object, which is a temporary storage location that allows you to pass data across redirects.  The framework handles storing the flash object in the session, then populating the controller variables from its contents on the very next user request.  Struts Flow also takes care of cleaning up the flash data from the session once it is used.</p>
+        
+    </section>
+  <section name="JSP Presentation">
+  <a name="jsp"/>
+  <p>
+        You might notice we aren't explicitly forwarding to any JSP pages.  Struts Flow will automatically forward the request to a JSP page with the same name as the action.  Therefore, when we "wait" in the <code>play()</code> action, the <code>views/guess/play.jsp</code> page is shown.
+        </p>
+        <p>To gather the user's guess, <code>play.jsp</code> generates a form:</p>
+<pre>
+&lt;html>
+&lt;head>
+  &lt;title>Struts Flow number guessing game&lt;/title>
+&lt;/head>
+&lt;body>
+
+  &lt;h1>Guess the Number Between 1 and 10&lt;/h1>
+  
+  &lt;h2>&lt;%= request.getAttribute("hint") %>&lt;/h2>
+  
+  &lt;h3>You've guessed &lt;%= request.getAttribute("guesses") %> times.&lt;/h3>
+  
+  &lt;form method="post" action="play.do">
+    &lt;input type="hidden" name="contid" value='&lt;%= request.getAttribute("contid") %>' />
+    &lt;input type="text" name="guess"/>
+    &lt;input type="submit"/>
+  &lt;/form>
+  
+&lt;/body>
+&lt;/html>
+</pre>
+<p>The hidden input variable <code>contid</code> stores the continuation to load from when the form gets submitted.</p>
+        <p>
+        And that's it!  There are no Struts configuration files to write, no flow transition files to keep in sync.  To add new pages to the application, like a high score list, just add a new function to the controller and its JSP page.
+        </p>
+      </section>
+  </body>
+</document>

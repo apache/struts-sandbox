@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE struts-config PUBLIC
+          "-//Apache Software Foundation//DTD Struts Configuration 1.3//EN"
+          "http://struts.apache.org/dtds/struts-config_1_3.dtd">
+
+<struts-config>
+
+  <!-- 
+
+    This is a default Struts configuration file that can be used by itself
+    for simple applications, or as a starting point for others.  It defines
+    several wildcard mappings that should handle most requests without
+    modification.
+
+  -->
+  <action-mappings>
+
+    <action path="/*/*/*" type="org.apache.struts.flow.FlowAction">
+      <set-property key="controller" value="{1}" />
+      <set-property key="function" value="{2}" />
+      <set-property key="id" value="{3}" />
+      <set-property key="script" value="$M/controllers/$CController.js" />
+      
+      <forward name="forward" path="/WEB-INF$M/views/$C/$A.jsp" />
+      <forward name="redirect" path="$M/$C/$A.do" redirect="true" /> 
+    </action>
+    
+    <action path="/*/*" extends="/*/*/*" />
+ </action-mappings>   
+
+ <controller forwardPattern="$P" />
+
+ <plug-in className="org.apache.struts.flow.FlowPlugIn">
+    <set-property property="scriptBase" value="/WEB-INF" />
+    <set-property property="debugger" value="false" />
+    <set-property property="reloadScripts" value="true" />
+    <set-property property="timeToLive" value="600000" />
+  </plug-in>
+
+
+</struts-config>

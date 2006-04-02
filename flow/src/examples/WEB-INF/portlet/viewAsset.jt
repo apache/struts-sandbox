@@ -1,0 +1,31 @@
+<h2>${xml.system.@nomenclature} ${xml.system.@name}</h2>
+
+<p>${xml.system.@description}</p>
+
+<h3>METOC Thresholds</h3>
+<table>
+  <tr>
+    <th>ID</th>
+    <th>Impact</th>
+    <th>Severity</th>
+    <th>Threshold</th>
+  </tr>
+  {for rule in xml..rule}
+  <tr>
+    <td>${rule.@key}</td>
+    <td>${rule.@condensedImpact}</td>
+    <td>{if parseInt(rule.@weight)==1}
+        Severe
+        {else}
+        Marginal
+        {/if}
+        </td>
+    <td>${rule.limit[0].@metocParameter} ${rule.limit[0].@operator} ${rule.limit[0].@value}</td>
+  </tr>
+  {/for}  
+</table>  
+
+<p>
+<a href="${renderUrl()}">Back</a>
+</p>
+

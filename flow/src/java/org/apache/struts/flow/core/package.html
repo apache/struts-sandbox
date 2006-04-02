@@ -1,0 +1,17 @@
+<html>
+<head>
+    <title>Flow Implementation</title>
+</head>
+<body>
+    <p>Extracted from <a href="http://cocoon.apache.org">Apache Cocoon</a>, this Flow implementation uses  
+    Mozilla's Rhino JavaScript interpreter, and <a href="http://jakarta.apache.org/commons/sandbox/chain">commons-chain</a> to enable continuations-based processing.  The use of    this library is not limited to the Servlet API or even web applications, although they generally need the     forrested continuation trees most, which allow the Flow to properly handle starting previous continuations like    in the case of the browser back button.
+    </p>
+    <p>
+    In Rhino a continuation is a JavaScript object that represents a snapshot of the state of an executing Rhino script -- i.e the current call-stack -- including each call-frame's program counter and local variables.  Captured continuation does not save the state of the variables, but rather pointers to the variables. Example: two continuations will share one instance of the local variable declared in the function, if those two continuations were created during execution of the same call of this function.
+    </p>
+    <p>
+    The term "Continuation" (borrowed from Scheme) is used because it represents the rest of, or the "continuation" of, a program. Each time you call a function, there is an implicit continuation -- the place where the function should return to. A JavaScript Continuation object provides a way to bind that implicit continuation to a name and keep hold of it. If you don't do anything with the named continuation, the program will eventually invoke it anyway when the function returns and passes control to its caller. Now that it's named, however, you could invoke the continuation earlier than normal, or you could invoke it later (after it has already been invoked by the normal control flow). In the early case, the effect is a non-local exit. In the later case, it's more like returning from the same function more than once.
+    </p>
+</body>
+</html>
+    

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap
+    PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
+    "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="System">
+
+  <resultMap id="result1" class="java.util.HashMap">
+    <result property="id" column="systemid" />
+    <result property="name" column="systemname" />
+  </resultMap>
+
+  <select id="getAll" parameterClass="java.util.Map" resultMap="result1">
+    select systemid, systemname
+    from
+      system
+  </select>
+</sqlMap>

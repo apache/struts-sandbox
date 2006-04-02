@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
+<web-app>
+  <!-- Action Servlet Configuration -->
+  <servlet>
+    <servlet-name>action</servlet-name>
+    <servlet-class>org.apache.struts.action.ActionServlet</servlet-class>
+    <init-param>
+      <param-name>config</param-name>
+      <param-value>org/apache/struts/flow/struts-config.xml</param-value>
+    </init-param>
+    <init-param>
+      <param-name>config/guess</param-name>
+      <param-value>org/apache/struts/flow/struts-config.xml</param-value>
+    </init-param>
+    <init-param>
+      <param-name>config/remote</param-name>
+      <param-value>org/apache/struts/flow/struts-config.xml</param-value>
+    </init-param>
+    <init-param>
+      <param-name>config/templates</param-name>
+      <param-value>org/apache/struts/flow/struts-config.xml</param-value>
+    </init-param>
+     <init-param>
+      <param-name>config/wizard</param-name>
+      <param-value>org/apache/struts/flow/struts-config.xml</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+   <servlet>
+        <servlet-name>FlowPortlet</servlet-name>
+        <display-name>FlowPortlet Wrapper</display-name>
+        <description>Automated generated Portlet Wrapper</description>
+        <servlet-class>org.apache.pluto.core.PortletServlet</servlet-class>
+        <init-param>
+            <param-name>portlet-guid</param-name>
+            <param-value>examples.FlowPortlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>portlet-class</param-name>
+            <param-value>org.apache.struts.flow.portlet.FlowPortlet</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>FlowPortlet</servlet-name>
+        <url-pattern>/FlowPortlet/*</url-pattern>
+    </servlet-mapping>
+
+  <!-- Action Servlet Mapping -->
+  <servlet-mapping>
+    <servlet-name>action</servlet-name>
+    <url-pattern>*.do</url-pattern>
+  </servlet-mapping>
+</web-app>

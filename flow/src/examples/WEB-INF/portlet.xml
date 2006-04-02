@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd" version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd">
+	<portlet>
+	  <description>Struts Flow Examples</description>
+		<portlet-name>FlowPortlet</portlet-name>
+		<display-name>Struts Flow Examples</display-name>
+		
+		<portlet-class>org.apache.struts.flow.portlet.FlowPortlet</portlet-class>
+	
+		<init-param>
+		  <name>path</name>
+		  <value>/WEB-INF/portlet/numberguess.js</value>
+		</init-param>
+
+		<expiration-cache>-1</expiration-cache>
+		        
+    <supports>
+			<mime-type>text/html</mime-type>
+      <portlet-mode>VIEW</portlet-mode>
+			<portlet-mode>HELP</portlet-mode>
+     </supports>
+
+		<supported-locale>en</supported-locale>        
+
+		<portlet-info>
+			<title>Struts Flow Examples</title>
+			<short-title>Struts Flow Examples</short-title>
+			<keywords>Examples</keywords>
+		</portlet-info>
+	</portlet>
+</portlet-app>

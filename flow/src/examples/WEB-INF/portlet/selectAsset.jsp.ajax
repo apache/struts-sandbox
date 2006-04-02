@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<%@ taglib uri="http://java.sun.com/portlet" prefix="portlet" %>
+<portlet:defineObjects/>
+
+  <h1>Select Asset</h1>
+  
+          <script src="<%=request.getContextPath()+response.encodeURL("/js/vcXMLRPC.js")%>" />
+          <script src="<%=request.getContextPath()+response.encodeURL("/js/finders.js")%>" />
+            <table cellspacing="2" cellpadding="3">
+              <tr>
+                  <td class="property">
+                      Asset search
+                  </td>
+                  <td>
+                    <form name="find">
+                        <input name="name" type="text" size="15" />&#160;
+                        <input type="button" value="Search" onclick="findNames(form.name.value, document.forms['list'].SystemKey, 'asset',  true, []);" />
+                    </form>    
+                  </td>
+              </tr>
+              <tr>
+                <td class="property">
+                  Choose an asset
+                </td>
+                <td>
+                  <form name="list" >
+                      <select name="SystemKey">
+                        <option value="">---- Assets ------</option>
+                      </select>&#160;
+                      <input type="submit" value="View" />
+                  </form>
+                </td>
+              </tr>
+            </table>
+
+  <h2><%= request.getAttribute("hint") %></h2>
+  
+  <h3>You've guessed <%= request.getAttribute("guesses") %> times.</h3>
+   
+<portlet:renderURL var="submitUrl"> 
+  <portlet:param name="contid" value="<%= String.valueOf(request.getAttribute("contid")) %>"/> 
+</portlet:renderURL>
+
+<form action="<%=submitUrl%>"> 
+    <input type="text" name="guess"/>
+    <input type="submit"/>
+  </form>

@@ -1,0 +1,37 @@
+
+  <h2>Select Asset</h2>
+  
+            <table cellspacing="2" cellpadding="3">
+              <tr>
+                  <td class="property">
+                      Asset search
+                  </td>
+                  <td>
+                    <form method="GET" action="${%renderUrl({params:{contid:contid}})%}">
+                        <input name="name" type="text" size="15" />&#160;
+                        <input type="submit" value="Search" />
+                    </form>    
+                  </td>
+              </tr>
+              {if this["assets"]}
+              <tr>
+                <td class="property">
+                  Choose an asset
+                </td>
+                <td>
+                  <form method="GET" action="${%renderUrl({params:{contid:contid}})%}" >
+                      <select name="SystemKey">
+
+                        {for x in assets}
+                            <option value="${x}">${x_index}</option>
+                        {forelse}
+                            <option value="">---- No assets found ------</option>
+                        {/for}
+                      </select>&#160;
+                      <input type="submit" value="View" />
+                  </form>
+                </td>
+              </tr>
+              {/if}
+            </table>
+

@@ -1,0 +1,11 @@
+  <h1>Find Asset</h1>
+  
+<ul>
+{for r in xml..rule}
+  <li>${r.@condensedImpact} - ${r.@fullImpact}</li>
+{/for}  
+</ul>
+
+${xml.request.param.(@name=="debug").value}
+
+<br />

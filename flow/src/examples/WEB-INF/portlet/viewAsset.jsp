@@ -1,0 +1,2 @@
+<%=request.getAttribute("body")%>
+

@@ -1,0 +1,1 @@
+The secret number is ${secret}. After applying a penalty, you have guessed ${guesses} times.

@@ -1,0 +1,143 @@
+<?xml version="1.0"?>
+<document url="remote-example.html">
+
+  <properties>
+    <title>Struts Flow - Templates Example</title>
+  </properties>
+
+  <body>
+      <section name="Number Guess Example - Template Edition">
+      <a name="overview"/>
+        <p>This example shows the remote version of the number guessing game demonstrated in the <a
+        href="remote-example.html">previous example</a>, but now we change the server side to use <a
+        href="http://www.trimpath.com/project/wiki/JavaScriptTemplates">Javascript Templates</a> instead of JSP to
+        render the HTML page, and use <a href="http://www.trimpath.com/project/wiki/JavaScriptTemplates">Javascript
+        Templates</a> to render the cheat message as well.  
+        </p>
+        <p>
+        The end result is a 100% Javascript application from the client and server-side logic to the templating language
+        used to create HTML content, again both on the server and client-side. This allows the Java developer to create
+        the backend application exposing a set of reusable services or interfaces which have no dependency on Servlets
+        or any other presentation library. From those services, the web developer can create the entire view layer in
+        Javascript, both server and client portions. No more complicated JSP with tons of scriptlets the Java developer has
+        to help with. The <a href="http://www.trimpath.com/project/wiki/JavaScriptTemplates">Javascript Templates</a> is
+        a very concise and easy to use template language that makes HTML content generation easy and consistent,
+        allowing you to split up the application function between server and client side based on requirements and not
+        on levels of expertise.
+        </p>
+        <p>
+        In this example, the cheat message is displayed where the hint usually is rather than as a popup. The Javascript
+        on both the server and client are new as are the <a
+        href="http://www.trimpath.com/project/wiki/JavaScriptTemplates">Javascript Templates</a>.
+        </p>
+      </section>
+      <section name="Flow Code">
+      <a name="flow"/>
+        <p>The usual number guessing flow code has been modified to intercept the Struts forward and render the code
+        directly. Here is what the new parts of the flow code looks like:
+        </p>
+<pre>
+flow.load("/templates/template.js");
+
+...
+    // Change our endGame action to render a template
+    this.endGame = function() {
+        renderTemplate("endGame", this);
+    }
+...
+
+// This function renders the content directly using Javascript Templates
+function renderTemplateAndWait(page, bizdata, ttl) {
+    var cont = new FOM_WebContinuation(new Continuation(), flow.continuation, ttl);
+    bizdata.contid = cont.id;
+    renderTemplate(page, bizdata);
+    flow.forward(null, bizdata, cont);
+    FOM_Flow.suicide();
+}
+
+function renderTemplate(page, bizdata) {
+    var res = flow.context.response;
+    var stream = struts.servletContext.getResourceAsStream("/WEB-INF/templates/views/guess/"+page+".jt");
+    if (stream != null) {
+        var text = new String(stream.getText());
+        var html = text.process(bizdata);
+        res.writer.print(html);
+        res.writer.close();
+    } else {
+        res.sendError(res.SC_INTERNAL_SERVER_ERROR, "Unable to find page "+page);
+    }
+}
+
+// Replace the usual implementation with ours that renders the template before forwarding
+FOM_Flow.prototype._wait=renderTemplateAndWait;
+</pre>
+        <p>The <code>_wait()</code> function is an internal function that Struts Flow calls to do the actual
+        forward and continuation creation. We are replacing it as the <code>wait()</code> function has useful
+        logic for handling remote function calls that we don't want to duplicate. This process will most likely change
+        as Javascript Templates are better integrated into Struts Flow. Our new <code>renderTemplate()</code> function
+        ensures it is a real page request then generates the HTML by processing the passed template page and data.</p>
+    </section>
+ <section name="Javascript Templates Presentation (Server Side)">
+ <a name="jt"/>
+        <p>The <code>play.jsp</code> has been replaced by <code>play.jt</code> which has basically the same content,
+        but follows the Javascript Templates format rather than JSP. The client-side <code>cheat()</code> function
+        retrieves the <code>cheat.jt</code> template on the server, then uses it to process the results from the
+        server-side <code>cheat()</code> remote function call. The results of the template processing replace the hint
+        message.</p>
+        <p>This is what our new <code>play.jt</code> template looks like:</p>
+<pre>
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;Struts Flow number guessing game&lt;/title&gt;
+    &lt;script type="text/javascript"&gt;
+  &lt;!--
+function cheat() {
+    hint = document.getElementById("hint");
+    
+    dojo.io.bind({
+        url:  'play.do?FlowCall=cheat&amp;contid=${contid}',
+        type: "text/javascript",
+        load: function(type, data, evt) {
+            eval("data = "+data);
+            dojo.io.bind({
+                url:  "../cheat.jt",
+                type: "text/plain",
+                load: function(type, temp, evt) {
+                    hint.innerHTML = temp.process(data);
+                }
+            });
+        }
+    });
+}
+    --&gt;
+  &lt;/script&gt;
+  &lt;script type="text/javascript" src="../../remote/dojo-io.js"&gt;&lt;/script&gt;
+  &lt;script type="text/javascript" src="../template.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+  &lt;h1&gt;Guess the Number Between 1 and 10&lt;/h1&gt;
+  
+  &lt;h2 id="hint"&gt;${hint}&lt;/h2&gt;
+  
+  &lt;h3&gt;You've guessed ${guesses} times.&lt;/h3&gt;
+  
+  &lt;form method="post" action="play.do"&gt;
+    &lt;input type="hidden" name="contid" value="${contid}" /&gt;
+    &lt;input type="text" name="guess"/&gt;
+    &lt;input type="submit"/&gt;
+    &lt;input type="button" onclick="cheat()" value="Cheat" /&gt;
+  &lt;/form&gt;
+  
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p>What is not obvious is Javascript Templates adds a <code>process()</code> function to the String object which allows us to process the response text of the <code>cheat.jt</code> call directly.  The <code>cheat.jt</code> file looks like this:
+</p>
+<pre>
+The secret number is ${secret}. After applying a penalty, you have guessed ${guesses} times.
+</pre>
+        
+      </section>
+  </body>
+</document>

@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<html>
+<head>
+  <title>Struts Flow number guessing game</title>
+    <script type="text/javascript">
+  <!--
+function cheat() {
+    hint = document.getElementById("hint");
+    
+    dojo.io.bind({
+        url:  'play.do?FlowCall=cheat&contid=${contid}',
+        type: "text/javascript",
+        load: function(type, data, evt) {
+            eval("data = "+data);
+            dojo.io.bind({
+                url:  "../cheat.jt",
+                type: "text/plain",
+                load: function(type, temp, evt) {
+                    hint.innerHTML = temp.process(data);
+                }
+            });
+        }
+    });
+}
+    -->
+  </script>
+  <script type="text/javascript" src="../../remote/dojo-io.js"></script>
+  <script type="text/javascript" src="../template.js"></script>
+</head>
+<body>
+
+  <h1>Guess the Number Between 1 and 10</h1>
+  
+  <h2 id="hint">${hint}</h2>
+  
+  <h3>You've guessed ${guesses} times.</h3>
+  
+  <form method="post" action="play.do">
+    <input type="hidden" name="contid" value="${contid}" />
+    <input type="text" name="guess"/>
+    <input type="submit"/>
+    <input type="button" onclick="cheat()" value="Cheat" />
+  </form>
+  
+  <a href="../../index.html">Return to index</a>  
+  
+</body>
+</html>
