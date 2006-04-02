@@ -131,7 +131,7 @@ Examples that might involve new development
 STATUS - MAILREADER
 
 * Feature complete, but some marginal issue remain. 
-* Working on Tour
+* Could use a screen shot next to the code for each page.
 
 ----
 

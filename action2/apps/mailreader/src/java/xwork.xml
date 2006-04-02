@@ -14,11 +14,6 @@
                 <interceptor-ref name="defaultStack"/>
             </interceptor-stack>
 
-            <interceptor-stack name="submit">
-                <interceptor-ref name="token-session" />
-                <interceptor-ref name="access" />
-            </interceptor-stack>
-
         </interceptors>
 
         <default-interceptor-ref name="access"/>
@@ -64,12 +59,14 @@
         <action name="Registration" class="mailreader2.Registration">
             <result name="input">/pages/Registration.jsp</result>
             <result type="redirect-action">MainMenu</result>
+            <interceptor-ref name="defaultStack"/>
         </action>
 
         <action name="RegistrationSave" class="mailreader2.RegistrationSave">
             <result name="input">/pages/Registration.jsp</result>
             <result type="redirect-action">MainMenu</result>
-            <interceptor-ref name="submit" />
+            <interceptor-ref name="token-session" />
+            <interceptor-ref name="defaultStack"/>
         </action>
 
         <action name="Subscription" class="mailreader2.Subscription">
@@ -78,9 +75,10 @@
         </action>
 
         <action name="SubscriptionSave" class="mailreader2.SubscriptionSave">
-            <interceptor-ref name="submit" />
             <result name="input">/pages/Subscription.jsp</result>
             <result type="redirect-action">Registration!input</result>
+            <interceptor-ref name="token-session" />
+            <interceptor-ref name="access"/>
         </action>
 
         <action name="Logoff" class="mailreader2.Logoff">

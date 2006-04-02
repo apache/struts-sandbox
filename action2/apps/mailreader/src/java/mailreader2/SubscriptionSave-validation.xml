@@ -2,12 +2,6 @@
 
 <validators>
 
-    <field name="host">
-        <field-validator type="requiredstring">
-            <message key="error.host.required"/>
-        </field-validator>
-    </field>
-
     <field name="subscription.username">
         <field-validator type="requiredstring">
             <message key="error.username.required"/>
