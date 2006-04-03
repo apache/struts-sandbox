@@ -507,7 +507,8 @@ public class MailreaderSupport extends ActionSupport
         sub = findSubscription(host);
 
         if (null != sub) {
-            this.addFieldError("host", "error.host.unique");
+            // FIXME - localization - "error.host.unique")
+            addFieldError(Constants.HOST,"That hostname is already defined");
             return null;
         }
 
@@ -535,10 +536,8 @@ public class MailreaderSupport extends ActionSupport
 
     /**
      * <p>Delete the current Subscription object from the database.</p>
-     *
-     * @throws Exception
      */
-    public void removeSubscription() throws Exception {
+    public void removeSubscription()  {
         getUser().removeSubscription(getSubscription());
         getSession().remove(Constants.SUBSCRIPTION_KEY);
     }

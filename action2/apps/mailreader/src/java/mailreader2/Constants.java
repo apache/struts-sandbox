@@ -52,17 +52,6 @@ public final class Constants {
     public static final String EDIT = "Edit";
 
     /**
-     * <p> The token representing a "failure" result for this application.
-     * </p>
-     */
-    public static final String FAILURE = "Failure";
-
-    /**
-     * <p> The token representing a "logon" result for this application. </p>
-     */
-    public static final String LOGON = "Logon";
-
-    /**
      * <p> The package name for this application. </p>
      */
     public static final String PACKAGE = "org.apache.struts.apps.mailreader";
@@ -74,17 +63,17 @@ public final class Constants {
     public static final String SUBSCRIPTION_KEY = "subscription";
 
     /**
-     * <p> The token representing a "success" result for this application.
-     * </p>
-     */
-    public static final String SUCCESS = "Success";
-
-    /**
      * <p> The session scope attribute under which the User object for the
      * currently logged in user is stored. </p>
      */
     public static final String USER_KEY = "user";
 
+    /**
+     * <p>The token representing the "Host" property.
+     */
+    public static final String HOST = "host";
+
+    
     // ---- Error Messages ----
 
     /**

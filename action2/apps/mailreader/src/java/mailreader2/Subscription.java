@@ -116,6 +116,8 @@ public class Subscription extends MailreaderSupport
             copySubscription(getHost());
         }
 
+        if (hasErrors()) return INPUT;
+        
         saveUser();
         return SUCCESS;
     }

@@ -7,16 +7,31 @@
 
         <interceptors>
 
-            <interceptor name="authenticate" class="mailreader2.AuthenticationInterceptor"/>
+            <interceptor name="authentication"
+                         class="mailreader2.AuthenticationInterceptor"/>
 
-            <interceptor-stack name="access" >
-                <interceptor-ref name="authenticate" />
+            <interceptor-stack name="user" >
+                <interceptor-ref name="authentication" />
                 <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+
+            <interceptor-stack name="user-submit" >
+                <interceptor-ref name="token-session" />
+                <interceptor-ref name="user"/>
+            </interceptor-stack>
+
+            <interceptor-stack name="guest" >
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+
+            <interceptor-stack name="guest-submit" >
+                <interceptor-ref name="token-session" />
+                <interceptor-ref name="guest"/>
             </interceptor-stack>
 
         </interceptors>
 
-        <default-interceptor-ref name="access"/>
+        <default-interceptor-ref name="user"/>
         
         <default-action-ref name="Welcome"/>
 
@@ -34,7 +49,7 @@
 
         <action name="Welcome" class="mailreader2.Welcome">
             <result>/pages/Welcome.jsp</result>
-            <interceptor-ref name="defaultStack"/>
+            <interceptor-ref name="guest"/>
         </action>
 
         <action name="Logon" class="mailreader2.Logon">
@@ -45,7 +60,7 @@
             <exception-mapping
                     exception="org.apache.struts.apps.mailreader.dao.ExpiredPasswordException"
                     result="expired"/>
-            <interceptor-ref name="defaultStack"/>
+            <interceptor-ref name="guest"/>
         </action>
 
         <action name="ChangePassword">
@@ -59,14 +74,13 @@
         <action name="Registration" class="mailreader2.Registration">
             <result name="input">/pages/Registration.jsp</result>
             <result type="redirect-action">MainMenu</result>
-            <interceptor-ref name="defaultStack"/>
+            <interceptor-ref name="guest"/>
         </action>
 
         <action name="RegistrationSave" class="mailreader2.RegistrationSave">
             <result name="input">/pages/Registration.jsp</result>
             <result type="redirect-action">MainMenu</result>
-            <interceptor-ref name="token-session" />
-            <interceptor-ref name="defaultStack"/>
+            <interceptor-ref name="guest-submit" />
         </action>
 
         <action name="Subscription" class="mailreader2.Subscription">
@@ -77,8 +91,7 @@
         <action name="SubscriptionSave" class="mailreader2.SubscriptionSave">
             <result name="input">/pages/Subscription.jsp</result>
             <result type="redirect-action">Registration!input</result>
-            <interceptor-ref name="token-session" />
-            <interceptor-ref name="access"/>
+            <interceptor-ref name="user-submit" />
         </action>
 
         <action name="Logoff" class="mailreader2.Logoff">
@@ -87,7 +100,7 @@
 
         <action name="Tour">
             <result>/pages/tour.html</result>
-            <interceptor-ref name="defaultStack"/>
+            <interceptor-ref name="guest"/>
         </action>
 
     </package>

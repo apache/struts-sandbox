@@ -95,7 +95,7 @@
     <li>
         <a href="#Registration.jsp">Registration page</a>
         <ul>
-            <li><a href="iterator">iterator</a></li>
+            <li><a href="#iterator">iterator</a></li>
         </ul>
     </li>
 </ul>
@@ -299,7 +299,7 @@
 </p>
 <hr/>
 <h5>A simple "forward thru" action element</h5>
-<pre><code>&lt;action name="<strong>>Welcome</strong>">
+<pre><code>&lt;action name="<strong>Welcome</strong>">
   &lt;result><strong>/pages/Welcome.jsp</strong>&lt;/result>
 &lt;/action></code></pre>
 <hr/>
@@ -320,8 +320,8 @@
 <hr/>
 <h5>The Welcome action element</h5>
 <pre><code>&lt;action name="Welcome" <b>class="mailreader2.Welcome"</b>>
-    <strong>&lt;interceptor-ref name="defaultStack"/></strong>
     &lt;result>/pages/Welcome.jsp&lt;/result>
+    <strong>&lt;interceptor-ref name="guest"/></strong>
     &lt;/action></code></pre>
 <hr/>
 
@@ -1082,12 +1082,11 @@ public void setUser(User user) {
 <pre><code>private Map session;
 public Map <strong>getSession()</strong> {
   return session;
-}
-<hr />
 
 public void <strong>setSession(Map value)</strong> {
   session = value;
 }</code></pre>
+<hr />
 
 <p>
     To look at the MailreaderSupport class, you would think the Session property is a plain-old Map.
@@ -1219,7 +1218,7 @@ public void <strong>setSession(Map value)</strong> {
   &lt;<strong>exception-mapping</strong>
     exception="org.apache.struts.apps.mailreader.dao.ExpiredPasswordException"
   result="<strong>expired</strong>"/>
-  &lt;interceptor-ref name="<strong>defaultStack</strong>"/>
+  &lt;interceptor-ref name="<strong>guest</strong>"/>
 &lt;/action></code></pre>
 <hr/>
 
@@ -1363,33 +1362,40 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor {
 </p>
 
 <p>
-    The MailReader defines two custom Interceptor stacks, <strong>access</strong>
-    and <strong>submit</strong>, and sets the default-interceptor to "access".
+    The MailReader defines four custom Interceptor stacks: "user", "user-submit",
+    "guest", and "guest-submit".
 </p>
 
 <hr/>
 <h5>xwork.xml interceptors</h5>
 <pre><code>&lt;interceptors>
-  &lt;interceptor name="<strong>authenticate</strong>" class="mailreader2.AuthenticationInterceptor"/>
-  &lt;interceptor-stack name="<strong>access</strong>" >
-    &lt;interceptor-ref name="authenticate" />
-    &lt;interceptor-ref name="defaultStack"/>
+  &lt;interceptor name="<strong>authentication</strong>"
+               class="mailreader2.AuthenticationInterceptor"/>
+  &lt;interceptor-stack name="<strong>user</strong>" >
+      &lt;interceptor-ref name="authentication" />
+      &lt;interceptor-ref name="defaultStack"/>
   &lt;/interceptor-stack>
-  &lt;interceptor-stack name="<strong>submit</strong>">
-    &lt;interceptor-ref name="token-session" />
-    &lt;interceptor-ref name="<strong>access</strong>" />
+  &lt;interceptor-stack name="<strong>user-submit</strong>" >
+      &lt;interceptor-ref name="token-session" />
+      &lt;interceptor-ref name="user"/>
+  &lt;/interceptor-stack>
+  &lt;interceptor-stack name="<strong>guest</strong>" >
+      &lt;interceptor-ref name="defaultStack"/>
+  &lt;/interceptor-stack>
+  &lt;interceptor-stack name="<strong>guest-submit</strong>" >
+      &lt;interceptor-ref name="token-session" />
+      &lt;interceptor-ref name="guest"/>
   &lt;/interceptor-stack>
 &lt;/interceptors>
-
-&lt;<strong>default-interceptor-ref</strong> name="access"/></code></pre>
+&lt;<strong>default-interceptor-ref</strong> name="user"/></code></pre>
 <hr/>
 
 <p>
-    The "submit" stack is to be used with actions that post forms.
-    It includes the "token-session" Interceptor which guards against double-submits,
-    and then goes to include the "access" interceptor stack.
-    The "access" stack includes the authenticate Interceptor,
-    and then falls back to the standard "defaultStack".
+    The <strong>user</strong> stacks require that the client be authenticated,
+    in other words that a User object is present in the session.
+    The actions using a <strong>guest</strong> stack can be accessed by any client.
+    The <strong>-submit</strong> versions of each can be used with actions
+    with forms, to guard against double submits.
 </p>
 
 <h5>Double Submits</h5>
@@ -1534,7 +1540,7 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor {
 </p>
 
 <hr />
-<h5>MainMenu.jsp - head element</h5>
+<h5>Registration.jsp - head element</h5>
 <pre><code>&lt;head>
   &lt;saf:if test="<strong>task=='Create'</strong>">
     &lt;title>&lt;saf:text name="registration.title.create"/>&lt;/title>
@@ -1607,7 +1613,7 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor {
     So to display each subscription, we have to reach into the user object,
     and loop through the members of the subscription collection.
     Using the iterator tag, you can code it the way it sounds.
- /p>
+ </p>
 
 <hr/>
 <h5>Using iterator to list the Subscriptions</h5>
@@ -1638,7 +1644,7 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor {
 <hr/>
 
 <p>
-    When the iterator renders, it generates a list of Subscriptions for the current U/ser.
+    When the iterator renders, it generates a list of Subscriptions for the current User.
 </p>
 
 <hr />
@@ -1835,7 +1841,7 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor {
 </p>
 
 <pre><code>
-  &lt;a href="/action2-mailreader/Subscription!edit.do?<strong>host=mail.yahoo.com</strong>">Edit</a>
+  &lt;a href="/action2-mailreader/Subscription!edit.do?<strong>host=mail.yahoo.com</strong>">Edit&lt;/a>
 </code></pre>
 
 
@@ -2244,9 +2250,8 @@ public Subscription findSubscription(String host) {
 </h4>
 
 <p>
-    The other DynaActionForms we've seen used only String properties.
-    SubscriptionForm is different in that it uses a Boolean type for the
-    AutoConnect property.
+    Like many applications, the MailReader uses mainly String properties.
+    One exception is the AutoConnect property of the Subscription object.
     On the HTML form, the AutoConnect property is represented by a checkbox,
     and checkboxes need to be handled differently that other controls.
 </p>
@@ -2324,7 +2329,7 @@ public Subscription findSubscription(String host) {
 <hr />
 
 <p>
-    The <strong>copySubscription</strong> method is a bit more inter testing.
+    The <strong>copySubscription</strong> method is a bit more interesting.
     The MailReader DAO layer API includes some immutable fields
     that can't be set once the object is created.
     Because key fields are immutable,
