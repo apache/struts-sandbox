@@ -100,8 +100,11 @@ for some validation use cases.
 * Setting form type to "POST"
 ** (Should POST be the default?)
 
-* Proxy Result 
-** http://forums.opensymphony.com/thread.jspa?threadID=23621&tstart=0
+* Switching to SSL after login
+** http://forums.opensymphony.com/thread.jspa?messageID=11452&#11452
+
+* Customizing pages for multiple installations across multiple releases
+** http://forums.opensymphony.com/thread.jspa?messageID=23991&#23991
 
 ----
 
@@ -125,6 +128,10 @@ Examples that might involve new development
 * Default package names 
 ** Allow a default package name to be set for Action classes
    so that .MyAction could resolve to org.mycorp.myapp.mypackage.MyAction 
+
+* Proxy Result 
+** http://forums.opensymphony.com/thread.jspa?threadID=23621&tstart=0
+
 
 ----------------------------------------------------------------------------
 

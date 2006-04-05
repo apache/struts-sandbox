@@ -4,6 +4,11 @@
 
     <display-name>Action2 Mailreader</display-name>
 
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath*:applicationContext*.xml</param-value>
+    </context-param>
+
     <filter>
         <filter-name>Action2</filter-name>
         <filter-class>
