@@ -345,8 +345,8 @@ public class MailreaderSupport extends ActionSupport
     public User findUser(String username, String password)
             throws ExpiredPasswordException {
         // FIXME: Stupid testing hack to compensate for inadequate DAO layer
-        if ("Hermes".equals(username)) {
-            throw new ExpiredPasswordException("Hermes");
+        if (Constants.EXPIRED_PASSWORD_EXCEPTION.equals(username)) {
+            throw new ExpiredPasswordException(Constants.EXPIRED_PASSWORD_EXCEPTION);
         }
 
         User user = getDatabase().findUser(username);
@@ -354,7 +354,8 @@ public class MailreaderSupport extends ActionSupport
             user = null;
         }
         if (user == null) {
-            this.addFieldError("password", getText("error.password.mismatch"));
+            this.addFieldError(Constants.PASSWORD_MISMATCH_FIELD,
+                    getText("error.password.mismatch"));
         }
         return user;
     }

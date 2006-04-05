@@ -99,6 +99,20 @@ public final class Constants {
      */
     public static final String ERROR_DATABASE_MISSING = "error.database.missing";
 
+    /**
+     * <P>
+     * A "magic" username to trigger an ExpiredPasswordException for testing.
+     *</p>
+     */
+    public static final String EXPIRED_PASSWORD_EXCEPTION = "ExpiredPasswordException";
+
+    /**
+     * <p>
+     * Name of field to associate with authentification errors.
+     * <p>
+     */
+    public static final String PASSWORD_MISMATCH_FIELD = "password";
+
     // ---- Log Messages ----
 
     /**
