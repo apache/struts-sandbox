@@ -3,7 +3,7 @@ import com.opensymphony.xwork.ActionSupport;
 /**
  * <code>Example Action class</code>
  */
-public class Home extends ActionSupport {
+public class Hello extends ActionSupport {
 
     /**
      * An example implementation that does nothing an returns "success".
