@@ -17,7 +17,7 @@ Status File:
 COURSE SUMMARY 
 
 The Struts MailReader Training Course is a step-by-step introduction to the 
-leading web application framework for Java. Lectures are reinforced by 
+leading web application frameworks for Java. Lectures are reinforced by 
 several labs designed to explore common problems and best practice soutions. 
 This course is intended for developers who want field-tested advice on how 
 to get your applications working the "Struts Way".
@@ -25,21 +25,21 @@ to get your applications working the "Struts Way".
 COURSE OBJECTIVES
 
     * Present and apply MVC application architecture
-    * Build a working Struts application
-    * Understand how to unit test Struts applications
-    * Explain key Struts best practices
-    * Use popular Struts extensions to increase productivity
+    * Build a working web application
+    * Understand how to unit test web application
+    * Explain key best practices
+    * Use popular extensions to increase productivity
 
 AUDIENCE
 
 Developers and programmers who want to learn about web application 
-development using the Apache Struts Action framework
+development using Apache Struts Action frameworks.
 
 PREREQUISITES
 
-To benefit from this Struts training course, students should have experience 
+To benefit from the training course, students should have experience 
 programming with Java along with a basic knowledge of html. Experience with a 
-modern Java IDE, such as NetBeans or Eclipse, is also beneficial.
+modern Java IDE, such as NetBeans, Eclipse, or IDEA, is also beneficial.
 
 SOURCE CODE
 
