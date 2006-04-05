@@ -4,6 +4,11 @@
 
     <display-name>WebWork Application</display-name>
 
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath*:applicationContext*.xml</param-value>
+    </context-param>
+
     <filter>
         <filter-name>webwork</filter-name>
         <filter-class>com.opensymphony.webwork.dispatcher.FilterDispatcher</filter-class>

@@ -5,10 +5,10 @@
 
     <package name="default" extends="webwork-default">
 
-        <default-action-ref name="Home"/>
+        <default-action-ref name="Hello"/>
 
-        <action name="Home" class="Home">
-            <result>/pages/Home.jsp</result>
+        <action name="Hello" class="Hello">
+            <result>/pages/Hello.jsp</result>
         </action>
 
         <!-- Add your actions here -->

@@ -1,7 +1,7 @@
 import com.opensymphony.xwork.ActionSupport;
 
 /**
- * <code>Example Action class</code>
+ * Example Action class
  */
 public class Hello extends ActionSupport {
 

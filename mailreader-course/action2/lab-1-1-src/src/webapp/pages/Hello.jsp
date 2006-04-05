@@ -3,10 +3,10 @@
 
 <html>
 <head>
-    <title>Home</title>
+    <title>Hello</title>
 </head>
 
 <body>
-<h2><ww:text name="home.nessage"/></h2>
+<h2><ww:text name="hello.nessage"/></h2>
 </body>
 </html>

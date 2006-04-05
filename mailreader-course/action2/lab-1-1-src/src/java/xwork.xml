@@ -7,8 +7,8 @@
 
         <default-action-ref name="Missing"/>
 
-        <action name="Home" class="Home">
-            <result>/pages/Home.jsp</result>
+        <action name="Hello" class="Hello">
+            <result>/pages/Hello.jsp</result>
         </action>
 
         <action name="Missing">
