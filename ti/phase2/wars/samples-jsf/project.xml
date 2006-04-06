@@ -67,7 +67,8 @@
       </properties>
     </dependency>
     <dependency>
-      <id>jstl</id>
+      <groupId>jstl</groupId>
+      <artifactId>jstl</artifactId>
       <version>1.1.2</version>
       <properties>
         <war.bundle>true</war.bundle>

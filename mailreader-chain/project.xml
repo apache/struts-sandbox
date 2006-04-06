@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <project>
-  <id>mailreader</id>
+  <artifactId>mailreader</artifactId>
   <name>Struts MailReader for Commons Chain</name>
   <package>org.apache.*</package>
   <description>A new implementation of the classic Struts MailReader example using Commons Chain as a business facade.</description>

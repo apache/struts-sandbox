@@ -3,7 +3,7 @@
 <project>
   <extend>../project.xml</extend>
   <name>Jericho</name>
-  <id>struts-jericho</id>
+  <artifactId>struts-jericho</artifactId>
   <currentVersion>0.1-dev</currentVersion>
   <inceptionYear>2003</inceptionYear>
   <shortDescription>Struts Jericho 2.x Whiteboard</shortDescription>

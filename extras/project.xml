@@ -20,7 +20,7 @@
 
 
   <extend>../project.xml</extend>
-  <id>struts-resources-plugin</id>
+  <artifactId>struts-resources-plugin</artifactId>
 
   <name>Struts Resources Plugin</name>
   

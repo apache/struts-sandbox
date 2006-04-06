@@ -21,7 +21,7 @@
 <project>
 
   <extend>../../project.xml</extend>
-  <id>struts-ti-example</id>
+  <artifactId>struts-ti-example</artifactId>
   <name>Struts Ti Example</name>
 
 </project>
