@@ -1,5 +1,6 @@
 import com.opensymphony.util.BeanUtils;
 import com.opensymphony.webwork.interceptor.ApplicationAware;
+import com.opensymphony.webwork.interceptor.SessionAware;
 import com.opensymphony.xwork.ActionSupport;
 import org.apache.struts.apps.mailreader.dao.ExpiredPasswordException;
 import org.apache.struts.apps.mailreader.dao.User;
@@ -7,7 +8,8 @@ import org.apache.struts.apps.mailreader.dao.UserDatabase;
 
 import java.util.Map;
 
-public class MailReaderSupport extends ActionSupport implements ApplicationAware {
+public class MailReaderSupport extends ActionSupport
+        implements ApplicationAware, SessionAware {
 
     // ---- Register form properties ----
 
@@ -71,17 +73,26 @@ public class MailReaderSupport extends ActionSupport implements ApplicationAware
         replyToAddress = value;
     }
 
-    // ---- Messages ----
+    // ---- Keys ----
 
     public static final String DATABASE_KEY = "database";
+
+    public static final String USER_KEY = "user";
+
+    public static final String PASSWORD_MISMATCH_FIELD = "password";
+
+    public static final String CANCEL = "cancel";
+
+    // ---- Messages ----
 
     public static final String ERROR_DATABASE_MISSING =
             "Database is missing";
 
-    public static String ERROR_USERNAME_UNIQUE =
+    public static final String ERROR_USERNAME_UNIQUE =
             "That username is already in use - please select another";
 
-    public static final String USER_KEY = "user";
+    public static final String ERROR_PASSWORD_MISMATCH =
+            "Invalid username and/or password, please try again";
 
     // ---- ApplicationAware ----
 
@@ -109,11 +120,69 @@ public class MailReaderSupport extends ActionSupport implements ApplicationAware
         getApplication().put(DATABASE_KEY, database);
     }
 
+    // ---- SessionAware ----
+
+    /**
+     * <p>Field to store session context, or its proxy.</p>
+     */
+    private Map session;
+
+    /**
+     * <p>Store a new session context.</p>
+     *
+     * @param value A Map representing session state
+     */
+    public void setSession(Map value) {
+        session = value;
+    }
+
+    /**
+     * <p>Provide session context.</p>
+     *
+     * @return session context
+     */
+    public Map getSession() {
+        return session;
+    }
+
+    // ---- User property ----
+
+    /**
+     * <p>Provide reference to User object for authenticated user.</p>
+     *
+     * @return User object for authenticated user.
+     */
+    public User getUser() {
+        return (User) getSession().get(USER_KEY);
+    }
+
+    /**
+     * <p>Store new reference to User Object.</p>
+     *
+     * @param user User object for authenticated user
+     */
+    public void setUser(User user) {
+        getSession().put(USER_KEY, user);
+    }
+
     // ---- Database methods ----
 
     public User findUser(String username, String password)
             throws ExpiredPasswordException {
-        return getDatabase().findUser(username);
+
+        User user = getDatabase().findUser(username);
+
+        if ((user != null) && !user.getPassword().equals(password)) {
+            user = null;
+        }
+
+        if (user == null) {
+            addFieldError(PASSWORD_MISMATCH_FIELD,
+                    getText(ERROR_PASSWORD_MISMATCH));
+        }
+
+        return user;
+
     }
 
     public User createUser(String username, String password) throws Exception {
@@ -134,6 +203,12 @@ public class MailReaderSupport extends ActionSupport implements ApplicationAware
 
     public void saveUser() throws Exception {
         getDatabase().save();
+    }
+
+    // ---- Alias ----
+
+    public String cancel() {
+        return CANCEL;
     }
 
 }

@@ -14,7 +14,9 @@ public class Register extends MailReaderSupport {
             return Action.INPUT;
         }
 
-        createUser(getUsername(), getPassword());
+        user = createUser(getUsername(), getPassword());
+
+        setUser(user);
 
         saveUser();
 

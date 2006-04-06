@@ -9,7 +9,7 @@
 
 <ul>
     <li><a href="<ww:url action="Register!input"/>">Register with the MailReader</a></li>
-    <li><a href="<ww:url action="Missing"/>">Log on to the MailReader</a></li>
+    <li><a href="<ww:url action="Login!input"/>">Log on to the MailReader</a></li>
 </ul>
 
 <h3>Language Options</h3>

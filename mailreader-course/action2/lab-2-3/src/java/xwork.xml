@@ -21,11 +21,21 @@
 
         <action name="Register" class="Register">
             <result name="input">/pages/Register.jsp</result>
-            <result type="chain">Menu</result>
+            <result type="redirect-action">Menu</result>
         </action>
 
         <action name="Menu" class="MailReaderSupport">
             <result>/pages/Menu.jsp</result>
+        </action>
+
+        <action name="Logout" class="Logout">
+            <result type="redirect-action">Welcome</result>
+        </action>
+
+        <action name="Login" class="Login">
+            <result name="input">/pages/Login.jsp</result>
+            <result name="cancel" type="redirect-action">Welcome</result>
+            <result type="redirect-action">Menu</result>
         </action>
 
     </package>

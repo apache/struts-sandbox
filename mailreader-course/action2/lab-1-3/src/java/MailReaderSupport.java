@@ -71,17 +71,19 @@ public class MailReaderSupport extends ActionSupport implements ApplicationAware
         replyToAddress = value;
     }
 
-    // ---- Messages ----
+    // ---- Keys ----
 
     public static final String DATABASE_KEY = "database";
+
+    public static final String USER_KEY = "user";
+
+    // ---- Messages ----
 
     public static final String ERROR_DATABASE_MISSING =
             "Database is missing";
 
     public static String ERROR_USERNAME_UNIQUE =
             "That username is already in use - please select another";
-
-    public static final String USER_KEY = "user";
 
     // ---- ApplicationAware ----
 
