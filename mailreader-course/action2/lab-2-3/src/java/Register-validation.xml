@@ -1,0 +1,55 @@
+<!DOCTYPE validators PUBLIC "-//OpenSymphony Group//XWork Validator 1.0.2//EN" "http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
+
+<validators>
+
+    <field name="username">
+        <field-validator type="requiredstring">
+            <message>Username is required</message>
+        </field-validator>
+    </field>
+
+    <field name="fullName">
+        <field-validator type="requiredstring">
+            <message>Full Name is required</message>
+        </field-validator>
+    </field>
+
+    <field name="fromAddress">
+        <field-validator type="requiredstring">
+            <message>From Address is required</message>
+        </field-validator>
+        <field-validator type="email">
+            <message>Invalid format for From Address</message>
+        </field-validator>
+    </field>
+
+    <field name="replyToAddress">
+        <field-validator type="email">
+            <message>Invalid format for Reply To Address</message>
+        </field-validator>
+    </field>
+
+    <field name="password">
+        <field-validator type="requiredstring">
+            <message>Password is required</message>
+        </field-validator>
+        <field-validator type="stringlength">
+            <param name="trim">true</param>
+            <param name="minLength">4</param>
+            <param name="maxLength">10</param>
+            <message>Password length is not in the range 4 through 10.</message>
+        </field-validator>
+    </field>
+
+    <field name="password2">
+        <field-validator type="requiredstring">
+            <message>Confirmation password is required</message>
+        </field-validator>
+    </field>
+
+    <validator type="expression">
+        <param name="expression">password eq password2</param>
+        <message>Invalid username and/or password, please try again</message>
+    </validator>
+
+</validators>

@@ -1,0 +1,21 @@
+<setInputField
+        description="username"
+        name="username"
+        value="trillian"/>
+<setInputField
+        description="password"
+        name="password"
+        value="astra"/>
+<setInputField
+        description="password2"
+        name="password2"
+        value="astra"/>
+<setInputField
+        description="fullName"
+        name="fullName"
+        value="Tricia McMillian"/>
+<setInputField
+        description="fromAddress"
+        name="fromAddress"
+        value="tricia@magrathea.com"/>
+        &save-click;
