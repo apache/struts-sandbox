@@ -2,13 +2,13 @@
 <module version="4" relativePaths="true" type="J2EE_WEB_MODULE" j2ee-integration="Tomcat Server">
   <component name="ModuleRootManager" />
   <component name="NewModuleRootManager">
-    <output url="file://C:/opt/Apache/Tomcat-5.0/webapps/lab-1-1-src/WEB-INF/classes" />
+    <output url="file://$MODULE_DIR$/exploded/WEB-INF/classes" />
     <exclude-output />
-    <exploded url="file://C:/opt/Apache/Tomcat-5.0/webapps/lab-1-1-src" />
+    <exploded url="file://C:/opt/Apache/Tomcat-5.0/webapps/lab-1-0-src" />
     <exclude-exploded />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test" isTestSource="true" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -16,7 +16,52 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/lib/junit.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../lib/oscore.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../lib/commons-logging-1.0.4.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../lib/struts-mailreader-dao-1.3.0-dev.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../lib/webwork-2.2.2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../lib/spring-web.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../lib/spring-core.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -34,7 +79,43 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../lib/webwork-2.2.2.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../lib/spring-context.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../lib/spring-beans.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../lib/commons-digester-1.6.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../lib/commons-collections-3.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../lib/struts-taglib-1.3.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -61,78 +142,6 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../lib/spring-beans.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../lib/struts-taglib-1.3.0.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../lib/spring-core.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../lib/commons-digester-1.6.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../lib/oscore.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../lib/commons-collections-3.1.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../lib/spring-web.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../lib/spring-context.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
           <root url="jar://$MODULE_DIR$/../../lib/freemarker.jar!/" />
         </CLASSES>
         <JAVADOC />
@@ -142,16 +151,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../lib/struts-mailreader-dao-1.3.0-dev.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../lib/commons-logging-1.0.4.jar!/" />
+          <root url="jar://$APPLICATION_HOME_DIR$/lib/junit.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -160,7 +160,7 @@
     <orderEntryProperties />
   </component>
   <component name="WebModuleBuildComponent">
-    <setting name="EXPLODED_URL" value="file://C:/opt/Apache/Tomcat-5.0/webapps/lab-1-1-src" />
+    <setting name="EXPLODED_URL" value="file://C:/opt/Apache/Tomcat-5.0/webapps/lab-1-0-src" />
     <setting name="EXPLODED_ENABLED" value="true" />
     <setting name="JAR_URL" value="file://" />
     <setting name="JAR_ENABLED" value="false" />
@@ -253,6 +253,8 @@
     <deploymentDescriptor name="context.xml" url="file://$MODULE_DIR$/META-INF/context.xml" optional="false" version="5.x" />
     <webroots>
       <root url="file://$MODULE_DIR$/src/webapp" relative="/" />
+      <root url="file://$MODULE_DIR$/src/java" relative="/WEB-INF/src/java" />
+      <root url="file://$MODULE_DIR$/src/test" relative="/WEB-INF/src/test" />
     </webroots>
   </component>
   <component name="WeblogicWebModuleProperties">
