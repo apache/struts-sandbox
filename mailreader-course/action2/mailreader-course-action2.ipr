@@ -178,9 +178,9 @@
   </component>
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/lab-1-0-src/lab-1-0-src.iml" filepath="$PROJECT_DIR$/lab-1-0-src/lab-1-0-src.iml" />
-      <module fileurl="file://$PROJECT_DIR$/lab-1-1-src/lab-1-1-src.iml" filepath="$PROJECT_DIR$/lab-1-1-src/lab-1-1-src.iml" />
-      <module fileurl="file://$PROJECT_DIR$/lab-1-2-src/lab-1-2-src.iml" filepath="$PROJECT_DIR$/lab-1-2-src/lab-1-2-src.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lab-1-0/lab-1-0.iml" filepath="$PROJECT_DIR$/lab-1-0/lab-1-0.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lab-1-1/lab-1-1.iml" filepath="$PROJECT_DIR$/lab-1-1/lab-1-1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lab-1-2/lab-1-2.iml" filepath="$PROJECT_DIR$/lab-1-2/lab-1-2.iml" />
       <module fileurl="file://$PROJECT_DIR$/mailreader-course-action2.iml" filepath="$PROJECT_DIR$/mailreader-course-action2.iml" />
     </modules>
   </component>
