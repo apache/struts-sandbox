@@ -119,7 +119,7 @@
                 &register-trillian;
                 <verifyTitle
                         description="Menu page title"
-                        text="Menu"/>
+                        text="MailReader - Menu"/>
             </steps>
         </webtest>
 

@@ -1,7 +1,7 @@
 <%@ taglib uri="/webwork" prefix="ww" %>
 <html>
 <head>
-    <title>Menu</title>
+    <title>MailReader - Menu</title>
 </head>
 
 <body>

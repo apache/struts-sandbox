@@ -1,15 +1,15 @@
 <%@ taglib uri="/webwork" prefix="ww" %>
 <html>
 <head>
-    <title>MailReader Application</title>
+    <title>MailReader</title>
 </head>
 
 <body>
 <h3>MailReader Options</h3>
 
 <ul>
-    <li><a href="<ww:url action="Missing"/>">Register with the MailReader</a></li>
-    <li><a href="<ww:url action="Missing"/>">Log on to the MailReader</a></li>
+    <li><a href="<ww:url action="Missing"/>">Register with MailReader</a></li>
+    <li><a href="<ww:url action="Missing"/>">Log into MailReader</a></li>
 </ul>
 
 <h3>Language Options</h3>

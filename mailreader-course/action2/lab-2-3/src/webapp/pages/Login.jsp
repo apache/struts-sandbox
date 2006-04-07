@@ -1,14 +1,14 @@
 <%@ taglib uri="/webwork" prefix="ww" %>
 <html>
 <head>
-    <title>Login</title>
+    <title>MailReader - Login</title>
 </head>
 
-<body onLoad="self.focus();document.Logon.username.focus()">
+<body onLoad="self.focus();document.Login.username.focus()">
 
 <ww:actionerror/>
 <ww:form method="POST" validate="true">
-    <ww:textfield label="UserName" name="username"/>
+    <ww:textfield label="Username" name="username"/>
 
     <ww:password label="Password" name="password" showPassword="true"/>
 
