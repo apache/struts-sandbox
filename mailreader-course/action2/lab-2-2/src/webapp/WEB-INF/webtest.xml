@@ -52,8 +52,6 @@
      The tests are based on a set of MailReader Use Cases maintained at the
      Struts University site
      [http://opensource2.atlassian.com/confluence/oss/display/STRUTS/MailReader].
-
-     @version $Revision: 1.2 $ $Date: 2005-12-31 15:10:04 -0500 (Sat, 31 Dec 2005) $
      */
     -->
 
@@ -80,10 +78,7 @@
     <property name="webapps.home"
               location="/opt/Apache/Tomcat-5.5/webapps"/>
 
-    <property name="resource.home"
-              location="${webapps.home}/${basepath}/WEB-INF/classes/resources.properties"/>
-
-    <property file="${resource.home}"/>
+    <property file="${webapps.home}/${basepath}/WEB-INF/classes/resources.properties"/>
 
 
     <taskdef file="${webtest.home}/webtestTaskdefs.properties">

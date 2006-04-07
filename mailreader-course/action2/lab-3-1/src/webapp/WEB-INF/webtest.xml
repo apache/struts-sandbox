@@ -80,11 +80,7 @@
     <property name="webapps.home"
               location="/opt/Apache/Tomcat-5.5/webapps"/>
 
-    <property name="resource.home"
-              location="${webapps.home}/${basepath}/WEB-INF/classes/resources.properties"/>
-
-    <property file="${resource.home}"/>
-
+    <property file="${webapps.home}/${basepath}/WEB-INF/classes/resources.properties"/>
 
     <taskdef file="${webtest.home}/webtestTaskdefs.properties">
         <classpath>
@@ -116,7 +112,7 @@
                 &register-trillian;
                 <verifyTitle
                     description="Menu page title"
-                      text="MailReader - Menu"/>
+                      text="${menu.title}"/>
             </steps>
         </webtest>
 
