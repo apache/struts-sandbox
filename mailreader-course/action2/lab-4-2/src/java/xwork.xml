@@ -1,0 +1,109 @@
+<!DOCTYPE xwork PUBLIC "-//OpenSymphony Group//XWork 1.1.1//EN" "http://www.opensymphony.com/xwork/xwork-1.1.1.dtd">
+
+<xwork>
+    <include file="webwork-default.xml"/>
+
+    <package name="default" extends="webwork-default">
+
+        <interceptors>
+
+            <interceptor name="authentication"
+                         class="AuthenticationInterceptor"/>
+
+            <interceptor-stack name="user" >
+                <interceptor-ref name="authentication" />
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+
+            <interceptor-stack name="user-submit" >
+                <interceptor-ref name="token-session" />
+                <interceptor-ref name="user"/>
+            </interceptor-stack>
+
+            <interceptor-stack name="guest" >
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+
+            <interceptor-stack name="guest-submit" >
+                <interceptor-ref name="token-session" />
+                <interceptor-ref name="guest"/>
+            </interceptor-stack>
+
+        </interceptors>
+
+        <default-interceptor-ref name="user"/>
+
+        <default-action-ref name="Missing"/>
+
+        <global-results>
+            <result name="error">/pages/Error.jsp</result>
+            <result name="login" type="redirect-action">Login!input</result>
+        </global-results>
+
+        <global-exception-mappings>
+            <exception-mapping
+                    result="error"
+                    exception="java.lang.Throwable"/>
+        </global-exception-mappings>
+
+        <action name="Hello" class="Hello">
+            <result>/pages/Hello.jsp</result>
+            <interceptor-ref name="guest"/>
+        </action>
+
+        <action name="Missing">
+            <result>/pages/Missing.jsp</result>
+            <interceptor-ref name="guest"/>
+        </action>
+
+        <action name="Welcome">
+            <result>/pages/Welcome.jsp</result>
+            <interceptor-ref name="guest"/>
+        </action>
+
+        <action name="Register" class="Register">
+            <result name="input">/pages/Register.jsp</result>
+            <result name="cancel" type="redirect-action">Welcome</result>
+            <result type="redirect-action">Menu</result>
+            <interceptor-ref name="guest"/>
+        </action>
+
+        <action name="RegisterSave" class="RegisterSave">
+            <result name="input">/pages/Register.jsp</result>
+            <result type="redirect-action">Menu</result>
+            <interceptor-ref name="guest-submit" />
+        </action>
+
+        <action name="Menu" class="MailReaderSupport">
+            <result>/pages/Menu.jsp</result>
+        </action>
+
+        <action name="Logout" class="Logout">
+            <result type="redirect-action">Welcome</result>
+        </action>
+
+        <action name="Login" class="Login">
+            <result name="input">/pages/Login.jsp</result>
+            <result name="cancel" type="redirect-action">Welcome</result>
+            <result type="redirect-action">Menu</result>
+            <interceptor-ref name="guest"/>
+        </action>
+
+        <action name="Subscribe" class="Subscribe">
+            <result name="input">/pages/Subscribe.jsp</result>
+            <result type="redirect-action">Register!input</result>
+        </action>
+
+        <action name="SubscribeSave" class="SubscribeSave">
+            <result name="input">/pages/Subscribe.jsp</result>
+            <result type="redirect-action">Register!input</result>
+            <interceptor-ref name="user-submit" />
+        </action>
+
+        <action name="NPE" class="NPE">
+            <result>/pages/Hello.jsp</result>
+            <interceptor-ref name="guest"/>
+        </action>
+
+    </package>
+</xwork>
