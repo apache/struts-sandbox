@@ -15,7 +15,7 @@
         ]>
 
 <project name="MailReader Training Course - Exercise navigation and database logic
-- Canoo WebTests" basedir="." default="Register">
+- Canoo WebTests" basedir="." default="clean">
 
     <!--
      Canoo WebTest configuration file to test navigating between pages and
@@ -58,12 +58,12 @@
     -->
 
     <!-- Load local preferences, if any -->
-    <!-- property file="webtest.properties"/ -->
+    <property file="webtest.properties" />
 
     <!-- These properties can be customized using via webtest.properties -->
     <!-- See webtest.properties.sample for a starter file -->
     <property name="webtest.home"
-              location="C:/opt/Canoo/webtest-1.7"/>
+              location="/opt/Canoo/webtest-1.7"/>
 
     <property name="host"
               value="localhost"/>
@@ -75,19 +75,16 @@
               value="lab-2-2"/>
 
     <property name="mailreader.home"
-              location=""/>
+              location="../../../"/>
 
     <property name="webapps.home"
-              location="C:/opt/Apache/Tomcat-5.0/webapps/"/>
-
-    <!-- Load application resources
+              location="/opt/Apache/Tomcat-5.5/webapps"/>
 
     <property name="resource.home"
-              location="${mailreader.home}/src/java/org/apache/struts/apps/mailreader/resources/ApplicationResources.properties"/>
+              location="${webapps.home}/${basepath}/WEB-INF/classes/resources.properties"/>
 
     <property file="${resource.home}"/>
 
-    -->
 
     <taskdef file="${webtest.home}/webtestTaskdefs.properties">
         <classpath>
@@ -95,9 +92,6 @@
             <fileset dir="${webtest.home}" includes="**/lib/runtime/*.jar"/>
         </classpath>
     </taskdef>
-
-    <target name="clean" description="Only run against a clean database"
-            depends="Register"/>
 
     <target name="clean-database"
             description="Sets database.xml to default. Stop server, run target, and Start server.">
@@ -108,6 +102,9 @@
 
     <!-- ADD YOUR TARGETS HERE -->
 
+    <target name="clean" description="Only run against a clean database"
+            depends="Register"/>
+
     <target name="Register"
             description="Subscribers can store login credentials and a
             primary email contact with the system.">
@@ -116,10 +113,30 @@
             &config;
             <steps>
                 &register-open;
-                &register-trillian;
+                <setInputField
+                    description="username"
+                    name="username"
+                    value="trillian"/>
+                <setInputField
+                    description="password"
+                    name="password"
+                    value="astra"/>
+                <setInputField
+                    description="password2"
+                    name="password2"
+                    value="astra"/>
+                <setInputField
+                  description="fullName"
+                    name="fullName"
+                    value="Tricia McMillian"/>
+                <setInputField
+                    description="fromAddress"
+                    name="fromAddress"
+                    value="tricia@magrathea.com"/>
+                &save-click;
                 <verifyTitle
-                        description="Menu page title"
-                        text="MailReader - Menu"/>
+                    description="Menu page title"
+                      text="MailReader - Menu"/>
             </steps>
         </webtest>
 

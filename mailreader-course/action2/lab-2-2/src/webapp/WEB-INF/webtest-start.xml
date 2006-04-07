@@ -15,7 +15,7 @@
         ]>
 
 <project name="MailReader Training Course - Exercise navigation and database logic
-- Canoo WebTests" basedir="." default="clean">
+- Canoo WebTests" basedir="." >
 
     <!--
      Canoo WebTest configuration file to test navigating between pages and
@@ -53,15 +53,9 @@
      Struts University site
      [http://opensource2.atlassian.com/confluence/oss/display/STRUTS/MailReader].
 
-     @version $Revision: 1.2 $ $Date: 2005-12-31 15:10:04 -0500 (Sat, 31 Dec 2005) $
      */
     -->
 
-    <!-- Load local preferences, if any -->
-    <property file="webtest.properties" />
-
-    <!-- These properties can be customized using via webtest.properties -->
-    <!-- See webtest.properties.sample for a starter file -->
     <property name="webtest.home"
               location="/opt/Canoo/webtest-1.7"/>
 
@@ -100,26 +94,8 @@
               overwrite="true"/>
     </target>
 
+
     <!-- ADD YOUR TARGETS HERE -->
 
-    <target name="clean" description="Only run against a clean database"
-            depends="Register"/>
-
-    <target name="Register"
-            description="Subscribers can store login credentials and a
-            primary email contact with the system.">
-
-        <webtest name="Register Trillian (MSS)">
-            &config;
-            <steps>
-                &register-open;
-                &register-trillian;
-                <verifyTitle
-                    description="Menu page title"
-                      text="MailReader - Menu"/>
-            </steps>
-        </webtest>
-
-    </target>
 
 </project>

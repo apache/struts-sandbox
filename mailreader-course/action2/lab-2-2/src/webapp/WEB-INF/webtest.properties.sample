@@ -1,0 +1,15 @@
+# -----------------------------------------------------------------------------
+# webtest.properties.sample
+#
+# This is an example "webtest.properties" file, used to customize building Struts
+# for your local environment.  Make any changes you need, and rename this file
+# to "webtest.properties" in the same directory that contains the Struts
+# "webtest.xml" file.
+# -----------------------------------------------------------------------------
+webtest.home = /opt/Canoo/webtest-1.7
+host = localhost
+port = 8080
+basepath = lab-2-2
+webapps.home = /opt/Apache/Tomcat-5.5/webapps/
+resource.home = ${webapps.home}/${basepath}/WEB-INF/classes/resources.properties"
+# mailreader.home = 
