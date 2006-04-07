@@ -57,5 +57,65 @@
 
 </ww:form>
 
+<ww:if test="task == 'Edit'">
+    <div align="center">
+        <h3><ww:text name="heading.subscriptions"/></h3>
+    </div>
+
+    <table border="1" width="100%">
+
+        <tr>
+            <th align="center" width="30%">
+                <ww:text name="heading.host"/>
+            </th>
+            <th align="center" width="25%">
+                <ww:text name="heading.user"/>
+            </th>
+            <th align="center" width="10%">
+                <ww:text name="heading.type"/>
+            </th>
+            <th align="center" width="10%">
+                <ww:text name="heading.autoConnect"/>
+            </th>
+            <th align="center" width="15%">
+                <ww:text name="heading.action"/>
+            </th>
+        </tr>
+
+        <ww:iterator value="user.subscriptions">
+            <tr>
+                <td align="left">
+                    <ww:property value="host"/>
+                </td>
+                <td align="left">
+                    <ww:property value="username"/>
+                </td>
+                <td align="center">
+                    <ww:property value="type"/>
+                </td>
+                <td align="center">
+                    <ww:property value="autoConnect"/>
+                </td>
+                <td align="center">
+
+                    <a href="<ww:url action="Subscribe!delete"><ww:param name="host" value="host"/></ww:url>">
+                        <ww:text name="registration.deleteSubscription"/>
+                    </a>
+                    &nbsp;
+                    <a href="<ww:url action="Subscribe!edit"><ww:param name="host" value="host"/></ww:url>">
+                        <ww:text name="registration.editSubscription"/>
+                    </a>
+
+                </td>
+            </tr>
+        </ww:iterator>
+
+    </table>
+
+    <a href="<ww:url action="Subscribe!input"/>"><ww:text
+            name="registration.addSubscription"/></a>
+
+</ww:if>
+
 </body>
 </html>

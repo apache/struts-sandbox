@@ -2,30 +2,21 @@
 
 <validators>
 
-    <field name="username">
+    <field name="subscription.username">
         <field-validator type="requiredstring">
             <message key="error.username.required"/>
         </field-validator>
     </field>
 
-    <field name="fullName">
+    <field name="subscription.password">
         <field-validator type="requiredstring">
-            <message key="error.fullName.required"/>
+            <message key="error.password.required"/>
         </field-validator>
     </field>
 
-    <field name="fromAddress">
+    <field name="subscription.type">
         <field-validator type="requiredstring">
-            <message key="error.fromAddress.required"/>
-        </field-validator>
-        <field-validator type="email">
-            <message key="errors.email"/>
-        </field-validator>
-    </field>
-
-    <field name="replyToAddress">
-        <field-validator type="email">
-            <message key="errors.email"/>
+            <message key="error.type.invalid"/>
         </field-validator>
     </field>
 

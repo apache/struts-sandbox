@@ -1,0 +1,58 @@
+<!DOCTYPE xwork PUBLIC "-//OpenSymphony Group//XWork 1.1.1//EN" "http://www.opensymphony.com/xwork/xwork-1.1.1.dtd">
+
+<xwork>
+    <include file="webwork-default.xml"/>
+
+    <package name="default" extends="webwork-default">
+
+        <default-action-ref name="Missing"/>
+
+        <action name="Hello" class="Hello">
+            <result>/pages/Hello.jsp</result>
+        </action>
+
+        <action name="Missing">
+            <result>/pages/Missing.jsp</result>
+        </action>
+
+        <action name="Welcome">
+            <result>/pages/Welcome.jsp</result>
+        </action>
+
+        <action name="Register" class="Register">
+            <result name="input">/pages/Register.jsp</result>
+            <result name="cancel" type="redirect-action">Welcome</result>
+            <result type="redirect-action">Menu</result>
+        </action>
+
+        <action name="RegisterSave" class="RegisterSave">
+            <result name="input">/pages/Register.jsp</result>
+            <result type="redirect-action">Menu</result>
+        </action>
+
+        <action name="Menu" class="MailReaderSupport">
+            <result>/pages/Menu.jsp</result>
+        </action>
+
+        <action name="Logout" class="Logout">
+            <result type="redirect-action">Welcome</result>
+        </action>
+
+        <action name="Login" class="Login">
+            <result name="input">/pages/Login.jsp</result>
+            <result name="cancel" type="redirect-action">Welcome</result>
+            <result type="redirect-action">Menu</result>
+        </action>
+
+        <action name="Subscribe" class="Subscribe">
+            <result name="input">/pages/Subscribe.jsp</result>
+            <result type="redirect-action">Register!input</result>
+        </action>
+
+        <action name="SubscribeSave" class="SubscribeSave">
+            <result name="input">/pages/Subscribe.jsp</result>
+            <result type="redirect-action">Register!input</result>
+        </action>
+
+    </package>
+</xwork>
