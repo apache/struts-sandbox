@@ -10,7 +10,7 @@ public class Register extends MailReaderSupport {
         boolean haveUser = (user != null);
 
         if (haveUser) {
-            addActionError(ERROR_USERNAME_UNIQUE);
+            addActionError(getText(ERROR_USERNAME_UNIQUE));
             return Action.INPUT;
         }
 

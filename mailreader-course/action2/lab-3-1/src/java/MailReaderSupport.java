@@ -83,16 +83,16 @@ public class MailReaderSupport extends ActionSupport
 
     public static final String CANCEL = "cancel";
 
-    // ---- Messages ----
+    // ---- Message Keys ----
 
     public static final String ERROR_DATABASE_MISSING =
-            "Database is missing";
+            "error.database.missing";
 
     public static final String ERROR_USERNAME_UNIQUE =
-            "That username is already in use - please select another";
+            "error.username.unique";
 
     public static final String ERROR_PASSWORD_MISMATCH =
-            "Invalid username and/or password, please try again";
+            "error.password.mismatch";
 
     // ---- ApplicationAware ----
 
@@ -111,7 +111,7 @@ public class MailReaderSupport extends ActionSupport
     public UserDatabase getDatabase() {
         Object db = getApplication().get(DATABASE_KEY);
         if (db == null) {
-            this.addActionError(ERROR_DATABASE_MISSING);
+            this.addActionError(getText(ERROR_DATABASE_MISSING));
         }
         return (UserDatabase) db;
     }
@@ -191,7 +191,7 @@ public class MailReaderSupport extends ActionSupport
         User user = database.findUser(username);
 
         if (user != null) {
-            addActionError(ERROR_USERNAME_UNIQUE);
+            addActionError(getText(ERROR_USERNAME_UNIQUE));
             return null;
         }
 
