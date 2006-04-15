@@ -3,11 +3,10 @@
       xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
    <modelVersion>4.0.0</modelVersion>
-   <groupId>struts</groupId>
+   <groupId>org.apache.struts.action</groupId>
    <artifactId>struts-archetype-action-blank</artifactId>
-   <version>1.3.1-SNAPSHOT</version>
-   <packaging>maven-plugin</packaging>
-   <name>Struts Action Blank Archetype</name>
+   <version>1.3.2-SNAPSHOT</version>
+   <packaging>jar</packaging>
+   <name>Struts Archetypes - Action Blank</name>
 
 </project>
-   

@@ -8,8 +8,8 @@
      This is a blank Struts configuration file with an example
      welcome action/page and other commented sample elements.
 
-     Tiles and the Struts Validator are configured using the factory defaults
-     and are ready-to-use.
+     Struts Validator is configured using the factory defaults
+     and is ready-to-use.
 
      NOTE: If you have a generator tool to create the corresponding Java classes
      for you, you could include the details in the "form-bean" declarations.
@@ -137,17 +137,19 @@
 			  false : no validation
 
 	  Paths found in Tiles definitions are relative to the main context.
-  -->
 
+      To use this plugin, uncomment the struts-tiles dependency in pom.xml
+      directory then uncomment the plugin definition below.
+
+  -->
+  <!--
     <plug-in className="org.apache.struts.tiles.TilesPlugin" >
 
-      <!-- Path to XML definition file -->
       <set-property property="definitions-config"
                        value="/WEB-INF/tiles-defs.xml" />
-      <!-- Set Module-awareness to true -->
       <set-property property="moduleAware" value="true" />
     </plug-in>
-
+  -->
 
   <!-- =================================================== Validator plugin -->
 

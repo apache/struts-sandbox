@@ -5,7 +5,6 @@
       <resource>src/main/webapp/index.jsp</resource>
       <resource>src/main/webapp/pages/Welcome.jsp</resource>
       <resource>src/main/webapp/WEB-INF/struts-config.xml</resource>
-      <resource>src/main/webapp/WEB-INF/tiles-defs.xml</resource>
       <resource>src/main/webapp/WEB-INF/validation.xml</resource>
       <resource>src/main/webapp/WEB-INF/web.xml</resource>
       <resource>src/main/resources/MessageResources.properties</resource>
