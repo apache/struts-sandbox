@@ -39,7 +39,7 @@
                    name="replyToAddress"/>
 
     <ww:if test="task == 'Create'">
-        <ww:submit value="%{getText('button.save')}" action="RegisterSave"/>
+        <ww:submit value="%{getText('button.save')}" action="RegisterCreate"/>
 
         <ww:reset value="%{getText('button.reset')}"/>
 

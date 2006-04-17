@@ -11,14 +11,14 @@ public class Register extends MailReaderSupport {
 
         if (haveUser) {
             addActionError(ERROR_USERNAME_UNIQUE);
-            return Action.INPUT;
+            return INPUT;
         }
 
         createUser(getUsername(), getPassword());
 
         saveUser();
 
-        return Action.SUCCESS;
+        return SUCCESS;
     }
 
 }

@@ -202,6 +202,7 @@ public class MailReaderSupport extends ActionSupport
     }
 
     public void saveUser() throws Exception {
+        BeanUtils.setValues(getUser(), this, null);
         getDatabase().save();
     }
 

@@ -10,7 +10,5 @@
 <body>
 <h2><ww:text name="hello.nessage"/></h2>
 
-<jsp:include page="Footer.jsp"/>
-
 </body>
 </html>

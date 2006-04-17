@@ -7,6 +7,6 @@
 </head>
 
 <body>
-<h2><ww:text name="hello.nessage"/></h2>
+<h2><ww:text name="hello.message"/></h2>
 </body>
 </html>

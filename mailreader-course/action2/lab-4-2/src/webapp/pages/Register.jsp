@@ -10,11 +10,9 @@
     <ww:if test="task=='Edit'">
         <title><ww:text name="registration.title.edit"/></title>
     </ww:if>
-    <link href="<ww:url value="/css/mailreader.css"/>" rel="stylesheet"
-          type="text/css"/>
 </head>
 
-<body onLoad="self.focus();document.Register.username.focus()">
+<body>
 
 <ww:actionerror/>
 <ww:form method="POST" validate="true">
@@ -42,7 +40,7 @@
                    name="replyToAddress"/>
 
     <ww:if test="task == 'Create'">
-        <ww:submit value="%{getText('button.save')}" action="RegisterSave"/>
+        <ww:submit value="%{getText('button.save')}" action="RegisterCreate"/>
 
         <ww:reset value="%{getText('button.reset')}"/>
 
@@ -119,8 +117,6 @@
             name="registration.addSubscription"/></a>
 
 </ww:if>
-
-<jsp:include page="Footer.jsp"/>
 
 </body>
 </html>

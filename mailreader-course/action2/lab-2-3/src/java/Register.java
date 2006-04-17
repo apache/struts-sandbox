@@ -1,4 +1,5 @@
 import com.opensymphony.xwork.Action;
+import com.opensymphony.util.BeanUtils;
 import org.apache.struts.apps.mailreader.dao.User;
 
 public class Register extends MailReaderSupport {
@@ -11,7 +12,7 @@ public class Register extends MailReaderSupport {
 
         if (haveUser) {
             addActionError(ERROR_USERNAME_UNIQUE);
-            return Action.INPUT;
+            return INPUT;
         }
 
         user = createUser(getUsername(), getPassword());
@@ -20,7 +21,7 @@ public class Register extends MailReaderSupport {
 
         saveUser();
 
-        return Action.SUCCESS;
+        return SUCCESS;
     }
 
 }

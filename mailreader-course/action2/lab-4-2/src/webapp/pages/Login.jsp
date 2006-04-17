@@ -5,8 +5,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
     <title><ww:text name="login.title"/></title>
-    <link href="<ww:url value="/css/mailreader.css"/>" rel="stylesheet"
-          type="text/css"/>
 </head>
 
 <body onLoad="self.focus();document.Login.username.focus()">
@@ -22,8 +20,6 @@
     <ww:submit action="Login!cancel" value="%{getText('button.cancel')}" name="Cancel"
                onclick="form.onsubmit=null"/>
 </ww:form>
-
-<jsp:include page="Footer.jsp"/>
 
 </body>
 </html>

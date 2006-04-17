@@ -13,8 +13,6 @@
     <ww:if test="task=='Delete'">
         <title><ww:text name="subscription.title.delete"/></title>
     </ww:if>
-    <link href="<ww:url value="/css/mailreader.css"/>" rel="stylesheet"
-          type="text/css"/>
 </head>
 
 <body onLoad="self.focus();document.Subscribe.username.focus()">
@@ -61,8 +59,6 @@
                 value="%{getText('button.cancel')}"
                 onclick="form.onsubmit=null"/>
 </ww:form>
-
-<jsp:include page="Footer.jsp"/>
 
 </body>
 </html>

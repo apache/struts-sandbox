@@ -26,8 +26,8 @@ COURSE OBJECTIVES
 
     * Present and apply MVC application architecture
     * Build a working web application
-    * Understand how to unit test web application
-    * Explain key best practices
+    * Understand how to unit test web applications
+    * Explore key best practices
     * Use popular extensions to increase productivity
 
 AUDIENCE

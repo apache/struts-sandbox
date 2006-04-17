@@ -12,7 +12,5 @@
     Please try again in the next interation.
 </p>
 
-<jsp:include page="Footer.jsp"/>
-
 </body>
 </html>

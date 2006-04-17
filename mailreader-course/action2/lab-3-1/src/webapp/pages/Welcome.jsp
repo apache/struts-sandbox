@@ -9,7 +9,7 @@
 </head>
 
 <body>
-<h3>MailReader Options</h3>
+<h3><ww:text name="index.heading"/></h3>
 
 <ul>
     <li><a href="<ww:url action="Register!input"/>"><ww:text

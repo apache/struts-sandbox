@@ -68,7 +68,7 @@
             <interceptor-ref name="guest"/>
         </action>
 
-        <action name="RegisterSave" class="RegisterSave">
+        <action name="RegisterCreate" class="RegisterCreate">
             <result name="input">/pages/Register.jsp</result>
             <result type="redirect-action">Menu</result>
             <interceptor-ref name="guest-submit" />

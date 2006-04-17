@@ -25,6 +25,18 @@
     <li><a href="<ww:url action="Welcome?request_locale=ru"/>">Russian</a></li>
 </ul>
 
+<hr />
+
+<ww:form>
+
+<ww:doubleselect
+    label="doubleselect test1"
+    name="menu"
+    list="{'fruit','other'}"
+    doubleName="dishes"
+    doubleList="top == 'fruit'
+      ? {'apple', 'orange'} :   {'monkey', 'chicken'}" />
+</ww:form>
 </body>
 </html>
 

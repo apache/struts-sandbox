@@ -7,7 +7,7 @@
 <body onLoad="self.focus();document.Register.username.focus()">
 
 <ww:actionerror/>
-<ww:form method="POST" validate="true">
+<ww:form method="POST" validate="true" theme="simple">
 
     <ww:textfield label="Username" name="username"/>
 

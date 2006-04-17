@@ -21,7 +21,5 @@
     </a>
 </ul>
 
-<jsp:include page="Footer.jsp"/>
-
 </body>
 </html>

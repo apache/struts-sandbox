@@ -6,8 +6,6 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title><ww:text name="index.title"/></title>
-    <link href="<ww:url value="/css/mailreader.css"/>" rel="stylesheet"
-          type="text/css"/>
 </head>
 
 <body>
@@ -26,8 +24,6 @@
     <li><a href="<ww:url action="Welcome?request_locale=ja"/>">Japanese</a></li>
     <li><a href="<ww:url action="Welcome?request_locale=ru"/>">Russian</a></li>
 </ul>
-
-<jsp:include page="Footer.jsp"/>
 
 </body>
 </html>
