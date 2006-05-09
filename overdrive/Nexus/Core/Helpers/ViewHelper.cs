@@ -58,19 +58,15 @@ namespace Nexus.Core.Helpers
 			if (input == null) return;
 			ICollection keys = input.Keys;
 			IDictionary criteria = Criteria;
-			if (nullIfEmpty)
-				foreach (string key in keys)
-				{
-					object value = input[key];
-					string s = value as string;
-					if ((s != null) && (s.Length == 0))
-						criteria.Add(key, null);
-					else
-						criteria.Add(key, value);
-				}
-			else foreach (string key in keys)
+			foreach (string key in keys)
 			{
-				criteria.Add(key, input[key]);
+				string s = null;
+				string o = (input[key] as string);
+				if (o!=null) s = o.Trim();
+				if ((nullIfEmpty) && (s != null) && (s.Length == 0))
+					criteria.Add(key, null);
+				else
+					criteria.Add(key, s);
 			}
 		}
 
