@@ -26,7 +26,7 @@
   <!-- Select JSF State Saving Mode -->
   <context-param>
     <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
-    <param-value>${state.saving.method}</param-value>
+    <param-value>client</param-value>
   </context-param>
 
   <!-- JSF Configuration Resources (comma-separated list) -->
