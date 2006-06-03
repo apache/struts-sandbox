@@ -16,6 +16,8 @@
 
 --%>
 
+<%-- The Bundle.properties file is in the src/main/resources directory. --%>
+
 <f:loadBundle        var="messages"
-                basename="${package}.Bundle"/>
+                basename="Bundle"/>
 
