@@ -16,9 +16,6 @@ To use the archetype to create a blank project:
          -DartifactId=projectname                                     \
          -DremoteRepositories=http://people.apache.org/maven-snapshot-repository
          
-   You will then need to move src/main/resources/Bundle.properties into the 
-   proper package structure under src/main/resources.
-
 To build your new webapp and install it in your local Maven repository:
 
    $ cd projectname
