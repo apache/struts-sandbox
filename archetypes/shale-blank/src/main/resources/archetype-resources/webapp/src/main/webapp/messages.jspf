@@ -19,5 +19,5 @@
 <%-- The Bundle.properties file is in the src/main/resources directory. --%>
 
 <f:loadBundle        var="messages"
-                basename="Bundle"/>
+                basename="org.apache.shale.blank.Bundle"/>
 

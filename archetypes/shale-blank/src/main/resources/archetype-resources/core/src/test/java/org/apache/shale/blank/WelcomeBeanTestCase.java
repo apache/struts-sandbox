@@ -15,7 +15,7 @@
  *
  */
 
-package $package;
+package org.apache.shale.blank;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;

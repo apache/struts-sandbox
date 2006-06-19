@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>${groupId}</groupId>
+        <artifactId>${artifactId}-parent</artifactId>
+        <version>${version}</version>
+    </parent>
+    <artifactId>${artifactId}-it</artifactId>
+    <packaging>pom</packaging>
+
+    <name>Shale Starter Archetype - Integration Tests</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.struts.shale</groupId>
+            <artifactId>shale-test</artifactId>
+            <version>1.0.3-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>htmlunit</groupId>
+            <artifactId>htmlunit</artifactId>
+            <version>1.8</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.xml</groupId>
+                    <artifactId>jsr173</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.codehaus.cargo</groupId>
+            <artifactId>cargo-core-uberjar</artifactId>
+            <version>0.8</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.cargo</groupId>
+            <artifactId>cargo-ant</artifactId>
+            <version>0.8</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <!-- WelcomeTestCase needs the resource bundle from the core jar -->
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>${artifactId}-core</artifactId>
+            <version>${version}</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <testSourceDirectory>src/it/java</testSourceDirectory>
+        <finalName>${artifactId}</finalName>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>itest</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>compiler-it</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>testCompile</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>surefire-it</id>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>test</goal>
+                                </goals>
+                                <configuration>
+                                    <excludes>
+                                        <exclude>**/WelcomeTestCase.java</exclude>
+                                    </excludes>
+                                    <!-- 'basedir' gets filtered and archetype:create time, rather than build-time. -->
+                                    <systemProperties>
+                                        <property>
+                                            <name>url</name>
+                                            <value>http://localhost:8080/${artifactId}</value>
+                                        </property>
+                                        <property>
+                                            <name>cargo.tomcat5x.home</name>
+                                            <value>c:/java/apache-tomcat-5.5.17</value>
+                                        </property>
+                                        <property>
+                                            <name>cargo.tomcat5x.output</name>
+                                            <value>target/tomcat5x.out</value>
+                                        </property>
+                                        <property>
+                                            <name>cargo.tomcat5x.log</name>
+                                            <value>target/tomcat5x.log</value>
+                                        </property>
+                                        <property>
+                                            <name>cargo.deployable</name>
+                                            <value>../webapp/target/${artifactId}.war</value>
+                                        </property>
+                                    </systemProperties>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>

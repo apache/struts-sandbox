@@ -15,7 +15,7 @@
  *
  */
 
-package $package;
+package org.apache.shale.blank;
 
 import java.util.Date;
 import org.apache.shale.view.AbstractViewController;
