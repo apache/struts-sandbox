@@ -5,13 +5,13 @@
    <modelVersion>4.0.0</modelVersion>
    <parent>
       <groupId>org.apache.struts</groupId>
-      <artifactId>struts-parent</artifactId>
-      <version>2</version>
+      <artifactId>struts-master</artifactId>
+      <version>3-SNAPSHOT</version>
    </parent>
-   <groupId>org.apache.struts.action</groupId>
-   <artifactId>struts-archetype-action-blank</artifactId>
+   <groupId>org.apache.struts</groupId>
+   <artifactId>struts-archetype-blank</artifactId>
    <version>1.0-SNAPSHOT</version>
    <packaging>jar</packaging>
-   <name>Struts Archetypes - Action Blank</name>
+   <name>Struts Archetypes - Blank</name>
 
 </project>

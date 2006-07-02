@@ -1,19 +1,19 @@
 
-Struts Archetypes - Action Blank
+Struts Archetypes - Blank
 ================================
 
-This directory contains the Struts Action Blank Archetype for Maven 2.
+This directory contains the Struts Blank Archetype for Maven 2.
 
 To use the archetype to create a blank project:
 
    $ cd ~/projects
-   $ mvn archetype:create 
-         -DarchetypeGroupId=org.apache.struts.action
-         -DarchetypeArtifactId=struts-archetype-action-blank 
-         -DarchetypeVersion=1.0-SNAPSHOT
-         -DgroupId=com.example
-         -DpackageName=com.example.projectname
-         -DartifactId=my-webapp
+   $ mvn archetype:create                                    \
+         -DarchetypeGroupId=org.apache.struts                \
+         -DarchetypeArtifactId=struts-archetype-blank        \
+         -DarchetypeVersion=1.0-SNAPSHOT                     \
+         -DgroupId=com.example                               \
+         -DpackageName=com.example.projectname               \
+         -DartifactId=my-webapp                              \
          -DremoteRepositories=http://people.apache.org/maven-snapshot-repository
          
 To build your new webapp:
@@ -31,10 +31,10 @@ To start Tomcat and deploy your new webapp:
                <home>c:/java/apache-tomcat-5.5.17</home>
 
   $ mvn package cargo:start
-  
-To build and install the archetype in your local repository:
 
-   $ svn co http://svn.apache.org/repos/asf/struts/sandbox/trunk/archetypes
-   $ cd archetypes/action-blank
+(Optional) To build and install the archetype in your local repository:
+
+   $ svn co http://svn.apache.org/repos/asf/struts/maven/trunk/struts-archetype-blank
+   $ cd struts-archetype-blank
    $ mvn install
 
