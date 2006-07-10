@@ -25,17 +25,16 @@
 
    <parent>
       <groupId>org.apache.struts</groupId>
-      <artifactId>struts-parent</artifactId>
-      <version>2</version>
+      <artifactId>struts-master</artifactId>
+      <version>3</version>
    </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.apache.struts.sandbox</groupId>
-    <artifactId>sandbox-parent</artifactId>
-    <version>1</version>
+    <groupId>org.apache.struts</groupId>
+    <artifactId>struts-sandbox</artifactId>
+    <version>2-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Apache Struts Sandbox</name>
-    <url>http://struts.apache.org</url>
     <description>Apache Struts Sandbox</description>
 
     <inceptionYear>2000</inceptionYear>
@@ -47,11 +46,6 @@
     </scm>
 
     <distributionManagement>
-        <repository>
-           <id>apache-maven-test-builds</id>
-           <name>Apache Maven Repository (Test Builds)</name>
-           <url>scp://people.apache.org/www/cvs.apache.org/maven-snapshot-repository</url>
-        </repository>
         <site>
             <id>apache-site</id>
             <url>scp://people.apache.org/www/struts.apache.org/struts-sandbox</url>

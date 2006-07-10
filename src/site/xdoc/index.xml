@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<document>
+
+   <properties>
+      <title>Apache Struts - Sandbox</title>
+   </properties>
+
+   <body>
+
+      <section name="Apache Struts Sandbox">
+
+        <p>The Apache Struts Sandbox houses experimental, unreleased projects.</p>
+
+         <subsection name="Sandbox Projects">
+
+            <p>To find out what's in the sandbox, <a href="source-repository.html">
+                access the repository</a>, or visit the project website for
+                <ul>
+                    <li><a href="tiles/index.html">Tiles 2</a>,</li>
+                    <li><a href="struts-flow/index.html">Struts Flow</a>, or</li>
+                    <li><a href="struts-ti/index.html">Struts Ti</a>.</li>
+                </ul>
+           </p>
+         </subsection>
+      </section>
+
+   </body>
+
+</document>
