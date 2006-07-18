@@ -15,25 +15,22 @@
 
 <p>
     <i>
-        This article is meant to introduce a new user to Apache Struts 2 by "walking
-        through" a simple, but functional, application.
+        This article is meant to introduce a new user to Apache Struts 2 by 
+        "walking through" a simple, but functional, application.
+        The article includes code snippets, but for the best result, you might 
+        want to install the MailReader application on your own development 
+        workstation and follow along.
+        Of course, the full source code to the MailReader is included in the 
+        distribution.
     </i>
+
 </p>
 
 <p>
     <i>
-        The Struts 2 MailReader application is based on the 2.0.0 version Apache 
-        Struts 2.
-        To follow along, you should install the MailReader application on your
-        own development workstation (e.g. localhost).
-    </i>
-</p>
-
-<p>
-    <i>
-        This article assumes the reader has a basic understanding of the Java
-        language, JavaBeans, web applications, and JavaServer Pages. For background on
-        these technologies, see the
+        The tour assumes the reader has a basic understanding of the Java
+        language, JavaBeans, web applications, and JavaServer Pages. For 
+        background on these technologies, see the
         <a href="http://struts.apache.org/primer.html">
             Key Technologies Primer</a>.
     </i>
@@ -125,7 +122,7 @@
     The MailReader application demonstrates registering with an application,
     logging into an application, maintaining a master record, and maintaining
     child records.
-    This document overview the constructs needed to do these things,
+    This article overviews the constructs needed to do these things,
     including the server pages, Java classes, and configuration elements.
 </p>
 
@@ -176,7 +173,7 @@
     the container reads and parses the "Web Application Deployment
     Descriptor", or "web.xml" file.
     The framework plugs into a web application via a servlet filter.
-    Like any filter, the Struts 2 filter is deployed via the "web.xml".
+    Like any filter, the "struts2" filter is deployed via the "web.xml".
 </p>
 
 <hr/>
@@ -186,17 +183,17 @@
   "http://java.sun.com/dtd/web-app_2_3.dtd">
 &lt;web-app>
 
-  &lt;display-name>Struts 2 Mailreader&lt;/display-name>
+  &lt;display-name>Struts 2 MailReader&lt;/display-name>
 
   <strong>&lt;filter>
-    &lt;filter-name>Struts 2&lt;/filter-name>
+    &lt;filter-name>struts2&lt;/filter-name>
     &lt;filter-class>
       org.apache.struts2.dispatcher.FilterDispatcher
     &lt;/filter-class>
    &lt;/filter></strong>
 
   &lt;filter-mapping>
-    &lt;filter-name><strong>Struts 2</strong>&lt;/filter-name>
+    &lt;filter-name><strong>struts2</strong>&lt;/filter-name>
     &lt;url-pattern>/*&lt;/url-pattern>
   &lt;/filter-mapping>
 
@@ -229,7 +226,7 @@
 </p>
 
 <p>
-    However, most Struts 2 applications do not refer to physical pages,
+    However, most Struts applications do not refer to physical pages,
     but to "virtual resources" called <i>actions</i>.
     Actions specify code that we want to be run before a page
     or other resource renders the response.
@@ -268,7 +265,7 @@
 <p>
     One solution is to use a page to "bootstrap" one of our actions.
     We can register the usual "index.html" as the Welcome page and have it
-    redirects to a "Welcome" action.
+    redirect to a "Welcome" action.
 </p>
 
 <hr/>
@@ -284,15 +281,15 @@
 
 <p>
     As an alternative,
-    we could also have used a JSP page that issued the redirect with Struts 2 tags,
-    but a plain HTML solution works just as well.
+    we could also have used a JSP page that issued the redirect with a Struts tag,
+    but a plain HTML solution works as well.
 </p>
 
 <h4><a name="Welcome.do" id="Welcome.do">Welcome.do</a></h4>
 
 <p>
-    When the client requests "Welcome.do", the request is passed to the "Struts 2" FilterDispatcher
-    registered in the web.xml file.
+    When the client requests "Welcome.do", the request is passed to the "struts2" FilterDispatcher
+    (that we registered in the web.xml file).
     The FilterDispatcher retrieves the appropriate action mapping from the 
     configuration.
     If we just wanted to forward to the Welcome page, we could use a simple
@@ -349,17 +346,29 @@
 <p>
     The net effect is that all of the result details,
     including the paths to server pages,
-    can be maintained in the configuration file.
+    all can be declared <em>once</em> in the configuration.
     Tightly coupled implementation details are not scattered all over
     the application.
 </p>
 
-<h4><a name="Welcome.java" id="Welcome.java">Welcome Action</a></h4>
+<hr/>
+<h5>Key concept:</h5>
+<blockquote>
+    <p>
+        The Struts configuration lets us separate concerns and "say it once".
+        The configuration helps us "normalize" an application, 
+        in much the same way we normalize a database schema. 
+    </p>
+</blockquote>
+<hr/>
+
 
 <p>
     OK ... but why would a Welcome Action want to choose between "success" and
     "error"?
 </p>
+
+<h4><a name="Welcome.java" id="Welcome.java">Welcome Action</a></h4>
 
 <p>
     The MailReader application retains a list of users along with their email
@@ -409,7 +418,7 @@ public class Welcome extends MailreaderSupport {
 <hr/>
 
 <p>
-    Several common result name are predefined
+    Several common result names are predefined, 
     including ERROR, SUCCESS, LOGIN, NONE, and INPUT,
     so that these tokens can be used consistently across Struts 2 applications.
 </p>
@@ -476,7 +485,7 @@ public class Welcome extends MailreaderSupport {
 
 <p>
     The database comes seeded with a sample user.
-    If you check the "database.xml" file under "/src/java",
+    If you check the "database.xml" file under "/src/main",
     you'll see the sample user described in XML.
 </p>
 
@@ -506,7 +515,7 @@ public class Welcome extends MailreaderSupport {
     The message resources for the application are loaded through a reference in the
     "struts.properties" file.
     Like the database contents, the "struts.properties" file is kept under
-    "/src/java/" in the source tree.
+    "/src/main/" in the source tree.
 </p>
 
 <hr/>
@@ -521,8 +530,10 @@ struts.action.extension = <strong>do</strong></code></pre>
     for a Resource Bundle named "resources.properties".
     The bundle might be embedded in a JAR, or found in the "WEB-INF/classes"
     folder, or anywhere else on the runtime classpath.
-    In the MailReader, we keep the original bundle in the source tree under
-    "src/java/" from where it is copied to "WEB-INF/classes" at deployment.
+    In the MailReader, we keep the <strong>original</strong> bundle in the 
+    source tree under "src/main/". When the application is built, the 
+    properties files are  <strong>copied</strong> to "WEB-INF/classes", so 
+    that they are on the Java classpath.
 </p>
 
 <hr/>
@@ -535,10 +546,10 @@ struts.action.extension = <strong>do</strong></code></pre>
 <hr/>
 
 <p>
-    If you change a message in the resource, and then reload the application,
-    the change will appear throughout the application.
+    If you change a message in the resource, and then rebuild and reload the 
+    application, the change will appear throughout the application.
     If you provide message resources for additional locales, you can
-    internationalize your application.
+    localize your application.
     The MailReader provides resources for English, Russian, and Japanese.
 </p>
 
@@ -551,7 +562,7 @@ struts.action.extension = <strong>do</strong></code></pre>
 <hr/>
 <h5>Welcome.jsp</h5>
 <pre><code>&lt;%@ page contentType="text/html; charset=UTF-8" %>
-<strong>&lt;%@ taglib uri="/struts2" prefix="s" %></strong>
+<strong>&lt;%@ taglib prefix="s" uri="http://struts.apache.org/tags-ui" %></strong>
   &lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
   &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -596,7 +607,7 @@ struts.action.extension = <strong>do</strong></code></pre>
     At the top of the Welcome page, there are several directives that load the
     Struts 2 tag libraries.
     These are just the usual red tape that goes with any JSP file.
-    The rest of the page utilizes three Action three JSP tags:
+    The rest of the page utilizes three Struts JSP tags:
     "text", "url", and "i18n".
 </p>
 
@@ -645,7 +656,7 @@ struts.action.extension = <strong>do</strong></code></pre>
 
 <p>
     The <strong>alternate</strong> bundle is stored next to the default bundle,
-    so that it ends up under classes, which is on the application's class path.
+    so that it ends up under "classes", which is on the application's class path.
 </p>
 
 <p>
@@ -696,7 +707,7 @@ struts.action.extension = <strong>do</strong></code></pre>
 <hr/>
 <h5>Login.jsp</h5>
 <pre><code>&lt;%@ page contentType="text/html; charset=UTF-8" %>
-  &lt;%@ taglib uri="/struts2" prefix="s" %>
+  &lt;%@ taglib prefix="s" uri="http://struts.apache.org/tags-ui"  %>
   &lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
   &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -756,14 +767,14 @@ struts.action.extension = <strong>do</strong></code></pre>
 <p>
     Within the form tag,
     we see four more new tags: "textfield", "password", "submit",
-    and "reset". We also see a second form of "submit" that utilizes an
+    and "reset". We also see a second usage of "submit" that utilizes an
     "action" attribute.
 </p>
 
 <p>
-    When we place a control on a form, we usually need to place a set of
+    When we place a control on a form, we usually need to code a set of
     HTML tags to do everything we want to do.
-    Usually, we do not just want a plain "input type=text" tag.
+    Most often, we do not just want a plain "input type=text" tag.
     We want the input field to have a label too, and maybe even
     a tooltip. And, of course, a place to print a message
     should invalid data be entered.
@@ -803,11 +814,11 @@ struts.action.extension = <strong>do</strong></code></pre>
 
 <hr/>
 <pre><code>&lt;#if (actionErrors?exists && actionErrors?size > 0)>
-  &lt;table>
+  &lt;ul>
     &lt;#list actionErrors as error>
-      &lt;tr>&lt;td>&lt;span class="errorMessage">${error}&lt;/span>&lt;/td>&lt;/tr>
+      &lt;li>&lt;span class="errorMessage">${error}&lt;/span>&lt;/li>
     &lt;/#list>
-  lt;/table>
+  &lt;/ul>
 &lt;/#if></code></pre>
 <hr/>
 
@@ -816,6 +827,16 @@ struts.action.extension = <strong>do</strong></code></pre>
     you could edit a copy of this file, save it as a file named "actionerror.ftl",
     and place this one file somewhere on your classpath.
 </p>
+
+<hr/>
+<pre><code>&lt;#if (actionErrors?exists && actionErrors?size > 0)>
+  <strong>&lt;table></strong>
+    &lt;#list actionErrors as error>
+      <strong>&lt;tr>&lt;td></strong>&lt;span class="errorMessage">${error}&lt;/span><strong>&lt;/td>&lt;/tr></strong>
+    &lt;/#list>
+  <strong>&lt;/table></strong>
+&lt;/#if></code></pre>
+<hr/>
 
 <p>
     Under the covers, the framework uses
@@ -833,8 +854,8 @@ struts.action.extension = <strong>do</strong></code></pre>
     By default, the password tag will not retain input if the submit fails.
     If the username is wrong,
     the client will have to enter the password again too.
-    If you did want to retain the password when validation fails,
-    you can set the tag's "showPassword" property to true.
+    (If you did want to retain the password when validation fails,
+    you can set the tag's "showPassword" property to true.)
 </p>
 
 <p>
@@ -976,7 +997,7 @@ public String <strong>execute()</strong> throws ExpiredPasswordException {
     Logon lays out what we do to authenticate a user.
     We try to find the user using the credentials provided.
     If the user is found, we cache a reference.
-    If not user is not found, we return "input" so the client can try again.
+    If the user is not found, we return "input" so the client can try again.
     Otherwise, we return "success", so that the client can access the rest of the application.
 </p>
 
@@ -984,7 +1005,7 @@ public String <strong>execute()</strong> throws ExpiredPasswordException {
 
 <p>
     Let's look at the relevant properties and methods from MailreaderSupport
-    and another base class, <strong>ActionSupport</strong>:
+    and another base class, <strong>ActionSupport</strong>, namely 
     "getUsername", "getPassword", "findUser", "setUser", and "hasErrors".
 </p>
 
@@ -1047,13 +1068,13 @@ public void setPassword(String password) {
 <p>
     The "findUser" method dips into the MailReader Data Access Object layer,
     which is represented by the <strong>Database</strong> property.
-    The code for the DAO layer is maintained as a separate project.
+    The code for the DAO layer is maintained as a separate component.
     The MailReader application imports the DAO JAR,
     but it is not responsible for maintaining any of the DAO source.
     Keeping the data access layer at "arms-length" is a very good habit.
     It encourages a style of development where the data access layer
     can be tested and developed independently of a specific end-user application.
-    In fact, there are three versions of the MailReader application,
+    In fact, there are several renditions of the MailReader application,
     all which share the same MailReader DAO JAR!
 </p>
 
@@ -1069,7 +1090,8 @@ public void setPassword(String password) {
     When "findUser" returns,
     the Logon Action looks to see if a valid (non-null) User object is returned.
     A valid User is passed to the <strong>User property</strong>.
-    The User property is not implemented in quite the same way as Username and Password.
+    Although it is still a JavaBean property, 
+    the User property is not implemented in quite the same way as Username and Password.
 </p>
 
 <hr/>
@@ -1146,7 +1168,7 @@ public void <strong>setSession(Map value)</strong> {
     Each Interceptor can peek at the request before an Action class is invoked,
     and then again after the Action class is invoked.
     (If you have worked with Servlet
-    <a href="http://java.sun.com/products/servlet/Filters.html">Filters</a>,
+    <a href="http://struts.apache.org/primer.html#filters">Filters</a>,
     you will recognize this pattern.
     But, unlike Filters, Interceptors are not tied to HTTP.
     Interceptors can be tested and developed outside of a web application.)
@@ -1235,7 +1257,8 @@ public void <strong>setSession(Map value)</strong> {
 <p>
     In the Logon action element, the first result element is named "input".
     If validation or authentification fail,
-    the Action class will return "input" and the framework will transfer control to the Logon.jsp page.
+    the Action class will return "input" and the framework will transfer control to the 
+    "Logon.jsp" page.
 </p>
 
 <p>
@@ -1285,7 +1308,7 @@ public void <strong>setSession(Map value)</strong> {
 <hr/>
 <h5>Error.jsp</h5>
 <pre><code>&lt;%@ page contentType="text/html; charset=UTF-8" %>
-&lt;%@ taglib uri="/struts2" prefix="s" %>
+&lt;%@ taglib prefix="s" uri="http://struts.apache.org/tags-ui" %>
   &lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
   &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -1401,8 +1424,8 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor {
 <hr/>
 
 <p>
-    The <strong>user</strong> stacks require that the client be authenticated,
-    in other words that a User object is present in the session.
+    The <strong>user</strong> stacks require that the client be authenticated. 
+    In other words, that a User object is present in the session.
     The actions using a <strong>guest</strong> stack can be accessed by any client.
     The <strong>-submit</strong> versions of each can be used with actions
     with forms, to guard against double submits.
@@ -1411,8 +1434,8 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor {
 <h5>Double Submits</h5>
 
 <p>
-    A common problem with designing web applications is that response times
-    can vary and users are impatient.
+    A common problem with designing web applications is that users are impatient 
+    and response times can vary.
     Sometimes, people will press a submit button a second time.
     When this happens, the browser submits the request again,
     so that we now have two requests for the same thing.
@@ -1427,12 +1450,12 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor {
 </p>
 
 <p>
-    To forestall double submits and "back button" resubmit,
+    To forestall double submits, and "back button" resubmits,
     the framework can generate a token that is embedded in the form
     and also kept in the session.
     If the value of the tokens do not compare,
     then we know that there has been a problem,
-    and a form has been submitted twice or out of sequence.
+    and that a form has been submitted twice or out of sequence.
 </p>
 
 <p>
@@ -1446,8 +1469,12 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor {
 
 <p>
     Because the default interceptor stack will now authenticate the client,
-    we need to specify the standard "defaultStack" for the three "guest actions",
-    Welcome, Logon, and Register.
+    we need to specify the standard "defaultStack" for the three 
+    "guest actions", Welcome, Logon, and Register. 
+    Requiring authentification by default is the better practice, since it 
+    means that we won't forget to enable it when creating new actions. 
+    Meanwhile, those pesky users will ensure that we don't forget to disable 
+    authentification for "guest" services.
 </p>
 
 <h3><a name="MainMenu" id="MainMenu">MainMenu</a></h3>
@@ -1481,7 +1508,7 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor {
 
 <h5>MainMenu.jsp</h5>
 <pre><code>&lt;%@ page contentType="text/html; charset=UTF-8" %>
-&lt;%@ taglib uri="/struts2" prefix="s" %>
+&lt;%@ taglib prefix="s" uri="http://struts.apache.org/tags-ui"  %>
 &lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
   &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -1508,9 +1535,9 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor {
 <hr/>
 
 <p>
-    The source for MainMenu.jsp also contains a new tag, <strong>
+    The source for "MainMenu.jsp" also contains a new tag, <strong>
     property</strong>, which we use to customize the page with the
-    full name property of the authenticated user.
+    "fullName" property of the authenticated user.
 </p>
 
 <p>
@@ -1578,8 +1605,8 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor {
         The "test" tag is a convenient way to express presentation
         logic within your pages.
         Customized pages help to prevent user error,
-        and dynamic customization reduces the number of JSPs your application
-        needs to maintain, among other benefits.
+        and dynamic customization reduces the number of server pages your 
+        application needs to maintain, among other benefits.
     </font></p>
 </blockquote>
 <hr/>
@@ -1697,11 +1724,11 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor {
                     false
                 </td>
                 <td align="center">
-                    <a href="/Struts 2-mailreader/Subscription!delete.do?host=mail.hotmail.com">
+                    <a href="/struts2-mailreader/Subscription!delete.do?host=mail.hotmail.com">
                         Delete
                     </a>
                     &nbsp;
-                    <a href="/Struts 2-mailreader/Subscription!edit.do?host=mail.hotmail.com">
+                    <a href="/struts2-mailreader/Subscription!edit.do?host=mail.hotmail.com">
                         Edit
                     </a>
                 </td>
@@ -1720,17 +1747,17 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor {
                     false
                 </td>
                 <td align="center">
-                    <a href="/Struts 2-mailreader/Subscription!delete.do?host=mail.yahoo.com">
+                    <a href="/struts2-mailreader/Subscription!delete.do?host=mail.yahoo.com">
                         Delete
                     </a>
                     &nbsp;
-                    <a href="/Struts 2-mailreader/Subscription!edit.do?host=mail.yahoo.com">
+                    <a href="/struts2-mailreader/Subscription!edit.do?host=mail.yahoo.com">
                         Edit
                     </a>
                 </td>
             </tr>
     </table>
-    <a href="/Struts 2-mailreader/Subscription!input.do">Add</a>
+    <a href="/struts2-mailreader/Subscription!input.do">Add</a>
 
 <hr />
 
@@ -1763,11 +1790,11 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor {
 <p>
     Merging dynamic data into static web pages is a primary reason
     we create web applications.
-    The JavaServer Pages API has a mechanism that allows you to
+    The Java API has a mechanism that allows you to
     place objects in a servlet scope (page, request, session, or
-    application), and then retrieve them using a scriplet.
+    application), and then retrieve them using a JSP scriplet.
     If the object is placed directly in one of the scopes,
-    a JSP tag can find that object by searching page scope  and
+    a JSP tag or scriptlet can find that object by searching page scope and
     then request scope, and session scope, and finally application scope.
 </p>
 
@@ -1777,7 +1804,7 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor {
     the public properties of that object become first-class properties of the stack.
     The object's properties become the stack's properties.
     If another object on the stack has properties of the same name,
-    the last object pushed onto the stack wins.
+    the last object pushed onto the stack wins. (Last-In, First-Out.)
 </p>
 
 <p>
@@ -1801,7 +1828,7 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor {
     Since the Action is on the value stack,
     our tags can access any property of the Action as if it were an implicit property of the page.
     The tags don't access the Action directly.
-    If a textfield tag is told to render the Username property,
+    If a textfield tag is told to render the "Username" property,
     the tag asks the value stack for the value of "Username",
     and the value stack returns the first property it finds by that name.
 </p>
@@ -1812,11 +1839,13 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor {
     the value for the field is pushed onto the value stack.
     As a result, if the client enters text into an Integer field,
     the framework can still redisplay whatever was entered.
+    An invalid input value is not stored in the field (even if it could be). 
+    The invalid input is pushed onto the stack for the scope of the request.
 </p>
 
 <p>
     The Subscription list uses another new tag: the <strong>param</strong> tag.
-    As tags go, "param" takes very few parameters of it's own: just "name" and "value", and neither is required.
+    As tags go, "param" takes very few parameters of its own: just "name" and "value", and neither is required.
     Although simple, "param" is one of the most powerful tags the framework provides.
     Not so much because of what it does, but because of what "param" allows the other tags to do.
 </p>
@@ -1851,7 +1880,7 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor {
 </p>
 
 <pre><code>
-  &lt;a href="/Struts 2-mailreader/Subscription!edit.do?<strong>host=mail.yahoo.com</strong>">Edit&lt;/a>
+  &lt;a href="/struts2-mailreader/Subscription!edit.do?<strong>host=mail.yahoo.com</strong>">Edit&lt;/a>
 </code></pre>
 
 
@@ -1921,9 +1950,9 @@ public String find() {
     First, it must set the Task property to "Edit".
     The Subscription page will render itself differently
     depending on the value of the Task property.
-    Second, "edit" must locate the rel event Subscription
+    Second, "edit" must locate the relevant Subscription
     and set it to the Subscription property.
-    If all goes well, "edit" returns the "input" token,
+    If all goes well, "edit" returns the INPUT token,
     so that the "input" result will be invoked.
 </p>
 
@@ -1974,7 +2003,7 @@ public Subscription findSubscription(String host) {
 </p>
 
 <p>
-    As a final layer of defense, we also configured a validation for Subscription,
+    As a final layer of defense, we also configured a validator for Subscription,
     to ensure that we are passed a Host parameter.
 </p>
 
@@ -1996,14 +2025,14 @@ public Subscription findSubscription(String host) {
 </p>
 
 <p>
-    After setting the rel event Subscription object to the Subscription property,
+    After setting the relevent Subscription object to the Subscription property,
     the framework transfers control to the (you guessed it) Subscription page.
 </p>
 
 <hr />
 <h5>Subscription.jsp</h5>
 <pre><code>&lt;%@ page contentType="text/html; charset=UTF-8" %>
-&lt;%@ taglib uri="/webwork" prefix="saf" %>
+&lt;%@ taglib prefix="s" uri="http://struts.apache.org/tags-ui" %>
 &lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -2141,7 +2170,7 @@ public Subscription findSubscription(String host) {
 
 <p>
     Unsurprisingly, the <strong>select</strong> tag renders a select control,
-    but the tag goes so without requiring a lot of markup or redtape.
+    but the tag does so without requiring a lot of markup or redtape.
 </p>
 
 <pre><code>&lt;s:select label="%{getText('mailServerType')}"
@@ -2205,6 +2234,18 @@ public Subscription findSubscription(String host) {
     to a local property, where it is easier to manage.
 </p>
 
+
+<h4>
+    <a name="SubscriptionAction.java" id="SubscriptionAction.java">SubscriptionAction.java</a>
+</h4>
+
+<p>
+    Like many applications, the MailReader uses mainly String properties.
+    One exception is the AutoConnect property of the Subscription object.
+    On the HTML form, the AutoConnect property is represented by a checkbox,
+    and checkboxes need to be handled differently that other controls.
+</p>
+
 <p>
     The <strong>checkbox</strong> starts out as a simple enough control.
 </p>
@@ -2218,52 +2259,8 @@ public Subscription findSubscription(String host) {
     The problem is, if you clear a checkbox, the browser client will not submit <em>anything</em>.
     Nada. Zip.
     It is as if the checkbox control never existed.
-    The HTTP protocol has no way to affirm "false".
-    if the control is missing, we need to figure out it's been unclicked.
-</p>
-
-<p>
-    If you are backing the form with an object in session state, as MailReader does,
-    the behavior is problematic because, without some extra work,
-    the client cannot uncheck the box.
-    If the session-state property is set to true, and the client unchecks the box,
-    the control is not submitted.
-    There is no trigger to change state, and so state remains true.
-</p>
-
-<hr />
-<h5>SubscriptionSave</h5>
-<pre><code>public final class SubscriptionSave extends Subscription {
-
-  public void prepare() {
-    super.prepare();
-    // checkbox workaround
-    <strong>getSubscription().setAutoConnect(false);</strong>
-  }
-
-  public String execute() throws Exception {
-    return save();
-  }
-}</code></pre>
-<hr />
-
-<p>
-    The simplest solution is to employ our old friend Preparable again.
-    In the "prepare" method for SubscriptionSave,
-    we can set the property represented by the checkbox to false.
-    If the control is not submitted, then the property remains false.
-    If the control is submitted, then the property is set to true.
-</p>
-
-<h4>
-    <a name="SubscriptionAction.java" id="SubscriptionAction.java">SubscriptionAction.java</a>
-</h4>
-
-<p>
-    Like many applications, the MailReader uses mainly String properties.
-    One exception is the AutoConnect property of the Subscription object.
-    On the HTML form, the AutoConnect property is represented by a checkbox,
-    and checkboxes need to be handled differently that other controls.
+    The HTTP protocol has no way to affirm "false". 
+    If the control is missing, we need to figure out it's been unclicked.
 </p>
 
 <hr/>
@@ -2283,17 +2280,33 @@ public Subscription findSubscription(String host) {
         because if you uncheck the box, nothing is sent, and so the control
         stays checked.
     </p>
-
-    <p class="hint">
-        The simple solution is to set the initial value for a checkbox control
-        to false before the form is populated.
-        If the checkbox is checked, it will return a value, and the checkbox
-        will represent true.
-        If the checkbox is unchecked, it will not return a value, and the
-        checkbox will remain unchecked ("false").
-    </p>
 </blockquote>
 <hr/>
+
+<p>
+    The simplest solution is to employ our old friend Preparable again.
+    In the "prepare" method for SubscriptionSave,
+    we can set the property represented by the checkbox to false.
+    If the control is not submitted, then the property remains false.
+    If the control is submitted, then the property is set to true.
+</p>
+
+<hr />
+<h5>SubscriptionSave</h5>
+<pre><code>public final class SubscriptionSave extends Subscription {
+
+  public void prepare() {
+    super.prepare();
+    // checkbox workaround
+    <strong>getSubscription().setAutoConnect(false);</strong>
+  }
+
+  public String execute() throws Exception {
+    return save();
+  }
+}</code></pre>
+<hr />
+
 
 <p>
     If we press the SAVE button,
@@ -2398,7 +2411,7 @@ public Subscription findSubscription(String host) {
     reviewed a Registration record, and edited a Subscription.
     Of course, there's more, but from here on, it is mostly more of the same.
     The full source code for MailReader is
-    <a href="http://svn.apache.org/viewcvs.cgi/struts/sandbox/trunk/Struts 2/apps/mailreader/">available online</a>
+    <a href="http://svn.apache.org/viewcvs.cgi/struts/sandbox/trunk/struts2/apps/mailreader/">available online</a>
     and in the distribution.
 </p>
 
