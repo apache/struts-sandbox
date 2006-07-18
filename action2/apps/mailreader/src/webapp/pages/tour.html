@@ -6,24 +6,24 @@
     <meta http-equiv="Content-Type" content="text/html; charset=us-ascii"/>
     <link rel="stylesheet" type="text/css" href="../css/mailreader.css"/>
 
-    <title>A Walking Tour of the Action 2 MailReader Application</title>
+    <title>A Walking Tour of the Struts 2 MailReader Application</title>
 </head>
 
 <body>
 <blockquote>
-<h2>A Walking Tour of the Action 2 MailReader Application</h2>
+<h2>A Walking Tour of the Struts 2 MailReader Application</h2>
 
 <p>
     <i>
-        This article is meant to introduce a new user to Struts Action 2 by "walking
+        This article is meant to introduce a new user to Apache Struts 2 by "walking
         through" a simple, but functional, application.
     </i>
 </p>
 
 <p>
     <i>
-        The Action2 MailReader application is based on the 2.2.2 release of OpenSymphony WebWork
-        (soon to be known as Struts Action 2).
+        The Struts 2 MailReader application is based on the 2.0.0 version Apache 
+        Struts 2.
         To follow along, you should install the MailReader application on your
         own development workstation (e.g. localhost).
     </i>
@@ -34,8 +34,8 @@
         This article assumes the reader has a basic understanding of the Java
         language, JavaBeans, web applications, and JavaServer Pages. For background on
         these technologies, see the
-        <a href="http://struts.apache.org/struts-action/userGuide/preface.html">
-            Preface to the Action 1 User Guide</a>.
+        <a href="http://struts.apache.org/primer.html">
+            Key Technologies Primer</a>.
     </i>
 </p>
 
@@ -145,8 +145,8 @@
         However, use of the standard Java Authentication and Authorization
         Service (JAAS) is recommended for most applications.
         (See the <a
-            href="http://struts.apache.org/struts-action/userGuide/preface.html">
-        Preface to the Action 1 User Guide</a> for more about
+            href="http://struts.apache.org/primer.html">
+        Key Technologies Primer</a> for more about
         authentication technologies.)
     </font></p>
 </blockquote>
@@ -176,7 +176,7 @@
     the container reads and parses the "Web Application Deployment
     Descriptor", or "web.xml" file.
     The framework plugs into a web application via a servlet filter.
-    Like any filter, the Action servlet is deployed via the "web.xml".
+    Like any filter, the Struts 2 filter is deployed via the "web.xml".
 </p>
 
 <hr/>
@@ -186,17 +186,17 @@
   "http://java.sun.com/dtd/web-app_2_3.dtd">
 &lt;web-app>
 
-  &lt;display-name>Action2 Mailreader&lt;/display-name>
+  &lt;display-name>Struts 2 Mailreader&lt;/display-name>
 
   <strong>&lt;filter>
-    &lt;filter-name>Action2&lt;/filter-name>
+    &lt;filter-name>Struts 2&lt;/filter-name>
     &lt;filter-class>
-      com.opensymphony.webwork.dispatcher.FilterDispatcher
+      org.apache.struts2.dispatcher.FilterDispatcher
     &lt;/filter-class>
    &lt;/filter></strong>
 
   &lt;filter-mapping>
-    &lt;filter-name><strong>Action2</strong>&lt;/filter-name>
+    &lt;filter-name><strong>Struts 2</strong>&lt;/filter-name>
     &lt;url-pattern>/*&lt;/url-pattern>
   &lt;/filter-mapping>
 
@@ -229,7 +229,7 @@
 </p>
 
 <p>
-    However, most Action 2 applications do not refer to physical pages,
+    However, most Struts 2 applications do not refer to physical pages,
     but to "virtual resources" called <i>actions</i>.
     Actions specify code that we want to be run before a page
     or other resource renders the response.
@@ -248,10 +248,11 @@
 
 <p>
     The actions are listed in one or more XML configuration files,
-    the default configuration file being named "xwork.xml".
-    XWork is a command processing framework that underlies Action 2.
-    It is not bound to the web layer, making XWork applications easier to test.
-    Among other things, XWork handles the mapping of a request for a certain
+    the default configuration file being named "struts.xml".
+    When the application loads, the struts.xml, and any other files 
+    it includes, are parsed, and the framework creates a set of 
+    configuration objects. 
+    Among other things, the configuration maps a request for a certain 
     page to a certain action mapping.
 </p>
 
@@ -283,17 +284,17 @@
 
 <p>
     As an alternative,
-    we could also have used a JSP page that issued the redirect with Action 2 tags,
+    we could also have used a JSP page that issued the redirect with Struts 2 tags,
     but a plain HTML solution works just as well.
 </p>
 
 <h4><a name="Welcome.do" id="Welcome.do">Welcome.do</a></h4>
 
 <p>
-    When the client requests "Welcome.do", the request is passed to the "Action2" FilterDispatcher
+    When the client requests "Welcome.do", the request is passed to the "Struts 2" FilterDispatcher
     registered in the web.xml file.
-    The FilterDispatcher passes the request back to XWork to retrieve the appropriate
-    action mapping.
+    The FilterDispatcher retrieves the appropriate action mapping from the 
+    configuration.
     If we just wanted to forward to the Welcome page, we could use a simple
     configuration element.
 </p>
@@ -410,7 +411,7 @@ public class Welcome extends MailreaderSupport {
 <p>
     Several common result name are predefined
     including ERROR, SUCCESS, LOGIN, NONE, and INPUT,
-    so that these tokens can be used consistently across Action 2 applications.
+    so that these tokens can be used consistently across Struts 2 applications.
 </p>
 
 
@@ -503,15 +504,15 @@ public class Welcome extends MailreaderSupport {
 <p>
     As mentioned, MailReader is an internationalized application.
     The message resources for the application are loaded through a reference in the
-    "webwork.properties" file.
-    Like the database contents, the "webwork.properties" file is kept under
+    "struts.properties" file.
+    Like the database contents, the "struts.properties" file is kept under
     "/src/java/" in the source tree.
 </p>
 
 <hr/>
-<h5>webwork.properties</h5>
-<pre><code>webwork.custom.i18n.resources = <strong>resources</strong>
-webwork.action.extension = <strong>do</strong></code></pre>
+<h5>struts.properties</h5>
+<pre><code>struts.custom.i18n.resources = <strong>resources</strong>
+struts.action.extension = <strong>do</strong></code></pre>
 <hr/>
 
 <p>
@@ -550,42 +551,42 @@ webwork.action.extension = <strong>do</strong></code></pre>
 <hr/>
 <h5>Welcome.jsp</h5>
 <pre><code>&lt;%@ page contentType="text/html; charset=UTF-8" %>
-<strong>&lt;%@ taglib uri="/webwork" prefix="saf" %></strong>
+<strong>&lt;%@ taglib uri="/struts2" prefix="s" %></strong>
   &lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
   &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     &lt;head>
       &lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-      &lt;title><strong>&lt;saf:text name="index.title"/></strong>&lt;/title>
-      &lt;link href="<strong>&lt;saf:url value="/css/mailreader.css"/></strong>" rel="stylesheet"
+      &lt;title><strong>&lt;s:text name="index.title"/></strong>&lt;/title>
+      &lt;link href="<strong>&lt;s:url value="/css/mailreader.css"/></strong>" rel="stylesheet"
       type="text/css"/>
     &lt;/head>
 
     &lt;body>
-      &lt;h3>&lt;saf:text name="index.heading"/>&lt;/h3>
+      &lt;h3>&lt;s:text name="index.heading"/>&lt;/h3>
 
       &lt;ul>
-        &lt;li>&lt;a href="&lt;saf:url action="Registration!input"/>">&lt;saf:text
+        &lt;li>&lt;a href="&lt;s:url action="Registration!input"/>">&lt;s:text
           name="index.registration"/>&lt;/a>&lt;/li>
-        &lt;li>&lt;a href="&lt;saf:url action="Logon!input"/>">&lt;saf:text
+        &lt;li>&lt;a href="&lt;s:url action="Logon!input"/>">&lt;s:text
           name="index.logon"/>&lt;/a>&lt;/li>
       &lt;/ul>
 
       &lt;h3>Language Options&lt;/h3>
       &lt;ul>
-        &lt;li>&lt;a href="&lt;saf:url action="Welcome?request_locale=en"/>">English&lt;/a>&lt;/li>
-        &lt;li>&lt;a href="&lt;saf:url action="Welcome?request_locale=ja"/>">Japanese&lt;/a>&lt;/li>
-        &lt;li>&lt;a href="&lt;saf:url action="Welcome?request_locale=ru"/>">Russian&lt;/a>&lt;/li>
+        &lt;li>&lt;a href="&lt;s:url action="Welcome?request_locale=en"/>">English&lt;/a>&lt;/li>
+        &lt;li>&lt;a href="&lt;s:url action="Welcome?request_locale=ja"/>">Japanese&lt;/a>&lt;/li>
+        &lt;li>&lt;a href="&lt;s:url action="Welcome?request_locale=ru"/>">Russian&lt;/a>&lt;/li>
       &lt;/ul>
 
     &lt;hr />
 
-    &lt;p><strong>&lt;saf:i18n name="alternate"></strong>
-    &lt;img src="&lt;saf:text name="struts.logo.path"/>"
-      alt="&lt;saf:text name="struts.logo.alt"/>"/>
-    <strong>&lt;/saf:i18n></strong>&lt;/p>
+    &lt;p><strong>&lt;s:i18n name="alternate"></strong>
+    &lt;img src="&lt;s:text name="struts.logo.path"/>"
+      alt="&lt;s:text name="struts.logo.alt"/>"/>
+    <strong>&lt;/s:i18n></strong>&lt;/p>
 
-    &lt;p>&lt;a href="&lt;saf:url action="Tour" />">&lt;saf:text name="index.tour"/>&lt;/a>&lt;/p>
+    &lt;p>&lt;a href="&lt;s:url action="Tour" />">&lt;s:text name="index.tour"/>&lt;/a>&lt;/p>
 
   &lt;/body>
 &lt;/html></code></pre>
@@ -593,14 +594,14 @@ webwork.action.extension = <strong>do</strong></code></pre>
 
 <p>
     At the top of the Welcome page, there are several directives that load the
-    Action 2 tag libraries.
+    Struts 2 tag libraries.
     These are just the usual red tape that goes with any JSP file.
     The rest of the page utilizes three Action three JSP tags:
     "text", "url", and "i18n".
 </p>
 
 <p>
-    (We use the tag prefix "saf:" in the Action2 MailReader application,
+    (We use the tag prefix "s:" in the Struts 2 MailReader application,
     but you can use whatever prefix you like in your applications.)
 </p>
 
@@ -695,25 +696,25 @@ webwork.action.extension = <strong>do</strong></code></pre>
 <hr/>
 <h5>Login.jsp</h5>
 <pre><code>&lt;%@ page contentType="text/html; charset=UTF-8" %>
-  &lt;%@ taglib uri="/webwork" prefix="saf" %>
+  &lt;%@ taglib uri="/struts2" prefix="s" %>
   &lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
   &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   &lt;head>
-    &lt;title>&lt;saf:text name="logon.title"/>&lt;/title>
-      &lt;link href="&lt;saf:url value="/css/mailreader.css"/>" rel="stylesheet"
+    &lt;title>&lt;s:text name="logon.title"/>&lt;/title>
+      &lt;link href="&lt;s:url value="/css/mailreader.css"/>" rel="stylesheet"
         type="text/css"/>
   &lt;/head>
   &lt;body onLoad="self.focus();document.Logon.username.focus()">
-    <strong>&lt;saf:actionerror/></strong>
-    <strong>&lt;saf:form method="POST" validate="true"></strong>
-      <strong>&lt;saf:textfield label="%{getText('username')}" name="username"/></strong>
-      <strong>&lt;saf:password label="%{getText('password')}" name="password"/></strong>
-      <strong>&lt;saf:submit value="%{getText('button.save')}"/></strong>
-      <strong>&lt;saf:reset value="%{getText('button.reset')}"/></strong>
-      &lt;saf:submit <strong>action="Logon!cancel" onclick="form.onsubmit=null"</strong>
+    <strong>&lt;s:actionerror/></strong>
+    <strong>&lt;s:form method="POST" validate="true"></strong>
+      <strong>&lt;s:textfield label="%{getText('username')}" name="username"/></strong>
+      <strong>&lt;s:password label="%{getText('password')}" name="password"/></strong>
+      <strong>&lt;s:submit value="%{getText('button.save')}"/></strong>
+      <strong>&lt;s:reset value="%{getText('button.reset')}"/></strong>
+      &lt;s:submit <strong>action="Logon!cancel" onclick="form.onsubmit=null"</strong>
         value="%{getText('button.cancel')}"/>
-    &lt;/saf:form>
+    &lt;/s:form>
     &lt;jsp:include page="Footer.jsp"/>
   &lt;/body>
 &lt;/html></code></pre>
@@ -774,7 +775,7 @@ webwork.action.extension = <strong>do</strong></code></pre>
 </p>
 
 <pre><code>
-    &lt;saf:<strong>textfield</strong> label="%{getText('username')}" name="username"/>
+    &lt;s:<strong>textfield</strong> label="%{getText('username')}" name="username"/>
 </code></pre>
 
 <p>
@@ -845,7 +846,7 @@ webwork.action.extension = <strong>do</strong></code></pre>
     The second submit button is more interesting.
 </p>
 
-<pre><code>  &lt;saf:submit <strong>action="Logon!cancel" onclick="form.onsubmit=null"</strong>
+<pre><code>  &lt;s:submit <strong>action="Logon!cancel" onclick="form.onsubmit=null"</strong>
     value="%{getText('button.cancel')}"/>
 </code></pre>
 
@@ -865,7 +866,7 @@ webwork.action.extension = <strong>do</strong></code></pre>
 <blockquote>
     <p><font class="hint">
         The UI tags have options and capabilities beyond what we have shown here.
-        For more see, the <a href="http://wiki.opensymphony.com/display/WW/Tags">UI Tag documentation.</a>
+        For more see, the <a href="http://confluence.twdata.org/display/WW/Tags">UI Tag documentation.</a>
     </font></p>
 </blockquote>
 <hr/>
@@ -911,6 +912,15 @@ webwork.action.extension = <strong>do</strong></code></pre>
 &lt;/validators>
 </code></pre>
 <hr/>
+
+<p>
+   You may note that the DTD refers to "XWork". 
+   <a href="http://www.opensymphony.com/xwork/">
+     Open Symphony XWork
+   </a> is a generic command-pattern framework that can be used outside of a 
+   web environment. In practice, Struts 2 is a web-based extension of the 
+   XWork framework. 
+</p>
 
 <p>
     The field elements correspond to the ActionForm properties.
@@ -980,7 +990,7 @@ public String <strong>execute()</strong> throws ExpiredPasswordException {
 
 <p>
     The framework lets you define
-    <a href="http://struts.apache.org/struts-action/userGuide/preface.html#javabeans">JavaBean properties</a>
+    <a href="http://struts.apache.org/primer.html#javabeans">JavaBean properties</a>
     directly on the Action.
     Any JavaBean property can be used, including rich objects.
     When a request comes in,
@@ -1149,7 +1159,7 @@ public void <strong>setSession(Map value)</strong> {
     The framework comes with a default set of Interceptors,
     that it will use when another set is not specified,
     but you can designate your own default Interceptor set (or "stack")
-    in the xwork.xml configuration file.
+    in the struts.xml configuration file.
 </p>
 
 <p>
@@ -1196,7 +1206,7 @@ public void <strong>setSession(Map value)</strong> {
 
 <p>
     To answer that question,
-    we need to turn back to the "xwork.xml" file and look at how Logon is configured.
+    we need to turn back to the "struts.xml" file and look at how Logon is configured.
 </p>
 
 
@@ -1209,7 +1219,7 @@ public void <strong>setSession(Map value)</strong> {
 </p>
 
 <hr/>
-<h5>xwork.xml Logon</h5>
+<h5>struts.xml Logon</h5>
 <pre><code>&lt;action name="<strong>Logon</strong>" class="mailreader2.Logon">
   &lt;result name="<strong>input</strong>">/pages/Logon.jsp&lt;/result>
   &lt;result name="<strong>cancel</strong>" type="redirect-action">Welcome&lt;/result>
@@ -1255,7 +1265,7 @@ public void <strong>setSession(Map value)</strong> {
 </p>
 
 <hr/>
-<h5>xwork.xml exception-mapping</h5>
+<h5>struts.xml exception-mapping</h5>
 <pre><code>&lt;global-exception-mappings>
   &lt;exception-mapping
     result="error"
@@ -1275,7 +1285,7 @@ public void <strong>setSession(Map value)</strong> {
 <hr/>
 <h5>Error.jsp</h5>
 <pre><code>&lt;%@ page contentType="text/html; charset=UTF-8" %>
-&lt;%@ taglib uri="/webwork" prefix="saf" %>
+&lt;%@ taglib uri="/struts2" prefix="s" %>
   &lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
   &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -1291,14 +1301,14 @@ public void <strong>setSession(Map value)</strong> {
     &lt;/p>
     &lt;hr />
     &lt;h3>Error Message&lt;/h3>
-    <strong>&lt;saf:actionerror /></strong>
+    <strong>&lt;s:actionerror /></strong>
     &lt;p>
-      <strong>&lt;saf:property value="%{exception.message}"/></strong>
+      <strong>&lt;s:property value="%{exception.message}"/></strong>
     &lt;/p>
     &lt;hr />
     &lt;h3>Technical Details&lt;/h3>
     &lt;p>
-      <strong>&lt;saf:property value="%{exceptionStack}"/></strong>
+      <strong>&lt;s:property value="%{exceptionStack}"/></strong>
     &lt;/p>
     &lt;jsp:include page="Footer.jsp"/>
   &lt;/body>
@@ -1313,7 +1323,7 @@ public void <strong>setSession(Map value)</strong> {
 <p>
     Finally, the Logon action specifies an <strong>InterceptorStack</strong>
     named <strong>defaultStack.</strong>
-    If you've worked with Action 2 or WebWork 2 before, that might seem strange,
+    If you've worked with Struts 2 or WebWork 2 before, that might seem strange,
     since "defaultStack" is the factory default.
 </p>
 
@@ -1367,7 +1377,7 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor {
 </p>
 
 <hr/>
-<h5>xwork.xml interceptors</h5>
+<h5>struts.xml interceptors</h5>
 <pre><code>&lt;interceptors>
   &lt;interceptor name="<strong>authentication</strong>"
                class="mailreader2.AuthenticationInterceptor"/>
@@ -1471,26 +1481,26 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor {
 
 <h5>MainMenu.jsp</h5>
 <pre><code>&lt;%@ page contentType="text/html; charset=UTF-8" %>
-&lt;%@ taglib uri="/webwork" prefix="saf" %>
+&lt;%@ taglib uri="/struts2" prefix="s" %>
 &lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
   &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   &lt;head>
-    &lt;title>&lt;saf:text name="mainMenu.title"/>&lt;/title>
-      &lt;link href="&lt;saf:url value="/css/mailreader.css"/>" rel="stylesheet"
+    &lt;title>&lt;s:text name="mainMenu.title"/>&lt;/title>
+      &lt;link href="&lt;s:url value="/css/mailreader.css"/>" rel="stylesheet"
       type="text/css"/>
   &lt;/head>
 
   &lt;body>
-  &lt;h3>&lt;saf:text name="mainMenu.heading"/> <strong>&lt;saf:property
+  &lt;h3>&lt;s:text name="mainMenu.heading"/> <strong>&lt;s:property
     value="user.fullName"/></strong>&lt;/h3>
   &lt;ul>
-    &lt;li>&lt;a href="&lt;saf:url <strong>action="Registration!input"</strong> />">
-        &lt;saf:text name="mainMenu.registration"/>
+    &lt;li>&lt;a href="&lt;s:url <strong>action="Registration!input"</strong> />">
+        &lt;s:text name="mainMenu.registration"/>
       &lt;/a>
     &lt;/li>
-    &lt;li>&lt;a href="&lt;saf:url <strong>action="Logoff"</strong> />">
-      &lt;saf:text name="mainMenu.logoff"/>
+    &lt;li>&lt;a href="&lt;s:url <strong>action="Logoff"</strong> />">
+      &lt;s:text name="mainMenu.logoff"/>
       &lt;/a>
     &lt;/ul>
   &lt;/body>
@@ -1542,13 +1552,13 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor {
 <hr />
 <h5>Registration.jsp - head element</h5>
 <pre><code>&lt;head>
-  &lt;saf:if test="<strong>task=='Create'</strong>">
-    &lt;title>&lt;saf:text name="registration.title.create"/>&lt;/title>
-  &lt;/saf:if>
-  &lt;saf:if test="<strong>task=='Edit'</strong>">
-    &lt;title>&lt;saf:text name="registration.title.edit"/>&lt;/title>
-  &lt;/saf:if>
-  &lt;link href="&lt;saf:url value="/css/mailreader.css"/>" rel="stylesheet"
+  &lt;s:if test="<strong>task=='Create'</strong>">
+    &lt;title>&lt;s:text name="registration.title.create"/>&lt;/title>
+  &lt;/s:if>
+  &lt;s:if test="<strong>task=='Edit'</strong>">
+    &lt;title>&lt;s:text name="registration.title.edit"/>&lt;/title>
+  &lt;/s:if>
+  &lt;link href="&lt;s:url value="/css/mailreader.css"/>" rel="stylesheet"
     type="text/css"/>
 &lt;/head></code></pre>
 <hr />
@@ -1583,12 +1593,12 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor {
 
 <hr/>
 <h5></h5>
-<pre><code>&lt;saf:if test=<strong>"task == 'Edit'"</strong>>
+<pre><code>&lt;s:if test=<strong>"task == 'Edit'"</strong>>
   &lt;div align="center">
-    &lt;h3>&lt;saf:text name="heading.subscriptions"/>&lt;/h3>
+    &lt;h3>&lt;s:text name="heading.subscriptions"/>&lt;/h3>
   &lt;/div>
     &lt;!-- ... -->
-  &lt;/saf:if>
+  &lt;/s:if>
 &lt;jsp:include page="Footer.jsp"/>
 &lt;/body>&lt;/html></code></pre>
 <hr/>
@@ -1617,30 +1627,30 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor {
 
 <hr/>
 <h5>Using iterator to list the Subscriptions</h5>
-<pre><code>&lt;saf:iterator value="<strong>user.subscriptions</strong>">
+<pre><code>&lt;s:iterator value="<strong>user.subscriptions</strong>">
   &lt;tr>
     &lt;td align="left">
-      &lt;saf:property value="<strong>host</strong>"/>
+      &lt;s:property value="<strong>host</strong>"/>
     &lt;/td>
     &lt;td align="left">
-       &lt;saf:property value="<strong>username</strong>"/>
+       &lt;s:property value="<strong>username</strong>"/>
    &lt;/td>
   &lt;td align="center">
-      &lt;saf:property value="<strong>type</strong>"/>
+      &lt;s:property value="<strong>type</strong>"/>
   &lt;/td>
   &lt;td align="center">
-     &lt;saf:property value="<strong>autoConnect</strong>"/>
+     &lt;s:property value="<strong>autoConnect</strong>"/>
   &lt;/td>
   &lt;td align="center">
-    &lt;a href="&lt;saf:url action="<strong>Subscription!delete</strong>">&lt;saf:param name="<strong>host</strong>" value="host"/>&lt;/saf:url>">
-      &lt;saf:text name="registration.deleteSubscription"/>
+    &lt;a href="&lt;s:url action="<strong>Subscription!delete</strong>">&lt;s:param name="<strong>host</strong>" value="host"/>&lt;/s:url>">
+      &lt;s:text name="registration.deleteSubscription"/>
     &lt;/a>&nbsp;
-    &lt;a href="&lt;saf:url action="<strong>Subscription!edit</strong>">&lt;saf:param name="<strong>host</strong>" value="host"/>&lt;/saf:url>">
-      &lt;saf:text name="registration.editSubscription"/>
+    &lt;a href="&lt;s:url action="<strong>Subscription!edit</strong>">&lt;s:param name="<strong>host</strong>" value="host"/>&lt;/s:url>">
+      &lt;s:text name="registration.editSubscription"/>
      &lt;/a>
    &lt;/td>
  &lt;/tr>
-&lt;/saf:iterator></code></pre>
+&lt;/s:iterator></code></pre>
 <hr/>
 
 <p>
@@ -1687,11 +1697,11 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor {
                     false
                 </td>
                 <td align="center">
-                    <a href="/action2-mailreader/Subscription!delete.do?host=mail.hotmail.com">
+                    <a href="/Struts 2-mailreader/Subscription!delete.do?host=mail.hotmail.com">
                         Delete
                     </a>
                     &nbsp;
-                    <a href="/action2-mailreader/Subscription!edit.do?host=mail.hotmail.com">
+                    <a href="/Struts 2-mailreader/Subscription!edit.do?host=mail.hotmail.com">
                         Edit
                     </a>
                 </td>
@@ -1710,17 +1720,17 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor {
                     false
                 </td>
                 <td align="center">
-                    <a href="/action2-mailreader/Subscription!delete.do?host=mail.yahoo.com">
+                    <a href="/Struts 2-mailreader/Subscription!delete.do?host=mail.yahoo.com">
                         Delete
                     </a>
                     &nbsp;
-                    <a href="/action2-mailreader/Subscription!edit.do?host=mail.yahoo.com">
+                    <a href="/Struts 2-mailreader/Subscription!edit.do?host=mail.yahoo.com">
                         Edit
                     </a>
                 </td>
             </tr>
     </table>
-    <a href="/action2-mailreader/Subscription!input.do">Add</a>
+    <a href="/Struts 2-mailreader/Subscription!input.do">Add</a>
 
 <hr />
 
@@ -1820,11 +1830,11 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor {
 
 <pre><code>pager.legend = Displaying {current} of {count} items matching {criteria}.
 ...
-&lt;saf:text name="pager.legend">
-    &lt;saf:<strong>param</strong> name="current" value="42" />
-    &lt;saf:<strong>param</strong> name="count" value="314" />
-    &lt;saf:<strong>param</strong> name="criteria" value="Life, the Universe, and Everything" />
-&lt;/saf:text></code></pre>
+&lt;s:text name="pager.legend">
+    &lt;s:<strong>param</strong> name="current" value="42" />
+    &lt;s:<strong>param</strong> name="count" value="314" />
+    &lt;s:<strong>param</strong> name="criteria" value="Life, the Universe, and Everything" />
+&lt;/s:text></code></pre>
 
 <p>
     In the case of an "url" tag,
@@ -1833,7 +1843,7 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor {
 </p>
 
 <pre><code>
-  &lt;saf:url action="Subscription!edit">&lt;saf:param name="<strong>host" value="host</strong>"/>&lt;/saf:url>">
+  &lt;s:url action="Subscription!edit">&lt;s:param name="<strong>host" value="host</strong>"/>&lt;/s:url>">
 </code></pre>
 
 <p>
@@ -1841,7 +1851,7 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor {
 </p>
 
 <pre><code>
-  &lt;a href="/action2-mailreader/Subscription!edit.do?<strong>host=mail.yahoo.com</strong>">Edit&lt;/a>
+  &lt;a href="/Struts 2-mailreader/Subscription!edit.do?<strong>host=mail.yahoo.com</strong>">Edit&lt;/a>
 </code></pre>
 
 
@@ -1867,12 +1877,12 @@ public class <strong>AuthenticationInterceptor</strong> implements Interceptor {
     If we follow one of the "Edit" subscription links on the Registration page,
     we come to the Subscriptions page,
     which displays the details of our description in a data-entry form.
-    Let's have a look a the Subscription configuration in "xwork.xml"
+    Let's have a look a the Subscription configuration in "struts.xml"
     and follow the bouncing ball from page to action to page.
 </p>
 
 <hr />
-<h5>xwork.xml Subscription element</h5>
+<h5>struts.xml Subscription element</h5>
 <pre><code>&lt;action name="Subscription" class="mailreader2.Subscription">
   &lt;result name="input">/pages/Subscription.jsp&lt;/result>
   &lt;result type="redirect-action">Registration!input&lt;/result>
@@ -1952,7 +1962,7 @@ public Subscription findSubscription(String host) {
     But, that's OK.
     Since the page is suppose to be entered from a link that we created,
     we do expect everything to go right here.
-    But, if it doesn't, the global exception handler we defined in "xwork.xml"
+    But, if it doesn't, the global exception handler we defined in "struts.xml"
     will trap the exception for us.
 </p>
 
@@ -1998,62 +2008,62 @@ public Subscription findSubscription(String host) {
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   &lt;head>
-    &lt;saf:if test="task=='Create'">
-        &lt;title>&lt;saf:text name="subscription.title.create"/>&lt;/title>
-    &lt;/saf:if>
-    &lt;saf:if test="task=='Edit'">
-        &lt;title>&lt;saf:text name="subscription.title.edit"/>&lt;/title>
-    &lt;/saf:if>
-    &lt;saf:if test="task=='Delete'">
-        &lt;title>&lt;saf:text name="subscription.title.delete"/>&lt;/title>
-    &lt;/saf:if>
-    &lt;link href="&lt;saf:url value="/css/mailreader.css"/>" rel="stylesheet"
+    &lt;s:if test="task=='Create'">
+        &lt;title>&lt;s:text name="subscription.title.create"/>&lt;/title>
+    &lt;/s:if>
+    &lt;s:if test="task=='Edit'">
+        &lt;title>&lt;s:text name="subscription.title.edit"/>&lt;/title>
+    &lt;/s:if>
+    &lt;s:if test="task=='Delete'">
+        &lt;title>&lt;s:text name="subscription.title.delete"/>&lt;/title>
+    &lt;/s:if>
+    &lt;link href="&lt;s:url value="/css/mailreader.css"/>" rel="stylesheet"
           type="text/css"/>
   &lt;/head>
   &lt;body onLoad="self.focus();document.Subscription.username.focus()">
 
-    &lt;saf:actionerror/>
-    &lt;saf:form method="POST" <strong>action="SubscriptionSave"</strong> validate="false">
-      <strong>&lt;saf:token /></strong>
-      <strong>&lt;saf:hidden name="task"/></strong>
-      <strong>&lt;saf:label label="%{getText('username')}" name="user.username"/></strong>
+    &lt;s:actionerror/>
+    &lt;s:form method="POST" <strong>action="SubscriptionSave"</strong> validate="false">
+      <strong>&lt;s:token /></strong>
+      <strong>&lt;s:hidden name="task"/></strong>
+      <strong>&lt;s:label label="%{getText('username')}" name="user.username"/></strong>
 
-      &lt;saf:if test="task == 'Create'">
-        &lt;saf:textfield label="%{getText('mailHostname')}" name="host"/>
-      &lt;/saf:if>
-      &lt;saf:else>
-        &lt;saf:label label="%{getText('mailHostname')}" name="host"/>
-        &lt;saf:hidden name="host"/>
-      &lt;/saf:else>
+      &lt;s:if test="task == 'Create'">
+        &lt;s:textfield label="%{getText('mailHostname')}" name="host"/>
+      &lt;/s:if>
+      &lt;s:else>
+        &lt;s:label label="%{getText('mailHostname')}" name="host"/>
+        &lt;s:hidden name="host"/>
+      &lt;/s:else>
 
-      &lt;saf:if test="task == 'Delete'">
-        &lt;saf:label label="%{getText('mailUsername')}"
+      &lt;s:if test="task == 'Delete'">
+        &lt;s:label label="%{getText('mailUsername')}"
                    name="subscription.username"/>
-        &lt;saf:label label="%{getText('mailPassword')}"
+        &lt;s:label label="%{getText('mailPassword')}"
                    name="subscription.password"/>
-        &lt;saf:label label="%{getText('mailServerType')}"
+        &lt;s:label label="%{getText('mailServerType')}"
                    name="subscription.type"/>
-        &lt;saf:label label="%{getText('autoConnect')}"
+        &lt;s:label label="%{getText('autoConnect')}"
                    name="subscription.autoConnect"/>
-        &lt;saf:submit value="%{getText('button.confirm')}"/>
-      &lt;/saf:if>
-      &lt;saf:else>
-        &lt;saf:textfield label="%{getText('mailUsername')}"
+        &lt;s:submit value="%{getText('button.confirm')}"/>
+      &lt;/s:if>
+      &lt;s:else>
+        &lt;s:textfield label="%{getText('mailUsername')}"
                        name="subscription.username"/>
-        &lt;saf:textfield label="%{getText('mailPassword')}"
+        &lt;s:textfield label="%{getText('mailPassword')}"
                        name="subscription.password"/>
-        <strong>&lt;saf:select label="%{getText('mailServerType')}"
+        <strong>&lt;s:select label="%{getText('mailServerType')}"
                     name="subscription.type" list="types"/></strong>
-        <strong>&lt;saf:checkbox label="%{getText('autoConnect')}"
+        <strong>&lt;s:checkbox label="%{getText('autoConnect')}"
                       name="subscription.autoConnect"/></strong>
-        &lt;saf:submit value="%{getText('button.save')}"/>
-        &lt;saf:reset value="%{getText('button.reset')}"/>
-      &lt;/saf:else>
+        &lt;s:submit value="%{getText('button.save')}"/>
+        &lt;s:reset value="%{getText('button.reset')}"/>
+      &lt;/s:else>
 
-      &lt;saf:submit action="Registration!input"
+      &lt;s:submit action="Registration!input"
                 value="%{getText('button.cancel')}"
                 onclick="form.onsubmit=null"/>
-  &lt;/saf:form>
+  &lt;/s:form>
 
   &lt;jsp:include page="Footer.jsp"/>
   &lt;/body>
@@ -2134,7 +2144,7 @@ public Subscription findSubscription(String host) {
     but the tag goes so without requiring a lot of markup or redtape.
 </p>
 
-<pre><code>&lt;saf:select label="%{getText('mailServerType')}"
+<pre><code>&lt;s:select label="%{getText('mailServerType')}"
   name="subscription.type" <strong>list="types"</strong> />
 </code></pre>
 
@@ -2199,7 +2209,7 @@ public Subscription findSubscription(String host) {
     The <strong>checkbox</strong> starts out as a simple enough control.
 </p>
 
-<pre><code>  &lt;saf:checkbox label="%{getText('autoConnect')}"
+<pre><code>  &lt;s:checkbox label="%{getText('autoConnect')}"
   name="subscription.autoConnect"/></code></pre>
 
 <p>
@@ -2388,7 +2398,7 @@ public Subscription findSubscription(String host) {
     reviewed a Registration record, and edited a Subscription.
     Of course, there's more, but from here on, it is mostly more of the same.
     The full source code for MailReader is
-    <a href="http://svn.apache.org/viewcvs.cgi/struts/sandbox/trunk/action2/apps/mailreader/">available online</a>
+    <a href="http://svn.apache.org/viewcvs.cgi/struts/sandbox/trunk/Struts 2/apps/mailreader/">available online</a>
     and in the distribution.
 </p>
 
