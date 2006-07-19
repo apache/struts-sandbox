@@ -1,124 +1,124 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@ taglib uri="/webwork" prefix="saf" %>
+<%@ taglib uri="/struts-action" prefix="s" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-    <saf:if test="task=='Create'">
-        <title><saf:text name="registration.title.create"/></title>
-    </saf:if>
-    <saf:if test="task=='Edit'">
-        <title><saf:text name="registration.title.edit"/></title>
-    </saf:if>
-    <link href="<saf:url value="/css/mailreader.css"/>" rel="stylesheet"
+    <s:if test="task=='Create'">
+        <title><s:text name="registration.title.create"/></title>
+    </s:if>
+    <s:if test="task=='Edit'">
+        <title><s:text name="registration.title.edit"/></title>
+    </s:if>
+    <link href="<s:url value="/css/mailreader.css"/>" rel="stylesheet"
           type="text/css"/>
 </head>
 
 <body onLoad="self.focus();document.Registration.username.focus()">
 
-<saf:actionerror/>
-<saf:form method="POST" validate="false">
-    <saf:token />
-    <saf:hidden name="task"/>
-    <saf:if test="task == 'Create'">
-        <saf:textfield label="%{getText('username')}" name="username"/>
-    </saf:if>
-    <saf:else>
-        <saf:label label="%{getText('username')}" name="username"/>
-        <saf:hidden name="username"/>
-    </saf:else>
+<s:actionerror/>
+<s:form method="POST" validate="false">
+    <s:token />
+    <s:hidden name="task"/>
+    <s:if test="task == 'Create'">
+        <s:textfield label="%{getText('username')}" name="username"/>
+    </s:if>
+    <s:else>
+        <s:label label="%{getText('username')}" name="username"/>
+        <s:hidden name="username"/>
+    </s:else>
 
-    <saf:password label="%{getText('password')}" name="password"/>
+    <s:password label="%{getText('password')}" name="password"/>
 
-    <saf:password label="%{getText('password2')}" name="password2"/>
+    <s:password label="%{getText('password2')}" name="password2"/>
 
-    <saf:textfield label="%{getText('fullName')}"
+    <s:textfield label="%{getText('fullName')}"
                    name="user.fullName"/>
 
-    <saf:textfield label="%{getText('fromAddress')}"
+    <s:textfield label="%{getText('fromAddress')}"
                    name="user.fromAddress"/>
 
-    <saf:textfield label="%{getText('replyToAddress')}"
+    <s:textfield label="%{getText('replyToAddress')}"
                    name="user.replyToAddress"/>
 
-    <saf:if test="task == 'Create'">
-        <saf:submit value="%{getText('button.save')}" action="RegistrationSave"/>
+    <s:if test="task == 'Create'">
+        <s:submit value="%{getText('button.save')}" action="RegistrationSave"/>
 
-        <saf:reset value="%{getText('button.reset')}"/>
+        <s:reset value="%{getText('button.reset')}"/>
 
-        <saf:submit action="Welcome" value="%{getText('button.cancel')}"
+        <s:submit action="Welcome" value="%{getText('button.cancel')}"
                     onclick="form.onsubmit=null"/>
-    </saf:if>
-    <saf:else>
-        <saf:submit value="%{getText('button.save')}" action="Registration"/>
+    </s:if>
+    <s:else>
+        <s:submit value="%{getText('button.save')}" action="Registration"/>
 
-        <saf:reset value="%{getText('button.reset')}"/>
+        <s:reset value="%{getText('button.reset')}"/>
 
-        <saf:submit action="MainMenu" value="%{getText('button.cancel')}"
+        <s:submit action="MainMenu" value="%{getText('button.cancel')}"
                     onclick="form.onsubmit=null"/>
-    </saf:else>
+    </s:else>
 
-</saf:form>
+</s:form>
 
-<saf:if test="task == 'Edit'">
+<s:if test="task == 'Edit'">
     <div align="center">
-        <h3><saf:text name="heading.subscriptions"/></h3>
+        <h3><s:text name="heading.subscriptions"/></h3>
     </div>
 
     <table border="1" width="100%">
 
         <tr>
             <th align="center" width="30%">
-                <saf:text name="heading.host"/>
+                <s:text name="heading.host"/>
             </th>
             <th align="center" width="25%">
-                <saf:text name="heading.user"/>
+                <s:text name="heading.user"/>
             </th>
             <th align="center" width="10%">
-                <saf:text name="heading.type"/>
+                <s:text name="heading.type"/>
             </th>
             <th align="center" width="10%">
-                <saf:text name="heading.autoConnect"/>
+                <s:text name="heading.autoConnect"/>
             </th>
             <th align="center" width="15%">
-                <saf:text name="heading.action"/>
+                <s:text name="heading.action"/>
             </th>
         </tr>
 
-        <saf:iterator value="user.subscriptions">
+        <s:iterator value="user.subscriptions">
             <tr>
                 <td align="left">
-                    <saf:property value="host"/>
+                    <s:property value="host"/>
                 </td>
                 <td align="left">
-                    <saf:property value="username"/>
+                    <s:property value="username"/>
                 </td>
                 <td align="center">
-                    <saf:property value="type"/>
+                    <s:property value="type"/>
                 </td>
                 <td align="center">
-                    <saf:property value="autoConnect"/>
+                    <s:property value="autoConnect"/>
                 </td>
                 <td align="center">
 
-                    <a href="<saf:url action="Subscription!delete"><saf:param name="host" value="host"/></saf:url>">
-                        <saf:text name="registration.deleteSubscription"/>
+                    <a href="<s:url action="Subscription!delete"><s:param name="host" value="host"/></s:url>">
+                        <s:text name="registration.deleteSubscription"/>
                     </a>
                     &nbsp;
-                    <a href="<saf:url action="Subscription!edit"><saf:param name="host" value="host"/></saf:url>">
-                        <saf:text name="registration.editSubscription"/>
+                    <a href="<s:url action="Subscription!edit"><s:param name="host" value="host"/></s:url>">
+                        <s:text name="registration.editSubscription"/>
                     </a>
 
                 </td>
             </tr>
-        </saf:iterator>
+        </s:iterator>
 
     </table>
 
-    <a href="<saf:url action="Subscription!input"/>"><saf:text
+    <a href="<s:url action="Subscription!input"/>"><s:text
             name="registration.addSubscription"/></a>
 
-</saf:if>
+</s:if>
 
 <jsp:include page="Footer.jsp"/>
 

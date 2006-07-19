@@ -1,6 +1,6 @@
-<%@ taglib uri="/webwork" prefix="saf" %>
+<%@ taglib uri="/struts-action" prefix="s" %>
 <hr/>
 
 <p>
-    <a href="<saf:url action="Welcome" />"><saf:text name="index.title"/></a>
+    <a href="<s:url action="Welcome" />"><s:text name="index.title"/></a>
 </p>

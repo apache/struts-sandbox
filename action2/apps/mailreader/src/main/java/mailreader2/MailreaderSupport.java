@@ -21,7 +21,7 @@ package mailreader2;
 import com.opensymphony.util.BeanUtils;
 import org.apache.struts2.interceptor.ApplicationAware;
 import org.apache.struts2.interceptor.SessionAware;
-import com.opensymphony.xwork.ActionSupport;
+import com.opensymphony.xwork2.ActionSupport;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts.apps.mailreader.dao.ExpiredPasswordException;

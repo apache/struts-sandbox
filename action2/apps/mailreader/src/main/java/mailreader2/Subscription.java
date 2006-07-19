@@ -1,6 +1,6 @@
 package mailreader2;
 
-import com.opensymphony.xwork.Preparable;
+import com.opensymphony.xwork2.Preparable;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
