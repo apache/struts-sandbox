@@ -16,19 +16,22 @@ Status File:
 
 COURSE SUMMARY 
 
-The Struts MailReader Training Course is a step-by-step introduction to the 
-leading web application frameworks for Java. Lectures are reinforced by 
-several labs designed to explore common problems and best practice soutions. 
-This course is intended for developers who want field-tested advice on how 
-to get your applications working the "Struts Way".
+The MailReader Training Course for Struts 2 is a step-by-step introduction to 
+the next generation of Struts applications. After completing the course, you 
+will be equipped to create and maintain basic Struts applications, including 
+all necessary client-side and server-side programming.
+
+Presentations are reinforced by workshops designed to explore common problems 
+and best-practice solutions. This course is intended for developers who want 
+field-savvy advice on how to get your applications working the "Struts 2 Way". 
 
 COURSE OBJECTIVES
 
-    * Present and apply MVC application architecture
-    * Build a working web application
-    * Understand how to unit test web applications
-    * Explore key best practices
-    * Use popular extensions to increase productivity
+ * Present and apply MVC application architecture
+ * Build a working web application
+ * Understand how to unit test web applications
+ * Explore key best practices
+ * Use popular extensions to increase productivity
 
 AUDIENCE
 
@@ -43,21 +46,13 @@ modern Java IDE, such as NetBeans, Eclipse, or IDEA, is also beneficial.
 
 SOURCE CODE
 
-A set of "starter" source files are provided for each lab under folders 
-labeled in the style
+An example of each completed lab is provided in a folder named for the 
+corresponding use case. 
 
-* lab-#-#
+SESSSION NOTES 
 
-where #-# is the day and session number for the lab.
-
-An example of each completed lab is provided under a companion folder labeled 
-
-* lab-#-#-src
-
-LECTURE NOTES 
-
-Notes for the lecture session introducing each lab are maintained on the 
+Notes for the presentation introducing each workshop are maintained on the 
 Struts University wiki. For the notes and a session outline see: 
 
-* http://StrutsUniversity.org/MailReader+Training+Course
+ * http://StrutsUniversity.org/MailReader+Training+Course
 ==============================================================================
