@@ -7,10 +7,10 @@
     <title><s:text name="registration.title.create"/></title>
 </head>
 
-<body onLoad="self.focus();document.Register.username.focus()">
+<body onLoad="self.focus();document.Register_save.username.focus()">
 
 <s:actionerror/>
-<s:form method="POST" validate="true">
+<s:form action="Register_save" validate="true">
 
     <s:textfield label="%{getText('username')}" name="username"/>
 
@@ -18,16 +18,16 @@
 
     <s:password label="%{getText('password2')}" name="password2"/>
 
-    <s:textfield label="Full Name" name="fullName"/>
+    <s:textfield label="%{getText('fullName')}" name="fullName"/>
 
-    <s:textfield label="From Address" name="fromAddress"/>
+    <s:textfield label="%{getText('fromAddress')}" name="fromAddress"/>
 
-    <s:textfield label="Reply To Address" name="replyToAddress"/>
+    <s:textfield label="%{getText('replyToAddress')}" name="replyToAddress"/>
 
     <s:submit value="%{getText('button.save')}" name="Save"/>
 
-    <s:submit action="Register!cancel" value="%{getText('button.cancel')}" name="Cancel"
-               onclick="form.onsubmit=null"/>
+    <s:submit action="Register_cancel" value="%{getText('button.cancel')}" name="Cancel"
+              onclick="form.onsubmit=null"/>
 
 </s:form>
 
