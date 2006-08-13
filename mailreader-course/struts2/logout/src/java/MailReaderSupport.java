@@ -178,7 +178,7 @@ public class MailReaderSupport extends ActionSupport
 
         if (user == null) {
             addFieldError(PASSWORD_MISMATCH_FIELD,
-                    getText(ERROR_PASSWORD_MISMATCH));
+                    ERROR_PASSWORD_MISMATCH);
         }
 
         return user;

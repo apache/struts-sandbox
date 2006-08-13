@@ -1,5 +1,4 @@
 <%@ taglib prefix="s" uri="/tags" %>
-
 <html>
 <head>
     <title>Hello</title>

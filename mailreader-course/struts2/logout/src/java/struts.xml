@@ -25,13 +25,13 @@
             <result name="input">/pages/Register.jsp</result>
         </action>
 
+        <action name="Register_cancel" class="Register" method="cancel">
+            <result name="cancel" type="redirect-action">Welcome</result>
+        </action>
+
         <action name="Register_save" class="Register" method="save">
             <result name="input">/pages/Register.jsp</result>
             <result type="redirect-action">Menu</result>
-        </action>
-
-        <action name="Register_cancel" class="Register" method="cancel">
-            <result name="cancel" type="redirect-action">Welcome</result>
         </action>
 
         <action name="Menu" class="MailReaderSupport">
@@ -46,13 +46,13 @@
             <result name="input">/pages/Login.jsp</result>
         </action>
 
+        <action name="Login_cancel" class="Login" method="cancel">
+            <result name="cancel" type="redirect-action">Welcome</result>
+        </action>
+
         <action name="Login_save" class="Login" method="save">
             <result name="input">/pages/Login.jsp</result>
             <result type="redirect-action">Menu</result>
-        </action>
-
-        <action name="Login_cancel" class="Login" method="cancel">
-            <result name="cancel" type="redirect-action">Welcome</result>
         </action>
 
     </package>

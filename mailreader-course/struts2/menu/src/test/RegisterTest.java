@@ -14,7 +14,7 @@ public class RegisterTest extends RetainTest {
         action.setDatabase(database);
     }
 
-    public void testExecute() throws Exception {
+    public void testSave() throws Exception {
 
         action.setUsername("user");
         action.setPassword("pass");

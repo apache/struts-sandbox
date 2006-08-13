@@ -185,13 +185,18 @@
   </component>
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/browse/browse.iml" filepath="$PROJECT_DIR$/browse/browse.iml" />
       <module fileurl="file://$PROJECT_DIR$/hello/hello.iml" filepath="$PROJECT_DIR$/hello/hello.iml" />
+      <module fileurl="file://$PROJECT_DIR$/localize/localize.iml" filepath="$PROJECT_DIR$/localize/localize.iml" />
       <module fileurl="file://$PROJECT_DIR$/logout/logout.iml" filepath="$PROJECT_DIR$/logout/logout.iml" />
       <module fileurl="file://$PROJECT_DIR$/mailreader-course-struts2.iml" filepath="$PROJECT_DIR$/mailreader-course-struts2.iml" />
       <module fileurl="file://$PROJECT_DIR$/menu/menu.iml" filepath="$PROJECT_DIR$/menu/menu.iml" />
+      <module fileurl="file://$PROJECT_DIR$/profile/profile.iml" filepath="$PROJECT_DIR$/profile/profile.iml" />
       <module fileurl="file://$PROJECT_DIR$/register/register.iml" filepath="$PROJECT_DIR$/register/register.iml" />
       <module fileurl="file://$PROJECT_DIR$/register2/register2.iml" filepath="$PROJECT_DIR$/register2/register2.iml" />
       <module fileurl="file://$PROJECT_DIR$/retain/retain.iml" filepath="$PROJECT_DIR$/retain/retain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/subscribe/subscribe.iml" filepath="$PROJECT_DIR$/subscribe/subscribe.iml" />
+      <module fileurl="file://$PROJECT_DIR$/theme/theme.iml" filepath="$PROJECT_DIR$/theme/theme.iml" />
       <module fileurl="file://$PROJECT_DIR$/welcome/welcome.iml" filepath="$PROJECT_DIR$/welcome/welcome.iml" />
     </modules>
   </component>
