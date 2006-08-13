@@ -1,29 +1,29 @@
-<%@ taglib uri="/webwork" prefix="ww" %>
+<%@ taglib prefix="s" uri="/tags" %>
 <html>
 <head>
     <title>MailReader - Register</title>
 </head>
 
-<body onLoad="self.focus();document.Register.username.focus()">
+<body onLoad="self.focus();document.Register/save.username.focus()">
 
-<ww:actionerror/>
-<ww:form method="POST" validate="true">
+<s:actionerror/>
+<s:form action="Register/save" validate="true">
 
-    <ww:textfield label="Username" name="username"/>
+    <s:textfield label="Username" name="username"/>
 
-    <ww:password label="Password" name="password"/>
+    <s:password label="Password" name="password"/>
 
-    <ww:password label="(Repeat) Password" name="password2"/>
+    <s:password label="(Repeat) Password" name="password2"/>
 
-    <ww:textfield label="Full Name" name="fullName"/>
+    <s:textfield label="Full Name" name="fullName"/>
 
-    <ww:textfield label="From Address" name="fromAddress"/>
+    <s:textfield label="From Address" name="fromAddress"/>
 
-    <ww:textfield label="Reply To Address" name="replyToAddress"/>
+    <s:textfield label="Reply To Address" name="replyToAddress"/>
 
-    <ww:submit value="Save" name="Save"/>
+    <s:submit value="Save" name="Save"/>
 
-</ww:form>
+</s:form>
 
 
 </body>

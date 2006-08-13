@@ -9,7 +9,7 @@
 webtest.home = /opt/Canoo/webtest-1.7
 host = localhost
 port = 8080
-basepath = lab-2-2
+basepath = menu
 webapps.home = /opt/Apache/Tomcat-5.5/webapps/
 resource.home = ${webapps.home}/${basepath}/WEB-INF/classes/resources.properties"
 # mailreader.home = 

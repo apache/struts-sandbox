@@ -15,7 +15,7 @@
         ]>
 
 <project name="MailReader Training Course - Exercise navigation and database logic
-- Canoo WebTests" basedir="." >
+- Canoo WebTests" basedir=".">
 
     <!--
      Canoo WebTest configuration file to test navigating between pages and
@@ -65,7 +65,7 @@
               value="8080"/>
 
     <property name="basepath"
-              value="lab-2-2"/>
+              value="menu"/>
 
     <property name="mailreader.home"
               location="../../../"/>

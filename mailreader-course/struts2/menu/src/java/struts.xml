@@ -1,9 +1,12 @@
-<!DOCTYPE xwork PUBLIC "-//OpenSymphony Group//XWork 1.1.1//EN" "http://www.opensymphony.com/xwork/xwork-1.1.1.dtd">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
 
-<xwork>
-    <include file="webwork-default.xml"/>
+<struts>
+    <include file="struts-default.xml"/>
 
-    <package name="default" extends="webwork-default">
+    <package name="default" extends="struts-default">
 
         <default-action-ref name="Missing"/>
 
@@ -19,7 +22,11 @@
             <result>/pages/Welcome.jsp</result>
         </action>
 
-        <action name="Register" class="Register">
+        <action name="Register" class="Register" method="input">
+            <result name="input">/pages/Register.jsp</result>
+        </action>
+
+        <action name="Register/save" class="Register" method="save">
             <result name="input">/pages/Register.jsp</result>
             <result type="chain">Menu</result>
         </action>
@@ -29,4 +36,4 @@
         </action>
 
     </package>
-</xwork>
+</struts>

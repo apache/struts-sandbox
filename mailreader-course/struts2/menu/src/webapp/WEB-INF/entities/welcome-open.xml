@@ -1,6 +1,6 @@
 <invoke
         description="Open welcome action"
-        url="Welcome.do"/>
+        url="Welcome.action"/>
 <verifyTitle
         description="Welcome page title"
         text="MailReader"/>

@@ -56,7 +56,7 @@
     -->
 
     <!-- Load local preferences, if any -->
-    <property file="webtest.properties" />
+    <property file="webtest.properties"/>
 
     <!-- These properties can be customized using via webtest.properties -->
     <!-- See webtest.properties.sample for a starter file -->
@@ -70,7 +70,7 @@
               value="8080"/>
 
     <property name="basepath"
-              value="lab-2-2"/>
+              value="menu"/>
 
     <property name="mailreader.home"
               location="../../../"/>
@@ -107,31 +107,32 @@
         <webtest name="Register Trillian (MSS)">
             &config;
             <steps>
+                &welcome-open;
                 &register-open;
                 <setInputField
-                    description="username"
-                    name="username"
-                    value="trillian"/>
+                        description="username"
+                        name="username"
+                        value="trillian"/>
                 <setInputField
-                    description="password"
-                    name="password"
-                    value="astra"/>
+                        description="password"
+                        name="password"
+                        value="astra"/>
                 <setInputField
-                    description="password2"
-                    name="password2"
-                    value="astra"/>
+                        description="password2"
+                        name="password2"
+                        value="astra"/>
                 <setInputField
-                  description="fullName"
-                    name="fullName"
-                    value="Tricia McMillian"/>
+                        description="fullName"
+                        name="fullName"
+                        value="Tricia McMillian"/>
                 <setInputField
-                    description="fromAddress"
-                    name="fromAddress"
-                    value="tricia@magrathea.com"/>
+                        description="fromAddress"
+                        name="fromAddress"
+                        value="tricia@magrathea.com"/>
                 &save-click;
                 <verifyTitle
-                    description="Menu page title"
-                      text="MailReader - Menu"/>
+                        description="Menu page title"
+                        text="MailReader - Menu"/>
             </steps>
         </webtest>
 

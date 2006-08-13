@@ -1,17 +1,17 @@
-<%@ taglib uri="/webwork" prefix="ww" %>
+<%@ taglib prefix="s" uri="/tags" %>
 <html>
 <head>
     <title>MailReader - Menu</title>
 </head>
 
 <body>
-<h3>Main Menu Options for <ww:property value="fullName"/></h3>
+<h3>Main Menu Options for <s:property value="fullName"/></h3>
 <ul>
-    <li><a href="<ww:url action="Register!input" />">
+    <li><a href="<s:url action="Register" />">
         Edit your registration profile
     </a>
     </li>
-    <li><a href="<ww:url action="Logout"/>">
+    <li><a href="<s:url action="Logout"/>">
         Log out of MailReader application
     </a>
 </ul>
