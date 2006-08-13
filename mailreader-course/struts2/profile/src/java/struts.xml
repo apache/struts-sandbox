@@ -22,13 +22,20 @@
             <result>/pages/Welcome.jsp</result>
         </action>
 
-        <action name="Register" class="Register">
+        <action name="Register" class="Register" method="input">
             <result name="input">/pages/Register.jsp</result>
+        </action>
+
+        <action name="Register_cancel" class="Register" method="cancel">
             <result name="cancel" type="redirect-action">Welcome</result>
+        </action>
+
+        <action name="Register_create" class="RegisterCreate" method="save">
+            <result name="input">/pages/Register.jsp</result>
             <result type="redirect-action">Menu</result>
         </action>
 
-        <action name="RegisterCreate" class="RegisterCreate">
+        <action name="Register_save" class="Register" method="save">
             <result name="input">/pages/Register.jsp</result>
             <result type="redirect-action">Menu</result>
         </action>
@@ -41,9 +48,16 @@
             <result type="redirect-action">Welcome</result>
         </action>
 
-        <action name="Login" class="Login">
+        <action name="Login" class="Login" method="input">
             <result name="input">/pages/Login.jsp</result>
+        </action>
+
+        <action name="Login_cancel" class="Login" method="cancel">
             <result name="cancel" type="redirect-action">Welcome</result>
+        </action>
+
+        <action name="Login_save" class="Login" method="save">
+            <result name="input">/pages/Login.jsp</result>
             <result type="redirect-action">Menu</result>
         </action>
 

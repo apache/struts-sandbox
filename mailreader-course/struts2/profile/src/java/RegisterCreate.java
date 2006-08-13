@@ -1,5 +1,5 @@
 /**
  * <p>Stub class to allow extra validation on initial Save.</p>
  */
-public class RegisterSave extends Register {
+public class RegisterCreate extends Register {
 }

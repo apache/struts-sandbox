@@ -11,6 +11,7 @@ public class RegisterTest extends RetainTest {
         super.setUp();
         action = new Register();
         action.setApplication(new HashMap());
+        action.setSession(new HashMap());
         action.setDatabase(database);
     }
 

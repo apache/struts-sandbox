@@ -12,10 +12,10 @@
     </s:if>
 </head>
 
-<body onLoad="self.focus();document.Register.username.focus()">
+<body onLoad="self.focus();document.Register_save.username.focus()">
 
 <s:actionerror/>
-<s:form method="POST" validate="true">
+<s:form action="Register_save" validate="true">
     <s:hidden name="task"/>
     <s:if test="task == 'Create'">
         <s:textfield label="%{getText('username')}" name="username"/>
@@ -30,29 +30,29 @@
     <s:password label="%{getText('password2')}" name="password2"/>
 
     <s:textfield label="%{getText('fullName')}"
-                  name="fullName"/>
+                 name="fullName"/>
 
     <s:textfield label="%{getText('fromAddress')}"
-                  name="fromAddress"/>
+                 name="fromAddress"/>
 
     <s:textfield label="%{getText('replyToAddress')}"
-                  name="replyToAddress"/>
+                 name="replyToAddress"/>
 
     <s:if test="task == 'Create'">
-        <s:submit value="%{getText('button.save')}" action="RegisterCreate"/>
+        <s:submit value="%{getText('button.save')}" action="Register_create"/>
 
         <s:reset value="%{getText('button.reset')}"/>
 
         <s:submit action="Welcome" value="%{getText('button.cancel')}"
-                   onclick="form.onsubmit=null"/>
+                  onclick="form.onsubmit=null"/>
     </s:if>
     <s:else>
-        <s:submit value="%{getText('button.save')}" action="Register"/>
+        <s:submit value="%{getText('button.save')}"/>
 
         <s:reset value="%{getText('button.reset')}"/>
 
         <s:submit action="Menu" value="%{getText('button.cancel')}"
-                   onclick="form.onsubmit=null"/>
+                  onclick="form.onsubmit=null"/>
     </s:else>
 
 </s:form>
