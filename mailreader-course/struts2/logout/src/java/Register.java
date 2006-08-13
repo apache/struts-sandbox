@@ -1,10 +1,8 @@
-import com.opensymphony.xwork.Action;
-import com.opensymphony.util.BeanUtils;
 import org.apache.struts.apps.mailreader.dao.User;
 
 public class Register extends MailReaderSupport {
 
-    public String execute()
+    public String save()
             throws Exception {
 
         User user = findUser(getUsername(), getPassword());

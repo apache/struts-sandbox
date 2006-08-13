@@ -1,4 +1,4 @@
-import com.opensymphony.xwork.Action;
+import com.opensymphony.xwork2.Action;
 
 public class NPE implements Action {
 

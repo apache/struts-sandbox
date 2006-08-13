@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@ taglib uri="/webwork" prefix="ww" %>
+<%@ taglib prefix="s" uri="/tags" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -20,10 +20,10 @@
 
 <h3>Error Message</h3>
 
-<ww:actionerror />
+<s:actionerror/>
 
 <p>
-    <ww:property value="%{exception.message}"/>
+    <s:property value="%{exception.message}"/>
 </p>
 
 <hr/>
@@ -31,7 +31,7 @@
 <h3>Technical Details</h3>
 
 <p>
-    <ww:property value="%{exceptionStack}"/>
+    <s:property value="%{exceptionStack}"/>
 </p>
 
 </body>

@@ -58,7 +58,7 @@
     -->
 
     <!-- Load local preferences, if any -->
-    <property file="webtest.properties" />
+    <property file="webtest.properties"/>
 
     <!-- These properties can be customized using via webtest.properties -->
     <!-- See webtest.properties.sample for a starter file -->
@@ -111,8 +111,8 @@
                 &register-open;
                 &register-trillian;
                 <verifyTitle
-                    description="Menu page title"
-                      text="${menu.title}"/>
+                        description="Menu page title"
+                        text="${menu.title}"/>
             </steps>
         </webtest>
 

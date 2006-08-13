@@ -21,13 +21,13 @@ public class RegisterTest extends RetainTest {
         action.setFullName("John Q. User");
         action.setFromAddress("John.User@somewhere.com");
 
-        String success = action.execute();
+        String success = action.save();
         assertTrue("Expected SUCCESS", Action.SUCCESS.equals(success));
 
         User user = database.findUser("user");
         assertNotNull("Expected user", user);
 
-        String input = action.execute();
+        String input = action.save();
         assertTrue("Expected INPUT", Action.INPUT.equals(input));
     }
 

@@ -1,7 +1,7 @@
 import com.opensymphony.util.BeanUtils;
-import com.opensymphony.webwork.interceptor.ApplicationAware;
-import com.opensymphony.webwork.interceptor.SessionAware;
-import com.opensymphony.xwork.ActionSupport;
+import org.apache.struts2.interceptor.ApplicationAware;
+import org.apache.struts2.interceptor.SessionAware;
+import com.opensymphony.xwork2.ActionSupport;
 import org.apache.struts.apps.mailreader.dao.ExpiredPasswordException;
 import org.apache.struts.apps.mailreader.dao.User;
 import org.apache.struts.apps.mailreader.dao.UserDatabase;

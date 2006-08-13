@@ -1,31 +1,34 @@
-<!DOCTYPE xwork PUBLIC "-//OpenSymphony Group//XWork 1.1.1//EN" "http://www.opensymphony.com/xwork/xwork-1.1.1.dtd">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
 
-<xwork>
-    <include file="webwork-default.xml"/>
+<struts>
+    <include file="struts-default.xml"/>
 
-    <package name="default" extends="webwork-default">
+    <package name="default" extends="struts-default">
 
         <interceptors>
 
             <interceptor name="authentication"
                          class="AuthenticationInterceptor"/>
 
-            <interceptor-stack name="user" >
-                <interceptor-ref name="authentication" />
+            <interceptor-stack name="user">
+                <interceptor-ref name="authentication"/>
                 <interceptor-ref name="defaultStack"/>
             </interceptor-stack>
 
-            <interceptor-stack name="user-submit" >
-                <interceptor-ref name="token-session" />
+            <interceptor-stack name="user-submit">
+                <interceptor-ref name="token-session"/>
                 <interceptor-ref name="user"/>
             </interceptor-stack>
 
-            <interceptor-stack name="guest" >
+            <interceptor-stack name="guest">
                 <interceptor-ref name="defaultStack"/>
             </interceptor-stack>
 
-            <interceptor-stack name="guest-submit" >
-                <interceptor-ref name="token-session" />
+            <interceptor-stack name="guest-submit">
+                <interceptor-ref name="token-session"/>
                 <interceptor-ref name="guest"/>
             </interceptor-stack>
 
@@ -71,7 +74,7 @@
         <action name="RegisterCreate" class="RegisterCreate">
             <result name="input">/pages/Register.jsp</result>
             <result type="redirect-action">Menu</result>
-            <interceptor-ref name="guest-submit" />
+            <interceptor-ref name="guest-submit"/>
         </action>
 
         <action name="Menu" class="MailReaderSupport">
@@ -97,7 +100,7 @@
         <action name="SubscribeSave" class="SubscribeSave">
             <result name="input">/pages/Subscribe.jsp</result>
             <result type="redirect-action">Register!input</result>
-            <interceptor-ref name="user-submit" />
+            <interceptor-ref name="user-submit"/>
         </action>
 
         <action name="NPE" class="NPE">
@@ -106,4 +109,4 @@
         </action>
 
     </package>
-</xwork>
+</struts>

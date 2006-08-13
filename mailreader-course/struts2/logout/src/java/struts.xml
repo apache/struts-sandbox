@@ -7,7 +7,6 @@
     <include file="struts-default.xml"/>
 
     <package name="default" extends="struts-default">
-
         <default-action-ref name="Missing"/>
 
         <action name="Hello" class="Hello">
@@ -28,11 +27,32 @@
 
         <action name="Register_save" class="Register" method="save">
             <result name="input">/pages/Register.jsp</result>
-            <result type="chain">Menu</result>
+            <result type="redirect-action">Menu</result>
+        </action>
+
+        <action name="Register_cancel" class="Register" method="cancel">
+            <result name="cancel" type="redirect-action">Welcome</result>
         </action>
 
         <action name="Menu" class="MailReaderSupport">
             <result>/pages/Menu.jsp</result>
+        </action>
+
+        <action name="Logout" class="Logout">
+            <result type="redirect-action">Welcome</result>
+        </action>
+
+        <action name="Login" class="Login" method="input">
+            <result name="input">/pages/Login.jsp</result>
+        </action>
+
+        <action name="Login_save" class="Login" method="save">
+            <result name="input">/pages/Login.jsp</result>
+            <result type="redirect-action">Menu</result>
+        </action>
+
+        <action name="Login_cancel" class="Login" method="cancel">
+            <result name="cancel" type="redirect-action">Welcome</result>
         </action>
 
     </package>

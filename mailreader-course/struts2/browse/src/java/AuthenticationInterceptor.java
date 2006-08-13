@@ -1,6 +1,6 @@
-import com.opensymphony.xwork.interceptor.Interceptor;
-import com.opensymphony.xwork.ActionInvocation;
-import com.opensymphony.xwork.Action;
+import com.opensymphony.xwork2.interceptor.Interceptor;
+import com.opensymphony.xwork2.ActionInvocation;
+import com.opensymphony.xwork2.Action;
 import java.util.Map;
 import org.apache.struts.apps.mailreader.dao.User;
 

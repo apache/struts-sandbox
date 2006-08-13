@@ -1,5 +1,6 @@
-<%@ taglib uri="/webwork" prefix="ww" %>
+<%@ taglib prefix="s" uri="/tags" %>
 <hr/>
+
 <p>
-    <a href="<ww:url action="Welcome" />"><ww:text name="index.title"/></a>
+    <a href="<s:url action="Welcome" />"><s:text name="index.title"/></a>
 </p>

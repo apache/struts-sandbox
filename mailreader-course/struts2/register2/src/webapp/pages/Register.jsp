@@ -4,9 +4,9 @@
     <title>MailReader - Register</title>
 </head>
 
-<body onLoad="self.focus();document.Register/save.username.focus()">
+<body onLoad="self.focus();document.Register_save.username.focus()">
 <s:actionerror/>
-<s:form action="Register/save">
+<s:form action="Register_save">
 
     <s:textfield label="Username" name="username"/>
 

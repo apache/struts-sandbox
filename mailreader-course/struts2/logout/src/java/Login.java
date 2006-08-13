@@ -1,10 +1,10 @@
+import com.opensymphony.util.BeanUtils;
 import org.apache.struts.apps.mailreader.dao.ExpiredPasswordException;
 import org.apache.struts.apps.mailreader.dao.User;
-import com.opensymphony.util.BeanUtils;
 
 public class Login extends MailReaderSupport {
 
-    public String execute() throws ExpiredPasswordException {
+    public String save() throws ExpiredPasswordException {
 
         User user = findUser(getUsername(), getPassword());
 

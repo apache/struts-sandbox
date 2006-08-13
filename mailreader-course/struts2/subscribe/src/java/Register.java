@@ -19,7 +19,7 @@ public class Register extends MailReaderSupport {
         return INPUT;
     }
 
-    public String execute()
+    public String save()
             throws Exception {
 
         User user = getUser();

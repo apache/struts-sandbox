@@ -18,7 +18,7 @@ public class RetainTest extends TestCase {
 
     public void testDatabaseClean() throws Exception {
         User user = database.findUser("user");
-        assertNull("Expected user to be created", user);
+        assertNull("Expected user to be missing", user);
     }
 
     //  Add your test methods here.

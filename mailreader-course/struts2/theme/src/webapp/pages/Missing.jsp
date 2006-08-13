@@ -1,8 +1,8 @@
-<%@ taglib uri="/webwork" prefix="ww" %>
+<%@ taglib prefix="s" uri="/tags" %>
 <html>
 <head>
     <title>Missing Feature</title>
-    <link href="<ww:url value="/css/mailreader.css"/>" rel="stylesheet"
+    <link href="<s:url value="/css/mailreader.css"/>" rel="stylesheet"
           type="text/css"/>
 </head>
 

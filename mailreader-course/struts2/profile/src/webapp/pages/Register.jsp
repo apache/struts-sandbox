@@ -1,61 +1,61 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@ taglib uri="/webwork" prefix="ww" %>
+<%@ taglib prefix="s" uri="/tags" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-    <ww:if test="task=='Create'">
-        <title><ww:text name="registration.title.create"/></title>
-    </ww:if>
-    <ww:if test="task=='Edit'">
-        <title><ww:text name="registration.title.edit"/></title>
-    </ww:if>
+    <s:if test="task=='Create'">
+        <title><s:text name="registration.title.create"/></title>
+    </s:if>
+    <s:if test="task=='Edit'">
+        <title><s:text name="registration.title.edit"/></title>
+    </s:if>
 </head>
 
 <body onLoad="self.focus();document.Register.username.focus()">
 
-<ww:actionerror/>
-<ww:form method="POST" validate="true">
-    <ww:hidden name="task"/>
-    <ww:if test="task == 'Create'">
-        <ww:textfield label="%{getText('username')}" name="username"/>
-    </ww:if>
-    <ww:else>
-        <ww:label label="%{getText('username')}" name="username"/>
-        <ww:hidden name="username"/>
-    </ww:else>
+<s:actionerror/>
+<s:form method="POST" validate="true">
+    <s:hidden name="task"/>
+    <s:if test="task == 'Create'">
+        <s:textfield label="%{getText('username')}" name="username"/>
+    </s:if>
+    <s:else>
+        <s:label label="%{getText('username')}" name="username"/>
+        <s:hidden name="username"/>
+    </s:else>
 
-    <ww:password label="%{getText('password')}" name="password"/>
+    <s:password label="%{getText('password')}" name="password"/>
 
-    <ww:password label="%{getText('password2')}" name="password2"/>
+    <s:password label="%{getText('password2')}" name="password2"/>
 
-    <ww:textfield label="%{getText('fullName')}"
-                   name="fullName"/>
+    <s:textfield label="%{getText('fullName')}"
+                  name="fullName"/>
 
-    <ww:textfield label="%{getText('fromAddress')}"
-                   name="fromAddress"/>
+    <s:textfield label="%{getText('fromAddress')}"
+                  name="fromAddress"/>
 
-    <ww:textfield label="%{getText('replyToAddress')}"
-                   name="replyToAddress"/>
+    <s:textfield label="%{getText('replyToAddress')}"
+                  name="replyToAddress"/>
 
-    <ww:if test="task == 'Create'">
-        <ww:submit value="%{getText('button.save')}" action="RegisterCreate"/>
+    <s:if test="task == 'Create'">
+        <s:submit value="%{getText('button.save')}" action="RegisterCreate"/>
 
-        <ww:reset value="%{getText('button.reset')}"/>
+        <s:reset value="%{getText('button.reset')}"/>
 
-        <ww:submit action="Welcome" value="%{getText('button.cancel')}"
-                    onclick="form.onsubmit=null"/>
-    </ww:if>
-    <ww:else>
-        <ww:submit value="%{getText('button.save')}" action="Register"/>
+        <s:submit action="Welcome" value="%{getText('button.cancel')}"
+                   onclick="form.onsubmit=null"/>
+    </s:if>
+    <s:else>
+        <s:submit value="%{getText('button.save')}" action="Register"/>
 
-        <ww:reset value="%{getText('button.reset')}"/>
+        <s:reset value="%{getText('button.reset')}"/>
 
-        <ww:submit action="Menu" value="%{getText('button.cancel')}"
-                    onclick="form.onsubmit=null"/>
-    </ww:else>
+        <s:submit action="Menu" value="%{getText('button.cancel')}"
+                   onclick="form.onsubmit=null"/>
+    </s:else>
 
-</ww:form>
+</s:form>
 
 </body>
 </html>

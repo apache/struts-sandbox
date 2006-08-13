@@ -1,64 +1,64 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@ taglib uri="/webwork" prefix="ww" %>
+<%@ taglib prefix="s" uri="/tags" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-    <ww:if test="task=='Create'">
-        <title><ww:text name="subscription.title.create"/></title>
-    </ww:if>
-    <ww:if test="task=='Edit'">
-        <title><ww:text name="subscription.title.edit"/></title>
-    </ww:if>
-    <ww:if test="task=='Delete'">
-        <title><ww:text name="subscription.title.delete"/></title>
-    </ww:if>
+    <s:if test="task=='Create'">
+        <title><s:text name="subscription.title.create"/></title>
+    </s:if>
+    <s:if test="task=='Edit'">
+        <title><s:text name="subscription.title.edit"/></title>
+    </s:if>
+    <s:if test="task=='Delete'">
+        <title><s:text name="subscription.title.delete"/></title>
+    </s:if>
 </head>
 
 <body onLoad="self.focus();document.Subscribe.username.focus()">
 
-<ww:actionerror/>
-<ww:form method="POST" action="SubscribeSave" validate="true">
-    <ww:token/>
-    <ww:hidden name="task"/>
-    <ww:label label="%{getText('username')}" name="user.username"/>
+<s:actionerror/>
+<s:form method="POST" action="SubscribeSave" validate="true">
+    <s:token/>
+    <s:hidden name="task"/>
+    <s:label label="%{getText('username')}" name="user.username"/>
 
-    <ww:if test="task == 'Create'">
-        <ww:textfield label="%{getText('mailHostname')}" name="host"/>
-    </ww:if>
-    <ww:else>
-        <ww:label label="%{getText('mailHostname')}" name="host"/>
-        <ww:hidden name="host"/>
-    </ww:else>
+    <s:if test="task == 'Create'">
+        <s:textfield label="%{getText('mailHostname')}" name="host"/>
+    </s:if>
+    <s:else>
+        <s:label label="%{getText('mailHostname')}" name="host"/>
+        <s:hidden name="host"/>
+    </s:else>
 
-    <ww:if test="task == 'Delete'">
-        <ww:label label="%{getText('mailUsername')}"
-                   name="subscription.username"/>
-        <ww:label label="%{getText('mailPassword')}"
-                   name="subscription.password"/>
-        <ww:label label="%{getText('mailServerType')}"
-                   name="subscription.type"/>
-        <ww:label label="%{getText('autoConnect')}"
-                   name="subscription.autoConnect"/>
-        <ww:submit value="%{getText('button.confirm')}"/>
-    </ww:if>
-    <ww:else>
-        <ww:textfield label="%{getText('mailUsername')}"
-                       name="subscription.username"/>
-        <ww:textfield label="%{getText('mailPassword')}"
-                       name="subscription.password"/>
-        <ww:select label="%{getText('mailServerType')}"
-                    name="subscription.type" list="types"/>
-        <ww:checkbox label="%{getText('autoConnect')}"
-                      name="subscription.autoConnect"/>
-        <ww:submit value="%{getText('button.save')}"/>
-        <ww:reset value="%{getText('button.reset')}"/>
-    </ww:else>
+    <s:if test="task == 'Delete'">
+        <s:label label="%{getText('mailUsername')}"
+                  name="subscription.username"/>
+        <s:label label="%{getText('mailPassword')}"
+                  name="subscription.password"/>
+        <s:label label="%{getText('mailServerType')}"
+                  name="subscription.type"/>
+        <s:label label="%{getText('autoConnect')}"
+                  name="subscription.autoConnect"/>
+        <s:submit value="%{getText('button.confirm')}"/>
+    </s:if>
+    <s:else>
+        <s:textfield label="%{getText('mailUsername')}"
+                      name="subscription.username"/>
+        <s:textfield label="%{getText('mailPassword')}"
+                      name="subscription.password"/>
+        <s:select label="%{getText('mailServerType')}"
+                   name="subscription.type" list="types"/>
+        <s:checkbox label="%{getText('autoConnect')}"
+                     name="subscription.autoConnect"/>
+        <s:submit value="%{getText('button.save')}"/>
+        <s:reset value="%{getText('button.reset')}"/>
+    </s:else>
 
-    <ww:submit action="Register!input"
-                value="%{getText('button.cancel')}"
-                onclick="form.onsubmit=null"/>
-</ww:form>
+    <s:submit action="Register!input"
+               value="%{getText('button.cancel')}"
+               onclick="form.onsubmit=null"/>
+</s:form>
 
 </body>
 </html>

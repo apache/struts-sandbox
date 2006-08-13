@@ -1,22 +1,22 @@
-<%@ taglib uri="/webwork" prefix="ww" %>
+<%@ taglib prefix="s" uri="/tags" %>
 <html>
 <head>
     <title>MailReader - Login</title>
 </head>
 
-<body onLoad="self.focus();document.Login.username.focus()">
+<body onLoad="self.focus();document.Login_save.username.focus()">
 
-<ww:actionerror/>
-<ww:form method="POST" validate="true">
-    <ww:textfield label="Username" name="username"/>
+<s:actionerror/>
+<s:form action="Login_save" validate="true">
+    <s:textfield label="Username" name="username"/>
 
-    <ww:password label="Password" name="password" showPassword="true"/>
+    <s:password label="Password" name="password" showPassword="true"/>
 
-    <ww:submit value="Save" name="Save"/>
+    <s:submit value="Save" name="Save"/>
 
-    <ww:submit action="Login!cancel" value="Cancel" name="Cancel"
-               onclick="form.onsubmit=null"/>
-</ww:form>
+    <s:submit action="Login_cancel" value="Cancel" name="Cancel"
+              onclick="form.onsubmit=null"/>
+</s:form>
 
 </body>
 </html>
