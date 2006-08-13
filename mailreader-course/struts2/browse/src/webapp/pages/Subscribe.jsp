@@ -15,11 +15,10 @@
     </s:if>
 </head>
 
-<body onLoad="self.focus();document.Subscribe.username.focus()">
+<body onLoad="self.focus();document.Subscribe_save.username.focus()">
 
 <s:actionerror/>
-<s:form method="POST" action="SubscribeSave" validate="true">
-    <s:token/>
+<s:form action="Subscribe_save" validate="true">
     <s:hidden name="task"/>
     <s:label label="%{getText('username')}" name="user.username"/>
 
@@ -33,31 +32,31 @@
 
     <s:if test="task == 'Delete'">
         <s:label label="%{getText('mailUsername')}"
-                  name="subscription.username"/>
+                 name="subscription.username"/>
         <s:label label="%{getText('mailPassword')}"
-                  name="subscription.password"/>
+                 name="subscription.password"/>
         <s:label label="%{getText('mailServerType')}"
-                  name="subscription.type"/>
+                 name="subscription.type"/>
         <s:label label="%{getText('autoConnect')}"
-                  name="subscription.autoConnect"/>
+                 name="subscription.autoConnect"/>
         <s:submit value="%{getText('button.confirm')}"/>
     </s:if>
     <s:else>
         <s:textfield label="%{getText('mailUsername')}"
-                      name="subscription.username"/>
+                     name="subscription.username"/>
         <s:textfield label="%{getText('mailPassword')}"
-                      name="subscription.password"/>
+                     name="subscription.password"/>
         <s:select label="%{getText('mailServerType')}"
-                   name="subscription.type" list="types"/>
+                  name="subscription.type" list="types"/>
         <s:checkbox label="%{getText('autoConnect')}"
-                     name="subscription.autoConnect"/>
+                    name="subscription.autoConnect"/>
         <s:submit value="%{getText('button.save')}"/>
         <s:reset value="%{getText('button.reset')}"/>
     </s:else>
 
-    <s:submit action="Register!input"
-               value="%{getText('button.cancel')}"
-               onclick="form.onsubmit=null"/>
+    <s:submit action="Register"
+              value="%{getText('button.cancel')}"
+              onclick="form.onsubmit=null"/>
 </s:form>
 
 </body>

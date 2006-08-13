@@ -39,7 +39,7 @@ public class Subscribe extends MailReaderSupport
 
         setSubscription(sub);
 
-        return INPUT;
+        return SUCCESS;
 
     }
 
