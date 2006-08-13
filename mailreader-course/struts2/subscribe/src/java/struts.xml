@@ -21,13 +21,20 @@
             <result>/pages/Welcome.jsp</result>
         </action>
 
-        <action name="Register" class="Register">
+        <action name="Register" class="Register" method="input">
             <result name="input">/pages/Register.jsp</result>
+        </action>
+
+        <action name="Register_cancel" class="Register" method="cancel">
             <result name="cancel" type="redirect-action">Welcome</result>
+        </action>
+
+        <action name="Register_create" class="RegisterCreate" method="save">
+            <result name="input">/pages/Register.jsp</result>
             <result type="redirect-action">Menu</result>
         </action>
 
-        <action name="RegisterCreate" class="RegisterCreate">
+        <action name="Register_save" class="Register" method="save">
             <result name="input">/pages/Register.jsp</result>
             <result type="redirect-action">Menu</result>
         </action>
@@ -40,20 +47,37 @@
             <result type="redirect-action">Welcome</result>
         </action>
 
-        <action name="Login" class="Login">
+        <action name="Login" class="Login" method="input">
             <result name="input">/pages/Login.jsp</result>
+        </action>
+
+        <action name="Login_cancel" class="Login" method="cancel">
             <result name="cancel" type="redirect-action">Welcome</result>
+        </action>
+
+        <action name="Login_save" class="Login" method="save">
+            <result name="input">/pages/Login.jsp</result>
             <result type="redirect-action">Menu</result>
         </action>
 
-        <action name="Subscribe" class="Subscribe">
+        <action name="Subscribe" class="Subscribe" method="input">
             <result name="input">/pages/Subscribe.jsp</result>
-            <result type="redirect-action">Register!input</result>
+            <result type="redirect-action">Register</result>
         </action>
 
-        <action name="SubscribeSave" class="SubscribeSave">
+        <action name="Subscribe_delete" class="Subscribe" method="delete">
+            <result name="input" type="redirect-action">Login</result>
+            <result>/pages/Subscribe.jsp</result>
+        </action>
+
+        <action name="Subscribe_edit" class="Subscribe" method="edit">
+            <result name="input" type="redirect-action">Login</result>
+            <result>/pages/Subscribe.jsp</result>
+        </action>
+
+        <action name="Subscribe_save" class="SubscribeSave" method="save">
             <result name="input">/pages/Subscribe.jsp</result>
-            <result type="redirect-action">Register!input</result>
+            <result type="redirect-action">Register</result>
         </action>
 
     </package>

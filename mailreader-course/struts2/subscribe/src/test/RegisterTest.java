@@ -11,10 +11,11 @@ public class RegisterTest extends RetainTest {
         super.setUp();
         action = new Register();
         action.setApplication(new HashMap());
+        action.setSession(new HashMap());
         action.setDatabase(database);
     }
 
-    public void testExecute() throws Exception {
+    public void testSave() throws Exception {
 
         action.setUsername("user");
         action.setPassword("pass");

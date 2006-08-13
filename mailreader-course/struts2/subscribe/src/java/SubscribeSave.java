@@ -1,12 +1,12 @@
+/**
+ * <p>Stub class to allow extra validation when saving.</p>
+ */
 public final class SubscribeSave extends Subscribe {
 
     public void prepare() {
         super.prepare();
-            // checkbox workaround
+        // checkbox workaround
         getSubscription().setAutoConnect(false);
     }
 
-    public String execute() throws Exception {
-        return save();
-    }
 }

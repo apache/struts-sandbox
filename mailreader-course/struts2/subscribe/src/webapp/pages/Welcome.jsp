@@ -12,31 +12,34 @@
 <h3>MailReader Options</h3>
 
 <ul>
-    <li><a href="<s:url action="Register!input"/>"><s:text
+    <li><a href="<s:url action="Register"/>"><s:text
             name="index.registration"/></a></li>
-    <li><a href="<s:url action="Login!input"/>"><s:text
+    <li><a href="<s:url action="Login"/>"><s:text
             name="index.login"/></a></li>
 </ul>
 
 <h3>Language Options</h3>
 <ul>
-    <li><a href="<s:url action="Welcome?request_locale=en"/>">English</a></li>
-    <li><a href="<s:url action="Welcome?request_locale=ja"/>">Japanese</a></li>
-    <li><a href="<s:url action="Welcome?request_locale=ru"/>">Russian</a></li>
+    <li>
+        <s:url id="en" action="Welcome">
+            <s:param name="request_locale">en</s:param>
+        </s:url>
+        <s:a href="%{en}">English</s:a>
+    </li>
+    <li>
+        <s:url id="ja" action="Welcome">
+            <s:param name="request_locale">ja</s:param>
+        </s:url>
+        <s:a href="%{ja}">Japanese</s:a>
+    </li>
+    <li>
+        <s:url id="ru" action="Welcome">
+            <s:param name="request_locale">ru</s:param>
+        </s:url>
+        <s:a href="%{ru}">Russian</s:a>
+    </li>
 </ul>
-
 <hr/>
-
-<s:form>
-
-    <s:doubleselect
-            label="doubleselect test1"
-            name="menu"
-            list="{'fruit','other'}"
-            doubleName="dishes"
-            doubleList="top == 'fruit'
-      ? {'apple', 'orange'} :   {'monkey', 'chicken'}"/>
-</s:form>
 </body>
 </html>
 

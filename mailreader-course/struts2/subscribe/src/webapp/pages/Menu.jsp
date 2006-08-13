@@ -10,7 +10,7 @@
 <body>
 <h3><s:text name="menu.heading"/> <s:property value="user.fullName"/></h3>
 <ul>
-    <li><a href="<s:url action="Register!input" />">
+    <li><a href="<s:url action="Register" />">
         <s:text name="menu.registration"/>
     </a>
     </li>

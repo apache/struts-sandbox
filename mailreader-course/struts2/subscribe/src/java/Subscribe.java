@@ -28,7 +28,7 @@ public class Subscribe extends MailReaderSupport
         return INPUT;
     }
 
-    public String find() {
+    protected String find() {
 
         org.apache.struts.apps.mailreader.dao.Subscription
                 sub = findSubscription();
@@ -39,7 +39,7 @@ public class Subscribe extends MailReaderSupport
 
         setSubscription(sub);
 
-        return INPUT;
+        return SUCCESS;
 
     }
 
