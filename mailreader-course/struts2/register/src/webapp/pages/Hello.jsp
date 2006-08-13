@@ -3,6 +3,7 @@
 <head>
     <title>Hello</title>
 </head>
+
 <body>
 <h2><ww:text name="hello.message"/></h2>
 </body>

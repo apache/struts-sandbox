@@ -1,7 +1,7 @@
 import junit.framework.TestCase;
+import org.apache.struts.apps.mailreader.dao.Subscription;
 import org.apache.struts.apps.mailreader.dao.User;
 import org.apache.struts.apps.mailreader.dao.UserDatabase;
-import org.apache.struts.apps.mailreader.dao.Subscription;
 import org.apache.struts.apps.mailreader.dao.impl.memory.MemoryUserDatabase;
 
 public class RetainTest extends TestCase {
@@ -18,7 +18,7 @@ public class RetainTest extends TestCase {
 
     public void testDatabaseClean() throws Exception {
         User user = database.findUser("user");
-        assertNull("Expected user to be created",user);
+        assertNull("Expected user to be created", user);
     }
 
     //  Add your test methods here.
@@ -32,7 +32,7 @@ public class RetainTest extends TestCase {
     public void testFindUser() throws Exception {
         User user1 = database.createUser("user");
         User user2 = database.findUser("user");
-        assertSame("Expected users to match",user1,user2);
+        assertSame("Expected users to match", user1, user2);
     }
 
     public void testCreateSubscription() throws Exception {
@@ -43,7 +43,7 @@ public class RetainTest extends TestCase {
     public void testFindSubscription() throws Exception {
         Subscription sub1 = database.createUser("user").createSubscription("mail.yahoo.com");
         Subscription sub2 = database.findUser("user").findSubscription("mail.yahoo.com");
-        assertSame("Expected Subscriptions to match",sub1,sub2);
+        assertSame("Expected Subscriptions to match", sub1, sub2);
     }
 
     public void testDatabsaeSave() throws Exception {
@@ -73,25 +73,25 @@ public class RetainTest extends TestCase {
 
     public void testFinderUserBogus() throws Exception {
         User user1 = database.findUser("bogus");
-        assertNull("Expected bogus user to be not found",user1);
+        assertNull("Expected bogus user to be not found", user1);
         User user2 = database.createUser("user");
         assertNotNull("Expected user to be created", user2);
         user1 = database.findUser("bogus");
-        assertNull("Expected bogus user to be not found",user1);
+        assertNull("Expected bogus user to be not found", user1);
         user1 = database.findUser("user");
-        assertNotNull("Expected user to be found",user1);
+        assertNotNull("Expected user to be found", user1);
     }
 
     public void testFindSubBogus() throws Exception {
-        User user =database.createUser("user");
+        User user = database.createUser("user");
         Subscription sub = user.findSubscription("mail.bogus.com");
         assertNull(sub);
         sub = database.findUser("user").createSubscription("mail.hotmail.com");
         assertNotNull(sub);
         Subscription sub2 = user.findSubscription("mail.bogus.com");
         assertNull(sub2);
-        Subscription sub3  =user.findSubscription("mail.hotmail.com");
-        assertSame(sub,sub3);
+        Subscription sub3 = user.findSubscription("mail.hotmail.com");
+        assertSame(sub, sub3);
     }
 
 }
