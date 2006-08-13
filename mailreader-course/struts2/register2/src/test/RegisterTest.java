@@ -1,4 +1,4 @@
-import com.opensymphony.xwork.Action;
+import com.opensymphony.xwork2.Action;
 import org.apache.struts.apps.mailreader.dao.User;
 
 import java.util.HashMap;
