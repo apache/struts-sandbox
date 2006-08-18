@@ -16,4 +16,11 @@
 
         <!-- Add your actions here -->
     </package>
+
+    <package name="tutorial" extends="struts-default">
+        <action name="HelloWorld" class="tutorial.HelloWorld">
+            <result name="success">/tutorial/HelloWorld.jsp</result>
+        </action>
+    </package>
+
 </struts>
