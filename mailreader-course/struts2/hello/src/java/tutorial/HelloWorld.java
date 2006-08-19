@@ -11,8 +11,6 @@ public class HelloWorld implements Action {
         message = "Hello, World!\n";
         message += "The time is:\n";
         message += DateFormat.getDateInstance().format(new Date());
-        ;
-
         return SUCCESS;
     }
 
