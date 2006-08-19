@@ -2,9 +2,9 @@
 <module version="4" relativePaths="true" type="J2EE_WEB_MODULE" j2ee-integration="Tomcat Server">
   <component name="ModuleRootManager" />
   <component name="NewModuleRootManager">
-    <output url="file://C:/opt/Apache/Tomcat-5.5/webapps/hello/WEB-INF/classes" />
+    <output url="file://C:/opt/Apache/Tomcat-5.5/webapps/tutorial/WEB-INF/classes" />
     <exclude-output />
-    <exploded url="file://C:/opt/Apache/Tomcat-5.5/webapps/hello" />
+    <exploded url="file://C:/opt/Apache/Tomcat-5.5/webapps/tutorial" />
     <exclude-exploded />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src/java" isTestSource="false" />
@@ -160,7 +160,7 @@
     <orderEntryProperties />
   </component>
   <component name="WebModuleBuildComponent">
-    <setting name="EXPLODED_URL" value="file://C:/opt/Apache/Tomcat-5.5/webapps/hello" />
+    <setting name="EXPLODED_URL" value="file://C:/opt/Apache/Tomcat-5.5/webapps/tutorial" />
     <setting name="EXPLODED_ENABLED" value="true" />
     <setting name="JAR_URL" value="file://" />
     <setting name="JAR_ENABLED" value="false" />
@@ -169,6 +169,11 @@
     <setting name="RUN_JASPER_VALIDATION" value="false" />
   </component>
   <component name="WebModuleProperties">
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/commons-collections-2.1.jar" />
+      <url>jar://$MODULE_DIR$/../lib/commons-collections-2.1.jar!/</url>
+    </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib/commons-digester-1.6.jar" />

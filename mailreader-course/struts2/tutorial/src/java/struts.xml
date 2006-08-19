@@ -6,32 +6,26 @@
 <struts>
     <include file="struts-default.xml"/>
 
-    <package name="default" extends="struts-default">
-
-        <default-action-ref name="Hello"/>
-
-        <action name="Hello" class="Hello">
-            <result>/pages/Hello.jsp</result>
-        </action>
-
-        <!-- Add your actions here -->
-    </package>
-
-    <package name="tutorial" extends="struts-default">
+    <package name="hello" extends="struts-default">
 
         <action name="HelloWorld" class="tutorial.HelloWorld">
-            <result name="success">/tutorial/HelloWorld.jsp</result>
-        </action>
-
-        <action name="/HelloName" class="tutorial.HelloName">
-            <result name="success">/tutorial/HelloName-success.jsp</result>
-            <result name="error">/tutorial/HelloName-error.html</result>
-        </action>
-
-        <action name="/HelloName2" class="tutorial.HelloName2">
-            <result name="success">/tutorial/HelloName2-success.jsp</result>
-            <result name="error">/tutorial/HelloName-error.html</result>
+            <result name="success">HelloWorld.jsp</result>
         </action>
 
     </package>
+
+    <package name="actions" extends="struts-default">
+
+        <action name="HelloName" class="tutorial.HelloName">
+            <result name="success">/HelloName-success.jsp</result>
+            <result name="error">HelloName-error.html</result>
+        </action>
+
+        <action name="HelloName2" class="tutorial.HelloName2">
+            <result name="success">HelloName2-success.jsp</result>
+            <result name="error">HelloName-error.html</result>
+        </action>
+
+    </package>
+
 </struts>
