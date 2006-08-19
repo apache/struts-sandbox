@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <include file="struts-default.xml"/>
+
+    <package name="default" extends="struts-default">
+
+        <default-action-ref name="Hello"/>
+
+        <action name="Hello" class="Hello">
+            <result>/pages/Hello.jsp</result>
+        </action>
+
+        <!-- Add your actions here -->
+    </package>
+
+    <package name="tutorial" extends="struts-default">
+
+        <action name="HelloWorld" class="tutorial.HelloWorld">
+            <result name="success">/tutorial/HelloWorld.jsp</result>
+        </action>
+
+        <action name="/HelloName" class="tutorial.HelloName">
+            <result name="success">/tutorial/HelloName-success.jsp</result>
+            <result name="error">/tutorial/HelloName-error.html</result>
+        </action>
+
+        <action name="/HelloName2" class="tutorial.HelloName2">
+            <result name="success">/tutorial/HelloName2-success.jsp</result>
+            <result name="error">/tutorial/HelloName-error.html</result>
+        </action>
+
+    </package>
+</struts>
