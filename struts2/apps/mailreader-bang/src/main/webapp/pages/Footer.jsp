@@ -1,4 +1,4 @@
-<%@ taglib uri="/struts-action" prefix="s" %>
+<%@ taglib uri="/struts-tags" prefix="s" %>
 <hr/>
 
 <p>

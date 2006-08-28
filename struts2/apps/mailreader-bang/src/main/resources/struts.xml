@@ -36,8 +36,6 @@
 
         <default-interceptor-ref name="user"/>
         
-        <default-action-ref name="Welcome"/>
-
         <global-results>
             <result name="error">/pages/Error.jsp</result>
             <result name="invalid.token">/pages/Error.jsp</result>
@@ -80,7 +78,7 @@
             <interceptor-ref name="guest"/>
         </action>
 
-        <action name="RegistrationSave" class="mailreader2.RegistrationSave">
+        <action name="RegistrationSave" class="mailreader2.Registration">
             <result name="input">/pages/Registration.jsp</result>
             <result type="redirect-action">MainMenu</result>
             <interceptor-ref name="guest-submit" />

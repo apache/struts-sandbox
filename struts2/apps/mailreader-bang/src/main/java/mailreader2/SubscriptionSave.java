@@ -1,7 +1,7 @@
 package mailreader2;
 
 /**
- * <p> Workaround class. Submitting to an alias doesn't seem to work. </p>
+ * <p> Save a subscriptioin, resetting checkbox in prepare.</p>
  */
 public final class SubscriptionSave extends Subscription {
 

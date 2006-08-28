@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@ taglib uri="/struts-action" prefix="s" %>
+<%@ taglib uri="/struts-tags" prefix="s" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -22,9 +22,24 @@
 
 <h3>Language Options</h3>
 <ul>
-    <li><a href="<s:url action="Welcome?request_locale=en"/>">English</a></li>
-    <li><a href="<s:url action="Welcome?request_locale=ja"/>">Japanese</a></li>
-    <li><a href="<s:url action="Welcome?request_locale=ru"/>">Russian</a></li>
+    <li>
+        <s:url id="en" action="Welcome">
+            <s:param name="request_locale">en</s:param>
+        </s:url>
+        <s:a href="%{en}">English</s:a>
+    </li>
+    <li>
+        <s:url id="ja" action="Welcome">
+            <s:param name="request_locale">ja</s:param>
+        </s:url>
+        <s:a href="%{ja}">Japanese</s:a>
+    </li>
+    <li>
+        <s:url id="ru" action="Welcome">
+            <s:param name="request_locale">ru</s:param>
+        </s:url>
+        <s:a href="%{ru}">Russian</s:a>
+    </li>
 </ul>
 
 <hr/>

@@ -38,7 +38,6 @@ public class Subscription extends MailreaderSupport
         types = m;
 
         setHost(getSubscriptionHost());
-
     }
 
     /**
