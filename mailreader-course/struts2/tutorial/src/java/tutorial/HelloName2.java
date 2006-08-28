@@ -7,8 +7,10 @@ import java.util.Map;
 
 public class HelloName2 extends ActionSupport implements ParameterAware {
 
+    public static String NAME = "name";
+
     public String execute() {
-        String[] name = (String[]) parameters.get("name");
+        String[] name = (String[]) parameters.get(NAME);
         if (name == null || name[0] == null || name[0].length() == 0)
             return ERROR;
         else

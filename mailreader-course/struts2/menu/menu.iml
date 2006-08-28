@@ -174,7 +174,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="Tomcat 5.5" level="application_server_libraries" />
     <orderEntryProperties />
   </component>
   <component name="WebModuleBuildComponent">
@@ -268,7 +267,6 @@
       <url>jar://$MODULE_DIR$/../lib/xwork-2.0-SNAPSHOT.jar!/</url>
     </containerElement>
     <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/src/webapp/WEB-INF/web.xml" optional="false" version="2.3" />
-    <deploymentDescriptor name="context.xml" url="file://$MODULE_DIR$/META-INF/context.xml" optional="false" version="5.x" />
     <deploymentDescriptor name="" url="file://$MODULE_DIR$/META-INF/context.xml" optional="false">
       <option name="DEFAULT_DIR" value="WEB-INF" />
       <option name="NAME" value="" />

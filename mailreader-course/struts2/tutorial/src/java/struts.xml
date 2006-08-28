@@ -17,7 +17,7 @@
     <package name="actions" extends="struts-default">
 
         <action name="HelloName" class="tutorial.HelloName">
-            <result name="success">/HelloName-success.jsp</result>
+            <result name="success">HelloName-success.jsp</result>
             <result name="error">HelloName-error.html</result>
         </action>
 

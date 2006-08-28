@@ -197,6 +197,7 @@
       <module fileurl="file://$PROJECT_DIR$/retain/retain.iml" filepath="$PROJECT_DIR$/retain/retain.iml" />
       <module fileurl="file://$PROJECT_DIR$/subscribe/subscribe.iml" filepath="$PROJECT_DIR$/subscribe/subscribe.iml" />
       <module fileurl="file://$PROJECT_DIR$/theme/theme.iml" filepath="$PROJECT_DIR$/theme/theme.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tutorial/tutorial.iml" filepath="$PROJECT_DIR$/tutorial/tutorial.iml" />
       <module fileurl="file://$PROJECT_DIR$/welcome/welcome.iml" filepath="$PROJECT_DIR$/welcome/welcome.iml" />
     </modules>
   </component>
