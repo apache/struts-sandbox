@@ -12,7 +12,6 @@
     <!--
     <include file="struts-bang.xml"/>
     -->
-
     <include file="struts-wildcard.xml"/>
 
 </struts>
