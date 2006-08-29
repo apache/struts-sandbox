@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <include file="struts-default.xml"/>
+
+    <package name="default" namespace="" extends="struts-default">
+
+        <global-results>
+            <result name="error">/pages/Error.jsp</result>
+            <result name="invalid.token">/pages/Error.jsp</result>
+            <result name="success" type="redirect-action">MainMenu</result>
+            <result name="expired" type="chain">ChangePassword</result>
+        </global-results>
+
+        <global-exception-mappings>
+            <exception-mapping
+                    result="error"
+                    exception="java.lang.Throwable"/>
+            <exception-mapping
+                    exception="org.apache.struts.apps.mailreader.dao.ExpiredPasswordException"
+                    result="expired"/>
+        </global-exception-mappings>
+
+        <!-- goto actions: Exit to another workflow -->
+
+        <action name="subscription/Save" class="mailreader2.subscription.Save">
+            <result name="input">/pages/subscription.jsp</result>
+            <result type="redirect-action">registration/vInput</result>
+        </action>
+
+        <!-- prepare actions: Confirm/Delete, Edit, Input -->
+        <!-- A "!" might be a better convention,
+             but that doesn't seem to work with a button -->
+
+        <action name="*/v*" class="mailreader2.{1}.{2}">
+            <result>/pages/{1}.jsp</result>
+        </action>
+
+        <!-- execute actions: Create, Retrieve, Update, Save -->
+
+        <action name="*/*" class="mailreader2.{1}.{2}">
+            <result name="input">/pages/{1}.jsp</result>
+        </action>
+
+        <!-- Why doen't these match * -->
+        <!-- It seems to be concaternating a period to the token -->
+        <!-- Unable to instantiate Action, mailreader2.Welcome.,
+             defined for 'Welcome' in namespace '/'mailreader2.Welcome. -->
+        <action name="Logoff" class="mailreader2.Logoff">
+            <result>/pages/Logoff.jsp</result>
+        </action>
+
+        <action name="MainMenu" class="mailreader2.MainMenu">
+            <result>/pages/MainMenu.jsp</result>
+        </action>
+
+        <action name="Welcome" class="mailreader2.Welcome">
+            <result>/pages/Welcome.jsp</result>
+        </action>
+
+        <!-- display actions: Welcome, Logoff, MainMenu -->
+
+        <action name="*" class="mailreader2.{1}">
+            <result>/pages/{1}.jsp</result>
+        </action>
+
+    </package>
+
+</struts>
