@@ -10,8 +10,8 @@
     <include file="struts-support.xml"/>
 
     <!--
-    <include file="struts-bang.xml"/>
-    -->
     <include file="struts-wildcard.xml"/>
+    -->
+    <include file="struts-bang.xml"/>
 
 </struts>
