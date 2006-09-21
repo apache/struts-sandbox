@@ -46,6 +46,12 @@ namespace Nexus.Web
 			return (string.Empty.Equals(input)) ? null : input;
 		}
 
+		protected string Trim(string input, bool nullOnEmpty)
+		{
+			string output = (input==null) ? null : input.Trim();
+			return (nullOnEmpty) ? NullOnEmpty(output) : output;
+		}
+
 		/// <summary>
 		/// Extract the root name from the id, allowing for a prefix and suffix.
 		/// </summary>
@@ -401,6 +407,75 @@ namespace Nexus.Web
 			}
 		}
 
+		public void EnableControls(ControlCollection controls, bool enable)
+		{
+			foreach (Control t in controls)
+			{
+				if (IsTextBox(t))
+				{
+					TextBox x = (TextBox) t;
+					x.Enabled = enable;
+					continue;
+				}
+				if (IsViewLabel(t))
+				{
+					ViewLabel x = (ViewLabel) t;
+					x.Enabled = enable;
+					continue;
+				}
+				if (IsLabel(t))
+				{
+					Label x = (Label) t;
+					x.Enabled = enable;
+					continue;
+				}
+				if (IsListControl(t))
+				{
+					ListControl x = (ListControl) t;
+					x.Enabled = enable;
+					continue;
+				}
+				if (IsCheckBox(t))
+				{
+					CheckBox x = (CheckBox) t;
+					x.Enabled = enable;
+					continue;
+				}
+				if (IsRadioButton(t))
+				{
+					RadioButton x = (RadioButton) t;
+					x.Enabled = enable;
+					continue;
+				}
+				if (IsButton(t))
+				{
+					Button x = (Button) t;
+					x.Enabled = enable;
+					continue;
+				}			
+			}
+		}
+
+		public void EnableControls(ControlCollection controls)
+		{
+			EnableControls(controls,true);
+		}
+
+		public void EnableControls()
+		{
+			EnableControls(this.Controls,true);
+		}
+
+		public void DisableControls(ControlCollection controls)
+		{
+			EnableControls(controls,false);
+		}
+
+		public void DisableControls()
+		{
+			EnableControls(this.Controls,false);
+		}
+
 		private void BindControls(ControlCollection controls, IDictionary dictionary, string prefix, string list_suffix)
 		{
 			foreach (Control t in controls)
@@ -410,6 +485,7 @@ namespace Nexus.Web
 					TextBox x = (TextBox) t;
 					object v = dictionary[ToColumn(x.ID, prefix)];
 					if (v != null) x.Text = v.ToString();
+					continue;
 				}
 				if (IsViewLabel(t))
 				{
@@ -423,6 +499,7 @@ namespace Nexus.Web
 					Label x = (Label) t;
 					object v = dictionary[ToColumn(x.ID, prefix)];
 					if (v != null) x.Text = v.ToString();
+					continue;
 				}
 				if (IsListControl(t))
 				{
@@ -434,18 +511,21 @@ namespace Nexus.Web
 						BindListControl(x, s);
 					else
 						BindListControl(x, s, r);
+					continue;
 				}
 				if (IsCheckBox(t))
 				{
 					CheckBox x = (CheckBox) t;
 					object v = dictionary[ToColumn(x.ID, prefix)];
 					if (v != null) x.Checked = true;
+					continue;
 				}
 				if (IsRadioButton(t))
 				{
 					RadioButton x = (RadioButton) t;
 					object v = dictionary[ToColumn(x.ID, prefix)];
 					if (v != null) x.Checked = true;
+					continue;
 				}
 			}
 		}
@@ -508,14 +588,14 @@ namespace Nexus.Web
 				if (IsTextBox(t))
 				{
 					TextBox x = (TextBox) t;
-					string value = (nullOnEmpty) ? NullOnEmpty(x.Text) : x.Text;
+					string value = Trim(x.Text, nullOnEmpty);
 					dictionary.Add(ToColumn(x.ID, prefix), value);
 					continue;
 				}
 				if (IsLabel(t))
 				{
 					Label x = (Label) t;
-					string value = (nullOnEmpty) ? NullOnEmpty(x.Text) : x.Text;
+					string value = Trim(x.Text, nullOnEmpty);
 					dictionary.Add(ToColumn(x.ID, prefix), value);
 					continue;
 				}
@@ -523,7 +603,7 @@ namespace Nexus.Web
 				{
 					ListControl x = (ListControl) t;
 					string root = RootId(x.ID, prefix, list_suffix);
-					string value = (nullOnEmpty) ? NullOnEmpty(x.SelectedValue) : x.SelectedValue;
+					string value = Trim(x.SelectedValue, nullOnEmpty);;
 					dictionary.Add(root, value);
 					continue;
 				}
