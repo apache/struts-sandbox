@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Text;
 using Nexus.Core.Helpers;
@@ -22,10 +23,37 @@ namespace Nexus.Web
 			}
 			return alert;
 		}
-
+		
+		/**
+		 * Return Fault messages in HTML format. 
+		 */
+		private string FaultMessages()
+		{
+			Exception e = Fault;
+			StringBuilder fault = new StringBuilder("[");
+			fault.Append(e.Message);
+			fault.Append("] ");
+			fault.Append(e.Source);
+			fault.Append(e.StackTrace);
+			return HtmlMessage(fault.ToString());			
+		}
+		
 		public override string AlertsText
 		{
-			get { return HtmlMessageBuilder(Alerts); }
+			get
+			{
+				if (HasFault)
+				{					
+					string field_messages = HtmlMessageBuilder(Alerts);
+					StringBuilder alerts = new StringBuilder(field_messages);					
+					alerts.Append(FaultMessages());
+					return alerts.ToString();
+				}
+				else
+				{
+					return HtmlMessageBuilder(Alerts);
+				} 
+			}
 		}
 
 		public override string HintsFor(string id)
@@ -48,6 +76,7 @@ namespace Nexus.Web
 		/// 
 		private string HtmlMessage(object message)
 		{
+			if (message==null) return null;
 			StringBuilder sb = new StringBuilder("<p>");
 			sb.Append(message.ToString());
 			sb.Append("</p>");

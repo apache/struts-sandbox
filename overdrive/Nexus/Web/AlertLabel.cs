@@ -16,11 +16,12 @@ namespace Nexus.Web
 		/// Set the defaults for this subclass.
 		/// </summary>
 		/// 
-		public AlertLabel()
+		public AlertLabel() : base()
 		{
 			Suffix = ALERT_SUFFIX;
 			View_Hint = false;
-			EnableViewState = false;
+			base.EnableViewState = false;
+			// http://blogs.msdn.com/scottwil/archive/2005/01/14/353177.aspx
 		}
 
 	}

@@ -331,7 +331,7 @@ namespace Nexus.Web
 
 		public void ResetControls()
 		{
-			ControlCollection controls = this.Controls;
+			ControlCollection controls = Controls;
 			foreach (Control control in controls)
 			{
 				if (IsTextBox(control))
@@ -463,7 +463,7 @@ namespace Nexus.Web
 
 		public void EnableControls()
 		{
-			EnableControls(this.Controls,true);
+			EnableControls(Controls,true);
 		}
 
 		public void DisableControls(ControlCollection controls)
@@ -473,7 +473,7 @@ namespace Nexus.Web
 
 		public void DisableControls()
 		{
-			EnableControls(this.Controls,false);
+			EnableControls(Controls,false);
 		}
 
 		private void BindControls(ControlCollection controls, IDictionary dictionary, string prefix, string list_suffix)
@@ -537,7 +537,7 @@ namespace Nexus.Web
 
 		public void Bind(IDictionary dictionary)
 		{
-			BindControls(this.Controls, dictionary, null, ListSuffix);
+			BindControls(Controls, dictionary, null, ListSuffix);
 		}
 
 		public void ExecuteBind(ControlCollection controls, IViewHelper helper)
@@ -555,7 +555,7 @@ namespace Nexus.Web
 
 		public void ExecuteBind(IViewHelper helper)
 		{
-			ExecuteBind(this.Controls, helper);
+			ExecuteBind(Controls, helper);
 		}
 
 		public IViewHelper ExecuteBind(string command)
@@ -633,13 +633,13 @@ namespace Nexus.Web
 
 		public void ReadExecute(ControlCollection controls, IViewHelper helper, bool nullIfEmpty)
 		{
-			Read(this.Controls, helper.Criteria, nullIfEmpty);
+			Read(Controls, helper.Criteria, nullIfEmpty);
 			helper.Execute();
 		}
 
 		public void ReadExecute(IViewHelper helper, bool nullIfEmpty)
 		{
-			ReadExecute(this.Controls, helper, nullIfEmpty);
+			ReadExecute(Controls, helper, nullIfEmpty);
 		}
 
 		public void ReadExecute(IViewHelper helper)
@@ -656,12 +656,12 @@ namespace Nexus.Web
 
 		public IViewHelper Read(string command, bool nullOnEmpty)
 		{
-			return Read(this.Controls, command, nullOnEmpty);
+			return Read(Controls, command, nullOnEmpty);
 		}
 
 		public IViewHelper Read(string command)
 		{
-			return Read(this.Controls, command, true);
+			return Read(Controls, command, true);
 		}
 
 		public IViewHelper ReadExecute(ControlCollection collection, string command, bool nullOnEmpty)
@@ -679,12 +679,12 @@ namespace Nexus.Web
 
 		public IViewHelper ReadExecute(string command, bool nullIfEmpty)
 		{
-			return ReadExecute(this.Controls, command, nullIfEmpty);
+			return ReadExecute(Controls, command, nullIfEmpty);
 		}
 
 		public IViewHelper ReadExecute(string command)
 		{
-			return ReadExecute(this.Controls, command, true);
+			return ReadExecute(Controls, command, true);
 		}
 
 
@@ -788,9 +788,9 @@ namespace Nexus.Web
 				control.SelectedIndex = -1;
 				SelectItem(control, value);
 			}
-			catch (NullReferenceException e1)
+			catch (NullReferenceException okay)
 			{
-				if (e1 == null) value = string.Empty; // placate the IDE
+				if (okay==null) throw okay; // Silly, but it placates the IDE
 			}
 		}
 
