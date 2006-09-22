@@ -60,7 +60,7 @@ namespace Nexus.Core
 		{
 			foreach (DictionaryEntry entry in entries)
 			{
-				Add(entry.Key, entry.Value);
+				base.Add(entry.Key, entry.Value);
 			}
 		}
 
@@ -96,7 +96,7 @@ namespace Nexus.Core
 			set
 			{
 				this[UserProfile.USER_PROFILE] = value;
-				IProfile profile = value as IProfile;
+				IProfile profile = value;
 				if (null != profile)
 					this[UserProfile.USER_ID] = profile.UserId;
 			}
@@ -203,7 +203,7 @@ namespace Nexus.Core
 
 		public bool HasAlerts
 		{
-			get { return this.ContainsKey(Tokens.Alerts); }
+			get { return ContainsKey(Tokens.Alerts); }
 		}
 
 		public Exception Fault
@@ -211,7 +211,7 @@ namespace Nexus.Core
 			get { return this[Tokens.Fault] as Exception; }
 			set
 			{
-				Exception e = value as Exception;
+				Exception e = value;
 				this[Tokens.Fault] = e;
 				AddAlert(e.Message);
 			}
@@ -219,7 +219,7 @@ namespace Nexus.Core
 
 		public bool HasFault
 		{
-			get { return this.ContainsKey(Tokens.Fault); }
+			get { return ContainsKey(Tokens.Fault); }
 		}
 
 		public bool IsNominal
@@ -245,7 +245,7 @@ namespace Nexus.Core
 
 		public bool HasHints
 		{
-			get { return this.ContainsKey(Tokens.Hints); }
+			get { return ContainsKey(Tokens.Hints); }
 		}
 
 	}

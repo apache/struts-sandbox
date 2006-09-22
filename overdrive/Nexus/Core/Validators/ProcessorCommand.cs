@@ -49,7 +49,7 @@ namespace Nexus.Core.Validators
 
 		public virtual bool ExecuteConvert(IProcessorContext context)
 		{
-			bool okay = false;
+			bool okay;
 			string id = context.FieldKey;
 			IFieldTable table = context.FieldTable;
 			IFieldContext fieldContext = table.GetFieldContext(id); // enforces Strict
@@ -102,7 +102,7 @@ namespace Nexus.Core.Validators
 				if (source == null)
 					context.Target = null;
 				else okay = FormatOutput(context);
-				return true;
+				return okay;
 			}
 
 			IProcessor processor = fieldContext.Processor;

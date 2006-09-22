@@ -35,8 +35,8 @@ namespace Nexus.Core.Validators
 				ICollection keys = row.Keys;
 				foreach (string key in keys)
 				{
-					// IProcessorContext _context = new ProcessorContext(key, context);
-					// formatter.ExecuteProcess(_context);
+					IProcessorContext _context = new ProcessorContext(key, context);
+					formatter.ExecuteProcess(_context);
 				}
 				target.AddEntry(context.Criteria);
 			}
