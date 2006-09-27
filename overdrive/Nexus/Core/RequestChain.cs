@@ -21,10 +21,10 @@ namespace Nexus.Core
 
 			// Composite Required and Related
 			IList _RequiredIDs = command.RequiredIDs;
-			if (null != _RequiredIDs) this.AddRequiredIDs = _RequiredIDs;
+			if (null != _RequiredIDs) AddRequiredIDs = _RequiredIDs;
 
 			IList _RelatedIDs = command.RelatedIDs;
-			if (null != _RelatedIDs) this.AddRelatedIDs = _RelatedIDs;
+			if (null != _RelatedIDs) AddRelatedIDs = _RelatedIDs;
 		}
 
 		public IList AddCommands

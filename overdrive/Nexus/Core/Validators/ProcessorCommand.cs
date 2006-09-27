@@ -190,7 +190,11 @@ namespace Nexus.Core.Validators
 		private ICollection CombinedIDs(IRequestContext context)
 		{
 			IDictionary combined = new Hashtable();
-			IList relatedIDs = context.CommandBin.RelatedIDs; // outer list
+			IList relatedIDs = context.CommandBin.RelatedIDs; // outer list			
+				// Add Command ID to related list (since we store outcome under our own ID)
+				string id = context.CommandBin.ID;
+				bool found_self = relatedIDs.Contains(id);
+				if (!found_self) relatedIDs.Add(id);
 			if (relatedIDs != null) foreach (string i in relatedIDs) combined[i] = i;
 			IList requiredIDs = context.CommandBin.RequiredIDs; // inner list
 			if (requiredIDs != null) foreach (string i in requiredIDs) combined[i] = i;
