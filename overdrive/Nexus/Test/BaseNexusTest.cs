@@ -125,7 +125,7 @@ namespace Nexus.Core
 		/// 
 		public void AssertNoFault(IViewHelper helper )
 		{
-			FaultText(helper.Fault);
+			if (helper.HasFault) FaultText(helper.Fault) ;
 		}
 
 		/// <summary>
@@ -266,6 +266,16 @@ namespace Nexus.Core
 		}
 
 		/// <summary>
+		/// Virtual method for populating a context 
+		/// for an insert test. 
+		/// </summary>
+		/// <param name="context"></param>
+		protected virtual void PopulateInsert(IDictionary context)
+		{
+			Populate(context);
+		}
+
+		/// <summary>
 		/// Insert and then delete a new record, 
 		/// calling the Populate method to fill the context with the appropriate values.
 		/// </summary>
@@ -276,7 +286,7 @@ namespace Nexus.Core
 		protected IRequestContext AssertInsertDelete(string insertId, string keyId, string keyValue, string deleteId)
 		{
 			IRequestContext context = catalog.GetRequestContext(insertId);
-			Populate(context);
+			PopulateInsert(context);
 			context[keyId] = String.Empty;
 
 			catalog.ExecuteRequest(context);

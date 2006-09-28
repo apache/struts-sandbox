@@ -69,7 +69,10 @@ namespace Nexus.Core
 
 		public virtual IList RequiredIDs
 		{
-			get { return _RequiredIDs; }
+			get
+			{
+				return _RequiredIDs;
+			}
 			set { _RequiredIDs = value; }
 		}
 
@@ -99,7 +102,12 @@ namespace Nexus.Core
 
 		public virtual IList RelatedIDs
 		{
-			get { return _RelatedIDs; }
+			get
+			{
+				if (_RelatedIDs==null) 
+					_RelatedIDs = new ArrayList();
+				return _RelatedIDs;
+			}
 			set { _RelatedIDs = value; }
 		}
 

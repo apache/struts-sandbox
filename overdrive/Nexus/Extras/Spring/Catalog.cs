@@ -184,7 +184,7 @@ namespace Nexus.Extras.Spring
 
 		public IRequestContext GetRequestContext(IRequestCommand command)
 		{
-			IRequestContext context = null;
+			IRequestContext context;
 			try
 			{
 				context = command.NewContext();
