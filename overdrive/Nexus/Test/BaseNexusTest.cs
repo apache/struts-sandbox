@@ -94,6 +94,16 @@ namespace Nexus.Core
 			}
 			return found;
 		}
+		
+		protected void FaultText(Exception fault)
+		{
+			StringBuilder text = new StringBuilder("[");
+			text.Append(fault.Message);
+			text.Append("] ");
+			text.Append(fault.Source);
+			text.Append(fault.StackTrace);
+			Assert.Fail(text.ToString());			
+		}
 
 		/// <summary>
 		/// Convenience method to confirm that no Exception was caught.
@@ -102,9 +112,20 @@ namespace Nexus.Core
 		/// 
 		public void AssertNoFault(IRequestContext context)
 		{
-			bool hasFault = context.HasFault;
-			if (hasFault)
-				Assert.Fail(context.Fault.Message);
+			if (context.HasFault)
+			{
+				FaultText(context.Fault);
+			}
+		}
+		
+		/// <summary>
+		/// Convenience method to confirm that no Exception was caught.
+		/// </summary>
+		/// <param name="helper">Helper under test</param>
+		/// 
+		public void AssertNoFault(IViewHelper helper )
+		{
+			FaultText(helper.Fault);
 		}
 
 		/// <summary>
@@ -149,9 +170,7 @@ namespace Nexus.Core
 		/// 
 		public void AssertNominal(IViewHelper helper)
 		{
-			bool hasFault = helper.HasFault;
-			if (hasFault)
-				Assert.Fail(helper.Fault.Message);
+			AssertNoFault(helper); 
 
 			bool hasAlerts = helper.HasAlerts;
 			if (hasAlerts)
