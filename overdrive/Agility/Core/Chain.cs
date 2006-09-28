@@ -123,7 +123,7 @@ namespace Agility.Core
 			// or throws an exception
 			bool saveResult = false;
 			Exception saveException = null;
-			int i = 0;
+			int i;
 			int n = commands.Length;
 			;
 			for (i = 0; i < n; i++)
@@ -146,7 +146,7 @@ namespace Agility.Core
 				i--;
 			}
 			bool handled = false;
-			bool result = false;
+			bool result;
 			for (int j = i; j >= 0; j--)
 			{
 				if (commands[j] is IFilter)
@@ -160,7 +160,7 @@ namespace Agility.Core
 					}
 					catch (Exception e)
 					{
-						e = e; // Silently ignore
+						if (e == null) throw (e); // Silently ignore
 					}
 				}
 			}
