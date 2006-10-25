@@ -61,7 +61,7 @@ namespace Nexus.Core.Helpers
 			foreach (string key in keys)
 			{
 				string s = null;
-				string o = (input[key] as string);
+				string o = Convert.ToString(input[key]);
 				if (o!=null) s = o.Trim();
 				if ((nullIfEmpty) && (s != null) && (s.Length == 0))
 					criteria.Add(key, null);
@@ -79,7 +79,7 @@ namespace Nexus.Core.Helpers
 		{
 			get
 			{
-				IList result = null;
+				IList result;
 				object o = Criteria[Context.Command];
 				if (o == null)
 				{

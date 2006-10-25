@@ -243,7 +243,7 @@ namespace Nexus.Web
 
 		public virtual string ItemCommandName
 		{
-			get { return _ItemCommand as string; }
+			get { return _ItemCommand; }
 			set { _ItemCommand = value; }
 		}
 
@@ -271,13 +271,22 @@ namespace Nexus.Web
 			set { _AllowCustomPaging = value; }
 		}
 
+		const int DEFAULT_DATAGRID_PAGESIZE = 10;
+		private int _PageSize = DEFAULT_DATAGRID_PAGESIZE;
+
+		public virtual int PageSize
+		{
+			get { return _PageSize; }
+			set { _PageSize = value; }
+		}
+
 		#endregion		
 
 		#region Binding methods 
 
 		protected virtual void DataSource(IViewHelper helper)
 		{
-			IList list = helper.Outcome as IList;
+			IList list = helper.Outcome;
 			DataGrid grid = Grid;
 			grid.DataSource = list;
 			if (grid.AllowCustomPaging)
@@ -374,6 +383,7 @@ namespace Nexus.Web
 
 		protected virtual void BindGrid(IViewHelper helper)
 		{
+
 			// Only bind columns once
 			// WARNING: Won't work with a singleton
 			DataGrid grid = Grid;
@@ -384,8 +394,12 @@ namespace Nexus.Web
 				int i = 0;
 				if (HasEditColumn) i = BindEditColumn(i);
 				if (HasItemColumn) i = BindItemColumn(i);
+				// Adopt any direct changes to Grid object
+				if (grid.PageSize==DEFAULT_DATAGRID_PAGESIZE) grid.PageSize = PageSize;
+				AllowCustomPaging = AllowCustomPaging || grid.AllowCustomPaging;
+				// Check custom page settings
 				if (AllowCustomPaging)
-				{
+				{					
 					count = GetItemCount(helper);
 					grid.AllowCustomPaging = true;
 					grid.VirtualItemCount = count;
@@ -483,11 +497,11 @@ namespace Nexus.Web
 			// Fake a blank row
 			IViewHelper helper = GetHelperFor(ListCommand);
 			list.Insert(String.Empty);
-			// ISSUE: FIXME: Do we need helper.Outcome = list;
+			helper.Criteria[ListCommand] = list;
 			grid.DataSource = list;
 			grid.CurrentPageIndex = 0;
 			grid.EditItemIndex = 0;
-			DataBind();
+			BindGrid(helper);
 			return helper;
 		}
 
@@ -576,7 +590,7 @@ namespace Nexus.Web
 
 		public virtual bool Open()
 		{
-			IViewHelper helper = this.LoadGrid(list_Criteria);
+			IViewHelper helper = LoadGrid(list_Criteria);
 			bool okay = helper.IsNominal;
 			if (!okay)
 			{
@@ -670,6 +684,7 @@ namespace Nexus.Web
 				// ISSUE: Event? Page_Prompt = msg_EDIT_HINT;
 				list_Insert = true;
 				list_ItemIndex = 0;
+				Grid.Visible = true;
 			}
 			else Page_Alert = helper;
 		}
@@ -712,10 +727,11 @@ namespace Nexus.Web
 			IViewHelper helper = Save(key, controls);
 			bool okay = helper.IsNominal;
 			if (okay)
-			{
+			{				
+				if (View_Save != null) View_Save(this, new ViewArgs(helper));
 				list_Insert = false;
 				list_ItemIndex = -1;
-				okay = this.Open();
+				okay = Open();
 				// ISSUE: Event? Page_Prompt = (List_Insert) ? msg_ADD_SUCCESS : msg_SAVE_SUCCESS;
 			}
 			if (!okay) Page_Alert = helper;
@@ -737,6 +753,7 @@ namespace Nexus.Web
 			int index = e.Item.ItemIndex;
 			list_Item(e.CommandName, index);
 		}
+
 
 		public const string ITEM_LIMIT = "item_limit";
 		public const string ITEM_OFFSET = "item_offset";
@@ -775,7 +792,7 @@ namespace Nexus.Web
 			public int ItemThru;
 			public int ItemCount;
 		}
-		
+
 		/// <summary>
 		/// Optional extension point so that subclasses can make adjustments 
 		/// based on whether there are items to display or not. 
@@ -882,8 +899,14 @@ namespace Nexus.Web
 
 		protected virtual void list_Item_Click(int index)
 		{
-			// Override to provide implementation
+			// Override to provide implementation			
 		}
+
+		/// <summary>
+		/// Signal when an item is being saved.
+		/// </summary>
+		/// 
+		public event EventHandler View_Save;
 
 		/// <summary>
 		/// Reset state for this control, including any ViewState attributes
@@ -912,7 +935,7 @@ namespace Nexus.Web
 			grid.UpdateCommand += new DataGridCommandEventHandler(list_Save);
 			grid.ItemCommand += new DataGridCommandEventHandler(List_Item);
 			grid.PageIndexChanged += new DataGridPageChangedEventHandler(list_PageIndexChanged);
-			if (this.Visible) Open();
+			if (Visible) Open();
 		}
 
 		#region Web Form Designer generated code
@@ -1156,16 +1179,21 @@ namespace Nexus.Web
 			}
 
 			public DropDownListTemplate(string id, IKeyValueList list) : this(id,list,false)
-			{
-				
-			}
-				
+			{}
+
 			public DropDownListTemplate(string id, IKeyValueList list, bool insertNullKey)
 			{
-				if (insertNullKey) 
-				{
-					list.Insert(0, new KeyValue(String.Empty, NULL_TOKEN));
-				}
+					if (insertNullKey) 
+					{
+						lock(list)
+						{
+							IKeyValue e = list[0] as KeyValue;
+							if (!NULL_TOKEN.Equals(e.Text))
+							{								
+								list.Insert(0, new KeyValue(String.Empty, NULL_TOKEN));						
+							}
+						}
+					}					
 
 				_DataField = id;
 				_Control = new DropDownList();
