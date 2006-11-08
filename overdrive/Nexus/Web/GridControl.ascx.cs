@@ -43,6 +43,12 @@ namespace Nexus.Web
 			return criteria;
 		}
 
+		protected IDictionary list_Criteria_NewPageIndex(IDictionary criteria, int pageIndex, bool allowCustomPaging)
+		{
+			Grid.AllowCustomPaging = allowCustomPaging;
+			return list_Criteria_NewPageIndex(criteria, pageIndex);
+		}
+
 		/// <summary>
 		/// If AllowCustomPage is set, 
 		/// calculate new List and Offset, using the list_Context.
@@ -56,7 +62,7 @@ namespace Nexus.Web
 		protected IDictionary list_Criteria_NewPageIndex(int pageIndex)
 		{
 			IDictionary criteria = list_Criteria;
-			return list_Criteria_NewPageIndex(criteria, pageIndex);
+			return list_Criteria_NewPageIndex(criteria, pageIndex, AllowCustomPaging);
 		}
 
 		/// <summary>
@@ -263,7 +269,7 @@ namespace Nexus.Web
 			set { _HasEditColumn = value; }
 		}
 
-		private bool _AllowCustomPaging = false;
+		private bool _AllowCustomPaging = true;
 
 		public virtual bool AllowCustomPaging
 		{
@@ -561,7 +567,7 @@ namespace Nexus.Web
 
 			if ((Grid.AllowCustomPaging) && (criteria == null))
 			{
-				list_Criteria_NewPageIndex(criteria, 0);
+				list_Criteria_NewPageIndex(criteria, 0, true);
 				HasCriteria = true;
 			}
 
@@ -602,7 +608,7 @@ namespace Nexus.Web
 		public virtual bool Open(IDictionary criteria)
 		{
 			Page_Reset();
-			list_Criteria_NewPageIndex(criteria, 0);
+			list_Criteria_NewPageIndex(criteria, 0, AllowCustomPaging);
 			return Open();
 		}
 
@@ -879,6 +885,7 @@ namespace Nexus.Web
 			ListPageIndexChanged_Raise(sender, e.NewPageIndex, grid.PageSize, count);
 			list_Refresh();
 		}
+
 
 		#endregion
 
