@@ -870,12 +870,22 @@ namespace Nexus.Web
 		}
 
 		/// <summary>
+		/// Signal that input was reset.
+		/// </summary>
+		/// 
+		public event EventHandler View_Reset;
+
+		/// <summary>
 		/// Reset control values.
 		/// </summary>
 		/// 
 		protected void reset_Click(object sender, EventArgs e)
 		{
 			Page_Reset();
+			if (View_Reset != null)
+			{
+				View_Reset(sender, e); // bubble it
+			}			
 		}
 
 		/// <summary>
