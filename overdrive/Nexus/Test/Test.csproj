@@ -86,16 +86,6 @@
                     AssemblyFolderKey = "hklm\dn\nunit.framework"
                 />
                 <Reference
-                    Name = "Agility.Core"
-                    AssemblyName = "Agility.Core"
-                    HintPath = "..\..\local-cache\Agility\Agility.Core.dll"
-                />
-                <Reference
-                    Name = "Spring.Core"
-                    AssemblyName = "Spring.Core"
-                    HintPath = "..\..\local-cache\SpringNet\Spring.Core.dll"
-                />
-                <Reference
                     Name = "Core"
                     Project = "{7C8CAFD4-1E45-41B4-9963-F51199B12EA7}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
@@ -109,6 +99,16 @@
                     Name = "Web"
                     Project = "{2BD7CDE0-01F7-4CC5-9AE9-2F9470FB7007}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "Spring.Core"
+                    AssemblyName = "Spring.Core"
+                    HintPath = "..\..\..\local-cache\SpringNet\Spring.Core.dll"
+                />
+                <Reference
+                    Name = "Agility.Core"
+                    AssemblyName = "Agility.Core"
+                    HintPath = "..\..\..\local-cache\Agility\Agility.Core.dll"
                 />
             </References>
         </Build>
