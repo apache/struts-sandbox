@@ -575,6 +575,13 @@ namespace Nexus.Web
 				helper = ExecuteList(criteria);
 			else
 				helper = ExecuteList();
+
+			if (Grid.AllowCustomPaging)
+			{
+				int count = GetItemCount(helper);
+				ListPageIndexChanged_Raise(this, 0, Grid.PageSize, count);								
+			}
+
 			return helper;
 		}
 
