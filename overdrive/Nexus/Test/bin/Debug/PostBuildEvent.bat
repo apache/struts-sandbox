@@ -1,5 +1,5 @@
 @echo off
-C:\projects\Apache\struts-overdrive\sandbox\overdrive\Nexus\postbuild.bat C:\projects\Apache\struts-overdrive\sandbox\overdrive\Nexus\Test\bin\Debug\  Nexus.Test  Nexus  C:\projects\Apache\struts-overdrive\sandbox\overdrive\Nexus\
+C:\projects\Nexus\struts-overdrive\sandbox\overdrive\Nexus\postbuild.bat C:\projects\Nexus\struts-overdrive\sandbox\overdrive\Nexus\Test\bin\Debug\  Nexus.Test  Nexus  C:\projects\Nexus\struts-overdrive\sandbox\overdrive\Nexus\
 if errorlevel 1 goto CSharpReportError
 goto CSharpEnd
 :CSharpReportError

@@ -21,10 +21,12 @@ using Nexus.Core.Tables;
 namespace Nexus.Core.Helpers
 {
 	/// <summary>
-	/// Provide a facade for use by a code-behind to simplify access to the 
-	/// IRequestContext and IRequestCommand. 
+	/// Provide methods for running a business command and handling the result.
 	/// </summary>
 	/// <remarks><p>
+	/// IViewHelper is a facade for use by a code-behind to simplify access 
+	/// to the IRequestContext and IRequestCommand. 
+	/// </p><p>
 	/// The helper may also work with the catalog to act as a 
 	/// "front controller" by ensuring routine tasks are carried out.
 	/// These tasks can include input validation, data conversion, 

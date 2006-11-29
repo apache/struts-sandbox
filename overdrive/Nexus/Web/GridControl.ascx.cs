@@ -8,19 +8,22 @@ using WQD.Core.Controls;
 
 namespace Nexus.Web
 {
+	/// <summary>
+	/// List, edit, and select items using a DataGrid and IViewHelper commands. 
+	/// </summary>
 	public class GridControl : ViewControl
 	{
 		#region Runtime state Properties
 
 		/// <summary>
-		/// Attribute token for List_Criteria.
+		/// Provide an attribute token for List_Criteria.
 		/// </summary>
 		private string LIST_CRITERIA_KEY = "list_Criteria";
 
 		/// <summary>
 		/// Set the given criteria to the list_Critieria (creating a new one if null), and, 
-		/// If AllowCustomPage is set, 
-		/// calcuate new Limit and Offset, based on pageIndex, and set to criteria.
+		/// if AllowCustomPage is set, 
+		/// calculate new Limit and Offset, based on pageIndex, and set to criteria.
 		/// </summary>
 		/// <remarks><p>
 		/// This form is provided to be called by list_Criteria_Init. 
@@ -49,24 +52,14 @@ namespace Nexus.Web
 			return list_Criteria_NewPageIndex(criteria, pageIndex);
 		}
 
-		/// <summary>
-		/// If AllowCustomPage is set, 
-		/// calculate new List and Offset, using the list_Context.
-		/// </summary>
-		/// <remarks><p>
-		/// The other form is provided to be called by list_Criteria_Init. 
-		/// This form is provided to be called by other methods.
-		/// </p></remarks>
-		/// <param name="pageIndex">The new page index</param>
-		/// <returns>The updated list_Criteria instance</returns>
 		protected IDictionary list_Criteria_NewPageIndex(int pageIndex)
 		{
 			IDictionary criteria = list_Criteria;
-			return list_Criteria_NewPageIndex(criteria, pageIndex, AllowCustomPaging);
+			return list_Criteria_NewPageIndex(criteria, pageIndex);
 		}
 
 		/// <summary>
-		/// Values to use with a query statement.
+		/// Provide values to use with a query statement, persisted across requests.
 		/// </summary>
 		protected IDictionary list_Criteria
 		{
@@ -92,7 +85,7 @@ namespace Nexus.Web
 		}
 
 		/// <summary>
-		/// Attribute token for List_ItemIndex
+		/// Provide attribute token for List_ItemIndex.
 		/// </summary>
 		private const string LIST_ITEM_INDEX = "list_ItemIndex";
 
@@ -115,12 +108,12 @@ namespace Nexus.Web
 		}
 
 		/// <summary>
-		/// Attribute token for List_ItemKey.
+		/// Provide attribute token for List_ItemKey.
 		/// </summary>
 		private const string LIST_ITEM_KEY = "list_ItemKey";
 
 		/// <summary>
-		/// The data key for the selected item.
+		/// Provide data key for the selected item.
 		/// </summary>
 		public virtual string list_ItemKey
 		{
@@ -129,12 +122,12 @@ namespace Nexus.Web
 		}
 
 		/// <summary>
-		/// Attribute token for List_Insert.
+		/// Provide attribute token for List_Insert.
 		/// </summary>
 		private const string LIST_INSERT_KEY = "list_Insert";
 
 		/// <summary>
-		/// Insert mode - are we adding or modifying?
+		/// Determine insert mode - are we adding or modifying?
 		/// </summary>
 		public virtual bool list_Insert
 		{
@@ -147,8 +140,14 @@ namespace Nexus.Web
 			set { ViewState[LIST_INSERT_KEY] = value; }
 		}
 
+		/// <summary>
+		/// Store whether command uses critiera.
+		/// </summary>
 		private bool _HasCriteria = true;
 
+		/// <summary>
+		/// Track whether a criteria is used.
+		/// </summary>
 		public virtual bool HasCriteria
 		{
 			get { return _HasCriteria; }
@@ -159,24 +158,42 @@ namespace Nexus.Web
 
 		#region Command properties to set
 
+		/// <summary>
+		/// Store the Find Command.
+		/// </summary>
 		private string _FindCommand;
 
+		/// <summary>
+		/// Provide the Find Command to prepare a new search.
+		/// </summary>
 		public virtual string FindCommand
 		{
 			get { return _FindCommand; }
 			set { _FindCommand = value; }
 		}
 
+		/// <summary>
+		/// Store the List Command.
+		/// </summary>
 		private string _ListCommand;
 
+		/// <summary>
+		/// Provide the List Command to filter items and populate the DataGrid.
+		/// </summary>
 		public virtual string ListCommand
 		{
 			get { return _ListCommand; }
 			set { _ListCommand = value; }
 		}
 
+		/// <summary>
+		/// Store the Save Command.
+		/// </summary>
 		private string _SaveCommand;
 
+		/// <summary>
+		/// Provide the Save Command to retain changes to an item.
+		/// </summary>
 		public virtual string SaveCommand
 		{
 			get { return _SaveCommand; }
@@ -187,16 +204,32 @@ namespace Nexus.Web
 
 		#region Column properties to set 
 
+		/// <summary>
+		/// Store the key field.
+		/// </summary>
 		private string _DataKeyField;
 
+		/// <summary>
+		/// Provide the key field for the DataGrid.
+		/// </summary>
 		public virtual string DataKeyField
 		{
 			get { return _DataKeyField; }
 			set { _DataKeyField = value; }
 		}
 
+		/// <summary>
+		/// Store the list of GridConfig items.
+		/// </summary>
 		private IList _Configs;
 
+		/// <summary>
+		/// Provide a list of the GridConfig items.
+		/// </summary>
+		/// <remarks><p>
+		/// GridConfig is a local class that describes 
+		/// the fields needed to program a DataGrid column.
+		/// </p></remarks>
 		public virtual IList Configs
 		{
 			get { return _Configs; }
@@ -207,79 +240,163 @@ namespace Nexus.Web
 
 		#region Column properties with defaults
 
+		/// <summary>
+		/// Provide default text for the EDIT control.
+		/// </summary>
 		public const string msg_EDIT_TEXT = "EDIT";
+		
+		/// <summary>
+		/// Provide default text for the CANCEL control.
+		/// </summary>
 		public const string msg_QUIT_TEXT = "CANCEL";
-		public const string msg_SAVE_TEXT = "SAVE";
-		public const string msg_ITEM_TEXT = "#";
-		public const string msg_ITEM_COMMAND = "Item";
 
+		/// <summary>
+		/// Provide default text for the SAVE control.
+		/// </summary>
+		public const string msg_SAVE_TEXT = "SAVE";
+
+		/// <summary>
+		/// Provide default text for the ITEM control.
+		/// </summary>		
+		public const string msg_ITEM_TEXT = "#";
+		
+		/// <summary>
+		/// Store the text for the EDIT control.
+		/// </summary>
 		private string _EditText = msg_EDIT_TEXT;
 
+		/// <summary>
+		/// Provide the text for the EDIT control.
+		/// </summary>
 		public virtual string EditText
 		{
 			get { return _EditText; }
 			set { _EditText = value; }
 		}
 
+		/// <summary>
+		/// Store the text for the QUIT control.
+		/// </summary>
 		private string _QuitText = msg_QUIT_TEXT;
 
+		/// <summary>
+		/// Provide the text for the QUIT control.
+		/// </summary>
 		public virtual string QuitText
 		{
 			get { return _QuitText; }
 			set { _QuitText = value; }
 		}
 
+		/// <summary>
+		/// Store the text for the SAVE control.
+		/// </summary>
 		private string _SaveText = msg_SAVE_TEXT;
 
+		/// <summary>
+		/// Provide the text for the SAVE control.
+		/// </summary>
 		public virtual string SaveText
 		{
 			get { return _SaveText; }
 			set { _SaveText = value; }
 		}
 
+		/// <summary>
+		/// Store the text for the ITEM control.
+		/// </summary>
 		private string _ItemText = msg_ITEM_TEXT;
 
+		/// <summary>
+		/// Provide the text for the ITEM control.
+		/// </summary>
 		public virtual string ItemText
 		{
 			get { return _ItemText; }
 			set { _ItemText = value; }
 		}
 
+		/// <summary>
+		/// Provide default token to signal an item select command.
+		/// </summary>		
+		public const string msg_ITEM_COMMAND = "Item";
+
+		/// <summary>
+		/// Store the token to signal an item select command. 
+		/// </summary>
 		private string _ItemCommand = msg_ITEM_COMMAND;
 
+		/// <summary>
+		/// Provide the token to signal an item select command. 
+		/// </summary>
 		public virtual string ItemCommandName
 		{
 			get { return _ItemCommand; }
 			set { _ItemCommand = value; }
 		}
 
+		/// <summary>
+		/// Store whether an item column is presented [false].
+		/// </summary>
 		private bool _HasItemColumn = false;
 
+		/// <summary>
+		/// Provide whether an item column is presented [false].
+		/// </summary>
 		public virtual bool HasItemColumn
 		{
 			get { return _HasItemColumn; }
 			set { _HasItemColumn = value; }
 		}
 
+		/// <summary>
+		/// Store whether an edit column is presented [false].
+		/// </summary>
 		private bool _HasEditColumn = false;
 
+		/// <summary>
+		/// Provide whether an edit column is presented [false].
+		/// </summary>
 		public virtual bool HasEditColumn
 		{
 			get { return _HasEditColumn; }
 			set { _HasEditColumn = value; }
 		}
 
+		/// <summary>
+		/// Store whether dataset is being accessed page by page. 
+		/// </summary>
 		private bool _AllowCustomPaging = true;
 
+		/// <summary>
+		/// Provide whether dataset is being accessed page by page. 
+		/// </summary>
+		/// <remarks><p>
+		/// Custom paging refers to whether the entire dataset is retrieved all at once
+		/// or whether the items to fill the current page are retrieved.
+		/// A DataGrid may be configured to display pages with AllowCusteomPaging set to false, 
+		/// but the underlying query should retrieve the entire dataset up front.
+		/// Whether page numbers are used is set in the DataGrid markup, not here.
+		/// </p></remarks>
 		public virtual bool AllowCustomPaging
 		{
 			get { return _AllowCustomPaging; }
 			set { _AllowCustomPaging = value; }
 		}
 
+		/// <summary>
+		/// Store the ASP.NET default for a DataGrid page size.
+		/// </summary>
 		const int DEFAULT_DATAGRID_PAGESIZE = 10;
+		
+		/// <summary>
+		/// Store the DataGrid default page size.
+		/// </summary>
 		private int _PageSize = DEFAULT_DATAGRID_PAGESIZE;
 
+		/// <summary>
+		/// Provide the DataGrid default page size.
+		/// </summary>
 		public virtual int PageSize
 		{
 			get { return _PageSize; }
@@ -290,6 +407,11 @@ namespace Nexus.Web
 
 		#region Binding methods 
 
+		/// <summary>
+		/// Set the Helper's outcome to the DataGrid datasource, 
+		/// and update the virtual item count if AllowCustomPaging.
+		/// </summary>
+		/// <param name="helper"></param>
 		protected virtual void DataSource(IViewHelper helper)
 		{
 			IList list = helper.Outcome;
@@ -301,34 +423,56 @@ namespace Nexus.Web
 			}
 		}
 
+		/// <summary>
+		/// Bind the current datasource to the base control and the DataGrid control.
+		/// </summary>
 		public override void DataBind()
 		{
 			base.DataBind();
 			Grid.DataBind();
 		}
 
-		protected virtual int BindItemColumn(int i)
+		/// <summary>
+		/// Configure a control column to select a DataGrid item (or row).
+		/// </summary>
+		/// <param name="pos">The column position</param>
+		/// <returns>The next column position</returns>
+		protected virtual int BindItemColumn(int pos)
 		{
 			ButtonColumn column = new ButtonColumn();
 			column.ButtonType = ButtonColumnType.PushButton;
 			column.Text = ItemText;
 			column.CommandName = ItemCommandName;
-			Grid.Columns.AddAt(i, column);
-			return ++i;
+			Grid.Columns.AddAt(pos, column);
+			return ++pos;
 		}
 
-		protected virtual int BindEditColumn(int i)
+		/// <summary>
+		/// Configure a control column to edit a DataGrid item (or row).
+		/// </summary>
+		/// <param name="pos">The column position</param>
+		/// <returns>The next column position</returns>
+		protected virtual int BindEditColumn(int pos)
 		{
 			EditCommandColumn column = new EditCommandColumn();
 			column.ButtonType = ButtonColumnType.PushButton;
 			column.EditText = EditText;
 			column.CancelText = QuitText;
 			column.UpdateText = SaveText;
-			Grid.Columns.AddAt(i, column);
-			return ++i;
+			Grid.Columns.AddAt(pos, column);
+			return ++pos;
 		}
 
-		protected virtual int BindColumns(int i)
+		/// <summary>
+		/// Configure the list of custom columns, starting from a given column position.
+		/// </summary>
+		/// <remarks><p>
+		/// If the edit or item columns have already been configured, 
+		/// then starting position may be 1 or 2.
+		/// </p></remarks>
+		/// <param name="pos">Starting column position</param>
+		/// <returns>Next column position</returns>
+		protected virtual int BindColumns(int pos)
 		{
 			DataGrid grid = Grid;
 			grid.DataKeyField = DataKeyField;
@@ -339,13 +483,20 @@ namespace Nexus.Web
 				IGridConfig config = configs[c] as IGridConfig;
 				if (config.HasTemplate)
 				{
-					i = BindTemplateColumn(i, config);
+					pos = BindTemplateColumn(pos, config);
 				}
-				else i = BindColumn(i, config);
+				else pos = BindColumn(pos, config);
 			}
-			return i;
+			return pos;
 		}
 
+		/// <summary>
+		/// Configure a DataGrid column at the given position, 
+		/// using the IGridConfig settings.
+		/// </summary>
+		/// <param name="pos">Position to insert column</param>
+		/// <param name="config">Column settings</param>
+		/// <returns>The next column pos</returns>
 		protected int BindColumn(int pos, IGridConfig config)
 		{
 			BoundColumn column = new BoundColumn();
@@ -357,6 +508,13 @@ namespace Nexus.Web
 			return pos + 1;
 		}
 
+		/// <summary>
+		/// Configure a template column at the given position, 
+		/// using the IGtridConfig settings.
+		/// </summary>
+		/// <param name="pos">Position to insert column</param>
+		/// <param name="config">Column settings</param>
+		/// <returns>The next column pos</returns>
 		protected int BindTemplateColumn(int pos, IGridConfig config)
 		{
 			TemplateColumn column = new TemplateColumn();
@@ -369,15 +527,25 @@ namespace Nexus.Web
 			return pos + 1;
 		}
 
+		/// <summary>
+		/// Store whether the DataGrid has bee configured.
+		/// </summary>
 		private bool bind = true;
 
+		/// <summary>
+		/// Initialize the DataGrid with any custom columns.
+		/// </summary>
+		/// <remarks>
+		/// This method is meant to be overriden by subclasses 
+		/// to program a custom set of DataGrid columns.
+		/// </remarks>
 		protected virtual void InitGrid()
 		{
 			bind = true;
 		}
 
 		/// <summary>
-		/// Obtain item count from Helper.
+		/// Obtain the item count from Helper.
 		/// </summary>
 		/// <param name="helper">The helper to examine</param>
 		/// <returns>Total count of items for all pages</returns>
@@ -387,6 +555,10 @@ namespace Nexus.Web
 			return Convert.ToInt32(helper.Criteria[ITEM_COUNT]);
 		}
 
+		/// <summary>
+		/// Configure the DataGrid for initial display.
+		/// </summary>
+		/// <param name="helper">The Helper with an outcome to bind as a DataSource</param>
 		protected virtual void BindGrid(IViewHelper helper)
 		{
 
@@ -424,6 +596,13 @@ namespace Nexus.Web
 
 		#region Special ReadControls method 
 
+		/// <summary>
+		/// Inspect a collection of DataGrid controls and set control values to a dictionary.
+		/// </summary>
+		/// <param name="controls">DataGrid Control Collection</param>
+		/// <param name="dictionary">Output object for control values</param>
+		/// <param name="keys">List of control/attribute names to collect</param>
+		/// <param name="nullIfEmpty">If value is an empty strong, set to null</param>
 		protected void ReadGridControls(ControlCollection controls, IDictionary dictionary, string[] keys, bool nullIfEmpty)
 		{
 			int i = -1;
@@ -487,15 +666,20 @@ namespace Nexus.Web
 		#region Command methods
 
 		/// <summary>
-		/// If "Add Row" feature is going to be used, 
-		/// Override getter to return new instance of the Context list 
-		/// for this application. 
+		/// Provide an internal extension point 
+		/// that can return an entry item of the appropriate type 
+		/// to use when adding a new entry to the dataset.
 		/// </summary>
 		protected virtual IEntryList NewContextList
 		{
 			get { throw new NotImplementedException(); }
 		}
-
+		
+		/// <summary>
+		/// Create a blank for editing by creating an empty row 
+		/// and temporarily changing the datasource.
+		/// </summary>
+		/// <returns></returns>
 		protected virtual IViewHelper DataInsert()
 		{
 			DataGrid grid = Grid;
@@ -511,12 +695,24 @@ namespace Nexus.Web
 			return helper;
 		}
 
+		/// <summary>
+		/// Invoke a Find command.
+		/// </summary>
+		/// <param name="key">Data index key for the entry, if any</param>
+		/// <param name="controls">The set of controls</param>
+		/// <returns>The executed helper</returns>
 		protected virtual IViewHelper Find(string key, ControlCollection controls)
 		{
 			IViewHelper helper = ExecuteBind(FindCommand);
 			return helper;
 		}
 
+		/// <summary>
+		/// Invoke a Save command.
+		/// </summary>
+		/// <param name="key">Data index key for the entry, if any</param>
+		/// <param name="controls">The set of controls</param>
+		/// <returns>The executed helper</returns>
 		protected virtual IViewHelper Save(string key, ControlCollection controls)
 		{
 			IViewHelper h = GetHelperFor(SaveCommand);
@@ -545,6 +741,10 @@ namespace Nexus.Web
 
 		#region Loading methods
 
+		/// <summary>
+		/// Invoke a ListCommand that doesn't require a criteria.
+		/// </summary>
+		/// <returns>Executed helper</returns>
 		public virtual IViewHelper ExecuteList()
 		{
 			IViewHelper helper = Execute(ListCommand);
@@ -553,6 +753,10 @@ namespace Nexus.Web
 			return helper;
 		}
 
+		/// <summary>
+		/// Invoke a ListCommand that uses a criteria.
+		/// </summary>
+		/// <returns>Executed helper</returns>
 		public virtual IViewHelper ExecuteList(IDictionary criteria)
 		{
 			IViewHelper helper = ReadExecute(ListCommand, criteria);
@@ -561,6 +765,11 @@ namespace Nexus.Web
 			return helper;
 		}
 
+		/// <summary>
+		/// Setup the DataGrid when the page is first initialized.
+		/// </summary>
+		/// <param name="criteria">Parameters for the comamnd</param>
+		/// <returns></returns>
 		public virtual IViewHelper LoadGrid(IDictionary criteria)
 		{
 			IViewHelper helper;
@@ -575,13 +784,13 @@ namespace Nexus.Web
 				helper = ExecuteList(criteria);
 			else
 				helper = ExecuteList();
-
+			
 			if (Grid.AllowCustomPaging)
 			{
 				int count = GetItemCount(helper);
 				ListPageIndexChanged_Raise(this, 0, Grid.PageSize, count);								
 			}
-
+			
 			return helper;
 		}
 
@@ -630,6 +839,12 @@ namespace Nexus.Web
 			Reset(list_Criteria);
 		}
 
+		/// <summary>
+		/// Handle standard list Item events by opening item 
+		/// or preparing to add a new item.
+		/// </summary>
+		/// <param name="commandName">The com</param>
+		/// <param name="index"></param>
 		protected virtual void list_Item(string commandName, int index)
 		{
 			switch (commandName)
@@ -654,6 +869,10 @@ namespace Nexus.Web
 			}
 		}
 
+		/// <summary>
+		/// Handle standard Edit events by setting the index and refreshing display.
+		/// </summary>
+		/// <param name="index"></param>
 		protected virtual void list_Edit(int index)
 		{
 			// ISSUE: Event? Page_Prompt = msg_EDIT_HINT;
@@ -661,6 +880,9 @@ namespace Nexus.Web
 			list_Refresh();
 		}
 
+		/// <summary>
+		/// Reset DataGrid state.
+		/// </summary>
 		protected virtual void list_Quit()
 		{
 			// ISSUE: Event? Page_Prompt = msg_QUIT_SUCCESS;
@@ -669,6 +891,9 @@ namespace Nexus.Web
 			list_Refresh();
 		}
 
+		/// <summary>
+		/// Refresh DataGrid  by rebinding datasource.
+		/// </summary>
 		protected virtual void list_Refresh()
 		{
 			DataBind();
@@ -688,6 +913,9 @@ namespace Nexus.Web
 			Grid.CurrentPageIndex = 0; // sic
 		}
 
+		/// <summary>
+		/// Insert a new row for editing.
+		/// </summary>
 		protected virtual void list_Add()
 		{
 			IViewHelper helper = DataInsert();
@@ -706,6 +934,10 @@ namespace Nexus.Web
 
 		#region List events
 
+		/// <summary>
+		/// Prepare an item for editing and return its key.
+		/// </summary>
+		/// <returns>Data key for item to edit</returns>
 		private string GetDataKey()
 		{
 			DataGrid grid = Grid;
@@ -714,6 +946,11 @@ namespace Nexus.Web
 			return key;
 		}
 
+		/// <summary>
+		/// Harvest a collection of controls from DataGrid
+		/// </summary>
+		/// <param name="e"></param>
+		/// <returns>A control collection for DataGrid</returns>
 		public virtual ControlCollection GetControls(DataGridCommandEventArgs e)
 		{
 			DataGrid grid = Grid;
@@ -728,11 +965,21 @@ namespace Nexus.Web
 
 		// postback events
 
+		/// <summary>
+		/// Handle event by presenting selected row in an editable form.
+		/// </summary>
+		/// <param name="source">Event source</param>
+		/// <param name="e">Event parameters</param>
 		private void list_Edit(object source, DataGridCommandEventArgs e)
 		{
 			list_Edit(e.Item.ItemIndex);
 		}
 
+		/// <summary>
+		/// Handle event by retaining any changes to the selected DataGrid row.
+		/// </summary>
+		/// <param name="source">Event source</param>
+		/// <param name="e">Event parameters</param>
 		private void list_Save(object source, DataGridCommandEventArgs e)
 		{
 			string key = (list_Insert) ? null : GetDataKey();
@@ -750,26 +997,53 @@ namespace Nexus.Web
 			if (!okay) Page_Alert = helper;
 		}
 
+		
+		/// <summary>
+		/// Handle event by resetting DataGrid state.
+		/// </summary>
+		/// <param name="source">Event source</param>
+		/// <param name="e">Event parameters</param>
 		private void list_Quit(object source, DataGridCommandEventArgs e)
 		{
 			list_Quit();
 		}
 
+		/// <summary>
+		/// Handle list add event by inserting a new row, 
+		/// and raising a View Add event.
+		/// </summary>
+		/// <param name="sender">Event source</param>
+		/// <param name="e">Event parameters</param>
 		protected void list_Add(object sender, EventArgs e)
 		{
 			list_Add();
 			if (View_Add != null) View_Add(sender, e);
 		}
 
+		/// <summary>
+		/// Handle list item event by opening item or preparing to add new item.
+		/// </summary>
+		/// <param name="source">Event source</param>
+		/// <param name="e">Event parameters</param>
 		private void List_Item(object source, DataGridCommandEventArgs e)
 		{
 			int index = e.Item.ItemIndex;
 			list_Item(e.CommandName, index);
 		}
 
-
+		/// <summary>
+		/// Provide key to store item limit in criteria.
+		/// </summary>
 		public const string ITEM_LIMIT = "item_limit";
+		
+		/// <summary>
+		/// Provide key to store item offset in criteria.
+		/// </summary>
 		public const string ITEM_OFFSET = "item_offset";
+		
+		/// <summary>
+		/// Provide key to store item count in criteria.
+		/// </summary>
 		public const string ITEM_COUNT = "item_count";
 
 		#endregion
@@ -902,6 +1176,12 @@ namespace Nexus.Web
 		/// 
 		public event EventHandler View_Add;
 
+		/// <summary>
+		/// Handle click event by raising a View Add event 
+		/// and passing the list criteria.
+		/// </summary>
+		/// <param name="sender">Event source</param>
+		/// <param name="e">Runtime arguments</param>
 		protected void add_Click(object sender, EventArgs e)
 		{
 			if (View_Add != null)
@@ -911,6 +1191,10 @@ namespace Nexus.Web
 			}
 		}
 
+		/// <summary>
+		/// Provide an internal extension point for handling a selected item.
+		/// </summary>
+		/// <param name="index">Page index of item being selected</param>
 		protected virtual void list_Item_Click(int index)
 		{
 			// Override to provide implementation			
@@ -919,7 +1203,6 @@ namespace Nexus.Web
 		/// <summary>
 		/// Signal when an item is being saved.
 		/// </summary>
-		/// 
 		public event EventHandler View_Save;
 
 		/// <summary>
@@ -938,7 +1221,6 @@ namespace Nexus.Web
 		/// </summary>
 		/// <param name="sender">Event source</param>
 		/// <param name="e">Runtime arguments</param>
-		/// 
 		private void Page_Load(object sender, EventArgs e)
 		{
 			DataGrid grid = Grid;
@@ -982,6 +1264,9 @@ namespace Nexus.Web
 
 		#region Templates
 
+		/// <summary>
+		/// Describe the fields needed to program a DataGrid column.
+		/// </summary>
 		public interface IGridConfig
 		{
 			string DataField { get; }
@@ -991,25 +1276,32 @@ namespace Nexus.Web
 			bool HasTemplate { get; }
 		}
 
+		/// <summary>
+		/// Implement IGridConfig.
+		/// </summary>
 		public class GridConfig : IGridConfig
 		{
 			/// <summary>
-			/// Attribute name (required).
+			/// Store attribute name for column (required).
 			/// </summary>
-			/// 
 			private string _DataField;
 
+			/// <summary>
+			/// Provide attribute name for column (required).
+			/// </summary>
 			public string DataField
 			{
 				get { return _DataField; }
 			}
 
 			/// <summary>
-			/// Heading for this attribute (optional).
+			/// Store heading for this column (optional).
 			/// </summary>
-			/// 
 			private string _HeaderText;
 
+			/// <summary>
+			/// Provide heading for this column (optional).
+			/// </summary>
 			public string HeaderText
 			{
 				get
@@ -1020,10 +1312,13 @@ namespace Nexus.Web
 			}
 
 			/// <summary>
-			/// Item template for this attribute (optional).
+			/// Store item template for this column (optional).
 			/// </summary>
 			private ITemplate _ItemTemplate;
 
+			/// <summary>
+			/// Provide item template for this column (optional).
+			/// </summary>
 			public ITemplate ItemTemplate
 			{
 				get { return _ItemTemplate; }
@@ -1031,10 +1326,13 @@ namespace Nexus.Web
 			}
 
 			/// <summary>
-			/// Edit template for this attribute (optional).
+			/// Store edit template for this column (optional).
 			/// </summary>
 			private ITemplate _EditItemTemplate;
 
+			/// <summary>
+			/// Provide edit template for this column (optional).
+			/// </summary>
 			public ITemplate EditItemTemplate
 			{
 				get { return _EditItemTemplate; }
@@ -1045,17 +1343,32 @@ namespace Nexus.Web
 			// string SortFormat;
 			// ITemplate ItemFormat;
 
+			/// <summary>
+			/// Store whether attribute has a template. 
+			/// </summary>
 			public bool HasTemplate
 			{
 				get { return (_ItemTemplate != null) || (_EditItemTemplate != null); }
 			}
 
+			/// <summary>
+			/// Construct a GridConfig from a data field and header test.
+			/// </summary>
+			/// <param name="dataField">The attribute name for this column</param>
+			/// <param name="headerText">The header text for this column</param>
 			public GridConfig(string dataField, string headerText)
 			{
 				_DataField = dataField;
 				_HeaderText = headerText;
 			}
 
+			/// <summary>
+			/// Construct a GridConfig using all attributes.
+			/// </summary>
+			/// <param name="dataField">The attribute name for this column</param>
+			/// <param name="headerText">The header text for this column</param>
+			/// <param name="itemTemplate">The item template for this column</param>
+			/// <param name="editItemTemplate">The edit template for this column</param>
 			public GridConfig(string dataField, string headerText, ITemplate itemTemplate, ITemplate editItemTemplate)
 			{
 				_DataField = dataField;
@@ -1065,11 +1378,22 @@ namespace Nexus.Web
 			}
 		}
 
-
+		/// <summary>
+		/// Add literal text to a DataGrid column.
+		/// </summary>
 		public class LiteralTemplate : ITemplate
 		{
+			
+			/// <summary>
+			/// Store attribute name.
+			/// </summary>
 			private string _DataField;
 
+			/// <summary>
+			/// Handle data binding event by setting control text to data field.
+			/// </summary>
+			/// <param name="sender"></param>
+			/// <param name="e"></param>
 			private void OnDataBinding(object sender, EventArgs e)
 			{
 				Literal control;
@@ -1086,17 +1410,30 @@ namespace Nexus.Web
 				container.Controls.Add(control);
 			}
 
+			/// <summary>
+			/// Construct instance from attribute name.
+			/// </summary>
+			/// <param name="dataField">Attribute name</param>
 			public LiteralTemplate(string dataField)
 			{
 				_DataField = dataField;
 			}
 		}
 
+		/// <summary>
+		/// Configure a DataGrid column to display the selected value on the KeyValue list.
+		/// </summary>
 		public class KeyValueTemplate : ITemplate
 		{
 			private string _DataField;
 			private IKeyValueList _Control;
 
+			/// <summary>
+			/// Handle data binding events by extracting key and value, 
+			/// and setting selected value to control text.
+			/// </summary>
+			/// <param name="sender">Event source</param>
+			/// <param name="e">Runtime arguments</param>
 			private void OnDataBinding(object sender, EventArgs e)
 			{
 				Literal control;
@@ -1114,6 +1451,11 @@ namespace Nexus.Web
 				container.Controls.Add(control);
 			}
 
+			/// <summary>
+			/// Construct instance from a datafield and the list.
+			/// </summary>
+			/// <param name="dataField">Attribute name</param>
+			/// <param name="list">List of keyValue items</param>
 			public KeyValueTemplate(string dataField, IKeyValueList list)
 			{
 				_DataField = dataField;
@@ -1121,11 +1463,26 @@ namespace Nexus.Web
 			}	
 		}
 
+		/// <summary>
+		/// Present a drop down list control when editing a column.
+		/// </summary>
 		public class DropDownListTemplate : ITemplate
 		{
+			/// <summary>
+			/// Store attribute name.
+			/// </summary>
 			private string _DataField;
+			
+			/// <summary>
+			/// Store reference to the DropDownList control.
+			/// </summary>
 			private DropDownList _Control;
 
+			/// <summary>
+			/// Scan list for an item matching value.
+			/// </summary>
+			/// <param name="control">The control to scan</param>
+			/// <param name="value">The value to match</param>
 			private void SelectItem(ListControl control, string value)
 			{
 				if (value != null)
@@ -1143,6 +1500,11 @@ namespace Nexus.Web
 				}
 			}
 
+			/// <summary>
+			/// Handle a data binding event by selecting the key row.
+			/// </summary>
+			/// <param name="sender"></param>
+			/// <param name="e"></param>
 			private void OnDataBinding(object sender, EventArgs e)
 			{
 				DropDownList control;
@@ -1159,7 +1521,7 @@ namespace Nexus.Web
 			private int _SelectedIndex;
 
 			/// <summary>
-			/// Kludge method to set Selected Index.
+			/// Provide a kludge method to set Selected Index.
 			/// </summary>
 			/// <remarks><p>
 			/// After setting the selected index on DataBinding, 
@@ -1181,6 +1543,10 @@ namespace Nexus.Web
 				container.Controls.Add(_Control);
 			}
 
+			/// <summary>
+			/// Construct a DropDownListTempate from an id and datasource. 
+			/// </summary>
+			/// <param name="id">Data Field Name</param>
 			public DropDownListTemplate(string id, object dataSource)
 			{
 				_DataField = id;
@@ -1192,9 +1558,20 @@ namespace Nexus.Web
 				_Control.PreRender += new EventHandler(OnPreRender);
 			}
 
+			/// <summary>
+			/// Construct a DropDownListTempate from an id and list. 
+			/// </summary>
+			/// <param name="id">Data Field Name</param>
+			/// <param name="list">Items to list</param>
 			public DropDownListTemplate(string id, IKeyValueList list) : this(id,list,false)
 			{}
 
+			/// <summary>
+			/// Construct a DropDownListTempate from id, list, insertNullKey.
+			/// </summary>
+			/// <param name="id">Data Field Name</param>
+			/// <param name="list">Items to list</param>
+			/// <param name="insertNullKey">Whether to prepend a -v- item to the list</param>
 			public DropDownListTemplate(string id, IKeyValueList list, bool insertNullKey)
 			{
 					if (insertNullKey) 

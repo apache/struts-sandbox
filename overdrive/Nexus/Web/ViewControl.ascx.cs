@@ -12,6 +12,13 @@ namespace Nexus.Web
 	/// <summary>
 	/// Base class for view controls (sub forms).
 	/// </summary>
+	/// <remarks>
+	/// ViewControl can read and bind controls, 
+	/// and provides access methods for helper and message resources  
+	/// </remarks>
+	/// 
+	/// 
+	/// 
 	public class ViewControl : UserControl, IViewControl
 	{
 		private IRequestCatalog _Catalog;

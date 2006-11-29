@@ -110,6 +110,11 @@
                     AssemblyName = "Agility.Core"
                     HintPath = "..\..\..\local-cache\Agility\Agility.Core.dll"
                 />
+                <Reference
+                    Name = "Spring.Web"
+                    AssemblyName = "Spring.Web"
+                    HintPath = "..\..\local-cache\SpringNet\Spring.Web.dll"
+                />
             </References>
         </Build>
         <Files>
