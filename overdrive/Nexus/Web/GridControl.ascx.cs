@@ -650,9 +650,11 @@ namespace Nexus.Web
 				// Check custom page settings
 				if (AllowCustomPaging)
 				{					
-					count = GetItemCount(helper);
 					grid.AllowCustomPaging = true;
+					count = GetItemCount(helper);
 					grid.VirtualItemCount = count;
+					int page = GetItemPage(helper);
+					if (page!=0) grid.CurrentPageIndex = page;
 				}
 				BindColumns(i);
 			}
@@ -1264,7 +1266,6 @@ namespace Nexus.Web
 				a.ItemFrom = from;
 				a.ItemThru = thru;
 				a.ItemCount = count;
-				Grid.CurrentPageIndex = page;
 				ListPageIndexChanged(sender, a);
 			}
 		}
