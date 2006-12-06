@@ -550,11 +550,83 @@ namespace Nexus.Web
 		/// <param name="helper">The helper to examine</param>
 		/// <returns>Total count of items for all pages</returns>
 		/// 	
-		private int GetItemCount(IViewHelper helper)
+		protected int GetItemCount(IViewHelper helper)
 		{
 			return Convert.ToInt32(helper.Criteria[ITEM_COUNT]);
 		}
 
+		/// <summary>
+		/// Obtain the item page from Helper, or zero if no page set.
+		/// </summary>
+		/// <param name="helper">The helper to examine</param>
+		/// <returns>Current page number within data set</returns>
+		/// 	
+		protected int GetItemPage(IViewHelper helper)
+		{
+			object page = helper.Criteria[ITEM_PAGE];
+			if (page==null) return 0;			
+			return Convert.ToInt32(page);
+		}
+
+		/// <summary>
+		/// Update the item page from Helper.
+		/// </summary>
+		/// <param name="helper">The helper to examine</param>
+		/// <returns>Current page number for current item</returns>
+		/// 	
+		protected void SetItemPage(IViewHelper helper, int page)
+		{
+			helper.Criteria[ITEM_PAGE] = Convert.ToString(page);
+		}
+
+		
+		/// <summary>
+		/// Update the item offset from Helper.
+		/// </summary>
+		/// <param name="helper">The helper to examine</param>
+		/// <returns>Current page number for current item</returns>
+		/// 	
+		protected void SetItemOffset(IViewHelper helper, int ofs)
+		{
+			helper.Criteria[ITEM_OFFSET] = Convert.ToString(ofs);
+		}
+
+
+		/// <summary>
+		/// Store the item key field name.
+		/// </summary>
+		/// <param name="context">The context to examine</param>
+		/// <param name="key">The name of the item key field</param>
+		/// 	
+		protected void SetItemKey(IDictionary context, string key)
+		{
+			context[ITEM_KEY] = key;
+		}
+		
+		/// <summary>
+		/// Obtain the item key field name.
+		/// </summary>
+		/// <param name="context">The context to examine</param>
+		/// <returns>Name of key field</returns>
+		/// 	
+		protected object GetItemKey(IDictionary context)
+		{
+			return context[ITEM_KEY];
+		}
+		
+		/// <summary>
+		/// Obtain the item page from Helper, or zero if no page set.
+		/// </summary>
+		/// <param name="context">The context to examine</param>
+		/// <returns>Current page number within data set</returns>
+		/// 	
+		protected object GetItemKeyValue(IDictionary context)
+		{
+			object key = context[ITEM_KEY];
+			if (key==null) return null;
+			return context[key];
+		}
+		
 		/// <summary>
 		/// Configure the DataGrid for initial display.
 		/// </summary>
@@ -752,19 +824,61 @@ namespace Nexus.Web
 			if (okay) BindGrid(helper); // DoBindGrid = helper;
 			return helper;
 		}
-
+		
 		/// <summary>
-		/// Invoke a ListCommand that uses a criteria.
+		/// Look for a IssueEventKey, and scroll to it, if found.
 		/// </summary>
-		/// <returns>Executed helper</returns>
+		/// <param name="criteria">Input/outpout values</param>
+		/// <returns>Helper after obtaining list</returns>
 		public virtual IViewHelper ExecuteList(IDictionary criteria)
 		{
+			
 			IViewHelper helper = ReadExecute(ListCommand, criteria);
+
+			object issue_event_key = GetItemKeyValue(criteria);
+			int count = GetItemCount(helper);
 			bool okay = helper.IsNominal;
-			if (okay) BindGrid(helper); // DoBindGrid = helper;
+			bool skip_to_item = (issue_event_key == null) || (count==0) || !okay;
+			if (skip_to_item)
+			{
+				if (okay) BindGrid(helper); // DoBindGrid = helper;
+				return helper;
+			}
+			
+			bool found = false; 
+			int page = -1;
+			int item = -1;
+			object key = GetItemKey(criteria);
+			while ((!found) && (count>item) && helper.IsNominal)
+			{
+				page++;
+				if (helper.IsNominal)
+				{
+					IList outcome = helper.Outcome;
+					foreach (EntryDictionary e in outcome)
+					{
+						found = found || (issue_event_key.Equals(e.Criteria[key]));
+					}
+					if (!found)
+					{
+						item = item + outcome.Count;
+						SetItemOffset(helper,item+1);
+						helper.Execute();
+					}
+				}
+			}
+			
+			if (helper.IsNominal)
+			{
+				if (found) SetItemPage(helper,page);							
+				BindGrid(helper); // DoBindGrid = helper;
+			} 
 			return helper;
 		}
-
+		
+		
+		
+		
 		/// <summary>
 		/// Setup the DataGrid when the page is first initialized.
 		/// </summary>
@@ -780,15 +894,18 @@ namespace Nexus.Web
 				HasCriteria = true;
 			}
 
-			if (HasCriteria)
+			if (HasCriteria) 
+			{
 				helper = ExecuteList(criteria);
+			}
 			else
 				helper = ExecuteList();
 			
 			if (Grid.AllowCustomPaging)
 			{
+				int page = GetItemPage(helper);
 				int count = GetItemCount(helper);
-				ListPageIndexChanged_Raise(this, 0, Grid.PageSize, count);								
+				ListPageIndexChanged_Raise(this, page, Grid.PageSize, count);								
 			}
 			
 			return helper;
@@ -1046,6 +1163,16 @@ namespace Nexus.Web
 		/// </summary>
 		public const string ITEM_COUNT = "item_count";
 
+		/// <summary>
+		/// Provide key to store item page in criteria.
+		/// </summary>
+		public const string ITEM_PAGE = "item_page";
+
+		/// <summary>
+		/// Provide key to store item key in criteria.
+		/// </summary>
+		public const string ITEM_KEY = "item_key";
+		
 		#endregion
 
 		#region ListPageIndexChanged 
@@ -1137,6 +1264,7 @@ namespace Nexus.Web
 				a.ItemFrom = from;
 				a.ItemThru = thru;
 				a.ItemCount = count;
+				Grid.CurrentPageIndex = page;
 				ListPageIndexChanged(sender, a);
 			}
 		}
@@ -1574,17 +1702,17 @@ namespace Nexus.Web
 			/// <param name="insertNullKey">Whether to prepend a -v- item to the list</param>
 			public DropDownListTemplate(string id, IKeyValueList list, bool insertNullKey)
 			{
-					if (insertNullKey) 
+				if (insertNullKey) 
+				{
+					lock(list)
 					{
-						lock(list)
-						{
-							IKeyValue e = list[0] as KeyValue;
-							if (!NULL_TOKEN.Equals(e.Text))
-							{								
-								list.Insert(0, new KeyValue(String.Empty, NULL_TOKEN));						
-							}
+						IKeyValue e = list[0] as KeyValue;
+						if (!NULL_TOKEN.Equals(e.Text))
+						{								
+							list.Insert(0, new KeyValue(String.Empty, NULL_TOKEN));						
 						}
-					}					
+					}
+				}					
 
 				_DataField = id;
 				_Control = new DropDownList();

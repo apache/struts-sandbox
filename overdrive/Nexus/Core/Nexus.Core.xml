@@ -1741,5 +1741,38 @@
             Token for Entry Item command name.
             </summary>
         </member>
+        <member name="T:Nexus.Core.EntryDictionary">
+            <summary>
+            Expose field attributes as public properties.
+            </summary>
+            <remarks><p>
+            The EntryDictionary is used for integration with libraries that 
+            can use only public properties, such as DataGrid. 
+            It is also used to pass properties as Event argument, 
+            in which case it is used like a data transfer object.
+            </p><p>
+            The values are available both as an IDictionary and 
+            (optionally) as Properties. 
+            (The properties should use the IDictionary for storage.)
+            To define properties, extend EntryDictionary.
+            </p></remarks>
+        </member>
+        <member name="M:Nexus.Core.EntryDictionary.ToString">
+            <summary>
+            Provide a string representation of the field values 
+            in the format "key=value\n".
+            </summary>
+            <returns>String representation</returns>
+        </member>
+        <member name="M:Nexus.Core.EntryDictionary.CacheText">
+            <summary>
+            Call calculated properties so that 
+            they are cached as entries in the table.
+            </summary>
+            <remarks>
+            <p>Override to provide functionality</p>
+            </remarks>
+            
+        </member>
     </members>
 </doc>

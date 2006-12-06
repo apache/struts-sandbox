@@ -104,6 +104,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "EntryDictionary.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IEntryList.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
