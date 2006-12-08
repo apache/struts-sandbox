@@ -593,17 +593,6 @@ namespace Nexus.Web
 
 
 		/// <summary>
-		/// Store the item key field name.
-		/// </summary>
-		/// <param name="context">The context to examine</param>
-		/// <param name="key">The name of the item key field</param>
-		/// 	
-		protected void SetItemKey(IDictionary context, string key)
-		{
-			context[ITEM_KEY] = key;
-		}
-		
-		/// <summary>
 		/// Obtain the item key field name.
 		/// </summary>
 		/// <param name="context">The context to examine</param>
@@ -611,22 +600,48 @@ namespace Nexus.Web
 		/// 	
 		protected object GetItemKey(IDictionary context)
 		{
+			if (context==null) return null;
 			return context[ITEM_KEY];
 		}
 		
 		/// <summary>
-		/// Obtain the item page from Helper, or zero if no page set.
+		/// Store the item key field name.
+		/// </summary>
+		/// <param name="context">The context to examine</param>
+		/// <param name="key">The name of the item key field</param>
+		/// 	
+		protected void SetItemKey(IDictionary context, string key)
+		{
+			if (context!=null) context[ITEM_KEY] = key;
+		}
+		
+		/// <summary>
+		/// Obtain the item key value for Helper.
 		/// </summary>
 		/// <param name="context">The context to examine</param>
 		/// <returns>Current page number within data set</returns>
 		/// 	
 		protected object GetItemKeyValue(IDictionary context)
 		{
+			if (context==null) return null;
 			object key = context[ITEM_KEY];
 			if (key==null) return null;
 			return context[key];
 		}
 		
+		/// <summary>
+		/// Update the item key value for Helper, especially to clear on Add.
+		/// </summary>
+		/// <param name="context">The context to examine</param>
+		/// <returns>Current page number within data set</returns>
+		/// 	
+		protected void SetItemKeyValue(IDictionary context, string val)
+		{
+			if (context==null) return;
+			object key = context[ITEM_KEY];
+			if (key!=null) context[key] = val;
+		}
+
 		/// <summary>
 		/// Configure the DataGrid for initial display.
 		/// </summary>
@@ -1315,6 +1330,7 @@ namespace Nexus.Web
 		{
 			if (View_Add != null)
 			{
+				SetItemKeyValue(list_Criteria, null);
 				FindArgs f = new FindArgs(e, list_Criteria);
 				View_Add(sender, f);
 			}
