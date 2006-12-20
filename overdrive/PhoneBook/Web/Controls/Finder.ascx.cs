@@ -27,7 +27,7 @@ namespace PhoneBook.Web.Controls
 		/// 
 		public void Open()
 		{
-			IViewHelper h = this.ExecuteBind(App.ENTRY_FIND);
+			IViewHelper h = ExecuteBind(App.ENTRY_FIND);
 			bool ok = (h.IsNominal);
 			if (!ok)
 				Page_Alert = h;

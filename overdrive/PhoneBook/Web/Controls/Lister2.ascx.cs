@@ -165,20 +165,21 @@ namespace PhoneBook.Web.Controls
 			SaveCommand = App.ENTRY_SAVE;
 			DataKeyField = App.ENTRY_KEY;
 			AllowCustomPaging = true;
+			PageSize = 2;
 			// HasEditColumn = true; // Set from profile
 
-			IList list = new ArrayList(7);
-			list.Add(GetConfig(App.LAST_NAME));
-			list.Add(GetConfig(App.FIRST_NAME));
-			list.Add(GetConfig(App.EXTENSION));
-			list.Add(GetConfig(App.USER_NAME));
-			list.Add(GetConfig(App.HIRED));
-			list.Add(GetConfig(App.HOURS));
+			IList cols = new ArrayList(7);
+			cols.Add(GetConfig(App.LAST_NAME));
+			cols.Add(GetConfig(App.FIRST_NAME));
+			cols.Add(GetConfig(App.EXTENSION));
+			cols.Add(GetConfig(App.USER_NAME));
+			cols.Add(GetConfig(App.HIRED));
+			cols.Add(GetConfig(App.HOURS));
 			IGridConfig c = GetConfig(App.EDITOR);
 			c.ItemTemplate = new KeyValueTemplate(App.EDITOR, EditorKeyList);
 			c.EditItemTemplate = new DropDownListTemplate(App.EDITOR, EditorKeyList);
-			list.Add(c);
-			Configs = list;
+			cols.Add(c);
+			Configs = cols;
 		}
 
 		/// <summary>
@@ -207,7 +208,8 @@ namespace PhoneBook.Web.Controls
 		private void Page_Init()
 		{
 			Grid_Init(list);
-			this.ListPageIndexChanged += new EventHandler(this_ListPageIndexChanged);
+			
+			ListPageIndexChanged += new EventHandler(this_ListPageIndexChanged);
 			add.Click += new EventHandler(list_Add);
 		}
 

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+using System;
 using System.Collections;
 
 namespace PhoneBook.Core
@@ -21,6 +22,7 @@ namespace PhoneBook.Core
 	/// Expose field attributes as public properties.
 	/// </summary>
 	/// 
+	[Serializable]
 	public class AppEntry
 	{
 		/// <summary>

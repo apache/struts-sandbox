@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="utf-8" ?> 
-
+<?xml version="1.0" encoding="UTF-8" ?>
 <sqlMap 
-	namespace="PhoneBook" 
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xsi:noNamespaceSchemaLocation="SqlMap.xsd" >
+	namespace="phonebook" 
+	xmlns="http://ibatis.apache.org/mapping" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
 
    <parameterMaps>
 		
@@ -108,7 +107,7 @@
 			   <isNotNull property="item_limit">
 					LIMIT #item_limit# OFFSET #item_offset# 
 			   </isNotNull>			
-			</dynamic>	
+			</dynamic>;
 		</select>
 
 		<select id="entry_count" paramClass="Hashtable" resultClass="string">

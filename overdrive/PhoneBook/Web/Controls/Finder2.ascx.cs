@@ -52,7 +52,7 @@ namespace PhoneBook.Web.Controls
 		{
 			if (Filter_Changed == null) return;
 			Filter_Reset(null);
-			IViewHelper helper = Read(App.ENTRY_FIND);
+			IViewHelper helper = Read(App.ENTRY_LIST);
 			Filter_Changed(this, new ViewArgs(helper));
 		}
 

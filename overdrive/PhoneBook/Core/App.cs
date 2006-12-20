@@ -81,6 +81,10 @@ namespace PhoneBook.Core
 
 		#region Commands
 
+		public const string FROM_DATE = "from_date";
+		
+		public const string THRU_DATE = "thru_date";
+
 		/// <summary>
 		/// Token for SQL LIMIT clause.
 		/// </summary>

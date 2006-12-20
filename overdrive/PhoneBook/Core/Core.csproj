@@ -94,6 +94,11 @@
                     AssemblyName = "Agility.Core"
                     HintPath = "..\..\local-cache\Agility\Agility.Core.dll"
                 />
+                <Reference
+                    Name = "Spring.Core"
+                    AssemblyName = "Spring.Core"
+                    HintPath = "..\..\local-cache\SpringNet\Spring.Core.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -140,6 +145,11 @@
                 <Folder RelPath = "bin\Debug\" />
                 <File
                     RelPath = "Commands\AppCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Commands\BaseCommand.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

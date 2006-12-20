@@ -148,7 +148,7 @@ namespace PhoneBook.Web.Forms
 		private void View_Init(ViewControl c)
 		{
 			c.View_Alert += new EventHandler(View_Error);
-			c.Catalog = this.Catalog; // ISSUE: Why isn't control injection working?
+			c.Catalog = Catalog; // ISSUE: Why isn't control injection working?
 		}
 
 		private void Page_PreRender(object sender, EventArgs e)
@@ -196,8 +196,11 @@ namespace PhoneBook.Web.Forms
 		/// <summary>
 		/// Handle Filter Changed event by opening the Lister control 
 		/// and passing through the search criteria 
-		/// provided by the event arts.
+		/// provided by the event args, 
+		/// so that the Lister control can present the matching entities.
 		/// </summary>
+		/// <remarks>
+		/// </remarks>
 		/// <param name="sender">Event source</param>
 		/// <param name="e">Runtime arguements</param>
 		/// 
@@ -205,7 +208,7 @@ namespace PhoneBook.Web.Forms
 		{
 			ViewArgs a = e as ViewArgs;
 			IViewHelper helper = a.Helper;
-			lister.Reset(helper.Criteria);
+			lister.Reset(helper.Criteria); // Runs the list command with new criteria
 		}
 
 		#endregion
@@ -231,13 +234,14 @@ namespace PhoneBook.Web.Forms
 		private void Page_Init()
 		{
 			Profile = Session[UserProfile.USER_PROFILE] as AppUserProfile;
-			this.PreRender += new EventHandler(this.Page_PreRender);
+			PreRender += new EventHandler(Page_PreRender);
 
 			View_Init(finder);
 
 			View_Init(letter_filter);
 			letter_filter.View_Filter += new EventHandler(letter_filter_View_Filter);
 			IViewHelper helper = Catalog.GetHelperFor(App.ENTRY_INITIAL);
+
 			helper.Execute();
 			letter_filter.Open(helper.Outcome);
 

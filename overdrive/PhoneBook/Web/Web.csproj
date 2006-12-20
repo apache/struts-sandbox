@@ -115,11 +115,6 @@
                     HintPath = "..\..\local-cache\SpringNet\Spring.Web.dll"
                 />
                 <Reference
-                    Name = "ByteFX.MySqlClient"
-                    AssemblyName = "ByteFX.MySqlClient"
-                    HintPath = "..\..\local-cache\iBatisNet\ByteFX.MySqlClient.dll"
-                />
-                <Reference
                     Name = "Agility.Core"
                     AssemblyName = "Agility.Core"
                     HintPath = "..\..\local-cache\Agility\Agility.Core.dll"
@@ -128,6 +123,16 @@
                     Name = "Nexus.Extras"
                     AssemblyName = "Nexus.Extras"
                     HintPath = "..\..\local-cache\Nexus\Nexus.Extras.dll"
+                />
+                <Reference
+                    Name = "Jayrock.Json"
+                    AssemblyName = "Jayrock.Json"
+                    HintPath = "..\..\local-cache\jayrock\Jayrock.Json.dll"
+                />
+                <Reference
+                    Name = "Jayrock"
+                    AssemblyName = "Jayrock"
+                    HintPath = "..\..\local-cache\jayrock\Jayrock.dll"
                 />
             </References>
         </Build>
@@ -159,7 +164,15 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "Objects.xml"
+                    RelPath = "HelloWorld.ashx"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "HelloWorld.html"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Objects-web.xml"
                     BuildAction = "Content"
                 />
                 <File
@@ -186,7 +199,7 @@
                 <File
                     RelPath = "Controls\AppGridControl.ascx.cs"
                     DependentUpon = "AppGridControl.ascx"
-                    SubType = "Code"
+                    SubType = "ASPXCodeBehind"
                     BuildAction = "Compile"
                 />
                 <File
@@ -202,7 +215,7 @@
                 <File
                     RelPath = "Controls\Finder.ascx.cs"
                     DependentUpon = "Finder.ascx"
-                    SubType = "Code"
+                    SubType = "ASPXCodeBehind"
                     BuildAction = "Compile"
                 />
                 <File
@@ -218,7 +231,7 @@
                 <File
                     RelPath = "Controls\Finder2.ascx.cs"
                     DependentUpon = "Finder2.ascx"
-                    SubType = "Code"
+                    SubType = "ASPXCodeBehind"
                     BuildAction = "Compile"
                 />
                 <File
@@ -250,7 +263,7 @@
                 <File
                     RelPath = "Controls\Lister.ascx.cs"
                     DependentUpon = "Lister.ascx"
-                    SubType = "Code"
+                    SubType = "ASPXCodeBehind"
                     BuildAction = "Compile"
                 />
                 <File
@@ -302,7 +315,7 @@
                 <File
                     RelPath = "Forms\Directory2.aspx.cs"
                     DependentUpon = "Directory2.aspx"
-                    SubType = "Code"
+                    SubType = "ASPXCodeBehind"
                     BuildAction = "Compile"
                 />
                 <File

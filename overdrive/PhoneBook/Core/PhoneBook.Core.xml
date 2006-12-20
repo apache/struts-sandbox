@@ -52,6 +52,118 @@
             <returns>Preconfigured Mapper instance</returns>
             
         </member>
+        <member name="T:PhoneBook.Core.Commands.BaseCommand">
+            <summary>
+            Provide an abtract extension of BaseNexusCommand 
+            with shared members for WNE Commands, 
+            including a SqlMapper factory method.
+            </summary>
+            <remarks><p>
+            Superclasses must implement a NexusExecute method (inherited from BaseNexusCommand.
+            </p><p>
+            Concrete subclasses are expected to be created by a IOC Container, like Spring.NET. 
+            Most concrete subclasses will be "decorator" classes designed to behave 
+            differently based on what properties are set when the class is created. 
+            Others may be custom classes with predefined behaviors. 
+            </p><p>
+            The Spring catalog provides the versatility we need to mix-and-match 
+            base commands with custom commands, as needed, 
+            and call either from the client in exactly the same way.
+            </p><p>
+            NOTE that subclasses should NOT use the Outcome property of 
+            the Nexus context since they may be subcommands in a Chain. 
+            All BaseCommands should use the idiom 
+            <code>context[ID] = object</code>
+            to store output.
+            </p><p>
+            NOTE after using the ReShaper code reformatter, 
+            the Mapper method needs to be edited. 
+            ReSharper removes an absolute reference that we actually need. 
+            (Our Mapper method calls the IBatisNet Mapper method.)
+            The correct line of code is maintained as a comment, 
+            so that it can <b>copied</b> over the reformatted version. 
+            </p></remarks>
+        </member>
+        <member name="F:PhoneBook.Core.Commands.BaseCommand.WILDCARD">
+            <summary>
+            Document the wildcard character used by SQL queries.
+            </summary>
+        </member>
+        <member name="F:PhoneBook.Core.Commands.BaseCommand._Remark">
+            <summary>
+            Provide a field for the Remark property.
+            </summary>
+        </member>
+        <member name="F:PhoneBook.Core.Commands.BaseCommand._Mapper">
+            <summary>
+            Provide a field for the Mapper property.
+            </summary>
+            
+        </member>
+        <member name="M:PhoneBook.Core.Commands.BaseCommand.IsEmpty(System.String)">
+            <summary>
+            Indicate whether string is null or zero length.
+            </summary>
+            <param name="input">Input to validate</param>
+            <returns>True if string is nyull or zero length</returns>
+            
+        </member>
+        <member name="M:PhoneBook.Core.Commands.BaseCommand.GuidString">
+            <summary>
+            Create new Global Universal Identifer as a formatted string.
+            </summary>
+            <returns>String representing a new GUID</returns>
+            <remarks><p>
+            No two calls to this method will ever return duplicate strings.
+            </p></remarks>
+            
+        </member>
+        <member name="M:PhoneBook.Core.Commands.BaseCommand.LikeMe(Agility.Core.IContext,System.String)">
+            <summary>
+            Prepare an attribute for use with a SQL wildcard ("LIKE") operation.
+            </summary>
+            <remarks><p>
+            A wildcard is prepended and appended for a full, scan-across match, 
+            so that the string will found in any part of the field.
+            </p></remarks>
+            <param name="context">Context with attribute to escape</param>
+            <param name="id">Name of attribute to escape</param>
+        </member>
+        <member name="P:PhoneBook.Core.Commands.BaseCommand.ID">
+            <summary>
+            If an ID is not provided, default to the ObjectName.
+            </summary>
+        </member>
+        <member name="P:PhoneBook.Core.Commands.BaseCommand.ObjectName">
+            <summary>
+            Provide a field for the Spring object name (set by Spring).
+            </summary>
+        </member>
+        <member name="P:PhoneBook.Core.Commands.BaseCommand.Remark">
+            <summary>
+            Accept an arbitrary comment about a command 
+            -- more for use in the XML document.
+            </summary>
+            
+        </member>
+        <member name="P:PhoneBook.Core.Commands.BaseCommand.Mapper">
+            <summary>
+            Expose a preconfigured SqlMapper instance that Commands can use to run statements.
+            </summary>
+            <remarks><p>
+            Commands use Mapper to invoke SqlMap statements, such as 
+            <code>
+            object row = Mapper ().QueryForObject (QueryID, context);
+            </code>.
+            </p><p>
+            Any SqlMapper API method may be called. 
+            </p><p>
+            The default behavior of BAseNexusCommand is to use the 
+            command ID if the QueryID is null.
+            </p></remarks>
+            <returns>Preconfigured Mapper</returns>
+            
+        </member>
         <member name="T:PhoneBook.Core.Commands.BaseCount">
             <summary>
             Invoke a query that returns the count of a result set.
@@ -75,11 +187,49 @@
         </member>
         <member name="T:PhoneBook.Core.Commands.BaseList">
             <summary>
-            Execute database statement indicated by QueryID, 
-            for a list of objects
-            returning each attribute in the main context.
+            Run the select query indicated by QueryID, 
+            first escaping any LikeIDs and extending any date ranges,
+            and return the result as an IList, 
             </summary>
-            
+        </member>
+        <member name="M:PhoneBook.Core.Commands.BaseList.GetArray(System.String)">
+            <summary>
+            Generate an array from the IDs.
+            </summary>
+            <returns>Array of LikeIDs</returns>
+        </member>
+        <member name="F:PhoneBook.Core.Commands.BaseList.LAST_TICK">
+            <summary>
+            Document the last second of the day 
+            so as to calculate values for concepts like today and tomorrow.
+            </summary>
+        </member>
+        <member name="M:PhoneBook.Core.Commands.BaseList.ExtendThruDate(Nexus.Core.IRequestContext)">
+            <summary>
+            If ThruDate is set to the minimum time (00:00), 
+            set to the maximum time instead (23:59). 
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="M:PhoneBook.Core.Commands.BaseList.PreProcess(Nexus.Core.IRequestContext)">
+            <summary>
+            Prepare special attributes for the query.
+            </summary>
+            <param name="context">The context we are processing</param>
+        </member>
+        <member name="M:PhoneBook.Core.Commands.BaseList.RequestExecute(Nexus.Core.IRequestContext)">
+            <summary>
+            Provide a default, convenience implementation that will run a "QueryForList" 
+            using a data mapping statement of the same ID as the Command; 
+            override as needed.
+            </summary>
+            <param name="context">The INexusContext we are processing.</param>
+            <returns>CONTINUE, if an Exception is not thrown.</returns>
+        </member>
+        <member name="P:PhoneBook.Core.Commands.BaseList.LikeIDs">
+            <summary>
+            Names of key fields to escape for a "like" search.
+            </summary>
         </member>
         <member name="T:PhoneBook.Core.Commands.BaseSave">
             <summary>

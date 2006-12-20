@@ -125,7 +125,7 @@ namespace PhoneBook.Web.Forms
 		private void View_Init(ViewControl c)
 		{
 			c.View_Alert += new EventHandler(View_Error);
-			c.Catalog = this.Catalog; // ISSUE: Why isn't control injection working?
+			c.Catalog = Catalog; // ISSUE: Why isn't control injection working?
 		}
 
 		/// <summary>

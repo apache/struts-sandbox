@@ -3,11 +3,9 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
 
-	<object id="Base" />
-	
-	<import resource="Resources/AppBase.xml"/>
-	<import resource="Resources/AppConfig.xml"/>
-	<import resource="Resources/AppFields.xml"/>
-	<import resource="Resources/Catalog.xml"/>
+	<import resource="web://~/Resources/AppBase.xml"/>
+	<import resource="web://~/Resources/AppConfig.xml"/>
+	<import resource="web://~/Resources/AppFields.xml"/>
+	<import resource="web://~/Resources/Catalog.xml"/>
 	
 </objects>

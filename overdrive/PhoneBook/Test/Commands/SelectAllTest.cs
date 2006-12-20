@@ -93,14 +93,14 @@ namespace PhoneBook.Core.Commands
 		{
 			IViewHelper helper = catalog.GetHelperFor(App.ENTRY_LIST);
 			helper.Criteria[App.ITEM_LIMIT] = 2;
-			helper.Criteria[App.ITEM_OFFSET] = 4;
+			helper.Criteria[App.ITEM_OFFSET] = 0;
 			helper.Execute();
 			if (!helper.IsNominal) Assert.Fail(helper.AlertsText);
 			IList list = helper.Outcome;
 			Assert.IsTrue(list.Count == 2, "Expected result set to be limited to two entries.");
 			AppEntry entry = list[0] as AppEntry;
 			helper.Criteria[App.ITEM_LIMIT] = 2;
-			helper.Criteria[App.ITEM_OFFSET] = 2;
+			helper.Criteria[App.ITEM_OFFSET] = 3;
 			helper.Execute();
 			IList list2 = helper.Outcome;
 			AppEntry entry2 = list2[0] as AppEntry;

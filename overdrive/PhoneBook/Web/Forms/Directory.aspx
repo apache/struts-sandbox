@@ -14,20 +14,20 @@
 	</HEAD>
 	<body>
 		<h1>PhoneBook Directory</h1>
-			<form id="form" method="post" runat="server">
+			<form id="form1" method="post" runat="server">
 			
 			<!-- ERROR -->
-			<asp:Panel ID="error_panel" Runat="server">
-			<p><asp:Label ID="error_label" Runat="server"></asp:Label></p>
+			<asp:Panel id="error_panel" runat="server">
+			<p><asp:Label id="error_label" runat="server"></asp:Label></p>
 			<hr>
 			</asp:Panel>
 			
 			<!-- PROMPT -->
 			<p>Select a filter to display fewer entries.</p>	
 
-			<app:Finder id="finder" Runat="server" OnClick="finder_Click"></app:Finder>
+			<app:Finder id="finder" runat="server"></app:Finder>
 			
- 			<app:Lister id="lister" runat="server" OnClick="lister_Click"></app:Lister>
+ 			<app:Lister id="lister" runat="server"></app:Lister>
 
 		</form>
 	</body>
