@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.apache.struts</groupId>
+        <artifactId>struts2-plugins</artifactId>
+        <version>2.0.2-SNAPSHOT</version>
+    </parent>
+    <groupId>org.apache.struts</groupId>
+    <artifactId>struts2-scope-plugin</artifactId>
+    <packaging>jar</packaging>
+    <name>Struts 2 Scope Plugin</name>
+    
+    <scm>
+       <connection>scm:svn:http://svn.apache.org/repos/asf/struts/sandbox/trunk/struts2-scope-plugin/</connection>
+       <developerConnection>scm:svn:https://svn.apache.org/repos/asf/struts/sandbox/trunk/struts2-scope-plugin/</developerConnection>
+       <url>http://svn.apache.org/viewcvs.cgi/struts/sandbox/trunk/struts2-scope-plugin/</url>
+    </scm>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+            <version>3.8.1</version>
+        </dependency>
+   </dependencies>
+</project>
