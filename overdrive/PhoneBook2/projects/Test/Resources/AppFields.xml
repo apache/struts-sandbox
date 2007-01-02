@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<objects xmlns="http://www.springframework.net" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+
+	 <!-- FieldTable -->
+
+	<object id="FieldTable" type="Nexus.Core.Tables.FieldTable">
+		<property name="AddFieldContexts">
+			<list>
+				<ref object="last_name"/> 
+				<ref object="first_name"/> 
+				<ref object="extension"/> 
+				<ref object="user_name"/> 
+				<ref object="hired"/> 
+				<ref object="hours"/> 				
+				<ref object="_entry_list"/> 
+				<ref object="_entry_list_count"/> 
+				<ref object="_extension_list"/>
+				<ref object="_hired_list"/>
+			</list>
+		</property>
+		<property name="AddProcessors">
+			<list>
+				<ref object="DateTimeProcessor"/> 
+				<ref object="TelephoneProcessor"/> 
+				<ref object="EntryListProcessor"/> 
+				<ref object="ExtensionListProcessor"/>
+				<ref object="HiredListProcessor"/>
+			</list>
+		</property>
+	</object>
+
+	<object id="last_name" parent="BaseFieldContext">
+		<property name="ID"><value>last_name</value></property>	
+	</object>
+
+	<object id="first_name" parent="BaseFieldContext">
+		<property name="ID"><value>first_name</value></property>	
+	</object>
+
+	<object id="user_name" parent="BaseFieldContext">
+		<property name="ID"><value>user_name</value></property>	
+	</object>
+	
+	<object id="extension" parent="BaseFieldContext">
+		<property name="ID"><value>extension</value></property>		
+		<property name="Processor"><ref object="TelephoneProcessor"/></property>
+	</object>
+
+	<object id="hired" parent="BaseFieldContext">
+		<property name="ID"><value>hired</value></property>	
+		<property name="Processor"><ref object="DateTimeProcessor"/></property>
+	</object>
+	
+	<object id="hours" parent="BaseFieldContext">
+		<property name="ID"><value>hours</value></property>	
+	</object>
+	
+	<object id="editor" parent="BaseFieldContext">
+		<property name="ID"><value>editor</value></property>	
+	</object>
+
+	<!-- property name="ControlTypeName"><value>CheckBox</value></property -->	
+
+	<!-- We need to "hash" the name with "_" to avoid conflict with the filter Command -->
+	<object id="_entry_list" parent="BaseFieldContext">
+		<property name="ID"><value>entry_list</value></property>
+		<property name="Processor"><ref object="EntryListProcessor"/></property>
+	</object>
+		
+	<object id="_entry_list_count" parent="BaseFieldContext">
+		<property name="ID"><value>entry_list_count</value></property>
+		<property name="Processor"><ref object="CollectionProcessor"/></property>
+	</object>
+
+	<object id="_extension_list" parent="BaseFieldContext">
+		<property name="ID"><value>extension_list</value></property>
+		<property name="Processor"><ref object="ExtensionListProcessor"/></property>
+	</object>
+
+	<object id="_hired_list" parent="BaseFieldContext">
+		<property name="ID"><value>hired_list</value></property>
+		<property name="Processor"><ref object="HiredListProcessor"/></property>
+	</object>
+
+	<object id="CollectionProcessor" type="Nexus.Core.Validators.CollectionProcessor, Nexus.Core">
+		<property name="ID"><value>EntryCountProcessor</value></property>
+	</object>
+	
+ 		<!-- "d" is .NET for "short date" --> 
+	<object id="DateTimeProcessor" type="Nexus.Core.Validators.DateTimeProcessor">
+		<property name="ID"><value>DateTimeProcessor</value></property>
+		<property name="DataFormat"><value>d</value></property>
+	</object>
+	
+	<object id="TelephoneProcessor" type="PhoneBook.Core.TelephoneProcessor">
+		<property name="ID"><value>TelephoneProcessor</value></property>
+	</object>
+
+	<object id="EntryListProcessor" type="PhoneBook.Core.AppEntryListProcessor">
+		<property name="ID"><value>EntryListProcessor</value></property>
+	</object>
+	
+	<object id="ExtensionListProcessor" parent="BaseKeyValueProcessor">
+		<property name="ID"><value>ExtensionListProcessor</value></property>
+		<property name="Key"><value>extension</value></property>
+	</object>
+	
+	<object id="HiredListProcessor" parent="BaseKeyValueProcessor">
+		<property name="ID"><value>HiredListProcessor</value></property>
+		<property name="Key"><value>hired</value></property>
+	</object>
+
+</objects>

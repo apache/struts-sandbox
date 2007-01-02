@@ -1,1 +1,0 @@
-@java -cp "%~dp0\src;%~dp0\bin;C:/projects/googlecode/gwt/gwt-windows-1.2.22/gwt-user.jar;C:/projects/googlecode/gwt/gwt-windows-1.2.22/gwt-dev-windows.jar" com.google.gwt.dev.GWTCompiler -out "%~dp0\www" %* website

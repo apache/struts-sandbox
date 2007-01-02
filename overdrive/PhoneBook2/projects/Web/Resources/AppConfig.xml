@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<objects xmlns="http://www.springframework.net" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+
+ <!-- Message Source -->
+
+	<object id="messageSource" type="Spring.Context.Support.ResourceSetMessageSource, Spring.Core">
+        <property name="ResourceManagers">
+            <list>
+                <value>PhoneBook.Core.Messages, PhoneBook.Core</value>
+                <value>Nexus.Web.Messages, Nexus.Web</value>
+            </list>
+        </property>    
+    </object>
+
+
+ <!-- Request Processors -->
+	
+  <object id="convert_input" type="Nexus.Core.Validators.ConvertInput">
+    <property name="ID"><value>convert_input</value></property>
+  </object>
+
+  <object id="format_output" type="Nexus.Core.Validators.FormatOutput">
+    <property name="ID"><value>format_output</value></property>    
+  </object>
+  
+  <object id="clear_context" type="Nexus.Core.Validators.ClearContext">
+    <property name="ID"><value>clear_context</value></property>    
+  </object>
+
+ <!-- pre-op -->
+
+  <object id="pre-op" parent="BaseChain">
+	<property name="AddCommands">
+		<list>
+			<ref object="convert_input"/>
+		</list>   
+    </property>           
+  </object>  
+  
+ <!-- post-op -->
+
+  <object id="post-op" parent="BaseChain">
+	<property name="AddCommands">
+		<list>
+			<ref object="format_output"/>
+		</list>   
+    </property>           
+  </object>
+    		
+ <!-- Catalog -->
+ 
+  <object id="Catalog" type="Nexus.Extras.Spring.Catalog">
+	  <property name="FieldTable"><ref object="FieldTable"/></property>
+	  <property name="PreOp"><ref object="pre-op"/></property>
+	  <property name="PostOp"><ref object="post-op"/></property>
+	  <property name="ViewHelper"><object type="Nexus.Web.WebHelper, Nexus.Web" singleton="false"/></property>
+ </object>
+ 
+<!-- iBATIS Mapper -->
+  
+  <object id="Mapper" type="IBatisNet.DataMapper.Mapper, IBatisNet.DataMapper" 
+		factory-method="Instance"/> 
+      
+</objects>

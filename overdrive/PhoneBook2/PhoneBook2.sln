@@ -9,6 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "projects\Test\Test.
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "C:\...\Web\", "projects\Web\", "{055ABF30-6F91-48EB-B457-2D9274F0D34F}"
 	ProjectSection(WebsiteProperties) = preProject
+		ProjectReferences = "{F65FCC91-C9CB-40CE-87A6-C0CB00F73592}|PhoneBook.Core.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/Web"
 		Debug.AspNetCompiler.PhysicalPath = "projects\Web\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\Web\"

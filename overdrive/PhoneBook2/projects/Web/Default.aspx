@@ -9,7 +9,20 @@
 <body>
     <form id="form1" runat="server">
     <div>
-    Howdy!
+    <ul>
+    <li>
+        <a href="HelloWorld.html">HelloWorld.html</a> - Simple Jayrock example
+    </li>
+    <li>
+        <a href="Demo.ashx">Demo.ashx</a> - Jayrock JSON-RPC DemoService, with automatic service discovery and interactive test page. It doesn't get any easier than this!
+    </li>
+    <li>
+        <a href="DemoDojo.html">DemoDojo.html</a> - Simple example of integrating Dojo and Jayrock
+    </li>
+    <li>
+        <a href="PhoneBook.html">PhoneBook.html</a> - First blush example of calling Nexus commands from JSON-RPC service
+    </li>
+    </ul>
     </div>
     </form>
 </body>

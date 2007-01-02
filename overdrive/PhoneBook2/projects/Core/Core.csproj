@@ -7,8 +7,8 @@
     <ProjectGuid>{F65FCC91-C9CB-40CE-87A6-C0CB00F73592}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PhoneBook2.Core</RootNamespace>
-    <AssemblyName>PhoneBook2.Core</AssemblyName>
+    <RootNamespace>PhoneBook.Core</RootNamespace>
+    <AssemblyName>PhoneBook.Core</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -28,13 +28,46 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Agility.Core, Version=1.0.2355.25640, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\local-cache\Agility\Agility.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="IBatisNet.DataMapper, Version=1.5.1.0, Culture=neutral, PublicKeyToken=ed781d9fc396c6ca, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\local-cache\iBatisNet\IBatisNet.DataMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="Nexus.Core, Version=1.0.2539.22197, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\local-cache\Nexus\Nexus.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Spring.Core, Version=1.1.0.2, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\local-cache\SpringNet\Spring.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="App.cs" />
+    <Compile Include="AppEntry.cs" />
+    <Compile Include="AppEntryList.cs" />
+    <Compile Include="AppEntryListProcessor.cs" />
+    <Compile Include="Commands\AppCommand.cs" />
+    <Compile Include="Commands\BaseCommand.cs" />
+    <Compile Include="Commands\BaseCount.cs" />
+    <Compile Include="Commands\BaseEntry.cs" />
+    <Compile Include="Commands\BaseFilterList.cs" />
+    <Compile Include="Commands\BaseList.cs" />
+    <Compile Include="Commands\BaseSave.cs" />
+    <Compile Include="Commands\EntryInitial.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TelephoneProcessor.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Messages.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

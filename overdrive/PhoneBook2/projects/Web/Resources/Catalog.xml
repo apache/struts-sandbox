@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<objects xmlns="http://www.springframework.net" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+
+	<!-- entry commands -->
+
+  <object id="entry_list_rows" parent="BaseList">
+		<property name="ID"><value>entry_list</value></property>
+		<property name="QueryID"><value>entry</value></property>
+		<property name="RelatedIDs">
+			<list>
+				<value>entry_list</value>
+				<value>entry_key</value>
+				<value>last_name</value>
+				<value>first_name</value>
+				<value>extension</value>
+				<value>user_name</value>
+				<value>hired</value>
+				<value>hours</value>
+				<value>editor</value>
+				<value>initial</value>
+				<value>item_count</value>
+				<value>item_offset</value>
+				<value>item_limit</value>
+			</list>
+		</property>
+  </object>
+  
+  <object id="entry_list_count" parent="BaseCount">
+		<property name="ID"><value>entry_list_count</value></property>
+		<property name="QueryID"><value>entry_count</value></property>
+		<property name="RelatedIDs">
+			<list>
+				<value>entry_list</value>
+				<value>entry_key</value>
+				<value>last_name</value>
+				<value>first_name</value>
+				<value>extension</value>
+				<value>user_name</value>
+				<value>hired</value>
+				<value>hours</value>
+				<value>editor</value>
+				<value>initial</value>
+				<value>item_count</value>
+				<value>item_offset</value>
+				<value>item_limit</value>
+			</list>
+		</property>
+  </object>
+
+  <object id="entry" parent="BaseEntry">
+		<property name="ID"><value>entry</value></property>
+		<property name="RelatedIDs">
+			<list>
+				<value>entry</value>
+				<value>entry_key</value>
+				<value>last_name</value>
+				<value>first_name</value>
+				<value>extension</value>
+				<value>user_name</value>
+				<value>hired</value>
+				<value>hours</value>
+				<value>editor</value>
+			</list>
+		</property>
+  </object>
+  
+	
+	<!-- filter list commands -->
+		
+  <object id="last_name_list" parent="BaseFilterList">
+	<property name="ID"><value>last_name_list</value></property>
+	<property name="RelatedIDs"><list><value>last_name_list</value></list></property>
+  </object>
+
+  <object id="first_name_list" parent="BaseFilterList">
+	<property name="ID"><value>first_name_list</value></property>
+	<property name="RelatedIDs"><list><value>first_name_list</value></list></property>
+  </object>
+  
+  <object id="extension_list" parent="BaseFilterList">
+	<property name="ID"><value>extension_list</value></property>
+	<property name="RelatedIDs"><list><value>extension_list</value></list></property>	
+  </object>
+
+  <object id="user_name_list" parent="BaseFilterList">
+	<property name="ID"><value>user_name_list</value></property>
+	<property name="RelatedIDs"><list><value>user_name_list</value></list></property>	
+  </object>
+
+  <object id="hired_list" parent="BaseFilterList">
+	<property name="ID"><value>hired_list</value></property>
+	<property name="RelatedIDs"><list><value>hired_list</value></list></property>	
+  </object>
+
+  <object id="hours_list" parent="BaseFilterList">
+	<property name="ID"><value>hours_list</value></property>
+	<property name="RelatedIDs"><list><value>hours_list</value></list></property>	
+  </object>
+  
+	<object id="entry_initial" parent="EntryInitial">
+		<property name="ID">
+			<value>entry_initial</value>
+		</property>
+		<property name="RelatedIDs">
+			<list>
+				<value>entry_initial</value>
+			</list>		
+		</property>
+	</object>
+  
+	<!-- chains -->
+    
+    <object id="entry_list" parent="BaseChain">
+		<property name="ID">
+			<value>entry_list</value>
+		</property>
+		<property name="AddCommands">
+			<list>
+				<ref object="entry_list_count" />
+				<ref object="entry_list_rows" />
+			</list>
+		</property>
+	</object>
+    
+    <object id="entry_find" parent="BaseChain">
+		<property name="ID">
+			<value>entry_find</value>
+		</property>
+		<property name="AddCommands">
+			<list>
+				<ref object="last_name_list" />
+				<ref object="first_name_list" />
+				<ref object="extension_list" />
+				<ref object="user_name_list" />
+				<ref object="hired_list" />
+				<ref object="hours_list" />
+			</list>
+		</property>
+	</object>
+			
+  <object id="entry_save" parent="BaseSave">
+		<property name="ID">
+			<value>entry_save</value>
+		</property>
+		<property name="KeyID">
+			<value>entry_key</value>
+		</property>
+		<property name="InsertID">
+			<value>entry_insert</value>
+		</property>
+		<property name="UpdateID">
+			<value>entry_update</value>
+		</property>
+		<property name="RelatedIDs">
+			<list>
+				<value>entry_key</value>
+			</list>
+		</property>
+		<property name="RequiredIDs">
+			<list>
+				<value>first_name</value>
+				<value>last_name</value>
+				<value>extension</value>
+				<value>user_name</value>
+				<value>hours</value>
+				<value>hired</value>
+				<value>editor</value>
+			</list>
+		</property>
+	</object>
+
+</objects>

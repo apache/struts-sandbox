@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<sqlMap 
+	namespace="phonebook" 
+	xmlns="http://ibatis.apache.org/mapping" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+
+   <parameterMaps>
+		
+   		<parameterMap id="entry_save_param">
+			<parameter property="last_name"/>
+			<parameter property="first_name"/>
+			<parameter property="extension"/>
+			<parameter property="user_name"/>
+			<parameter property="hired"/>
+			<parameter property="hours"/>
+			<parameter property="editor"/>
+   			<parameter property="entry_key"/>   		
+        </parameterMap>    		
+  	
+  	</parameterMaps>
+		
+	<statements>
+	
+		<select id="last_name_list" resultClass="string">
+			SELECT DISTINCT 
+				last_name
+			FROM entry
+			ORDER BY last_name			
+		</select>
+		
+		<select id="first_name_list" resultClass="string">
+			SELECT DISTINCT 
+				first_name
+			FROM entry
+			ORDER BY first_name
+		</select>
+		
+		<select id="extension_list" resultClass="string">
+			SELECT DISTINCT 
+				extension
+			FROM entry
+			ORDER BY extension
+		</select>
+
+		<select id="user_name_list" resultClass="string">
+			SELECT DISTINCT 
+				user_name
+			FROM entry
+			ORDER BY user_name
+		</select>
+
+		<select id="hired_list"  resultClass="date">
+			SELECT DISTINCT 
+				hired
+			FROM entry
+			ORDER BY hired
+		</select>
+
+		<select id="hours_list"  resultClass="string">
+			SELECT DISTINCT 
+				hours
+			FROM entry
+			ORDER BY hours
+		</select>
+
+		<select id="entry" paramClass="Hashtable" resultClass="Hashtable">
+			SELECT 
+				last_name,
+				first_name,
+				extension,
+				user_name,
+				hired,
+				hours,
+				editor,
+				pk_entry AS entry_key				
+			FROM entry
+			<dynamic prepend="WHERE">			
+				<isNotNull property="initial" prepend="AND">
+					last_name LIKE #initial#
+				</isNotNull>
+				<isNotNull property="last_name" prepend="AND">
+					last_name=#last_name#
+				</isNotNull>
+				<isNotNull property="first_name" prepend="AND">
+					first_name=#first_name#
+				</isNotNull>
+				<isNotNull property="extension" prepend="AND">
+					extension=#extension#
+				</isNotNull>
+				<isNotNull property="user_name" prepend="AND">
+					user_name=#user_name#
+				</isNotNull>
+				<isNotNull property="hired" prepend="AND">
+					hired=#hired#
+				</isNotNull>
+				<isNotNull property="hours" prepend="AND">
+					hours=#hours#
+				</isNotNull>
+				<isNotNull property="editor" prepend="AND">
+					hours=#editor#
+				</isNotNull>
+				<isNotNull property="entry_key" prepend="AND">
+					pk_entry=#entry_key#
+				</isNotNull>
+			</dynamic>			
+			<dynamic>
+			   <isNotNull property="item_limit">
+					LIMIT #item_limit# OFFSET #item_offset# 
+			   </isNotNull>			
+			</dynamic>;
+		</select>
+
+		<select id="entry_count" paramClass="Hashtable" resultClass="string">
+			SELECT COUNT(*) FROM entry
+			<dynamic prepend="WHERE">			
+				<isNotNull property="initial" prepend="AND">
+					last_name LIKE #initial#
+				</isNotNull>
+				<isNotNull property="last_name" prepend="AND">
+					last_name=#last_name#
+				</isNotNull>
+				<isNotNull property="first_name" prepend="AND">
+					first_name=#first_name#
+				</isNotNull>
+				<isNotNull property="extension" prepend="AND">
+					extension=#extension#
+				</isNotNull>
+				<isNotNull property="user_name" prepend="AND">
+					user_name=#user_name#
+				</isNotNull>
+				<isNotNull property="hired" prepend="AND">
+					hired=#hired#
+				</isNotNull>
+				<isNotNull property="hours" prepend="AND">
+					hours=#hours#
+				</isNotNull>
+				<isNotNull property="editor" prepend="AND">
+					hours=#editor#
+				</isNotNull>
+				<isNotNull property="entry_key" prepend="AND">
+					pk_entry=#entry_key#
+				</isNotNull>
+			</dynamic>			
+		</select>
+		
+		<select id="entry_initial" paramClass="string" resultClass="string">		
+			SELECT COUNT(*) 
+			FROM entry
+			WHERE last_name LIKE #value#
+		</select>									
+		
+		<insert id="entry_insert" parameterMap="entry_save_param">
+    		INSERT INTO entry (    			
+				last_name,
+				first_name,
+				extension,
+				user_name,
+				hired,
+				hours,
+				editor,
+				pk_entry
+				)
+			VALUES (?,?,?,?, ?,?,?,?)
+		</insert>		
+
+		<update id="entry_update" parameterMap="entry_save_param">
+			UPDATE entry SET
+				last_name=?,
+				first_name=?,
+				extension=?,
+				user_name=?,
+				hired=?,
+				hours=?,
+				editor=?
+			WHERE 
+				pk_entry=?
+		</update>
+						
+	</statements>
+</sqlMap>

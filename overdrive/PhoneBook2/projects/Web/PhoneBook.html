@@ -1,11 +1,11 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
         <head>
-                <title>Dojo/Jayrocks Demo</title>
+                <title>PhoneBook</title>
                 <meta name="GENERATOR" content="Microsoft Visual Studio .NET 7.1">
                 <meta name=ProgId content=VisualStudio.HTML>
                 <meta name=Originator content="Microsoft Visual Studio .NET 7.1">
-                <script language="javascript" src="Demo.ashx?proxy&v=2"></script>
+                <script language="javascript" src="PhoneBook.ashx?proxy&v=2"></script>
                 <script language="javascript" src="js/dojo/dojo.js"></script>
                 <script language="javascript">
                     dojo.require("dojo.io.*");
@@ -13,7 +13,6 @@
                     dojo.require("dojo.html.*");
                     dojo.require("dojo.json");
 
-                    // Invokes service method
                     function dojoChannel(call)
                     {
                         var bindArgs = {
@@ -29,11 +28,10 @@
                         return req;
                     }
 
-                    // Formats output into a control
-                    function string_array_element(type, data, evt)
+                    function last_name_list_element(type, data, evt)
                     {
                         var arr = data.result;
-                        var theDiv = dojo.byId('string_array');
+                        var theDiv = dojo.byId('last_name_list');
                         var select = document.createElement('select');
                         for(var i=0; i < arr.length; i++)
                         {
@@ -42,21 +40,15 @@
                         theDiv.appendChild(select);
                     }
 
-                    // Wraps call to RPC method
-                    function getStringArray()
+                    function last_name_list()
                     {
-                        DemoService.rpc.getStringArray(string_array_element).call(dojoChannel);
+                        PhoneBook.rpc.last_name_list(last_name_list_element).call(dojoChannel);
                     }
 
-                    // Obtains output on page load
-                    dojo.event.connect(window, "onload", getStringArray);
+                    dojo.event.connect(window, "onload", last_name_list);
                 </script>
         </head>
     <body>
-
-        <h2>getStringArray as Select control</h2>
-        <div id="string_array"></div>
-        <hr />
-        
+        <div id="last_name_list"></div>
     </body>
 </html> 

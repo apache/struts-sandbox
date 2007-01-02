@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<objects xmlns="http://www.springframework.net" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+
+ <!-- Base element (super parent)-->
+ 
+ <object id="BaseMapper" abstract="true">
+     <property name="Mapper"><ref object="Mapper"/></property>
+ </object>
+ 
+ <!-- Base class parents --> 
+
+	<object id="BaseChain" type="Nexus.Core.RequestChain, Nexus.Core"/>
+	
+	<object id="BaseCount" type="PhoneBook.Core.Commands.BaseCount, PhoneBook.Core" parent="BaseMapper"/>
+
+	<object id="BaseEntry" type="PhoneBook.Core.Commands.BaseEntry, PhoneBook.Core" parent="BaseMapper"/>
+	
+	<object id="BaseFilterList" type="PhoneBook.Core.Commands.BaseFilterList, PhoneBook.Core" parent="BaseMapper"/>
+	
+	<object id="BaseFieldContext" type="Nexus.Extras.Spring.FieldContext">
+		<property name="MessageSource">
+			<ref object="messageSource" />
+		</property>		
+	</object>
+	
+	<object id="BaseKeyValueProcessor" type="Nexus.Core.Validators.KeyValueProcessor"/>
+
+	<object id="BaseList" type="PhoneBook.Core.Commands.BaseList, PhoneBook.Core" parent="BaseMapper"/>
+
+	<object id="BaseSave" type="PhoneBook.Core.Commands.BaseSave, PhoneBook.Core" parent="BaseMapper"/>
+
+    <object id="EntryInitial" type="PhoneBook.Core.Commands.EntryInitial, PhoneBook.Core" parent="BaseMapper"/>
+
+</objects>
