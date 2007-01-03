@@ -5,13 +5,15 @@
                 <meta name="GENERATOR" content="Microsoft Visual Studio .NET 7.1">
                 <meta name=ProgId content=VisualStudio.HTML>
                 <meta name=Originator content="Microsoft Visual Studio .NET 7.1">
-                <script language="javascript" src="PhoneBook.ashx?proxy&v=2"></script>
+                <script language="javascript" src="PhoneBook.ashx?proxy&v=2"></script>                
                 <script language="javascript" src="js/dojo/dojo.js"></script>
                 <script language="javascript">
                     dojo.require("dojo.io.*");
                     dojo.require("dojo.event.*");
                     dojo.require("dojo.html.*");
                     dojo.require("dojo.json");
+            		dojo.require("dojo.widget.FilteringTable");
+            		dojo.hostenv.writeIncludes();
 
                     function dojoChannel(call)
                     {
@@ -21,7 +23,7 @@
                             method: "POST",
                             mimetype: "text/json",
                             handle: call.callback,
-                            postContent:  dojo.json.serialize(call.request)
+                            postContent: dojo.json.serialize(call.request)
                         };
                         var req = dojo.io.bind(bindArgs);
                         dojo.event
@@ -31,24 +33,146 @@
                     function last_name_list_element(type, data, evt)
                     {
                         var arr = data.result;
-                        var theDiv = dojo.byId('last_name_list');
+                        var last_name_list = dojo.byId('last_name_list');
                         var select = document.createElement('select');
                         for(var i=0; i < arr.length; i++)
                         {
                             select.options[i] = new Option(arr[i], arr[i]);
                         }
-                        theDiv.appendChild(select);
+                        var label = document.createElement('label');
+                        label.value = "Last Name: ";
+                        last_name_list.appendChild(label);
+                        last_name_list.appendChild(select);
                     }
 
                     function last_name_list()
-                    {
+                    {                    
                         PhoneBook.rpc.last_name_list(last_name_list_element).call(dojoChannel);
                     }
 
-                    dojo.event.connect(window, "onload", last_name_list);
+                    dojo.event.connect(window, "onload", last_name_list);                        
+
+                    function entry_list_element(type, data, evt)
+                    {
+                    	var w = dojo.widget.byId("entry_list");
+                        w.store.setData(data.result);
+                    }
+                    
+                    function entry_list()
+                    {                    
+                        PhoneBook.rpc.entry_list(entry_list_element).call(dojoChannel);
+                    }
+
+                    dojo.event.connect(window, "onload", entry_list);
+
+		            function showSelected() {
+			            var w=dojo.widget.byId("entry_list");
+			            if (w) {
+			                var s=w.getValue();
+				            if (s.length>0) alert(s);
+				            else alert("No rows are selected.");
+			            }
+		            }
+
+    		        function dateFilter(dt) {
+			            return (dt == '5/29/1987' || dt == '11/18/1984');
+		            }
+		            function applyDate(key){
+			            dojo.widget.byId(key).setFilter("hired", dateFilter);
+		            }
+				
+		            function nameFilter(name){
+			            return (name.charAt(0) >= 'M' && name.charAt(0) <= 'Z');
+		            }
+		            function applyName(key){
+			            dojo.widget.byId(key).setFilter("last_name", nameFilter);
+	            	}
+		
                 </script>
-        </head>
+                
+	            <style type="text/css">
+		        /***
+			        The following is just an example of how to use the table.
+			        You can override any class names to be used if you wish.
+		        ***/
+		        table {
+			        font-family:Lucida Grande, Verdana;
+			        font-size:0.8em;
+			        width:100%;
+			        border:1px solid #ccc;
+			        border-collapse:collapse;
+			        cursor:default;
+		        }
+		        table td,
+		        table th{
+			        padding:2px;
+			        font-weight:normal;
+		        }
+		        table thead td, table thead th {
+			        background-image:url(images/ft-head.gif);
+			        background-repeat:no-repeat;
+			        background-position:top right;
+		        }
+		        table thead td.selectedUp, table thead th.selectedUp {
+			        background-image:url(images/ft-headup.gif);
+		        }
+		        table thead td.selectedDown, table thead th.selectedDown {
+			        background-image:url(images/ft-headdown.gif);
+		        }
+			
+		        table tbody tr td{
+			        border-bottom:1px solid #ddd;
+		        }
+		        table tbody tr.alt td{
+			        background: #e3edfa;
+		        }
+		        table tbody tr.selected td{
+			       background: yellow;
+		        }
+		        table tbody tr:hover td{
+			        background: #a6c2e7;
+		        }
+		        table tbody tr.selected:hover td{
+			        background:#ff9;
+		        }
+
+		        #inputArea{
+			        margin:1em 0;
+			        padding:1em;
+			        background-color:#eef;
+		        }
+		        #updateTestInput{
+			        border:1px solid #ccc;
+			        width:100%;
+			        height:80px;
+			        font-family:serif;
+			        font-size:0.9em;
+			        overflow:auto;
+		        }
+    	</style>                            
+    </head>
     <body>
+    
         <div id="last_name_list"></div>
+        
+	    <table id="entry_list" 
+	            cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;"
+	            dojoType="filteringTable" alternateRows="true" valueField="user_name" >
+	        <thead>
+		    <tr>
+			    <th field="last_name" sort="asc">Last Name</th>
+			    <th field="first_name">First Name</th>
+			    <th field="extension">Extension</th>
+			    <th field="user_name">User</th>
+			    <th field="hired" align="center">Hired</th>
+			    <th field="hours" align="center">Hours</th>
+		    </tr>
+	        </thead>
+	    </table>
+	    <p>
+       	<input type="button" onclick="showSelected();" value="Show the selected object" />
+		<input type="button" onclick="applyDate('entry_list');" value="Show only hires between 1/1/1984 and 1/1/1987" /> 
+		<input type="button" onclick="applyName('entry_list');" value="Show only names between M and Z" /> 
+       	</p>
     </body>
 </html> 

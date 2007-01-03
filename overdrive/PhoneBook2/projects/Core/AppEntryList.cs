@@ -24,5 +24,10 @@ namespace PhoneBook.Core
                 entry.Add(col.Key.ToString(), col.Value.ToString());
             Add(entry);
         }
+        
+        public AppEntry[] ToAppEntryArray()
+        {
+            return (AppEntry[])ToArray(typeof(AppEntry));
+        }
     }
 }

@@ -2,26 +2,47 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-    <title>Hello Jayrock</title>
+    <title>Hello Jayrock and Dojo</title>
+
+    <!-- Basic Jayrock -->
     <script type="text/javascript" src="js/json.js"></script>
     <script type="text/javascript" src="helloworld.ashx?proxy"></script>
     <script type="text/javascript">
-/* <![CDATA[ */
+        window.onload = function()
+        {       
+            var s = new HelloWorld();
+            alert("sync:" + s.greetings());
+            s.greetings(function(response) {
+                alert("async:" + response.result)
+            });
+        }
+    </script>
+    <!-- Basic Dojo -->
+    <script language="javascript" src="js/dojo/dojo.js"></script>
+    <script language="javascript">
+        dojo.require("dojo.event.*");
+	    dojo.require("dojo.widget.*");
+	    dojo.require("dojo.widget.Button");
 
-window.onload = function()
-{
-    var s = new HelloWorld();
+        function helloPressed()
+        {
+            alert('You pressed the button');
+        }
 
-    alert("sync:" + s.greetings());
-
-    s.greetings(function(response) {
-      alert("async:" + response.result)
-    });
-}
-
-/* ]]> */
+        function helloInit()
+        {
+            var helloButton = dojo.widget.byId('helloButton');
+            dojo.event.connect(helloButton, 'onClick', 'helloPressed')
+            
+        }        
+        dojo.addOnLoad(helloInit);        
     </script>
 </head>
 <body>
-    <p>This page tests the HelloWorld service with Jayrock.</p>
+    <p>This page combines the Jayrock and Dojo Hello World examples.</p>
+    
+    <p><button id="helloButton" class="dojo-Button">Hello World!</button></p>
+    
 </body>
+</html>
+

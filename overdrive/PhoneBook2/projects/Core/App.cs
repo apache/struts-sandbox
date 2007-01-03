@@ -30,6 +30,12 @@ namespace PhoneBook.Core
         #region Properties
 
         /// <summary>
+        /// Token for Catalog property.
+        /// </summary>
+        /// 
+        public const string CATALOG_KEY = "Catalog";
+
+        /// <summary>
         /// Token for entry_key property.
         /// </summary>
         /// 
