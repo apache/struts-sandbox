@@ -14,12 +14,14 @@
                     dojo.require("dojo.json");
             		dojo.require("dojo.widget.FilteringTable");
             		dojo.hostenv.writeIncludes();
-
-                    function dojoChannel(call)
+            		
+            		/* call server */
+            		
+                    function server(call)
                     {
                         var bindArgs = {
                             url: call.url+'?rpc',
-                            error: function(type, data, evt){alert("error");},
+                            error: function(type, data, evt){alert("Error Communicating with Server: " + data);},
                             method: "POST",
                             mimetype: "text/json",
                             handle: call.callback,
@@ -30,64 +32,68 @@
                         return req;
                     }
 
-                    function last_name_list_element(type, data, evt)
-                    {
-                        var arr = data.result;
-                        var last_name_list = dojo.byId('last_name_list');
-                        var select = document.createElement('select');
-                        for(var i=0; i < arr.length; i++)
-                        {
-                            select.options[i] = new Option(arr[i], arr[i]);
-                        }
-                        var label = document.createElement('label');
-                        label.value = "Last Name: ";
-                        last_name_list.appendChild(label);
-                        last_name_list.appendChild(select);
-                    }
-
-                    function last_name_list()
-                    {                    
-                        PhoneBook.rpc.last_name_list(last_name_list_element).call(dojoChannel);
-                    }
-
-                    dojo.event.connect(window, "onload", last_name_list);                        
-
-                    function entry_list_element(type, data, evt)
+                    /* lister */
+                    
+                    function entry_list_result(type, data, evt)
                     {
                     	var w = dojo.widget.byId("entry_list");
                         w.store.setData(data.result);
-                    }
-                    
+                    }                    
                     function entry_list()
                     {                    
-                        PhoneBook.rpc.entry_list(entry_list_element).call(dojoChannel);
+                        PhoneBook.rpc.entry_list(entry_list_result).call(server);
                     }
-
-                    dojo.event.connect(window, "onload", entry_list);
-
-		            function showSelected() {
-			            var w=dojo.widget.byId("entry_list");
-			            if (w) {
-			                var s=w.getValue();
-				            if (s.length>0) alert(s);
-				            else alert("No rows are selected.");
-			            }
+                    dojo.addOnLoad(entry_list);
+                    
+                    function entry_list_select_result(evt) {                   
+                        var table = dojo.widget.byId("entry_list");
+                        var row = table.getSelectedData();
+                        var user_name = row.user_name; 
+                        var entry_key = row.entry_key;
+                        alert(user_name + " (" + entry_key + ") is selected.");
+                    }                   
+                    function entry_list_select() {
+                        dojo.event.connect(dojo.byId("entry_list"), "onSelect",	entry_list_select_result);
+                    }
+                    dojo.addOnLoad(entry_list_select);
+                    
+                    /* lister filters */
+                    
+    		        function dateFilter(hired) {
+			            return (hired == '5/29/1987' || hired == '11/18/1984');
 		            }
-
-    		        function dateFilter(dt) {
-			            return (dt == '5/29/1987' || dt == '11/18/1984');
-		            }
-		            function applyDate(key){
-			            dojo.widget.byId(key).setFilter("hired", dateFilter);
+		            function applyDate(id){
+			            dojo.widget.byId(id).setFilter("hired", dateFilter);
 		            }
 				
-		            function nameFilter(name){
-			            return (name.charAt(0) >= 'M' && name.charAt(0) <= 'Z');
+		            function nameFilter(last_name){
+			            return (last_name.charAt(0) >= 'M' && last_name.charAt(0) <= 'Z');
 		            }
-		            function applyName(key){
-			            dojo.widget.byId(key).setFilter("last_name", nameFilter);
+		            function applyName(id){
+			            dojo.widget.byId(id).setFilter("last_name", nameFilter);
 	            	}
 		
+		            function clearFilters(id){
+			            dojo.widget.byId(id).clearFilters();
+		            }		            
+		            function reloadData(id){
+			            dojo.widget.byId(id).store.clearData();
+			            entry_list();
+			        }
+			        			        
+                    /* editor */
+                    
+                    function entry_save_result(type, data, evt)
+                    {
+                    	alert ( "Added: " + data.result.user_name + " (" + data.result.entry_key + ")" );
+                    }    
+                    function entry_save()
+                    {                    
+                    	var w = dojo.widget.byId("entry_form");         
+                    	var values = w.getValues();           	
+                        PhoneBook.rpc.entry_save(values,entry_save_result).call(server);
+                    }
+
                 </script>
                 
 	            <style type="text/css">
@@ -151,13 +157,36 @@
 		        }
     	</style>                            
     </head>
-    <body>
-    
-        <div id="last_name_list"></div>
+    <body>   
         
+        <div id="editor">
+        <form id="entry_form" dojoType="Form">
+            <table><tr>
+                    <td>First Name</td><td><input name="first_name" /></td>
+                </tr><tr>
+                    <td>Last Name</td><td><input name="last_name" /></td>
+                </tr><tr>
+                    <td>Extension</td><td><input name="extension" /></td>
+                </tr><tr>
+                    <td>User Name</td><td><input name="user_name" /></td>
+                </tr><tr>
+                    <td>Hired</td><td><input type="text" name="hired" dojoType="dropdowndatepicker" displayFormat="dd/MM/yyyy" /></td>
+                </tr><tr>
+                    <td>Hours</td><td><input name="hours" /></td>
+                </tr><tr>
+                    <td rowspan="2"><input type="button" onClick="entry_save();" value="SAVE" />
+                    <input type="hidden" name="editor" value="1" />
+                    <input type="hidden" name="entry_key" />
+                </td>
+            </tr></table>
+        </form>
+        </div>
+        
+        <div id="lister">
 	    <table id="entry_list" 
 	            cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;"
-	            dojoType="filteringTable" alternateRows="true" valueField="user_name" >
+                dojoType="filteringTable" alternateRows="true" valueField="user_name" 
+                >
 	        <thead>
 		    <tr>
 			    <th field="last_name" sort="asc">Last Name</th>
@@ -170,9 +199,13 @@
 	        </thead>
 	    </table>
 	    <p>
-       	<input type="button" onclick="showSelected();" value="Show the selected object" />
 		<input type="button" onclick="applyDate('entry_list');" value="Show only hires between 1/1/1984 and 1/1/1987" /> 
 		<input type="button" onclick="applyName('entry_list');" value="Show only names between M and Z" /> 
+		<input type="button" value="Show All Entries" onclick="clearFilters('entry_list');" />
+		<input type="button" value="Reload Data" onclick="reloadData('entry_list');" />
+		<input type="button" value="Select Row" onclick="entry_list_select_result('entry_list');" />
        	</p>
+       	</div> 
+       	
     </body>
 </html> 

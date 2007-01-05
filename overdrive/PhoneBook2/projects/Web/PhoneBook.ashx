@@ -55,6 +55,29 @@ namespace JayrockWeb
             // if helper.IsNominal ... 
             AppEntryList list = helper.Outcome as AppEntryList;
             return list.ToAppEntryArray();
-        }        
+        }
+
+        [JsonRpcMethod(App.ENTRY, Idempotent = true)]
+        [JsonRpcHelp("Returns an entry by key.")]
+        public AppEntry entry(string key)
+        {
+            IViewHelper helper = GetCatalog().GetHelperFor(App.ENTRY);
+            helper.Criteria[App.ENTRY_KEY] = key;
+            helper.Execute();
+            // if helper.IsNominal ... 
+            return helper.Outcome[0] as AppEntry;
+        }
+
+        [JsonRpcMethod(App.ENTRY_SAVE, Idempotent = true)]
+        [JsonRpcHelp("Saves the entry, insert or updating as appropriate.")]
+        public IDictionary entry_save(IDictionary input)
+        {
+            IViewHelper helper = GetCatalog().GetHelperFor(App.ENTRY_SAVE);
+            helper.Read(input,true);
+            helper.Execute();
+            // if helper.IsNominal ... 
+            return helper.Outcome[0] as IDictionary;
+        }
+            
     }
 }
