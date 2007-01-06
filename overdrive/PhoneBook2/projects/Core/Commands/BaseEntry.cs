@@ -29,13 +29,18 @@ namespace PhoneBook.Core.Commands
 		public override bool RequestExecute(IRequestContext context)
 		{
 			object o = Mapper.QueryForObject(QueryID, context);
-			context[ID] = o;
-			IDictionary entry = o as IDictionary;
-			foreach (DictionaryEntry e in entry)
-			{
-				context[e.Key] = e.Value;
-			}
-			return CONTINUE;
+            IDictionary result = o as IDictionary;
+
+		    ICollection keys = result.Keys;
+            foreach (string key in keys)
+            {
+                context[key] = result[key];
+            }
+
+		    AppEntry entry = new AppEntry(result);
+            context[ID] = entry;
+		    
+		    return CONTINUE;
 		}
 	}
 }

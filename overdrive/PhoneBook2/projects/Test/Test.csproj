@@ -73,6 +73,7 @@
     <Compile Include="BaseTest.cs" />
     <Compile Include="Commands\DirectoryViewTest.cs" />
     <Compile Include="Commands\FilterLists.cs" />
+    <Compile Include="Commands\FormatEntry.cs" />
     <Compile Include="Commands\SelectAllTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

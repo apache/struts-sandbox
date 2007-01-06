@@ -43,7 +43,7 @@ namespace PhoneBook.Core
 
 			string mark = "-";
 			if (output == null) return false;
-			string buffer = null;
+			string buffer;
 
 			if (output.Length == 10)
 			{
