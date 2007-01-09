@@ -91,11 +91,6 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "NUnitAsp"
-                    AssemblyName = "NUnitAsp"
-                    HintPath = "..\..\local-cache\NUnitAsp\NUnitAsp.dll"
-                />
-                <Reference
                     Name = "Nexus.Core"
                     AssemblyName = "Nexus.Core"
                     HintPath = "..\..\local-cache\Nexus\Nexus.Core.dll"
@@ -167,11 +162,6 @@
                 />
                 <File
                     RelPath = "Commands\SelectAllTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Forms\DirectoryTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

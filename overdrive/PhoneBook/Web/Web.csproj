@@ -125,14 +125,9 @@
                     HintPath = "..\..\local-cache\Nexus\Nexus.Extras.dll"
                 />
                 <Reference
-                    Name = "Jayrock.Json"
-                    AssemblyName = "Jayrock.Json"
-                    HintPath = "..\..\local-cache\jayrock\Jayrock.Json.dll"
-                />
-                <Reference
-                    Name = "Jayrock"
-                    AssemblyName = "Jayrock"
-                    HintPath = "..\..\local-cache\jayrock\Jayrock.dll"
+                    Name = "MySql.Data"
+                    AssemblyName = "MySql.Data"
+                    HintPath = "..\..\local-cache\iBatisNet\MySql.Data.dll"
                 />
             </References>
         </Build>
@@ -164,15 +159,11 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "HelloWorld.ashx"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "HelloWorld.html"
+                    RelPath = "Objects.xml"
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "Objects-web.xml"
+                    RelPath = "Objects-Web.xml"
                     BuildAction = "Content"
                 />
                 <File

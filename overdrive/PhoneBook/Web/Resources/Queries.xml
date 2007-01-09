@@ -175,6 +175,10 @@
 			WHERE 
 				pk_entry=?
 		</update>
-						
-	</statements>
+
+    <delete id="entry_delete" paramClass="Hashtable">
+       DELETE FROM entry WHERE pk_entry=#entry_key#;        
+    </delete>
+
+  </statements>
 </sqlMap>
