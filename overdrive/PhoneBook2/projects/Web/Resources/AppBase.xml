@@ -15,9 +15,11 @@
 	
 	<object id="BaseCount" type="PhoneBook.Core.Commands.BaseCount, PhoneBook.Core" parent="BaseMapper"/>
 
-	<object id="BaseEntry" type="PhoneBook.Core.Commands.BaseEntry, PhoneBook.Core" parent="BaseMapper"/>
-	
-	<object id="BaseFilterList" type="PhoneBook.Core.Commands.BaseFilterList, PhoneBook.Core" parent="BaseMapper"/>
+  <object id="BaseDelete" type="PhoneBook.Core.Commands.BaseDelete, PhoneBook.Core" parent="BaseMapper"/>
+
+  <object id="BaseEntry" type="PhoneBook.Core.Commands.BaseEntry, PhoneBook.Core" parent="BaseMapper"/>
+
+  <object id="BaseFilterList" type="PhoneBook.Core.Commands.BaseFilterList, PhoneBook.Core" parent="BaseMapper"/>
 	
 	<object id="BaseFieldContext" type="Nexus.Extras.Spring.FieldContext">
 		<property name="MessageSource">

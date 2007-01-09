@@ -80,6 +80,19 @@ namespace JayrockWeb
             AppEntry entry = new AppEntry(helper.Criteria);
             return entry;
         }
-            
+
+        [JsonRpcMethod(App.ENTRY_DELETE, Idempotent = true)]
+        [JsonRpcHelp("Deletes an entry by key.")]
+        public AppEntry entry_delete(string key)
+        {
+            IViewHelper helper = GetCatalog().GetHelperFor(App.ENTRY_DELETE);
+            helper.Criteria[App.ENTRY_KEY] = key;
+            helper.Execute();
+            // if helper.IsNominal ... 
+            AppEntry entry = new AppEntry(helper.Criteria);
+            return entry;
+        }
+
+    
     }
 }

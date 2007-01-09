@@ -88,7 +88,7 @@
 		<property name="ID"><value>EntryCountProcessor</value></property>
 	</object>
 	
- 		<!-- "d" is .NET for "short date" --> 
+ 		<!-- "d" is .NET for "shor date" --> 
 	<object id="DateTimeProcessor" type="Nexus.Core.Validators.DateTimeProcessor">
 		<property name="ID"><value>DateTimeProcessor</value></property>
 		<property name="DataFormat"><value>d</value></property>

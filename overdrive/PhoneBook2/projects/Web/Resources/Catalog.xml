@@ -65,9 +65,19 @@
 			</list>
 		</property>
   </object>
-  
-	
-	<!-- filter list commands -->
+
+  <object id="entry_delete" parent="BaseDelete">
+    <property name="ID">
+      <value>entry_delete</value>
+    </property>
+    <property name="RequiredIDs">
+      <list>
+        <value>entry_key</value>
+      </list>
+    </property>
+  </object>
+
+  <!-- filter list commands -->
 		
   <object id="last_name_list" parent="BaseFilterList">
 	<property name="ID"><value>last_name_list</value></property>

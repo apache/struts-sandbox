@@ -175,6 +175,12 @@ namespace PhoneBook.Core
         /// 
         public const string ENTRY_SAVE = "entry_save";
 
+        /// <summary>
+        /// Token for Entry Delete command.
+        /// </summary>
+        /// 
+        public const string ENTRY_DELETE = "entry_delete";
+
         #endregion
 
         #region Messages

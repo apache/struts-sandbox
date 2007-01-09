@@ -72,6 +72,7 @@
     <Compile Include="Commands\AppCommand.cs" />
     <Compile Include="Commands\BaseCommand.cs" />
     <Compile Include="Commands\BaseCount.cs" />
+    <Compile Include="Commands\BaseDelete.cs" />
     <Compile Include="Commands\BaseEntry.cs" />
     <Compile Include="Commands\BaseFilterList.cs" />
     <Compile Include="Commands\BaseList.cs" />

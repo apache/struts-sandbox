@@ -45,12 +45,17 @@
                     }
                     dojo.addOnLoad(entry_list);
                     
-                    function entry_list_select_result(evt) {                   
+                    function entry_list_select_edit(evt) {                   
                         var table = dojo.widget.byId("entry_list");
                         entry_edit(table.getSelectedData().entry_key);
                     }                   
+                    function entry_list_select_delete(evt) {                   
+                        var table = dojo.widget.byId("entry_list");
+                        entry_delete(table.getSelectedData().entry_key);
+                    }                   
+
                     function entry_list_select() {
-                        dojo.event.connect(dojo.byId("entry_list"), "onSelect",	entry_list_select_result);
+                        dojo.event.connect(dojo.byId("entry_list"), "onSelect",	entry_list_select_edit);
                     }
                     dojo.addOnLoad(entry_list_select);
                     
@@ -79,27 +84,85 @@
 			        }
 			        			        
                     /* editor */
-                    
+
+                    function setHired(hired) {                    
+                        var dpHired = dojo.widget.byId("dpHired");
+                    	dpHired.setDate(hired);
+                    }
+
                     function entry_edit_result(type, data, evt) 
                     {
                     	var w = dojo.widget.byId("entry_form");         
-                    	w.setValues(data.result);     
-                    	      	                        
+                    	w.setValues(data.result);   
+                    	var part = new Array();
+                    	part = data.result.hired.split('/',3); // mm/dd/yyyy
+                    	var yyyy = part[2];
+                    	var mm = part[0];
+                    	var dd = part[1];
+                    	if (mm.length==1) mm = new String().concat('0',mm);
+                    	if (dd.length==1) dd = new String().concat('0',dd);
+                    	var hired = new String().concat( yyyy,'-',mm,'-',dd );
+                    	setHired(hired); 
                     }
                     function entry_edit(entry_key) 
                     {
                         PhoneBook.rpc.entry(entry_key,entry_edit_result).call(server);
                     }
 
-                    function entry_save_result(type, data, evt)
+                    function entry_save_result() {
+                    	reloadData('entry_list');
+                    	entry_reset();
+                    }                    
+                    function entry_save_update_result(type, data, evt)
+                    {
+                    	alert ( "Edited: " + data.result.user_name + " (" + data.result.entry_key + ")" );
+                    	entry_save_result();
+                    }    
+                    function entry_save_insert_result(type, data, evt)
                     {
                     	alert ( "Added: " + data.result.user_name + " (" + data.result.entry_key + ")" );
+                    	entry_save_result();
                     }    
                     function entry_save()
                     {                    
                     	var w = dojo.widget.byId("entry_form");         
-                    	var values = w.getValues();           	
-                        PhoneBook.rpc.entry_save(values,entry_save_result).call(server);
+                    	var values = w.getValues();        
+                    	if (values.entry_key)   	
+                            PhoneBook.rpc.entry_save(values,entry_save_update_result).call(server);
+                        else                             
+                            PhoneBook.rpc.entry_save(values,entry_save_insert_result).call(server);
+                    }                    
+                    
+                    function entry_reset() {
+                        var w = dojo.widget.byId("entry_form");
+                        var values = w.getValues(); 
+                        values.first_name = "";
+                        values.last_name = "";
+                        values.extension = "";
+                        values.user_name = "";
+                        values.hours = "37.5";
+                        values.entry_key = "";
+                        w.setValues(values);
+                        var today = new Date();
+                        setHired(today);
+                    }                    
+                    
+                    function entry_add() 
+                    {
+                        entry_reset();
+                    }
+
+                    function entry_delete_result(type, data, evt)
+                    {
+                    	alert ( "Deleted: (" + data.result.entry_key + ")" );
+                    	entry_save_result();
+                    }    
+                    function entry_delete(entry_key) 
+                    {
+                    	if (entry_key) {   
+                            confirm ( "Delete entry?" );
+                            PhoneBook.rpc.entry_delete(entry_key,entry_delete_result).call(server);
+                        }
                     }
 
                 </script>
@@ -170,10 +233,16 @@
         <div id="finder" />
         
         <div id="lister">
+        
+        <table id="filter_menu"><tr><td>
+       	    <input type="button" onclick="applyDate('entry_list');" value="Show only hires between 1/1/1984 and 1/1/1987" /> 
+            <input type="button" onclick="applyName('entry_list');" value="Show only names between M and Z" /> 
+            <input type="button" value="Show All Entries" onclick="clearFilters('entry_list');" />
+   		    <input type="button" value="Reload Entries" onclick="reloadData('entry_list');" />        
+        </td></tr></table>
+        
 	    <table id="entry_list" 
-	            cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;"
-                dojoType="filteringTable" alternateRows="true" valueField="user_name" 
-                >
+            dojoType="filteringTable" alternateRows="true" valueField="user_name" >
 	        <thead>
 		    <tr>
 			    <th field="last_name" sort="asc">Last Name</th>
@@ -185,18 +254,19 @@
 		    </tr>
 	        </thead>
 	    </table>
-	    <p>
-		<input type="button" onclick="applyDate('entry_list');" value="Show only hires between 1/1/1984 and 1/1/1987" /> 
-		<input type="button" onclick="applyName('entry_list');" value="Show only names between M and Z" /> 
-		<input type="button" value="Show All Entries" onclick="clearFilters('entry_list');" />
-		<input type="button" value="Reload Data" onclick="reloadData('entry_list');" />
-		<input type="button" value="Edit Row" onclick="entry_list_select_result('entry_list');" />
-       	</p>
+        
+        <table id="edit_menu"><tr><td>
+            <input type="button" value="Edit Entry" onclick="entry_list_select_edit('entry_list');" />
+            <input type="button" value="Add Entry" onclick="entry_add('entry_list');" />
+            <input type="button" value="Delete Entry" onclick="entry_list_select_delete('entry_list');" />
+        </td></tr></table>
+        
        	</div> 
        	
        	<div id="viewer" />
        	
         <div id="editor">
+        
         <form id="entry_form" dojoType="Form">
             <table><tr>
                     <td>First Name</td><td><input name="first_name" /></td>
@@ -207,7 +277,7 @@
                 </tr><tr>
                     <td>User Name</td><td><input name="user_name" /></td>
                 </tr><tr>
-                    <td>Hired</td><td><input name="hired" dojoType="dropdowndatepicker" displayFormat="dd/MM/yyyy" /></td>
+                    <td>Hired</td><td><input name="hired" widgetid="dpHired" dojoType="dropdowndatepicker" displayFormat="MM/dd/yyyy" /></td>
                 </tr><tr>
                     <td>Hours</td><td><input name="hours" /></td>
                 </tr><tr>

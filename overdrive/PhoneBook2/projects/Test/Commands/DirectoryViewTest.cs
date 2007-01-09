@@ -19,7 +19,7 @@ namespace PhoneBook.Core.Commands
 		public void ContainsFilters()
 		{
 			IRequestContext context = catalog.ExecuteRequest(App.ENTRY_FIND);
-			this.AssertNominal(context);
+			AssertNominal(context);
 			string[] FILTERS = {App.LAST_NAME_LIST, App.FIRST_NAME_LIST, App.EXTENSION_LIST, App.USER_NAME_LIST, App.HIRED_LIST, App.HOURS_LIST};
 			foreach (string filter in FILTERS)
 			{
