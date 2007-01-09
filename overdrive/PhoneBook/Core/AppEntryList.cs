@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Nexus.Core;
 
@@ -13,7 +14,7 @@ namespace PhoneBook.Core
 		{
 			AppEntry entry = new AppEntry();
 			entry.entry_key = key;
-			this.Insert(0, entry);
+			Insert(0, entry);
 			return entry;
 		}
 
@@ -21,8 +22,17 @@ namespace PhoneBook.Core
 		{
 			AppEntry entry = new AppEntry();
 			foreach (DictionaryEntry col in row)
-				entry.Add(col.Key.ToString(), col.Value.ToString());
+			{
+				string key = Convert.ToString(col.Key);
+				string value = Convert.ToString(col.Value);
+				entry.Add(key, value);
+			}
 			Add(entry);
+		}
+        
+		public AppEntry[] ToAppEntryArray()
+		{
+			return (AppEntry[])ToArray(typeof(AppEntry));
 		}
 	}
 }

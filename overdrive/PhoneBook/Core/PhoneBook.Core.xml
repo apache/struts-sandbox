@@ -169,6 +169,13 @@
             Invoke a query that returns the count of a result set.
             </summary>
         </member>
+        <member name="T:PhoneBook.Core.Commands.BaseDelete">
+            <summary>
+            Execute delete statement indicated by QueryID 
+            for a single entity.
+            </summary>
+            
+        </member>
         <member name="T:PhoneBook.Core.Commands.BaseEntry">
             <summary>
             Execute database statement indicated by QueryID 
@@ -308,6 +315,12 @@
             </summary>
             
         </member>
+        <member name="F:PhoneBook.Core.App.CATALOG_KEY">
+            <summary>
+            Token for Catalog property.
+            </summary>
+            
+        </member>
         <member name="F:PhoneBook.Core.App.ENTRY_KEY">
             <summary>
             Token for entry_key property.
@@ -440,6 +453,12 @@
             </summary>
             
         </member>
+        <member name="F:PhoneBook.Core.App.ENTRY_DELETE">
+            <summary>
+            Token for Entry Delete command.
+            </summary>
+            
+        </member>
         <member name="F:PhoneBook.Core.App.DIRECTORY_TITLE">
             <summary>
             Token for Directory page title.
@@ -461,13 +480,7 @@
             </summary>
             
         </member>
-        <member name="F:PhoneBook.Core.AppEntry._Value">
-            <summary>
-            Internal storage.
-            </summary>
-            
-        </member>
-        <member name="M:PhoneBook.Core.AppEntry.AddAll(System.Collections.IDictionary)">
+        <member name="M:PhoneBook.Core.AppEntry.AddAll(PhoneBook.Core.AppEntry)">
             <summary>
             Add each source entry to our internal store. 
             </summary>
@@ -475,40 +488,8 @@
             Entries with keys that match the property names will be exposed. 
             Other entries may be added, but can only be retrieved via Get.
             </p></remarks>
-            <param name="sources">Entries to add</param>
+            <param name="row">Entries to add</param>
             
-        </member>
-        <member name="M:PhoneBook.Core.AppEntry.Add(System.String,System.String)">
-            <summary>
-            Add a single entry to our internal store.
-            </summary>
-            <remarks><p>
-            Entries with keys that match the property names will be exposed. 
-            Other entries may be added, but can only be retrieved via Get.
-            </p></remarks>
-            <param name="key">ID for entry</param>
-            <param name="value">Content for entry</param>
-            
-        </member>
-        <member name="M:PhoneBook.Core.AppEntry.Get(System.String)">
-            <summary>
-            Provide the value corresponding to key from the internal store.
-            </summary>
-            <param name="key">ID for entry</param>
-            <returns>Content for entry</returns>
-            
-        </member>
-        <member name="M:PhoneBook.Core.AppEntry.Set(System.String,System.String)">
-            <summary>
-            Set an entry to the internal store, overwriting any existing entry.
-            </summary>
-            <remarks><p>
-            This is a protected method used by the Properties. 
-            Use an existing Property to set values, 
-            or extend the class to include other Properties. 
-            </p></remarks>
-            <param name="key"></param>
-            <param name="value"></param>
         </member>
         <member name="T:PhoneBook.Core.AppEntryList">
             <summary>

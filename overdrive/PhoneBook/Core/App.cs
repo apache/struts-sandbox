@@ -1,18 +1,18 @@
- /*
- * Copyright 2005 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+/*
+* Copyright 2005 The Apache Software Foundation.
+* 
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+* 
+*      http://www.apache.org/licenses/LICENSE-2.0
+* 
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
 
 namespace PhoneBook.Core
 {
@@ -28,6 +28,12 @@ namespace PhoneBook.Core
 		}
 
 		#region Properties
+
+		/// <summary>
+		/// Token for Catalog property.
+		/// </summary>
+		/// 
+		public const string CATALOG_KEY = "Catalog";
 
 		/// <summary>
 		/// Token for entry_key property.
@@ -77,12 +83,12 @@ namespace PhoneBook.Core
 		/// 
 		public const string EDITOR = "editor";
 
-		#endregion 
+		#endregion
 
 		#region Commands
 
 		public const string FROM_DATE = "from_date";
-		
+
 		public const string THRU_DATE = "thru_date";
 
 		/// <summary>
@@ -169,6 +175,12 @@ namespace PhoneBook.Core
 		/// 
 		public const string ENTRY_SAVE = "entry_save";
 
+		/// <summary>
+		/// Token for Entry Delete command.
+		/// </summary>
+		/// 
+		public const string ENTRY_DELETE = "entry_delete";
+
 		#endregion
 
 		#region Messages
@@ -188,6 +200,6 @@ namespace PhoneBook.Core
 		/// </summary>
 		public const string DIRECTORY_PROMPT = "directory_prompt";
 
-		#endregion 
+		#endregion
 	}
 }
