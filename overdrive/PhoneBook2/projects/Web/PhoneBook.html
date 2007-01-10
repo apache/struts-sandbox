@@ -1,21 +1,21 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
         <head>
                 <title>PhoneBook</title>
-                <meta name="GENERATOR" content="Microsoft Visual Studio .NET 7.1">
-                <meta name=ProgId content=VisualStudio.HTML>
-                <meta name=Originator content="Microsoft Visual Studio .NET 7.1">
-                <script language="javascript" src="PhoneBook.ashx?proxy&v=2"></script>                
-                <script language="javascript" src="js/dojo/dojo.js"></script>
-                <script language="javascript">
+                <script type="text/javascript" src="PhoneBook.ashx?proxy&v=2"></script>                
+                <script type="text/javascript" src="js/dojo/dojo.js"></script>
+                <script type="text/javascript">
+                	dojo.require("dojo.widget.TabContainer");                
+	                dojo.require("dojo.widget.ContentPane");
+	                dojo.require("dojo.widget.LayoutContainer");
                     dojo.require("dojo.io.*");
                     dojo.require("dojo.event.*");
                     dojo.require("dojo.html.*");
                     dojo.require("dojo.json");
             		dojo.require("dojo.widget.FilteringTable");
             		dojo.hostenv.writeIncludes();
-            		
-            		/* call server */
+
+                    /* call server */
             		
                     function server(call)
                     {
@@ -31,31 +31,46 @@
                         dojo.event
                         return req;
                     }
+                                		
+            		var container_id = "container";
 
-                    /* lister */
+                    function view_select(id) {
+                        var w = dojo.widget.byId(container_id);  
+           	            w.selectChild(id);                    	
+                    }
                     
+                    /* lister */
+                                        
+            		var lister_id = "lister";
+            		var entry_list_id = "entry_list";
+            		
+                    function lister_select() {
+                        view_select(lister_id); 
+                    }            		
+            		
+            		function entry_list() {
+            		    return dojo.widget.byId(entry_list_id);
+            		}
+            		
                     function entry_list_result(type, data, evt)
                     {
-                    	var w = dojo.widget.byId("entry_list");
-                        w.store.setData(data.result);
+                        entry_list().store.setData(data.result);
                     }                    
-                    function entry_list()
+                    function entry_list_load()
                     {                    
                         PhoneBook.rpc.entry_list(entry_list_result).call(server);
                     }
-                    dojo.addOnLoad(entry_list);
+                    dojo.addOnLoad(entry_list_load);
                     
                     function entry_list_select_edit(evt) {                   
-                        var table = dojo.widget.byId("entry_list");
-                        entry_edit(table.getSelectedData().entry_key);
+                        entry_edit(entry_list().getSelectedData().entry_key);
                     }                   
                     function entry_list_select_delete(evt) {                   
-                        var table = dojo.widget.byId("entry_list");
-                        entry_delete(table.getSelectedData().entry_key);
+                        entry_delete(entry_list().getSelectedData().entry_key);
                     }                   
 
                     function entry_list_select() {
-                        dojo.event.connect(dojo.byId("entry_list"), "onSelect",	entry_list_select_edit);
+                        dojo.event.connect(entry_list(), "onSelect", entry_list_select_edit);
                     }
                     dojo.addOnLoad(entry_list_select);
                     
@@ -80,20 +95,33 @@
 		            }		            
 		            function reloadData(id){
 			            dojo.widget.byId(id).store.clearData();
-			            entry_list();
+			            entry_list_load();
 			        }
 			        			        
                     /* editor */
 
+            		var editor_id = "editor";
+
+                    function editor_select() {
+                        view_select(editor_id); 
+                    }
+
+            		var entry_form_id = "entry_form";
+
+            		function entry_form() {
+            		    return dojo.widget.byId(entry_form_id);
+            	    }
+            		
+            		var dpHired_id = "dpHired";
+            		            		
                     function setHired(hired) {                    
-                        var dpHired = dojo.widget.byId("dpHired");
+                        var dpHired = dojo.widget.byId(dpHired_id);
                     	dpHired.setDate(hired);
                     }
 
                     function entry_edit_result(type, data, evt) 
                     {
-                    	var w = dojo.widget.byId("entry_form");         
-                    	w.setValues(data.result);   
+                    	entry_form().setValues(data.result);   
                     	var part = new Array();
                     	part = data.result.hired.split('/',3); // mm/dd/yyyy
                     	var yyyy = part[2];
@@ -103,6 +131,8 @@
                     	if (dd.length==1) dd = new String().concat('0',dd);
                     	var hired = new String().concat( yyyy,'-',mm,'-',dd );
                     	setHired(hired); 
+                    	
+                    	editor_select();
                     }
                     function entry_edit(entry_key) 
                     {
@@ -110,8 +140,10 @@
                     }
 
                     function entry_save_result() {
-                    	reloadData('entry_list');
+                    	reloadData(entry_list_id);
                     	entry_reset();
+                    	lister_select();
+                    	
                     }                    
                     function entry_save_update_result(type, data, evt)
                     {
@@ -125,24 +157,27 @@
                     }    
                     function entry_save()
                     {                    
-                    	var w = dojo.widget.byId("entry_form");         
-                    	var values = w.getValues();        
+                    	var values = entry_form().getValues();        
                     	if (values.entry_key)   	
                             PhoneBook.rpc.entry_save(values,entry_save_update_result).call(server);
                         else                             
                             PhoneBook.rpc.entry_save(values,entry_save_insert_result).call(server);
-                    }                    
+                    }     
+                    
+                    function entry_quit() {
+                    	entry_reset();
+                    	lister_select();
+                    }               
                     
                     function entry_reset() {
-                        var w = dojo.widget.byId("entry_form");
-                        var values = w.getValues(); 
+                        var values = entry_form().getValues(); 
                         values.first_name = "";
                         values.last_name = "";
                         values.extension = "";
                         values.user_name = "";
                         values.hours = "37.5";
                         values.entry_key = "";
-                        w.setValues(values);
+                        entry_form().setValues(values);
                         var today = new Date();
                         setHired(today);
                     }                    
@@ -150,6 +185,7 @@
                     function entry_add() 
                     {
                         entry_reset();
+                        editor_select();
                     }
 
                     function entry_delete_result(type, data, evt)
@@ -160,12 +196,23 @@
                     function entry_delete(entry_key) 
                     {
                     	if (entry_key) {   
-                            confirm ( "Delete entry?" );
-                            PhoneBook.rpc.entry_delete(entry_key,entry_delete_result).call(server);
+                            var ok = confirm ( "Delete entry?" );
+                            if (ok) 
+                                PhoneBook.rpc.entry_delete(entry_key,entry_delete_result).call(server);
                         }
                     }
 
                 </script>
+                
+                <style type="text/css">
+                body {
+	                font-family : sans-serif;
+                }
+                .dojoTabPaneWrapper {
+                    padding : 10px 10px 10px 10px;
+                }
+
+                </style>
                 
 	            <style type="text/css">
 		        /***
@@ -230,10 +277,9 @@
     </head>
     <body>   
     
-        <div id="finder" />
-        
-        <div id="lister">
-        
+        <div id="container" dojoType="TabContainer" style="width:100%; height:70%;" selectedChild="lister">
+
+        <div id="lister" dojoType="ContentPane" label="PhoneBook Directory" >
         <table id="filter_menu"><tr><td>
        	    <input type="button" onclick="applyDate('entry_list');" value="Show only hires between 1/1/1984 and 1/1/1987" /> 
             <input type="button" onclick="applyName('entry_list');" value="Show only names between M and Z" /> 
@@ -256,16 +302,12 @@
 	    </table>
         
         <table id="edit_menu"><tr><td>
-            <input type="button" value="Edit Entry" onclick="entry_list_select_edit('entry_list');" />
             <input type="button" value="Add Entry" onclick="entry_add('entry_list');" />
-            <input type="button" value="Delete Entry" onclick="entry_list_select_delete('entry_list');" />
         </td></tr></table>
         
        	</div> 
        	
-       	<div id="viewer" />
-       	
-        <div id="editor">
+        <div id="editor" dojoType="ContentPane" label="Entry Editor">
         
         <form id="entry_form" dojoType="Form">
             <table><tr>
@@ -281,12 +323,16 @@
                 </tr><tr>
                     <td>Hours</td><td><input name="hours" /></td>
                 </tr><tr>
-                    <td rowspan="2"><input type="button" onClick="entry_save();" value="SAVE" />
+                    <td rowspan="2">
+                    <input type="button" value="SAVE" onClick="entry_save();" />
+                    <input type="button" value="CANCEL" onClick="entry_quit();" />
+                    <input type="button" value="DELETE" onclick="entry_list_select_delete('entry_list');" />
                     <input type="hidden" name="editor" value="1" />
                     <input type="hidden" name="entry_key" />
                 </td>
             </tr></table>
         </form>
+        </div>
         </div>
         
     </body>

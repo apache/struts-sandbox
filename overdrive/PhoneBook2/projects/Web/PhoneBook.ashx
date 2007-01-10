@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections;
+using System.Configuration;
 using Agility.Extras.Spring;
 using Jayrock.JsonRpc;
 using Jayrock.JsonRpc.Web;
@@ -23,6 +24,8 @@ namespace JayrockWeb
             {
                 IApplicationContext factory = Objects.Factory();
                 catalog = factory.GetObject(App.CATALOG_KEY) as IRequestCatalog;
+                if (catalog == null) 
+                    throw new ConfigurationErrorsException("PhoneBook: GetCatalog()==null");
             }
             return catalog;
         }
@@ -38,6 +41,8 @@ namespace JayrockWeb
         {            
             RequestContext context = Execute(App.LAST_NAME_LIST);
             KeyValueList list = context.Outcome as KeyValueList;
+            if (list == null) return null; // FIXME: Better error handling
+            
             ArrayList names = new ArrayList(list.Count);
             foreach (KeyValue k in list)
             {
@@ -52,7 +57,7 @@ namespace JayrockWeb
         {
             IViewHelper helper = GetCatalog().GetHelperFor(App.ENTRY_LIST);
             helper.Execute();
-            // if helper.IsNominal ... 
+            // if helper.IsNominal ... // FIXME: Better error handling
             AppEntryList list = helper.Outcome as AppEntryList;
             return list;
         }
@@ -64,7 +69,7 @@ namespace JayrockWeb
             IViewHelper helper = GetCatalog().GetHelperFor(App.ENTRY);
             helper.Criteria[App.ENTRY_KEY] = key;
             helper.Execute();
-            // if helper.IsNominal ... 
+            // if helper.IsNominal ... // FIXME: Better error handling
             AppEntry entry = new AppEntry(helper.Criteria);
             return entry;
         }
@@ -76,7 +81,7 @@ namespace JayrockWeb
             IViewHelper helper = GetCatalog().GetHelperFor(App.ENTRY_SAVE);
             helper.Read(input,true);
             helper.Execute();
-            // if helper.IsNominal ... 
+            // if helper.IsNominal ... // FIXME: Better error handling
             AppEntry entry = new AppEntry(helper.Criteria);
             return entry;
         }
@@ -88,7 +93,7 @@ namespace JayrockWeb
             IViewHelper helper = GetCatalog().GetHelperFor(App.ENTRY_DELETE);
             helper.Criteria[App.ENTRY_KEY] = key;
             helper.Execute();
-            // if helper.IsNominal ... 
+            // if helper.IsNominal ... // FIXME: Better error handling
             AppEntry entry = new AppEntry(helper.Criteria);
             return entry;
         }
