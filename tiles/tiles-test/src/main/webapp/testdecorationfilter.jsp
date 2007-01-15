@@ -1,1 +1,0 @@
-<i>This Content should be wrapped with the standard layout.</i>
