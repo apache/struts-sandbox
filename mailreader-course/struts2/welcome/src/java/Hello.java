@@ -8,7 +8,7 @@ public class Hello extends ActionSupport {
     /**
      * An example implementation that does nothing and returns "success".
      *
-     * @return {@link #SUCCESS}
+     * @return {@link #SUCCESS} default result
      */
     public String execute() throws Exception {
         return SUCCESS;
