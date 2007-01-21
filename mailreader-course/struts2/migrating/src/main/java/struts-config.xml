@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE struts-config PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 1.3//EN"
+        "http://struts.apache.org/dtds/struts-config_1_3.dtd">
+<struts-config>
+    <form-beans>
+
+        <form-bean name="HelloForm"
+                   type="actions.HelloForm">
+        </form-bean>
+
+    </form-beans>
+
+    <action-mappings>
+
+        <action path="/HelloInput"
+                name="HelloForm"
+                forward="/HelloInput.jsp"
+                validate="false"/>
+
+        <action path="/Hello"
+                name="HelloForm"
+                forward="/HelloPage.jsp"
+                validate="true"
+                input="/HelloInput.do"/>
+
+        <action path="/Locale"
+                type="actions.LocaleAction">
+            <forward name="success" path="/HelloInput.do"/>
+        </action>
+
+    </action-mappings>
+
+    <message-resources parameter="resources"/>
+
+    <plug-in className="org.apache.struts.validator.ValidatorPlugIn">
+        <set-property
+                property="pathnames"
+                value="/org/apache/struts/validator/validator-rules.xml,
+                /WEB-INF/classes/validation.xml"/>
+    </plug-in>
+
+</struts-config>

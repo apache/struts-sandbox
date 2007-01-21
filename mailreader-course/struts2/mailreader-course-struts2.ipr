@@ -265,6 +265,7 @@
       <module fileurl="file://$PROJECT_DIR$/logout/logout.iml" filepath="$PROJECT_DIR$/logout/logout.iml" />
       <module fileurl="file://$PROJECT_DIR$/mailreader-course-struts2.iml" filepath="$PROJECT_DIR$/mailreader-course-struts2.iml" />
       <module fileurl="file://$PROJECT_DIR$/menu/menu.iml" filepath="$PROJECT_DIR$/menu/menu.iml" />
+      <module fileurl="file://$PROJECT_DIR$/migrating/migrating.iml" filepath="$PROJECT_DIR$/migrating/migrating.iml" />
       <module fileurl="file://$PROJECT_DIR$/profile/profile.iml" filepath="$PROJECT_DIR$/profile/profile.iml" />
       <module fileurl="file://$PROJECT_DIR$/register/register.iml" filepath="$PROJECT_DIR$/register/register.iml" />
       <module fileurl="file://$PROJECT_DIR$/register2/register2.iml" filepath="$PROJECT_DIR$/register2/register2.iml" />
@@ -282,13 +283,8 @@
       <option name="PORT" value="8080" />
       <option name="LOCAL" value="true" />
       <option name="OPEN_IN_BROWSER" value="true" />
-      <option name="OPEN_IN_BROWSER_URL" value="http://localhost:8080/welcome" />
+      <option name="OPEN_IN_BROWSER_URL" value="http://localhost:8080/migrating" />
       <option name="COMMON_VM_ARGUMENTS" value="" />
-      <J2EE_MODULE DEPLOYMENT_SOURCE_NAME="exploded">
-        <option name="CONTEXT_PATH" value="/" />
-        <option name="MODULE_NAME" value="retain" />
-        <option name="DEPLOY" value="false" />
-      </J2EE_MODULE>
       <J2EE_MODULE DEPLOYMENT_SOURCE_NAME="exploded">
         <option name="CONTEXT_PATH" value="/" />
         <option name="MODULE_NAME" value="theme" />
@@ -296,7 +292,7 @@
       </J2EE_MODULE>
       <J2EE_MODULE DEPLOYMENT_SOURCE_NAME="exploded">
         <option name="CONTEXT_PATH" value="/" />
-        <option name="MODULE_NAME" value="subscribe" />
+        <option name="MODULE_NAME" value="hello" />
         <option name="DEPLOY" value="false" />
       </J2EE_MODULE>
       <J2EE_MODULE DEPLOYMENT_SOURCE_NAME="exploded">
@@ -306,7 +302,17 @@
       </J2EE_MODULE>
       <J2EE_MODULE DEPLOYMENT_SOURCE_NAME="exploded">
         <option name="CONTEXT_PATH" value="/" />
-        <option name="MODULE_NAME" value="hello" />
+        <option name="MODULE_NAME" value="profile" />
+        <option name="DEPLOY" value="false" />
+      </J2EE_MODULE>
+      <J2EE_MODULE DEPLOYMENT_SOURCE_NAME="exploded">
+        <option name="CONTEXT_PATH" value="/" />
+        <option name="MODULE_NAME" value="subscribe" />
+        <option name="DEPLOY" value="false" />
+      </J2EE_MODULE>
+      <J2EE_MODULE DEPLOYMENT_SOURCE_NAME="exploded">
+        <option name="CONTEXT_PATH" value="/" />
+        <option name="MODULE_NAME" value="retain" />
         <option name="DEPLOY" value="false" />
       </J2EE_MODULE>
       <J2EE_MODULE DEPLOYMENT_SOURCE_NAME="exploded">
@@ -316,17 +322,7 @@
       </J2EE_MODULE>
       <J2EE_MODULE DEPLOYMENT_SOURCE_NAME="exploded">
         <option name="CONTEXT_PATH" value="/" />
-        <option name="MODULE_NAME" value="logout" />
-        <option name="DEPLOY" value="false" />
-      </J2EE_MODULE>
-      <J2EE_MODULE DEPLOYMENT_SOURCE_NAME="exploded">
-        <option name="CONTEXT_PATH" value="/" />
-        <option name="MODULE_NAME" value="profile" />
-        <option name="DEPLOY" value="false" />
-      </J2EE_MODULE>
-      <J2EE_MODULE DEPLOYMENT_SOURCE_NAME="exploded">
-        <option name="CONTEXT_PATH" value="/" />
-        <option name="MODULE_NAME" value="register2" />
+        <option name="MODULE_NAME" value="migrating" />
         <option name="DEPLOY" value="false" />
       </J2EE_MODULE>
       <J2EE_MODULE DEPLOYMENT_SOURCE_NAME="exploded">
@@ -336,12 +332,22 @@
       </J2EE_MODULE>
       <J2EE_MODULE DEPLOYMENT_SOURCE_NAME="exploded">
         <option name="CONTEXT_PATH" value="/" />
-        <option name="MODULE_NAME" value="register" />
+        <option name="MODULE_NAME" value="register2" />
+        <option name="DEPLOY" value="false" />
+      </J2EE_MODULE>
+      <J2EE_MODULE DEPLOYMENT_SOURCE_NAME="exploded">
+        <option name="CONTEXT_PATH" value="/" />
+        <option name="MODULE_NAME" value="logout" />
         <option name="DEPLOY" value="false" />
       </J2EE_MODULE>
       <J2EE_MODULE DEPLOYMENT_SOURCE_NAME="exploded">
         <option name="CONTEXT_PATH" value="/" />
         <option name="MODULE_NAME" value="localize" />
+        <option name="DEPLOY" value="false" />
+      </J2EE_MODULE>
+      <J2EE_MODULE DEPLOYMENT_SOURCE_NAME="exploded">
+        <option name="CONTEXT_PATH" value="/" />
+        <option name="MODULE_NAME" value="register" />
         <option name="DEPLOY" value="false" />
       </J2EE_MODULE>
       <option name="DEPLOY_TOMCAT_MANAGER" value="false" />
@@ -407,13 +413,13 @@
   <component name="libraryTable">
     <library name="Struts2">
       <CLASSES>
-        <root url="jar://$PROJECT_DIR$/lib/freemarker-2.3.4.jar!/" />
         <root url="jar://$PROJECT_DIR$/lib/struts-core-1.3.5.jar!/" />
         <root url="jar://$PROJECT_DIR$/lib/struts2-api-2.0.3.jar!/" />
         <root url="jar://$PROJECT_DIR$/lib/ognl-2.6.9.jar!/" />
         <root url="jar://$PROJECT_DIR$/lib/commons-logging-1.0.4.jar!/" />
         <root url="jar://$PROJECT_DIR$/lib/xwork-2.0.0.jar!/" />
         <root url="jar://$PROJECT_DIR$/lib/struts2-core-2.0.3.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/freemarker-2-3-8.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
@@ -425,6 +431,22 @@
         <root url="jar://$PROJECT_DIR$/lib/oscore.jar!/" />
         <root url="jar://$PROJECT_DIR$/lib/commons-digester-1.6.jar!/" />
         <root url="jar://$PROJECT_DIR$/lib/commons-collections-3.1.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="Struts1">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/lib/oro-2.0.8.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/commons-collections-3.1.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/commons-beanutils-1.6.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/struts-core-1.3.5.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/commons-chain-1.1.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/commons-logging-1.0.4.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/commons-digester-1.6.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/commons-validator-1.3.0.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/antlr-2.7.2.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/struts-taglib-1.3.5.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />

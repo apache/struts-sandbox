@@ -15,7 +15,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Struts2" level="project" />
     <orderEntry type="library" name="junit" level="application" />
-    <orderEntry type="library" name="servlet-api" level="application" />
     <orderEntryProperties />
   </component>
   <component name="WebModuleBuildComponent">
@@ -30,10 +29,6 @@
   </component>
   <component name="WebModuleProperties">
     <containerElement type="library" name="junit" level="application">
-      <attribute name="method" value="0" />
-      <attribute name="URI" value="&lt;N/A&gt;" />
-    </containerElement>
-    <containerElement type="library" name="servlet-api" level="application">
       <attribute name="method" value="0" />
       <attribute name="URI" value="&lt;N/A&gt;" />
     </containerElement>

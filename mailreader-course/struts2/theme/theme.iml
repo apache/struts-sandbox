@@ -14,7 +14,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="junit" level="application" />
-    <orderEntry type="library" name="servlet-api" level="application" />
     <orderEntry type="library" name="Struts2" level="project" />
     <orderEntry type="module-library">
       <library>
@@ -35,6 +34,7 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="Mailreader-dao" level="project" />
+    <orderEntry type="library" name="servlet-api" level="application" />
     <orderEntryProperties />
   </component>
   <component name="WebModuleBuildComponent">

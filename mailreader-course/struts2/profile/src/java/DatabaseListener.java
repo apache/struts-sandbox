@@ -186,6 +186,7 @@ public final class DatabaseListener implements ServletContextListener {
      * <p>Calculate and return an absolute pathname to the XML file to contain
      * our persistent storage information.</p>
      *
+     * @return Absolute path to XML file.
      * @throws Exception if an input/output error occurs
      */
     private String calculatePath() throws Exception {
