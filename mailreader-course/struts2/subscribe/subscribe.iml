@@ -31,6 +31,10 @@
   </component>
   <component name="WebModuleProperties">
     <containerElement type="library" name="junit" level="application">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib" />
+    </containerElement>
+    <containerElement type="library" name="junit" level="application">
       <attribute name="method" value="0" />
       <attribute name="URI" value="&lt;N/A&gt;" />
     </containerElement>

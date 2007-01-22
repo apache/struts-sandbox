@@ -23,6 +23,8 @@
     </orderEntry>
     <orderEntry type="library" name="Struts1" level="project" />
     <orderEntry type="library" name="Struts2" level="project" />
+    <orderEntry type="library" name="junit" level="application" />
+    <orderEntry type="library" name="servlet-api" level="application" />
     <orderEntryProperties />
   </component>
   <component name="WebModuleBuildComponent">
@@ -40,6 +42,14 @@
       <attribute name="method" value="0" />
       <attribute name="URI" value="&lt;N/A&gt;" />
       <url>jar://$APPLICATION_HOME_DIR$/lib/j2ee.jar!/</url>
+    </containerElement>
+    <containerElement type="library" name="junit" level="application">
+      <attribute name="method" value="0" />
+      <attribute name="URI" value="/WEB-INF/lib" />
+    </containerElement>
+    <containerElement type="library" name="servlet-api" level="application">
+      <attribute name="method" value="0" />
+      <attribute name="URI" value="&lt;N/A&gt;" />
     </containerElement>
     <containerElement type="library" name="Struts1" level="project">
       <attribute name="method" value="1" />
