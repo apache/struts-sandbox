@@ -76,10 +76,10 @@
             <result>/pages/Subscribe.jsp</result>
         </action>
 
-        <action name="Subscribe_save" class="SubscribeSave" method="save">
+        <action name="Subscribe_save" class="Subscribe" method="save">
             <result name="input">/pages/Subscribe.jsp</result>
             <result type="redirect-action">Register</result>
-        </action>
+        </action>        
 
     </package>
 </struts>
