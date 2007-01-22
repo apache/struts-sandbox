@@ -18,40 +18,37 @@
 <s:form action="Register_save" validate="true">
     <s:hidden name="task"/>
     <s:if test="task == 'Create'">
-        <s:textfield label="%{getText('username')}" name="username"/>
+        <s:textfield key="username"/>
     </s:if>
     <s:else>
-        <s:label label="%{getText('username')}" name="username"/>
+        <s:label key="username"/>
         <s:hidden name="username"/>
     </s:else>
 
-    <s:password label="%{getText('password')}" name="password"/>
+    <s:password key="password"/>
 
-    <s:password label="%{getText('password2')}" name="password2"/>
+    <s:password key="password2"/>
 
-    <s:textfield label="%{getText('fullName')}"
-                 name="fullName"/>
+    <s:textfield key="fullName"/>
 
-    <s:textfield label="%{getText('fromAddress')}"
-                 name="fromAddress"/>
+    <s:textfield key="fromAddress"/>
 
-    <s:textfield label="%{getText('replyToAddress')}"
-                 name="replyToAddress"/>
+    <s:textfield key="replyToAddress"/>
 
     <s:if test="task == 'Create'">
-        <s:submit value="%{getText('button.save')}" action="Register_create"/>
+        <s:submit key="button.save" action="Register_create"/>
 
-        <s:reset value="%{getText('button.reset')}"/>
+        <s:reset key="button.reset"/>
 
-        <s:submit action="Welcome" value="%{getText('button.cancel')}"
+        <s:submit action="Welcome" key="button.cancel"
                   onclick="form.onsubmit=null"/>
     </s:if>
     <s:else>
-        <s:submit value="%{getText('button.save')}"/>
+        <s:submit key="button.save"/>
 
-        <s:reset value="%{getText('button.reset')}"/>
+        <s:reset key="button.reset"/>
 
-        <s:submit action="Menu" value="%{getText('button.cancel')}"
+        <s:submit action="Menu" key="button.cancel"
                   onclick="form.onsubmit=null"/>
     </s:else>
 

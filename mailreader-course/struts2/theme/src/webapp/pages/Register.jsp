@@ -12,48 +12,44 @@
     </s:if>
 </head>
 
-<body>
+<body onLoad="self.focus();document.Register_save.username.focus()">
 
 <s:actionerror/>
-<s:form method="POST" validate="true">
-    <s:token/>
+<s:form action="Register_save" validate="true">
     <s:hidden name="task"/>
     <s:if test="task == 'Create'">
-        <s:textfield label="%{getText('username')}" name="username"/>
+        <s:textfield key="username"/>
     </s:if>
     <s:else>
-        <s:label label="%{getText('username')}" name="username"/>
+        <s:label key="username"/>
         <s:hidden name="username"/>
     </s:else>
 
-    <s:password label="%{getText('password')}" name="password"/>
+    <s:password key="password"/>
 
-    <s:password label="%{getText('password2')}" name="password2"/>
+    <s:password key="password2"/>
 
-    <s:textfield label="%{getText('fullName')}"
-                  name="fullName"/>
+    <s:textfield key="fullName"/>
 
-    <s:textfield label="%{getText('fromAddress')}"
-                  name="fromAddress"/>
+    <s:textfield key="fromAddress"/>
 
-    <s:textfield label="%{getText('replyToAddress')}"
-                  name="replyToAddress"/>
+    <s:textfield key="replyToAddress"/>
 
     <s:if test="task == 'Create'">
-        <s:submit value="%{getText('button.save')}" action="RegisterCreate"/>
+        <s:submit key="button.save" action="Register_create"/>
 
-        <s:reset value="%{getText('button.reset')}"/>
+        <s:reset key="button.reset"/>
 
-        <s:submit action="Welcome" value="%{getText('button.cancel')}"
-                   onclick="form.onsubmit=null"/>
+        <s:submit action="Welcome" key="button.cancel"
+                  onclick="form.onsubmit=null"/>
     </s:if>
     <s:else>
-        <s:submit value="%{getText('button.save')}" action="Register"/>
+        <s:submit key="button.save"/>
 
-        <s:reset value="%{getText('button.reset')}"/>
+        <s:reset key="button.reset"/>
 
-        <s:submit action="Menu" value="%{getText('button.cancel')}"
-                   onclick="form.onsubmit=null"/>
+        <s:submit action="Menu" key="button.cancel"
+                  onclick="form.onsubmit=null"/>
     </s:else>
 
 </s:form>
@@ -99,11 +95,11 @@
                 </td>
                 <td align="center">
 
-                    <a href="<s:url action="Subscribe!delete"><s:param name="host" value="host"/></s:url>">
+                    <a href="<s:url action="Subscribe_delete"><s:param name="host" value="host"/></s:url>">
                         <s:text name="registration.deleteSubscription"/>
                     </a>
                     &nbsp;
-                    <a href="<s:url action="Subscribe!edit"><s:param name="host" value="host"/></s:url>">
+                    <a href="<s:url action="Subscribe_edit"><s:param name="host" value="host"/></s:url>">
                         <s:text name="registration.editSubscription"/>
                     </a>
 
@@ -113,7 +109,7 @@
 
     </table>
 
-    <a href="<s:url action="Subscribe!input"/>"><s:text
+    <a href="<s:url action="Subscribe"/>"><s:text
             name="registration.addSubscription"/></a>
 
 </s:if>

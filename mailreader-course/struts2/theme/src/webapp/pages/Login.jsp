@@ -7,18 +7,18 @@
     <title><s:text name="login.title"/></title>
 </head>
 
-<body onLoad="self.focus();document.Login.username.focus()">
+<body onLoad="self.focus();document.Login_save.username.focus()">
 
 <s:actionerror/>
-<s:form method="POST" validate="true">
-    <s:textfield label="%{getText('username')}" name="username"/>
+<s:form action="Login_save" validate="true">
+    <s:textfield key="username"/>
 
-    <s:password label="%{getText('password')}" name="password" showPassword="true"/>
+    <s:password key="password" showPassword="true"/>
 
-    <s:submit value="%{getText('button.save')}" name="Save"/>
+    <s:submit key="button.save"/>
 
-    <s:submit action="Login!cancel" value="%{getText('button.cancel')}" name="Cancel"
-               onclick="form.onsubmit=null"/>
+    <s:submit action="Login_cancel" key="button.cancel"
+              onclick="form.onsubmit=null"/>
 </s:form>
 
 </body>

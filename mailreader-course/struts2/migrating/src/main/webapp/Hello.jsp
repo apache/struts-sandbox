@@ -17,7 +17,7 @@
 <ul>
     <li>
         <s:url id="en" action="Hello_input">
-            <s:param name="request_locale">es</s:param>
+            <s:param name="request_locale">en</s:param>
         </s:url>
         <s:a href="%{en}">English</s:a>
     </li>

@@ -11,14 +11,14 @@
 
 <s:actionerror/>
 <s:form action="Login_save" validate="true">
-    <s:textfield label="%{getText('username')}" name="username"/>
+    <s:textfield key="username"/>
 
-    <s:password label="%{getText('password')}" name="password" showPassword="true"/>
+    <s:password key="password" showPassword="true"/>
 
-    <s:submit value="%{getText('button.save')}" name="Save"/>
+    <s:submit key="button.save"/>
 
-    <s:submit action="Login_cancel" value="%{getText('button.cancel')}" name="Cancel"
-              onclick="form.onsubmit=null"/>
+    <s:submit action="Login_cancel" key="button.cancel"
+                onclick="form.onsubmit=null"/>
 </s:form>
 
 </body>

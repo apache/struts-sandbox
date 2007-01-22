@@ -1,7 +1,9 @@
 <%@ taglib prefix="bean" uri="http://struts.apache.org/tags-bean" %>
 <%@ taglib prefix="html" uri="http://struts.apache.org/tags-html" %>
 <html>
-<head><title><bean:message key="prompt"/></title></head>
+<head>
+    <title><bean:message key="prompt"/></title>
+</head>
 
 <body>
 <h2><bean:message key="prompt"/></h2>

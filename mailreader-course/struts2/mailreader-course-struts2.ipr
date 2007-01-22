@@ -283,7 +283,7 @@
       <option name="PORT" value="8080" />
       <option name="LOCAL" value="true" />
       <option name="OPEN_IN_BROWSER" value="true" />
-      <option name="OPEN_IN_BROWSER_URL" value="http://localhost:8080/migrating" />
+      <option name="OPEN_IN_BROWSER_URL" value="http://localhost:8080/subscribe" />
       <option name="COMMON_VM_ARGUMENTS" value="" />
       <J2EE_MODULE DEPLOYMENT_SOURCE_NAME="exploded">
         <option name="CONTEXT_PATH" value="/" />

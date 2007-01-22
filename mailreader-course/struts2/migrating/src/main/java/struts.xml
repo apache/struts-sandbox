@@ -8,8 +8,6 @@
     <constant name="struts.enable.DynamicMethodInvocation" value="false" />
     <constant name="struts.custom.i18n.resources" value="resources"/>
 
-    <include file="struts-default.xml"/>
-
     <package name="hello-default" extends="struts-default">
 
         <action name="Hello_*" method="{1}" class="actions.Hello">

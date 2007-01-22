@@ -64,6 +64,7 @@
     <webroots>
       <root url="file://$MODULE_DIR$/src/main/resources" relative="/WEB-INF/classes" />
       <root url="file://$MODULE_DIR$/src/main/webapp" relative="/" />
+      <root url="file://$MODULE_DIR$/src/main/java" relative="/WEB-INF/classes" />
     </webroots>
   </component>
   <component name="WeblogicWebModuleProperties" />
