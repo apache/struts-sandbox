@@ -5,17 +5,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title><s:text name="index.title"/></title>
+    <title>
+        <s:text name="index.title"/>
+    </title>
 </head>
 
 <body>
 <h3>MailReader Options</h3>
 
 <ul>
-    <li><a href="<s:url action="Register"/>"><s:text
-            name="index.registration"/></a></li>
-    <li><a href="<s:url action="Login"/>"><s:text
-            name="index.login"/></a></li>
+    <li><a href="<s:url action="Register"/>">
+        <s:text
+                name="index.registration"/>
+    </a></li>
+    <li><a href="<s:url action="Login"/>">
+        <s:text
+                name="index.login"/>
+    </a></li>
 </ul>
 
 <h3>Language Options</h3>

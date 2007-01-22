@@ -1,12 +1,12 @@
 import com.opensymphony.util.BeanUtils;
-import org.apache.struts2.interceptor.ApplicationAware;
-import org.apache.struts2.interceptor.SessionAware;
 import com.opensymphony.xwork2.ActionSupport;
 import org.apache.struts.apps.mailreader.dao.ExpiredPasswordException;
+import org.apache.struts.apps.mailreader.dao.Subscription;
 import org.apache.struts.apps.mailreader.dao.User;
 import org.apache.struts.apps.mailreader.dao.UserDatabase;
-import org.apache.struts.apps.mailreader.dao.Subscription;
 import org.apache.struts.apps.mailreader.dao.impl.memory.MemorySubscription;
+import org.apache.struts2.interceptor.ApplicationAware;
+import org.apache.struts2.interceptor.SessionAware;
 
 import java.util.Map;
 
@@ -96,7 +96,7 @@ public class MailReaderSupport extends ActionSupport
     }
 
     public void setTask(String value) {
-        task =  value;
+        task = value;
     }
 
     // ---- Keys ----
@@ -286,7 +286,7 @@ public class MailReaderSupport extends ActionSupport
         return findSubscription(getHost());
     }
 
-    public void removeSubscription()  {
+    public void removeSubscription() {
         getUser().removeSubscription(getSubscription());
         getSession().remove(SUBSCRIPTION_KEY);
     }
@@ -309,13 +309,12 @@ public class MailReaderSupport extends ActionSupport
 
         if (null != sub) {
             // FIXME - localization - "error.host.unique")
-            addFieldError(HOST,ERROR_HOST_UNIQUE);
+            addFieldError(HOST, ERROR_HOST_UNIQUE);
             return null;
         }
 
         return getUser().createSubscription(host);
     }
-
 
     // ---- Alias ----
 

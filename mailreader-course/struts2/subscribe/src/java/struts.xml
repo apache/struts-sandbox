@@ -4,8 +4,8 @@
         "http://struts.apache.org/dtds/struts-2.0.dtd">
 
 <struts>
-    <constant name="struts.devMode" value="true" />
-    <constant name="struts.enable.DynamicMethodInvocation" value="false" />
+    <constant name="struts.devMode" value="true"/>
+    <constant name="struts.enable.DynamicMethodInvocation" value="false"/>
 
     <package name="default" extends="struts-default">
         <default-action-ref name="Missing"/>
@@ -79,7 +79,7 @@
         <action name="Subscribe_save" class="Subscribe" method="save">
             <result name="input">/pages/Subscribe.jsp</result>
             <result type="redirect-action">Register</result>
-        </action>        
+        </action>
 
     </package>
 </struts>

@@ -2,11 +2,15 @@
 <%@ taglib prefix="html" uri="http://struts.apache.org/tags-html" %>
 <html>
 <head>
-    <title><bean:message key="prompt"/></title>
+    <title>
+        <bean:message key="prompt"/>
+    </title>
 </head>
 
 <body>
-<h2><bean:message key="prompt"/></h2>
+<h2>
+    <bean:message key="prompt"/>
+</h2>
 <html:errors/>
 <html:form action="/Hello">
     <table>
@@ -18,7 +22,9 @@
                 <html:text property="message"/>
             </td>
         </tr>
-        <td colspan="2"><html:submit/></td>
+        <td colspan="2">
+            <html:submit/>
+        </td>
     </table>
 </html:form>
 </body>

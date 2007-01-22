@@ -5,13 +5,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
     <s:if test="task=='Create'">
-        <title><s:text name="subscription.title.create"/></title>
+        <title>
+            <s:text name="subscription.title.create"/>
+        </title>
     </s:if>
     <s:if test="task=='Edit'">
-        <title><s:text name="subscription.title.edit"/></title>
+        <title>
+            <s:text name="subscription.title.edit"/>
+        </title>
     </s:if>
     <s:if test="task=='Delete'">
-        <title><s:text name="subscription.title.delete"/></title>
+        <title>
+            <s:text name="subscription.title.delete"/>
+        </title>
     </s:if>
 </head>
 

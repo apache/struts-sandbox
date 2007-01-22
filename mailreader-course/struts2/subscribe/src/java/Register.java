@@ -28,7 +28,7 @@ public class Register extends MailReaderSupport {
         if (editing) {
             // FIXME: Any way to call the RegisterSave validators from here?
             String newPassword = getPassword();
-            boolean changing = ((null != newPassword) && (newPassword.length()>0));
+            boolean changing = ((null != newPassword) && (newPassword.length() > 0));
             if (!changing) {
                 setPassword(user.getPassword());
             } else {

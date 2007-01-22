@@ -7,6 +7,8 @@
 </head>
 
 <body>
-<h2><s:text name="hello.message"/></h2>
+<h2>
+    <s:text name="hello.message"/>
+</h2>
 </body>
 </html>

@@ -5,10 +5,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
     <s:if test="task=='Create'">
-        <title><s:text name="registration.title.create"/></title>
+        <title>
+            <s:text name="registration.title.create"/>
+        </title>
     </s:if>
     <s:if test="task=='Edit'">
-        <title><s:text name="registration.title.edit"/></title>
+        <title>
+            <s:text name="registration.title.edit"/>
+        </title>
     </s:if>
 </head>
 
@@ -56,7 +60,9 @@
 
 <s:if test="task == 'Edit'">
     <div align="center">
-        <h3><s:text name="heading.subscriptions"/></h3>
+        <h3>
+            <s:text name="heading.subscriptions"/>
+        </h3>
     </div>
 
     <table border="1" width="100%">
@@ -109,8 +115,10 @@
 
     </table>
 
-    <a href="<s:url action="Subscribe"/>"><s:text
-            name="registration.addSubscription"/></a>
+    <a href="<s:url action="Subscribe"/>">
+        <s:text
+                name="registration.addSubscription"/>
+    </a>
 
 </s:if>
 

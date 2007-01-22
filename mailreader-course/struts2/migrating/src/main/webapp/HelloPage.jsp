@@ -2,15 +2,21 @@
 <%@ taglib prefix="html" uri="http://struts.apache.org/tags-html" %>
 <html>
 <head>
-    <title><bean:message key="message"/></title>
+    <title>
+        <bean:message key="message"/>
+    </title>
 </head>
 
 <body>
-<h2><bean:write name="HelloForm" property="message"/></h2>
+<h2>
+    <bean:write name="HelloForm" property="message"/>
+</h2>
 
 <ul>
     <li>
-        <html:link action="/HelloInput"><bean:message key="prompt"/></html:link>
+        <html:link action="/HelloInput">
+            <bean:message key="prompt"/>
+        </html:link>
     </li>
 </ul>
 

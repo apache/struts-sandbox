@@ -4,7 +4,9 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-    <title><s:text name="registration.title.create"/></title>
+    <title>
+        <s:text name="registration.title.create"/>
+    </title>
 </head>
 
 <body onLoad="self.focus();document.Register_save.username.focus()">

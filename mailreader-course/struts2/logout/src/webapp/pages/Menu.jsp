@@ -5,7 +5,9 @@
 </head>
 
 <body>
-<h3>Menu Options for <s:property value="user.fullName"/></h3>
+<h3>Menu Options for
+    <s:property value="user.fullName"/>
+</h3>
 <ul>
     <li><a href="<s:url action="Register" />">
         Edit your registration profile

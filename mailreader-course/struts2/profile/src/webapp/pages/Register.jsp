@@ -5,10 +5,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
     <s:if test="task=='Create'">
-        <title><s:text name="registration.title.create"/></title>
+        <title>
+            <s:text name="registration.title.create"/>
+        </title>
     </s:if>
     <s:if test="task=='Edit'">
-        <title><s:text name="registration.title.edit"/></title>
+        <title>
+            <s:text name="registration.title.edit"/>
+        </title>
     </s:if>
 </head>
 

@@ -4,11 +4,16 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-    <title><s:text name="menu.title"/></title>
+    <title>
+        <s:text name="menu.title"/>
+    </title>
 </head>
 
 <body>
-<h3><s:text name="menu.heading"/> <s:property value="user.fullName"/></h3>
+<h3>
+    <s:text name="menu.heading"/>
+    <s:property value="user.fullName"/>
+</h3>
 <ul>
     <li><a href="<s:url action="Register" />">
         <s:text name="menu.registration"/>
