@@ -18,30 +18,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.struts2.views.java;
+package org.apache.struts2.views.java.simple;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import org.apache.struts2.views.java.simple.AbstractTagHandler;
+import org.apache.struts2.views.java.Attributes;
 
-public class SimpleTheme extends DefaultTheme {
+import java.io.IOException;
 
-    public SimpleTheme() {
-        setHandlerFactories(new HashMap<String,List<TagHandlerFactory>>() {{
-            put("text", new FactoryList(TextFieldHandler.class, ScriptingEventsHandler.class, CommonAttributesHandler.class));
-        }});
-        setName("simple");
+public class CommonAttributesHandler extends AbstractTagHandler {
+
+    /* (non-Javadoc)
+     * @see org.apache.struts2.views.java.simple.AbstractTagHandler#start(java.lang.String, org.apache.struts2.views.java.Attributes)
+     */
+    @Override
+    public void start(String name, Attributes a) throws IOException {
+        a.addIfExists("accesskey", context.getParameters().get("accesskey"));
+        super.start(name, a);
     }
     
-    private class FactoryList extends ArrayList<TagHandlerFactory> {
-        public FactoryList(Class... classes) {
-            super();
-            for (Class cls : classes) {
-                add(new DefaultTagHandlerFactory(cls));
-            }
-            add(new DefaultTagHandlerFactory(XHTMLTagSerializer.class));
-        }
-    }
-
 }

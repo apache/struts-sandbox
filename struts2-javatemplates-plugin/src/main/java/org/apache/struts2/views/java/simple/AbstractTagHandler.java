@@ -1,5 +1,5 @@
 /*
- * $Id: BaseTemplateEngine.java 471756 2006-11-06 15:01:43Z husted $
+ * $Id$
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,11 +18,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.struts2.views.java;
+package org.apache.struts2.views.java.simple;
 
 import java.io.IOException;
 
 import org.apache.struts2.components.template.TemplateRenderingContext;
+import org.apache.struts2.views.java.TagHandler;
+import org.apache.struts2.views.java.Attributes;
 
 public class AbstractTagHandler implements TagHandler {
     

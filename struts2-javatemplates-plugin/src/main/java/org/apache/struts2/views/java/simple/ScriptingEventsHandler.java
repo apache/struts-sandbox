@@ -1,5 +1,5 @@
 /*
- * $Id: BaseTemplateEngine.java 471756 2006-11-06 15:01:43Z husted $
+ * $Id$
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,7 +18,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.struts2.views.java;
+package org.apache.struts2.views.java.simple;
+
+import org.apache.struts2.views.java.simple.AbstractTagHandler;
+import org.apache.struts2.views.java.Attributes;
 
 import java.io.IOException;
 import java.util.Map;
@@ -26,7 +29,7 @@ import java.util.Map;
 public class ScriptingEventsHandler extends AbstractTagHandler {
 
     /* (non-Javadoc)
-     * @see org.apache.struts2.views.java.AbstractTagHandler#start(java.lang.String, org.apache.struts2.views.java.Attributes)
+     * @see org.apache.struts2.views.java.simple.AbstractTagHandler#start(java.lang.String, org.apache.struts2.views.java.Attributes)
      */
     @Override
     public void start(String name, Attributes a) throws IOException {

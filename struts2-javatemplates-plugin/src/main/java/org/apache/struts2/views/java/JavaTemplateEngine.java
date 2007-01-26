@@ -27,7 +27,7 @@ import org.apache.struts2.components.template.BaseTemplateEngine;
 import org.apache.struts2.components.template.Template;
 import org.apache.struts2.components.template.TemplateRenderingContext;
 import org.apache.struts2.views.java.Theme;
-import org.apache.struts2.views.java.SimpleTheme;
+import org.apache.struts2.views.java.simple.SimpleTheme;
 
 public class JavaTemplateEngine extends BaseTemplateEngine {
 

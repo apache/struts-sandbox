@@ -1,5 +1,5 @@
 /*
- * $Id: BaseTemplateEngine.java 471756 2006-11-06 15:01:43Z husted $
+ * $Id$
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,44 +18,32 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.struts2.views.java;
+package org.apache.struts2.views.java.simple;
+
+import org.apache.struts2.views.java.TagGenerator;
+import org.apache.struts2.views.java.Attributes;
 
 import java.io.IOException;
-import java.io.StringWriter;
-import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.struts2.components.Property;
-import org.apache.struts2.components.template.TemplateRenderingContext;
-
-public class TextFieldHandler extends AbstractTagHandler implements TagGenerator {
+public class SelectHandler extends AbstractTagHandler implements TagGenerator {
 
     public void generate() throws IOException {
         Map<String,Object> params = context.getParameters();
         Attributes a = new Attributes();
-        a.put("type", "text");
-        
+
         a.addDefaultToEmpty("name", params.get("name"))
          .addIfExists("size", params.get("size"))
-         .addIfExists("maxlength", params.get("maxlength"))
          .addIfExists("value", params.get("nameValue"), false)
          .addIfTrue("disabled", params.get("disabled"))
          .addIfTrue("readonly", params.get("readonly"))
+         .addIfTrue("multiple", params.get("multiple"))
          .addIfExists("tabindex", params.get("tagindex"))
          .addIfExists("id", params.get("id"))
          .addIfExists("class", params.get("cssClass"))
          .addIfExists("style", params.get("cssStyle"))
          .addIfExists("title", params.get("title"));
-        super.start("input", a);
-        super.end("input");
+        super.start("select", a);
+        super.end("select");
     }
-    
-    private String evalProperty(Object rawValue) {
-        Property prop = new Property(context.getStack());
-        prop.setValue(rawValue.toString());
-        StringWriter writer = new StringWriter();
-        prop.start(writer);
-        return writer.toString();
-    }
-    
 }
