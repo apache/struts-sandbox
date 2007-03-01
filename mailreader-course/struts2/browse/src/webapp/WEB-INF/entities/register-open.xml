@@ -1,5 +1,0 @@
-&welcome-open;
-<clickLink
-        description="Click Register"
-        label="Register with MailReader"/>
-        &register-page;

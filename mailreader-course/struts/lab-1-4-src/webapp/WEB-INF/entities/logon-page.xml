@@ -1,3 +1,0 @@
-<verifyTitle
-        description="Logon page title"
-        text="${Logon.title}"/>

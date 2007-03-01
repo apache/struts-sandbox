@@ -1,3 +1,0 @@
-<clickButton
-        description="Click Submit"
-        name="${button.submit.id}"/>

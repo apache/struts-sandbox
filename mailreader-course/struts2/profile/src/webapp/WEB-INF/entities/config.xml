@@ -1,6 +1,0 @@
-<config
-        host="${host}"
-        port="${port}"
-        basepath="${basepath}"
-        protocol="http"/>
-

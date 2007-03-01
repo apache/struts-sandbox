@@ -1,6 +1,0 @@
-<invoke
-        description="Open welcome action"
-        url="Welcome.do"/>
-<verifyTitle
-        description="Welcome page title"
-        text="${index.title}"/>
