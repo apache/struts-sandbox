@@ -1,6 +1,0 @@
-NOTICE
-
-This software consists of voluntary contributions made by many
-individuals on behalf of the Apache Software Foundation and was 
-originally based, in part, on public domain software written by the 
-Oklahoma Department of Environmental Quality, Oklahoma City OK US.
