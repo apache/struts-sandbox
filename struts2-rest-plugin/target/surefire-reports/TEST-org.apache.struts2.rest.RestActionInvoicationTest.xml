@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite errors="0" skipped="0" tests="10" time="0.174" failures="0" name="org.apache.struts2.rest.RestActionInvoicationTest">
+  <properties>
+    <property value="Java(TM) 2 Runtime Environment, Standard Edition" name="java.runtime.name"/>
+    <property value="/usr/lib/jvm/java-1.5.0-sun-1.5.0.06/jre/lib/i386" name="sun.boot.library.path"/>
+    <property value="1.5.0_06-b05" name="java.vm.version"/>
+    <property value="Sun Microsystems Inc." name="java.vm.vendor"/>
+    <property value="http://java.sun.com/" name="java.vendor.url"/>
+    <property value=":" name="path.separator"/>
+    <property value="Java HotSpot(TM) Server VM" name="java.vm.name"/>
+    <property value="sun.io" name="file.encoding.pkg"/>
+    <property value="US" name="user.country"/>
+    <property value="unknown" name="sun.os.patch.level"/>
+    <property value="Java Virtual Machine Specification" name="java.vm.specification.name"/>
+    <property value="/home/mrdon/dev/struts/sandbox/struts2-rest-plugin" name="user.dir"/>
+    <property value="1.5.0_06-b05" name="java.runtime.version"/>
+    <property value="sun.awt.X11GraphicsEnvironment" name="java.awt.graphicsenv"/>
+    <property value="/home/mrdon/dev/struts/sandbox/struts2-rest-plugin" name="basedir"/>
+    <property value="/usr/lib/jvm/java-1.5.0-sun-1.5.0.06/jre/lib/endorsed" name="java.endorsed.dirs"/>
+    <property value="i386" name="os.arch"/>
+    <property value="/tmp" name="java.io.tmpdir"/>
+    <property value="
+" name="line.separator"/>
+    <property value="Sun Microsystems Inc." name="java.vm.specification.vendor"/>
+    <property value="Linux" name="os.name"/>
+    <property value="ANSI_X3.4-1968" name="sun.jnu.encoding"/>
+    <property value="/usr/lib/jvm/java-1.5.0-sun-1.5.0.06/jre/lib/i386/server:/usr/lib/jvm/java-1.5.0-sun-1.5.0.06/jre/lib/i386:/usr/lib/jvm/java-1.5.0-sun-1.5.0.06/jre/../lib/i386" name="java.library.path"/>
+    <property value="Java Platform API Specification" name="java.specification.name"/>
+    <property value="49.0" name="java.class.version"/>
+    <property value="HotSpot Server Compiler" name="sun.management.compiler"/>
+    <property value="2.6.20-16-generic" name="os.version"/>
+    <property value="/home/mrdon" name="user.home"/>
+    <property value="GMT+10:00" name="user.timezone"/>
+    <property value="sun.print.PSPrinterJob" name="java.awt.printerjob"/>
+    <property value="ANSI_X3.4-1968" name="file.encoding"/>
+    <property value="1.5" name="java.specification.version"/>
+    <property value="mrdon" name="user.name"/>
+    <property value="/home/mrdon/.m2/repository/org/apache/maven/surefire/surefire-api/2.0/surefire-api-2.0.jar:/home/mrdon/.m2/repository/org/codehaus/plexus/plexus-utils/1.1/plexus-utils-1.1.jar:/home/mrdon/.m2/repository/org/apache/maven/surefire/surefire-booter/2.0/surefire-booter-2.0.jar" name="java.class.path"/>
+    <property value="1.0" name="java.vm.specification.version"/>
+    <property value="32" name="sun.arch.data.model"/>
+    <property value="/usr/lib/jvm/java-1.5.0-sun-1.5.0.06/jre" name="java.home"/>
+    <property value="Sun Microsystems Inc." name="java.specification.vendor"/>
+    <property value="en" name="user.language"/>
+    <property value="mixed mode" name="java.vm.info"/>
+    <property value="1.5.0_06" name="java.version"/>
+    <property value="/usr/lib/jvm/java-1.5.0-sun-1.5.0.06/jre/lib/ext" name="java.ext.dirs"/>
+    <property value="/usr/lib/jvm/java-1.5.0-sun-1.5.0.06/jre/lib/rt.jar:/usr/lib/jvm/java-1.5.0-sun-1.5.0.06/jre/lib/i18n.jar:/usr/lib/jvm/java-1.5.0-sun-1.5.0.06/jre/lib/sunrsasign.jar:/usr/lib/jvm/java-1.5.0-sun-1.5.0.06/jre/lib/jsse.jar:/usr/lib/jvm/java-1.5.0-sun-1.5.0.06/jre/lib/jce.jar:/usr/lib/jvm/java-1.5.0-sun-1.5.0.06/jre/lib/charsets.jar:/usr/lib/jvm/java-1.5.0-sun-1.5.0.06/jre/classes" name="sun.boot.class.path"/>
+    <property value="Sun Microsystems Inc." name="java.vendor"/>
+    <property value="/home/mrdon/.m2/repository" name="localRepository"/>
+    <property value="/" name="file.separator"/>
+    <property value="http://java.sun.com/cgi-bin/bugreport.cgi" name="java.vendor.url.bug"/>
+    <property value="little" name="sun.cpu.endian"/>
+    <property value="UnicodeLittle" name="sun.io.unicode.encoding"/>
+    <property value="gnome" name="sun.desktop"/>
+    <property value="" name="sun.cpu.isalist"/>
+  </properties>
+  <testcase time="0.134" name="testFindParamsInName"/>
+  <testcase time="0" name="testFindParamsInName_oneParam"/>
+  <testcase time="0" name="testFindParamsInName_noParams"/>
+  <testcase time="0.016" name="testFindMethod"/>
+  <testcase time="0.001" name="testFindMethod_missingParams"/>
+  <testcase time="0.001" name="testFindMethod_noParams"/>
+  <testcase time="0.003" name="testCallAction"/>
+  <testcase time="0.001" name="testCallAction_oneParam"/>
+  <testcase time="0" name="testCallAction_noParam"/>
+  <testcase time="0.001" name="testCallAction_withBody"/>
+</testsuite>
