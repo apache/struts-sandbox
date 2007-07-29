@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+    
+<struts>
+    <bean type="org.apache.struts2.osgi.BundleAccessor" class="org.apache.struts2.osgi.DefaultBundleAccessor" />
+    <bean type="org.apache.struts2.osgi.PackageLoader" class="org.apache.struts2.osgi.BundlePackageLoader" />
+    <bean name="osgi" type="com.opensymphony.xwork2.ObjectFactory" class="org.apache.struts2.osgi.DelegatingObjectFactory" />
+    
+    <constant name="struts.objectFactory" value="osgi" />
+    <constant name="struts.objectFactory.delegate" value="struts" />
+    
+</struts>
