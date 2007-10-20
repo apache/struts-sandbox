@@ -1,0 +1,2 @@
+
+<% response.sendRedirect("order/.xhtml"); %>
