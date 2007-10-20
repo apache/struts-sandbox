@@ -8,10 +8,14 @@
 
     <bean type="com.opensymphony.xwork2.ActionProxyFactory" name="rest" class="org.apache.struts2.rest.RestActionProxyFactory" />
 	<bean type="org.apache.struts2.dispatcher.mapper.ActionMapper" name="rest" class="org.apache.struts2.rest.RestActionMapper" />
+	
+	<bean type="com.opensymphony.xwork2.config.PackageProvider" name="rest" class="org.apache.struts2.rest.ResourceClasspathPackageProvider" />
 
-    <bean type="org.apache.struts2.rest.handler.MimeTypeHandler" name="xml" class="org.apache.struts2.rest.handler.XStreamHandler" />
-    <bean type="org.apache.struts2.rest.handler.MimeTypeHandler" name="js" class="org.apache.struts2.rest.handler.XStreamJsonHandler" />
-    <bean type="org.apache.struts2.rest.handler.MimeTypeHandler" name="html" class="org.apache.struts2.rest.handler.HtmlHandler" />
+	<bean class="org.apache.struts2.rest.ContentTypeHandlerSelector" />
+
+    <bean type="org.apache.struts2.rest.handler.ContentTypeHandler" name="xml" class="org.apache.struts2.rest.handler.XStreamHandler" />
+    <bean type="org.apache.struts2.rest.handler.ContentTypeHandler" name="json" class="org.apache.struts2.rest.handler.XStreamJsonHandler" />
+    <bean type="org.apache.struts2.rest.handler.ContentTypeHandler" name="html" class="org.apache.struts2.rest.handler.HtmlHandler" />
 
     <constant name="struts.actionProxyFactory" value="rest" />
     <constant name="struts.rest.defaultHandlerName" value="xml" />
@@ -21,7 +25,51 @@
     <constant name="struts.configuration.classpath.defaultParentPackage" value="rest-default" />
     
     <package name="rest-default" extends="struts-default">
-    	<default-interceptor-ref name="basicStack"/>
+        <interceptors>
+            <interceptor name="rest" class="org.apache.struts2.rest.ContentTypeInterceptor"/>
+
+            <!-- A complete stack with all the common interceptors in place.
+                 Generally, this stack should be the one you use, though it
+                 may do more than you need. Also, the ordering can be
+                 switched around (ex: if you wish to have your servlet-related
+                 objects applied before prepare() is called, you'd need to move
+                 servlet-config interceptor up.
+
+                 This stack also excludes from the normal validation and workflow
+                 the method names input, back, and cancel. These typically are
+                 associated with requests that should not be validated.
+                 -->
+            <interceptor-stack name="restDefaultStack">
+                <interceptor-ref name="exception"/>
+                <interceptor-ref name="alias"/>
+                <interceptor-ref name="servletConfig"/>
+                <interceptor-ref name="prepare"/>
+                <interceptor-ref name="i18n"/>
+                <interceptor-ref name="chain"/>
+                <interceptor-ref name="debugging"/>
+                <interceptor-ref name="profiling"/>
+                <interceptor-ref name="scopedModelDriven"/>
+                <interceptor-ref name="modelDriven"/>
+                <interceptor-ref name="fileUpload"/>
+                <interceptor-ref name="checkbox"/>
+                <interceptor-ref name="staticParams"/>
+                <interceptor-ref name="params">
+                  <param name="excludeParams">dojo\..*</param>
+                </interceptor-ref>
+                <interceptor-ref name="rest" />
+                <interceptor-ref name="conversionError"/>
+                <interceptor-ref name="validation">
+                    <param name="excludeMethods">input,back,cancel,browse</param>
+                </interceptor-ref>
+                <interceptor-ref name="workflow">
+                    <param name="excludeMethods">input,back,cancel,browse</param>
+                </interceptor-ref>
+            </interceptor-stack>
+    
+        </interceptors>
+    
+    
+    	<default-interceptor-ref name="restDefaultStack"/>
     </package>
 
 </struts>

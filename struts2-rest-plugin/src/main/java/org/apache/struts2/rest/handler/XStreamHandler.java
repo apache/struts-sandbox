@@ -32,22 +32,17 @@ import org.apache.struts2.ServletActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.thoughtworks.xstream.XStream;
 
-public class XStreamHandler implements MimeTypeHandler {
+public class XStreamHandler implements ContentTypeHandler {
 
-    public String fromObject(Object obj, ActionInvocation inv) throws IOException {
-        HttpServletResponse response = ServletActionContext.getResponse();
+    public String fromObject(Object obj, String resultCode, OutputStream out) throws IOException {
         XStream xstream = createXStream();
-        ByteArrayOutputStream bout = new ByteArrayOutputStream();
-        xstream.toXML(obj, bout);
-        response.getOutputStream().write(bout.toByteArray());
-        response.setContentLength(bout.size());
-        response.setContentType(getContentType());
+        xstream.toXML(obj, out);
         return null;
     }
 
-    public Object toObject(InputStream in) {
+    public void toObject(InputStream in, Object target) {
         XStream xstream = createXStream();
-        return xstream.fromXML(in);
+        xstream.fromXML(in, target);
     }
     
     protected XStream createXStream() {
@@ -55,7 +50,10 @@ public class XStreamHandler implements MimeTypeHandler {
     }
 
     public String getContentType() {
-        return "text/xml";
+        return "application/xml";
     }
 
+    public String getExtension() {
+        return "xml";
+    }
 }

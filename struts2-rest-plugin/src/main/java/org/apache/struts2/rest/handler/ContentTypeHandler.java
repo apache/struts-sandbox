@@ -18,12 +18,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.struts2.rest;
+package org.apache.struts2.rest.handler;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Restful {
+import com.opensymphony.xwork2.ActionInvocation;
 
+public interface ContentTypeHandler {
+    void toObject(InputStream in, Object target);
+    
+    String fromObject(Object obj, String resultCode, OutputStream stream) throws IOException;
+    
+    String getContentType();
+    
+    String getExtension();
 }

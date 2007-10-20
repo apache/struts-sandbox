@@ -22,20 +22,27 @@ package org.apache.struts2.rest.handler;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Collections;
 
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionInvocation;
 
-public class HtmlHandler implements MimeTypeHandler {
+public class HtmlHandler implements ContentTypeHandler {
 
-    public String fromObject(Object obj, ActionInvocation inv) throws IOException {
-        inv.getStack().push(Collections.singletonMap("body", obj));
-        return Action.SUCCESS;
+    public String fromObject(Object obj, String resultCode, OutputStream out) throws IOException {
+        return resultCode;
     }
 
-    public Object toObject(InputStream in) {
-        return null;
+    public void toObject(InputStream in, Object target) {
+    }
+
+    public String getExtension() {
+        return "xhtml";
+    }
+
+    public String getContentType() {
+        return "application/xhtml+xml";
     }
 
 }

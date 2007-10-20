@@ -35,5 +35,7 @@ public class XStreamJsonHandler extends XStreamHandler {
         return "text/javascript";
     }
     
-    
+    public String getExtension() {
+        return "json";
+    }
 }
