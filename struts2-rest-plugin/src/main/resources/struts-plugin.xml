@@ -11,7 +11,7 @@
 	
 	<bean type="com.opensymphony.xwork2.config.PackageProvider" name="rest" class="org.apache.struts2.rest.ResourceClasspathPackageProvider" />
 
-	<bean class="org.apache.struts2.rest.ContentTypeHandlerSelector" />
+	<bean class="org.apache.struts2.rest.ContentTypeHandlerManager" />
 
     <bean type="org.apache.struts2.rest.handler.ContentTypeHandler" name="xml" class="org.apache.struts2.rest.handler.XStreamHandler" />
     <bean type="org.apache.struts2.rest.handler.ContentTypeHandler" name="json" class="org.apache.struts2.rest.handler.XStreamJsonHandler" />
@@ -27,6 +27,7 @@
     <package name="rest-default" extends="struts-default">
         <interceptors>
             <interceptor name="rest" class="org.apache.struts2.rest.ContentTypeInterceptor"/>
+            <interceptor name="restWorkflow" class="org.apache.struts2.rest.RestWorkflowInterceptor"/>
 
             <!-- A complete stack with all the common interceptors in place.
                  Generally, this stack should be the one you use, though it
@@ -59,10 +60,10 @@
                 <interceptor-ref name="rest" />
                 <interceptor-ref name="conversionError"/>
                 <interceptor-ref name="validation">
-                    <param name="excludeMethods">input,back,cancel,browse</param>
+                    <param name="excludeMethods">input,back,cancel,browse,index,show</param>
                 </interceptor-ref>
-                <interceptor-ref name="workflow">
-                    <param name="excludeMethods">input,back,cancel,browse</param>
+                <interceptor-ref name="restWorkflow">
+                    <param name="excludeMethods">input,back,cancel,browse,index,show</param>
                 </interceptor-ref>
             </interceptor-stack>
     

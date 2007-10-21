@@ -11,8 +11,10 @@ import org.apache.struts2.rest.DefaultRestInfo;
 import org.apache.struts2.rest.RestInfo;
 
 import com.opensymphony.xwork2.ModelDriven;
+import com.opensymphony.xwork2.Validateable;
+import com.opensymphony.xwork2.ValidationAwareSupport;
 
-public class OrderResource implements ModelDriven<Object>, ParameterAware{
+public class OrderResource extends ValidationAwareSupport implements ModelDriven<Object>, ParameterAware, Validateable{
     
     private Order model = new Order();
     private static Map<String,Order> orders = new HashMap<String,Order>() {{
@@ -21,6 +23,12 @@ public class OrderResource implements ModelDriven<Object>, ParameterAware{
         put("5", new Order("5", "Jim", 66));
     }};
     private Collection<Order> list;
+    
+    public void validate() {
+        if (model.getId() == null || model.getId().length() ==0) {
+            addFieldError("id", "ID is wrong");
+        }
+    }
     
     public String show() {
         return "show";

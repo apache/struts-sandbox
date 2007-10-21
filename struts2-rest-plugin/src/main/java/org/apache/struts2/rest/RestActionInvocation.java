@@ -81,14 +81,14 @@ public class RestActionInvocation extends DefaultActionInvocation {
 
     private static final Logger LOG = LoggerFactory.getLogger(RestActionInvocation.class);
     
-    private ContentTypeHandlerSelector handlerSelector;
+    private ContentTypeHandlerManager handlerSelector;
 
     protected RestActionInvocation(Map extraContext, boolean pushAction) throws Exception {
         super(extraContext, pushAction);
     }
 
     @Inject
-    public void setMimeTypeHandlerSelector(ContentTypeHandlerSelector sel) {
+    public void setMimeTypeHandlerSelector(ContentTypeHandlerManager sel) {
         this.handlerSelector = sel;
     }
     
@@ -161,36 +161,9 @@ public class RestActionInvocation extends DefaultActionInvocation {
             this.explicitResult = (Result) methodResult;
             return null;
         } else if (methodResult != null) {
-            HttpServletRequest req = ServletActionContext.getRequest();
-            HttpServletResponse res = ServletActionContext.getResponse();
-            ContentTypeHandler handler = handlerSelector.getHandlerForRequest(req);
-            Object target = action;
-            if (target instanceof ModelDriven) {
-                target = ((ModelDriven)target).getModel();
-            }
-            
-            if (methodResult instanceof RestInfo) {
-                RestInfo info = (RestInfo) methodResult;
-                resultCode = info.apply(req, res, target);
-            } else {
-                resultCode = (String) methodResult;
-            }
-            
-            String extCode = resultCode+"-"+handler.getExtension();
-            if (actionConfig.getResults().get(extCode) != null) {
-                resultCode = extCode;
-            } else {
-                ByteArrayOutputStream bout = new ByteArrayOutputStream();
-                
-                resultCode = handler.fromObject(target, resultCode, bout);
-                if (bout.size() > 0) {
-                    res.setContentLength(bout.size());
-                    res.setContentType(handler.getContentType());
-                    res.getOutputStream().write(bout.toByteArray());
-                    res.getOutputStream().close();
-                }
-            }
+            resultCode = handlerSelector.handleResult(actionConfig, methodResult, action);
         }
         return resultCode;
     }
+
 }
