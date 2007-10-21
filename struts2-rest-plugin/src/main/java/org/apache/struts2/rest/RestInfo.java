@@ -23,10 +23,23 @@ package org.apache.struts2.rest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * Type-safe rest-related information to apply to a response
+ */
 public interface RestInfo {
 
+    /**
+     * Applies the configured information to the response
+     * @param request The request
+     * @param response The response
+     * @param target The target object, usually the action
+     * @return The result code to process
+     */
     String apply(HttpServletRequest request,
             HttpServletResponse response, Object target);
     
+    /**
+     * The HTTP status code
+     */
     int getStatus();
 }

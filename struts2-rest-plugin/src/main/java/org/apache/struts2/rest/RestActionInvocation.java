@@ -66,14 +66,9 @@ import javax.servlet.http.HttpServletResponse;
 
 
 /**
- * The Default ActionInvocation implementation
- *
- * @author Rainer Hermanns
- * @author tmjee
- * 
- * @version $Date: 2007-04-26 23:36:51 +1000 (Thu, 26 Apr 2007) $ $Id: DefaultActionInvocation.java 1499 2007-04-26 13:36:51Z mrdon $
- * 
- * @see com.opensymphony.xwork2.DefaultActionProxy
+ * Extends the usual {@link ActionInvocation} to add support for processing the object returned
+ * from the action execution.  This allows us to support methods that return {@link RestInfo}
+ * as well as apply content type-specific operations to the result.
  */
 public class RestActionInvocation extends DefaultActionInvocation {
     

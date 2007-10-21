@@ -38,6 +38,10 @@ import com.opensymphony.xwork2.config.entities.ActionConfig;
 import com.opensymphony.xwork2.inject.Container;
 import com.opensymphony.xwork2.inject.Inject;
 
+/**
+ * Manages {@link ContentTypeHandler} instances and uses them to
+ * process results
+ */
 public class ContentTypeHandlerManager {
 
     private Map<String,ContentTypeHandler> handlers = new HashMap<String,ContentTypeHandler>();
@@ -57,6 +61,11 @@ public class ContentTypeHandlerManager {
         }
     }
     
+    /**
+     * Gets the handler for the request by looking at the extension
+     * @param req The request
+     * @return The appropriate handler
+     */
     public ContentTypeHandler getHandlerForRequest(HttpServletRequest req) {
         String extension = findExtension(req.getRequestURI());
         if (extension == null) {
@@ -65,6 +74,15 @@ public class ContentTypeHandlerManager {
         return handlers.get(extension);
     }
     
+    /**
+     * Handles the result using handlers to generate content type-specific content
+     * 
+     * @param actionConfig The action config for the current request
+     * @param methodResult The object returned from the action method
+     * @param target The object to return, usually the action object
+     * @return The new result code to process
+     * @throws IOException If unable to write to the response
+     */
     public String handleResult(ActionConfig actionConfig, Object methodResult, Object target)
             throws IOException {
         String resultCode = null;
@@ -109,6 +127,12 @@ public class ContentTypeHandlerManager {
         
     }
     
+    /**
+     * Finds the extension in the url
+     * 
+     * @param url The url
+     * @return The extension
+     */
     protected String findExtension(String url) {
         int dotPos = url.lastIndexOf('.');
         int slashPos = url.lastIndexOf('/');

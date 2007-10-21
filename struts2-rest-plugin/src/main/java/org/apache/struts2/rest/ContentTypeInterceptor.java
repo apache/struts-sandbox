@@ -30,8 +30,12 @@ import com.opensymphony.xwork2.ModelDriven;
 import com.opensymphony.xwork2.inject.Inject;
 import com.opensymphony.xwork2.interceptor.Interceptor;
 
+/**
+ * Uses the content handler to apply the request body to the action
+ */
 public class ContentTypeInterceptor implements Interceptor {
 
+    private static final long serialVersionUID = 1L;
     ContentTypeHandlerManager selector;
     
     @Inject

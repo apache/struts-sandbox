@@ -42,6 +42,10 @@ import static javax.servlet.http.HttpServletResponse.*;
  *
  * An interceptor that makes sure there are not validation errors before allowing the interceptor chain to continue.
  * <b>This interceptor does not perform any validation</b>.
+ * 
+ * <p>Copied from the {@link DefaultWorkflowInterceptor}, this interceptor adds support for error handling of Restful
+ * operations.  For example, if an validation error is discovered, a map of errors is created and processed to be
+ * returned, using the appropriate content handler for rendering the body.</p>
  *
  * <p/>This interceptor does nothing if the name of the method being invoked is specified in the <b>excludeMethods</b>
  * parameter. <b>excludeMethods</b> accepts a comma-delimited list of method names. For example, requests to
@@ -153,8 +157,8 @@ public class RestWorkflowInterceptor extends MethodFilterInterceptor {
 	}
 	
 	/**
-	 * Intercept {@link ActionInvocation} and returns a <code>inputResultName</code>
-	 * when action / field errors is found registered.
+	 * Intercept {@link ActionInvocation} and processes the errors using the {@link ContentTypeHandler}
+	 * appropriate for the request.  
 	 * 
 	 * @return String result name
 	 */

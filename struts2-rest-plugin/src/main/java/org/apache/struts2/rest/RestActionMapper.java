@@ -39,60 +39,38 @@ import com.opensymphony.xwork2.util.logging.LoggerFactory;
 /**
  * <!-- START SNIPPET: description -->
  *
- * Improved restful action mapper that adds several ReST-style improvements to
- * action mapping, but supports fully-customized URL's via XML.  The two primary
- * ReST enhancements are:
- * <ul>
- *  <li>If the method is not specified (via '!' or 'method:' prefix), the method is
- *      "guessed" at using ReST-style conventions that examine the URL and the HTTP
- *      method.</li>
- *  <li>Parameters are extracted from the action name, if parameter name/value pairs
- *      are specified using PARAM_NAME/PARAM_VALUE syntax.
- * </ul>
- * <p>
- * These two improvements allow a GET request for 'category/action/movie/Thrillers' to
- * be mapped to the action name 'movie' with an id of 'Thrillers' with an extra parameter
- * named 'category' with a value of 'action'.  A single action mapping can then handle
- * all CRUD operations using wildcards, e.g.
- * </p>
- * <pre>
- *   &lt;action name="movie/*" className="app.MovieAction"&gt;
- *     &lt;param name="id"&gt;{0}&lt;/param&gt;
- *     ...
- *   &lt;/action&gt;
- * </pre>
+ * Restful action mapper that enforces Ruby-On-Rails Rest-style mappings.If the method 
+ * is not specified (via '!' or 'method:' prefix), the method is "guessed" at using 
+ * ReST-style conventions that examine the URL and the HTTP method.  Special care has
+ * been given to ensure this mapper works correctly with the codebehind plugin so that
+ * XML configuration is unnecessary.
+ *  
  * <p>
  *   This mapper supports the following parameters:
  * </p>
  * <ul>
  *   <li><code>struts.mapper.idParameterName</code> - If set, this value will be the name
  *       of the parameter under which the id is stored.  The id will then be removed
- *       from the action name.  This allows restful actions to not require wildcards.
+ *       from the action name.  Whether or not the method is specified, the mapper will 
+ *       try to truncate the identifier from the url and store it as a parameter.
  *   </li>
  * </ul>
  * <p>
  * The following URL's will invoke its methods:
  * </p>
  * <ul> 
- *  <li><code>GET:    /movie/               => method="index"</code></li>
- *  <li><code>GET:    /movie/Thrillers      => method="show", id="Thrillers"</code></li>
- *  <li><code>GET:    /movie/Thrillers;edit => method="input", id="Thrillers"</code></li>
- *  <li><code>GET:    /movie/new            => method="input"</code></li>
- *  <li><code>POST:   /movie/               => method="create"</code></li>
- *  <li><code>PUT:    /movie/Thrillers      => method="update", id="Thrillers"</code></li>
- *  <li><code>DELETE: /movie/Thrillers      => method="destroy", id="Thrillers"</code></li>
+ *  <li><code>GET:    /movies                => method="index"</code></li>
+ *  <li><code>GET:    /movies/Thrillers      => method="show", id="Thrillers"</code></li>
+ *  <li><code>GET:    /movies/Thrillers;edit => method="edit", id="Thrillers"</code></li>
+ *  <li><code>GET:    /movies/new            => method="editNew"</code></li>
+ *  <li><code>POST:   /movies                => method="create"</code></li>
+ *  <li><code>PUT:    /movies/Thrillers      => method="update", id="Thrillers"</code></li>
+ *  <li><code>DELETE: /movies/Thrillers      => method="destroy", id="Thrillers"</code></li>
  * </ul>
  * <p>
  * To simulate the HTTP methods PUT and DELETE, since they aren't supported by HTML,
- * the HTTP parameter "__http_method" will be used.
+ * the HTTP parameter "_method" will be used.
  * </p>
- * <p>
- * The syntax and design for this feature was inspired by the ReST support in Ruby on Rails.
- * See <a href="http://ryandaigle.com/articles/2006/08/01/whats-new-in-edge-rails-simply-restful-support-and-how-to-use-it">
- * http://ryandaigle.com/articles/2006/08/01/whats-new-in-edge-rails-simply-restful-support-and-how-to-use-it
- * </a>
- * </p>
- *
  * <!-- END SNIPPET: description -->
  */
 public class RestActionMapper extends DefaultActionMapper {
@@ -208,7 +186,8 @@ public class RestActionMapper extends DefaultActionMapper {
     }
     
     /**
-     * Parses the name and namespace from the uri.  Doesn't allow slashes in name.
+     * Parses the name and namespace from the uri.  Uses the configured package 
+     * namespaces to determine the name and id parameter, to be parsed later.
      *
      * @param uri
      *            The uri

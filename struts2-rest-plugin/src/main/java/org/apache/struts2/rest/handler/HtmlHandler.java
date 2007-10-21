@@ -28,6 +28,9 @@ import java.util.Collections;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionInvocation;
 
+/**
+ * Handles HTML content, usually just a simple passthrough to the framework
+ */
 public class HtmlHandler implements ContentTypeHandler {
 
     public String fromObject(Object obj, String resultCode, OutputStream out) throws IOException {

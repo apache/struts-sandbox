@@ -31,7 +31,7 @@ import com.opensymphony.xwork2.inject.Inject;
 
 
 /**
- * 
+ * Factory that creates the {@link RestActionInvocation}
  */
 public class RestActionProxyFactory extends DefaultActionProxyFactory {
 

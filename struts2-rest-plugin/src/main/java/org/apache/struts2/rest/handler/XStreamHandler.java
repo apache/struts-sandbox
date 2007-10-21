@@ -26,6 +26,9 @@ import java.io.OutputStream;
 
 import com.thoughtworks.xstream.XStream;
 
+/**
+ * Handles XML content
+ */
 public class XStreamHandler implements ContentTypeHandler {
 
     public String fromObject(Object obj, String resultCode, OutputStream out) throws IOException {

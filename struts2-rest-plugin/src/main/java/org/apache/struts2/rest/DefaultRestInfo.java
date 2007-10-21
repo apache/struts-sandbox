@@ -27,6 +27,9 @@ import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * Default implementation of rest info that uses fluent-style construction
+ */
 public class DefaultRestInfo implements RestInfo {
     String resultCode;
     int status = SC_OK;
