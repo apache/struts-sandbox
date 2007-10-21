@@ -46,11 +46,13 @@ public class OrdersResource extends ValidationAwareSupport implements ModelDrive
     
     public String destroy() {
         orders.remove(model.getId());
+        model = null;
         return "success";
     }
     
     public RestInfo create() {
         orders.put(model.getId(), model);
+        model = null;
         return new DefaultRestInfo()
             .setLocationId(model.getId())
             .renderResult("success");
@@ -58,6 +60,7 @@ public class OrdersResource extends ValidationAwareSupport implements ModelDrive
     
     public String update() {
         orders.put(model.getId(), model);
+        model = null;
         return "success";
     }
     

@@ -29,8 +29,10 @@ import com.thoughtworks.xstream.XStream;
 public class XStreamHandler implements ContentTypeHandler {
 
     public String fromObject(Object obj, String resultCode, OutputStream out) throws IOException {
-        XStream xstream = createXStream();
-        xstream.toXML(obj, out);
+        if (obj != null) {
+            XStream xstream = createXStream();
+            xstream.toXML(obj, out);
+        }
         return null;
     }
 
