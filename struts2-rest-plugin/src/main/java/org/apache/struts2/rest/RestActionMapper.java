@@ -39,7 +39,7 @@ import com.opensymphony.xwork2.util.logging.LoggerFactory;
 /**
  * <!-- START SNIPPET: description -->
  *
- * Restful action mapper that enforces Ruby-On-Rails Rest-style mappings.If the method 
+ * This Restful action mapper enforces Ruby-On-Rails Rest-style mappings.  If the method 
  * is not specified (via '!' or 'method:' prefix), the method is "guessed" at using 
  * ReST-style conventions that examine the URL and the HTTP method.  Special care has
  * been given to ensure this mapper works correctly with the codebehind plugin so that

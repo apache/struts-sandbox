@@ -9,6 +9,7 @@
 	
 	
 	<!-- Filters -->
+	<!-- START SNIPPET: filter -->
     <filter>
         <filter-name>action2</filter-name>
         <filter-class>org.apache.struts2.dispatcher.FilterDispatcher</filter-class>
@@ -17,6 +18,7 @@
         	<param-value>org.apache.struts2.rest.example</param-value>
         </init-param>
     </filter>
+    <!-- END SNIPPET: filter -->
 	
     <filter-mapping>
         <filter-name>action2</filter-name>
