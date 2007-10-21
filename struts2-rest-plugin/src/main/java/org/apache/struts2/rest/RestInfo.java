@@ -27,4 +27,6 @@ public interface RestInfo {
 
     String apply(HttpServletRequest request,
             HttpServletResponse response, Object target);
+    
+    int getStatus();
 }

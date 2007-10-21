@@ -101,6 +101,10 @@ public class DefaultRestInfo implements RestInfo {
         }
         return resultCode;
     }
+
+    public int getStatus() {
+        return status;
+    }
     
     
     

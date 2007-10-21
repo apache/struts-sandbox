@@ -28,6 +28,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import static javax.servlet.http.HttpServletResponse.SC_OK;
 
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.rest.handler.ContentTypeHandler;
@@ -73,12 +74,22 @@ public class ContentTypeHandlerManager {
             target = ((ModelDriven)target).getModel();
         }
         
+        boolean statusNotOk = false;
         if (methodResult instanceof RestInfo) {
             RestInfo info = (RestInfo) methodResult;
             resultCode = info.apply(req, res, target);
+            if (info.getStatus() != SC_OK) {
+                statusNotOk = true;
+            }
         } else {
             resultCode = (String) methodResult;
         }
+        
+        // Don't return any content for PUT, DELETE, and POST where there are no errors
+        if (!statusNotOk && !"get".equalsIgnoreCase(req.getMethod())) {
+            target = null;
+        }
+        
         ContentTypeHandler handler = getHandlerForRequest(req);
         String extCode = resultCode+"-"+handler.getExtension();
         if (actionConfig.getResults().get(extCode) != null) {
@@ -95,6 +106,7 @@ public class ContentTypeHandlerManager {
             }
         }
         return resultCode;
+        
     }
     
     protected String findExtension(String url) {
