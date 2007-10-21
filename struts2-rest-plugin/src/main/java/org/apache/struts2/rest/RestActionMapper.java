@@ -20,26 +20,21 @@
  */
 package org.apache.struts2.rest;
 
+import java.util.HashMap;
+import java.util.Iterator;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts2.StrutsConstants;
+import org.apache.struts2.dispatcher.mapper.ActionMapping;
+import org.apache.struts2.dispatcher.mapper.DefaultActionMapper;
+
 import com.opensymphony.xwork2.config.Configuration;
 import com.opensymphony.xwork2.config.ConfigurationManager;
 import com.opensymphony.xwork2.config.entities.PackageConfig;
 import com.opensymphony.xwork2.inject.Inject;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
-
-import javax.servlet.http.HttpServletRequest;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.StringTokenizer;
-import java.net.URLDecoder;
-
-import org.apache.struts2.RequestUtils;
-import org.apache.struts2.StrutsConstants;
-import org.apache.struts2.dispatcher.mapper.ActionMapping;
-import org.apache.struts2.dispatcher.mapper.DefaultActionMapper;
 
 /**
  * <!-- START SNIPPET: description -->
@@ -156,14 +151,14 @@ public class RestActionMapper extends DefaultActionMapper {
             // If a method hasn't been explicitly named, try to guess using ReST-style patterns
             if (mapping.getMethod() == null) {
 
-                // Handle uris ending in '/'
-                if (lastSlashPos == fullName.length() -1) {
+                // Handle uris with no id, possibly ending in '/'
+                if (lastSlashPos == -1 || lastSlashPos == fullName.length() -1) {
 
-                    // Index e.g. foo/
+                    // Index e.g. foo
                     if (isGet(request)) {
                         mapping.setMethod("index");
                         
-                    // Creating a new entry on POST e.g. foo/
+                    // Creating a new entry on POST e.g. foo
                     } else if (isPost(request)) {
                         mapping.setMethod("create");
                     }
@@ -174,11 +169,11 @@ public class RestActionMapper extends DefaultActionMapper {
                     // Viewing the form to edit an item e.g. foo/1;edit
                     if (isGet(request) && id.endsWith(";edit")) {
                         id = id.substring(0, id.length() - ";edit".length());
-                        mapping.setMethod("input");
+                        mapping.setMethod("edit");
                         
                     // Viewing the form to create a new item e.g. foo/new
                     } else if (isGet(request) && "new".equals(id)) {
-                        mapping.setMethod("input");
+                        mapping.setMethod("editNew");
 
                     // Removing an item e.g. foo/1
                     } else if (isDelete(request)) {
@@ -234,17 +229,22 @@ public class RestActionMapper extends DefaultActionMapper {
             namespace = "/";
             name = uri.substring(lastSlash + 1);
         } else {
-            int secondToLastSlash = uri.lastIndexOf('/', lastSlash - 1);
-            if (secondToLastSlash == 0) {
-                namespace = "/";
-                name = uri.substring(secondToLastSlash + 1);
-            } else if (secondToLastSlash > -1) {
-                namespace = uri.substring(0, secondToLastSlash);
-                name = uri.substring(secondToLastSlash + 1);
-            } else {
-                namespace = "";
-                name = uri;
+            // Try to find the namespace in those defined, defaulting to ""
+            Configuration config = configManager.getConfiguration();
+            String prefix = uri.substring(0, lastSlash);
+            namespace = "";
+            // Find the longest matching namespace, defaulting to the default
+            for (Iterator i = config.getPackageConfigs().values().iterator(); i
+                    .hasNext();) {
+                String ns = ((PackageConfig) i.next()).getNamespace();
+                if (ns != null && prefix.startsWith(ns) && (prefix.length() == ns.length() || prefix.charAt(ns.length()) == '/')) {
+                    if (ns.length() > namespace.length()) {
+                        namespace = ns;
+                    }
+                }
             }
+
+            name = uri.substring(namespace.length() + 1);
         }
 
         mapping.setNamespace(namespace);

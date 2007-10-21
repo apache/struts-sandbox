@@ -6,24 +6,24 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-	<title>Order <s:property value="model.id" /></title>
+	<title>Order <s:property value="id" /></title>
 </head>
 <body>
     <table>
         <tr>
             <th>ID</th>
-            <td><s:property value="model.id" /></td>
+            <td><s:property value="id" /></td>
         </tr>
         <tr>
             <th>Client</th>
-            <td><s:property value="model.clientName" /></td>
+            <td><s:property value="clientName" /></td>
         </tr>
         <tr>
             <th>Amount</th>
-            <td><s:property value="model.amount" /></td>
+            <td><s:property value="amount" /></td>
         </tr>
     </table>    	
-    <a href="./.xhtml">Back to Orders</a>
+    <a href="../orders.xhtml">Back to Orders</a>
 </body>
 </html>
 	

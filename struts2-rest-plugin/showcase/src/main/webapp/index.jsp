@@ -1,2 +1,2 @@
 
-<% response.sendRedirect("order/.xhtml"); %>
+<% response.sendRedirect("orders.xhtml"); %>

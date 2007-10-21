@@ -14,14 +14,16 @@ import com.opensymphony.xwork2.ModelDriven;
 import com.opensymphony.xwork2.Validateable;
 import com.opensymphony.xwork2.ValidationAwareSupport;
 
-public class OrderResource extends ValidationAwareSupport implements ModelDriven<Object>, ParameterAware, Validateable{
+public class OrdersResource extends ValidationAwareSupport implements ModelDriven<Object>, ParameterAware, Validateable{
     
     private Order model = new Order();
-    private static Map<String,Order> orders = new HashMap<String,Order>() {{
-        put("3", new Order("3", "Bob", 33));
-        put("4", new Order("4", "Sarah", 44));
-        put("5", new Order("5", "Jim", 66));
-    }};
+    private static Map<String,Order> orders = new HashMap<String,Order>();
+    
+    static {
+        orders.put("3", new Order("3", "Bob", 33));
+        orders.put("4", new Order("4", "Sarah", 44));
+        orders.put("5", new Order("5", "Jim", 66));
+    }
     private Collection<Order> list;
     
     public void validate() {
@@ -34,13 +36,12 @@ public class OrderResource extends ValidationAwareSupport implements ModelDriven
         return "show";
     }
     
-    public String input() {
-        if (model.getId() != null) {
-            return "input";
-        } else {
-            return "new";
-        }
-        
+    public String edit() {
+        return "edit";
+    }
+    
+    public String editNew() {
+        return "editNew";
     }
     
     public String destroy() {
@@ -61,7 +62,7 @@ public class OrderResource extends ValidationAwareSupport implements ModelDriven
     }
     
     public RestInfo index() {
-        list = orders.values();
+        list = new ArrayList(orders.values());
         
         return new DefaultRestInfo()
             .renderResult("index")

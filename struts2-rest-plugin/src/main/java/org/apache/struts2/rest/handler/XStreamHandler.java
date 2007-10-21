@@ -20,16 +20,10 @@
  */
 package org.apache.struts2.rest.handler;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.struts2.ServletActionContext;
-
-import com.opensymphony.xwork2.ActionInvocation;
 import com.thoughtworks.xstream.XStream;
 
 public class XStreamHandler implements ContentTypeHandler {

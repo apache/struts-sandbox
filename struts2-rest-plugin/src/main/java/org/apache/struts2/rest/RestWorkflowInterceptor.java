@@ -23,7 +23,11 @@ package org.apache.struts2.rest;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.dispatcher.mapper.ActionMapping;
+
 import com.opensymphony.xwork2.Action;
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.ValidationAware;
 import com.opensymphony.xwork2.inject.Inject;
@@ -164,12 +168,22 @@ public class RestWorkflowInterceptor extends MethodFilterInterceptor {
             	if (LOG.isDebugEnabled()) {
             		LOG.debug("Errors on action "+validationAwareAction+", returning result name 'input'");
             	}
+            	ActionMapping mapping = (ActionMapping) ActionContext.getContext().get(ServletActionContext.ACTION_MAPPING);
+            	String method = inputResultName;
+                if ("create".equals(mapping.getMethod())) {
+                    method = "editNew";
+                } else if ("update".equals(mapping.getMethod())) {
+                    method = "edit";
+                }
+                
+                
             	RestInfo info = new DefaultRestInfo()
             	    .disableCaching()
-            	    .renderResult(inputResultName)
+            	    .renderResult(method)
             	    .withStatus(SC_BAD_REQUEST);
             	
             	Map errors = new HashMap();
+            	
             	errors.put("actionErrors", validationAwareAction.getActionErrors());
             	errors.put("fieldErrors", validationAwareAction.getFieldErrors());
             	return manager.handleResult(invocation.getProxy().getConfig(), info, errors);

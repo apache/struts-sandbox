@@ -10,7 +10,7 @@
 </head>
 <body>
     Operation Successful    <br />	
-     <a href="./.xhtml">Back to Orders</a>
+     <a href="<%=request.getContextPath() %>/orders.xhtml">Back to Orders</a>
 </body>
 </html>
 	

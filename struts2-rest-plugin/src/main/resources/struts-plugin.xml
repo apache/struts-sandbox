@@ -60,10 +60,10 @@
                 <interceptor-ref name="rest" />
                 <interceptor-ref name="conversionError"/>
                 <interceptor-ref name="validation">
-                    <param name="excludeMethods">input,back,cancel,browse,index,show</param>
+                    <param name="excludeMethods">input,back,cancel,browse,index,show,edit,editNew</param>
                 </interceptor-ref>
                 <interceptor-ref name="restWorkflow">
-                    <param name="excludeMethods">input,back,cancel,browse,index,show</param>
+                    <param name="excludeMethods">input,back,cancel,browse,index,show,edit,editNew</param>
                 </interceptor-ref>
             </interceptor-stack>
     
