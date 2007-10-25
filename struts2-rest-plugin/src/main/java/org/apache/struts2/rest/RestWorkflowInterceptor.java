@@ -181,7 +181,7 @@ public class RestWorkflowInterceptor extends MethodFilterInterceptor {
                 }
                 
                 
-            	RestInfo info = new DefaultRestInfo()
+            	HttpHeaders info = new DefaultHttpHeaders()
             	    .disableCaching()
             	    .renderResult(method)
             	    .withStatus(SC_BAD_REQUEST);

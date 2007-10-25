@@ -20,26 +20,28 @@
  */
 package org.apache.struts2.rest;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import org.apache.struts2.config.ClasspathPackageProvider;
+
+import com.opensymphony.xwork2.util.ResolverUtil.ClassTest;
 
 /**
- * Type-safe rest-related information to apply to a response
+ * Checks for actions ending in Controller indicating a Rest controller
  */
-public interface RestInfo {
-
-    /**
-     * Applies the configured information to the response
-     * @param request The request
-     * @param response The response
-     * @param target The target object, usually the action
-     * @return The result code to process
-     */
-    String apply(HttpServletRequest request,
-            HttpServletResponse response, Object target);
+public class ControllerClasspathPackageProvider extends ClasspathPackageProvider {
     
-    /**
-     * The HTTP status code
-     */
-    int getStatus();
+    @Override
+    protected ClassTest createActionClassTest() {
+        return new ClassTest() {
+            // Match Action implementations and classes ending with "Controller"
+            public boolean matches(Class type) {
+                return (type.getSimpleName().endsWith("Controller"));
+            }
+        };
+    }
+    
+    @Override
+    protected String getClassSuffix() {
+        return "Controller";
+    }
+
 }

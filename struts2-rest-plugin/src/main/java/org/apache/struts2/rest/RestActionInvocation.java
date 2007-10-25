@@ -67,7 +67,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * Extends the usual {@link ActionInvocation} to add support for processing the object returned
- * from the action execution.  This allows us to support methods that return {@link RestInfo}
+ * from the action execution.  This allows us to support methods that return {@link HttpHeaders}
  * as well as apply content type-specific operations to the result.
  */
 public class RestActionInvocation extends DefaultActionInvocation {

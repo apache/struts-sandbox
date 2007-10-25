@@ -93,8 +93,8 @@ public class ContentTypeHandlerManager {
         }
         
         boolean statusNotOk = false;
-        if (methodResult instanceof RestInfo) {
-            RestInfo info = (RestInfo) methodResult;
+        if (methodResult instanceof HttpHeaders) {
+            HttpHeaders info = (HttpHeaders) methodResult;
             resultCode = info.apply(req, res, target);
             if (info.getStatus() != SC_OK) {
                 statusNotOk = true;

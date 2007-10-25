@@ -54,6 +54,27 @@ import com.opensymphony.xwork2.util.logging.LoggerFactory;
  *       from the action name.  Whether or not the method is specified, the mapper will 
  *       try to truncate the identifier from the url and store it as a parameter.
  *   </li>
+ *   <li><code>struts.mapper.indexMethodName</code> - The method name to call for a GET
+ *       request with no id parameter. Defaults to 'index'.
+ *   </li>
+ *   <li><code>struts.mapper.getMethodName</code> - The method name to call for a GET
+ *       request with an id parameter. Defaults to 'show'.
+ *   </li>
+ *   <li><code>struts.mapper.postMethodName</code> - The method name to call for a POST
+ *       request with no id parameter. Defaults to 'create'.
+ *   </li>
+ *   <li><code>struts.mapper.putMethodName</code> - The method name to call for a PUT
+ *       request with an id parameter. Defaults to 'update'.
+ *   </li>
+ *   <li><code>struts.mapper.deleteMethodName</code> - The method name to call for a DELETE
+ *       request with an id parameter. Defaults to 'destroy'.
+ *   </li>
+ *   <li><code>struts.mapper.editMethodName</code> - The method name to call for a GET
+ *       request with an id parameter and the 'edit' view specified. Defaults to 'edit'.
+ *   </li>
+ *   <li><code>struts.mapper.newMethodName</code> - The method name to call for a GET
+ *       request with no id parameter and the 'new' view specified. Defaults to 'editNew'.
+ *   </li>
  * </ul>
  * <p>
  * The following URL's will invoke its methods:
@@ -78,6 +99,13 @@ public class RestActionMapper extends DefaultActionMapper {
     protected static final Logger LOG = LoggerFactory.getLogger(RestActionMapper.class);
     public static final String HTTP_METHOD_PARAM = "_method";
     private String idParameterName = "id";
+    private String indexMethodName = "index";
+    private String getMethodName = "show";
+    private String postMethodName = "create";
+    private String editMethodName = "edit";
+    private String newMethodName = "editNew";
+    private String deleteMethodName = "destroy";
+    private String putMethodName = "update";
     
     public RestActionMapper() {
     }
@@ -90,7 +118,42 @@ public class RestActionMapper extends DefaultActionMapper {
     public void setIdParameterName(String idParameterName) {
         this.idParameterName = idParameterName;
     }
-    
+
+    @Inject(required=false,value="struts.mapper.indexMethodName")
+    public void setIndexMethodName(String indexMethodName) {
+        this.indexMethodName = indexMethodName;
+    }
+
+    @Inject(required=false,value="struts.mapper.getMethodName")
+    public void setGetMethodName(String getMethodName) {
+        this.getMethodName = getMethodName;
+    }
+
+    @Inject(required=false,value="struts.mapper.postMethodName")
+    public void setPostMethodName(String postMethodName) {
+        this.postMethodName = postMethodName;
+    }
+
+    @Inject(required=false,value="struts.mapper.editMethodName")
+    public void setEditMethodName(String editMethodName) {
+        this.editMethodName = editMethodName;
+    }
+
+    @Inject(required=false,value="struts.mapper.newMethodName")
+    public void setNewMethodName(String newMethodName) {
+        this.newMethodName = newMethodName;
+    }
+
+    @Inject(required=false,value="struts.mapper.deleteMethodName")
+    public void setDeleteMethodName(String deleteMethodName) {
+        this.deleteMethodName = deleteMethodName;
+    }
+
+    @Inject(required=false,value="struts.mapper.putMethodName")
+    public void setPutMethodName(String putMethodName) {
+        this.putMethodName = putMethodName;
+    }
+
     public ActionMapping getMapping(HttpServletRequest request,
             ConfigurationManager configManager) {
         ActionMapping mapping = new ActionMapping();
@@ -134,11 +197,11 @@ public class RestActionMapper extends DefaultActionMapper {
 
                     // Index e.g. foo
                     if (isGet(request)) {
-                        mapping.setMethod("index");
+                        mapping.setMethod(indexMethodName);
                         
                     // Creating a new entry on POST e.g. foo
                     } else if (isPost(request)) {
-                        mapping.setMethod("create");
+                        mapping.setMethod(postMethodName);
                     }
 
                 // Handle uris with an id at the end
@@ -147,23 +210,23 @@ public class RestActionMapper extends DefaultActionMapper {
                     // Viewing the form to edit an item e.g. foo/1;edit
                     if (isGet(request) && id.endsWith(";edit")) {
                         id = id.substring(0, id.length() - ";edit".length());
-                        mapping.setMethod("edit");
+                        mapping.setMethod(editMethodName);
                         
                     // Viewing the form to create a new item e.g. foo/new
                     } else if (isGet(request) && "new".equals(id)) {
-                        mapping.setMethod("editNew");
+                        mapping.setMethod(newMethodName);
 
                     // Removing an item e.g. foo/1
                     } else if (isDelete(request)) {
-                        mapping.setMethod("destroy");
+                        mapping.setMethod(deleteMethodName);
                         
                     // Viewing an item e.g. foo/1
                     } else if (isGet(request)) {
-                        mapping.setMethod("show");
+                        mapping.setMethod(getMethodName);
                     
                     // Updating an item e.g. foo/1    
                     }  else if (isPut(request)) {
-                        mapping.setMethod("update");
+                        mapping.setMethod(putMethodName);
                     }
                 }
             }

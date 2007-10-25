@@ -20,28 +20,26 @@
  */
 package org.apache.struts2.rest;
 
-import org.apache.struts2.config.ClasspathPackageProvider;
-
-import com.opensymphony.xwork2.util.ResolverUtil.ClassTest;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
- * Checks for actions ending in Resource indicating a Rest resource
+ * Type-safe rest-related informtion to apply to a response
  */
-public class ResourceClasspathPackageProvider extends ClasspathPackageProvider {
-    
-    @Override
-    protected ClassTest createActionClassTest() {
-        return new ClassTest() {
-            // Match Action implementations and classes ending with "Resource"
-            public boolean matches(Class type) {
-                return (type.getSimpleName().endsWith("Resource"));
-            }
-        };
-    }
-    
-    @Override
-    protected String getClassSuffix() {
-        return "Resource";
-    }
+public interface HttpHeaders {
 
+    /**
+     * Applies the configured information to the response
+     * @param request The request
+     * @param response The response
+     * @param target The target object, usually the action
+     * @return The result code to process
+     */
+    String apply(HttpServletRequest request,
+            HttpServletResponse response, Object target);
+    
+    /**
+     * The HTTP status code
+     */
+    int getStatus();
 }

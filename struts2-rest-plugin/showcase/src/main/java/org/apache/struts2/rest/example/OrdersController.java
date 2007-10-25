@@ -7,14 +7,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.struts2.interceptor.ParameterAware;
-import org.apache.struts2.rest.DefaultRestInfo;
-import org.apache.struts2.rest.RestInfo;
+import org.apache.struts2.rest.DefaultHttpHeaders;
+import org.apache.struts2.rest.HttpHeaders;
 
 import com.opensymphony.xwork2.ModelDriven;
 import com.opensymphony.xwork2.Validateable;
 import com.opensymphony.xwork2.ValidationAwareSupport;
 
-public class OrdersResource extends ValidationAwareSupport implements ModelDriven<Object>, ParameterAware, Validateable{
+public class OrdersController extends ValidationAwareSupport implements ModelDriven<Object>, ParameterAware, Validateable{
     
     private Order model = new Order();
     private static Map<String,Order> orders = new HashMap<String,Order>();
@@ -49,9 +49,9 @@ public class OrdersResource extends ValidationAwareSupport implements ModelDrive
         return "success";
     }
     
-    public RestInfo create() {
+    public HttpHeaders create() {
         orders.put(model.getId(), model);
-        return new DefaultRestInfo()
+        return new DefaultHttpHeaders()
             .setLocationId(model.getId())
             .renderResult("success");
     }
@@ -61,10 +61,10 @@ public class OrdersResource extends ValidationAwareSupport implements ModelDrive
         return "success";
     }
     
-    public RestInfo index() {
+    public HttpHeaders index() {
         list = new ArrayList(orders.values());
         
-        return new DefaultRestInfo()
+        return new DefaultHttpHeaders()
             .renderResult("index")
             .withETag("2323");
     }

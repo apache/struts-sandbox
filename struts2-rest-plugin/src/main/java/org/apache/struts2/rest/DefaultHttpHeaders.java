@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Default implementation of rest info that uses fluent-style construction
  */
-public class DefaultRestInfo implements RestInfo {
+public class DefaultHttpHeaders implements HttpHeaders {
     String resultCode;
     int status = SC_OK;
     Object etag;
@@ -39,43 +39,43 @@ public class DefaultRestInfo implements RestInfo {
     boolean disableCaching;
     Date lastModified;
     
-    public DefaultRestInfo renderResult(String code) {
+    public DefaultHttpHeaders renderResult(String code) {
         this.resultCode = code;
         return this;
     }
     
-    public DefaultRestInfo withStatus(int code) {
+    public DefaultHttpHeaders withStatus(int code) {
         this.status = code;
         return this;
     }
     
-    public DefaultRestInfo withETag(Object etag) {
+    public DefaultHttpHeaders withETag(Object etag) {
         this.etag = etag;
         return this;
     }
     
-    public DefaultRestInfo setLocationId(Object id) {
+    public DefaultHttpHeaders setLocationId(Object id) {
         this.locationId = id;
         return this;
     }
     
-    public DefaultRestInfo setLocation(String loc) {
+    public DefaultHttpHeaders setLocation(String loc) {
         this.location = loc;
         return this;
     }
     
-    public DefaultRestInfo lastModified(Date date) {
+    public DefaultHttpHeaders lastModified(Date date) {
         this.lastModified = date;
         return this;
     }
     
-    public DefaultRestInfo disableCaching() {
+    public DefaultHttpHeaders disableCaching() {
         this.disableCaching = true;
         return this;
     }
     
     /* (non-Javadoc)
-     * @see org.apache.struts2.rest.RestInfo#apply(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.Object)
+     * @see org.apache.struts2.rest.HttpHeaders#apply(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.Object)
      */
     public String apply(HttpServletRequest request, HttpServletResponse response, Object target) {
         response.setStatus(status);
