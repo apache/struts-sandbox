@@ -20,23 +20,21 @@
  */
 package org.apache.struts2.rest;
 
+import com.opensymphony.xwork2.ModelDriven;
+import com.opensymphony.xwork2.config.entities.ActionConfig;
+import com.opensymphony.xwork2.inject.Container;
+import com.opensymphony.xwork2.inject.Inject;
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.rest.handler.ContentTypeHandler;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import static javax.servlet.http.HttpServletResponse.SC_OK;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import static javax.servlet.http.HttpServletResponse.SC_OK;
-
-import org.apache.struts2.ServletActionContext;
-import org.apache.struts2.rest.handler.ContentTypeHandler;
-
-import com.opensymphony.xwork2.ModelDriven;
-import com.opensymphony.xwork2.config.entities.ActionConfig;
-import com.opensymphony.xwork2.inject.Container;
-import com.opensymphony.xwork2.inject.Inject;
 
 /**
  * Manages {@link ContentTypeHandler} instances and uses them to
@@ -44,19 +42,31 @@ import com.opensymphony.xwork2.inject.Inject;
  */
 public class ContentTypeHandlerManager {
 
-    private Map<String,ContentTypeHandler> handlers = new HashMap<String,ContentTypeHandler>();
-    private String defaultHandlerName;
+    Map<String,ContentTypeHandler> handlers = new HashMap<String,ContentTypeHandler>();
+    String defaultHandlerName;
+    public static final String STRUTS_REST_HANDLER_OVERRIDE_PREFIX = "struts.rest.handlerOverride.";
 
     @Inject("struts.rest.defaultHandlerName")
     public void setDefaultHandlerName(String name) {
         this.defaultHandlerName = name;
     }
-    
+
     @Inject
     public void setContainer(Container container) {
         Set<String> names = container.getInstanceNames(ContentTypeHandler.class);
         for (String name : names) {
             ContentTypeHandler handler = container.getInstance(ContentTypeHandler.class, name);
+
+            // Check for overriding handlers for the current extension
+            String overrideName = container.getInstance(String.class, STRUTS_REST_HANDLER_OVERRIDE_PREFIX +handler.getExtension());
+            if (overrideName != null) {
+                if (!handlers.containsKey(handler.getExtension())) {
+                    handler = container.getInstance(ContentTypeHandler.class, overrideName);
+                } else {
+                    // overriding handler has already been registered
+                    continue;
+                }
+            }
             this.handlers.put(handler.getExtension(), handler);
         }
     }

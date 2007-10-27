@@ -21,7 +21,7 @@
     <constant name="struts.rest.defaultHandlerName" value="xml" />
     <constant name="struts.mapper.class" value="rest" />
     <constant name="struts.mapper.idParameterName" value="id" />
-    <constant name="struts.action.extension" value="" />
+    <constant name="struts.action.extension" value="xhtml,,xml,json" />
     <constant name="struts.configuration.classpath.defaultParentPackage" value="rest-default" />
     
     <package name="rest-default" extends="struts-default">
