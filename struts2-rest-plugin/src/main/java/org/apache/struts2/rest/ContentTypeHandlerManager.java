@@ -29,6 +29,7 @@ import org.apache.struts2.rest.handler.ContentTypeHandler;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import static javax.servlet.http.HttpServletResponse.SC_NOT_MODIFIED;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -101,13 +102,20 @@ public class ContentTypeHandlerManager {
         if (target instanceof ModelDriven) {
             target = ((ModelDriven)target).getModel();
         }
-        
+
         boolean statusNotOk = false;
         if (methodResult instanceof HttpHeaders) {
             HttpHeaders info = (HttpHeaders) methodResult;
             resultCode = info.apply(req, res, target);
             if (info.getStatus() != SC_OK) {
-                statusNotOk = true;
+
+                // Don't return content on a not modified
+                if (info.getStatus() == SC_NOT_MODIFIED) {
+                    target = null;
+                } else {
+                    statusNotOk = true;
+                }
+
             }
         } else {
             resultCode = (String) methodResult;
@@ -117,20 +125,22 @@ public class ContentTypeHandlerManager {
         if (!statusNotOk && !"get".equalsIgnoreCase(req.getMethod())) {
             target = null;
         }
-        
+
         ContentTypeHandler handler = getHandlerForRequest(req);
-        String extCode = resultCode+"-"+handler.getExtension();
-        if (actionConfig.getResults().get(extCode) != null) {
-            resultCode = extCode;
-        } else {
-            ByteArrayOutputStream bout = new ByteArrayOutputStream();
-            
-            resultCode = handler.fromObject(target, resultCode, bout);
-            if (bout.size() > 0) {
-                res.setContentLength(bout.size());
-                res.setContentType(handler.getContentType());
-                res.getOutputStream().write(bout.toByteArray());
-                res.getOutputStream().close();
+        if (handler != null) {
+            String extCode = resultCode+"-"+handler.getExtension();
+            if (actionConfig.getResults().get(extCode) != null) {
+                resultCode = extCode;
+            } else {
+                ByteArrayOutputStream bout = new ByteArrayOutputStream();
+
+                resultCode = handler.fromObject(target, resultCode, bout);
+                if (bout.size() > 0) {
+                    res.setContentLength(bout.size());
+                    res.setContentType(handler.getContentType());
+                    res.getOutputStream().write(bout.toByteArray());
+                    res.getOutputStream().close();
+                }
             }
         }
         return resultCode;

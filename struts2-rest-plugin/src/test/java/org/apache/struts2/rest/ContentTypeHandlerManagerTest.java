@@ -22,15 +22,77 @@ package org.apache.struts2.rest;
 
 import com.mockobjects.dynamic.C;
 import com.mockobjects.dynamic.Mock;
+import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.config.entities.ActionConfig;
 import com.opensymphony.xwork2.inject.Container;
 import junit.framework.TestCase;
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.rest.handler.ContentTypeHandler;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 
+import static javax.servlet.http.HttpServletResponse.SC_NOT_MODIFIED;
+import static javax.servlet.http.HttpServletResponse.SC_OK;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
 public class ContentTypeHandlerManagerTest extends TestCase {
+
+    private ContentTypeHandlerManager mgr;
+    private MockHttpServletResponse mockResponse;
+    private MockHttpServletRequest mockRequest;
+
+    @Override
+    public void setUp() {
+        mgr = new ContentTypeHandlerManager();
+        mockResponse = new MockHttpServletResponse();
+        mockRequest = new MockHttpServletRequest();
+        mockRequest.setMethod("GET");
+        ActionContext.setContext(new ActionContext(new HashMap()));
+        ServletActionContext.setRequest(mockRequest);
+        ServletActionContext.setResponse(mockResponse);
+    }
+
+    @Override
+    public void tearDown() {
+        mockRequest = null;
+        mockRequest = null;
+        mgr = null;
+    }
+
+    public void testHandleResultOK() throws IOException {
+
+        String obj = "mystring";
+        ContentTypeHandler handler = new ContentTypeHandler() {
+            public void toObject(InputStream in, Object target) {}
+            public String fromObject(Object obj, String resultCode, OutputStream stream) throws IOException {
+                stream.write(obj.toString().getBytes());
+                return resultCode;
+            }
+            public String getContentType() { return "foo"; }
+            public String getExtension() { return "foo"; }
+        };
+        mgr.handlers.put("xml", handler);
+        mgr.defaultHandlerName = "xml";
+        mgr.handleResult(new ActionConfig(), new DefaultHttpHeaders().withStatus(SC_OK), obj);
+
+        assertEquals(obj.getBytes().length, mockResponse.getContentLength());
+    }
+
+    public void testHandleResultNotModified() throws IOException {
+
+        Mock mockHandlerXml = new Mock(ContentTypeHandler.class);
+        mockHandlerXml.matchAndReturn("getExtension", "xml");
+        mgr.handlers.put("xml", (ContentTypeHandler) mockHandlerXml.proxy());
+        mgr.handleResult(null, new DefaultHttpHeaders().withStatus(SC_NOT_MODIFIED), new Object());
+
+        assertEquals(0, mockResponse.getContentLength());
+    }
 
     public void testHandlerOverride() {
         Mock mockHandlerXml = new Mock(ContentTypeHandler.class);

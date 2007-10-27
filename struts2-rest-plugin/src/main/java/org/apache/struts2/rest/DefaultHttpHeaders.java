@@ -20,12 +20,11 @@
  */
 package org.apache.struts2.rest;
 
-import static javax.servlet.http.HttpServletResponse.*;
-
-import java.util.Date;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import static javax.servlet.http.HttpServletResponse.SC_NOT_MODIFIED;
+import static javax.servlet.http.HttpServletResponse.SC_OK;
+import java.util.Date;
 
 /**
  * Default implementation of rest info that uses fluent-style construction
@@ -37,6 +36,7 @@ public class DefaultHttpHeaders implements HttpHeaders {
     Object locationId;
     String location;
     boolean disableCaching;
+    boolean noETag = false;
     Date lastModified;
     
     public DefaultHttpHeaders renderResult(String code) {
@@ -51,6 +51,11 @@ public class DefaultHttpHeaders implements HttpHeaders {
     
     public DefaultHttpHeaders withETag(Object etag) {
         this.etag = etag;
+        return this;
+    }
+
+    public DefaultHttpHeaders withNoETag() {
+        this.noETag = true;
         return this;
     }
     
@@ -78,30 +83,60 @@ public class DefaultHttpHeaders implements HttpHeaders {
      * @see org.apache.struts2.rest.HttpHeaders#apply(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.Object)
      */
     public String apply(HttpServletRequest request, HttpServletResponse response, Object target) {
-        response.setStatus(status);
+
         if (disableCaching) {
             response.setHeader("Cache-Control", "no-cache");
-        } else if (lastModified != null) {
-            response.setDateHeader("LastModified", lastModified.getTime());
-        } else {
-            if (etag == null) {
-                etag = String.valueOf(target.hashCode());
-            }
+        }
+        if (lastModified != null) {
+            response.setDateHeader("Last-Modified", lastModified.getTime());
+        }
+        if (etag == null && !noETag) {
+            etag = String.valueOf(target.hashCode());
+        }
+        if (etag != null) {
             response.setHeader("ETag", etag.toString());
         }
+
         if (locationId != null) {
             String url = request.getRequestURL().toString();
             int lastSlash = url.lastIndexOf("/");
             int lastDot = url.lastIndexOf(".");
             if (lastDot > lastSlash && lastDot > -1) {
-                url = url.substring(0, lastDot)+locationId+url.substring(lastDot);
+                url = url.substring(0, lastDot)+"/"+locationId+url.substring(lastDot);
             } else {
-                url += locationId;
+                url += "/"+locationId;
             }
             response.setHeader("Location", url);
         } else if (location != null) {
             response.setHeader("Location", location);
         }
+
+        if (status == SC_OK) {
+            boolean etagNotChanged = false;
+            boolean lastModifiedNotChanged = false;
+            String reqETag = request.getHeader("If-None-Match");
+            if (etag != null) {
+                if (etag.equals(reqETag)) {
+                    etagNotChanged = true;
+                }
+            }
+
+            String reqLastModified = request.getHeader("If-Modified-Since");
+            if (lastModified != null) {
+                if (String.valueOf(lastModified.getTime()).equals(reqLastModified)) {
+                    lastModifiedNotChanged = true;
+                }
+
+            }
+
+            if ((etagNotChanged && lastModifiedNotChanged) ||
+                (etagNotChanged && reqLastModified == null) ||
+                (lastModifiedNotChanged && reqETag == null)) {
+                status = SC_NOT_MODIFIED;
+            }
+        }
+
+        response.setStatus(status);
         return resultCode;
     }
 
