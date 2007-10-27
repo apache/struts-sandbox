@@ -20,21 +20,19 @@
  */
 package org.apache.struts2.rest;
 
-import java.util.HashMap;
-import java.util.Iterator;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.struts2.StrutsConstants;
-import org.apache.struts2.dispatcher.mapper.ActionMapping;
-import org.apache.struts2.dispatcher.mapper.DefaultActionMapper;
-
 import com.opensymphony.xwork2.config.Configuration;
 import com.opensymphony.xwork2.config.ConfigurationManager;
 import com.opensymphony.xwork2.config.entities.PackageConfig;
 import com.opensymphony.xwork2.inject.Inject;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
+import org.apache.struts2.StrutsConstants;
+import org.apache.struts2.dispatcher.mapper.ActionMapping;
+import org.apache.struts2.dispatcher.mapper.DefaultActionMapper;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * <!-- START SNIPPET: description -->
@@ -186,8 +184,18 @@ public class RestActionMapper extends DefaultActionMapper {
             int lastSlashPos = fullName.lastIndexOf('/');
             String id = null;
             if (lastSlashPos > -1) {
+
+                // fun trickery to parse 'actionName/id/methodName' in the case of 'animals/dog/edit'
+                int prevSlashPos = fullName.lastIndexOf('/', lastSlashPos - 1);
+                if (prevSlashPos > -1) {
+                    mapping.setMethod(fullName.substring(lastSlashPos+1));
+                    fullName = fullName.substring(0, lastSlashPos);
+                    lastSlashPos = prevSlashPos;
+                }
                 id = fullName.substring(lastSlashPos+1);
             }
+
+
 
             // If a method hasn't been explicitly named, try to guess using ReST-style patterns
             if (mapping.getMethod() == null) {
