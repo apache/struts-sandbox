@@ -27,13 +27,6 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import static javax.servlet.http.HttpServletResponse.*;
 import java.util.Date;
 
-/**
- * Created by IntelliJ IDEA.
- * User: mrdon
- * Date: 27/10/2007
- * Time: 18:14:48
- * To change this template use File | Settings | File Templates.
- */
 public class DefaultHttpHeadersTest extends TestCase {
     private MockHttpServletResponse mockResponse;
     private MockHttpServletRequest mockRequest;
