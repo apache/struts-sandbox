@@ -44,12 +44,12 @@ import java.util.Set;
 public class ContentTypeHandlerManager {
 
     Map<String,ContentTypeHandler> handlers = new HashMap<String,ContentTypeHandler>();
-    String defaultHandlerName;
+    String defaultExtension;
     public static final String STRUTS_REST_HANDLER_OVERRIDE_PREFIX = "struts.rest.handlerOverride.";
 
-    @Inject("struts.rest.defaultHandlerName")
-    public void setDefaultHandlerName(String name) {
-        this.defaultHandlerName = name;
+    @Inject("struts.rest.defaultExtension")
+    public void setDefaultExtension(String name) {
+        this.defaultExtension = name;
     }
 
     @Inject
@@ -80,7 +80,7 @@ public class ContentTypeHandlerManager {
     public ContentTypeHandler getHandlerForRequest(HttpServletRequest req) {
         String extension = findExtension(req.getRequestURI());
         if (extension == null) {
-            extension = defaultHandlerName;
+            extension = defaultExtension;
         }
         return handlers.get(extension);
     }

@@ -78,7 +78,7 @@ public class ContentTypeHandlerManagerTest extends TestCase {
             public String getExtension() { return "foo"; }
         };
         mgr.handlers.put("xml", handler);
-        mgr.defaultHandlerName = "xml";
+        mgr.defaultExtension = "xml";
         mgr.handleResult(new ActionConfig(), new DefaultHttpHeaders().withStatus(SC_OK), obj);
 
         assertEquals(obj.getBytes().length, mockResponse.getContentLength());

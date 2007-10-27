@@ -18,7 +18,7 @@
     <bean type="org.apache.struts2.rest.handler.ContentTypeHandler" name="html" class="org.apache.struts2.rest.handler.HtmlHandler" />
 
     <constant name="struts.actionProxyFactory" value="rest" />
-    <constant name="struts.rest.defaultHandlerName" value="xml" />
+    <constant name="struts.rest.defaultExtension" value="xml" />
     <constant name="struts.mapper.class" value="rest" />
     <constant name="struts.mapper.idParameterName" value="id" />
     <constant name="struts.action.extension" value="xhtml,,xml,json" />
