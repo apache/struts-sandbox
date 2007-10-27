@@ -81,6 +81,7 @@ import java.util.Iterator;
  *  <li><code>GET:    /movies                => method="index"</code></li>
  *  <li><code>GET:    /movies/Thrillers      => method="show", id="Thrillers"</code></li>
  *  <li><code>GET:    /movies/Thrillers;edit => method="edit", id="Thrillers"</code></li>
+ *  <li><code>GET:    /movies/Thrillers/edit => method="edit", id="Thrillers"</code></li>
  *  <li><code>GET:    /movies/new            => method="editNew"</code></li>
  *  <li><code>POST:   /movies                => method="create"</code></li>
  *  <li><code>PUT:    /movies/Thrillers      => method="update", id="Thrillers"</code></li>
