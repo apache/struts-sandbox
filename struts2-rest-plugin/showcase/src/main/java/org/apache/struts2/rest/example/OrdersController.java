@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.struts2.config.Result;
+import org.apache.struts2.config.Results;
+import org.apache.struts2.dispatcher.ServletActionRedirectResult;
 import org.apache.struts2.interceptor.ParameterAware;
 import org.apache.struts2.rest.DefaultHttpHeaders;
 import org.apache.struts2.rest.HttpHeaders;
@@ -14,6 +17,9 @@ import com.opensymphony.xwork2.ModelDriven;
 import com.opensymphony.xwork2.Validateable;
 import com.opensymphony.xwork2.ValidationAwareSupport;
 
+@Results({
+    @Result(name="success", type=ServletActionRedirectResult.class, value="orders") 
+})
 public class OrdersController extends ValidationAwareSupport implements ModelDriven<Object>, ParameterAware, Validateable{
     
     private Order model = new Order();
@@ -46,11 +52,13 @@ public class OrdersController extends ValidationAwareSupport implements ModelDri
     
     public String destroy() {
         orders.remove(model.getId());
+        addActionMessage("Order removed successfully");
         return "success";
     }
     
     public HttpHeaders create() {
         orders.put(model.getId(), model);
+        addActionMessage("New order created successfully");
         return new DefaultHttpHeaders()
             .setLocationId(model.getId())
             .renderResult("success");
@@ -58,6 +66,7 @@ public class OrdersController extends ValidationAwareSupport implements ModelDri
     
     public String update() {
         orders.put(model.getId(), model);
+        addActionMessage("Order updated successfully");
         return "success";
     }
     
@@ -66,7 +75,7 @@ public class OrdersController extends ValidationAwareSupport implements ModelDri
         
         return new DefaultHttpHeaders()
             .renderResult("index")
-            .withETag("2323");
+            .disableCaching();
     }
     
     public Object getModel() {

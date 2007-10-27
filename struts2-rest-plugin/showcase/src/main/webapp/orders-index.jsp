@@ -9,6 +9,7 @@
 	<title>Orders</title>
 </head>
 <body>
+    <s:actionmessage />
     <table>
         <tr>
             <th>ID</th>

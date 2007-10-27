@@ -28,6 +28,7 @@
         <interceptors>
             <interceptor name="rest" class="org.apache.struts2.rest.ContentTypeInterceptor"/>
             <interceptor name="restWorkflow" class="org.apache.struts2.rest.RestWorkflowInterceptor"/>
+            <interceptor name="messages" class="org.apache.struts2.interceptor.MessageStoreInterceptor" />
 
             <!-- A complete stack with all the common interceptors in place.
                  Generally, this stack should be the one you use, though it
@@ -44,6 +45,9 @@
                 <interceptor-ref name="exception"/>
                 <interceptor-ref name="alias"/>
                 <interceptor-ref name="servletConfig"/>
+                <interceptor-ref name="messages">
+                    <param name="operationMode">AUTOMATIC</param>
+                </interceptor-ref>
                 <interceptor-ref name="prepare"/>
                 <interceptor-ref name="i18n"/>
                 <interceptor-ref name="chain"/>
