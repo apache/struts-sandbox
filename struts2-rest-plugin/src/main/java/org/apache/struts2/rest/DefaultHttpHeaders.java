@@ -39,6 +39,12 @@ public class DefaultHttpHeaders implements HttpHeaders {
     boolean noETag = false;
     Date lastModified;
     
+    public DefaultHttpHeaders() {}
+    
+    public DefaultHttpHeaders(String result) {
+        resultCode = result;
+    }
+    
     public DefaultHttpHeaders renderResult(String code) {
         this.resultCode = code;
         return this;

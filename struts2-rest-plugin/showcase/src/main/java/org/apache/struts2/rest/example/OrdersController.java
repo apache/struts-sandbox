@@ -38,8 +38,8 @@ public class OrdersController extends ValidationAwareSupport implements ModelDri
         }
     }
     
-    public String show() {
-        return "show";
+    public HttpHeaders show() {
+        return new DefaultHttpHeaders("show");
     }
     
     public String edit() {
@@ -73,8 +73,7 @@ public class OrdersController extends ValidationAwareSupport implements ModelDri
     public HttpHeaders index() {
         list = new ArrayList(orders.values());
         
-        return new DefaultHttpHeaders()
-            .renderResult("index")
+        return new DefaultHttpHeaders("index")
             .disableCaching();
     }
     
