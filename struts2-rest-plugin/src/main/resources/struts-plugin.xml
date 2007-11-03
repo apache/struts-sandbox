@@ -72,9 +72,18 @@
             </interceptor-stack>
     
         </interceptors>
+
+        <result-types>
+            <result-type name="redirect" class="org.apache.struts2.dispatcher.ServletRedirectResult">
+                <param name="statusCode">303</param>
+            </result-type>
+            <result-type name="redirectAction" class="org.apache.struts2.dispatcher.ServletActionRedirectResult">
+                <param name="statusCode">303</param>
+            </result-type>
+        </result-types>
     
     
-    	<default-interceptor-ref name="restDefaultStack"/>
+        <default-interceptor-ref name="restDefaultStack"/>
     </package>
 
 </struts>
