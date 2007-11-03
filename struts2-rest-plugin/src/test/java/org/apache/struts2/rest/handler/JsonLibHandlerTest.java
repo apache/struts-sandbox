@@ -20,25 +20,32 @@
  */
 package org.apache.struts2.rest.handler;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
+import junit.framework.TestCase;
 
-/**
- * Handles JSON content using XStream
- */
-public class XStreamJsonHandler extends XStreamHandler {
+import java.io.StringWriter;
+import java.io.IOException;
+import java.io.StringReader;
 
-    @Override
-    protected XStream createXStream() {
-        return new XStream(new JettisonMappedXmlDriver());
+public class JsonLibHandlerTest extends TestCase {
+
+    public void testFromObject() throws IOException {
+        Contact contact = new Contact("bob", true, 44);
+
+        StringWriter writer = new StringWriter();
+        JsonLibHandler handler = new JsonLibHandler();
+        handler.fromObject(contact, "success", writer);
+
+        assertEquals("{\"age\":44,\"important\":true,\"name\":\"bob\"}", writer.toString());
     }
 
-    @Override
-    public String getContentType() {
-        return "text/javascript";
-    }
-    
-    public String getExtension() {
-        return "json";
+    public void testToObject() throws IOException {
+        Contact contact = new Contact("bob", true, 44);
+
+        Contact target = new Contact();
+        StringReader reader = new StringReader("{\"age\":44,\"important\":true,\"name\":\"bob\"}");
+        JsonLibHandler handler = new JsonLibHandler();
+        handler.toObject(reader, target);
+
+        assertEquals(contact, target);
     }
 }

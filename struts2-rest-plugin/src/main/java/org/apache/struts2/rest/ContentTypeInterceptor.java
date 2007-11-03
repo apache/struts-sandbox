@@ -57,7 +57,7 @@ public class ContentTypeInterceptor implements Interceptor {
         }
         
         if (request.getContentLength() > 0) {
-            handler.toObject(request.getInputStream(), target);
+            handler.toObject(request.getReader(), target);
         }
         return invocation.invoke();
     }

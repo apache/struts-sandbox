@@ -20,9 +20,7 @@
  */
 package org.apache.struts2.rest.handler;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 
 import com.opensymphony.xwork2.ActionInvocation;
 
@@ -36,7 +34,7 @@ public interface ContentTypeHandler {
      * @param in The input stream, usually the body of the request
      * @param target The target, usually the action class
      */
-    void toObject(InputStream in, Object target);
+    void toObject(Reader in, Object target) throws IOException;
     
     /**
      * Writes content to the stream
@@ -47,7 +45,7 @@ public interface ContentTypeHandler {
      * @return The new result code
      * @throws IOException If unable to write to the output stream
      */
-    String fromObject(Object obj, String resultCode, OutputStream stream) throws IOException;
+    String fromObject(Object obj, String resultCode, Writer stream) throws IOException;
     
     /**
      * Gets the content type for this handler

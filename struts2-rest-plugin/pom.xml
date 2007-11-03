@@ -24,14 +24,10 @@
             <version>1.2.2</version>
         </dependency>
         <dependency>
-            <groupId>org.codehaus.jettison</groupId>
-            <artifactId>jettison</artifactId>
-            <version>1.0-RC1</version>
-        </dependency>   
-        <dependency>
-            <groupId>stax</groupId>
-            <artifactId>stax-api</artifactId>
-            <version>1.0.1</version>
+            <groupId>net.sf.json-lib</groupId>
+            <artifactId>json-lib</artifactId>
+            <classifier>jdk15</classifier>
+            <version>2.1</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -56,6 +52,13 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-mock</artifactId>
+            <version>1.2.8</version>
+            <optional>true</optional>
+        </dependency>
+
+       <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
             <version>1.2.8</version>
             <optional>true</optional>
         </dependency>

@@ -157,7 +157,7 @@ public class RestWorkflowInterceptor extends MethodFilterInterceptor {
 	}
 	
 	/**
-	 * Intercept {@link ActionInvocation} and processes the errors using the {@link ContentTypeHandler}
+	 * Intercept {@link ActionInvocation} and processes the errors using the {@link org.apache.struts2.rest.handler.ContentTypeHandler}
 	 * appropriate for the request.  
 	 * 
 	 * @return String result name

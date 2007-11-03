@@ -34,8 +34,8 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import static javax.servlet.http.HttpServletResponse.SC_NOT_MODIFIED;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Writer;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -69,9 +69,9 @@ public class ContentTypeHandlerManagerTest extends TestCase {
 
         String obj = "mystring";
         ContentTypeHandler handler = new ContentTypeHandler() {
-            public void toObject(InputStream in, Object target) {}
-            public String fromObject(Object obj, String resultCode, OutputStream stream) throws IOException {
-                stream.write(obj.toString().getBytes());
+            public void toObject(Reader in, Object target) {}
+            public String fromObject(Object obj, String resultCode, Writer stream) throws IOException {
+                stream.write(obj.toString());
                 return resultCode;
             }
             public String getContentType() { return "foo"; }

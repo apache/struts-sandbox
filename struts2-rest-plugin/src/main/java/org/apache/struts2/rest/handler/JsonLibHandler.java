@@ -20,39 +20,42 @@
  */
 package org.apache.struts2.rest.handler;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
+import java.io.*;
 
-import com.thoughtworks.xstream.XStream;
+import net.sf.json.JSONObject;
+import net.sf.json.JsonConfig;
 
 /**
- * Handles XML content
+ * Handles JSON content using json-lib
  */
-public class XStreamHandler implements ContentTypeHandler {
+public class JsonLibHandler implements ContentTypeHandler {
 
-    public String fromObject(Object obj, String resultCode, Writer out) throws IOException {
+    public void toObject(Reader in, Object target) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        char[] buffer = new char[1024];
+        int len = 0;
+        while ((len = in.read(buffer)) > 0) {
+            sb.append(buffer, 0, len);
+        }
+        JSONObject jsonObject = JSONObject.fromObject(sb.toString());
+        JSONObject.toBean(jsonObject, target, new JsonConfig());
+    }
+
+    public String fromObject(Object obj, String resultCode, Writer stream) throws IOException {
         if (obj != null) {
-            XStream xstream = createXStream();
-            xstream.toXML(obj, out);
+            JSONObject jsonObject = JSONObject.fromObject(obj);
+            stream.write(jsonObject.toString());
         }
         return null;
-    }
 
-    public void toObject(Reader in, Object target) {
-        XStream xstream = createXStream();
-        xstream.fromXML(in, target);
-    }
-    
-    protected XStream createXStream() {
-        return new XStream();
+
     }
 
     public String getContentType() {
-        return "application/xml";
+        return "text/javascript";
     }
-
+    
     public String getExtension() {
-        return "xml";
+        return "json";
     }
 }

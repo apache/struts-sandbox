@@ -33,6 +33,7 @@ import static javax.servlet.http.HttpServletResponse.SC_NOT_MODIFIED;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -132,13 +133,14 @@ public class ContentTypeHandlerManager {
             if (actionConfig.getResults().get(extCode) != null) {
                 resultCode = extCode;
             } else {
-                ByteArrayOutputStream bout = new ByteArrayOutputStream();
-
-                resultCode = handler.fromObject(target, resultCode, bout);
-                if (bout.size() > 0) {
-                    res.setContentLength(bout.size());
+                StringWriter writer = new StringWriter();
+                resultCode = handler.fromObject(target, resultCode, writer);
+                String text = writer.toString();
+                if (text.length() > 0) {
+                    byte[] data = text.getBytes("UTF-8");
+                    res.setContentLength(data.length);
                     res.setContentType(handler.getContentType());
-                    res.getOutputStream().write(bout.toByteArray());
+                    res.getOutputStream().write(data);
                     res.getOutputStream().close();
                 }
             }

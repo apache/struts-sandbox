@@ -14,7 +14,7 @@
 	<bean class="org.apache.struts2.rest.ContentTypeHandlerManager" />
 
     <bean type="org.apache.struts2.rest.handler.ContentTypeHandler" name="xml" class="org.apache.struts2.rest.handler.XStreamHandler" />
-    <bean type="org.apache.struts2.rest.handler.ContentTypeHandler" name="json" class="org.apache.struts2.rest.handler.XStreamJsonHandler" />
+    <bean type="org.apache.struts2.rest.handler.ContentTypeHandler" name="json" class="org.apache.struts2.rest.handler.JsonLibHandler" />
     <bean type="org.apache.struts2.rest.handler.ContentTypeHandler" name="html" class="org.apache.struts2.rest.handler.HtmlHandler" />
 
     <constant name="struts.actionProxyFactory" value="rest" />
