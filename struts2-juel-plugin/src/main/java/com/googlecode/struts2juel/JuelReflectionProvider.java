@@ -10,6 +10,9 @@ import com.opensymphony.xwork2.ognl.OgnlReflectionProvider;
 import com.opensymphony.xwork2.util.CompoundRoot;
 import com.opensymphony.xwork2.util.reflection.ReflectionException;
 
+/**
+ * A OgnlReflectionProvider based on Juel.
+ */
 public class JuelReflectionProvider extends OgnlReflectionProvider {
     ExpressionFactory factory = new de.odysseus.el.ExpressionFactoryImpl();
 

@@ -6,6 +6,9 @@ import com.opensymphony.xwork2.util.CompoundRoot;
 
 import de.odysseus.el.util.SimpleContext;
 
+/**
+ * An implementation of SimpleContext that knows about the CompoundRoot.
+ */
 public class CompoundRootELContext extends SimpleContext {
     private VariableMapper variableMapper;
 

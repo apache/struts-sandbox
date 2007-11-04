@@ -1,12 +1,20 @@
 package com.googlecode.struts2juel;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.el.ValueExpression;
 import javax.el.VariableMapper;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import com.opensymphony.xwork2.util.CompoundRoot;
 
+/**
+ * Implementation of VariableMapper based on a CompoundRoot.
+ */
 public class CompoundRootVariableMapper extends VariableMapper {
     private CompoundRoot root;
     
@@ -30,8 +38,7 @@ public class CompoundRootVariableMapper extends VariableMapper {
 
     @Override
     public ValueExpression setVariable(String variable, ValueExpression valueExpression) {
-        // TODO Auto-generated method stub
-        return null;
+        throw new RuntimeException("Method not implemented!");
     }
 
 }
