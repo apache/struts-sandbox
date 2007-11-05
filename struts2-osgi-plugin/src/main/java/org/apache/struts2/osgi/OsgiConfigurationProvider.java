@@ -83,7 +83,7 @@ public class OsgiConfigurationProvider implements ConfigurationProvider {
         Properties props = new Properties();
         props.setProperty("osgi.resource.loader.description","OSGI bundle loader");
         props.setProperty("osgi.resource.loader.class", BundleResourceLoader.class.getName());
-        props.setProperty(Velocity.RESOURCE_LOADER, "strutsclass,osgi");
+        props.setProperty(Velocity.RESOURCE_LOADER, "strutsfile,strutsclass,osgi");
         vm.setVelocityProperties(props);
     }
     
