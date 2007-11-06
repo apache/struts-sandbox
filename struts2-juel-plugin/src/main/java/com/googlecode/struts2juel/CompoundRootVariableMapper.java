@@ -1,14 +1,9 @@
 package com.googlecode.struts2juel;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.el.ValueExpression;
 import javax.el.VariableMapper;
 
 import org.apache.commons.beanutils.PropertyUtils;
-
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import com.opensymphony.xwork2.util.CompoundRoot;
 

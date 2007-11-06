@@ -14,10 +14,17 @@ import com.opensymphony.xwork2.util.reflection.ReflectionException;
  * A OgnlReflectionProvider based on Juel.
  */
 public class JuelReflectionProvider extends OgnlReflectionProvider {
-    ExpressionFactory factory = new de.odysseus.el.ExpressionFactoryImpl();
+	private ExpressionFactory factory;
 
+	public void initExpressionFactory() {
+		if (factory == null) {
+			factory = ExpressionFactoryLocator.locateExpressFactory();
+		}
+	}
+	
     @Override
     public Object getValue(String expr, Map context, Object root) throws ReflectionException {
+    	initExpressionFactory();
         CompoundRoot compoundRoot = new CompoundRoot();
         compoundRoot.add(root);
         ELContext elContext = new CompoundRootELContext(compoundRoot);
@@ -29,6 +36,7 @@ public class JuelReflectionProvider extends OgnlReflectionProvider {
 
     @Override
     public void setValue(String expr, Map context, Object root, Object value) throws ReflectionException {
+    	initExpressionFactory();
         CompoundRoot compoundRoot = new CompoundRoot();
         compoundRoot.add(root);
         ELContext elContext = new CompoundRootELContext(compoundRoot);

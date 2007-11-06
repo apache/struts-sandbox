@@ -21,15 +21,17 @@ public class JuelValueStack implements ValueStack {
 	private Class defaultType;
 	private Map overrides;
 
-	private ExpressionFactory factory = new de.odysseus.el.ExpressionFactoryImpl();
+	private ExpressionFactory factory;
 
 	private ELContext elContext;
 
-	public JuelValueStack() {
+	public JuelValueStack(ExpressionFactory factory) {
+		this.factory = factory;
 		setRoot(new CompoundRoot());
 	}
 
-	public JuelValueStack(ValueStack vs) {
+	public JuelValueStack(ExpressionFactory factory, ValueStack vs) {
+		this.factory = factory;
 		setRoot(new CompoundRoot(vs.getRoot()));
 	}
 
