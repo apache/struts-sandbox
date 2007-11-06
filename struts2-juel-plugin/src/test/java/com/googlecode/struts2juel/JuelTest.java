@@ -9,6 +9,7 @@ import junit.framework.TestCase;
 import com.opensymphony.xwork2.util.CompoundRoot;
 
 public class JuelTest extends TestCase {
+	
     public void testBasicFind() throws IllegalAccessException,
         InvocationTargetException, NoSuchMethodException {
         ExpressionFactory factory = new de.odysseus.el.ExpressionFactoryImpl();

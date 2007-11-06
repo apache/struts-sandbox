@@ -20,7 +20,7 @@ public class CompoundRootELContext extends ELContext {
     private VariableMapper variableMapper;
     private FunctionMapper functionMapper = new NullFunctionMapper();
 
-    private static final ELResolver DEFAULT_RESOLVER_READ_ONLY = new CompositeELResolver() {
+    private static final ELResolver DEFAULT_RESOLVER_READ_WRITE = new CompositeELResolver() {
 		{
 			add(new ArrayELResolver(false));
 			add(new ListELResolver(false));
@@ -41,7 +41,7 @@ public class CompoundRootELContext extends ELContext {
 
 	@Override
 	public ELResolver getELResolver() {
-		return DEFAULT_RESOLVER_READ_ONLY;
+		return DEFAULT_RESOLVER_READ_WRITE;
 	}
 
 	@Override

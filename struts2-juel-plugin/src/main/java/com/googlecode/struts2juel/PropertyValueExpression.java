@@ -60,7 +60,7 @@ public class PropertyValueExpression extends ValueExpression {
 
 	@Override
 	public boolean isReadOnly(ELContext arg0) {
-		return PropertyUtils.isWriteable(object, property);
+		return !PropertyUtils.isWriteable(object, property);
 	}
 
 	@Override
