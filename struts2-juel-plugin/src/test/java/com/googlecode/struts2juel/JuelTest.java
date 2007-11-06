@@ -16,7 +16,7 @@ public class JuelTest extends TestCase {
         CompoundRoot root = new CompoundRoot();
         TestObject obj = new TestObject();
         root.add(obj);
-        JuelValueStack stack = new JuelValueStack();
+        JuelValueStack stack = new JuelValueStack(factory);
         stack.setRoot(root);
         stack.setValue("${value}", "Hello World");
         String value = stack.findString("${value}");
@@ -30,7 +30,7 @@ public class JuelTest extends TestCase {
         CompoundRoot root = new CompoundRoot();
         TestObject obj = new TestObject();
         root.add(obj);
-        JuelValueStack stack = new JuelValueStack();
+        JuelValueStack stack = new JuelValueStack(factory);
         stack.setRoot(root);
         stack.setValue("${value}", "Hello World");
         String value = stack.findString("${VALUENOTHERE}");
