@@ -22,7 +22,6 @@ public class CompoundRootELContext extends ELContext {
 
     private static final ELResolver DEFAULT_RESOLVER_READ_ONLY = new CompositeELResolver() {
 		{
-			add(new CompoundRootELResolver());
 			add(new ArrayELResolver(false));
 			add(new ListELResolver(false));
 			add(new MapELResolver(false));
