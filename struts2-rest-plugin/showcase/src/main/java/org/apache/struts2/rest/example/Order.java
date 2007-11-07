@@ -1,7 +1,5 @@
 package org.apache.struts2.rest.example;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-
 public class Order implements Cloneable {
     String id;
     String clientName;
