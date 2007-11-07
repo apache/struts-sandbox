@@ -9,7 +9,7 @@
 <body>
 <h3>Please fill out Survey</h3>
 <p>
-  <s:form action="SurveySave" method="get">
+  <s:form action="SurveySave" method="post">
   	<s:textfield label="First Name" name="surveyBean.firstName"></s:textfield>
   	<s:textfield label="Last Name" name="surveyBean.lastName"></s:textfield>
   	<s:textfield label="Age" name="surveyBean.age"></s:textfield>
