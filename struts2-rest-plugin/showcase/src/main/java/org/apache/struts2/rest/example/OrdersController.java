@@ -20,10 +20,12 @@ import com.opensymphony.xwork2.ValidationAwareSupport;
 @Results({
     @Result(name="success", type=ServletActionRedirectResult.class, value="orders") 
 })
-public class OrdersController extends ValidationAwareSupport implements ModelDriven<Object>, ParameterAware, Validateable{
+public class OrdersController extends ValidationAwareSupport implements ModelDriven<Object>, Validateable{
     
     private Order model = new Order();
     private static Map<String,Order> orders = new HashMap<String,Order>();
+    private static int nextId = 6;
+    private String id;
     
     static {
         orders.put("3", new Order("3", "Bob", 33));
@@ -31,10 +33,17 @@ public class OrdersController extends ValidationAwareSupport implements ModelDri
         orders.put("5", new Order("5", "Jim", 66));
     }
     private Collection<Order> list;
+
+    public void setId(String id) {
+        if (id != null && orders.containsKey(id)) {
+            this.model = orders.get(id);
+        }
+        this.id = id;
+    }
     
     public void validate() {
-        if (model.getId() == null || model.getId().length() ==0) {
-            addFieldError("id", "ID is wrong");
+        if (model.getClientName() == null || model.getClientName().length() ==0) {
+            addFieldError("clientName", "The client name is empty");
         }
     }
     
@@ -47,6 +56,7 @@ public class OrdersController extends ValidationAwareSupport implements ModelDri
     }
     
     public String editNew() {
+        model = new Order();
         return "editNew";
     }
     
@@ -57,11 +67,11 @@ public class OrdersController extends ValidationAwareSupport implements ModelDri
     }
     
     public HttpHeaders create() {
+        model.setId(String.valueOf(nextId++));
         orders.put(model.getId(), model);
         addActionMessage("New order created successfully");
-        return new DefaultHttpHeaders()
-            .setLocationId(model.getId())
-            .renderResult("success");
+        return new DefaultHttpHeaders("success")
+            .setLocationId(model.getId());
     }
     
     public String update() {
@@ -81,12 +91,4 @@ public class OrdersController extends ValidationAwareSupport implements ModelDri
         return (list != null ? list : model);
     }
 
-    // Silly workaround since modeldriven doesn't work right in xwork 2.1.0
-    public void setParameters(Map<String,String[]> parameters) {
-        if (parameters.get("id") != null && orders.get(parameters.get("id")[0]) != null) {
-            orders.get(parameters.get("id")[0]).copyTo(model);
-        }
-    }
-    
-    
 }

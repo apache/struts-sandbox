@@ -117,7 +117,7 @@ public class DefaultHttpHeaders implements HttpHeaders {
             response.setHeader("Location", location);
         }
 
-        if (status == SC_OK) {
+        if (status == SC_OK && !disableCaching) {
             boolean etagNotChanged = false;
             boolean lastModifiedNotChanged = false;
             String reqETag = request.getHeader("If-None-Match");

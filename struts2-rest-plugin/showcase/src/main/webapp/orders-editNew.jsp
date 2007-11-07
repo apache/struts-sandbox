@@ -11,7 +11,6 @@
 <body>
     <s:form method="post" action="%{#request.contextPath}/orders.xhtml">
     <table>
-        <s:textfield name="id" label="ID" />
         <s:textfield name="clientName" label="Client"/>
         <s:textfield name="amount" label="Amount" />
         <tr>

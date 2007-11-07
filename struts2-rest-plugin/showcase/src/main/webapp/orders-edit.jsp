@@ -12,7 +12,7 @@
     <s:form method="post" action="%{#request.contextPath}/orders/%{id}.xhtml">
     <s:hidden name="_method" value="put" />
     <table>
-        <s:textfield name="id" label="ID" />
+        <s:textfield name="id" label="ID" disabled="true"/>
         <s:textfield name="clientName" label="Client"/>
         <s:textfield name="amount" label="Amount" />
         <tr>

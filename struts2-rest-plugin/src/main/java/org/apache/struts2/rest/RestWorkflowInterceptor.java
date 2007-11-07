@@ -164,7 +164,7 @@ public class RestWorkflowInterceptor extends MethodFilterInterceptor {
 	 */
     protected String doIntercept(ActionInvocation invocation) throws Exception {
         Object action = invocation.getAction();
-        
+
         if (action instanceof ValidationAware) {
             ValidationAware validationAwareAction = (ValidationAware) action;
 

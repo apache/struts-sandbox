@@ -2,7 +2,7 @@ package org.apache.struts2.rest.example;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
-public class Order {
+public class Order implements Cloneable {
     String id;
     String clientName;
     int amount;
@@ -32,12 +32,6 @@ public class Order {
     }
     public void setId(String id) {
         this.id = id;
-    }
-    
-    public void copyTo(Order order) {
-        order.setId(getId());
-        order.setAmount(getAmount());
-        order.setClientName(getClientName());
     }
 
     @Override
