@@ -9,6 +9,7 @@ import javax.el.ExpressionFactory;
 import javax.el.PropertyNotFoundException;
 import javax.el.ValueExpression;
 
+import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
 import com.opensymphony.xwork2.util.CompoundRoot;
 import com.opensymphony.xwork2.util.ValueStack;
 
@@ -20,19 +21,27 @@ public class JuelValueStack implements ValueStack {
 	private transient Map context;
 	private Class defaultType;
 	private Map overrides;
+	private XWorkConverter xworkConverter;
 
 	private ExpressionFactory factory;
 
 	private ELContext elContext;
 
-	public JuelValueStack(ExpressionFactory factory) {
-		this.factory = factory;
-		setRoot(new CompoundRoot());
+	public JuelValueStack(ExpressionFactory factory,
+			XWorkConverter xworkConverter) {
+		this(factory, xworkConverter, new CompoundRoot());
 	}
 
-	public JuelValueStack(ExpressionFactory factory, ValueStack vs) {
+	public JuelValueStack(ExpressionFactory factory,
+			XWorkConverter xworkConverter, ValueStack vs) {
+		this(factory, xworkConverter, new CompoundRoot(vs.getRoot()));
+	}
+
+	public JuelValueStack(ExpressionFactory factory,
+			XWorkConverter xworkConverter, CompoundRoot root) {
+		this.xworkConverter = xworkConverter;
 		this.factory = factory;
-		setRoot(new CompoundRoot(vs.getRoot()));
+		setRoot(new CompoundRoot());
 	}
 
 	public String findString(String expr) {
@@ -64,8 +73,11 @@ public class JuelValueStack implements ValueStack {
 			}
 			// parse our expression
 			ValueExpression valueExpr = factory.createValueExpression(
-					elContext, expr, asType);
+					elContext, expr, Object.class);
 			Object retVal = valueExpr.getValue(elContext);
+			if (!Object.class.equals(asType)) {
+				retVal = xworkConverter.convertValue(null, retVal, asType);
+			}
 			return retVal;
 		} catch (PropertyNotFoundException e) {
 			// property not found
@@ -127,7 +139,7 @@ public class JuelValueStack implements ValueStack {
 				expr = "${" + expr + "}";
 			}
 			// hack to allow parameters to be set back
-			// juel doesn't support setting String[] values on String properties
+			// uel doesn't support setting String[] values on String properties
 			if (value != null && value instanceof String[]
 					&& ((String[]) value).length == 1) {
 				value = ((String[]) value)[0];
@@ -151,6 +163,6 @@ public class JuelValueStack implements ValueStack {
 		this.context = new TreeMap();
 		context.put(VALUE_STACK, this);
 		this.root = root;
-		this.elContext = new CompoundRootELContext(root);
+		this.elContext = new CompoundRootELContext(xworkConverter, root);
 	}
 }

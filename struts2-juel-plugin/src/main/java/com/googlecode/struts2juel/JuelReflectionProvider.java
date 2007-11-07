@@ -6,6 +6,8 @@ import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
 
+import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
+import com.opensymphony.xwork2.inject.Inject;
 import com.opensymphony.xwork2.ognl.OgnlReflectionProvider;
 import com.opensymphony.xwork2.util.CompoundRoot;
 import com.opensymphony.xwork2.util.reflection.ReflectionException;
@@ -15,6 +17,12 @@ import com.opensymphony.xwork2.util.reflection.ReflectionException;
  */
 public class JuelReflectionProvider extends OgnlReflectionProvider {
 	private ExpressionFactory factory;
+	private XWorkConverter xworkConverter;
+
+	@Inject
+	public void setXWorkConverter(XWorkConverter conv) {
+		this.xworkConverter = conv;
+	}
 
 	public void initExpressionFactory() {
 		if (factory == null) {
@@ -27,7 +35,7 @@ public class JuelReflectionProvider extends OgnlReflectionProvider {
     	initExpressionFactory();
         CompoundRoot compoundRoot = new CompoundRoot();
         compoundRoot.add(root);
-        ELContext elContext = new CompoundRootELContext(compoundRoot);
+        ELContext elContext = new CompoundRootELContext(xworkConverter, compoundRoot);
         // parse our expression
         ValueExpression valueExpr = factory.createValueExpression(elContext,
             expr, String.class);
@@ -39,7 +47,7 @@ public class JuelReflectionProvider extends OgnlReflectionProvider {
     	initExpressionFactory();
         CompoundRoot compoundRoot = new CompoundRoot();
         compoundRoot.add(root);
-        ELContext elContext = new CompoundRootELContext(compoundRoot);
+        ELContext elContext = new CompoundRootELContext(xworkConverter, compoundRoot);
         // parse our expression
         ValueExpression valueExpr = factory.createValueExpression(elContext,
             expr, String.class);

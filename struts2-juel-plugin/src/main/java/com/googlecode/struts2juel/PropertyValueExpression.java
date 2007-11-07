@@ -7,14 +7,18 @@ import javax.el.ValueExpression;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
+import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
+
 /**
  * A value expression that uses a javabean as the root of the value expression.
  */
 public class PropertyValueExpression extends ValueExpression {
 	private Object object;
 	private String property;
+    private XWorkConverter xworkConverter;
 
 	public PropertyValueExpression(Object object, String property) {
+    	this.xworkConverter = xworkConverter;
 		this.object = object;
 		this.property = property;
 	}
@@ -33,7 +37,7 @@ public class PropertyValueExpression extends ValueExpression {
 	}
 
 	@Override
-	public Class<?> getType(ELContext arg0) {
+	public Class<?> getType(ELContext context) {
 		try {
 			return PropertyUtils.getPropertyType(object, property);
 		} catch (IllegalAccessException e) {
@@ -46,7 +50,7 @@ public class PropertyValueExpression extends ValueExpression {
 	}
 
 	@Override
-	public Object getValue(ELContext arg0) {
+	public Object getValue(ELContext context) {
 		try {
 			return PropertyUtils.getSimpleProperty(object, property);
 		} catch (IllegalAccessException e) {
@@ -59,14 +63,17 @@ public class PropertyValueExpression extends ValueExpression {
 	}
 
 	@Override
-	public boolean isReadOnly(ELContext arg0) {
+	public boolean isReadOnly(ELContext context) {
 		return !PropertyUtils.isWriteable(object, property);
 	}
 
 	@Override
-	public void setValue(ELContext arg0, Object obj) {
+	public void setValue(ELContext context, Object value) {
 		try {
-			PropertyUtils.setSimpleProperty(object, property, obj);
+			Class propType = PropertyUtils.getPropertyType(object, property);
+			XWorkConverter xworkConverter = ((CompoundRootELContext) context).getXworkConverter();
+			Object convertedValue = xworkConverter.convertValue(value, propType);
+			PropertyUtils.setSimpleProperty(object, property, convertedValue);
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException(e);
 		} catch (InvocationTargetException e) {
