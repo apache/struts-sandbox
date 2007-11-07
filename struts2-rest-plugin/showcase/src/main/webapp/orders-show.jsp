@@ -23,7 +23,7 @@
             <td><s:property value="amount" /></td>
         </tr>
     </table>    	
-    <a href="../orders.xhtml">Back to Orders</a>
+    <a href="../orders">Back to Orders</a>
 </body>
 </html>
 	

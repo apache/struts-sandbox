@@ -9,7 +9,7 @@
 	<title>New Order</title>
 </head>
 <body>
-    <s:form method="post" action="%{#request.contextPath}/orders.xhtml">
+    <s:form method="post" action="%{#request.contextPath}/orders">
     <table>
         <s:textfield name="clientName" label="Client"/>
         <s:textfield name="amount" label="Amount" />
@@ -19,7 +19,7 @@
             </td>
     </table>
     </s:form>    	
-    <a href="<%=request.getContextPath() %>/orders.xhtml">Back to Orders</a>
+    <a href="<%=request.getContextPath() %>/orders">Back to Orders</a>
 </body>
 </html>
 	

@@ -22,13 +22,13 @@
             <td><s:property value="id" /></td>
             <td><s:property value="clientName" /></td>
             <td><s:property value="amount" /></td>
-            <td><a href="orders/<s:property value="id" />.xhtml">View</a> |
-                <a href="orders/<s:property value="id" />;edit.xhtml">Edit</a> |
-                <a href="orders/<s:property value="id" />.xhtml?_method=DELETE">Delete</a></td>
+            <td><a href="orders/<s:property value="id" />">View</a> |
+                <a href="orders/<s:property value="id" />/edit">Edit</a> |
+                <a href="orders/<s:property value="id" />?_method=DELETE">Delete</a></td>
         </tr>
         </s:iterator>
     </table>    	
-    <a href="orders/new.xhtml">Create a new order</a>
+    <a href="orders/new">Create a new order</a>
 </body>
 </html>
 	

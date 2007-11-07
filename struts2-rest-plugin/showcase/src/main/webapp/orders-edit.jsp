@@ -9,7 +9,7 @@
 	<title>Order <s:property value="id" /></title>
 </head>
 <body>
-    <s:form method="post" action="%{#request.contextPath}/orders/%{id}.xhtml">
+    <s:form method="post" action="%{#request.contextPath}/orders/%{id}">
     <s:hidden name="_method" value="put" />
     <table>
         <s:textfield name="id" label="ID" disabled="true"/>
@@ -21,7 +21,7 @@
             </td>
     </table>
     </s:form>    	
-    <a href="<%=request.getContextPath() %>/orders.xhtml">Back to Orders</a>
+    <a href="<%=request.getContextPath() %>/orders">Back to Orders</a>
 </body>
 </html>
 	

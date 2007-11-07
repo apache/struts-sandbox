@@ -9,7 +9,6 @@ import java.util.Map;
 import org.apache.struts2.config.Result;
 import org.apache.struts2.config.Results;
 import org.apache.struts2.dispatcher.ServletActionRedirectResult;
-import org.apache.struts2.interceptor.ParameterAware;
 import org.apache.struts2.rest.DefaultHttpHeaders;
 import org.apache.struts2.rest.HttpHeaders;
 
@@ -61,7 +60,7 @@ public class OrdersController extends ValidationAwareSupport implements ModelDri
     }
     
     public String destroy() {
-        orders.remove(model.getId());
+        orders.remove(id);
         addActionMessage("Order removed successfully");
         return "success";
     }
@@ -75,7 +74,7 @@ public class OrdersController extends ValidationAwareSupport implements ModelDri
     }
     
     public String update() {
-        orders.put(model.getId(), model);
+        orders.put(id, model);
         addActionMessage("Order updated successfully");
         return "success";
     }
