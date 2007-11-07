@@ -58,6 +58,10 @@ public class OrdersController extends ValidationAwareSupport implements ModelDri
         model = new Order();
         return "editNew";
     }
+
+    public String deleteConfirm() {
+        return "deleteConfirm";
+    }
     
     public String destroy() {
         orders.remove(id);

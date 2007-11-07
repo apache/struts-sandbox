@@ -24,7 +24,7 @@
             <td><s:property value="amount" /></td>
             <td><a href="orders/<s:property value="id" />">View</a> |
                 <a href="orders/<s:property value="id" />/edit">Edit</a> |
-                <a href="orders/<s:property value="id" />?_method=DELETE">Delete</a></td>
+                <a href="orders/<s:property value="id" />/deleteConfirm">Delete</a></td>
         </tr>
         </s:iterator>
     </table>    	
