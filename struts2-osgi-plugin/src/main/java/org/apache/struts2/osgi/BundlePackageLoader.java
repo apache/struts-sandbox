@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 
 import com.opensymphony.xwork2.ObjectFactory;
 import com.opensymphony.xwork2.config.Configuration;
@@ -20,8 +21,8 @@ import com.opensymphony.xwork2.util.location.Location;
 
 public class BundlePackageLoader implements PackageLoader {
 
-    public List<PackageConfig> loadPackages(Bundle bundle, ObjectFactory objectFactory, Map<String,PackageConfig> pkgConfigs) throws ConfigurationException {
-        BundleConfigurationProvider prov = new BundleConfigurationProvider("struts.xml", bundle);
+    public List<PackageConfig> loadPackages(Bundle bundle, BundleContext bundleContext, ObjectFactory objectFactory, Map<String,PackageConfig> pkgConfigs) throws ConfigurationException {
+        BundleConfigurationProvider prov = new BundleConfigurationProvider("struts.xml", bundle, bundleContext);
         Configuration config = new DefaultConfiguration("struts.xml");
         for (PackageConfig pkg : pkgConfigs.values()) {
             config.addPackageConfig(pkg.getName(), pkg);
@@ -34,10 +35,12 @@ public class BundlePackageLoader implements PackageLoader {
     
     static class BundleConfigurationProvider extends XmlConfigurationProvider {
         private Bundle bundle;
+        private BundleContext bundleContext;
 
-        public BundleConfigurationProvider(String filename, Bundle bundle) { 
+        public BundleConfigurationProvider(String filename, Bundle bundle, BundleContext bundleContext) { 
             super(filename, true);
             this.bundle = bundle;
+            this.bundleContext = bundleContext;
         }
         public BundleConfigurationProvider(String filename) { super(filename); }
 
@@ -47,20 +50,22 @@ public class BundlePackageLoader implements PackageLoader {
             Iterator<URL> iter = new EnumeratorIterator<URL>(e);
             return iter;
         }
+        
         @Override
-        protected boolean verifyAction(String className, String name,
-                Location loc) {
+        protected boolean verifyAction(String className, String name, Location loc) {
             try {
-                Class cls = bundle.loadClass(className);
-                return cls != null;
-            } catch (ClassNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                return bundle.loadClass(className) != null;
+            } catch (Exception e) {
+                //try spring
+                try {
+                    return SpringOSGiUtil.isValidBean(bundleContext, className);
+                } catch (Exception e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
                 return false;
             }
         }
-        
-        
     }
     
     static class EnumeratorIterator<E> implements Iterator<E> {

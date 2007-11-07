@@ -3,6 +3,7 @@ package org.apache.struts2.osgi;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -20,8 +21,6 @@ import java.util.jar.JarInputStream;
 
 import javax.servlet.ServletContext;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.felix.framework.Felix;
 import org.apache.felix.framework.cache.BundleCache;
 import org.apache.felix.framework.util.FelixConstants;
@@ -35,8 +34,6 @@ import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.BundleListener;
 import org.osgi.framework.Constants;
-import org.osgi.framework.FrameworkEvent;
-import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
@@ -49,10 +46,12 @@ import com.opensymphony.xwork2.inject.ContainerBuilder;
 import com.opensymphony.xwork2.inject.Inject;
 import com.opensymphony.xwork2.util.ResolverUtil.Test;
 import com.opensymphony.xwork2.util.location.LocatableProperties;
+import com.opensymphony.xwork2.util.logging.Logger;
+import com.opensymphony.xwork2.util.logging.LoggerFactory;
 
 public class OsgiConfigurationProvider implements ConfigurationProvider {
     
-    private static final Log log = LogFactory.getLog(OsgiConfigurationProvider.class);
+    private static final Logger log = LoggerFactory.getLogger(OsgiConfigurationProvider.class);
 
     private Felix felix;
     private Map<String,Bundle> bundles = Collections.synchronizedMap(new HashMap<String,Bundle>());
@@ -66,6 +65,7 @@ public class OsgiConfigurationProvider implements ConfigurationProvider {
     @Inject
     public void setBundleAccessor(BundleAccessor acc) {
         acc.setBundles(bundles);
+        acc.setBundleContext(bundleContext);
     }
     
     @Inject
@@ -116,7 +116,7 @@ public class OsgiConfigurationProvider implements ConfigurationProvider {
                     bundleNames.add(ref.getBundle().getSymbolicName());
                     log.info("Loading packages from bundle "+ref.getBundle().getSymbolicName());
                     PackageLoader loader = (PackageLoader) bundleContext.getService(ref);
-                    for (PackageConfig pkg : loader.loadPackages(ref.getBundle(), objectFactory, configuration.getPackageConfigs())) {
+                    for (PackageConfig pkg : loader.loadPackages(ref.getBundle(),  bundleContext, objectFactory, configuration.getPackageConfigs())) {
                         configuration.addPackageConfig(pkg.getName(), pkg);
                     }
                 }
@@ -134,12 +134,19 @@ public class OsgiConfigurationProvider implements ConfigurationProvider {
     }
     
     protected void loadOsgi() {
+        //configuration properties 
+        Properties systemProperties = getProperties("default.properties");
+        Properties strutsProperties = getProperties("struts-osgi.properties");
+        
         Map configMap = new StringMap(false);
+        
         configMap.put(Constants.FRAMEWORK_SYSTEMPACKAGES,
             "org.osgi.framework; version=1.4.0," +
             "org.osgi.service.packageadmin; version=1.2.0," +
             "org.osgi.service.startlevel; version=1.0.0," +
-            "org.osgi.service.url; version=1.0.0");
+            "org.osgi.service.url; version=1.0.0" +
+            getSystemPackages(systemProperties) + 
+            strutsProperties.getProperty("xwork"));
 
         Set<String> bundlePaths = new HashSet<String>(findInPackage("bundles"));
         log.info("Loading Struts bundles "+bundlePaths);
@@ -151,7 +158,7 @@ public class OsgiConfigurationProvider implements ConfigurationProvider {
         
         configMap.put(FelixConstants.AUTO_START_PROP + ".1",
             sb.toString());
-        configMap.put(BundleCache.CACHE_PROFILE_DIR_PROP, "/tmp/foo");//System.getProperty("tmp.dir"));
+        configMap.put(BundleCache.CACHE_PROFILE_DIR_PROP, System.getProperty("tmp.dir"));
         configMap.put(BundleCache.CACHE_DIR_PROP, "jim");
         configMap.put(FelixConstants.EMBEDDED_EXECUTION_PROP, "true");
         configMap.put(FelixConstants.SERVICE_URLHANDLERS_PROP, "false");
@@ -182,6 +189,32 @@ public class OsgiConfigurationProvider implements ConfigurationProvider {
         }
         
         
+    }
+    
+    private String getSystemPackages(Properties properties) {
+        String jreVersion = "jre-" + System.getProperty("java.version").substring(0, 3);
+        return properties.getProperty(jreVersion);
+    }
+    
+    private Properties getProperties(String fileName) {
+        URL propertiesURL = OsgiConfigurationProvider.class.getClassLoader().getResource(
+            fileName);
+        Properties properties = new Properties();
+        InputStream is = null;
+        try {
+            is = propertiesURL.openConnection().getInputStream();
+            properties.load(is);
+            is.close();
+        } catch (Exception ex2) {
+            // Try to close input stream if we have one.
+            try {
+                if (is != null)
+                    is.close();
+            } catch (IOException ex3) {
+                // Nothing we can do.
+            }
+        }
+        return properties;
     }
     
     class BundleRegistration implements BundleActivator, BundleListener {

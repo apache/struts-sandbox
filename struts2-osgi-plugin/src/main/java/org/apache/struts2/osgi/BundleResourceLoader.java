@@ -2,13 +2,12 @@ package org.apache.struts2.osgi;
 
 import java.io.InputStream;
 
-import org.apache.struts2.util.ClassLoaderUtils;
-import org.apache.struts2.views.velocity.StrutsResourceLoader;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
-import com.opensymphony.xwork2.inject.Inject;
-
+/**
+ * Finds Velocity templates in bundles
+ */
 public class BundleResourceLoader extends ClasspathResourceLoader {
 
     public synchronized InputStream getResourceStream(String name)
