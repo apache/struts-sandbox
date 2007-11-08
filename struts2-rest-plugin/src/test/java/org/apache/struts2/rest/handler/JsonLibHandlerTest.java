@@ -25,6 +25,7 @@ import junit.framework.TestCase;
 import java.io.StringWriter;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Arrays;
 
 public class JsonLibHandlerTest extends TestCase {
 
@@ -36,6 +37,16 @@ public class JsonLibHandlerTest extends TestCase {
         handler.fromObject(contact, "success", writer);
 
         assertEquals("{\"age\":44,\"important\":true,\"name\":\"bob\"}", writer.toString());
+    }
+
+    public void testFromObjectArray() throws IOException {
+        Contact contact = new Contact("bob", true, 44);
+
+        StringWriter writer = new StringWriter();
+        JsonLibHandler handler = new JsonLibHandler();
+        handler.fromObject(Arrays.asList(contact), "success", writer);
+
+        assertEquals("[{\"age\":44,\"important\":true,\"name\":\"bob\"}]", writer.toString());
     }
 
     public void testToObject() throws IOException {
