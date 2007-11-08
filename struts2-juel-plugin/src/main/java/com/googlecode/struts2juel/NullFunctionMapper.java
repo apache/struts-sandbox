@@ -7,7 +7,7 @@ import javax.el.FunctionMapper;
 public class NullFunctionMapper extends FunctionMapper {
 
 	@Override
-	public Method resolveFunction(String arg0, String arg1) {
+	public Method resolveFunction(String prefix, String localName) {
 		return null;
 	}
 

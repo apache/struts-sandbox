@@ -15,10 +15,8 @@ import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
 public class PropertyValueExpression extends ValueExpression {
 	private Object object;
 	private String property;
-    private XWorkConverter xworkConverter;
 
 	public PropertyValueExpression(Object object, String property) {
-    	this.xworkConverter = xworkConverter;
 		this.object = object;
 		this.property = property;
 	}
@@ -70,10 +68,14 @@ public class PropertyValueExpression extends ValueExpression {
 	@Override
 	public void setValue(ELContext context, Object value) {
 		try {
-			Class propType = PropertyUtils.getPropertyType(object, property);
-			XWorkConverter xworkConverter = ((CompoundRootELContext) context).getXworkConverter();
-			Object convertedValue = xworkConverter.convertValue(value, propType);
-			PropertyUtils.setSimpleProperty(object, property, convertedValue);
+			XWorkConverter converter = (XWorkConverter) context
+					.getContext(XWorkConverter.class);
+			if (converter != null) {
+				Class propType = PropertyUtils
+						.getPropertyType(object, property);
+				value = converter.convertValue(null, value, propType);
+			}
+			PropertyUtils.setSimpleProperty(object, property, value);
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException(e);
 		} catch (InvocationTargetException e) {

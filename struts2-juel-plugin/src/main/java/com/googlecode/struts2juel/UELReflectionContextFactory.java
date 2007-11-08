@@ -8,7 +8,7 @@ import com.opensymphony.xwork2.util.reflection.ReflectionContextFactory;
 /**
  * ReflectionContextFactory for Juel.
  */
-public class JuelReflectionContextFactory implements ReflectionContextFactory {
+public class UELReflectionContextFactory implements ReflectionContextFactory {
     public Map createDefaultContext(Object root) {
         return new HashMap();
     }

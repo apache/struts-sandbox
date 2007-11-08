@@ -13,7 +13,7 @@ import com.opensymphony.xwork2.util.CompoundRoot;
 import com.opensymphony.xwork2.util.reflection.ReflectionException;
 
 /**
- * A OgnlReflectionProvider based on Juel.
+ * A OgnlReflectionProvider based on Unified EL.
  */
 public class JuelReflectionProvider extends OgnlReflectionProvider {
 	private ExpressionFactory factory;
@@ -26,7 +26,7 @@ public class JuelReflectionProvider extends OgnlReflectionProvider {
 
 	public void initExpressionFactory() {
 		if (factory == null) {
-			factory = ExpressionFactoryLocator.locateExpressFactory();
+			factory = ExpressionFactory.newInstance();
 		}
 	}
 	
@@ -35,7 +35,8 @@ public class JuelReflectionProvider extends OgnlReflectionProvider {
     	initExpressionFactory();
         CompoundRoot compoundRoot = new CompoundRoot();
         compoundRoot.add(root);
-        ELContext elContext = new CompoundRootELContext(xworkConverter, compoundRoot);
+        ELContext elContext = new CompoundRootELContext(compoundRoot);
+        elContext.putContext(XWorkConverter.class, xworkConverter);
         // parse our expression
         ValueExpression valueExpr = factory.createValueExpression(elContext,
             expr, String.class);
@@ -47,7 +48,8 @@ public class JuelReflectionProvider extends OgnlReflectionProvider {
     	initExpressionFactory();
         CompoundRoot compoundRoot = new CompoundRoot();
         compoundRoot.add(root);
-        ELContext elContext = new CompoundRootELContext(xworkConverter, compoundRoot);
+        ELContext elContext = new CompoundRootELContext(compoundRoot);
+        elContext.putContext(XWorkConverter.class, xworkConverter);
         // parse our expression
         ValueExpression valueExpr = factory.createValueExpression(elContext,
             expr, String.class);

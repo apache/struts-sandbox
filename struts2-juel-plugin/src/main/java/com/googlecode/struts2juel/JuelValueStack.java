@@ -14,7 +14,7 @@ import com.opensymphony.xwork2.util.CompoundRoot;
 import com.opensymphony.xwork2.util.ValueStack;
 
 /**
- * A ValueStack that uses Juel as the underlying Expression Language.
+ * A ValueStack that uses Unified EL as the underlying Expression Language.
  */
 public class JuelValueStack implements ValueStack {
 	private CompoundRoot root = new CompoundRoot();
@@ -54,7 +54,7 @@ public class JuelValueStack implements ValueStack {
 
 	public Object findValue(String expr, Class asType) {
 		try {
-			if (expr != null && expr.startsWith("#")) {
+			if (expr != null && expr.startsWith("#") && !expr.startsWith("#{")) {
 				int firstDot = expr.indexOf('.');
 				String key = expr.substring(1, firstDot);
 				String value = expr.substring(firstDot + 1);
@@ -66,10 +66,11 @@ public class JuelValueStack implements ValueStack {
 			}
 			if (expr != null && expr.startsWith("%{")) {
 				// replace %{ with ${
-				expr = "$" + expr.substring(1);
+				expr = "#" + expr.substring(1);
 			}
-			if (expr != null && !expr.startsWith("${")) {
-				expr = "${" + expr + "}";
+			if (expr != null && !expr.startsWith("${")
+					&& !expr.startsWith("#{")) {
+				expr = "#{" + expr + "}";
 			}
 			// parse our expression
 			ValueExpression valueExpr = factory.createValueExpression(
@@ -135,14 +136,9 @@ public class JuelValueStack implements ValueStack {
 	public void setValue(String expr, Object value,
 			boolean throwExceptionOnFailure) {
 		try {
-			if (expr != null && !expr.startsWith("${")) {
-				expr = "${" + expr + "}";
-			}
-			// hack to allow parameters to be set back
-			// uel doesn't support setting String[] values on String properties
-			if (value != null && value instanceof String[]
-					&& ((String[]) value).length == 1) {
-				value = ((String[]) value)[0];
+			if (expr != null && !expr.startsWith("${")
+					&& !expr.startsWith("#{")) {
+				expr = "#{" + expr + "}";
 			}
 			// parse our expression
 			ValueExpression valueExpr = factory.createValueExpression(
@@ -163,6 +159,7 @@ public class JuelValueStack implements ValueStack {
 		this.context = new TreeMap();
 		context.put(VALUE_STACK, this);
 		this.root = root;
-		this.elContext = new CompoundRootELContext(xworkConverter, root);
+		elContext = new CompoundRootELContext(root);
+        elContext.putContext(XWorkConverter.class, xworkConverter);
 	}
 }

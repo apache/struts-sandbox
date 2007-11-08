@@ -22,7 +22,7 @@ public class JuelValueStackFactory implements ValueStackFactory {
 
 	public void initExpressionFactory() {
 		if (factory == null) {
-			factory = ExpressionFactoryLocator.locateExpressFactory();
+			factory = ExpressionFactory.newInstance();
 		}
 	}
 

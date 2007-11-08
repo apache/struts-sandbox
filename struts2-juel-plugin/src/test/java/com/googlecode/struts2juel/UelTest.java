@@ -14,12 +14,13 @@ import com.opensymphony.xwork2.XWorkTestCase;
 import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
 import com.opensymphony.xwork2.util.CompoundRoot;
 
-public class JuelTest extends XWorkTestCase {
-	private ExpressionFactory factory = new de.odysseus.el.ExpressionFactoryImpl();
+public class UelTest extends XWorkTestCase {
+	private ExpressionFactory factory = ExpressionFactory.newInstance();
 	private XWorkConverter converter;
+	private DateFormat format = DateFormat.getDateInstance();
 
 	private class DateConverter extends StrutsTypeConverter {
-		private DateFormat format = DateFormat.getDateInstance();
+
 		@Override
 		public Object convertFromString(Map context, String[] values,
 				Class toClass) {
@@ -34,9 +35,9 @@ public class JuelTest extends XWorkTestCase {
 		public String convertToString(Map context, Object o) {
 			return format.format(o);
 		}
-		
+
 	}
-	
+
 	protected void setUp() throws Exception {
 		super.setUp();
 
@@ -58,6 +59,40 @@ public class JuelTest extends XWorkTestCase {
 		stack.setValue("${age}", "56");
 		String age = stack.findString("${age}");
 		assertEquals("56", age);
+	}
+
+	public void testSetStringArray() throws IllegalAccessException,
+			InvocationTargetException, NoSuchMethodException {
+		CompoundRoot root = new CompoundRoot();
+		TestObject obj = new TestObject();
+		root.add(obj);
+		JuelValueStack stack = new JuelValueStack(factory, converter);
+		stack.setRoot(root);
+		stack.setValue("${value}", new String[] { "Hello World" });
+		String value = stack.findString("${value}");
+		assertEquals("Hello World", value);
+
+		stack.setValue("${age}", new String[] { "67" });
+		assertEquals(new Integer(67), stack.findValue("${age}"));
+	}
+
+	public void testDeferredFind() throws IllegalAccessException,
+			InvocationTargetException, NoSuchMethodException {
+		CompoundRoot root = new CompoundRoot();
+		TestObject obj = new TestObject();
+		root.add(obj);
+		JuelValueStack stack = new JuelValueStack(factory, converter);
+		stack.setRoot(root);
+		stack.setValue("#{value}", "Hello World");
+		String value = stack.findString("#{value}");
+		assertEquals("Hello World", value);
+
+		stack.setValue("#{age}", "56");
+		String age = stack.findString("#{age}");
+		assertEquals("56", age);
+
+		stack.setValue("#{date}", new Date());
+		assertEquals(stack.findString("#{date}"), format.format(obj.getDate()));
 	}
 
 	public void test2LevelSet() throws IllegalAccessException,
@@ -95,7 +130,7 @@ public class JuelTest extends XWorkTestCase {
 		assertEquals(stack.findValue("${inner.age}"), obj.getInner().getAge());
 
 		stack.setValue("${date}", new Date());
-		assertEquals(stack.findString("${date}"), obj.getDate());
+		assertEquals(stack.findString("${date}"), format.format(obj.getDate()));
 	}
 
 	public void testNotFound() throws IllegalAccessException,
