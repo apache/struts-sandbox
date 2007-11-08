@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC 
 	"-//W3C//DTD XHTML 1.1 Transitional//EN"
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-	
+
 <%@taglib prefix="s" uri="/struts-tags" %>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -19,12 +19,12 @@
         </tr>
         <s:iterator value="model">
         <tr>
-            <td><s:property value="id" /></td>
-            <td><s:property value="clientName" /></td>
-            <td><s:property value="amount" /></td>
-            <td><a href="orders/<s:property value="id" />">View</a> |
-                <a href="orders/<s:property value="id" />/edit">Edit</a> |
-                <a href="orders/<s:property value="id" />/deleteConfirm">Delete</a></td>
+            <td>${id}</td>
+            <td>${clientName}</td>
+            <td>${amount}</td>
+            <td><a href="orders/${id}">View</a> |
+                <a href="orders/${id}/edit">Edit</a> |
+                <a href="orders/${id}/deleteConfirm">Delete</a></td>
         </tr>
         </s:iterator>
     </table>    	
