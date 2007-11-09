@@ -18,9 +18,12 @@ import com.opensymphony.xwork2.config.entities.PackageConfig;
 import com.opensymphony.xwork2.config.impl.DefaultConfiguration;
 import com.opensymphony.xwork2.config.providers.XmlConfigurationProvider;
 import com.opensymphony.xwork2.util.location.Location;
+import com.opensymphony.xwork2.util.logging.Logger;
+import com.opensymphony.xwork2.util.logging.LoggerFactory;
 
 public class BundlePackageLoader implements PackageLoader {
-
+    private static final Logger LOG = LoggerFactory.getLogger(BundlePackageLoader.class);
+    
     public List<PackageConfig> loadPackages(Bundle bundle, BundleContext bundleContext, ObjectFactory objectFactory, Map<String,PackageConfig> pkgConfigs) throws ConfigurationException {
         BundleConfigurationProvider prov = new BundleConfigurationProvider("struts.xml", bundle, bundleContext);
         Configuration config = new DefaultConfiguration("struts.xml");
@@ -51,18 +54,26 @@ public class BundlePackageLoader implements PackageLoader {
             return iter;
         }
         
+        /* 
+         * Try to find the class (className) on this bundle. If the class it not found,
+         * try to find an Spring bean with that name. 
+         */
         @Override
         protected boolean verifyAction(String className, String name, Location loc) {
             try {
                 return bundle.loadClass(className) != null;
             } catch (Exception e) {
-                //try spring
+                if (LOG.isDebugEnabled())
+                    LOG.debug("Unable to find class #1 in bundle #2", className, bundle.getSymbolicName());
+
+                //try to find a bean with that id
                 try {
                     return SpringOSGiUtil.isValidBean(bundleContext, className);
                 } catch (Exception e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
+                    if (LOG.isDebugEnabled())
+                        LOG.debug("Unable to find bean #1", className);
                 }
+                
                 return false;
             }
         }

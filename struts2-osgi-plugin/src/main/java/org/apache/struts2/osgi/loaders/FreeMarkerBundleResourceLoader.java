@@ -1,13 +1,15 @@
-package org.apache.struts2.osgi;
+package org.apache.struts2.osgi.loaders;
 
 import java.net.URL;
+
+import org.apache.struts2.osgi.DefaultBundleAccessor;
 
 import freemarker.cache.URLTemplateLoader;
 
 /**
  * Finds FreeMarker templates in bundles
  */
-public class BundleTemplateLoader extends URLTemplateLoader {
+public class FreeMarkerBundleResourceLoader extends URLTemplateLoader {
 
     @Override
     protected URL getURL(String name) {

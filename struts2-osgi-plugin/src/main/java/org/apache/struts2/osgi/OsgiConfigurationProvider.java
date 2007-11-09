@@ -25,6 +25,7 @@ import org.apache.felix.framework.Felix;
 import org.apache.felix.framework.cache.BundleCache;
 import org.apache.felix.framework.util.FelixConstants;
 import org.apache.felix.framework.util.StringMap;
+import org.apache.struts2.osgi.loaders.VelocityBundleResourceLoader;
 import org.apache.struts2.views.velocity.VelocityManager;
 import org.apache.velocity.app.Velocity;
 import org.osgi.framework.Bundle;
@@ -51,7 +52,7 @@ import com.opensymphony.xwork2.util.logging.LoggerFactory;
 
 public class OsgiConfigurationProvider implements ConfigurationProvider {
     
-    private static final Logger log = LoggerFactory.getLogger(OsgiConfigurationProvider.class);
+    private static final Logger LOG = LoggerFactory.getLogger(OsgiConfigurationProvider.class);
 
     private Felix felix;
     private Map<String,Bundle> bundles = Collections.synchronizedMap(new HashMap<String,Bundle>());
@@ -82,7 +83,7 @@ public class OsgiConfigurationProvider implements ConfigurationProvider {
     public void setVelocityManager(VelocityManager vm) {
         Properties props = new Properties();
         props.setProperty("osgi.resource.loader.description","OSGI bundle loader");
-        props.setProperty("osgi.resource.loader.class", BundleResourceLoader.class.getName());
+        props.setProperty("osgi.resource.loader.class", VelocityBundleResourceLoader.class.getName());
         props.setProperty(Velocity.RESOURCE_LOADER, "strutsfile,strutsclass,osgi");
         vm.setVelocityProperties(props);
     }
@@ -91,8 +92,7 @@ public class OsgiConfigurationProvider implements ConfigurationProvider {
         try {
             felix.stop();
         } catch (BundleException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOG.error("Failed to stop Felix", e);
         }
         bundles = null; 
     }
@@ -114,7 +114,7 @@ public class OsgiConfigurationProvider implements ConfigurationProvider {
             for (ServiceReference ref : refs) {
                 if (!bundleNames.contains(ref.getBundle().getSymbolicName())) {
                     bundleNames.add(ref.getBundle().getSymbolicName());
-                    log.info("Loading packages from bundle "+ref.getBundle().getSymbolicName());
+                    LOG.info("Loading packages from bundle #1", ref.getBundle().getSymbolicName());
                     PackageLoader loader = (PackageLoader) bundleContext.getService(ref);
                     for (PackageConfig pkg : loader.loadPackages(ref.getBundle(),  bundleContext, objectFactory, configuration.getPackageConfigs())) {
                         configuration.addPackageConfig(pkg.getName(), pkg);
@@ -136,6 +136,8 @@ public class OsgiConfigurationProvider implements ConfigurationProvider {
     protected void loadOsgi() {
         //configuration properties 
         Properties systemProperties = getProperties("default.properties");
+        
+        //struts specific properties
         Properties strutsProperties = getProperties("struts-osgi.properties");
         
         Map configMap = new StringMap(false);
@@ -149,7 +151,7 @@ public class OsgiConfigurationProvider implements ConfigurationProvider {
             strutsProperties.getProperty("xwork"));
 
         Set<String> bundlePaths = new HashSet<String>(findInPackage("bundles"));
-        log.info("Loading Struts bundles "+bundlePaths);
+        LOG.info("Loading Struts bundles "+bundlePaths);
         
         StringBuilder sb = new StringBuilder();
         for (String path : bundlePaths) {
@@ -158,7 +160,7 @@ public class OsgiConfigurationProvider implements ConfigurationProvider {
         
         configMap.put(FelixConstants.AUTO_START_PROP + ".1",
             sb.toString());
-        configMap.put(BundleCache.CACHE_PROFILE_DIR_PROP, System.getProperty("tmp.dir"));
+        configMap.put(BundleCache.CACHE_PROFILE_DIR_PROP, System.getProperty("java.io.tmpdir"));
         configMap.put(BundleCache.CACHE_DIR_PROP, "jim");
         configMap.put(FelixConstants.EMBEDDED_EXECUTION_PROP, "true");
         configMap.put(FelixConstants.SERVICE_URLHANDLERS_PROP, "false");
@@ -183,12 +185,9 @@ public class OsgiConfigurationProvider implements ConfigurationProvider {
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                LOG.error("An error occured while waiting for bundle activation", e);
             }
         }
-        
-        
     }
     
     private String getSystemPackages(Properties properties) {
@@ -224,29 +223,16 @@ public class OsgiConfigurationProvider implements ConfigurationProvider {
             bundleContext = context;
         }
 
-        public void stop(BundleContext arg0) throws Exception {
-            // TODO Auto-generated method stub
-            
+        public void stop(BundleContext ctx) throws Exception {
         }
 
         public void bundleChanged(BundleEvent evt) {
-            if (evt.getType() == evt.INSTALLED) {
-                log.debug("Installed bundle "+evt.getBundle().getSymbolicName());
+            if (evt.getType() == BundleEvent.INSTALLED) {
+                LOG.debug("Installed bundle "+evt.getBundle().getSymbolicName());
                 bundles.put(evt.getBundle().getLocation(), evt.getBundle());
                 bundlesChanged = true;
             }
-            
-            // Copy out all view files
-            /*if (evt.getType() == evt.STARTED) {
-                Enumeration e = evt.getBundle().findEntries("/view/", null, true);
-                while (e != null && e.hasMoreElements()) {
-                    URL url = (URL) e.nextElement();
-                    System.out.println("found view url: "+url);
-                }
-            }
-            */
         }
-
     }
     
     /**
@@ -268,7 +254,7 @@ public class OsgiConfigurationProvider implements ConfigurationProvider {
             urls = Thread.currentThread().getContextClassLoader().getResources(packageName);
         }
         catch (IOException ioe) {
-            log.warn("Could not read package: " + packageName, ioe);
+            LOG.warn("Could not read package: " + packageName, ioe);
             return paths;
         }
 
@@ -297,7 +283,7 @@ public class OsgiConfigurationProvider implements ConfigurationProvider {
                 }
             }
             catch (IOException ioe) {
-                log.warn("could not read entries", ioe);
+                LOG.warn("could not read entries", ioe);
             }
         }
         return paths;
@@ -330,10 +316,9 @@ public class OsgiConfigurationProvider implements ConfigurationProvider {
             }
             else if (file.getName().endsWith(".jar")) {
                 try {
-                    paths.add(file.toURL().toString());
+                    paths.add(file.toURI().toURL().toString());
                 } catch (MalformedURLException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    LOG.error("Invalid file path", e);
                 }
             }
         }
@@ -357,12 +342,12 @@ public class OsgiConfigurationProvider implements ConfigurationProvider {
             while ( (entry = jarStream.getNextJarEntry() ) != null) {
                 String name = entry.getName();
                 if (!entry.isDirectory() && name.startsWith(parent) && name.endsWith(".jar")) {
-                    paths.add(jarfile.toURL()+"!"+entry.getName());
+                    paths.add(jarfile.toURI().toURL()+"!"+entry.getName());
                 }
             }
         }
         catch (IOException ioe) {
-            log.error("Could not search jar file '" + jarfile + "' due to an IOException", ioe);
+            LOG.error("Could not search jar file #1 due to an IOException", ioe, jarfile.toString());
         }
     }
 

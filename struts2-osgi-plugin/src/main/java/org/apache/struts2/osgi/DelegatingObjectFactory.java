@@ -39,7 +39,7 @@ public class DelegatingObjectFactory extends ObjectFactory {
         {
             return delegateObjectFactory.getClassInstance(className);
         }
-        catch (ClassNotFoundException cnfe)
+        catch (Exception e)
         {
             return bundleResourceLoader.loadClass(className);
         }

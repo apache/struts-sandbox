@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import javax.servlet.ServletContext;
 
+import org.apache.struts2.osgi.loaders.FreeMarkerBundleResourceLoader;
 import org.apache.struts2.views.freemarker.FreemarkerManager;
 import org.apache.struts2.views.freemarker.StrutsClassTemplateLoader;
 
@@ -16,7 +17,11 @@ import freemarker.cache.MultiTemplateLoader;
 import freemarker.cache.TemplateLoader;
 import freemarker.cache.WebappTemplateLoader;
 
-public class BundleFreemarkerManager extends FreemarkerManager{
+/**
+ * This class extends FreemarkerManager in core to add a template loader
+ * (that finds resources inside bundles) to MultiTemplateLoader
+ */
+public class BundleFreemarkerManager extends FreemarkerManager {
     private static final Logger LOG = LoggerFactory.getLogger(BundleFreemarkerManager.class);
     
     @Override
@@ -33,7 +38,7 @@ public class BundleFreemarkerManager extends FreemarkerManager{
             try {
                 templatePathLoader = new FileTemplateLoader(new File(templatePath));
             } catch (IOException e) {
-                LOG.error("Invalid template path specified: " + e.getMessage(), e);
+                LOG.error("Invalid template path specified: #1",e, e.getMessage());
             }
         }
 
@@ -44,12 +49,12 @@ public class BundleFreemarkerManager extends FreemarkerManager{
                         templatePathLoader,
                         new WebappTemplateLoader(servletContext),
                         new StrutsClassTemplateLoader(),
-                        new BundleTemplateLoader()
+                        new FreeMarkerBundleResourceLoader()
                 })
                 : new MultiTemplateLoader(new TemplateLoader[]{
                     new WebappTemplateLoader(servletContext),
                     new StrutsClassTemplateLoader(),
-                    new BundleTemplateLoader()
+                    new FreeMarkerBundleResourceLoader()
                 });
     }
     

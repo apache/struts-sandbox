@@ -44,39 +44,39 @@ public class DefaultBundleAccessor implements BundleAccessor {
         this.bundleContext = bundleContext;
     }
     
-    public Class<?> loadClass(String name) throws ClassNotFoundException {
+    public Class<?> loadClass(String className) throws ClassNotFoundException {
         Class cls = null;
-        if (classToBundle.containsKey(name)) {
-            bundles.get(classToBundle.get(name)).loadClass(name);
+        if (classToBundle.containsKey(className)) {
+            bundles.get(classToBundle.get(className)).loadClass(className);
         } else {
             for (Entry<String,Bundle> entry : bundles.entrySet()) {
                 try {
-                    cls = entry.getValue().loadClass(name);
+                    cls = entry.getValue().loadClass(className);
                     if (cls != null) {
-                        classToBundle.put(name, entry.getKey());
+                        classToBundle.put(className, entry.getKey());
                     }
                 } catch (ClassNotFoundException ex) {
                     if (LOG.isDebugEnabled()) {
-                        LOG.debug("class not found in bundle "+entry.getValue().getSymbolicName());
+                        LOG.debug("class #1 not found in bundle #2", className, entry.getValue().getSymbolicName());
                     }
                 }
             }
         }
         
         if (cls == null) {
-            //try spring
+            //try to find a bean with that id
             try {
-                Object bean = SpringOSGiUtil.getBean(bundleContext, name);
+                Object bean = SpringOSGiUtil.getBean(bundleContext, className);
                 if (bean != null)
                     cls = bean.getClass();
             } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                if (LOG.isDebugEnabled())
+                    LOG.debug("Unable to find bean #1", className);
             }
         }
         
         if (cls == null) {
-            throw new ClassNotFoundException("Unable to find class "+name+" in bundles");
+            throw new ClassNotFoundException("Unable to find class "+className+" in bundles");
         }
         return cls;
     }
