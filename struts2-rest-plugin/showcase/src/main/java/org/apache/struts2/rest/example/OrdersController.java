@@ -22,47 +22,60 @@ public class OrdersController extends ValidationAwareSupport implements ModelDri
     private Collection<Order> list;
     private OrdersService ordersService = new OrdersService();
 
+    // GET /orders/1
     public HttpHeaders show() {
         return new DefaultHttpHeaders("show");
     }
+
+    // GET /orders
+    public HttpHeaders index() {
+        list = ordersService.getAll();
+        return new DefaultHttpHeaders("index")
+            .disableCaching();
+    }
     
+    // GET /orders/1/edit
     public String edit() {
         return "edit";
     }
-    
+
+    // GET /orders/new
     public String editNew() {
         model = new Order();
         return "editNew";
     }
 
+    // GET /orders/1/deleteConfirm
     public String deleteConfirm() {
         return "deleteConfirm";
     }
 
+    // DELETE /orders/1
     public String destroy() {
         ordersService.remove(id);
         addActionMessage("Order removed successfully");
         return "success";
     }
-    
+
+    // POST /orders
     public HttpHeaders create() {
         ordersService.save(model);
         addActionMessage("New order created successfully");
         return new DefaultHttpHeaders("success")
             .setLocationId(model.getId());
     }
-    
+
+    // PUT /orders/1
     public String update() {
         ordersService.save(model);
         addActionMessage("Order updated successfully");
         return "success";
     }
-    
-    public HttpHeaders index() {
-        list = ordersService.getAll();
-        
-        return new DefaultHttpHeaders("index")
-            .disableCaching();
+
+    public void validate() {
+        if (model.getClientName() == null || model.getClientName().length() ==0) {
+            addFieldError("clientName", "The client name is empty");
+        }
     }
 
     public void setId(String id) {
@@ -70,12 +83,6 @@ public class OrdersController extends ValidationAwareSupport implements ModelDri
             this.model = ordersService.get(id);
         }
         this.id = id;
-    }
-
-    public void validate() {
-        if (model.getClientName() == null || model.getClientName().length() ==0) {
-            addFieldError("clientName", "The client name is empty");
-        }
     }
     
     public Object getModel() {
