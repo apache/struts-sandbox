@@ -8,7 +8,7 @@ import com.opensymphony.xwork2.util.ValueStack;
 import com.opensymphony.xwork2.util.ValueStackFactory;
 
 /**
- * Creates JuelValueStacks.
+ * Creates UelValueStacks.
  */
 public class UelValueStackFactory implements ValueStackFactory {
 	private ExpressionFactory factory;
