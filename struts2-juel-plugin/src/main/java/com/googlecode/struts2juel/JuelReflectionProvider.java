@@ -35,7 +35,7 @@ public class JuelReflectionProvider extends OgnlReflectionProvider {
     	initExpressionFactory();
         CompoundRoot compoundRoot = new CompoundRoot();
         compoundRoot.add(root);
-        ELContext elContext = new CompoundRootELContext(compoundRoot);
+        ELContext elContext = new CompoundRootELContext();
         elContext.putContext(XWorkConverter.class, xworkConverter);
         // parse our expression
         ValueExpression valueExpr = factory.createValueExpression(elContext,
@@ -48,7 +48,7 @@ public class JuelReflectionProvider extends OgnlReflectionProvider {
     	initExpressionFactory();
         CompoundRoot compoundRoot = new CompoundRoot();
         compoundRoot.add(root);
-        ELContext elContext = new CompoundRootELContext(compoundRoot);
+        ELContext elContext = new CompoundRootELContext();
         elContext.putContext(XWorkConverter.class, xworkConverter);
         // parse our expression
         ValueExpression valueExpr = factory.createValueExpression(elContext,

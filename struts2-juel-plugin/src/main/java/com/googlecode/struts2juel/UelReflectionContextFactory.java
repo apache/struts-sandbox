@@ -6,9 +6,9 @@ import java.util.Map;
 import com.opensymphony.xwork2.util.reflection.ReflectionContextFactory;
 
 /**
- * ReflectionContextFactory for Juel.
+ * ReflectionContextFactory for Unified EL.
  */
-public class UELReflectionContextFactory implements ReflectionContextFactory {
+public class UelReflectionContextFactory implements ReflectionContextFactory {
     public Map createDefaultContext(Object root) {
         return new HashMap();
     }

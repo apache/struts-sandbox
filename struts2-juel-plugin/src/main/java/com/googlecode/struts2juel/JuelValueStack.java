@@ -72,6 +72,8 @@ public class JuelValueStack implements ValueStack {
 					&& !expr.startsWith("#{")) {
 				expr = "#{" + expr + "}";
 			}
+	        elContext.putContext(XWorkConverter.class, xworkConverter);
+	        elContext.putContext(CompoundRoot.class, root);
 			// parse our expression
 			ValueExpression valueExpr = factory.createValueExpression(
 					elContext, expr, Object.class);
@@ -140,6 +142,8 @@ public class JuelValueStack implements ValueStack {
 					&& !expr.startsWith("#{")) {
 				expr = "#{" + expr + "}";
 			}
+	        elContext.putContext(XWorkConverter.class, xworkConverter);
+	        elContext.putContext(CompoundRoot.class, root);
 			// parse our expression
 			ValueExpression valueExpr = factory.createValueExpression(
 					elContext, expr, Object.class);
@@ -159,7 +163,6 @@ public class JuelValueStack implements ValueStack {
 		this.context = new TreeMap();
 		context.put(VALUE_STACK, this);
 		this.root = root;
-		elContext = new CompoundRootELContext(root);
-        elContext.putContext(XWorkConverter.class, xworkConverter);
+		elContext = new CompoundRootELContext();
 	}
 }

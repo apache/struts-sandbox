@@ -7,7 +7,7 @@
 <struts>
 	<bean type="com.opensymphony.xwork2.util.ValueStackFactory" name="uel" class="com.googlecode.struts2juel.JuelValueStackFactory" />
 	<bean type="com.opensymphony.xwork2.util.reflection.ReflectionProvider" name="uel" class="com.googlecode.struts2juel.JuelReflectionProvider" />	
-	<bean type="com.opensymphony.xwork2.util.reflection.ReflectionContextFactory" name="uel" class="com.googlecode.struts2juel.UELReflectionContextFactory" />
+	<bean type="com.opensymphony.xwork2.util.reflection.ReflectionContextFactory" name="uel" class="com.googlecode.struts2juel.UelReflectionContextFactory" />
 
     <constant name="struts.valueStackFactory" value="uel" />
     <constant name="struts.reflectionProvider" value="uel" />

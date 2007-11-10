@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.el.ExpressionFactory;
@@ -81,6 +82,7 @@ public class UelTest extends XWorkTestCase {
 		CompoundRoot root = new CompoundRoot();
 		TestObject obj = new TestObject();
 		root.add(obj);
+
 		JuelValueStack stack = new JuelValueStack(factory, converter);
 		stack.setRoot(root);
 		stack.setValue("#{value}", "Hello World");
@@ -93,6 +95,22 @@ public class UelTest extends XWorkTestCase {
 
 		stack.setValue("#{date}", new Date());
 		assertEquals(stack.findString("#{date}"), format.format(obj.getDate()));
+	}
+
+	public void testMap() throws IllegalAccessException,
+			InvocationTargetException, NoSuchMethodException {
+		CompoundRoot root = new CompoundRoot();
+		HashMap map = new HashMap();
+		map.put("nameValue", "Musachy");
+		TestObject obj = new TestObject();
+		obj.setParameters(map);
+		root.add(obj);
+
+		JuelValueStack stack = new JuelValueStack(factory, converter);
+		stack.setRoot(root);
+		String value = (String) stack.findValue("parameters.nameValue",
+				String.class);
+		assertEquals("Musachy", value);
 	}
 
 	public void test2LevelSet() throws IllegalAccessException,
@@ -153,6 +171,7 @@ public class UelTest extends XWorkTestCase {
 		private int age;
 		private Date date;
 		private TestObject inner;
+		private Map parameters;
 
 		public String getValue() {
 			return value;
@@ -186,5 +205,12 @@ public class UelTest extends XWorkTestCase {
 			this.inner = inner;
 		}
 
+		public Map getParameters() {
+			return parameters;
+		}
+
+		public void setParameters(Map parameters) {
+			this.parameters = parameters;
+		}
 	}
 }
