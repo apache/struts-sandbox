@@ -16,7 +16,7 @@ import com.opensymphony.xwork2.util.ValueStack;
 /**
  * A ValueStack that uses Unified EL as the underlying Expression Language.
  */
-public class JuelValueStack implements ValueStack {
+public class UelValueStack implements ValueStack {
 	private CompoundRoot root = new CompoundRoot();
 	private transient Map context;
 	private Class defaultType;
@@ -27,17 +27,17 @@ public class JuelValueStack implements ValueStack {
 
 	private ELContext elContext;
 
-	public JuelValueStack(ExpressionFactory factory,
+	public UelValueStack(ExpressionFactory factory,
 			XWorkConverter xworkConverter) {
 		this(factory, xworkConverter, new CompoundRoot());
 	}
 
-	public JuelValueStack(ExpressionFactory factory,
+	public UelValueStack(ExpressionFactory factory,
 			XWorkConverter xworkConverter, ValueStack vs) {
 		this(factory, xworkConverter, new CompoundRoot(vs.getRoot()));
 	}
 
-	public JuelValueStack(ExpressionFactory factory,
+	public UelValueStack(ExpressionFactory factory,
 			XWorkConverter xworkConverter, CompoundRoot root) {
 		this.xworkConverter = xworkConverter;
 		this.factory = factory;

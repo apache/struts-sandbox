@@ -10,7 +10,7 @@ import com.opensymphony.xwork2.util.ValueStackFactory;
 /**
  * Creates JuelValueStacks.
  */
-public class JuelValueStackFactory implements ValueStackFactory {
+public class UelValueStackFactory implements ValueStackFactory {
 	private ExpressionFactory factory;
 
 	private XWorkConverter xworkConverter;
@@ -28,11 +28,11 @@ public class JuelValueStackFactory implements ValueStackFactory {
 
 	public ValueStack createValueStack() {
 		initExpressionFactory();
-		return new JuelValueStack(factory, xworkConverter);
+		return new UelValueStack(factory, xworkConverter);
 	}
 
 	public ValueStack createValueStack(ValueStack stack) {
 		initExpressionFactory();
-		return new JuelValueStack(factory, xworkConverter, stack);
+		return new UelValueStack(factory, xworkConverter, stack);
 	}
 }

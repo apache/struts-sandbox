@@ -15,7 +15,7 @@ import com.opensymphony.xwork2.util.reflection.ReflectionException;
 /**
  * A OgnlReflectionProvider based on Unified EL.
  */
-public class JuelReflectionProvider extends OgnlReflectionProvider {
+public class UelReflectionProvider extends OgnlReflectionProvider {
 	private ExpressionFactory factory;
 	private XWorkConverter xworkConverter;
 
