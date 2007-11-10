@@ -43,7 +43,7 @@ public class XWorkBeanELResolver extends BeanELResolver {
 			if (converter != null && base != null) {
 				Class propType = PropertyUtils.getPropertyType(base, property
 						.toString());
-				value = converter.convertValue(value, propType);
+				value = converter.convertValue(null, value, propType);
 			}
 			super.setValue(context, base, property, value);
 		} catch (IllegalAccessException e) {
