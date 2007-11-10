@@ -26,7 +26,7 @@ public class UelReflectionProvider extends OgnlReflectionProvider {
 
 	public void initExpressionFactory() {
 		if (factory == null) {
-			factory = ExpressionFactory.newInstance();
+			factory = ExpressionFactoryHolder.getExpressionFactory();
 		}
 	}
 	

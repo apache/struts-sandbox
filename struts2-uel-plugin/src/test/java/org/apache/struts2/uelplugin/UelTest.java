@@ -46,7 +46,7 @@ public class UelTest extends XWorkTestCase {
 		converter = container.getInstance(XWorkConverter.class);
 		converter.registerConverter("java.util.Date", new DateConverter());
 	}
-
+	
 	public void testBasicFind() throws IllegalAccessException,
 			InvocationTargetException, NoSuchMethodException {
 		CompoundRoot root = new CompoundRoot();

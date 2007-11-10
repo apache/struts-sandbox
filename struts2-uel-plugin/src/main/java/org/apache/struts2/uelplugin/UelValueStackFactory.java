@@ -2,7 +2,9 @@ package org.apache.struts2.uelplugin;
 
 import javax.el.ExpressionFactory;
 
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
+import com.opensymphony.xwork2.inject.Container;
 import com.opensymphony.xwork2.inject.Inject;
 import com.opensymphony.xwork2.util.ValueStack;
 import com.opensymphony.xwork2.util.ValueStackFactory;
@@ -15,24 +17,35 @@ public class UelValueStackFactory implements ValueStackFactory {
 
 	private XWorkConverter xworkConverter;
 
+	private Container container;
+	
 	@Inject
 	public void setXWorkConverter(XWorkConverter conv) {
 		this.xworkConverter = conv;
 	}
 
-	public void initExpressionFactory() {
+    @Inject
+    public void setContainer(Container container) throws ClassNotFoundException {
+    	this.container = container;
+    }
+    	
+    public void initExpressionFactory() {
 		if (factory == null) {
-			factory = ExpressionFactory.newInstance();
+			factory = ExpressionFactoryHolder.getExpressionFactory();
 		}
 	}
 
 	public ValueStack createValueStack() {
 		initExpressionFactory();
-		return new UelValueStack(factory, xworkConverter);
+		ValueStack results = new UelValueStack(factory, xworkConverter);
+		results.getContext().put(ActionContext.CONTAINER, container);
+		return results;
 	}
 
 	public ValueStack createValueStack(ValueStack stack) {
 		initExpressionFactory();
-		return new UelValueStack(factory, xworkConverter, stack);
+		ValueStack results = new UelValueStack(factory, xworkConverter, stack);
+		results.getContext().put(ActionContext.CONTAINER, container);
+		return results;
 	}
 }

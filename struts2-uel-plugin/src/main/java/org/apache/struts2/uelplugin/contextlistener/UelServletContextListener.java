@@ -6,9 +6,9 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.jsp.JspApplicationContext;
 import javax.servlet.jsp.JspFactory;
 
+import org.apache.struts2.uelplugin.ExpressionFactoryHolder;
 import org.apache.struts2.uelplugin.elresolvers.CompoundRootELResolver;
 import org.apache.struts2.uelplugin.elresolvers.XWorkBeanELResolver;
-
 
 /**
  * Responsible for registering the ELResolvers.
@@ -23,6 +23,8 @@ public class UelServletContextListener implements ServletContextListener {
 		jspApplicationContext.addELResolver(new XWorkBeanELResolver());
 		contextEvent.getServletContext().log(
 				"CompoundRootELResolver and XWorkBeanELResolver registered");
+		ExpressionFactoryHolder.setExpressionFactory(jspApplicationContext
+				.getExpressionFactory());
 	}
 
 	public void contextDestroyed(ServletContextEvent contextEvent) {

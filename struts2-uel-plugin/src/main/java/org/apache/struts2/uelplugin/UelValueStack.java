@@ -56,10 +56,18 @@ public class UelValueStack implements ValueStack {
 		try {
 			if (expr != null && expr.startsWith("#") && !expr.startsWith("#{")) {
 				int firstDot = expr.indexOf('.');
-				String key = expr.substring(1, firstDot);
-				String value = expr.substring(firstDot + 1);
-				Map map = (Map) context.get(key);
-				return map.get(value);
+				if (firstDot < 0) {
+					String key = expr.substring(1);
+					return (Object) context.get(key);
+				} else {
+					String key = expr.substring(1, firstDot);
+					String value = expr.substring(firstDot + 1);
+					Map map = (Map) context.get(key);
+					return map.get(value);
+				}
+			}
+			if (context.get(expr) != null) {
+				return context.get(expr);
 			}
 			if ((overrides != null) && overrides.containsKey(expr)) {
 				expr = (String) overrides.get(expr);
