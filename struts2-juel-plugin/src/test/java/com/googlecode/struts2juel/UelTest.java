@@ -51,7 +51,7 @@ public class UelTest extends XWorkTestCase {
 		CompoundRoot root = new CompoundRoot();
 		TestObject obj = new TestObject();
 		root.add(obj);
-		JuelValueStack stack = new JuelValueStack(factory, converter);
+		UelValueStack stack = new UelValueStack(factory, converter);
 		stack.setRoot(root);
 		stack.setValue("${value}", "Hello World");
 		String value = stack.findString("${value}");
@@ -67,7 +67,7 @@ public class UelTest extends XWorkTestCase {
 		CompoundRoot root = new CompoundRoot();
 		TestObject obj = new TestObject();
 		root.add(obj);
-		JuelValueStack stack = new JuelValueStack(factory, converter);
+		UelValueStack stack = new UelValueStack(factory, converter);
 		stack.setRoot(root);
 		stack.setValue("${value}", new String[] { "Hello World" });
 		String value = stack.findString("${value}");
@@ -83,7 +83,7 @@ public class UelTest extends XWorkTestCase {
 		TestObject obj = new TestObject();
 		root.add(obj);
 
-		JuelValueStack stack = new JuelValueStack(factory, converter);
+		UelValueStack stack = new UelValueStack(factory, converter);
 		stack.setRoot(root);
 		stack.setValue("#{value}", "Hello World");
 		String value = stack.findString("#{value}");
@@ -106,7 +106,7 @@ public class UelTest extends XWorkTestCase {
 		obj.setParameters(map);
 		root.add(obj);
 
-		JuelValueStack stack = new JuelValueStack(factory, converter);
+		UelValueStack stack = new UelValueStack(factory, converter);
 		stack.setRoot(root);
 		String value = (String) stack.findValue("parameters.nameValue",
 				String.class);
@@ -120,7 +120,7 @@ public class UelTest extends XWorkTestCase {
 		TestObject nestedObj = new TestObject();
 		obj.setInner(nestedObj);
 		root.add(obj);
-		JuelValueStack stack = new JuelValueStack(factory, converter);
+		UelValueStack stack = new UelValueStack(factory, converter);
 		stack.setRoot(root);
 		stack.setValue("${inner.age}", "66");
 		assertEquals(66, obj.getInner().getAge());
@@ -134,7 +134,7 @@ public class UelTest extends XWorkTestCase {
 		TestObject inner = new TestObject();
 		obj.setInner(inner);
 		root.add(obj);
-		JuelValueStack stack = new JuelValueStack(factory, converter);
+		UelValueStack stack = new UelValueStack(factory, converter);
 		stack.setRoot(root);
 
 		stack.setValue("${age}", "22");
@@ -156,7 +156,7 @@ public class UelTest extends XWorkTestCase {
 		CompoundRoot root = new CompoundRoot();
 		TestObject obj = new TestObject();
 		root.add(obj);
-		JuelValueStack stack = new JuelValueStack(factory, converter);
+		UelValueStack stack = new UelValueStack(factory, converter);
 		stack.setRoot(root);
 		stack.setValue("${value}", "Hello World");
 		String value = stack.findString("${VALUENOTHERE}");
