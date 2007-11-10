@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+    
+<struts>
+	<bean type="com.opensymphony.xwork2.util.ValueStackFactory" name="uel" class=" org.apache.struts2.uelplugin.UelValueStackFactory" />
+	<bean type="com.opensymphony.xwork2.util.reflection.ReflectionProvider" name="uel" class="org.apache.struts2.uelplugin.UelReflectionProvider" />	
+	<bean type="com.opensymphony.xwork2.util.reflection.ReflectionContextFactory" name="uel" class=" org.apache.struts2.uelplugin.UelReflectionContextFactory" />
+
+    <constant name="struts.valueStackFactory" value="uel" />
+    <constant name="struts.reflectionProvider" value="uel" />
+    <constant name="struts.reflectionContextFactory" value="uel" />
+</struts>
