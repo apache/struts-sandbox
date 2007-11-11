@@ -53,6 +53,7 @@ public class UelValueStack implements ValueStack {
 	}
 
 	public Object findValue(String expr, Class asType) {
+		String originalExpression = expr;
 		try {
 			if (expr != null && expr.startsWith("#") && !expr.startsWith("#{")) {
 				int firstDot = expr.indexOf('.');
@@ -65,9 +66,6 @@ public class UelValueStack implements ValueStack {
 					Map map = (Map) context.get(key);
 					return map.get(value);
 				}
-			}
-			if (context.get(expr) != null) {
-				return context.get(expr);
 			}
 			if ((overrides != null) && overrides.containsKey(expr)) {
 				expr = (String) overrides.get(expr);
@@ -91,6 +89,9 @@ public class UelValueStack implements ValueStack {
 			}
 			return retVal;
 		} catch (PropertyNotFoundException e) {
+			if (context.containsKey(originalExpression)) {
+				return context.get(originalExpression);
+			}
 			// property not found
 			return null;
 		} catch (ELException e) {
