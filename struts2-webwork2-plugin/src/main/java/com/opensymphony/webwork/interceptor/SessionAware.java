@@ -1,6 +1,4 @@
 /*
- * $Id: StrutsModels.java 549177 2007-06-20 18:17:22Z musachy $
- *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -18,27 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.opensymphony.xwork;
+package com.opensymphony.webwork.interceptor;
 
-
-
-public class ActionContext extends com.opensymphony.xwork2.ActionContext {
-
-    private com.opensymphony.xwork2.ActionContext realContext;
-    
-    
-    public ActionContext(com.opensymphony.xwork2.ActionContext ctx) {
-        super(ctx.getContextMap());
-        this.realContext = ctx;
-    }
-    
-    /**
-     * Returns the ActionContext specific to the current thread.
-     *
-     * @return the ActionContext for the current thread, is never <tt>null</tt>.
-     */
-    public static ActionContext getContext() {
-        return new ActionContext(com.opensymphony.xwork2.ActionContext.getContext());
-    }
-
+public interface SessionAware extends org.apache.struts2.interceptor.SessionAware {
 }

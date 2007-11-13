@@ -20,25 +20,5 @@
  */
 package com.opensymphony.xwork;
 
-
-
-public class ActionContext extends com.opensymphony.xwork2.ActionContext {
-
-    private com.opensymphony.xwork2.ActionContext realContext;
-    
-    
-    public ActionContext(com.opensymphony.xwork2.ActionContext ctx) {
-        super(ctx.getContextMap());
-        this.realContext = ctx;
-    }
-    
-    /**
-     * Returns the ActionContext specific to the current thread.
-     *
-     * @return the ActionContext for the current thread, is never <tt>null</tt>.
-     */
-    public static ActionContext getContext() {
-        return new ActionContext(com.opensymphony.xwork2.ActionContext.getContext());
-    }
-
+public interface ActionInvocation extends com.opensymphony.xwork2.ActionInvocation {
 }
