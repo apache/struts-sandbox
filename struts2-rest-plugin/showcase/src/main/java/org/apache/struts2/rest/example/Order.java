@@ -1,6 +1,6 @@
 package org.apache.struts2.rest.example;
 
-public class Order implements Cloneable {
+public class Order {
     String id;
     String clientName;
     int amount;
