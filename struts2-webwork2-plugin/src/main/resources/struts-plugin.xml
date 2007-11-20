@@ -6,6 +6,8 @@
     
 <struts>
 
-    <bean type="org.apache.struts2.views.TagLibrary" name="ww" class="org.apache.struts2.views.DefaultTagLibrary" />   
-
+    <bean type="org.apache.struts2.dispatcher.mapper.ActionMapper" name="webwork" class="org.apache.struts2.dispatcher.mapper.WebworkActionMapper" />   
+	<constant name="struts.mapper.class" value="webwork" />
+	
+    <bean type="org.apache.struts2.views.TagLibrary" name="ww" class="org.apache.struts2.views.DefaultTagLibrary" />
 </struts>
