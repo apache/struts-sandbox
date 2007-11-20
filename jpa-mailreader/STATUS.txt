@@ -1,0 +1,123 @@
+JPA MailReader
+------------------------------------------------------------------------
+
+Quality Grade: test-build only.
+
+----
+
+The JPA MailReader is a best-practices example of using Struts 2 with 
+the Java Persistence API with a standard SQL database. 
+
+The example is based on the original MailReader Demonstration 
+Application and uses a modified version of the MailReader JPA package 
+developed for the Apache Shale Example. 
+
+The application uses the Struts 2 CodeBehind plugin that eliminates  
+documenting Actions in XML. The Action classes and pages are linked 
+together using convention over configuration. In some cases, 
+Result annotations are used to move between workflows. 
+
+This implementaion expresses the business classes in an "entity" 
+package. The business classes are designed from the ground-up to be 
+used with the JPA. Sufficient annotation is provided so that a SQL 
+database schema can be generated from the entity classes. (See 
+RetainTest to bootstrap a database.)
+
+The persistence logic is contained in a "Manager" class that is 
+associated with each entity class. Essentially, the manager classes 
+are data access objects. The Managers extend a superclass which 
+provides data access code that can be shared within the persistence 
+unit. Most manager methods are type-safe wrappers around shared 
+methods. 
+
+Each business class also has an XWork type converter. Most often, 
+the converters use a substitute key for the conversion ID, rather than 
+the primary key. (Exposing the primary key to the user interface layer 
+is considered a bad practice in DBA circles.) 
+
+To provide maximum portability, the internal primary keys are UUIDs. 
+The entities are based on a mapper superclass which provides shared 
+code for creating and managing the primary keys.
+
+The business class, manager, and type converter are all stored in 
+a sub-package named for each business class. Essentially, the 
+sub-package is a resource container that encapsulates all of the 
+entity's data and behavior. 
+
+The Action packaging follows a similar strategy, but also creates 
+a resource heirarchy from the entites. The "root" action package 
+contains the "welcome" resources. The "action.user" package encapsulates
+the "user" resources, and the "action.user.subscription" package 
+encapsulates the "subscription" resources. The nesting of subscription 
+within user reflects the one-to-many relationship between a user 
+resource and and its subscriptions. 
+
+Since the CodeBehind package is being utilized, the folder structure
+for the JSP templates follows the package structure. 
+
+Each package/namespace has an Index Action, which is usually the 
+superclass for other Actions in the same package. The Actions 
+utilize the Managers to access the persistent data. The default 
+constructor for an Action instantiates the default Manager, but 
+an alternate constructor is provided that could be used to pass 
+in a mock Manager. (Accordingly, the Managers all implement a  
+specific interface.) 
+
+The Actions provide request-scope User and Subscription objects 
+that represent the resources being edited in the current request. 
+The pages record the User and/or Subscrition resource as a hidden 
+field. The type converters fetch the appropriate entity from the 
+persistence unit, so that it can be set as the current User or 
+Subscription object. 
+
+Of course, the hidden field can also be expressed as a GET 
+attribute, and this technique is used to restore the current User 
+after a redirect. Overall, the design can be considered "RESTful".
+
+The logged-in user is maintained in a session-scope "Profile".
+
+
+KNOWN ISSUES 
+
+ * No POM is provided. Dependencies include 
+   ** commons-logging-1.0.4
+   ** derbyclient
+   ** freemarker-2.3.8
+   ** ognl-2.6.11
+   ** struts-codebehind-plugin-2.0.10
+   ** struts-core-2.0.10
+   ** toplink-essentials
+   ** toplink-agent-essentials
+   ** xwork-2.0.4
+
+ * Toplink could be replaced with OpenJPA. 
+ 
+ * Need a routine to autocreate the Derby database at installation.
+ 
+ * The index.html is not redirecting to the index action. 
+ 
+ * Not all of the persistence actions operate correctly. 
+   
+   ** Delete complains that the entity is detached. 
+   ** After creating a Subscription, it does not appear on the list 
+      until the container is restarted. 
+      
+ * There is no global error handling and logging.
+ 
+ * There is no access security. Anyone can access any user resource.
+ 
+ * Despite the scope of the application, the example could include 
+   a demonstration of handling optimistic locking
+
+CURRENT FOCUS
+
+ * With the application structure in place, work is now focussed on 
+   creating a unit test suit against the data access logic. 
+   
+ * With a unit test suite in place, we may consider using the 
+   "one transaction per request" strategy, if it can be reconciled 
+   with unit testing. 
+
+
+========================================================================
+
