@@ -27,8 +27,9 @@ public class HelloTest extends TestCase {
 
     /**
      * An example test that asserts true.
-     *
-     * @throws Exception On invalid assertions
+     * 
+     * @throws Exception
+     *             On invalid assertions
      */
     public void testTestCase() throws Exception {
         assertTrue(true);

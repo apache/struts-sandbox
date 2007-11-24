@@ -28,6 +28,7 @@ import org.apache.struts2.util.StrutsTypeConverter;
  * </p>
  * 
  */
+@SuppressWarnings("unchecked")
 public class UserTypeConverter extends StrutsTypeConverter {
 
     /**

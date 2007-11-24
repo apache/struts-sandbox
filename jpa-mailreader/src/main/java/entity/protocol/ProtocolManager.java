@@ -51,6 +51,7 @@ public class ProtocolManager extends EntityManagerSuperclass implements
      * 
      * @see entity.IProtocolManager#findAll()
      */
+    @SuppressWarnings("unchecked")
     public List<Protocol> findAll() {
         EntityManager em = EntityManagerHelper.getEntityManager();
         try {
@@ -70,9 +71,10 @@ public class ProtocolManager extends EntityManagerSuperclass implements
      * 
      * @see entity.IProtocolManager#findAllAsMap()
      */
-    public Map findAllAsMap() {
+    public Map<String, String> findAllAsMap() {
         List<Protocol> items = findAll();
-        Map map = new LinkedHashMap(items.size());
+        Map<String, String> map = new LinkedHashMap<String, String>(items
+                .size());
         for (Protocol item : items) {
             map.put(String.valueOf(item.getId()), item.getDescription());
         }

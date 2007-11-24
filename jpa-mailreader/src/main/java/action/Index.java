@@ -22,6 +22,9 @@ import java.util.HashMap;
 import java.util.Map;
 import org.apache.struts2.interceptor.SessionAware;
 import com.opensymphony.xwork2.ActionSupport;
+import com.opensymphony.xwork2.conversion.annotations.Conversion;
+import com.opensymphony.xwork2.conversion.annotations.ConversionType;
+import com.opensymphony.xwork2.conversion.annotations.TypeConversion;
 
 /**
  * <p>
@@ -32,6 +35,11 @@ import com.opensymphony.xwork2.ActionSupport;
  * Generic logic should be pushed down to the Entity managers or another facade.
  * </p>
  */
+@Conversion(conversions = {
+        @TypeConversion(type = ConversionType.APPLICATION, key = "entity.protocol.Protocol", converter = "entity.protocol.ProtocolTypeConverter"),
+        @TypeConversion(type = ConversionType.APPLICATION, key = "entity.subscription.Subscription", converter = "entity.subscription.SubscriptionTypeConverter"),
+        @TypeConversion(type = ConversionType.APPLICATION, key = "entity.user.User", converter = "entity.user.UserTypeConverter") })
+@SuppressWarnings("unchecked")
 public class Index extends ActionSupport implements SessionAware {
 
     // ---- STATICS ----

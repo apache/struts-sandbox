@@ -50,6 +50,6 @@ public interface ProtocolManagerInterface {
      * returned.
      * </p>
      */
-    public abstract Map findAllAsMap();
+    public abstract Map<String, String> findAllAsMap();
 
 }

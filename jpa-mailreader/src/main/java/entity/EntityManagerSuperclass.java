@@ -100,6 +100,7 @@ public class EntityManagerSuperclass {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public Object findEntity(Class entity, String id) {
         EntityManager manager = EntityManagerHelper.getEntityManager();
         Object result = null;

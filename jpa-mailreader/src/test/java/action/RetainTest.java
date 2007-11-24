@@ -42,7 +42,8 @@ public class RetainTest extends TestCase {
         return UUID.randomUUID().toString();
     }
 
-    public void testBootstrap() throws Exception {
+    @SuppressWarnings("unchecked")
+    public void _testBootstrap() throws Exception {
 
         EntityManager em = EntityManagerHelper.getEntityManager();
         EntityTransaction et = null;

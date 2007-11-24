@@ -19,7 +19,6 @@
 package entity.user;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -28,7 +27,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
-import javax.persistence.Version;
 
 import entity.EntitySuperclass;
 import entity.subscription.Subscription;
@@ -91,9 +89,6 @@ public class User extends EntitySuperclass implements Serializable {
     @Column(length = 16, nullable = false, unique = true)
     private String username;
 
-    @Version()
-    private Timestamp last_update;
-
     // ---- PROPERTIES ----
 
     public String getFromAddress() {
@@ -110,14 +105,6 @@ public class User extends EntitySuperclass implements Serializable {
 
     public void setFullName(String value) {
         full_name = value;
-    }
-
-    public Timestamp getLastUpdate() {
-        return last_update;
-    }
-
-    public void setLastUpdate(Timestamp value) {
-        last_update = value;
     }
 
     public String getPassword() {

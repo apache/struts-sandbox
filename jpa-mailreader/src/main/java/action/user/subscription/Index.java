@@ -57,13 +57,13 @@ public class Index extends action.user.Index implements Preparable {
     protected SubscriptionManagerInterface manager;
     private ProtocolManagerInterface protocolManager;
 
-    private Map protocols;
+    private Map<String, String> protocols;
 
-    public Map getProtocols() {
+    public Map<String, String> getProtocols() {
         return protocols;
     }
 
-    public void setProtocols(Map value) {
+    public void setProtocols(Map<String, String> value) {
         protocols = value;
     }
 

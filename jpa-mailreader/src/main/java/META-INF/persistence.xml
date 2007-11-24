@@ -1,27 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<persistence xmlns="http://java.sun.com/xml/ns/persistence"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
-    http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd" version="1.0">
-    
-	<persistence-unit name="entity"
-		transaction-type="RESOURCE_LOCAL">
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence     http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
+
+<!--      
+	<persistence-unit name="entity" transaction-type="RESOURCE_LOCAL">
 		<provider>
 			oracle.toplink.essentials.PersistenceProvider
 		</provider>
-		<class>entity.protocol.Protocol</class>
-		<class>entity.subscription.Subscription</class>
-		<class>entity.user.User</class>
+        <class>entity.EntitySuperclass</class>
+        <class>entity.protocol.Protocol</class>
+        <class>entity.subscription.Subscription</class>
+        <class>entity.user.User</class>
 		<properties>
-			<property name="toplink.jdbc.driver"
-				value="org.apache.derby.jdbc.ClientDriver" />
-			<property name="toplink.jdbc.url"
-				value="jdbc:derby://localhost:1527/mailreader" />
-			<property name="toplink.jdbc.user" value="app" />
-			<property name="toplink.jdbc.password" value="app" />
-			<property name="toplink.ddl-generation"
-				value="create-tables" />
+			<property name="toplink.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver"/>
+			<property name="toplink.jdbc.url" value="jdbc:derby://localhost:1527/mailreader"/>
+			<property name="toplink.jdbc.user" value="app"/>
+			<property name="toplink.jdbc.password" value="app"/>
+			<property name="toplink.ddl-generation" value="create-tables"/>
 		</properties>
 	</persistence-unit>
+-->
 
+	<persistence-unit name="entity" transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+        <class>entity.EntitySuperclass</class>
+        <class>entity.protocol.Protocol</class>
+        <class>entity.subscription.Subscription</class>
+        <class>entity.user.User</class>
+  		<properties>
+			<property name = "hibernate.connection.driver_class" value = "org.apache.derby.jdbc.ClientDriver"/>
+			<property name = "hibernate.connection.url" value = "jdbc:derby://localhost:1527/mailreader"/>
+			<property name = "hibernate.connection.username" value = "app"/>
+			<property name = "hibernate.connection.password" value = "app"/>
+			<property name = "hibernate.hbm2ddl.auto" value = "update"/>
+	  	</properties>
+	</persistence-unit>
+	
 </persistence>

@@ -96,10 +96,12 @@ public class Index extends action.Index {
         }
     }
 
+    @SuppressWarnings("unchecked")
     protected void login() {
         getProfile().put(USER, getUser());
     }
 
+    @SuppressWarnings("unchecked")
     protected void logout() {
         getProfile().put(USER, null);
     }
