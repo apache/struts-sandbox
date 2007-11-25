@@ -36,41 +36,22 @@ import entity.EntityManagerSuperclass;
 public class ProtocolManager extends EntityManagerSuperclass implements
         ProtocolManagerInterface {
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see entity.IProtocolManager#find(java.lang.String)
-     */
     public Protocol find(String value) {
         Protocol result = (Protocol) findEntity(Protocol.class, value);
         return result;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see entity.IProtocolManager#findAll()
-     */
     @SuppressWarnings("unchecked")
     public List<Protocol> findAll() {
-        EntityManager em = EntityManagerHelper.getEntityManager();
-        try {
-            List<Protocol> protocols = em.createNamedQuery(Protocol.FIND_ALL)
-                    .getResultList();
-            if (protocols == null) {
-                protocols = new ArrayList<Protocol>();
-            }
-            return protocols;
-        } finally {
-            em.close();
+        EntityManager manager = EntityManagerHelper.getEntityManager();
+        List<Protocol> protocols = manager.createNamedQuery(Protocol.FIND_ALL)
+                .getResultList();
+        if (protocols == null) {
+            protocols = new ArrayList<Protocol>();
         }
+        return protocols;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see entity.IProtocolManager#findAllAsMap()
-     */
     public Map<String, String> findAllAsMap() {
         List<Protocol> items = findAll();
         Map<String, String> map = new LinkedHashMap<String, String>(items

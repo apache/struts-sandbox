@@ -14,4 +14,14 @@
     <!-- include file="" / -->
     <!-- Add packages here -->
     
+    <package name="entity-default" extends="struts-default">
+		<interceptors>
+	  		<interceptor name="entityInterceptor" class="entities.EntityInterceptor"/>
+ 			<interceptor-stack name="entityStack">
+				  <interceptor-ref name="entityInterceptor"/>
+				  <interceptor-ref name="defaultStack"/>
+  			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="entityStack"/>
+	</package>        
 </struts>

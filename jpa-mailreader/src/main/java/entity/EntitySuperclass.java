@@ -28,8 +28,6 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 
-import entity.user.User;
-
 @MappedSuperclass
 public class EntitySuperclass implements Serializable {
 
@@ -61,7 +59,7 @@ public class EntitySuperclass implements Serializable {
 
     public boolean equals(Object obj) {
         if ((obj instanceof EntitySuperclass) && (getId() != null)) {
-            return getId().equals(((User) obj).getId());
+            return getId().equals(((EntitySuperclass) obj).getId());
         } else {
             return false;
         }
@@ -78,6 +76,11 @@ public class EntitySuperclass implements Serializable {
     }
 
     public String toString() {
-        return "entity.EntitySuperclass[id=" + getId() + "']";
+        return "entity.EntitySuperclass[id=" + getId() + "]";
+    }
+
+    public EntitySuperclass() {
+        String id = UUID.randomUUID().toString();
+        setId(id);
     }
 }

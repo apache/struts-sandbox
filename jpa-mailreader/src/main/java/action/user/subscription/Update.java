@@ -22,7 +22,7 @@ public class Update extends Index {
 
     public String input() throws Exception {
         setInput(UPDATE);
-        return manager.hasId(getSubscription()) ? super.input() : ERROR;
+        return super.input();
     }
 
 }

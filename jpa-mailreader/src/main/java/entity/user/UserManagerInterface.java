@@ -18,6 +18,8 @@
  */
 package entity.user;
 
+import javax.persistence.PersistenceException;
+
 public interface UserManagerInterface {
 
     /**
@@ -29,7 +31,18 @@ public interface UserManagerInterface {
      * @param value
      *            User instance to be added
      */
-    public abstract User create(User value);
+    void create(User value) throws PersistenceException;
+
+    /**
+     * <p>
+     * Delete the specified <code>User</code> (and any associated child
+     * <code>Subscription</code>s) into the persistent database.
+     * </p>
+     * 
+     * @param value
+     *            User instance to be added
+     */
+    void delete(User value) throws PersistenceException;
 
     /**
      * <p>
@@ -40,7 +53,7 @@ public interface UserManagerInterface {
      * @param value
      *            Username to match
      */
-    public abstract User find(String value);
+    User find(String value);
 
     /**
      * <p>
@@ -51,18 +64,7 @@ public interface UserManagerInterface {
      * @param value
      *            Username to match
      */
-    public abstract User findByName(String value);
-
-    /**
-     * <p>
-     * Determine if the <code>User</code> object has been assigned an ID
-     * value.
-     * 
-     * @param value
-     *            User object to examine
-     * @return True if the User object has an ID value
-     */
-    public abstract boolean hasId(User value);
+    User findByName(String value);
 
     /**
      * <p>
@@ -73,6 +75,6 @@ public interface UserManagerInterface {
      * @param value
      *            Copy of User instance to match and update
      */
-    public abstract void update(User value) throws Exception;
+    void update(User value) throws PersistenceException;
 
 }

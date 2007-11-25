@@ -37,9 +37,9 @@ import entity.user.User;
  * </p>
  * 
  * <p>
- * JPA entity class for the <code>APP_SUBSCRIPTION</code> table. This class is
- * kept simple to allow for easier regeneration.
- * </p>
+ * JPA entity class for the <code>APP_SUBSCRIPTION</code> table. TThis class
+ * contains sufficient detail to regenerate the database schema (top-down
+ * development).
  */
 @Entity(name = "APP_SUBSCRIPTION")
 @NamedQueries( {
@@ -98,7 +98,7 @@ public class Subscription extends EntitySuperclass implements Serializable {
 
     @JoinColumn(name = "protocol_id")
     @OneToOne
-    private Protocol protocol_id;
+    private Protocol protocol;
 
     @JoinColumn(name = "user_id", nullable = false)
     @ManyToOne
@@ -134,11 +134,11 @@ public class Subscription extends EntitySuperclass implements Serializable {
     }
 
     public Protocol getProtocol() {
-        return protocol_id;
+        return protocol;
     }
 
     public void setProtocol(Protocol value) {
-        protocol_id = value;
+        protocol = value;
     }
 
     public User getUser() {
@@ -165,6 +165,25 @@ public class Subscription extends EntitySuperclass implements Serializable {
      * </p>
      */
     public Subscription() {
+        super();
+    }
+
+    /**
+     * <p>
+     * Instantiate a default <code>Subscription</code> object, and load
+     * values.
+     * </p>
+     * 
+     */
+    public Subscription(String host, User user, String username,
+            String password, Protocol protocol, boolean autoConnect) {
+        super();
+        setHost(host);
+        setUser(user);
+        setUsername(username);
+        setPassword(password);
+        setProtocol(protocol);
+        setAutoConnect(autoConnect);
     }
 
 }

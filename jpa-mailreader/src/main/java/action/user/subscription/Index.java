@@ -116,7 +116,8 @@ public class Index extends action.user.Index implements Preparable {
 
     protected void update() throws Exception {
         Subscription result = getSubscription();
-        if (manager.hasId(result)) {
+        boolean exists = (null != manager.find(result.getId()));
+        if (exists) {
             manager.update(result);
         } else {
             addActionError(getText(ERROR_CREDENTIALS_MISMATCH));

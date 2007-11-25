@@ -19,85 +19,34 @@
 package entity;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
-import java.util.UUID;
 
 /**
  * <p>
  * Custom CRUD operations involving the <code>User</code> object.
  * <p>
+ * <p>
+ * This implementation delegates transaction managemetn and exception handling
+ * to another component, such as an Interceptor or Filter, or the setUp and
+ * tearDown methods of a TestCase.
+ * </p>
  * 
  */
 public class EntityManagerSuperclass {
 
-    // --- STATICS ----
-
-    /**
-     * <p>
-     * Error message to post when create fails.
-     * </p>
-     */
-    public static final String CREATE_ERROR = "Exception in create()";
-
-    /**
-     * <p>
-     * Error message to post when delete fails.
-     * </p>
-     */
-    public static final String DELETE_ERROR = "Exception in delete()";
-
-    /**
-     * <p>
-     * Error message to post when update fails.
-     * </p>
-     */
-    public static final String UPDATE_ERROR = "Exception in update()";
-
-    // --- METHODS ----
-
-    public Object createEntity(EntitySuperclass value) {
+    public void createEntity(EntitySuperclass value)
+            throws PersistenceException {
         EntityManager manager = EntityManagerHelper.getEntityManager();
-        EntityTransaction transaction = null;
-        try {
-            transaction = manager.getTransaction();
-            transaction.begin();
-            String id = UUID.randomUUID().toString();
-            value.setId(id);
-            manager.persist(value);
-            transaction.commit();
-        } catch (Exception e) {
-            EntityManagerHelper.log(CREATE_ERROR, e);
-            throw new PersistenceException(e);
-        } finally {
-            if ((transaction != null) && transaction.isActive()) {
-                transaction.rollback();
-            }
-            manager.close();
-        }
-        return value;
+        manager.persist(value);
     }
 
-    public void delete(Object value) throws Exception {
+    public void deleteEntity(EntitySuperclass value)
+            throws PersistenceException {
         EntityManager manager = EntityManagerHelper.getEntityManager();
-        EntityTransaction transaction = null;
-        try {
-            transaction = manager.getTransaction();
-            transaction.begin();
-            manager.merge(value);
-            manager.remove(value);
-            transaction.commit();
-        } catch (Exception e) {
-            EntityManagerHelper.log(DELETE_ERROR, e);
-            throw new PersistenceException(e);
-        } finally {
-            if ((transaction != null) && transaction.isActive()) {
-                transaction.rollback();
-            }
-            manager.close();
-        }
+        manager.merge(value);
+        manager.remove(value);
     }
 
     @SuppressWarnings("unchecked")
@@ -105,60 +54,29 @@ public class EntityManagerSuperclass {
         EntityManager manager = EntityManagerHelper.getEntityManager();
         Object result = null;
         try {
-            result = manager.find(entity, id);
-            return result;
+            manager.find(entity, id);
         } catch (NoResultException e) {
-            return null;
-        } finally {
-            manager.close();
+            result = null;
         }
+        return result;
     }
 
     public Object findEntityByName(String namedQuery, String parameterName,
             String value) {
         EntityManager manager = EntityManagerHelper.getEntityManager();
         Object result = null;
+        Query query = manager.createNamedQuery(namedQuery);
+        query.setParameter(parameterName, value);
         try {
-            Query query = manager.createNamedQuery(namedQuery);
-            query.setParameter(parameterName, value);
             result = query.getSingleResult();
-            return result;
         } catch (NoResultException e) {
-            return null;
-        } finally {
-            manager.close();
+            result = null;
         }
-    }
-
-    public boolean entityHasId(EntitySuperclass value) {
-        if (value == null)
-            return false;
-        String id = value.getId();
-        boolean result = ((id != null) && (id.length() > 0));
         return result;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see entity.IUserManager#update(entity.User)
-     */
-    public void updateEntity(Object value) throws Exception {
+    public void updateEntity(Object value) throws PersistenceException {
         EntityManager manager = EntityManagerHelper.getEntityManager();
-        EntityTransaction transaction = null;
-        try {
-            transaction = manager.getTransaction();
-            transaction.begin();
-            manager.merge(value);
-            transaction.commit();
-        } catch (Exception e) {
-            EntityManagerHelper.log(UPDATE_ERROR, e);
-            throw new PersistenceException(e);
-        } finally {
-            if ((transaction != null) && transaction.isActive()) {
-                transaction.rollback();
-            }
-            manager.close();
-        }
+        manager.merge(value);
     }
 }

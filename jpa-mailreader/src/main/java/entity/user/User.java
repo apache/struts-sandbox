@@ -20,6 +20,8 @@ package entity.user;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.ArrayList;
+import java.sql.Timestamp;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -36,8 +38,8 @@ import entity.subscription.Subscription;
  * Describes an account that maintains zero or more <code>Subscription</code>s.
  * </p>
  * <p>
- * JPA entity class for the <code>APP_USER</code> table. This class is kept
- * simple to allow for easier regeneration.
+ * JPA entity class for the <code>APP_USER</code> table. This class contains
+ * sufficient detail to regenerate the database schema (top-down development).
  * </p>
  */
 @Entity(name = "APP_USER")
@@ -174,9 +176,30 @@ public class User extends EntitySuperclass implements Serializable {
      */
     public void addSubscription(Subscription subscription) {
         List<Subscription> subscriptions = getSubscriptions();
+        if (subscriptions == null) {
+            subscriptions = new ArrayList<Subscription>();
+            setSubscriptions(subscriptions);
+        }
         if (!subscriptions.contains(subscription)) {
             subscription.setUser(this);
             subscriptions.add(subscription);
+        }
+    }
+
+    /**
+     * <p>
+     * Add the specified <code>Subscriptions</code> to the set of
+     * subscriptions associated with this <code>User</code>.
+     * </p>
+     * <p>
+     * A duplicate <code>Subscription</code> is not added but quietly ignored.
+     * </p>
+     */
+    public void addSubscriptions(List<Subscription> subscriptions) {
+        if (subscriptions == null)
+            return;
+        for (int i = 0; i < subscriptions.size(); i++) {
+            addSubscription(subscriptions.get(i));
         }
     }
 
@@ -202,6 +225,38 @@ public class User extends EntitySuperclass implements Serializable {
      * </p>
      */
     public User() {
+        super();
+    }
+
+    /**
+     * <p>
+     * Instantiate a <code>User</code> object with a username and password.
+     * </p>
+     * <p>
+     * This constructor does not set the ID value.
+     * </p>
+     */
+    public User(String username, String password) {
+        super();
+        setUsername(username);
+        setPassword(password);
+    }
+
+    /**
+     * <p>
+     * Instantiate a <code>User</code> object, and load values.
+     * </p>
+     */
+    public User(String username, String password, String fullName,
+            String fromAddress, String replyToAddress, Timestamp lastUpdated,
+            String id) {
+        super();
+        setUsername(username);
+        setPassword(password);
+        setFullName(fullName);
+        setReplyToAddress(replyToAddress);
+        setLastUpdate(lastUpdated);
+        setId(id);
     }
 
 }

@@ -32,7 +32,7 @@ public interface ProtocolManagerInterface {
      * @param id
      *            Protocol id to look up
      */
-    public abstract Protocol find(String value);
+    Protocol find(String value);
 
     /**
      * <p>
@@ -41,7 +41,7 @@ public interface ProtocolManagerInterface {
      * will be returned.
      * </p>
      */
-    public abstract List<Protocol> findAll();
+    List<Protocol> findAll();
 
     /**
      * <p>
@@ -50,6 +50,6 @@ public interface ProtocolManagerInterface {
      * returned.
      * </p>
      */
-    public abstract Map<String, String> findAllAsMap();
+    Map<String, String> findAllAsMap();
 
 }

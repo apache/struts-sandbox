@@ -25,6 +25,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.conversion.annotations.Conversion;
 import com.opensymphony.xwork2.conversion.annotations.ConversionType;
 import com.opensymphony.xwork2.conversion.annotations.TypeConversion;
+import org.apache.struts2.config.ParentPackage;
 
 /**
  * <p>
@@ -40,6 +41,7 @@ import com.opensymphony.xwork2.conversion.annotations.TypeConversion;
         @TypeConversion(type = ConversionType.APPLICATION, key = "entity.subscription.Subscription", converter = "entity.subscription.SubscriptionTypeConverter"),
         @TypeConversion(type = ConversionType.APPLICATION, key = "entity.user.User", converter = "entity.user.UserTypeConverter") })
 @SuppressWarnings("unchecked")
+@ParentPackage("entity-default")
 public class Index extends ActionSupport implements SessionAware {
 
     // ---- STATICS ----

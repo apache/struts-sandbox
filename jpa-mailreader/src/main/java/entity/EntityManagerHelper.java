@@ -18,13 +18,13 @@
  */
 package entity;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * <p>
@@ -37,13 +37,12 @@ public class EntityManagerHelper {
 
     private static final EntityManagerFactory emf;
     private static final ThreadLocal<EntityManager> threadLocal;
-    private static final Logger logger;
+    private static final Log logger;
 
     static {
         emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT);
         threadLocal = new ThreadLocal<EntityManager>();
-        logger = Logger.getLogger(PERSISTENCE_UNIT);
-        logger.setLevel(Level.ALL);
+        logger = LogFactory.getLog(EntityManagerHelper.class);
     }
 
     public static EntityManager getEntityManager() {
@@ -70,20 +69,20 @@ public class EntityManagerHelper {
         getEntityManager().getTransaction().commit();
     }
 
-    public static void rollback() {
-        getEntityManager().getTransaction().rollback();
-    }
-
     public static Query createQuery(String query) {
         return getEntityManager().createQuery(query);
     }
 
-    public static void log(String info, Level level, Throwable ex) {
-        logger.log(level, info, ex);
+    public static void flush() {
+        getEntityManager().flush();
     }
 
-    public static void log(String info, Throwable ex) {
-        logger.log(Level.INFO, info, ex);
+    public static void logError(String info, Throwable ex) {
+        logger.error(info, ex);
+    }
+
+    public static void rollback() {
+        getEntityManager().getTransaction().rollback();
     }
 
 }

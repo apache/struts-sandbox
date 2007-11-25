@@ -22,7 +22,7 @@ public class Delete extends Index {
 
     public String input() throws Exception {
         setInput(DELETE);
-        return manager.hasId(getSubscription()) ? super.input() : ERROR;
+        return super.input();
     }
 
 }

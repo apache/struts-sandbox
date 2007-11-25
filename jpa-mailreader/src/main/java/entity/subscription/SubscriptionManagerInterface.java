@@ -29,7 +29,7 @@ public interface SubscriptionManagerInterface {
      * @param value
      *            Subscription to insert
      */
-    public abstract Subscription create(Subscription value);
+    void create(Subscription value);
 
     /**
      * <p>
@@ -40,7 +40,7 @@ public interface SubscriptionManagerInterface {
      * @param value
      *            Subscription instance to delete
      */
-    public abstract void delete(Subscription value) throws Exception;
+    void delete(Subscription value) throws Exception;
 
     /**
      * <p>
@@ -51,7 +51,7 @@ public interface SubscriptionManagerInterface {
      * @param value
      *            Host to match
      */
-    public abstract Subscription find(String value);
+    Subscription find(String value);
 
     /**
      * <p>
@@ -62,19 +62,7 @@ public interface SubscriptionManagerInterface {
      * @param id
      *            Subscription id to match
      */
-    public abstract Subscription findByName(String value);
-
-    /**
-     * <p>
-     * Determine if the <code>Subscription</code> object has been assigned an
-     * ID value.
-     * </p>
-     * 
-     * @param value
-     *            Subscription object to examine
-     * @return True if the Subscription object has an ID value
-     */
-    public abstract boolean hasId(Subscription value);
+    Subscription findByName(String value);
 
     /**
      * <p>
@@ -85,6 +73,6 @@ public interface SubscriptionManagerInterface {
      * @param user
      *            Copy of Subscription instance to match and update
      */
-    public abstract void update(Subscription value) throws Exception;
+    void update(Subscription value) throws Exception;
 
 }

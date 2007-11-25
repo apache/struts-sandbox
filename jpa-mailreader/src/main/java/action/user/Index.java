@@ -108,7 +108,8 @@ public class Index extends action.Index {
 
     protected void update() throws Exception {
         User result = getUser();
-        if (manager.hasId(result)) {
+        boolean exists = (null != manager.find(result.getId()));
+        if (exists) {
             manager.update(result);
         } else {
             addActionError(getText(ERROR_CREDENTIALS_MISMATCH));

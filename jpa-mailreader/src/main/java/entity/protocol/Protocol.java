@@ -30,8 +30,9 @@ import entity.EntitySuperclass;
  * Describes an email server protocol, such as POP or SMTP.
  * </p>
  * <p>
- * JPA entity class for the <code>APP_PROTOCOL</code> table. This class is
- * kept simple to allow for easier regeneration.
+ * JPA entity class for the <code>APP_PROTOCOL</code> table. This class
+ * contains sufficient detail to regenerate the database schema (top-down
+ * development).
  * </p>
  */
 @Entity(name = "APP_PROTOCOL")
@@ -70,6 +71,12 @@ public class Protocol extends EntitySuperclass implements Serializable {
      * </p>
      */
     public Protocol() {
+        super();
+    }
+
+    public Protocol(String description) {
+        super();
+        setDescription(description);
     }
 
 }

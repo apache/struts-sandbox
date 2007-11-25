@@ -18,6 +18,7 @@
  */
 package entity.user;
 
+import javax.persistence.PersistenceException;
 import entity.EntityManagerSuperclass;
 
 /**
@@ -29,54 +30,26 @@ import entity.EntityManagerSuperclass;
 public class UserManager extends EntityManagerSuperclass implements
         UserManagerInterface {
 
-    // --- METHODS ----
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see entity.IUserManager#create(entity.User)
-     */
-    public User create(User value) {
-        User result = (User) createEntity(value);
-        return result;
+    public void create(User value) throws PersistenceException {
+        createEntity(value);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see entity.IUserManager#find(java.lang.String)
-     */
+    public void delete(User value) throws PersistenceException {
+        deleteEntity(value);
+    }
+
     public User find(String value) {
         User result = (User) findEntity(User.class, value);
         return result;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see entity.IUserManager#findByName(java.lang.String)
-     */
     public User findByName(String value) {
         User result = (User) findEntityByName(User.FIND_BY_NAME, User.NAME,
                 value);
         return result;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see entity.IUserManager#hasId(entity.User)
-     */
-    public boolean hasId(User value) {
-        return entityHasId(value);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see entity.IUserManager#update(entity.User)
-     */
-    public void update(User value) throws Exception {
+    public void update(User value) throws PersistenceException {
         updateEntity(value);
     }
 }

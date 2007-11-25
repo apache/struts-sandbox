@@ -32,7 +32,7 @@ import entity.user.User;
 
 import junit.framework.TestCase;
 
-public class RetainTest extends TestCase {
+public class BootstrapDataTest extends TestCase {
 
     public void setUp() throws Exception {
         super.setUp();
@@ -40,6 +40,10 @@ public class RetainTest extends TestCase {
 
     private String getUUID() {
         return UUID.randomUUID().toString();
+    }
+
+    public void testTrue() throws Exception {
+        assertTrue(true);
     }
 
     @SuppressWarnings("unchecked")
