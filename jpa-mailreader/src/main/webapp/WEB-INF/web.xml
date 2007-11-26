@@ -5,6 +5,23 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
 	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
+  <servlet>
+    <servlet-name>XFireServlet</servlet-name>
+    <servlet-class>
+        org.codehaus.xfire.transport.http.XFireConfigurableServlet
+    </servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>XFireServlet</servlet-name>
+    <url-pattern>/servlet/XFireServlet/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>XFireServlet</servlet-name>
+    <url-pattern>/services/*</url-pattern>
+  </servlet-mapping>
+
   	<filter>
     	<filter-name>
     		struts2

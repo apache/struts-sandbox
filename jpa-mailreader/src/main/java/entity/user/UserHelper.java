@@ -19,6 +19,7 @@
 package entity.user;
 
 import javax.persistence.PersistenceException;
+import javax.jws.WebService;
 
 /**
  * <p>
@@ -26,6 +27,7 @@ import javax.persistence.PersistenceException;
  * </p>
  * 
  */
+@WebService
 public interface UserHelper {
 
     /**

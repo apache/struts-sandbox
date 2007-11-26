@@ -6,11 +6,11 @@
 <struts>
 
     <constant name="struts.devMode" value="false" />
-    <constant name="struts.action.extension" value="" />
+    <constant name="struts.action.extension" value="do" />
     
     <package name="entity-default" extends="struts-default">
 		<interceptors>
-	  		<interceptor name="entityInterceptor" class="entities.EntityInterceptor"/>
+	  		<interceptor name="entityInterceptor" class="entity.EntityInterceptor"/>
  			<interceptor-stack name="entityStack">
 				  <interceptor-ref name="entityInterceptor"/>
 				  <interceptor-ref name="defaultStack"/>

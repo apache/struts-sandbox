@@ -23,6 +23,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.jws.WebService;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 
@@ -34,6 +35,7 @@ import entity.EntityHelper;
  * Default JPA implementation of <code>ProtocolHelper</code>.
  * </p>
  */
+@WebService(serviceName = "protocol", endpointInterface = "entity.protocol.ProtocolHelper")
 public class ProtocolHelperImpl extends EntityHelper implements ProtocolHelper {
 
     public int count() throws PersistenceException {

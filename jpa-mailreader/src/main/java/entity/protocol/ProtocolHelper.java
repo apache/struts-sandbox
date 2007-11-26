@@ -21,6 +21,7 @@ package entity.protocol;
 import java.util.List;
 import java.util.Map;
 
+import javax.jws.WebService;
 import javax.persistence.PersistenceException;
 
 /**
@@ -29,6 +30,7 @@ import javax.persistence.PersistenceException;
  * object.
  * <p>
  */
+@WebService
 public interface ProtocolHelper {
 
     /**

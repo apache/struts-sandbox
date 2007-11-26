@@ -18,6 +18,7 @@
  */
 package entity.subscription;
 
+import javax.jws.WebService;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 
@@ -29,6 +30,7 @@ import entity.EntityManagerHelper;
  * Default JPA implementation of <code>UserHelper</code>.
  * </p>
  */
+@WebService(serviceName = "subscription", endpointInterface = "entity.subscription.SubscriptionHelper")
 public class SubscriptionHelperImpl extends EntityHelper implements
         SubscriptionHelper {
 
