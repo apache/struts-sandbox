@@ -46,7 +46,9 @@ import entity.subscription.Subscription;
 @Entity(name = "APP_USER")
 @NamedQueries( {
         @NamedQuery(name = User.FIND_ALL, query = User.FIND_ALL_QUERY),
-        @NamedQuery(name = User.FIND_BY_NAME, query = User.FIND_BY_NAME_QUERY) })
+        @NamedQuery(name = User.FIND_BY_NAME, query = User.FIND_BY_NAME_QUERY),
+        @NamedQuery(name = User.COUNT, query = User.COUNT_QUERY)        
+})
 public class User extends UuidEntity implements Serializable {
 
     // ---- STATICS ----
@@ -58,12 +60,7 @@ public class User extends UuidEntity implements Serializable {
      */
     static final String FIND_ALL = "User.FIND_ALL";
 
-    /**
-     * <p>
-     * Query for finding a <code>User</code> by username.
-     * </p>
-     */
-    static final String FIND_ALL_QUERY = "SELECT u FROM APP_USER u";
+    private static final String FIND_ALL_QUERY = "SELECT u FROM APP_USER u";
 
     /**
      * <p>
@@ -72,12 +69,11 @@ public class User extends UuidEntity implements Serializable {
      */
     static final String FIND_BY_NAME = "User.FIND_BY_USERNAME";
 
-    /**
-     * <p>
-     * Query for finding a <code>User</code> by username.
-     * </p>
-     */
-    static final String FIND_BY_NAME_QUERY = "SELECT u FROM APP_USER u WHERE u.username = :username";
+    private static final String FIND_BY_NAME_QUERY = "SELECT u FROM APP_USER u WHERE u.username = :username";
+    
+    static final String COUNT = "User.COUNT";
+    
+    private static final String COUNT_QUERY = "SELECT COUNT(*) FROM APP_USER";
 
     /**
      * <p>

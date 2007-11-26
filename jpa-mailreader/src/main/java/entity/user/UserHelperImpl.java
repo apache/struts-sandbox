@@ -28,6 +28,12 @@ import entity.EntityHelper;
  */
 public class UserHelperImpl extends EntityHelper implements UserHelper {
 
+    public int count() throws PersistenceException {
+        Long count = (Long) singleResult(User.COUNT, null, null);
+        int result = count.intValue();
+        return result;
+    }
+    
     public void create(User value) throws PersistenceException {
         createEntity(value);
     }
@@ -42,7 +48,7 @@ public class UserHelperImpl extends EntityHelper implements UserHelper {
     }
 
     public User findByName(String value) {
-        User result = (User) findEntity(User.FIND_BY_NAME, User.NAME, value);
+        User result = (User) singleResult(User.FIND_BY_NAME, User.NAME, value);
         return result;
     }
 

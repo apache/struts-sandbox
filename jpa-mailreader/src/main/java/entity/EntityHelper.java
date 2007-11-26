@@ -18,6 +18,7 @@
  */
 package entity;
 
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
@@ -47,12 +48,27 @@ public class EntityHelper {
         manager.remove(value);
     }
 
-    public Object findEntity(String namedQuery, String parameterName,
+    @SuppressWarnings("unchecked")
+    public List resultList(String namedQuery, String parameterName,
+            String value) {
+        EntityManager manager = EntityManagerHelper.getEntityManager();
+        List result = null;
+        Query query = manager.createNamedQuery(namedQuery);
+        if (parameterName!=null) query.setParameter(parameterName, value);
+        try {
+            result = query.getResultList();
+        } catch (NoResultException e) {
+            result = null;
+        }
+        return result;
+    }
+
+    public Object singleResult(String namedQuery, String parameterName,
             String value) {
         EntityManager manager = EntityManagerHelper.getEntityManager();
         Object result = null;
         Query query = manager.createNamedQuery(namedQuery);
-        query.setParameter(parameterName, value);
+        if (parameterName!=null) query.setParameter(parameterName, value);
         try {
             result = query.getSingleResult();
         } catch (NoResultException e) {

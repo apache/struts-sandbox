@@ -49,7 +49,7 @@ public class SubscriptionHelperImpl extends EntityHelper implements
     }
 
     public Subscription findByName(String value) {
-        Subscription result = (Subscription) findEntity(
+        Subscription result = (Subscription) singleResult(
                 Subscription.FIND_BY_NAME, Subscription.NAME, value);
         return result;
     }

@@ -7,6 +7,7 @@ import junit.framework.TestCase;
 public class EntityTestCase extends TestCase {
 
     protected EntityManager manager;
+    protected boolean rollback = false;
 
     public void setUp() throws Exception {
         super.setUp();
@@ -16,6 +17,7 @@ public class EntityTestCase extends TestCase {
 
     public void tearDown() throws Exception {
         super.tearDown();
+        if (rollback) EntityManagerHelper.rollback();
         EntityManagerHelper.commit();
         EntityManagerHelper.closeEntityManager();
     }

@@ -18,6 +18,8 @@
  */
 package entity.user;
 
+import javax.persistence.PersistenceException;
+
 /**
  * <p>
  * Custom operations involving the <code>User</code> object.
@@ -25,7 +27,16 @@ package entity.user;
  * 
  */
 public interface UserHelper {
-
+    
+    /**
+     * <p>
+     * Provide the current count of <p>User</p> objects.
+     * </p> 
+     * @return current count of <p>User</p> objects
+     * @throws PersistenceException
+     */
+    int count() throws PersistenceException;
+    
     /**
      * <p>
      * Insert the specified <code>User</code> into the persistent database.
