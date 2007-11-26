@@ -23,7 +23,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import entity.EntitySuperclass;
+import entity.UuidEntity;
 
 /**
  * <p>
@@ -32,12 +32,12 @@ import entity.EntitySuperclass;
  * <p>
  * JPA entity class for the <code>APP_PROTOCOL</code> table. This class
  * contains sufficient detail to regenerate the database schema (top-down
- * development).
+ * development). The annotation mode is by field.
  * </p>
  */
 @Entity(name = "APP_PROTOCOL")
 @NamedQueries( { @NamedQuery(name = Protocol.FIND_ALL, query = "SELECT p FROM APP_PROTOCOL p") })
-public class Protocol extends EntitySuperclass implements Serializable {
+public class Protocol extends UuidEntity implements Serializable {
 
     // ---- STATICS ----
 

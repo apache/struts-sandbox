@@ -29,7 +29,20 @@ import javax.persistence.Transient;
 import javax.persistence.Version;
 
 @MappedSuperclass
-public class EntitySuperclass implements Serializable {
+/**
+ * <p>
+ * Define a POJO that utilizes an ID property based on a universally unique
+ * identifier (UUID).
+ * </p>
+ * <p>
+ * UUIDs are particulary useful in RESTful application designs, since an object
+ * instance can assign its own primary key without interacting with a
+ * persistence unit. This base class is intended as a convenience only, and the
+ * class type should not be referred by the API. Instances of this class should
+ * be treated as ordinary POJOs (which they are!).
+ * </p>
+ */
+public class UuidEntity implements Serializable {
 
     @Transient
     private UUID uuid;
@@ -58,8 +71,8 @@ public class EntitySuperclass implements Serializable {
     }
 
     public boolean equals(Object obj) {
-        if ((obj instanceof EntitySuperclass) && (getId() != null)) {
-            return getId().equals(((EntitySuperclass) obj).getId());
+        if ((obj instanceof UuidEntity) && (getId() != null)) {
+            return getId().equals(((UuidEntity) obj).getId());
         } else {
             return false;
         }
@@ -76,10 +89,10 @@ public class EntitySuperclass implements Serializable {
     }
 
     public String toString() {
-        return "entity.EntitySuperclass[id=" + getId() + "]";
+        return "entity.UuidEntity[id=" + getId() + "]";
     }
 
-    public EntitySuperclass() {
+    public UuidEntity() {
         String id = UUID.randomUUID().toString();
         setId(id);
     }

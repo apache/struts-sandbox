@@ -38,7 +38,7 @@ public class UserTypeConverter extends StrutsTypeConverter {
      * </p>
      */
     public Object convertFromString(Map context, String[] values, Class toClass) {
-        UserManagerInterface manager = new UserManager();
+        UserHelper manager = new UserHelperImpl();
         String name = values[0];
         User result = manager.findByName(name);
         return result;

@@ -21,7 +21,7 @@ package entity.protocol;
 import java.util.List;
 import java.util.Map;
 
-public interface ProtocolManagerInterface {
+public interface ProtocolHelper {
 
     /**
      * <p>

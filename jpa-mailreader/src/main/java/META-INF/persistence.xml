@@ -6,7 +6,6 @@
 		<provider>
 			oracle.toplink.essentials.PersistenceProvider
 		</provider>
-        <class>entity.EntitySuperclass</class>
         <class>entity.protocol.Protocol</class>
         <class>entity.subscription.Subscription</class>
         <class>entity.user.User</class>
@@ -22,7 +21,6 @@
 
 	<persistence-unit name="entity" transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
-        <class>entity.EntitySuperclass</class>
         <class>entity.protocol.Protocol</class>
         <class>entity.subscription.Subscription</class>
         <class>entity.user.User</class>

@@ -19,17 +19,17 @@
 package entity.subscription;
 
 import javax.persistence.EntityManager;
+
+import entity.EntityHelper;
 import entity.EntityManagerHelper;
-import entity.EntityManagerSuperclass;
 
 /**
  * <p>
- * Custom persistence operations involving the <code>Subscription</code>
- * object.
- * <p>
+ * Default JPA implementation of <code>UserHelper</code>.
+ * </p>
  */
-public class SubscriptionManager extends EntityManagerSuperclass implements
-        SubscriptionManagerInterface {
+public class SubscriptionHelperImpl extends EntityHelper implements
+        SubscriptionHelper {
 
     public void create(Subscription value) {
         createEntity(value);
@@ -43,14 +43,14 @@ public class SubscriptionManager extends EntityManagerSuperclass implements
     }
 
     public Subscription find(String value) {
-        Subscription result = (Subscription) findEntity(Subscription.class,
+        Subscription result = (Subscription) readEntity(Subscription.class,
                 value);
         return result;
     }
 
     public Subscription findByName(String value) {
-        Subscription result = (Subscription) findEntityByName(
-                Subscription.FIND_BY_HOST, Subscription.HOST, value);
+        Subscription result = (Subscription) findEntity(
+                Subscription.FIND_BY_NAME, Subscription.NAME, value);
         return result;
     }
 

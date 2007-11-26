@@ -26,18 +26,17 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 
 import entity.EntityManagerHelper;
-import entity.EntityManagerSuperclass;
+import entity.EntityHelper;
 
 /**
  * <p>
  * Custom persistence operations involving the <code>Protocol</code> object.
  * <p>
  */
-public class ProtocolManager extends EntityManagerSuperclass implements
-        ProtocolManagerInterface {
+public class ProtocolHelperImpl extends EntityHelper implements ProtocolHelper {
 
     public Protocol find(String value) {
-        Protocol result = (Protocol) findEntity(Protocol.class, value);
+        Protocol result = (Protocol) readEntity(Protocol.class, value);
         return result;
     }
 

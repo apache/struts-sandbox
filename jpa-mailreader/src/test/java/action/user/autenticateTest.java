@@ -2,20 +2,20 @@ package action.user;
 
 import junit.framework.TestCase;
 import entity.user.User;
-import entity.user.UserManager;
-import entity.user.UserManagerInterface;
+import entity.user.UserHelper;
+import entity.user.UserHelperImpl;
 
 public class autenticateTest extends TestCase {
 
-    UserManagerInterface manager;
+    UserHelper helper;
 
     public void setUp() throws Exception {
         super.setUp();
-        manager = new UserManager();
+        helper = new UserHelperImpl();
     }
 
     private boolean authenticate(String username, String password) {
-        User foundValue = manager.findByName(username);
+        User foundValue = (User) helper.findByName(username);
         if ((foundValue != null) && !foundValue.getPassword().equals(password)) {
             foundValue = null;
         }

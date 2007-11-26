@@ -37,7 +37,7 @@ public class ProtocolTypeConverter extends StrutsTypeConverter {
      * entity from the persistence database.
      */
     public Object convertFromString(Map context, String[] values, Class toClass) {
-        ProtocolManagerInterface manager = new ProtocolManager();
+        ProtocolHelper manager = new ProtocolHelperImpl();
         String id = values[0];
         Protocol target = manager.find(id);
         return target;

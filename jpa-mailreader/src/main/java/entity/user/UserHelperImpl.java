@@ -19,16 +19,14 @@
 package entity.user;
 
 import javax.persistence.PersistenceException;
-import entity.EntityManagerSuperclass;
+import entity.EntityHelper;
 
 /**
  * <p>
- * Custom CRUD operations involving the <code>User</code> object.
- * <p>
- * 
+ * Default JPA implementation of <code>UserHelper</code>.
+ * </p>
  */
-public class UserManager extends EntityManagerSuperclass implements
-        UserManagerInterface {
+public class UserHelperImpl extends EntityHelper implements UserHelper {
 
     public void create(User value) throws PersistenceException {
         createEntity(value);
@@ -39,13 +37,12 @@ public class UserManager extends EntityManagerSuperclass implements
     }
 
     public User find(String value) {
-        User result = (User) findEntity(User.class, value);
+        User result = (User) readEntity(User.class, value);
         return result;
     }
 
     public User findByName(String value) {
-        User result = (User) findEntityByName(User.FIND_BY_NAME, User.NAME,
-                value);
+        User result = (User) findEntity(User.FIND_BY_NAME, User.NAME, value);
         return result;
     }
 

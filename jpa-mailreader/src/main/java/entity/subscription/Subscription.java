@@ -27,7 +27,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 
-import entity.EntitySuperclass;
+import entity.UuidEntity;
 import entity.protocol.Protocol;
 import entity.user.User;
 
@@ -39,14 +39,13 @@ import entity.user.User;
  * <p>
  * JPA entity class for the <code>APP_SUBSCRIPTION</code> table. TThis class
  * contains sufficient detail to regenerate the database schema (top-down
- * development).
+ * development). The annotation mode is by field.
  */
-@Entity(name = "APP_SUBSCRIPTION")
 @NamedQueries( {
-        @NamedQuery(name = Subscription.FIND_ALL, query = "SELECT s FROM APP_SUBSCRIPTION s"),
-        @NamedQuery(name = Subscription.FIND_BY_NAME, query = "SELECT s FROM APP_SUBSCRIPTION s WHERE s.host = :host"),
-        @NamedQuery(name = Subscription.FIND_BY_USER_ID, query = "SELECT s FROM APP_SUBSCRIPTION s WHERE s.user = :id"), })
-public class Subscription extends EntitySuperclass implements Serializable {
+        @NamedQuery(name = Subscription.FIND_ALL, query = Subscription.FIND_ALL_QUERY),
+        @NamedQuery(name = Subscription.FIND_BY_NAME, query = Subscription.FIND_BY_NAME_QUERY) })
+@Entity(name = "APP_SUBSCRIPTION")
+public class Subscription extends UuidEntity implements Serializable {
 
     // ---- STATICS ----
 
@@ -55,35 +54,35 @@ public class Subscription extends EntitySuperclass implements Serializable {
      * Named query for finding a <code>User</code> by username.
      * </p>
      */
-    public static final String FIND_ALL = "Subscription.FIND_ALL";
+    static final String FIND_ALL = "Subscription.FIND_ALL";
 
     /**
      * <p>
-     * Named query for finding a <code>Subscription</code> by host.
+     * Query for finding a <code>User</code> by username.
      * </p>
      */
-    public static final String FIND_BY_HOST = "Subscription.FIND_BY_HOST";
-
-    /**
-     * <p>
-     * Named query for finding a <code>User</code> by username.
-     * </p>
-     */
-    public static final String FIND_BY_USER_ID = "Subscription.FIND_BY_USER_ID";
+    static final String FIND_ALL_QUERY = "SELECT s FROM APP_SUBSCRIPTION s";
 
     /**
      * <p>
      * Named query for finding a <code>User</code> by username.
      * </p>
      */
-    public static final String FIND_BY_NAME = "Subscription.FIND_BY_HOST";
+    static final String FIND_BY_NAME = "Subscription.FIND_BY_HOST";
 
     /**
      * <p>
-     * Token represnting the "host" attribute.
+     * Query for finding a <code>User</code> by username.
      * </p>
      */
-    public static final String HOST = "host";
+    static final String FIND_BY_NAME_QUERY = "SELECT s FROM APP_SUBSCRIPTION s WHERE s.host = :host";
+
+    /**
+     * <p>
+     * Token represnting the "host" or "name" attribute.
+     * </p>
+     */
+    public static final String NAME = "host";
 
     // ---- FIELDS ----
 

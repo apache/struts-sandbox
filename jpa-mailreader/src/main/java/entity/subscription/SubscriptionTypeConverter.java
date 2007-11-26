@@ -36,7 +36,7 @@ public class SubscriptionTypeConverter extends StrutsTypeConverter {
      * entity from the persistence database.
      */
     public Object convertFromString(Map context, String[] values, Class toClass) {
-        SubscriptionManagerInterface manager = new SubscriptionManager();
+        SubscriptionHelper manager = new SubscriptionHelperImpl();
         String name = String.valueOf(values[0]);
         Subscription result = manager.findByName(name);
         return result;

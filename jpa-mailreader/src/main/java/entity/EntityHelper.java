@@ -34,34 +34,20 @@ import javax.persistence.Query;
  * </p>
  * 
  */
-public class EntityManagerSuperclass {
+public class EntityHelper {
 
-    public void createEntity(EntitySuperclass value)
-            throws PersistenceException {
+    public void createEntity(Object value) throws PersistenceException {
         EntityManager manager = EntityManagerHelper.getEntityManager();
         manager.persist(value);
     }
 
-    public void deleteEntity(EntitySuperclass value)
-            throws PersistenceException {
+    public void deleteEntity(Object value) throws PersistenceException {
         EntityManager manager = EntityManagerHelper.getEntityManager();
         manager.merge(value);
         manager.remove(value);
     }
 
-    @SuppressWarnings("unchecked")
-    public Object findEntity(Class entity, String id) {
-        EntityManager manager = EntityManagerHelper.getEntityManager();
-        Object result = null;
-        try {
-            manager.find(entity, id);
-        } catch (NoResultException e) {
-            result = null;
-        }
-        return result;
-    }
-
-    public Object findEntityByName(String namedQuery, String parameterName,
+    public Object findEntity(String namedQuery, String parameterName,
             String value) {
         EntityManager manager = EntityManagerHelper.getEntityManager();
         Object result = null;
@@ -69,6 +55,18 @@ public class EntityManagerSuperclass {
         query.setParameter(parameterName, value);
         try {
             result = query.getSingleResult();
+        } catch (NoResultException e) {
+            result = null;
+        }
+        return result;
+    }
+
+    @SuppressWarnings("unchecked")
+    public Object readEntity(Class entity, String id) {
+        EntityManager manager = EntityManagerHelper.getEntityManager();
+        Object result = null;
+        try {
+            manager.find(entity, id);
         } catch (NoResultException e) {
             result = null;
         }

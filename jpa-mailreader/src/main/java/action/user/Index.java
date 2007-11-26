@@ -19,8 +19,8 @@
 package action.user;
 
 import entity.user.User;
-import entity.user.UserManager;
-import entity.user.UserManagerInterface;
+import entity.user.UserHelperImpl;
+import entity.user.UserHelper;
 
 public class Index extends action.Index {
 
@@ -42,7 +42,7 @@ public class Index extends action.Index {
 
     // ---- PROPERTIES ----
 
-    UserManagerInterface manager;
+    UserHelper manager;
 
     public String getLocation() {
         return "/WEB-INF/results/user/";
@@ -122,7 +122,7 @@ public class Index extends action.Index {
      * </p>
      */
     public Index() {
-        manager = new UserManager();
+        manager = new UserHelperImpl();
     }
 
     /**
@@ -133,7 +133,7 @@ public class Index extends action.Index {
      * @param manager
      *            IUserManager instance
      */
-    public Index(UserManagerInterface manager) {
+    public Index(UserHelper manager) {
         this.manager = manager;
     }
 

@@ -16,63 +16,66 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package entity.subscription;
+package entity.user;
 
-public interface SubscriptionManagerInterface {
+/**
+ * <p>
+ * Custom operations involving the <code>User</code> object.
+ * </p>
+ * 
+ */
+public interface UserHelper {
 
     /**
      * <p>
-     * Insert the specified <code>Subscription</code> into the persistent
-     * database.
+     * Insert the specified <code>User</code> into the persistent database.
      * </p>
      * 
      * @param value
-     *            Subscription to insert
+     *            User to insert
      */
-    void create(Subscription value);
+    void create(User value);
 
     /**
      * <p>
-     * Merge changes to the specified Subscription object into the persistance
-     * database.
+     * Merge changes to the specified User object into the persistance database.
      * </p>
      * 
      * @param value
-     *            Subscription instance to delete
+     *            User instance to delete
      */
-    void delete(Subscription value) throws Exception;
+    void delete(User value) throws Exception;
 
     /**
      * <p>
-     * Retrieve the <code>Subscription</code> matching the specified host, if
-     * any; otherwise, return <code>null</code>.
+     * Retrieve the <code>User</code> matching the specified user ID, if any;
+     * otherwise, return <code>null</code>.
      * </p>
      * 
      * @param value
-     *            Host to match
+     *            ID to match
      */
-    Subscription find(String value);
+    User find(String value);
 
     /**
      * <p>
-     * Retrieve the <code>Subscription</code> matching the specified host id,
-     * if any; otherwise, return <code>null</code>.
+     * Retrieve the <code>User</code> matching the specified username, if any;
+     * otherwise, return <code>null</code>.
      * </p>
      * 
-     * @param id
-     *            Subscription id to match
+     * @param value
+     *            Username to match
      */
-    Subscription findByName(String value);
+    User findByName(String value);
 
     /**
      * <p>
-     * Merge changes to the specified Subscription object into the persistance
-     * database.
+     * Merge changes to the specified User object into the persistance database.
      * </p>
      * 
      * @param user
-     *            Copy of Subscription instance to match and update
+     *            Copy of User instance to match and update
      */
-    void update(Subscription value) throws Exception;
+    void update(User value) throws Exception;
 
 }

@@ -30,7 +30,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
-import entity.EntitySuperclass;
+import entity.UuidEntity;
 import entity.subscription.Subscription;
 
 /**
@@ -40,13 +40,14 @@ import entity.subscription.Subscription;
  * <p>
  * JPA entity class for the <code>APP_USER</code> table. This class contains
  * sufficient detail to regenerate the database schema (top-down development).
+ * The annotation mode is by field.
  * </p>
  */
 @Entity(name = "APP_USER")
 @NamedQueries( {
-        @NamedQuery(name = User.FIND_ALL, query = "SELECT u FROM APP_USER u"),
-        @NamedQuery(name = User.FIND_BY_NAME, query = "SELECT u FROM APP_USER u WHERE u.username = :username"), })
-public class User extends EntitySuperclass implements Serializable {
+        @NamedQuery(name = User.FIND_ALL, query = User.FIND_ALL_QUERY),
+        @NamedQuery(name = User.FIND_BY_NAME, query = User.FIND_BY_NAME_QUERY) })
+public class User extends UuidEntity implements Serializable {
 
     // ---- STATICS ----
 
@@ -55,21 +56,35 @@ public class User extends EntitySuperclass implements Serializable {
      * Named query for finding a <code>User</code> by username.
      * </p>
      */
-    public static final String FIND_ALL = "User.FIND_ALL";
+    static final String FIND_ALL = "User.FIND_ALL";
+
+    /**
+     * <p>
+     * Query for finding a <code>User</code> by username.
+     * </p>
+     */
+    static final String FIND_ALL_QUERY = "SELECT u FROM APP_USER u";
 
     /**
      * <p>
      * Named query for finding a <code>User</code> by username.
      * </p>
      */
-    public static final String FIND_BY_NAME = "User.FIND_BY_USERNAME";
+    static final String FIND_BY_NAME = "User.FIND_BY_USERNAME";
+
+    /**
+     * <p>
+     * Query for finding a <code>User</code> by username.
+     * </p>
+     */
+    static final String FIND_BY_NAME_QUERY = "SELECT u FROM APP_USER u WHERE u.username = :username";
 
     /**
      * <p>
      * Token representation the "username" attribute.
      * </p>
      */
-    public static final String NAME = "username";
+    static final String NAME = "username";
 
     // --- FIELDS ----
 

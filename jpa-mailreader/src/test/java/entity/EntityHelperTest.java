@@ -8,15 +8,15 @@ import junit.framework.TestCase;
  * </p>
  *
  */
-public class EntitySuperclassTest extends TestCase {
+public class EntityHelperTest extends TestCase {
 
-    EntitySuperclass entity;
-    EntitySuperclass entity2;
+    UuidEntity entity;
+    UuidEntity entity2;
 
     public void setUp() throws Exception {
         super.setUp();
-        entity = new EntitySuperclass();
-        entity2 = new EntitySuperclass();
+        entity = new UuidEntity();
+        entity2 = new UuidEntity();
     }
 
     public void testId() {
@@ -44,10 +44,10 @@ public class EntitySuperclassTest extends TestCase {
     }
 
     public void testToString() {
-        EntitySuperclass entity3 = new EntitySuperclass();
+        UuidEntity entity3 = new UuidEntity();
         entity3.setId("55ba338a-97fa-44ce-bdad-80236d9404d0");
         String value = entity3.toString();
-        String TO_STRING = "entity.EntitySuperclass[id=55ba338a-97fa-44ce-bdad-80236d9404d0]";
+        String TO_STRING = "entity.UuidEntity[id=55ba338a-97fa-44ce-bdad-80236d9404d0]";
         assertEquals(TO_STRING, value);
     }
 

@@ -30,11 +30,11 @@ import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.Validation;
 import com.opensymphony.xwork2.validator.annotations.Validations;
 
-import entity.protocol.ProtocolManager;
-import entity.protocol.ProtocolManagerInterface;
+import entity.protocol.ProtocolHelperImpl;
+import entity.protocol.ProtocolHelper;
 import entity.subscription.Subscription;
-import entity.subscription.SubscriptionManager;
-import entity.subscription.SubscriptionManagerInterface;
+import entity.subscription.SubscriptionHelperImpl;
+import entity.subscription.SubscriptionHelper;
 import entity.user.User;
 
 @Results( {
@@ -54,8 +54,8 @@ public class Index extends action.user.Index implements Preparable {
 
     static final String ERROR_CREDENTIALS_MISMATCH = "error.password.mismatch";
 
-    protected SubscriptionManagerInterface manager;
-    private ProtocolManagerInterface protocolManager;
+    protected SubscriptionHelper manager;
+    private ProtocolHelper protocolManager;
 
     private Map<String, String> protocols;
 
@@ -82,7 +82,7 @@ public class Index extends action.user.Index implements Preparable {
         Subscription foundValue = manager.findByName(name);
         boolean isNameInUse = (foundValue != null);
         if (isNameInUse)
-            addFieldError(Subscription.HOST, getText(ERROR_HOST_UNIQUE));
+            addFieldError(Subscription.NAME, getText(ERROR_HOST_UNIQUE));
         return NotErrors();
     }
 
@@ -91,7 +91,7 @@ public class Index extends action.user.Index implements Preparable {
         if (needUser) {
             User defaultUser = getUser();
             if (defaultUser == null) {
-                addFieldError(Subscription.HOST,
+                addFieldError(Subscription.NAME,
                         getText(ERROR_CREDENTIALS_MISMATCH));
             } else {
                 value.setUser(getUser());
@@ -159,8 +159,8 @@ public class Index extends action.user.Index implements Preparable {
      * </p>
      */
     public Index() {
-        manager = new SubscriptionManager();
-        protocolManager = new ProtocolManager();
+        manager = new SubscriptionHelperImpl();
+        protocolManager = new ProtocolHelperImpl();
     }
 
     /**
@@ -172,8 +172,7 @@ public class Index extends action.user.Index implements Preparable {
      * @param manager
      *            IUserManager instance
      */
-    public Index(SubscriptionManagerInterface manager,
-            ProtocolManagerInterface protocolManager) {
+    public Index(SubscriptionHelper manager, ProtocolHelper protocolManager) {
         this.manager = manager;
         this.protocolManager = protocolManager;
     }
