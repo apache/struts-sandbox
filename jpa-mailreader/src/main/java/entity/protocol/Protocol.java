@@ -36,10 +36,21 @@ import entity.UuidEntity;
  * </p>
  */
 @Entity(name = "APP_PROTOCOL")
-@NamedQueries( { @NamedQuery(name = Protocol.FIND_ALL, query = "SELECT p FROM APP_PROTOCOL p") })
+@NamedQueries( {
+        @NamedQuery(name = Protocol.COUNT, query = Protocol.COUNT_QUERY),
+        @NamedQuery(name = Protocol.FIND_ALL, query = Protocol.FIND_ALL_QUERY) })
 public class Protocol extends UuidEntity implements Serializable {
 
     // ---- STATICS ----
+
+    /**
+     * <p>
+     * Named query for counting <code>Protocol</code> entities.
+     * </p>
+     */
+    public static final String COUNT = "Protocol.COUNT";
+
+    private static final String COUNT_QUERY = "SELECT COUNT(*) FROM APP_PROTOCOL";
 
     /**
      * <p>
@@ -47,6 +58,8 @@ public class Protocol extends UuidEntity implements Serializable {
      * </p>
      */
     public static final String FIND_ALL = "Protocol.FIND_ALL";
+
+    private static final String FIND_ALL_QUERY = "SELECT p FROM APP_PROTOCOL p";
 
     // ---- FIELDS ----
 
@@ -74,6 +87,11 @@ public class Protocol extends UuidEntity implements Serializable {
         super();
     }
 
+    /**
+     * <p>
+     * Instantiate a default <code>Protocol</code> object, and load values.
+     * </p>
+     */
     public Protocol(String description) {
         super();
         setDescription(description);

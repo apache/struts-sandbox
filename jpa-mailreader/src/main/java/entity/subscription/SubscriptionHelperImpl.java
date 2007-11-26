@@ -19,6 +19,7 @@
 package entity.subscription;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceException;
 
 import entity.EntityHelper;
 import entity.EntityManagerHelper;
@@ -30,6 +31,12 @@ import entity.EntityManagerHelper;
  */
 public class SubscriptionHelperImpl extends EntityHelper implements
         SubscriptionHelper {
+
+    public int count() throws PersistenceException {
+        Long count = (Long) singleResult(Subscription.COUNT, null, null);
+        int result = count.intValue();
+        return result;
+    }
 
     public void create(Subscription value) {
         createEntity(value);

@@ -24,16 +24,23 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceException;
 
 import entity.EntityManagerHelper;
 import entity.EntityHelper;
 
 /**
  * <p>
- * Custom persistence operations involving the <code>Protocol</code> object.
- * <p>
+ * Default JPA implementation of <code>ProtocolHelper</code>.
+ * </p>
  */
 public class ProtocolHelperImpl extends EntityHelper implements ProtocolHelper {
+
+    public int count() throws PersistenceException {
+        Long count = (Long) singleResult(Protocol.COUNT, null, null);
+        int result = count.intValue();
+        return result;
+    }
 
     public Protocol find(String value) {
         Protocol result = (Protocol) readEntity(Protocol.class, value);

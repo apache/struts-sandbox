@@ -33,7 +33,7 @@ public class UserHelperImpl extends EntityHelper implements UserHelper {
         int result = count.intValue();
         return result;
     }
-    
+
     public void create(User value) throws PersistenceException {
         createEntity(value);
     }

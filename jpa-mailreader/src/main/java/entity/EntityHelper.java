@@ -49,12 +49,12 @@ public class EntityHelper {
     }
 
     @SuppressWarnings("unchecked")
-    public List resultList(String namedQuery, String parameterName,
-            String value) {
+    public List resultList(String namedQuery, String parameterName, String value) {
         EntityManager manager = EntityManagerHelper.getEntityManager();
         List result = null;
         Query query = manager.createNamedQuery(namedQuery);
-        if (parameterName!=null) query.setParameter(parameterName, value);
+        if (parameterName != null)
+            query.setParameter(parameterName, value);
         try {
             result = query.getResultList();
         } catch (NoResultException e) {
@@ -68,7 +68,8 @@ public class EntityHelper {
         EntityManager manager = EntityManagerHelper.getEntityManager();
         Object result = null;
         Query query = manager.createNamedQuery(namedQuery);
-        if (parameterName!=null) query.setParameter(parameterName, value);
+        if (parameterName != null)
+            query.setParameter(parameterName, value);
         try {
             result = query.getSingleResult();
         } catch (NoResultException e) {

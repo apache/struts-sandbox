@@ -27,16 +27,25 @@ import javax.persistence.PersistenceException;
  * 
  */
 public interface UserHelper {
-    
+
     /**
      * <p>
-     * Provide the current count of <p>User</p> objects.
-     * </p> 
-     * @return current count of <p>User</p> objects
+     * Provide the current count of
+     * <p>
+     * User
+     * </p>
+     * objects.
+     * </p>
+     * 
+     * @return current count of
+     *         <p>
+     *         User
+     *         </p>
+     *         objects
      * @throws PersistenceException
      */
     int count() throws PersistenceException;
-    
+
     /**
      * <p>
      * Insert the specified <code>User</code> into the persistent database.

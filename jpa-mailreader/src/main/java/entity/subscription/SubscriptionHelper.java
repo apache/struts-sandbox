@@ -18,13 +18,32 @@
  */
 package entity.subscription;
 
+import javax.persistence.PersistenceException;
+
 /**
  * <p>
- * Custom persistence operations involving the <code>Subscription</code>
- * object.
+ * Custom operations involving the <code>Subscription</code> object.
  * <p>
  */
 public interface SubscriptionHelper {
+
+    /**
+     * <p>
+     * Provide the current count of
+     * <p>
+     * Subscription
+     * </p>
+     * objects for all Users.
+     * </p>
+     * 
+     * @return current count of
+     *         <p>
+     *         Subscription
+     *         </p>
+     *         objects for all Users
+     * @throws PersistenceException
+     */
+    int count() throws PersistenceException;
 
     /**
      * <p>

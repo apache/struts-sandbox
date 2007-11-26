@@ -1,42 +1,29 @@
-package entity.user;
+package entity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
-import entity.EntityManagerHelper;
-import entity.EntityTestCase;
 import entity.protocol.Protocol;
-import entity.protocol.ProtocolHelperImpl;
 import entity.protocol.ProtocolHelper;
+import entity.protocol.ProtocolHelperImpl;
 import entity.subscription.Subscription;
+import entity.user.User;
+import entity.user.UserHelper;
+import entity.user.UserHelperImpl;
 
-public class UserManagerTest extends EntityTestCase {
+public class UserHelperTest extends EntityTestCase {
 
-    UserHelper helper;
-    Random generator;
-    String base;
+    protected UserHelper helper;
     int beforeCount = 0;
-
-    private String nextBase() {
-        int r = generator.nextInt();
-        return String.valueOf(r);
-    }
 
     public void setUp() throws Exception {
         super.setUp();
         helper = new UserHelperImpl();
-        generator = new Random();
-        base = nextBase();
         beforeCount = helper.count();
-    }
-
-    private boolean isNotEmpty(String value) {
-        return (value != null) && (value.length() > 0);
     }
 
     private User newUser() {
@@ -54,7 +41,7 @@ public class UserManagerTest extends EntityTestCase {
         }
         assertNotNull(result);
         Long count = (Long) result;
-        assertTrue(0<count.intValue());
+        assertTrue(0 < count.intValue());
     }
 
     public void testCreate() throws Exception {
@@ -65,7 +52,7 @@ public class UserManagerTest extends EntityTestCase {
         String after = user.getId();
         assertTrue("Initial ID changed on Create", before.equals(after));
         int afterCount = helper.count();
-        assertTrue("Expected count to increase",afterCount>beforeCount);
+        assertTrue("Expected count to increase", afterCount > beforeCount);
     }
 
     private List<Subscription> getSubscriptions(User user) {
@@ -109,6 +96,5 @@ public class UserManagerTest extends EntityTestCase {
         assertTrue(beforeCount == afterCount);
         // rollback = false;
     }
-    
-    
+
 }

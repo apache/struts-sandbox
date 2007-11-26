@@ -42,12 +42,23 @@ import entity.user.User;
  * development). The annotation mode is by field.
  */
 @NamedQueries( {
+        @NamedQuery(name = Subscription.COUNT, query = Subscription.COUNT_QUERY),
         @NamedQuery(name = Subscription.FIND_ALL, query = Subscription.FIND_ALL_QUERY),
         @NamedQuery(name = Subscription.FIND_BY_NAME, query = Subscription.FIND_BY_NAME_QUERY) })
 @Entity(name = "APP_SUBSCRIPTION")
 public class Subscription extends UuidEntity implements Serializable {
 
     // ---- STATICS ----
+
+    /**
+     * <p>
+     * Named query for counting <code>Subscription</code> entities for all
+     * Users.
+     * </p>
+     */
+    public static final String COUNT = "Subscription.COUNT";
+
+    private static final String COUNT_QUERY = "SELECT COUNT(*) FROM APP_SUBSCRIPTION";
 
     /**
      * <p>

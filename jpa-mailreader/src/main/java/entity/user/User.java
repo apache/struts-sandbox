@@ -19,9 +19,9 @@
 package entity.user;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.ArrayList;
-import java.sql.Timestamp;
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -47,18 +47,26 @@ import entity.subscription.Subscription;
 @NamedQueries( {
         @NamedQuery(name = User.FIND_ALL, query = User.FIND_ALL_QUERY),
         @NamedQuery(name = User.FIND_BY_NAME, query = User.FIND_BY_NAME_QUERY),
-        @NamedQuery(name = User.COUNT, query = User.COUNT_QUERY)        
-})
+        @NamedQuery(name = User.COUNT, query = User.COUNT_QUERY) })
 public class User extends UuidEntity implements Serializable {
 
     // ---- STATICS ----
 
     /**
      * <p>
+     * Named query for counting <code>User</code> entities.
+     * </p>
+     */
+    public static final String COUNT = "User.COUNT";
+
+    private static final String COUNT_QUERY = "SELECT COUNT(*) FROM APP_USER";
+
+    /**
+     * <p>
      * Named query for finding a <code>User</code> by username.
      * </p>
      */
-    static final String FIND_ALL = "User.FIND_ALL";
+    public static final String FIND_ALL = "User.FIND_ALL";
 
     private static final String FIND_ALL_QUERY = "SELECT u FROM APP_USER u";
 
@@ -67,17 +75,13 @@ public class User extends UuidEntity implements Serializable {
      * Named query for finding a <code>User</code> by username.
      * </p>
      */
-    static final String FIND_BY_NAME = "User.FIND_BY_USERNAME";
+    public static final String FIND_BY_NAME = "User.FIND_BY_USERNAME";
 
     private static final String FIND_BY_NAME_QUERY = "SELECT u FROM APP_USER u WHERE u.username = :username";
-    
-    static final String COUNT = "User.COUNT";
-    
-    private static final String COUNT_QUERY = "SELECT COUNT(*) FROM APP_USER";
 
     /**
      * <p>
-     * Token representation the "username" attribute.
+     * Token representing the "username" attribute.
      * </p>
      */
     static final String NAME = "username";
@@ -259,15 +263,12 @@ public class User extends UuidEntity implements Serializable {
      * </p>
      */
     public User(String username, String password, String fullName,
-            String fromAddress, String replyToAddress, Timestamp lastUpdated,
-            String id) {
+            String fromAddress, String replyToAddress) {
         super();
         setUsername(username);
         setPassword(password);
         setFullName(fullName);
         setReplyToAddress(replyToAddress);
-        setLastUpdate(lastUpdated);
-        setId(id);
     }
 
 }

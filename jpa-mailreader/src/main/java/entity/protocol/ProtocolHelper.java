@@ -21,7 +21,32 @@ package entity.protocol;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.PersistenceException;
+
+/**
+ * <p>
+ * Custom operations involving the <code>Protocol</code> object.
+ * <p>
+ */
 public interface ProtocolHelper {
+
+    /**
+     * <p>
+     * Provide the current count of
+     * <p>
+     * Subscription
+     * </p>
+     * objects for all Users.
+     * </p>
+     * 
+     * @return current count of
+     *         <p>
+     *         Subscription
+     *         </p>
+     *         objects for all Users
+     * @throws PersistenceException
+     */
+    int count() throws PersistenceException;
 
     /**
      * <p>
