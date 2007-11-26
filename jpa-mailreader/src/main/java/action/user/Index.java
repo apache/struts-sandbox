@@ -45,11 +45,7 @@ public class Index extends action.Index {
 
     // ---- PROPERTIES ----
 
-    UserHelper manager;
-
-    public String getLocation() {
-        return "/WEB-INF/results/user/";
-    }
+    private UserHelper manager;
 
     private User user;
 

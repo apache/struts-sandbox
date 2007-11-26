@@ -27,7 +27,7 @@ import javax.jws.WebService;
  * Default JPA implementation of <code>UserHelper</code>.
  * </p>
  */
-@WebService(serviceName = "user.soap", endpointInterface = "entity.user.UserHelper")
+@WebService(serviceName = "user", endpointInterface = "entity.user.UserHelper")
 public class UserHelperImpl extends EntityHelper implements UserHelper {
 
     public int count() throws PersistenceException {

@@ -31,8 +31,8 @@ import org.apache.struts2.util.StrutsTypeConverter;
 public class ProtocolTypeConverter extends StrutsTypeConverter {
 
     /**
-     * Given a String ID, retrieve the corresponding <code>Protocol</code>
-     * entity from the persistence database.
+     * Retrieve the corresponding <code>Protocol</code>
+     * entity from the persistence database, given a String ID.
      */
     public Object convertFromString(Map context, String[] values, Class toClass) {
         ProtocolHelper manager = new ProtocolHelperImpl();

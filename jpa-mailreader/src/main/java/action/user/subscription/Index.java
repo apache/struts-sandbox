@@ -52,11 +52,12 @@ import entity.user.User;
 @ParentPackage("entity-default")
 public class Index extends action.user.Index implements Preparable {
 
+    private static final String ERROR_CREDENTIALS_MISMATCH = "error.password.mismatch";
+
     protected static final String ERROR_HOST_UNIQUE = "error.host.unique";
 
-    static final String ERROR_CREDENTIALS_MISMATCH = "error.password.mismatch";
-
     protected SubscriptionHelper manager;
+    
     private ProtocolHelper protocolManager;
 
     private Map<String, String> protocols;

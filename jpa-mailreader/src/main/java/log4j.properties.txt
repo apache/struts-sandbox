@@ -1,0 +1,35 @@
+# Levels: TRACE, DEBUG, INFO, WARN, ERROR and FATAL
+
+# -- production mode --
+
+log4j.rootLogger = ERROR, stdout
+
+log4j.appender.stdout = org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.Threshold = ERROR
+log4j.appender.stdout.Target = System.out
+log4j.appender.stdout.layout = org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern = %d{ISO8601} %-5p [%F:%L] : %m%n
+
+
+# -- development mode  (not all need be set individually) --
+
+log4j.rootLogger = INFO, stdout
+
+#log4j.category.catalia=INFO
+#log4j.category.com.opensymphony.sitemesh=DEBUG
+#log4j.category.org.apache=DEBUG
+#log4j.category.org.apache.struts2=DEBUG
+
+#log4j.logger.org.hibernate=DEBUG
+#log4j.logger.org.hibernate.SQL=DEBUG
+#log4j.logger.org.hibernate.type=DEBUG
+#log4j.logger.org.hibernate.tool.hbm2ddl=DEBUG
+#log4j.logger.org.hibernate.cache=DEBUG
+#log4j.logger.org.hibernate.transaction=DEBUG
+#log4j.logger.org.hibernate.jdbc=DEBUG
+
+log4j.appender.stdout = org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.Threshold = DEBUG
+log4j.appender.stdout.Target = System.out
+log4j.appender.stdout.layout = org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern = %d{ISO8601} %-5p [%F:%L] : %m%n

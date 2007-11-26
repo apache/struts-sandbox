@@ -30,7 +30,7 @@ import entity.EntityManagerHelper;
  * Default JPA implementation of <code>UserHelper</code>.
  * </p>
  */
-@WebService(serviceName = "subscription.soap", endpointInterface = "entity.subscription.SubscriptionHelper")
+@WebService(serviceName = "subscription", endpointInterface = "entity.subscription.SubscriptionHelper")
 public class SubscriptionHelperImpl extends EntityHelper implements
         SubscriptionHelper {
 

@@ -92,10 +92,6 @@ public class Index extends ActionSupport implements EntityAware, SessionAware {
 
     // ---- PROPERTIES ----
 
-    public String getLocation() {
-        return "/WEB-INF/results/";
-    }
-
     /**
      * <p>
      * Provide a local cache of client properties.

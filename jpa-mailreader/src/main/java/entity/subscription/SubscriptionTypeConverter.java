@@ -31,8 +31,8 @@ import org.apache.struts2.util.StrutsTypeConverter;
 public class SubscriptionTypeConverter extends StrutsTypeConverter {
 
     /**
-     * Given a host name, retrieve the corresponding <code>Subscription</code>
-     * entity from the persistence database.
+     * Retrieve the corresponding <code>Subscription</code>
+     * entity from the persistence database, fiven a host name.
      */
     public Object convertFromString(Map context, String[] values, Class toClass) {
         SubscriptionHelper manager = new SubscriptionHelperImpl();

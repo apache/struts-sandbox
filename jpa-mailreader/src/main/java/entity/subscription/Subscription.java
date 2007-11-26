@@ -65,28 +65,18 @@ public class Subscription extends UuidEntity implements Serializable {
      * Named query for finding a <code>User</code> by username.
      * </p>
      */
-    static final String FIND_ALL = "Subscription.FIND_ALL";
+    public static final String FIND_ALL = "Subscription.FIND_ALL";
 
-    /**
-     * <p>
-     * Query for finding a <code>User</code> by username.
-     * </p>
-     */
-    static final String FIND_ALL_QUERY = "SELECT s FROM APP_SUBSCRIPTION s";
+    private static final String FIND_ALL_QUERY = "SELECT s FROM APP_SUBSCRIPTION s";
 
     /**
      * <p>
      * Named query for finding a <code>User</code> by username.
      * </p>
      */
-    static final String FIND_BY_NAME = "Subscription.FIND_BY_HOST";
+    public static final String FIND_BY_NAME = "Subscription.FIND_BY_HOST";
 
-    /**
-     * <p>
-     * Query for finding a <code>User</code> by username.
-     * </p>
-     */
-    static final String FIND_BY_NAME_QUERY = "SELECT s FROM APP_SUBSCRIPTION s WHERE s.host = :host";
+    private static final String FIND_BY_NAME_QUERY = "SELECT s FROM APP_SUBSCRIPTION s WHERE s.host = :host";
 
     /**
      * <p>
