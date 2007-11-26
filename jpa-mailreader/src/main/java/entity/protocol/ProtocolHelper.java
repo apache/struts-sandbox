@@ -25,7 +25,8 @@ import javax.persistence.PersistenceException;
 
 /**
  * <p>
- * Custom operations involving the <code>Protocol</code> object.
+ * Facade providing custom operations involving the <code>Protocol</code>
+ * object.
  * <p>
  */
 public interface ProtocolHelper {

@@ -24,10 +24,8 @@ import org.apache.struts2.util.StrutsTypeConverter;
 
 /**
  * <p>
- * Retrieve a <code>Protocol</code> entity from its String ID, or return the
- * String ID for a <code>Protocol</code> entity.
+ * Type converter for a <code>Protocol</code> entity.
  * </p>
- * 
  */
 @SuppressWarnings("unchecked")
 public class ProtocolTypeConverter extends StrutsTypeConverter {

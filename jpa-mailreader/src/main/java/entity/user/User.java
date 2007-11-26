@@ -35,7 +35,8 @@ import entity.subscription.Subscription;
 
 /**
  * <p>
- * Describes an account that maintains zero or more <code>Subscription</code>s.
+ * Entity representing an account that maintains zero or more
+ * <code>Subscription</code>s.
  * </p>
  * <p>
  * JPA entity class for the <code>APP_USER</code> table. This class contains

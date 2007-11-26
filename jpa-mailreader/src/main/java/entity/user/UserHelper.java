@@ -22,7 +22,7 @@ import javax.persistence.PersistenceException;
 
 /**
  * <p>
- * Custom operations involving the <code>User</code> object.
+ * Facade providing custom operations involving the <code>User</code> object.
  * </p>
  * 
  */

@@ -29,11 +29,14 @@ import org.apache.struts2.config.ParentPackage;
 
 /**
  * <p>
- * Provides the Struts-specific Business and Persistance Logic API for the
+ * The top-level Struts-specific business and persistance logic API for the
  * MailReader application.
  * </p>
  * <p>
- * Generic logic should be pushed down to the Entity managers or another facade.
+ * The application is entity or resource-orientated. Subclasses provide
+ * additional logic specific to each entity or resource. Persistence system
+ * logic is delegated to a helper class for each entity. The Action classes
+ * interact only with the entity helpers, and not the underlying JPA.
  * </p>
  */
 @Conversion(conversions = {

@@ -7,12 +7,6 @@
 
     <constant name="struts.devMode" value="false" />
     <constant name="struts.action.extension" value="" />
-
-    <!-- Alternative way to support message resources without wrapper classes or annotations.
-    <constant name="struts.custom.i18n.resources" value="action.package" />
-    -->
-    <!-- include file="" / -->
-    <!-- Add packages here -->
     
     <package name="entity-default" extends="struts-default">
 		<interceptors>
@@ -23,5 +17,17 @@
   			</interceptor-stack>
 		</interceptors>
 		<default-interceptor-ref name="entityStack"/>
+
+    	<global-results>
+        	<result name="error">exception.jsp</result>
+        	<result name="exception">exception.jsp</result>
+    	</global-results>
+
+    	<global-exception-mappings>
+        	<exception-mapping exception="java.lang.Exception" result="exception"/>
+    	</global-exception-mappings>
 	</package>        
+
+	<!-- include file="" / -->
+
 </struts>

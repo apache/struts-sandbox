@@ -20,8 +20,8 @@ package entity;
 
 /**
  * <p>
- * Signal that a password has expired and needs to be changed before principal
- * can be authorized for any other operation.
+ * An application exception to signals that a password has expired and needs to
+ * be changed before principal can be authorized for any other operation.
  * </p>
  */
 public class ExpiredPasswordException extends Exception {

@@ -26,12 +26,19 @@ import javax.persistence.Query;
 
 /**
  * <p>
- * Custom CRUD operations involving the <code>User</code> object.
+ * A set of generic CRUD operations that can operate on any entity in the
+ * default persistence unit.
+ * </p>
  * <p>
+ * If an application needs only basic CRUD operations, this class (and its
+ * companion the <code>EntityManagerHelper</code>) may be the only "data
+ * access object" the applications needs.
+ * </p>
  * <p>
- * This implementation delegates transaction managemetn and exception handling
+ * This implementation delegates transaction management and exception handling
  * to another component, such as an Interceptor or Filter, or the setUp and
- * tearDown methods of a TestCase.
+ * tearDown methods of a TestCase. See <code>EntityInterceptor</code> for an
+ * example.
  * </p>
  * 
  */

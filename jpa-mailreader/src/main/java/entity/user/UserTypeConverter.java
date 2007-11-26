@@ -23,18 +23,16 @@ import org.apache.struts2.util.StrutsTypeConverter;
 
 /**
  * <p>
- * Retrieve a <code>User</code> entity from its username, or return the
- * username for a <code>User</code> entity.
+ * Type convertion for a <code>User</code> entity.
  * </p>
- * 
  */
 @SuppressWarnings("unchecked")
 public class UserTypeConverter extends StrutsTypeConverter {
 
     /**
      * <p>
-     * Given a <code>username</code>, retrieve the corresponding
-     * <code>User</code> entity from the persistence database.
+     * Retrieve the corresponding <code>User</code> entity from the
+     * persistence database, given a <code>username</code>.
      * </p>
      */
     public Object convertFromString(Map context, String[] values, Class toClass) {

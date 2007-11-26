@@ -33,13 +33,13 @@ import entity.user.User;
 
 /**
  * <p>
- * Describes an email account.
+ * An entity representing an email account.
  * </p>
- * 
  * <p>
  * JPA entity class for the <code>APP_SUBSCRIPTION</code> table. TThis class
  * contains sufficient detail to regenerate the database schema (top-down
  * development). The annotation mode is by field.
+ * </p>
  */
 @NamedQueries( {
         @NamedQuery(name = Subscription.COUNT, query = Subscription.COUNT_QUERY),

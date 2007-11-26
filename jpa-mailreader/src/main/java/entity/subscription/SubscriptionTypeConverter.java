@@ -23,8 +23,7 @@ import org.apache.struts2.util.StrutsTypeConverter;
 
 /**
  * <p>
- * Retrieve a <code>Subscription</code> entity from by its host name, or
- * return the host name for a <code>Subscription</code> entity.
+ * Type converter for a <code>Subscription</code>.
  * </p>
  * 
  */

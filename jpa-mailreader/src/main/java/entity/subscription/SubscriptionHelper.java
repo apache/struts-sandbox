@@ -22,8 +22,9 @@ import javax.persistence.PersistenceException;
 
 /**
  * <p>
- * Custom operations involving the <code>Subscription</code> object.
- * <p>
+ * Facade providing custom operations involving the <code>Subscription</code>
+ * object.
+ * </p>
  */
 public interface SubscriptionHelper {
 

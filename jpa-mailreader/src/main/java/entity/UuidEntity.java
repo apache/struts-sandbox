@@ -31,8 +31,8 @@ import javax.persistence.Version;
 @MappedSuperclass
 /**
  * <p>
- * Define a POJO that utilizes an ID property based on a universally unique
- * identifier (UUID).
+ * A POJO base class with helper methods for managing an ID property based on a
+ * universally unique identifier (UUID).
  * </p>
  * <p>
  * UUIDs are particulary useful in RESTful application designs, since an object
