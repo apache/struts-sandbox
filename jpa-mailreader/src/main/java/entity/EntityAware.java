@@ -36,5 +36,5 @@ public interface EntityAware {
      * @param value
      *            EntityManager for this thead
      */
-    void setManager(EntityManager value);
+    void setEntityManager(EntityManager value);
 }

@@ -57,7 +57,7 @@ public interface SubscriptionHelper {
      * @param value
      *            Subscription to insert
      */
-    void create(Subscription value);
+    Subscription create(Subscription value);
 
     /**
      * <p>
@@ -68,7 +68,7 @@ public interface SubscriptionHelper {
      * @param value
      *            Subscription instance to delete
      */
-    void delete(Subscription value) throws Exception;
+    Subscription delete(Subscription value) throws Exception;
 
     /**
      * <p>
@@ -101,6 +101,6 @@ public interface SubscriptionHelper {
      * @param user
      *            Copy of Subscription instance to match and update
      */
-    void update(Subscription value) throws Exception;
+    Subscription update(Subscription value) throws Exception;
 
 }

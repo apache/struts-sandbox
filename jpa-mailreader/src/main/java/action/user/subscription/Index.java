@@ -20,6 +20,7 @@ package action.user.subscription;
 
 import java.util.Map;
 
+import org.apache.struts2.config.ParentPackage;
 import org.apache.struts2.config.Result;
 import org.apache.struts2.config.Results;
 import org.apache.struts2.dispatcher.ServletActionRedirectResult;
@@ -48,6 +49,7 @@ import entity.user.User;
                 Index.NAMESPACE, Index.NS_USER, Index.USER,
                 Index.SUBSCRIPTION_USER_USERNAME }) })
 @Validation()
+@ParentPackage("entity-default")
 public class Index extends action.user.Index implements Preparable {
 
     protected static final String ERROR_HOST_UNIQUE = "error.host.unique";

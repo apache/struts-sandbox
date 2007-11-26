@@ -44,15 +44,17 @@ import javax.persistence.Query;
  */
 public class EntityHelper {
 
-    public void createEntity(Object value) throws PersistenceException {
+    public Object createEntity(Object value) throws PersistenceException {
         EntityManager manager = EntityManagerHelper.getEntityManager();
         manager.persist(value);
+        return value;
     }
 
-    public void deleteEntity(Object value) throws PersistenceException {
+    public Object deleteEntity(Object value) throws PersistenceException {
         EntityManager manager = EntityManagerHelper.getEntityManager();
         manager.merge(value);
         manager.remove(value);
+        return value;
     }
 
     @SuppressWarnings("unchecked")
@@ -90,15 +92,16 @@ public class EntityHelper {
         EntityManager manager = EntityManagerHelper.getEntityManager();
         Object result = null;
         try {
-            manager.find(entity, id);
+            result = manager.find(entity, id);
         } catch (NoResultException e) {
             result = null;
         }
         return result;
     }
 
-    public void updateEntity(Object value) throws PersistenceException {
+    public Object updateEntity(Object value) throws PersistenceException {
         EntityManager manager = EntityManagerHelper.getEntityManager();
         manager.merge(value);
+        return value;
     }
 }

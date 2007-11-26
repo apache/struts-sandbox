@@ -30,7 +30,7 @@ import entity.EntityManagerHelper;
  * Default JPA implementation of <code>UserHelper</code>.
  * </p>
  */
-@WebService(serviceName = "subscription", endpointInterface = "entity.subscription.SubscriptionHelper")
+@WebService(serviceName = "subscription.soap", endpointInterface = "entity.subscription.SubscriptionHelper")
 public class SubscriptionHelperImpl extends EntityHelper implements
         SubscriptionHelper {
 
@@ -40,15 +40,15 @@ public class SubscriptionHelperImpl extends EntityHelper implements
         return result;
     }
 
-    public void create(Subscription value) {
-        createEntity(value);
+    public Subscription create(Subscription value) {
+        return (Subscription) createEntity(value);
     }
 
-    public void delete(Subscription value) throws Exception {
+    public Subscription delete(Subscription value) throws Exception {
         EntityManager manager = EntityManagerHelper.getEntityManager();
         manager.merge(value);
         value.getUser().removeSubscription(value);
-        manager.remove(value);
+        return (Subscription) deleteEntity(value);
     }
 
     public Subscription find(String value) {
@@ -63,7 +63,7 @@ public class SubscriptionHelperImpl extends EntityHelper implements
         return result;
     }
 
-    public void update(Subscription value) throws Exception {
-        updateEntity(value);
+    public Subscription update(Subscription value) throws Exception {
+        return (Subscription) updateEntity(value);
     }
 }

@@ -24,8 +24,13 @@
     	</global-results>
 
     	<global-exception-mappings>
-        	<exception-mapping exception="java.lang.Exception" result="exception"/>
+        	<exception-mapping exception="java.lang.Throwable" result="exception"/>
     	</global-exception-mappings>
+    	
+    	<action name="index.html">
+    		<result type="redirect-action">index</result>
+    	</action>
+    	
 	</package>        
 
 	<!-- include file="" / -->

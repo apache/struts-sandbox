@@ -27,7 +27,7 @@ import javax.jws.WebService;
  * Default JPA implementation of <code>UserHelper</code>.
  * </p>
  */
-@WebService(serviceName = "user", endpointInterface = "entity.user.UserHelper")
+@WebService(serviceName = "user.soap", endpointInterface = "entity.user.UserHelper")
 public class UserHelperImpl extends EntityHelper implements UserHelper {
 
     public int count() throws PersistenceException {
@@ -36,12 +36,12 @@ public class UserHelperImpl extends EntityHelper implements UserHelper {
         return result;
     }
 
-    public void create(User value) throws PersistenceException {
-        createEntity(value);
+    public User create(User value) throws PersistenceException {
+        return (User) createEntity(value);
     }
 
-    public void delete(User value) throws PersistenceException {
-        deleteEntity(value);
+    public User delete(User value) throws PersistenceException {
+        return (User) deleteEntity(value);
     }
 
     public User find(String value) {
@@ -54,7 +54,7 @@ public class UserHelperImpl extends EntityHelper implements UserHelper {
         return result;
     }
 
-    public void update(User value) throws PersistenceException {
-        updateEntity(value);
+    public User update(User value) throws PersistenceException {
+        return (User) updateEntity(value);
     }
 }

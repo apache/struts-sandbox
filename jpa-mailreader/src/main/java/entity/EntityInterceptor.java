@@ -48,7 +48,7 @@ public class EntityInterceptor extends AbstractInterceptor {
         EntityManager manager = EntityManagerHelper.getEntityManager();
         EntityManagerHelper.beginTransaction();
         myAction = (EntityAware) invocation.getAction();
-        myAction.setManager(manager);
+        myAction.setEntityManager(manager);
         try {
             result = invocation.invoke();
             EntityManagerHelper.commit();
@@ -60,6 +60,7 @@ public class EntityInterceptor extends AbstractInterceptor {
             } catch (Throwable t) {
                 EntityManagerHelper.logError("Exception during rollback", t);
             }
+            throw e;
         } finally {
             EntityManagerHelper.closeEntityManager();
         }

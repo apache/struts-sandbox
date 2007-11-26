@@ -56,7 +56,7 @@ public interface UserHelper {
      * @param value
      *            User to insert
      */
-    void create(User value);
+    User create(User value);
 
     /**
      * <p>
@@ -66,7 +66,7 @@ public interface UserHelper {
      * @param value
      *            User instance to delete
      */
-    void delete(User value) throws Exception;
+    User delete(User value) throws Exception;
 
     /**
      * <p>
@@ -98,6 +98,6 @@ public interface UserHelper {
      * @param user
      *            Copy of User instance to match and update
      */
-    void update(User value) throws Exception;
+    User update(User value) throws Exception;
 
 }

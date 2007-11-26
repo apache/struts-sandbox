@@ -20,12 +20,16 @@ package action;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.persistence.EntityManager;
+
 import org.apache.struts2.interceptor.SessionAware;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.conversion.annotations.Conversion;
 import com.opensymphony.xwork2.conversion.annotations.ConversionType;
 import com.opensymphony.xwork2.conversion.annotations.TypeConversion;
 import org.apache.struts2.config.ParentPackage;
+import entity.EntityAware;
 
 /**
  * <p>
@@ -45,7 +49,7 @@ import org.apache.struts2.config.ParentPackage;
         @TypeConversion(type = ConversionType.APPLICATION, key = "entity.user.User", converter = "entity.user.UserTypeConverter") })
 @SuppressWarnings("unchecked")
 @ParentPackage("entity-default")
-public class Index extends ActionSupport implements SessionAware {
+public class Index extends ActionSupport implements EntityAware, SessionAware {
 
     // ---- STATICS ----
 
@@ -105,28 +109,53 @@ public class Index extends ActionSupport implements SessionAware {
         getSession().put(PROFILE_KEY, value);
     }
 
-    /**
-     * <p>
-     * Record the CRUD operation in progress.
-     * </p>
-     */
     private String input = CREATE;
 
+    /**
+     * <p>
+     * Access the CRUD operation token.
+     * </p>
+     */
     public String getInput() {
         return input;
     }
 
+    /**
+     * <p>
+     * Store the CRUD operation in token.
+     * </p>
+     */
     public void setInput(String value) {
         input = value;
     }
 
+    private EntityManager entityManager;
+
     /**
      * <p>
-     * Provide the session context, or its proxy.
+     * Store the session context, or its proxy.
      * </p>
      */
+    public void setEntityManager(EntityManager value) {
+        entityManager = value;
+    }
+
+    /**
+     * <p>
+     * Access the EntityManager for this thread.
+     * </p>
+     */
+    protected EntityManager getManager() {
+        return entityManager;
+    }
+
     private Map session;
 
+    /**
+     * <p>
+     * Store the session context, or its proxy.
+     * </p>
+     */
     public void setSession(Map value) {
         session = value;
         Object profile = getProfile();
@@ -135,6 +164,11 @@ public class Index extends ActionSupport implements SessionAware {
         }
     }
 
+    /**
+     * <p>
+     * Access the session context, or its proxy.
+     * </p>
+     */
     protected Map getSession() {
         return session;
     }

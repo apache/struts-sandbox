@@ -46,19 +46,8 @@ public class Update extends Index {
         if (!UPDATE.equals(getInput()))
             return INPUT;
 
-        String newPassword = getUser().getPassword1();
-        boolean changing = ((null != newPassword) && (newPassword.length() > 0));
-        if (changing) {
-            String confirmPassword = getUser().getPassword2();
-            boolean matches = ((null != confirmPassword) && (confirmPassword
-                    .equals(newPassword)));
-            if (matches) {
-                getUser().setPassword(newPassword);
-            } else {
-                addActionError(getText(ERROR_PASSWORD_MATCH));
-                return INPUT;
-            }
-        }
+        if (!validatePasswordChange())
+            return INPUT;
 
         update();
         return (hasErrors()) ? INPUT : SUCCESS;

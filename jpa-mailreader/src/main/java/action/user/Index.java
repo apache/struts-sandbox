@@ -18,10 +18,13 @@
  */
 package action.user;
 
+import org.apache.struts2.config.ParentPackage;
+
 import entity.user.User;
 import entity.user.UserHelperImpl;
 import entity.user.UserHelper;
 
+@ParentPackage("entity-default")
 public class Index extends action.Index {
 
     // ---- STATICS ----
@@ -114,6 +117,22 @@ public class Index extends action.Index {
         } else {
             addActionError(getText(ERROR_CREDENTIALS_MISMATCH));
         }
+    }
+
+    protected boolean validatePasswordChange() {
+        String newPassword = getUser().getPassword1();
+        boolean changing = ((null != newPassword) && (newPassword.length() > 0));
+        if (changing) {
+            String confirmPassword = getUser().getPassword2();
+            boolean matches = ((null != confirmPassword) && (confirmPassword
+                    .equals(newPassword)));
+            if (matches) {
+                getUser().setPassword(newPassword);
+            } else {
+                addActionError(getText(ERROR_PASSWORD_MATCH));
+            }
+        }
+        return !hasErrors();
     }
 
     /**

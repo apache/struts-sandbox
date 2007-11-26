@@ -35,7 +35,7 @@ import entity.EntityHelper;
  * Default JPA implementation of <code>ProtocolHelper</code>.
  * </p>
  */
-@WebService(serviceName = "protocol", endpointInterface = "entity.protocol.ProtocolHelper")
+@WebService(serviceName = "protocol.soap", endpointInterface = "entity.protocol.ProtocolHelper")
 public class ProtocolHelperImpl extends EntityHelper implements ProtocolHelper {
 
     public int count() throws PersistenceException {
