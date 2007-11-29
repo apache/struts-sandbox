@@ -20,13 +20,10 @@
 -->
 
 	<persistence-unit name="entity" transaction-type="RESOURCE_LOCAL">
-		<provider>org.hibernate.ejb.HibernatePersistence</provider>
-        <class>entity.protocol.Protocol</class>
-        <class>entity.subscription.Subscription</class>
-        <class>entity.user.User</class>
+	    <provider>org.hibernate.ejb.HibernatePersistence</provider>
   		<properties>
 			<property name = "hibernate.connection.driver_class" value = "org.apache.derby.jdbc.ClientDriver"/>
-			<property name = "hibernate.connection.url" value = "jdbc:derby://localhost:1527/mailreader"/>
+			<property name = "hibernate.connection.url" value = "jdbc:derby://localhost:1527/mailreader;create=true"/>
 			<property name = "hibernate.connection.username" value = "app"/>
 			<property name = "hibernate.connection.password" value = "app"/>
   		    <property name = "hibernate.dialect" value="org.hibernate.dialect.DerbyDialect"/>

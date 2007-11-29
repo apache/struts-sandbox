@@ -23,6 +23,7 @@
     <s:if test="input == 'create'">
         <s:submit key="button.update" action="create" />     
         <s:submit key="button.cancel" action="create" method="cancel" onclick="form.onsubmit=null"/>
+        <s:submit action="create" >Label</s:submit>     
     </s:if>
     <s:else>
         <s:submit key="button.update" action="update"/>

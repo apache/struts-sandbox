@@ -7,6 +7,7 @@
 
     <constant name="struts.devMode" value="false" />
     <constant name="struts.action.extension" value="do" />
+    <constant name="struts.serve.static" value="true" />
     
     <package name="entity-default" extends="struts-default">
 		<interceptors>
