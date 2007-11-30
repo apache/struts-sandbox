@@ -8,11 +8,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 
-import entity.user.User;
-
 @Entity(name = "APP_MESSAGE")
-@NamedQueries({
-        @NamedQuery(name = Message.COUNT, query = Message.COUNT_QUERY) })
+@NamedQueries( { @NamedQuery(name = Message.COUNT, query = Message.COUNT_QUERY) })
 public class Message {
 
     public static final String COUNT = "Message.COUNT";
@@ -21,33 +18,41 @@ public class Message {
     @Id
     @GeneratedValue
     private Long id;
+
     public Long getId() {
         return id;
     }
+
     void setId(Long value) {
         id = value;
-    }    
-    
+    }
+
     private String text;
+
     public String getText() {
         return text;
     }
+
     public void setText(String value) {
         text = value;
     }
 
-    @OneToOne(cascade=CascadeType.ALL)
-    private Message message;    
+    @OneToOne(cascade = CascadeType.ALL)
+    private Message message;
+
     public Message getNextMessage() {
         return message;
     }
+
     public void setNextMessage(Message value) {
         message = value;
     }
-    
-    Message() {}
+
+    Message() {
+    }
+
     public Message(String value) {
         text = value;
     }
-    
+
 }

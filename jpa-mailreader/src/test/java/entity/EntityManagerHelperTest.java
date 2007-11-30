@@ -1,6 +1,7 @@
 package entity;
 
 import javax.persistence.EntityManager;
+
 import junit.framework.TestCase;
 
 public class EntityManagerHelperTest extends TestCase {

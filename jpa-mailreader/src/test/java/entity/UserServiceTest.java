@@ -8,21 +8,21 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import entity.protocol.Protocol;
-import entity.protocol.ProtocolHelper;
-import entity.protocol.ProtocolHelperImpl;
+import entity.protocol.ProtocolService;
+import entity.protocol.ProtocolServiceImpl;
 import entity.subscription.Subscription;
 import entity.user.User;
-import entity.user.UserHelper;
-import entity.user.UserHelperImpl;
+import entity.user.UserService;
+import entity.user.UserServiceImpl;
 
-public class UserHelperTest extends EntityTestCase {
+public class UserServiceTest extends EntityTestCase {
 
-    protected UserHelper helper;
+    protected UserService helper;
     int beforeCount = 0;
 
     public void setUp() throws Exception {
         super.setUp();
-        helper = new UserHelperImpl();
+        helper = new UserServiceImpl();
         beforeCount = helper.count();
     }
 
@@ -56,7 +56,7 @@ public class UserHelperTest extends EntityTestCase {
     }
 
     private List<Subscription> getSubscriptions(User user) {
-        ProtocolHelper protocolManager = new ProtocolHelperImpl();
+        ProtocolService protocolManager = new ProtocolServiceImpl();
         boolean autoConnect = false;
         List<Protocol> protocols = protocolManager.findAll();
         int protocolMax = protocols.size();
@@ -82,6 +82,8 @@ public class UserHelperTest extends EntityTestCase {
         helper.update(user);
         assertTrue("Expected ID", user.getId() != null);
         assertTrue(user.getSubscriptions() != null);
+        String qname =user.getQualifiedName(); 
+        assertTrue(qname !=null);
     }
 
     public void testCreateDelete() throws Exception {

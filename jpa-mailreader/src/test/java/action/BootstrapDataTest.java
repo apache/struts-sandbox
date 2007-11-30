@@ -25,12 +25,11 @@ import java.util.UUID;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
+import junit.framework.TestCase;
 import entity.EntityManagerHelper;
 import entity.protocol.Protocol;
 import entity.subscription.Subscription;
 import entity.user.User;
-
-import junit.framework.TestCase;
 
 public class BootstrapDataTest extends TestCase {
 

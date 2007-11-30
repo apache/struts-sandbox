@@ -8,7 +8,7 @@ import junit.framework.TestCase;
  * </p>
  *
  */
-public class EntityHelperTest extends TestCase {
+public class EntityServiceTest extends TestCase {
 
     UuidEntity entity;
     UuidEntity entity2;

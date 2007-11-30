@@ -19,6 +19,7 @@
 package entity;
 
 import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
@@ -40,9 +41,15 @@ import javax.persistence.Query;
  * tearDown methods of a TestCase. See <code>EntityInterceptor</code> for an
  * example.
  * </p>
+ * <p>
+ * In extending this service class, or other service classes, we should avoid 
+ * the <a href="http://www.martinfowler.com/bliki/AnemicDomainModel.html">
+ * Anemic Domain Model anti-pattern</a>, and keep both business logic and 
+ * business state in the Entity objects. 
+ * </p>
  * 
  */
-public class EntityHelper {
+public class EntityService {
 
     public Object createEntity(Object value) throws PersistenceException {
         EntityManager manager = EntityManagerHelper.getEntityManager();

@@ -19,16 +19,16 @@
 package entity.user;
 
 import javax.persistence.PersistenceException;
-import entity.EntityHelper;
-import javax.jws.WebService;
+
+import entity.EntityService;
 
 /**
  * <p>
  * Default JPA implementation of <code>UserHelper</code>.
  * </p>
  */
-@WebService(serviceName = "user", endpointInterface = "entity.user.UserHelper")
-public class UserHelperImpl extends EntityHelper implements UserHelper {
+// @WebService(serviceName = "user", endpointInterface = "entity.user.UserSession")
+public class UserServiceImpl extends EntityService implements UserService {
 
     public int count() throws PersistenceException {
         Long count = (Long) singleResult(User.COUNT, null, null);

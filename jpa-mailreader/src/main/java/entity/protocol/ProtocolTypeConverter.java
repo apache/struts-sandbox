@@ -31,11 +31,11 @@ import org.apache.struts2.util.StrutsTypeConverter;
 public class ProtocolTypeConverter extends StrutsTypeConverter {
 
     /**
-     * Retrieve the corresponding <code>Protocol</code>
-     * entity from the persistence database, given a String ID.
+     * Retrieve the corresponding <code>Protocol</code> entity from the
+     * persistence database, given a String ID.
      */
     public Object convertFromString(Map context, String[] values, Class toClass) {
-        ProtocolHelper manager = new ProtocolHelperImpl();
+        ProtocolService manager = new ProtocolServiceImpl();
         String id = values[0];
         Protocol target = manager.find(id);
         return target;

@@ -16,88 +16,67 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package entity.user;
+package entity.protocol;
+
+import java.util.List;
+import java.util.Map;
 
 import javax.persistence.PersistenceException;
-import javax.jws.WebService;
 
 /**
  * <p>
- * Facade providing custom operations involving the <code>User</code> object.
- * </p>
- * 
+ * Facade providing custom operations involving the <code>Protocol</code>
+ * object.
+ * <p>
  */
-@WebService
-public interface UserHelper {
+// @WebService
+public interface ProtocolService {
 
     /**
      * <p>
      * Provide the current count of
      * <p>
-     * User
+     * Subscription
      * </p>
-     * objects.
+     * objects for all Users.
      * </p>
      * 
      * @return current count of
      *         <p>
-     *         User
+     *         Subscription
      *         </p>
-     *         objects
+     *         objects for all Users
      * @throws PersistenceException
      */
     int count() throws PersistenceException;
 
     /**
      * <p>
-     * Insert the specified <code>User</code> into the persistent database.
-     * </p>
-     * 
-     * @param value
-     *            User to insert
-     */
-    User create(User value);
-
-    /**
-     * <p>
-     * Merge changes to the specified User object into the persistance database.
-     * </p>
-     * 
-     * @param value
-     *            User instance to delete
-     */
-    User delete(User value) throws Exception;
-
-    /**
-     * <p>
-     * Retrieve the <code>User</code> matching the specified user ID, if any;
+     * Retrieve the <code>Protocol</code> with the specified id, if any;
      * otherwise, return <code>null</code>.
      * </p>
      * 
-     * @param value
-     *            ID to match
+     * @param id
+     *            Protocol id to look up
      */
-    User find(String value);
+    Protocol find(String value);
 
     /**
      * <p>
-     * Retrieve the <code>User</code> matching the specified username, if any;
-     * otherwise, return <code>null</code>.
+     * Retrieve a <code>List</code> of the valid <code>Protocol</code>s for
+     * this application. If no valid protocols are defined, a zero length list
+     * will be returned.
      * </p>
-     * 
-     * @param value
-     *            Username to match
      */
-    User findByName(String value);
+    List<Protocol> findAll();
 
     /**
      * <p>
-     * Merge changes to the specified User object into the persistance database.
+     * Retrieve a <code>Map</code> of the valid <code>Protocol</code>s for
+     * this application. If no valid protocols are defined, an empty map will be
+     * returned.
      * </p>
-     * 
-     * @param user
-     *            Copy of User instance to match and update
      */
-    User update(User value) throws Exception;
+    Map<String, String> findAllAsMap();
 
 }

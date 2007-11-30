@@ -23,12 +23,14 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 
+import org.apache.struts2.config.ParentPackage;
 import org.apache.struts2.interceptor.SessionAware;
+
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.conversion.annotations.Conversion;
 import com.opensymphony.xwork2.conversion.annotations.ConversionType;
 import com.opensymphony.xwork2.conversion.annotations.TypeConversion;
-import org.apache.struts2.config.ParentPackage;
+
 import entity.EntityAware;
 
 /**

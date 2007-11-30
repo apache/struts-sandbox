@@ -26,16 +26,16 @@ import org.apache.struts2.config.Results;
 import org.apache.struts2.dispatcher.ServletActionRedirectResult;
 
 import com.opensymphony.xwork2.Preparable;
-import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
+import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.Validation;
 import com.opensymphony.xwork2.validator.annotations.Validations;
 
-import entity.protocol.ProtocolHelperImpl;
-import entity.protocol.ProtocolHelper;
+import entity.protocol.ProtocolService;
+import entity.protocol.ProtocolServiceImpl;
 import entity.subscription.Subscription;
-import entity.subscription.SubscriptionHelperImpl;
-import entity.subscription.SubscriptionHelper;
+import entity.subscription.SubscriptionService;
+import entity.subscription.SubscriptionServiceImpl;
 import entity.user.User;
 
 @Results( {
@@ -56,9 +56,9 @@ public class Index extends action.user.Index implements Preparable {
 
     protected static final String ERROR_HOST_UNIQUE = "error.host.unique";
 
-    protected SubscriptionHelper manager;
-    
-    private ProtocolHelper protocolManager;
+    protected SubscriptionService manager;
+
+    private ProtocolService protocolManager;
 
     private Map<String, String> protocols;
 
@@ -162,8 +162,8 @@ public class Index extends action.user.Index implements Preparable {
      * </p>
      */
     public Index() {
-        manager = new SubscriptionHelperImpl();
-        protocolManager = new ProtocolHelperImpl();
+        manager = new SubscriptionServiceImpl();
+        protocolManager = new ProtocolServiceImpl();
     }
 
     /**
@@ -175,7 +175,7 @@ public class Index extends action.user.Index implements Preparable {
      * @param manager
      *            IUserManager instance
      */
-    public Index(SubscriptionHelper manager, ProtocolHelper protocolManager) {
+    public Index(SubscriptionService manager, ProtocolService protocolManager) {
         this.manager = manager;
         this.protocolManager = protocolManager;
     }

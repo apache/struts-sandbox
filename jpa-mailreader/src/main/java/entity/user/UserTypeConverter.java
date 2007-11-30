@@ -19,6 +19,7 @@
 package entity.user;
 
 import java.util.Map;
+
 import org.apache.struts2.util.StrutsTypeConverter;
 
 /**
@@ -36,7 +37,7 @@ public class UserTypeConverter extends StrutsTypeConverter {
      * </p>
      */
     public Object convertFromString(Map context, String[] values, Class toClass) {
-        UserHelper manager = new UserHelperImpl();
+        UserService manager = new UserServiceImpl();
         String name = values[0];
         User result = manager.findByName(name);
         return result;

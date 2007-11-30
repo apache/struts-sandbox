@@ -21,8 +21,8 @@ package action.user;
 import org.apache.struts2.config.ParentPackage;
 
 import entity.user.User;
-import entity.user.UserHelperImpl;
-import entity.user.UserHelper;
+import entity.user.UserService;
+import entity.user.UserServiceImpl;
 
 @ParentPackage("entity-default")
 public class Index extends action.Index {
@@ -45,7 +45,7 @@ public class Index extends action.Index {
 
     // ---- PROPERTIES ----
 
-    private UserHelper manager;
+    private UserService manager;
 
     private User user;
 
@@ -137,7 +137,7 @@ public class Index extends action.Index {
      * </p>
      */
     public Index() {
-        manager = new UserHelperImpl();
+        manager = new UserServiceImpl();
     }
 
     /**
@@ -148,7 +148,7 @@ public class Index extends action.Index {
      * @param manager
      *            IUserManager instance
      */
-    public Index(UserHelper manager) {
+    public Index(UserService manager) {
         this.manager = manager;
     }
 

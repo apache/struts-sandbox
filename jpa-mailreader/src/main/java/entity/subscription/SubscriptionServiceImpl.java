@@ -18,11 +18,10 @@
  */
 package entity.subscription;
 
-import javax.jws.WebService;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 
-import entity.EntityHelper;
+import entity.EntityService;
 import entity.EntityManagerHelper;
 
 /**
@@ -30,9 +29,9 @@ import entity.EntityManagerHelper;
  * Default JPA implementation of <code>UserHelper</code>.
  * </p>
  */
-@WebService(serviceName = "subscription", endpointInterface = "entity.subscription.SubscriptionHelper")
-public class SubscriptionHelperImpl extends EntityHelper implements
-        SubscriptionHelper {
+// @WebService(serviceName = "subscription", endpointInterface = "entity.subscription.SubscriptionService")
+public class SubscriptionServiceImpl extends EntityService implements
+        SubscriptionService {
 
     public int count() throws PersistenceException {
         Long count = (Long) singleResult(Subscription.COUNT, null, null);

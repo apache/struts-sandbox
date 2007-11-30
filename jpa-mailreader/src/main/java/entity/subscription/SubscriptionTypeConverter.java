@@ -19,6 +19,7 @@
 package entity.subscription;
 
 import java.util.Map;
+
 import org.apache.struts2.util.StrutsTypeConverter;
 
 /**
@@ -31,11 +32,11 @@ import org.apache.struts2.util.StrutsTypeConverter;
 public class SubscriptionTypeConverter extends StrutsTypeConverter {
 
     /**
-     * Retrieve the corresponding <code>Subscription</code>
-     * entity from the persistence database, fiven a host name.
+     * Retrieve the corresponding <code>Subscription</code> entity from the
+     * persistence database, fiven a host name.
      */
     public Object convertFromString(Map context, String[] values, Class toClass) {
-        SubscriptionHelper manager = new SubscriptionHelperImpl();
+        SubscriptionService manager = new SubscriptionServiceImpl();
         String name = String.valueOf(values[0]);
         Subscription result = manager.findByName(name);
         return result;

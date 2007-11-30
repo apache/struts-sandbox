@@ -2,16 +2,16 @@ package action.user;
 
 import junit.framework.TestCase;
 import entity.user.User;
-import entity.user.UserHelper;
-import entity.user.UserHelperImpl;
+import entity.user.UserService;
+import entity.user.UserServiceImpl;
 
 public class autenticateTest extends TestCase {
 
-    UserHelper helper;
+    UserService helper;
 
     public void setUp() throws Exception {
         super.setUp();
-        helper = new UserHelperImpl();
+        helper = new UserServiceImpl();
     }
 
     private boolean authenticate(String username, String password) {

@@ -18,7 +18,6 @@
  */
 package entity.subscription;
 
-import javax.jws.WebService;
 import javax.persistence.PersistenceException;
 
 /**
@@ -27,8 +26,8 @@ import javax.persistence.PersistenceException;
  * object.
  * </p>
  */
-@WebService
-public interface SubscriptionHelper {
+// @WebService
+public interface SubscriptionService {
 
     /**
      * <p>
