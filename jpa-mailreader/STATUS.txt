@@ -8,7 +8,7 @@ Quality Grade: test-build only.
 The JPA MailReader is a best-practices example of using Struts 2 with 
 the Java Persistence API with a standard SQL database. 
 
-The example is based on the original MailReader Demonstration 
+The example descends from the original MailReader Demonstration 
 Application and uses a modified version of the MailReader JPA package 
 developed for the Apache Shale Example. 
 
@@ -17,23 +17,35 @@ documenting Actions in XML. The Action classes and pages are linked
 together using convention over configuration. In some cases, 
 Result annotations are used to move between workflows. 
 
-This implementaion expresses the business classes in an "entity" 
-package. The business classes are designed from the ground-up to be 
-used with the JPA. Sufficient annotation is provided so that a SQL 
-database schema can be generated from the entity classes. (See 
-RetainTest to bootstrap a database.)
+This implementation expresses the business classes in an "entity" 
+package. (Business classes are also referred to as "domain" classes 
+or "model" classes.) 
 
-The persistence logic is contained in a "Manager" class that is 
-associated with each entity class. Essentially, the manager classes 
-are data access objects. The Managers extend a superclass which 
-provides data access code that can be shared within the persistence 
-unit. Most manager methods are type-safe wrappers around shared 
-methods. 
+The business classes are designed from the ground-up to be used with 
+the JPA. Sufficient annotation is provided with the entity 
+implementations so that a SQL database schema can be generated from 
+the entity classes, just by running the application, or a unit test. 
+(See the entity.BootStrapDataTest for an example.)
+
+The persistence logic is contained in a "Service" class that is 
+associated with each entity class. The service classes are backed by 
+a static, singleton EntityManagerHelper class that provides the 
+service implementations with "data access object" functionality. 
+
+The inter-object and inter-layer logic is also contained in the 
+Service classes. Any code that is not dependant on a Struts Action is 
+pushed to the service layer, where it is easier to test and reuse. 
 
 Each business class also has an XWork type converter. Most often, 
 the converters use a substitute key for the conversion ID, rather than 
 the primary key. (Exposing the primary key to the user interface layer 
 is considered a bad practice in DBA circles.) 
+
+The type converters do make use of the services to perform database 
+lookups, as needed. An EntityInterceptor opens and closes a transaction
+for each request (OpenSessionInView), and the type converters share 
+that transaction and a persistence context with the Actions. (The 
+retrieved object is not detached.)
 
 To provide maximum portability, the internal primary keys are UUIDs. 
 The entities are based on a mapper superclass which provides shared 
@@ -44,37 +56,50 @@ a sub-package named for each business class. Essentially, the
 sub-package is a resource container that encapsulates all of the 
 entity's data and behavior. 
 
+An interface and default implementation is provided for each 
+entity and service. Since all of these are one-off implementations, 
+the interface is not strictly needed, but interfaces are 
+still useful containers for JavaDocs, and encourage correct thinking.
+
 The Action packaging follows a similar strategy, but also creates 
-a resource heirarchy from the entites. The "root" action package 
+a resource heirarchy from the entities. The "root" action package 
 contains the "welcome" resources. The "action.user" package encapsulates
 the "user" resources, and the "action.user.subscription" package 
 encapsulates the "subscription" resources. The nesting of subscription 
 within user reflects the one-to-many relationship between a user 
 resource and and its subscriptions. 
 
-Since the CodeBehind package is being utilized, the folder structure
-for the JSP templates follows the package structure. 
+Essentially, each package/namespace represents a distinct "resource" 
+from the REST perspective.
 
 Each package/namespace has an Index Action, which is usually the 
-superclass for other Actions in the same package. The Actions 
-utilize the Managers to access the persistent data. The default 
-constructor for an Action instantiates the default Manager, but 
-an alternate constructor is provided that could be used to pass 
-in a mock Manager. (Accordingly, the Managers all implement a  
-specific interface.) 
+superclass for other Actions in the same package.  The Index Actions 
+utilize the services to access business logic and persistent data. 
+The default constructor for an Action instantiates the default 
+service, but an alternate constructor is provided that could be 
+used to pass in a mock or alternate service. 
+
+Action aliases are not used. Each action has it's own Action 
+class, which subclass an Index Action. The execute methods are 
+intentionally anemic, and implementation details are encapsulated 
+on helper methods in the Index Action. 
 
 The Actions provide request-scope User and Subscription objects 
 that represent the resources being edited in the current request. 
-The pages record the User and/or Subscrition resource as a hidden 
+The pages record the User and/or Subscription resource as a hidden 
 field. The type converters fetch the appropriate entity from the 
 persistence unit, so that it can be set as the current User or 
 Subscription object. 
 
 Of course, the hidden field can also be expressed as a GET 
 attribute, and this technique is used to restore the current User 
-after a redirect. Overall, the design can be considered "RESTful".
+after a redirect. Overall, the design is intended to be "RESTful" 
+or at least REST-like.
 
 The logged-in user is maintained in a session-scope "Profile".
+
+Since the CodeBehind package is being utilized, the folder structure
+for the JSP templates follows the package structure. 
 
 
 KNOWN ISSUES 
@@ -86,38 +111,35 @@ KNOWN ISSUES
    ** ognl-2.6.11
    ** struts-codebehind-plugin-2.0.10
    ** struts-core-2.0.10
-   ** toplink-essentials
+   ** toplink-essentials 
    ** toplink-agent-essentials
    ** xwork-2.0.4
 
- * Toplink could be replaced with OpenJPA. 
+ * Toplink could be replaced with OpenJPA as a default provider. 
  
- * Need a routine to autocreate the Derby database at installation.
+ * Other providers, like Hibernate, could also be swapped in.
+ 
+ * Need a routine to autocreate the Derby database at installation, 
+   perhaps by running a test suite.
  
  * The index.html is not redirecting to the index action. 
  
- * Not all of the persistence actions operate correctly. 
-   
-   ** Delete complains that the entity is detached. 
-   ** After creating a Subscription, it does not appear on the list 
-      until the container is restarted. 
-      
- * There is no global error handling and logging.
+ * Global error handling and logging is either not working or not 
+   handling 500 errors.
  
  * There is no access security. Anyone can access any user resource.
  
  * Despite the scope of the application, the example could include 
    a demonstration of handling optimistic locking
+   
+ * The services could be exposed as Web Services (XFire/CFX) using 
+   an EntityFilter, once the A&A is sorted out.
 
 CURRENT FOCUS
 
  * With the application structure in place, work is now focussed on 
    creating a unit test suit against the data access logic. 
    
- * With a unit test suite in place, we may consider using the 
-   "one transaction per request" strategy, if it can be reconciled 
-   with unit testing. 
-
 
 ========================================================================
 
