@@ -44,6 +44,14 @@ import entity.EntityAware;
  * logic is delegated to a service class for each entity. The Action classes
  * interact only with the entity helpers, and not the underlying JPA.
  * </p>
+ * <p>
+ * Any helper method that is not physically bound the the UI API should be 
+ * moved to the service layer! In most cases, the remaining Action methods 
+ * will either call ActionErrors, return a result value meaningful only to 
+ * the UI, or retain state used by other Action helper methods. (A generic 
+ * ServiceError class with an ActionError adapter might allow us to move 
+ * 3/4 of the Action helper methods to the service layer.)   
+ * </p>
  */
 @Conversion(conversions = {
         @TypeConversion(type = ConversionType.APPLICATION, key = "entity.protocol.Protocol", converter = "entity.protocol.ProtocolTypeConverter"),
