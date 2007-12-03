@@ -27,25 +27,26 @@ import javax.persistence.Query;
 
 /**
  * <p>
- * A set of generic CRUD operations that can operate on any entity in the
- * default persistence unit.
+ * A set of generic CRUD methods that can operate on any entity in the default
+ * persistence unit.
  * </p>
  * <p>
  * If an application needs only basic CRUD operations, this class (and its
  * companion the <code>EntityManagerHelper</code>) may be the only "data
- * access object" the applications needs.
+ * access object" the application needs.
  * </p>
  * <p>
  * This implementation delegates transaction management and exception handling
  * to another component, such as an Interceptor or Filter, or the setUp and
- * tearDown methods of a TestCase. See <code>EntityInterceptor</code> for an
- * example.
+ * tearDown methods of a TestCase. See
+ * {@link entity.EntityInterceptor EntityInterceptor} and
+ * {@link entity.EntityTestCase EntityTestCase} for examples.
  * </p>
  * <p>
- * In extending this service class, or other service classes, we should avoid 
+ * In extending this service class, or other service classes, we should avoid
  * the <a href="http://www.martinfowler.com/bliki/AnemicDomainModel.html">
- * Anemic Domain Model anti-pattern</a>, and keep both business logic and 
- * business state in the Entity objects. 
+ * Anemic Domain Model anti-pattern</a>, and keep both business logic and
+ * business state in the Entity objects.
  * </p>
  * 
  */

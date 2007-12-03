@@ -32,12 +32,9 @@ import javax.persistence.Transient;
 
 import entity.UuidEntity;
 import entity.subscription.Subscription;
+import entity.subscription.SubscriptionImpl;
 
 /**
- * <p>
- * Entity representing an account that maintains zero or more
- * <code>Subscription</code>s.
- * </p>
  * <p>
  * JPA entity class for the <code>APP_USER</code> table. This class contains
  * sufficient detail to regenerate the database schema (top-down development).
@@ -46,46 +43,18 @@ import entity.subscription.Subscription;
  */
 @Entity(name = "APP_USER")
 @NamedQueries( {
-        @NamedQuery(name = User.FIND_ALL, query = User.FIND_ALL_QUERY),
-        @NamedQuery(name = User.FIND_BY_NAME, query = User.FIND_BY_NAME_QUERY),
-        @NamedQuery(name = User.COUNT, query = User.COUNT_QUERY) })
-public class User extends UuidEntity implements Serializable {
+        @NamedQuery(name = User.FIND_ALL, query = UserImpl.FIND_ALL_QUERY),
+        @NamedQuery(name = User.FIND_BY_NAME, query = UserImpl.FIND_BY_NAME_QUERY),
+        @NamedQuery(name = User.COUNT, query = UserImpl.COUNT_QUERY) })
+public class UserImpl extends UuidEntity implements Serializable, User {
 
     // ---- STATICS ----
 
-    /**
-     * <p>
-     * Named query for counting <code>User</code> entities.
-     * </p>
-     */
-    public static final String COUNT = "User.COUNT";
-
     private static final String COUNT_QUERY = "SELECT COUNT(*) FROM APP_USER";
-
-    /**
-     * <p>
-     * Named query for finding a <code>User</code> by username.
-     * </p>
-     */
-    public static final String FIND_ALL = "User.FIND_ALL";
 
     private static final String FIND_ALL_QUERY = "SELECT u FROM APP_USER u";
 
-    /**
-     * <p>
-     * Named query for finding a <code>User</code> by username.
-     * </p>
-     */
-    public static final String FIND_BY_NAME = "User.FIND_BY_USERNAME";
-
     private static final String FIND_BY_NAME_QUERY = "SELECT u FROM APP_USER u WHERE u.username = :username";
-
-    /**
-     * <p>
-     * Token representing the "username" attribute.
-     * </p>
-     */
-    static final String NAME = "username";
 
     // --- FIELDS ----
 
@@ -101,7 +70,7 @@ public class User extends UuidEntity implements Serializable {
     @Column(length = 64)
     private String reply_to_address;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, targetEntity = SubscriptionImpl.class)
     private List<Subscription> subscriptions;
 
     @Column(length = 16, nullable = false, unique = true)
@@ -181,15 +150,6 @@ public class User extends UuidEntity implements Serializable {
 
     // ---- METHODS ----
 
-    /**
-     * <p>
-     * Add the specified <code>Subscription</code> to the set of subscriptions
-     * associated with this <code>User</code>.
-     * </p>
-     * <p>
-     * A duplicate <code>Subscription</code> is not added but quietly ignored.
-     * </p>
-     */
     public void addSubscription(Subscription subscription) {
         List<Subscription> subscriptions = getSubscriptions();
         if (subscriptions == null) {
@@ -202,15 +162,6 @@ public class User extends UuidEntity implements Serializable {
         }
     }
 
-    /**
-     * <p>
-     * Add the specified <code>Subscriptions</code> to the set of
-     * subscriptions associated with this <code>User</code>.
-     * </p>
-     * <p>
-     * A duplicate <code>Subscription</code> is not added but quietly ignored.
-     * </p>
-     */
     public void addSubscriptions(List<Subscription> subscriptions) {
         if (subscriptions == null)
             return;
@@ -219,15 +170,6 @@ public class User extends UuidEntity implements Serializable {
         }
     }
 
-    /**
-     * <p>
-     * Remove the specified <code>Subscription</code> from the set of
-     * subscriptions associated with this <code>User</code>.
-     * </p>
-     * <p>
-     * A duplicate <code>Subscription</code> is not added but quietly ignored.
-     * </p>
-     */
     public void removeSubscription(Subscription subscription) {
         List<Subscription> subscriptions = getSubscriptions();
         if (subscriptions.contains(subscription)) {
@@ -240,7 +182,7 @@ public class User extends UuidEntity implements Serializable {
      * Instantiate a default <code>User</code> object.
      * </p>
      */
-    public User() {
+    public UserImpl() {
         super();
     }
 
@@ -252,7 +194,7 @@ public class User extends UuidEntity implements Serializable {
      * This constructor does not set the ID value.
      * </p>
      */
-    public User(String username, String password) {
+    public UserImpl(String username, String password) {
         super();
         setUsername(username);
         setPassword(password);
@@ -263,7 +205,7 @@ public class User extends UuidEntity implements Serializable {
      * Instantiate a <code>User</code> object, and load values.
      * </p>
      */
-    public User(String username, String password, String fullName,
+    public UserImpl(String username, String password, String fullName,
             String fromAddress, String replyToAddress) {
         super();
         setUsername(username);

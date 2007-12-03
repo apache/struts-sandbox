@@ -36,9 +36,9 @@ public class SubscriptionTypeConverter extends StrutsTypeConverter {
      * persistence database, fiven a host name.
      */
     public Object convertFromString(Map context, String[] values, Class toClass) {
-        SubscriptionService manager = new SubscriptionServiceImpl();
+        SubscriptionService service = new SubscriptionServiceImpl();
         String name = String.valueOf(values[0]);
-        Subscription result = manager.findByName(name);
+        Subscription result = service.findByName(name);
         return result;
     }
 

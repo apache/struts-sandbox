@@ -37,9 +37,9 @@ public class UserTypeConverter extends StrutsTypeConverter {
      * </p>
      */
     public Object convertFromString(Map context, String[] values, Class toClass) {
-        UserService manager = new UserServiceImpl();
+        UserService service = new UserServiceImpl();
         String name = values[0];
-        User result = manager.findByName(name);
+        User result = service.findByName(name);
         return result;
     }
 

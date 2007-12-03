@@ -18,23 +18,22 @@
  */
 package entity.subscription;
 
-import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 
 import entity.EntityService;
-import entity.EntityManagerHelper;
 
 /**
  * <p>
- * Default JPA implementation of <code>UserHelper</code>.
+ * Default JPA implementation of <code>SubscriptionService</code>.
  * </p>
  */
-// @WebService(serviceName = "subscription", endpointInterface = "entity.subscription.SubscriptionService")
+// @WebService(serviceName = "subscription", endpointInterface =
+// "entity.subscription.SubscriptionService")
 public class SubscriptionServiceImpl extends EntityService implements
         SubscriptionService {
 
     public int count() throws PersistenceException {
-        Long count = (Long) singleResult(Subscription.COUNT, null, null);
+        Long count = (Long) singleResult(SubscriptionImpl.COUNT, null, null);
         int result = count.intValue();
         return result;
     }
@@ -44,21 +43,20 @@ public class SubscriptionServiceImpl extends EntityService implements
     }
 
     public Subscription delete(Subscription value) throws Exception {
-        EntityManager manager = EntityManagerHelper.getEntityManager();
-        manager.merge(value);
+        updateEntity(value);
         value.getUser().removeSubscription(value);
         return (Subscription) deleteEntity(value);
     }
 
     public Subscription find(String value) {
-        Subscription result = (Subscription) readEntity(Subscription.class,
+        Subscription result = (Subscription) readEntity(SubscriptionImpl.class,
                 value);
         return result;
     }
 
     public Subscription findByName(String value) {
         Subscription result = (Subscription) singleResult(
-                Subscription.FIND_BY_NAME, Subscription.NAME, value);
+                SubscriptionImpl.FIND_BY_NAME, SubscriptionImpl.NAME, value);
         return result;
     }
 

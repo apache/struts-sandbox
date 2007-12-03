@@ -23,36 +23,34 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 
 import entity.EntityService;
-import entity.EntityManagerHelper;
 
 /**
  * <p>
- * Default JPA implementation of <code>ProtocolHelper</code>.
+ * Default JPA implementation of <code>ProtocolService</code>.
  * </p>
  */
-// @WebService(serviceName = "protocol", endpointInterface = "entity.protocol.ProtocolService")
-public class ProtocolServiceImpl extends EntityService implements ProtocolService {
+// @WebService(serviceName = "protocol", endpointInterface =
+// "entity.protocol.ProtocolService")
+public class ProtocolServiceImpl extends EntityService implements
+        ProtocolService {
 
     public int count() throws PersistenceException {
-        Long count = (Long) singleResult(Protocol.COUNT, null, null);
+        Long count = (Long) singleResult(ProtocolImpl.COUNT, null, null);
         int result = count.intValue();
         return result;
     }
 
     public Protocol find(String value) {
-        Protocol result = (Protocol) readEntity(Protocol.class, value);
+        Protocol result = (Protocol) readEntity(ProtocolImpl.class, value);
         return result;
     }
 
     @SuppressWarnings("unchecked")
     public List<Protocol> findAll() {
-        EntityManager manager = EntityManagerHelper.getEntityManager();
-        List<Protocol> protocols = manager.createNamedQuery(Protocol.FIND_ALL)
-                .getResultList();
+        List<Protocol> protocols = resultList(ProtocolImpl.FIND_ALL, null, null);
         if (protocols == null) {
             protocols = new ArrayList<Protocol>();
         }

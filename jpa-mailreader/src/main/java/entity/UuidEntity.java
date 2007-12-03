@@ -31,7 +31,7 @@ import javax.persistence.Version;
 @MappedSuperclass
 /**
  * <p>
- * A POJO base class with helper methods for managing an ID property based on a
+ * POJO base class with helper methods for managing an ID property based on a
  * universally unique identifier (UUID).
  * </p>
  * <p>
@@ -49,6 +49,8 @@ public class UuidEntity implements Serializable {
 
     @Id
     @Column(length = 36)
+    // @GeneratedValue(generator="system-uuid")
+    // @GenericGenerator(name="system-uuid", strategy = "uuid")
     private String id;
 
     public String getId() {

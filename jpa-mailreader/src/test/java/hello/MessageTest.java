@@ -63,22 +63,22 @@ public class MessageTest extends TestCase {
     public void testUpdate() throws Exception {
         final String MESSAGE = "Update me!";
         final String UPDATE = "Hey! I've been updated!";
-        
+
         Message message = new Message(MESSAGE);
         manager.persist(message);
-        manager.flush();        
+        manager.flush();
 
-        Long id = message.getId(); 
-        Message update = manager.find(Message.class, id);        
-        assertSame("Expected same instance",message,update);
-        
+        Long id = message.getId();
+        Message update = manager.find(Message.class, id);
+        assertSame("Expected same instance", message, update);
+
         update.setText(UPDATE);
         manager.flush();
-        
+
         Message result = manager.find(Message.class, id);
-        assertEquals(UPDATE,result.getText());        
+        assertEquals(UPDATE, result.getText());
     }
-    
+
     public void testCreateDelete() throws Exception {
         final String MESSAGE = "Delete me!";
         Message message = new Message(MESSAGE);

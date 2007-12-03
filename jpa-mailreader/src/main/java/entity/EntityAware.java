@@ -22,7 +22,7 @@ import javax.persistence.EntityManager;
 
 /**
  * <p>
- * Comparion interface to <code>EntityInterceptor</code> that provides access
+ * Companion interface to <code>EntityInterceptor</code> that provides access
  * to an <code>EntityManager</code> for this thread.
  * </p>
  */

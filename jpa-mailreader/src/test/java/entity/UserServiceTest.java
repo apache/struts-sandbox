@@ -11,7 +11,9 @@ import entity.protocol.Protocol;
 import entity.protocol.ProtocolService;
 import entity.protocol.ProtocolServiceImpl;
 import entity.subscription.Subscription;
+import entity.subscription.SubscriptionImpl;
 import entity.user.User;
+import entity.user.UserImpl;
 import entity.user.UserService;
 import entity.user.UserServiceImpl;
 
@@ -26,14 +28,14 @@ public class UserServiceTest extends EntityTestCase {
         beforeCount = helper.count();
     }
 
-    private User newUser() {
-        return new User("user_" + base, "pass_" + base);
+    private UserImpl newUser() {
+        return new UserImpl("user_" + base, "pass_" + base);
     }
 
     public void testCount() throws Exception {
         EntityManager manager = EntityManagerHelper.getEntityManager();
         Object result = null;
-        Query query = manager.createNamedQuery(User.COUNT);
+        Query query = manager.createNamedQuery(UserImpl.COUNT);
         try {
             result = query.getSingleResult();
         } catch (NoResultException e) {
@@ -45,7 +47,7 @@ public class UserServiceTest extends EntityTestCase {
     }
 
     public void testCreate() throws Exception {
-        User user = newUser();
+        UserImpl user = newUser();
         String before = user.getId();
         assertTrue("ID not assigned on New", isNotEmpty(before));
         helper.create(user);
@@ -66,29 +68,27 @@ public class UserServiceTest extends EntityTestCase {
             String base = String.valueOf(i + 1);
             autoConnect = !autoConnect;
             int protocolIndex = (i % protocolMax);
-            Subscription sub = new Subscription("host_" + base, user, "user_"
-                    + base, "pass_" + base, protocols.get(protocolIndex),
-                    autoConnect);
+            SubscriptionImpl sub = new SubscriptionImpl("host_" + base, user,
+                    "user_" + base, "pass_" + base, protocols
+                            .get(protocolIndex), autoConnect);
             subscriptions.add(sub);
         }
         return subscriptions;
     }
 
     public void testCreateWithSubscriptions() throws Exception {
-        User user = newUser();
+        UserImpl user = newUser();
         helper.create(user);
         List<Subscription> subscriptions = getSubscriptions(user);
         user.addSubscriptions(subscriptions);
         helper.update(user);
         assertTrue("Expected ID", user.getId() != null);
         assertTrue(user.getSubscriptions() != null);
-        String qname =user.getQualifiedName(); 
-        assertTrue(qname !=null);
     }
 
     public void testCreateDelete() throws Exception {
         // rollback = true;
-        User user = new User();
+        User user = new UserImpl();
         user.setUsername("user_" + base);
         user.setPassword("pass_" + base);
         helper.create(user);

@@ -35,9 +35,9 @@ public class ProtocolTypeConverter extends StrutsTypeConverter {
      * persistence database, given a String ID.
      */
     public Object convertFromString(Map context, String[] values, Class toClass) {
-        ProtocolService manager = new ProtocolServiceImpl();
+        ProtocolService service = new ProtocolServiceImpl();
         String id = values[0];
-        Protocol target = manager.find(id);
+        Protocol target = service.find(id);
         return target;
     }
 
@@ -45,7 +45,7 @@ public class ProtocolTypeConverter extends StrutsTypeConverter {
      * Provide the String ID for a <code>Protocol</code> object.
      */
     public String convertToString(Map context, Object o) {
-        Protocol value = (Protocol) o;
+        ProtocolImpl value = (ProtocolImpl) o;
         String id = value.getId();
         return id;
     }

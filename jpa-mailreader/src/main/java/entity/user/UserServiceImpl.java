@@ -27,11 +27,12 @@ import entity.EntityService;
  * Default JPA implementation of <code>UserHelper</code>.
  * </p>
  */
-// @WebService(serviceName = "user", endpointInterface = "entity.user.UserSession")
+// @WebService(serviceName = "user", endpointInterface =
+// "entity.user.UserSession")
 public class UserServiceImpl extends EntityService implements UserService {
 
     public int count() throws PersistenceException {
-        Long count = (Long) singleResult(User.COUNT, null, null);
+        Long count = (Long) singleResult(UserImpl.COUNT, null, null);
         int result = count.intValue();
         return result;
     }
@@ -45,12 +46,13 @@ public class UserServiceImpl extends EntityService implements UserService {
     }
 
     public User find(String value) {
-        User result = (User) readEntity(User.class, value);
+        User result = (User) readEntity(UserImpl.class, value);
         return result;
     }
 
-    public User findByName(String value) {
-        User result = (User) singleResult(User.FIND_BY_NAME, User.NAME, value);
+    public UserImpl findByName(String value) {
+        UserImpl result = (UserImpl) singleResult(UserImpl.FIND_BY_NAME,
+                UserImpl.NAME, value);
         return result;
     }
 

@@ -27,7 +27,7 @@ import javax.persistence.PersistenceException;
  * <p>
  * Facade providing custom operations involving the <code>Protocol</code>
  * object.
- * <p>
+ * </p>
  */
 // @WebService
 public interface ProtocolService {

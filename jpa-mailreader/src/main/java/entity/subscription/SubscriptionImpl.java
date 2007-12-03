@@ -19,6 +19,7 @@
 package entity.subscription;
 
 import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -29,65 +30,35 @@ import javax.persistence.OneToOne;
 
 import entity.UuidEntity;
 import entity.protocol.Protocol;
+import entity.protocol.ProtocolImpl;
 import entity.user.User;
+import entity.user.UserImpl;
 
 /**
  * <p>
- * An entity representing an email account.
- * </p>
- * <p>
- * JPA entity class for the <code>APP_SUBSCRIPTION</code> table. TThis class
+ * JPA entity class for the <code>APP_SUBSCRIPTION</code> table. This class
  * contains sufficient detail to regenerate the database schema (top-down
  * development). The annotation mode is by field.
  * </p>
  */
 @NamedQueries( {
-        @NamedQuery(name = Subscription.COUNT, query = Subscription.COUNT_QUERY),
-        @NamedQuery(name = Subscription.FIND_ALL, query = Subscription.FIND_ALL_QUERY),
-        @NamedQuery(name = Subscription.FIND_BY_NAME, query = Subscription.FIND_BY_NAME_QUERY) })
+        @NamedQuery(name = Subscription.COUNT, query = SubscriptionImpl.COUNT_QUERY),
+        @NamedQuery(name = Subscription.FIND_ALL, query = SubscriptionImpl.FIND_ALL_QUERY),
+        @NamedQuery(name = Subscription.FIND_BY_NAME, query = SubscriptionImpl.FIND_BY_NAME_QUERY) })
 @Entity(name = "APP_SUBSCRIPTION")
-public class Subscription extends UuidEntity implements Serializable {
+public class SubscriptionImpl extends UuidEntity implements Serializable,
+        Subscription {
 
     // ---- STATICS ----
 
-    /**
-     * <p>
-     * Named query for counting <code>Subscription</code> entities for all
-     * Users.
-     * </p>
-     */
-    public static final String COUNT = "Subscription.COUNT";
-
     private static final String COUNT_QUERY = "SELECT COUNT(*) FROM APP_SUBSCRIPTION";
-
-    /**
-     * <p>
-     * Named query for finding a <code>User</code> by username.
-     * </p>
-     */
-    public static final String FIND_ALL = "Subscription.FIND_ALL";
 
     private static final String FIND_ALL_QUERY = "SELECT s FROM APP_SUBSCRIPTION s";
 
-    /**
-     * <p>
-     * Named query for finding a <code>User</code> by username.
-     * </p>
-     */
-    public static final String FIND_BY_NAME = "Subscription.FIND_BY_HOST";
-
     private static final String FIND_BY_NAME_QUERY = "SELECT s FROM APP_SUBSCRIPTION s WHERE s.host = :host";
-
-    /**
-     * <p>
-     * Token represnting the "host" or "name" attribute.
-     * </p>
-     */
-    public static final String NAME = "host";
 
     // ---- FIELDS ----
 
-    @Column
     private boolean auto_connect;
 
     @Column(nullable = false)
@@ -96,12 +67,12 @@ public class Subscription extends UuidEntity implements Serializable {
     @Column(nullable = false)
     private String password;
 
-    @JoinColumn(name = "protocol_id")
-    @OneToOne
+    @JoinColumn
+    @OneToOne(targetEntity = ProtocolImpl.class)
     private Protocol protocol;
 
-    @JoinColumn(name = "user_id", nullable = false)
-    @ManyToOne
+    @JoinColumn(nullable = false)
+    @ManyToOne(targetEntity = UserImpl.class)
     private User user;
 
     @Column(nullable = false)
@@ -164,7 +135,7 @@ public class Subscription extends UuidEntity implements Serializable {
      * Instantiate a default <code>Subscription</code> object.
      * </p>
      */
-    public Subscription() {
+    public SubscriptionImpl() {
         super();
     }
 
@@ -175,7 +146,7 @@ public class Subscription extends UuidEntity implements Serializable {
      * </p>
      * 
      */
-    public Subscription(String host, User user, String username,
+    public SubscriptionImpl(String host, User user, String username,
             String password, Protocol protocol, boolean autoConnect) {
         super();
         setHost(host);

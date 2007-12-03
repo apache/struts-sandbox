@@ -26,7 +26,7 @@ import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 
 /**
  * <p>
- * A "single transaction per view" Interceptor for a JPA application.
+ * "Single transaction per view" Interceptor for a JPA application.
  * </p>
  * <p>
  * This class creates an EntityManager for each thread, and begins a transation.

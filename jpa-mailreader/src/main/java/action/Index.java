@@ -41,7 +41,7 @@ import entity.EntityAware;
  * <p>
  * The application is entity or resource-orientated. Subclasses provide
  * additional logic specific to each entity or resource. Persistence system
- * logic is delegated to a helper class for each entity. The Action classes
+ * logic is delegated to a service class for each entity. The Action classes
  * interact only with the entity helpers, and not the underlying JPA.
  * </p>
  */

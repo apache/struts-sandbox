@@ -29,9 +29,6 @@ import entity.UuidEntity;
 
 /**
  * <p>
- * Describes an email server protocol, such as POP or SMTP.
- * </p>
- * <p>
  * JPA entity class for the <code>APP_PROTOCOL</code> table. This class
  * contains sufficient detail to regenerate the database schema (top-down
  * development). The annotation mode is by field.
@@ -39,9 +36,9 @@ import entity.UuidEntity;
  */
 @Entity(name = "APP_PROTOCOL")
 @NamedQueries( {
-        @NamedQuery(name = Protocol.COUNT, query = Protocol.COUNT_QUERY),
-        @NamedQuery(name = Protocol.FIND_ALL, query = Protocol.FIND_ALL_QUERY) })
-public class Protocol extends UuidEntity implements Serializable {
+        @NamedQuery(name = ProtocolImpl.COUNT, query = ProtocolImpl.COUNT_QUERY),
+        @NamedQuery(name = ProtocolImpl.FIND_ALL, query = ProtocolImpl.FIND_ALL_QUERY) })
+public class ProtocolImpl extends UuidEntity implements Serializable, Protocol {
 
     // ---- STATICS ----
 
@@ -85,7 +82,7 @@ public class Protocol extends UuidEntity implements Serializable {
      * Instantiate a default <code>Protocol</code> object.
      * </p>
      */
-    public Protocol() {
+    public ProtocolImpl() {
         super();
     }
 
@@ -94,7 +91,7 @@ public class Protocol extends UuidEntity implements Serializable {
      * Instantiate a default <code>Protocol</code> object, and load values.
      * </p>
      */
-    public Protocol(String description) {
+    public ProtocolImpl(String description) {
         super();
         setDescription(description);
     }
