@@ -28,6 +28,7 @@ import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import entity.UuidEntity;
@@ -41,7 +42,8 @@ import entity.subscription.SubscriptionImpl;
  * The annotation mode is by field.
  * </p>
  */
-@Entity(name = "APP_USER")
+@Entity(name = "USER")
+@Table(name = "APP_USER")
 @NamedQueries( {
         @NamedQuery(name = User.FIND_ALL, query = UserImpl.FIND_ALL_QUERY),
         @NamedQuery(name = User.FIND_BY_NAME, query = UserImpl.FIND_BY_NAME_QUERY),
@@ -50,11 +52,11 @@ public class UserImpl extends UuidEntity implements Serializable, User {
 
     // ---- STATICS ----
 
-    private static final String COUNT_QUERY = "SELECT COUNT(*) FROM APP_USER";
+    private static final String COUNT_QUERY = "SELECT COUNT(*) FROM USER";
 
-    private static final String FIND_ALL_QUERY = "SELECT u FROM APP_USER u";
+    private static final String FIND_ALL_QUERY = "SELECT u FROM USER u";
 
-    private static final String FIND_BY_NAME_QUERY = "SELECT u FROM APP_USER u WHERE u.username = :username";
+    private static final String FIND_BY_NAME_QUERY = "SELECT u FROM USER u WHERE u.username = :username";
 
     // --- FIELDS ----
 

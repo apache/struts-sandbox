@@ -24,6 +24,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 import entity.UuidEntity;
 
@@ -34,7 +35,8 @@ import entity.UuidEntity;
  * development). The annotation mode is by field.
  * </p>
  */
-@Entity(name = "APP_PROTOCOL")
+@Entity(name = "PROTOCOL")
+@Table(name = "APP_PROTOCOL")
 @NamedQueries( {
         @NamedQuery(name = ProtocolImpl.COUNT, query = ProtocolImpl.COUNT_QUERY),
         @NamedQuery(name = ProtocolImpl.FIND_ALL, query = ProtocolImpl.FIND_ALL_QUERY) })
@@ -49,7 +51,7 @@ public class ProtocolImpl extends UuidEntity implements Serializable, Protocol {
      */
     public static final String COUNT = "Protocol.COUNT";
 
-    private static final String COUNT_QUERY = "SELECT COUNT(*) FROM APP_PROTOCOL";
+    private static final String COUNT_QUERY = "SELECT COUNT(*) FROM PROTOCOL";
 
     /**
      * <p>
@@ -58,7 +60,7 @@ public class ProtocolImpl extends UuidEntity implements Serializable, Protocol {
      */
     public static final String FIND_ALL = "Protocol.FIND_ALL";
 
-    private static final String FIND_ALL_QUERY = "SELECT p FROM APP_PROTOCOL p";
+    private static final String FIND_ALL_QUERY = "SELECT p FROM PROTOCOL p";
 
     // ---- FIELDS ----
 

@@ -27,6 +27,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import entity.UuidEntity;
 import entity.protocol.Protocol;
@@ -45,17 +46,18 @@ import entity.user.UserImpl;
         @NamedQuery(name = Subscription.COUNT, query = SubscriptionImpl.COUNT_QUERY),
         @NamedQuery(name = Subscription.FIND_ALL, query = SubscriptionImpl.FIND_ALL_QUERY),
         @NamedQuery(name = Subscription.FIND_BY_NAME, query = SubscriptionImpl.FIND_BY_NAME_QUERY) })
-@Entity(name = "APP_SUBSCRIPTION")
+@Entity(name = "SUBSCRIPTION")
+@Table(name = "APP_SUBSCRIPTION")
 public class SubscriptionImpl extends UuidEntity implements Serializable,
         Subscription {
 
     // ---- STATICS ----
 
-    private static final String COUNT_QUERY = "SELECT COUNT(*) FROM APP_SUBSCRIPTION";
+    private static final String COUNT_QUERY = "SELECT COUNT(*) FROM SUBSCRIPTION";
 
-    private static final String FIND_ALL_QUERY = "SELECT s FROM APP_SUBSCRIPTION s";
+    private static final String FIND_ALL_QUERY = "SELECT s FROM SUBSCRIPTION s";
 
-    private static final String FIND_BY_NAME_QUERY = "SELECT s FROM APP_SUBSCRIPTION s WHERE s.host = :host";
+    private static final String FIND_BY_NAME_QUERY = "SELECT s FROM SUBSCRIPTION s WHERE s.host = :host";
 
     // ---- FIELDS ----
 
@@ -71,8 +73,8 @@ public class SubscriptionImpl extends UuidEntity implements Serializable,
     @OneToOne(targetEntity = ProtocolImpl.class)
     private Protocol protocol;
 
-    @JoinColumn(nullable = false)
     @ManyToOne(targetEntity = UserImpl.class)
+    @JoinColumn(nullable = false)
     private User user;
 
     @Column(nullable = false)
