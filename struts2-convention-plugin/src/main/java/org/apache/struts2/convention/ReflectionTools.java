@@ -17,31 +17,26 @@ package org.apache.struts2.convention;
 
 /**
  * <p>
- * This class is a String helper.
+ * This class has some reflection helpers.
  * </p>
  *
- * @author  Brian Pontarelli
+ * @author Brian Pontarelli
  */
-public class StringTools {
-    public static boolean isTrimmedEmpty(String s) {
-        return s == null || s.trim().length() == 0;
-    }
-
-    public static String lastToken(String str, String s) {
-        int index = str.lastIndexOf(s);
-        if (index >= 0) {
-            return str.substring(index + 1);
+public class ReflectionTools {
+    /**
+     * Determines if the class given contains the method.
+     *
+     * @param   klass The class to check for the method.
+     * @param   method The method name.
+     * @param   parameterTypes The parameter types of the method.
+     * @return  True if the method exists, false if not.
+     */
+    public static boolean containsMethod(Class<?> klass, String method, Class<?>... parameterTypes) {
+        try {
+            klass.getMethod(method, parameterTypes);
+            return true;
+        } catch (NoSuchMethodException e) {
+            return false;
         }
-
-        return str;
-    }
-
-    public static String upToLastToken(String str, String s) {
-        int index = str.lastIndexOf(s);
-        if (index >= 0) {
-            return str.substring(0, index);
-        }
-
-        return str;
     }
 }

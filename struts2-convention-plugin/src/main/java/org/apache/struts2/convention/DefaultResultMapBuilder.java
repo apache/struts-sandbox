@@ -26,8 +26,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 
-import org.apache.struts2.convention.annotation.BaseResultLocation;
+import org.apache.struts2.convention.annotation.AnnotationTools;
 import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.convention.annotation.ResultLocation;
 import org.apache.struts2.convention.annotation.Results;
 
 import com.opensymphony.xwork2.Action;
@@ -37,7 +38,6 @@ import com.opensymphony.xwork2.config.entities.ResultConfig;
 import com.opensymphony.xwork2.config.entities.ResultTypeConfig;
 import com.opensymphony.xwork2.inject.Inject;
 import com.opensymphony.xwork2.util.ClassLoaderUtil;
-import com.opensymphony.xwork2.util.ResolverUtil;
 
 /**
  * <p>
@@ -88,7 +88,7 @@ import com.opensymphony.xwork2.util.ResolverUtil;
  *
  * <p>
  * Also, the base result location can be changed on an action class instance
- * basis by using the {@link BaseResultLocation} annotation.
+ * basis by using the {@link org.apache.struts2.convention.annotation.ResultLocation} annotation.
  * </p>
  *
  * @author  Brian Pontarelli
@@ -96,7 +96,7 @@ import com.opensymphony.xwork2.util.ResolverUtil;
 public class DefaultResultMapBuilder implements ResultMapBuilder {
     private static final Logger logger = Logger.getLogger(DefaultResultMapBuilder.class.getName());
     private final ServletContext servletContext;
-    private String baseResultLocation;
+    private String resultLocation;
     private Set<String> relativeResultTypes;
     private Map<String, String> resultsByExtension = new HashMap<String, String>();
 
@@ -107,12 +107,15 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
      * @param   relativeResultTypes The list of result types that can have locations that are relative
      *          and the localResultLocation (which is the baseResultLocation plus the namespace)
      *          prepended to them.
+     * @param   resultLocation The default location of the results.
      */
     @Inject
     public DefaultResultMapBuilder(ServletContext servletContext,
-            @Inject("struts.convention.relative.result.types") String relativeResultTypes) {
+            @Inject("struts.convention.relative.result.types") String relativeResultTypes,
+            @Inject("struts.convention.result.location") String resultLocation) {
         this.servletContext = servletContext;
         this.relativeResultTypes = new HashSet<String>(Arrays.asList(relativeResultTypes.split("\\s*[,]\\s*")));
+        this.resultLocation = resultLocation;
 
         this.resultsByExtension.put("jsp", "dispatcher");
         this.resultsByExtension.put("vm", "velocity");
@@ -122,41 +125,11 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
     /**
      * {@inheritDoc}
      */
-    @Inject("struts.convention.base.result.location")
-    public void setBaseResultLocation(String baseResultLocation) {
-        this.baseResultLocation = baseResultLocation;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Map<String, ResultConfig> build(Class<?> actionClass, String actionName,
+    public Map<String, ResultConfig> build(Class<?> actionClass, String method,
+            org.apache.struts2.convention.annotation.Action annotation, String actionName,
             PackageConfig packageConfig) {
-        // See if the class wants to change the resultLocation
-        String localResultLocation = baseResultLocation;
-        BaseResultLocation resultLocationAnnotation = actionClass.getAnnotation(BaseResultLocation.class);
-        if (resultLocationAnnotation != null) {
-            if (resultLocationAnnotation.value().equals("") && resultLocationAnnotation.property().equals("")) {
-                throw new ConfigurationException("The BaseResultLocation annotation must have either" +
-                    " a value or property specified.");
-            }
-
-            String property = resultLocationAnnotation.property();
-            if (property.equals("")) {
-                localResultLocation = resultLocationAnnotation.value();
-            } else {
-                try {
-                    ResourceBundle strutsBundle = ResourceBundle.getBundle("struts");
-                    localResultLocation = strutsBundle.getString(property);
-                } catch (Exception e) {
-                    throw new ConfigurationException("The action class [" + actionClass + "] defines" +
-                        " a @ResultLocation annotation and a property definition however the" +
-                        " struts.properties could not be found in the classpath using ResourceBundle" +
-                        " OR the bundle exists but the property [" + property + "] is not defined" +
-                        " in the file.", e);
-                }
-            }
-        }
+        // Get the default result location from the annotation or configuration
+        String localResultLocation = determineResultLocation(actionClass);
 
         // Add a slash
         if (!localResultLocation.endsWith("/")) {
@@ -184,9 +157,57 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
 
         Map<String, ResultConfig> results = new HashMap<String, ResultConfig>();
         createFromResources(results, localResultLocation, resultPrefix, actionName, packageConfig);
-        createFromAnnotations(results, localResultLocation, actionClass, actionName, packageConfig);
+        if (annotation != null && annotation.results() != null && annotation.results().length > 0) {
+            createFromAnnotations(results, localResultLocation, packageConfig, annotation.results());
+        }
+
+        Results resultsAnn = actionClass.getAnnotation(Results.class);
+        if (resultsAnn != null) {
+            createFromAnnotations(results, localResultLocation, packageConfig, resultsAnn.value());
+        }
+
+        Result resultAnn = actionClass.getAnnotation(Result.class);
+        if (resultAnn != null) {
+            createFromAnnotations(results, localResultLocation, packageConfig, new Result[]{resultAnn});
+        }
 
         return results;
+    }
+
+    /**
+     * Locates the result location from annotations on the action class or the package.
+     *
+     * @param   actionClass The action class.
+     * @return  The result location if it is set in the annotations otherwise, the default result
+     *          location is returned.
+     */
+    protected String determineResultLocation(Class<?> actionClass) {
+        String localResultLocation = resultLocation;
+        ResultLocation resultLocationAnnotation = AnnotationTools.findAnnotation(actionClass, ResultLocation.class);
+        if (resultLocationAnnotation != null) {
+            if (resultLocationAnnotation.value().equals("") && resultLocationAnnotation.property().equals("")) {
+                throw new ConfigurationException("The ResultLocation annotation must have either" +
+                    " a value or property specified.");
+            }
+
+            String property = resultLocationAnnotation.property();
+            if (property.equals("")) {
+                localResultLocation = resultLocationAnnotation.value();
+            } else {
+                try {
+                    ResourceBundle strutsBundle = ResourceBundle.getBundle("struts");
+                    localResultLocation = strutsBundle.getString(property);
+                } catch (Exception e) {
+                    throw new ConfigurationException("The action class [" + actionClass + "] defines" +
+                        " a @ResultLocation annotation and a property definition however the" +
+                        " struts.properties could not be found in the classpath using ResourceBundle" +
+                        " OR the bundle exists but the property [" + property + "] is not defined" +
+                        " in the file.", e);
+                }
+            }
+        }
+
+        return localResultLocation;
     }
 
     /**
@@ -228,17 +249,17 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
                 "] with a result prefix of [" + resultPrefix + "] and action name [" + actionName + "]");
         }
 
-        ResolverUtil resolver = new ResolverUtil();
-        resolver.findInPackage(new ResolverUtil.ResourceTest() {
-            public boolean matches(URL url) {
+        URLClassLoaderResolver resolver = new URLClassLoaderResolver();
+        resolver.find(new URLClassLoaderResolver.NameTest() {
+            public boolean test(URL url) {
                 String urlStr = url.toString();
                 int index = urlStr.lastIndexOf(localResultLocation);
                 String path = urlStr.substring(index + localResultLocation.length());
-                return path.startsWith(actionName) && !path.contains("/");
+                return path.startsWith(actionName);
             }
-        }, classPathLocation);
+        }, false, classPathLocation);
 
-        Set<URL> matches = resolver.getResources();
+        Set<URL> matches = resolver.getMatches();
         for (URL match : matches) {
             if (logger.isLoggable(Level.FINEST)) {
                 logger.finest("Processing URL [" + match + "]");
@@ -265,7 +286,7 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
         if (path.startsWith(resultPrefix)) {
             int indexOfDot = path.indexOf('.', resultPrefix.length());
 
-            // Grab the dash-resultCode. and pick out the resultCode
+            // This case is when the path doesn't contain a result code
             if (indexOfDot == resultPrefix.length()) {
                 if (logger.isLoggable(Level.FINEST)) {
                     logger.finest("The result file [" + path + "] has no result code and therefore" +
@@ -274,20 +295,22 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
                 }
 
                 if (!results.containsKey(Action.SUCCESS)) {
-                    ResultConfig success = createResultConfig(new ResultInfo(Action.SUCCESS, path),
-                        new HashMap<String, String>(), packageConfig, null, null, null);
+                    ResultConfig success = createResultConfig(new ResultInfo(Action.SUCCESS, path, packageConfig),
+                        new HashMap<String, String>(), packageConfig, null, null);
                     results.put(Action.SUCCESS, success);
                 }
                 if (!results.containsKey(Action.INPUT)) {
-                    ResultConfig input = createResultConfig(new ResultInfo(Action.INPUT, path),
-                        new HashMap<String, String>(), packageConfig, null, null, null);
+                    ResultConfig input = createResultConfig(new ResultInfo(Action.INPUT, path, packageConfig),
+                        new HashMap<String, String>(), packageConfig, null, null);
                     results.put(Action.INPUT, input);
                 }
                 if (!results.containsKey(Action.ERROR)) {
-                    ResultConfig error = createResultConfig(new ResultInfo(Action.ERROR, path),
-                        new HashMap<String, String>(), packageConfig, null, null, null);
+                    ResultConfig error = createResultConfig(new ResultInfo(Action.ERROR, path, packageConfig),
+                        new HashMap<String, String>(), packageConfig, null, null);
                     results.put(Action.ERROR, error);
                 }
+
+            // This case is when the path contains a result code
             } else if (indexOfDot > resultPrefix.length()) {
                 if (logger.isLoggable(Level.FINEST)) {
                     logger.finest("The result file [" + path + "] has a result code and therefore" +
@@ -295,54 +318,22 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
                 }
 
                 String resultCode = path.substring(resultPrefix.length() + 1, indexOfDot);
-                ResultConfig result = createResultConfig(new ResultInfo(resultCode, path),
-                    new HashMap<String, String>(), packageConfig, null, null, null);
+                ResultConfig result = createResultConfig(new ResultInfo(resultCode, path, packageConfig),
+                    new HashMap<String, String>(), packageConfig, null, null);
                 results.put(resultCode, result);
             }
         }
     }
 
-    /**
-     * This method uses the {@link Results} and {@link Result} annotations to construct and add more
-     * ResultConfig instances to the mapping.
-     *
-     * @param   resultConfigs The map to add the created ResultConfig instances to.
-     * @param   localResultLocation The calculated local location of the resources.
-     * @param   actionClass The action class that is used to get the annotations via reflection.
-     * @param   packageConfig The package configuration that is used in case the annotations don't
-     * @param   actionName The name of the action that the results are being created for. This is
-     *          used to verify that the annotation is associated with the action.
-     */
     protected void createFromAnnotations(Map<String, ResultConfig> resultConfigs,
-            String localResultLocation, Class<?> actionClass, String actionName,
-            PackageConfig packageConfig) {
-        // check if any annotations are around
-        while (actionClass != Object.class) {
-            //noinspection unchecked
-            Results results = actionClass.getAnnotation(Results.class);
-            if (results != null) {
-                // first check here...
-                for (int i = 0; i < results.value().length; i++) {
-                    Result result = results.value()[i];
-                    ResultConfig config = createResultConfig(new ResultInfo(result),
-                        new HashMap<String, String>(), packageConfig, result, actionName, localResultLocation);
-                    if (config != null) {
-                        resultConfigs.put(config.getName(), config);
-                    }
-                }
+            String localResultLocation, PackageConfig packageConfig, Result[] results) {
+        // Check for multiple results on the class
+        for (Result result : results) {
+            ResultConfig config = createResultConfig(new ResultInfo(result, packageConfig),
+                new HashMap<String, String>(), packageConfig, result, localResultLocation);
+            if (config != null) {
+                resultConfigs.put(config.getName(), config);
             }
-
-            // what about a single Result annotation?
-            Result result = actionClass.getAnnotation(Result.class);
-            if (result != null) {
-                ResultConfig config = createResultConfig(new ResultInfo(result),
-                    new HashMap<String, String>(), packageConfig, result, actionName, localResultLocation);
-                if (config != null) {
-                    resultConfigs.put(config.getName(), config);
-                }
-            }
-
-            actionClass = actionClass.getSuperclass();
         }
     }
 
@@ -355,8 +346,6 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
      * @param   resultParams The parameters passed to the result.
      * @param   packageConfig The PackageConfig to use to fetch defaults for result and parameters.
      * @param   result (Optional) The result annotation to pull additional information from.
-     * @param   actionName (Optional) The name of the current action, which is used only with the
-     *          annotations to verify that the annotation is targeting the current action.
      * @param   localResultLocation (Optional) Used only with the annotations to prepend to the
      *          location if the location in the annotation is relative and the type is one of the
      *          relativeResultTypes specified in the constructor.
@@ -365,48 +354,22 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
      */
     @SuppressWarnings(value = {"unchecked"})
     protected ResultConfig createResultConfig(ResultInfo info, Map<String, String> resultParams,
-            PackageConfig packageConfig, Result result, String actionName, String localResultLocation) {
+            PackageConfig packageConfig, Result result, String localResultLocation) {
         // First try to figure it out based on extension and then use the default
-        String type = info.type;
-        if (StringTools.isTrimmedEmpty(type)) {
-            String path = info.location;
-            int indexOfDot = path.lastIndexOf(".");
-            if (indexOfDot > 0) {
-                String extension = path.substring(indexOfDot + 1);
-                type = this.resultsByExtension.get(extension);
-            }
-        }
-
-        ResultTypeConfig resultTypeConfig;
-        if (StringTools.isTrimmedEmpty(type)) {
-            String defaultResultType = packageConfig.getFullDefaultResultType();
-            resultTypeConfig = packageConfig.getAllResultTypeConfigs().get(defaultResultType);
-            if (resultTypeConfig == null) {
-                throw new ConfigurationException("The no default result type is defined for the" +
-                    " Struts/Xwork package [" + packageConfig.getName() + "]. Therefore you must" +
-                    " define the result-type for all actions using the Result(s) annotation(s).");
-            }
-        } else {
-            resultTypeConfig = packageConfig.getAllResultTypeConfigs().get(type);
-            if (resultTypeConfig == null) {
-                throw new ConfigurationException("The Result type [" + type + "] which is" +
-                    " defined in the Result annotation, could not be found as a result-type defined" +
-                    " for the Struts/XWork package [" + packageConfig.getName() + "]");
-            }
+        ResultTypeConfig resultTypeConfig = packageConfig.getAllResultTypeConfigs().get(info.type);
+        if (resultTypeConfig == null) {
+            throw new ConfigurationException("The Result type [" + info.type + "] which is" +
+                " defined in the Result annotation or determined by the file extension or is the" +
+                " default result type for the PackageConfig of the action, could not be found as a" +
+                " result-type defined for the Struts/XWork package [" + packageConfig.getName() + "]");
         }
 
         // Handle the annotation
         if (result != null) {
-            // Skip the result if it doesn't belong to this action
-            if (result.action() != null && result.action().trim().length() > 0 &&
-                    !result.action().equals(actionName)) {
-                return null;
-            }
-
             // See if we can handle relative locations or not
             if (relativeResultTypes.contains(resultTypeConfig.getName())) {
                 String location = result.location();
-                if (!location.startsWith("/")) {
+                if (location != null && !location.startsWith("/")) {
                     location = localResultLocation + location;
                 }
 
@@ -471,22 +434,30 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
         public String location;
         public final String type;
 
-        public ResultInfo(String name, String location, String type) {
+        public ResultInfo(String name, String location, PackageConfig packageConfig) {
             this.name = name;
             this.location = location;
-            this.type = type;
+            this.type = determineType(location, packageConfig);
         }
 
-        public ResultInfo(String name, String location) {
-            this.name = name;
-            this.location = location;
-            this.type = null;
-        }
-
-        public ResultInfo(Result result) {
+        public ResultInfo(Result result, PackageConfig packageConfig) {
             this.name = result.name();
             this.location = result.location();
-            this.type = result.type();
+            if (result.type() != null) {
+                this.type = result.type();
+            } else {
+                this.type = determineType(location, packageConfig);
+            }
+        }
+
+        private String determineType(String location, PackageConfig packageConfig) {
+            int indexOfDot = location.lastIndexOf(".");
+            if (indexOfDot > 0) {
+                String extension = location.substring(indexOfDot + 1);
+                return resultsByExtension.get(extension);
+            } else {
+                return packageConfig.getFullDefaultResultType();
+            }
         }
     }
 }

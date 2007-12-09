@@ -44,7 +44,7 @@ public @interface Result {
     /**
      * @return  The location of the result within the web application or anywhere on disk. Since the
      *          base result location can be modified using a number of methods, including the
-     *          {@link org.apache.struts2.convention.annotation.BaseResultLocation} annotation, this can contain the variable
+     *          {@link ResultLocation} annotation, this can contain the variable
      *          <code>baseResultLocation</code> which will be token replaced with the appropriate
      *          value.
      */

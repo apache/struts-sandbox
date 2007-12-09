@@ -15,18 +15,23 @@
  */
 package org.apache.struts2.convention;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Actions;
-import org.apache.struts2.convention.annotation.ParentPackage;
+import org.apache.struts2.convention.annotation.AnnotationTools;
 import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.ParentPackage;
 
 import com.opensymphony.xwork2.ObjectFactory;
 import com.opensymphony.xwork2.config.Configuration;
@@ -35,7 +40,6 @@ import com.opensymphony.xwork2.config.entities.ActionConfig;
 import com.opensymphony.xwork2.config.entities.PackageConfig;
 import com.opensymphony.xwork2.config.entities.ResultConfig;
 import com.opensymphony.xwork2.inject.Inject;
-import com.opensymphony.xwork2.util.ResolverUtil;
 
 /**
  * <p>
@@ -54,7 +58,7 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
     private final ResultMapBuilder resultMapBuilder;
     private final ObjectFactory objectFactory;
     private String defaultParentPackage = "struts-default";
-    private String baseResultLocation;
+    private String resultLocation;
     private boolean redirectToSlash;
     private String[] actionPackages;
     private String[] excludePackages;
@@ -74,16 +78,29 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
      *          action for indexes. If this is set to true, index actions are not created because
      *          the unknown handler will redirect from /foo to /foo/. The only action that is created
      *          is to the empty action in the namespace (e.g. the namespace /foo and the action "").
+     * @param   actionPackages (Optional) An optional list of action packages that this should create
+     *          configuration for.
+     * @param   excludePackages (Optional) A  list of packages that should be skipped when building
+     *          configuration.
+     * @param   packageLocators (Optional) A list of names used to find action packages.
+     * @param   defaultParentPackage The default parent package for all the configuration.
+     * @param   resultLocation The default result location.
      */
     @Inject
     public PackageBasedActionConfigBuilder(Configuration configuration, ActionNameBuilder actionNameBuilder,
             ResultMapBuilder resultMapBuilder, ObjectFactory objectFactory,
             @Inject("struts.convention.redirect.to.slash") String redirectToSlash,
-            @Inject("struts.convention.action.packages", required = false) String actionPackages,
-            @Inject("struts.convention.exclude.packages", required = false) String excludePackages,
-            @Inject("struts.convention.package.locators", required = false) String packageLocators,
+            @Inject(value = "struts.convention.action.packages", required = false) String actionPackages,
+            @Inject(value = "struts.convention.exclude.packages", required = false) String excludePackages,
+            @Inject(value = "struts.convention.package.locators", required = false) String packageLocators,
             @Inject("struts.convention.default.parent.package") String defaultParentPackage,
-            @Inject("struts.convention.base.result.location") String baseResultLocation) {
+            @Inject("struts.convention.result.location") String resultLocation) {
+        if (StringTools.isTrimmedEmpty(actionPackages) && StringTools.isTrimmedEmpty(packageLocators)) {
+            throw new ConfigurationException("At least a list of action packages or action package locators " +
+                "must be given using one of the properties [struts.convention.action.packages] or " +
+                "[struts.convention.package.locators]");
+        }
+
         this.configuration = configuration;
         this.actionNameBuilder = actionNameBuilder;
         this.resultMapBuilder = resultMapBuilder;
@@ -98,7 +115,7 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
         }
 
         this.defaultParentPackage = defaultParentPackage;
-        this.baseResultLocation = baseResultLocation;
+        this.resultLocation = resultLocation;
     }
 
     /**
@@ -117,15 +134,36 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
                 Arrays.asList(actionPackages));
         }
 
-        ResolverUtil<Object> resolver = new ResolverUtil<Object>();
-        resolver.find(new ResolverUtil.ClassTest() {
-            public boolean matches(Class type) {
+        Set<Class<?>> classes = findActionsInNamedPackages();
+        classes.addAll(findActionsUsingPackageLocators());
+        buildConfiguration(classes);
+    }
+
+    protected Set<Class<?>> findActionsInNamedPackages() {
+        ClassClassLoaderResolver resolver = new ClassClassLoaderResolver();
+        resolver.find(new ClassClassLoaderResolver.Test<Class<?>>() {
+            public boolean test(Class type) {
                 return com.opensymphony.xwork2.Action.class.isAssignableFrom(type) ||
                     type.getSimpleName().endsWith("Action");
             }
-        }, actionPackages);
+        }, true, actionPackages);
 
-        Set<Class<?>> classes = resolver.getClasses();
+        return resolver.getMatches();
+    }
+
+    protected Set<Class<?>> findActionsUsingPackageLocators() {
+        ClassClassLoaderResolver resolver = new ClassClassLoaderResolver();
+        resolver.findByLocators(new ClassClassLoaderResolver.Test<Class<?>>() {
+            public boolean test(Class<?> type) {
+                return com.opensymphony.xwork2.Action.class.isAssignableFrom(type) ||
+                    type.getSimpleName().endsWith("Action");
+            }
+        }, true, excludePackages, packageLocators);
+
+        return resolver.getMatches();
+    }
+
+    protected void buildConfiguration(Set<Class<?>> classes) {
         Map<String, PackageConfig> packageConfigs = new HashMap<String, PackageConfig>();
 
         for (Class<?> actionClass : classes) {
@@ -138,75 +176,66 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
                 System.exit(1);
             }
 
-            // Action sub package below the action package
-            String actionSubPackage = actionClass.getPackage().getName();
+            // Determine the default namespace and action name
+            String defaultActionNamespace = determineActionNamespace(actionClass);
+            String defaultActionName = determineActionName(actionClass);
+
+            // Determine the action package
+            String actionPackage = actionClass.getPackage().getName();
             if (logger.isLoggable(Level.FINEST)) {
                 logger.finest("Processing class [" + actionClass.getName() + "] in package [" +
-                    actionSubPackage + "]");
+                    actionPackage + "]");
             }
 
-            // Figure out the namespace and action name
-            String actionNamespace = "";
-            String actionName = "";
-            for (String actionPackage : actionPackages) {
-                if (actionSubPackage.startsWith(actionPackage)) {
+            // Create or retrieve the default package config
+            PackageConfig defaultPkgCfg = getPackageConfig(packageConfigs, defaultActionNamespace,
+                actionPackage, actionClass, null);
 
-                    String name = actionClass.getName().substring(actionPackage.length() + 1);
-                    final int indexOfDot = name.lastIndexOf('.');
-                    if (indexOfDot > -1) {
-                        String convertedNamespace = actionNameBuilder.build(name.substring(0, indexOfDot));
-                        actionNamespace += "/" + convertedNamespace.replace('.', '/');
+            // Verify that the annotations have no errors and also determine if the default action
+            // configuration should still be built or not.
+            Map<String, List<Action>> map = getActionAnnotations(actionClass);
+            Set<String> actionNames = new HashSet<String>();
+            if (!map.containsKey("execute") && ReflectionTools.containsMethod(actionClass, "execute")) {
+                boolean found = false;
+                for (String method : map.keySet()) {
+                    List<Action> actions = map.get(method);
+                    for (Action action : actions) {
+
+                        // Check if there are duplicate action names in the annotations.
+                        String actionName = action.value().equals(Action.DEFAULT_VALUE) ? defaultActionName : action.value();
+                        if (actionNames.contains(actionName)) {
+                            throw new ConfigurationException("The action class [" + actionClass +
+                                "] contains two methods with an action name annotation whose value " +
+                                "is the same (they both might be empty as well).");
+                        } else {
+                            actionNames.add(actionName);
+                        }
+
+                        // Check if there are multiple annotations with no value.
+                        if (action.value().equals(Action.DEFAULT_VALUE)) {
+                            found = true;
+                        }
                     }
+                }
 
-                    actionName = actionNameBuilder.build(name.substring(indexOfDot + 1));
-                    if (logger.isLoggable(Level.FINEST)) {
-                        logger.finest("Got actionName for class [" + actionClass + "] of [" + actionName + "]");
-                    }
-
-                    break;
+                // Build the default
+                if (!found) {
+                    createActionConfig(defaultPkgCfg, actionClass, defaultActionName, "execute", null);
                 }
             }
 
-            // Create or retrieve the package config
-            PackageConfig defaultPkgCfg = getPackageConfig(packageConfigs, actionNamespace,
-                actionSubPackage, actionClass, null);
-
-            // Now see if there are any action annotations that would change the action creation
-            // at all. This could actually end up creating multiple actions
-            Actions actionsAnnotation = actionClass.getAnnotation(Actions.class);
-            if (actionsAnnotation != null) {
-                Action[] actionArray = actionsAnnotation.value();
-                boolean namelessSeen = false;
-                for (Action ann : actionArray) {
-                    if (ann.name().equals(Action.DEFAULT_ACTION_NAME) && !namelessSeen) {
-                        namelessSeen = true;
-                    } else if (ann.name().equals(Action.DEFAULT_ACTION_NAME)) {
-                        throw new ConfigurationException("You may only add a single ActionName " +
-                            "annotation that has no name parameter.");
-                    }
-
-                    // Build or retrieve a package config that uses the namespace from the ActionName
-                    // annotation rather than elsewhere
+            // Build the actions for the annotations
+            for (String method : map.keySet()) {
+                List<Action> actions = map.get(method);
+                for (Action action : actions) {
                     PackageConfig pkgCfg = defaultPkgCfg;
-                    if (!ann.namespace().equals(Action.DEFAULT_NAMESPACE)) {
-                        pkgCfg = getPackageConfig(packageConfigs, actionNamespace, actionSubPackage,
-                            actionClass, ann);
+                    if (!action.value().contains("/")) {
+                        pkgCfg = getPackageConfig(packageConfigs, defaultActionNamespace, actionPackage,
+                            actionClass, action);
                     }
 
-                    createActionConfig(pkgCfg, actionClass, actionName, ann);
+                    createActionConfig(pkgCfg, actionClass, defaultActionName, method, action);
                 }
-            } else {
-                Action ann = actionClass.getAnnotation(Action.class);
-
-                // Build or retrieve a package config that uses the namespace from the ActionName
-                // annotation rather than elsewhere
-                PackageConfig pkgCfg = defaultPkgCfg;
-                if (ann != null && !ann.namespace().equals(Action.DEFAULT_NAMESPACE)) {
-                    pkgCfg = getPackageConfig(packageConfigs, actionNamespace, actionSubPackage,
-                        actionClass, ann);
-                }
-
-                createActionConfig(pkgCfg, actionClass, actionName, ann);
             }
         }
 
@@ -276,22 +305,132 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
     }
 
     /**
+     * Locates all of the {@link Actions} and {@link Action} annotations on methods within the Action
+     * class and its parent classes.
+     *
+     * @param   actionClass The action class.
+     * @return  The list of annotations or an empty list if there are none.
+     */
+    protected Map<String, List<Action>> getActionAnnotations(Class<?> actionClass) {
+        Method[] methods = actionClass.getMethods();
+        Map<String, List<Action>> map = new HashMap<String, List<Action>>();
+        for (Method method : methods) {
+            Actions actionsAnnotation = method.getAnnotation(Actions.class);
+            if (actionsAnnotation != null) {
+                Action[] actionArray = actionsAnnotation.value();
+                boolean valuelessSeen = false;
+                List<Action> actions = new ArrayList<Action>();
+                for (Action ann : actionArray) {
+                    if (ann.value().equals(Action.DEFAULT_VALUE) && !valuelessSeen) {
+                        valuelessSeen = true;
+                    } else if (ann.value().equals(Action.DEFAULT_VALUE)) {
+                        throw new ConfigurationException("You may only add a single Action " +
+                            "annotation that has no value parameter.");
+                    }
+
+                    actions.add(ann);
+                }
+
+                map.put(method.getName(), actions);
+            } else {
+                Action ann = method.getAnnotation(Action.class);
+                if (ann != null) {
+                    map.put(method.getName(), Arrays.asList(ann));
+                }
+            }
+        }
+
+        return map;
+    }
+
+    /**
+     * Determines the namespace for the action based on the action class. If there is a {@link Namespace}
+     * annotation on the class (including parent classes) or on the package that the class is in, than
+     * it is used. Otherwise, the Java package name that the class is in is used inconjunction with
+     * either the <b>struts.convention.action.packages</b> or <b>struts.convention.package.locators</b>
+     * configuration values. These are used to determine which part of the Java package name should
+     * be converted into the namespace for the XWork PackageConfig.
+     *
+     * @param   actionClass The action class.
+     * @return  The namespace or an empty string.
+     */
+    protected String determineActionNamespace(Class<?> actionClass) {
+        // Check if there is a class or package level annotation for the namespace
+        Namespace ns = AnnotationTools.findAnnotation(actionClass, Namespace.class);
+        if (ns != null) {
+            if (logger.isLoggable(Level.FINEST)) {
+                logger.finest("Using non-default action namespace from Namespace annotation of [" +
+                    ns.value() + "]");
+            }
+
+            return ns.value();
+        }
+
+        String pkg = actionClass.getPackage().getName();
+        String pkgPart = null;
+        if (actionPackages != null) {
+            for (String actionPackage : actionPackages) {
+                if (pkg.startsWith(actionPackage)) {
+                    pkgPart = actionClass.getName().substring(actionPackage.length() + 1);
+                }
+            }
+        }
+
+        if (pkgPart == null && packageLocators != null) {
+            for (String packageLocator : packageLocators) {
+                int index = pkg.lastIndexOf(packageLocator);
+
+                // This ensures that the match is at the end, beginning or has a dot on each side of it
+                if (index >= 0 && (index + packageLocator.length() == pkg.length() || index == 0 ||
+                        (pkg.charAt(index - 1) == '.' && pkg.charAt(index + packageLocator.length()) == '.'))) {
+                    pkgPart = actionClass.getName().substring(index + packageLocator.length() + 1);
+                }
+            }
+        }
+
+        if (pkgPart != null) {
+            final int indexOfDot = pkgPart.lastIndexOf('.');
+            if (indexOfDot >= 0) {
+                String convertedNamespace = actionNameBuilder.build(pkgPart.substring(0, indexOfDot));
+                return "/" + convertedNamespace.replace('.', '/');
+            }
+        }
+
+        return "";
+    }
+
+    /**
+     * Converts the class name into an action name using the ActionNameBuilder.
+     *
+     * @param   actionClass The action class.
+     * @return  The action name.
+     */
+    protected String determineActionName(Class<?> actionClass) {
+        String actionName = actionNameBuilder.build(actionClass.getName());
+        if (logger.isLoggable(Level.FINEST)) {
+            logger.finest("Got actionName for class [" + actionClass + "] of [" + actionName + "]");
+        }
+
+        return actionName;
+    }
+
+    /**
      * Creates a single ActionConfig object.
      *
      * @param   pkgCfg The package the action configuration instance will belong to.
      * @param   actionClass The action class.
      * @param   actionName The name of the action.
+     * @param   method The method that the annotation was on (if the annotation is not null).
      * @param   annotation The ActionName annotation that might override the action name and possibly
-     *          set the action method.
      */
-    protected void createActionConfig(PackageConfig pkgCfg, Class<?> actionClass,
-            String actionName, Action annotation) {
+    protected void createActionConfig(PackageConfig pkgCfg, Class<?> actionClass, String actionName,
+            String method, Action annotation) {
         String actionMethod = null;
         if (annotation != null) {
-            actionName = annotation.name() != null && annotation.name().equals(Action.DEFAULT_ACTION_NAME) ?
-                actionName : annotation.name();
-            actionMethod = annotation.method() != null && annotation.method().equals(Action.DEFAULT_ACTION_METHOD) ?
-                null : annotation.method();
+            actionName = annotation.value() != null && annotation.value().equals(Action.DEFAULT_VALUE) ?
+                actionName : annotation.value();
+            actionName = StringTools.lastToken(actionName, "/");
+            actionMethod = method;
         }
 
         ConventionActionConfig actionConfig = new ConventionActionConfig();
@@ -302,7 +441,7 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
         }
 
         // Add the base result location for the unknown handler
-        actionConfig.setBaseResultLocation(baseResultLocation);
+        actionConfig.setBaseResultLocation(resultLocation);
 
         if (logger.isLoggable(Level.FINEST)) {
             logger.finest("Creating action config for class [" + actionClass + "], name [" + actionName +
@@ -310,7 +449,8 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
                 "]");
         }
 
-        Map<String, ResultConfig> results = resultMapBuilder.build(actionClass, actionName, pkgCfg);
+        Map<String, ResultConfig> results = resultMapBuilder.build(actionClass, method, annotation,
+            actionName, pkgCfg);
         actionConfig.setResults(results);
 
         pkgCfg.addActionConfig(actionName, actionConfig);
@@ -319,48 +459,16 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
     private PackageConfig getPackageConfig(final Map<String, PackageConfig> packageConfigs,
             String actionNamespace, final String actionPackage, final Class<?> actionClass,
             Action action) {
-        // First figure out the namespace of the package using the ActionName annotation if it exists
-        String namespaceName = null;
-        if (action != null && !action.namespace().equals(Action.DEFAULT_NAMESPACE)) {
+        if (action != null && !action.value().equals(Action.DEFAULT_VALUE)) {
             if (logger.isLoggable(Level.FINEST)) {
-                logger.finest("Using non-default action namespace from the ActionName annotation of [" +
-                    action.namespace() + "]");
+                logger.finest("Using non-default action namespace from the Action annotation of [" +
+                    action.value() + "]");
             }
-            namespaceName = action.namespace();
-        }
-
-        // Next figure out the namespace of the package using the class level annotation
-        if (namespaceName == null) {
-            Namespace ns = actionClass.getAnnotation(Namespace.class);
-            if (ns != null) {
-                if (logger.isLoggable(Level.FINEST)) {
-                    logger.finest("Using non-default action namespace from annotation of [" + ns.value() + "]");
-                }
-
-                namespaceName = ns.value();
-            }
-        }
-
-        // Next try the package level annotation
-        if (namespaceName == null) {
-            Namespace ns = actionClass.getPackage().getAnnotation(Namespace.class);
-            if (ns != null) {
-                if (logger.isLoggable(Level.FINEST)) {
-                    logger.finest("Using non-default action namespace from package level annotation of [" +
-                        ns.value() + "]");
-                }
-
-                namespaceName = ns.value();
-            }
-        }
-
-        // Lastly, use the value passed in, which is based off the Java package name
-        if (namespaceName == null) {
-            namespaceName = actionNamespace;
+            actionNamespace = StringTools.upToLastToken(action.value(), "/");
         }
 
         // Next grab the parent annotation from the class
-        ParentPackage parent = actionClass.getAnnotation(ParentPackage.class);
+        ParentPackage parent = AnnotationTools.findAnnotation(actionClass, ParentPackage.class);
         String parentName = null;
         if (parent != null) {
             if (logger.isLoggable(Level.FINEST)) {
@@ -368,19 +476,6 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
             }
 
             parentName = parent.value();
-        }
-
-        // Next try the package level annotation
-        if (parentName == null) {
-            parent = actionClass.getPackage().getAnnotation(ParentPackage.class);
-            if (parent != null) {
-                if (logger.isLoggable(Level.FINEST)) {
-                    logger.finest("Using non-default parent package from package level annotation of [" +
-                        parent.value() + "]");
-                }
-
-                parentName = parent.value();
-            }
         }
 
         // Finally use the default
@@ -400,19 +495,19 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
 
         // Grab based on package-namespace and if it exists, we need to ensure the existing one has
         // the correct parent package. If not, we need to create a new package config
-        String name = actionPackage + "#" + parentPkg.getName() + "#" + namespaceName;
+        String name = actionPackage + "#" + parentPkg.getName() + "#" + actionNamespace;
         PackageConfig pkgConfig = packageConfigs.get(name);
         if (pkgConfig == null) {
             pkgConfig = new PackageConfig();
             pkgConfig.setName(name);
-            pkgConfig.setNamespace(namespaceName);
+            pkgConfig.setNamespace(actionNamespace);
             pkgConfig.addParent(parentPkg);
             packageConfigs.put(name, pkgConfig);
         }
 
         if (logger.isLoggable(Level.FINEST)) {
             logger.finest("Created package config named [" + name + "] with a namespace [" +
-                namespaceName + "]");
+                actionNamespace + "]");
         }
 
         return pkgConfig;

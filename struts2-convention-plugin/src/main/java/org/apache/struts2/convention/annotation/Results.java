@@ -20,8 +20,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.struts2.convention.annotation.Result;
-
 /**
  * <p>
  * This annotation allows a class to define more than one {@link org.apache.struts2.convention.annotation.Result}
@@ -31,7 +29,7 @@ import org.apache.struts2.convention.annotation.Result;
  * @author  Brian Pontarelli
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
+@Target({ElementType.TYPE, ElementType.METHOD})
 public @interface Results {
     Result[] value();
 }

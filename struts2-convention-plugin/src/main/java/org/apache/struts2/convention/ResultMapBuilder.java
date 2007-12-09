@@ -17,6 +17,8 @@ package org.apache.struts2.convention;
 
 import java.util.Map;
 
+import org.apache.struts2.convention.annotation.Action;
+
 import com.opensymphony.xwork2.config.entities.PackageConfig;
 import com.opensymphony.xwork2.config.entities.ResultConfig;
 
@@ -34,17 +36,14 @@ public interface ResultMapBuilder {
      * Builds the result configurations given the action information.
      *
      * @param   actionClass The class of the action.
+     * @param   method The method name.
+     * @param   annotation The action annotation.
      * @param   actionName The action name.
-     * @param   packageConfig The package configuration that the action will be added to.
-     * @return  The mapping of the result names to the result configurations. If there were none found
+     * @param   packageConfig The package configuration that the action will be added to. @return
+     *          The mapping of the result names to the result configurations. If there were none found
      *          than this should return an empty Map.
+     * @return  The Results.
      */
-    Map<String, ResultConfig> build(Class<?> actionClass, String actionName, PackageConfig packageConfig);
-
-    /**
-     * Allows the base result location for the results to be modified.
-     *
-     * @param   baseResultLocation The new base result location.
-     */
-    void setBaseResultLocation(String baseResultLocation);
+    Map<String, ResultConfig> build(Class<?> actionClass, String method, Action annotation,
+        String actionName, PackageConfig packageConfig);
 }

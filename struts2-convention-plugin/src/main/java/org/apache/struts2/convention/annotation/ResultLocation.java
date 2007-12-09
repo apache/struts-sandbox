@@ -54,8 +54,8 @@ import java.lang.annotation.Target;
  * @author  Brian Pontarelli
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface BaseResultLocation {
+@Target({ElementType.TYPE, ElementType.PACKAGE})
+public @interface ResultLocation {
     /**
      * @return  The base result location to use for this action, instead of the default.
      */
