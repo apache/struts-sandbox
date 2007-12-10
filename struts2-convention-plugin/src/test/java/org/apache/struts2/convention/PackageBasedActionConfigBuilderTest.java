@@ -13,32 +13,18 @@
  * either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.texturemedia.smarturls;
+package org.apache.struts2.convention;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import junit.framework.TestCase;
+
 import org.apache.struts2.dispatcher.ServletDispatcherResult;
 import org.easymock.EasyMock;
 import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
-import org.junit.Test;
-import org.texturemedia.smarturls.actions.BaseResultLocationAnnotationAction;
-import org.texturemedia.smarturls.actions.MultipleAnnotationAction;
-import org.texturemedia.smarturls.actions.NoAnnotationAction;
-import org.texturemedia.smarturls.actions.SingleAnnotationAction;
-import org.texturemedia.smarturls.actions.Skip;
-import org.texturemedia.smarturls.actions.namespace.DefaultNamespaceAction;
-import org.texturemedia.smarturls.actions.namespace.ClassLevelAction;
-import org.texturemedia.smarturls.actions.namespace.ActionLevelAction;
-import org.texturemedia.smarturls.actions.parentpackage.DefaultAction;
-import org.texturemedia.smarturls.actions.parentpackage.DifferentParentPackageAction;
-import org.texturemedia.smarturls.actions.nested.ActionNameAction;
-import org.texturemedia.smarturls.actions.nested.ActionNamesAction;
-import org.texturemedia.smarturls.actions.nested.NamespaceAction;
-import org.texturemedia.smarturls.actions.nested.ParentPackageAction;
-import org.texturemedia.smarturls.actions.nested.TestAction;
 
+import com.mockobjects.MockObject;
 import com.opensymphony.xwork2.ObjectFactory;
 import com.opensymphony.xwork2.config.Configuration;
 import com.opensymphony.xwork2.config.entities.ActionConfig;
@@ -54,8 +40,7 @@ import com.opensymphony.xwork2.config.impl.DefaultConfiguration;
  *
  * @author Brian Pontarelli
  */
-public class PackageBasedActionConfigBuilderTest {
-    @Test
+public class PackageBasedActionConfigBuilderTest extends TestCase {
     public void testBuild() {
         MyPackageConfig strutsDefault = new MyPackageConfig();
         strutsDefault.setName("struts-default");
@@ -89,62 +74,62 @@ public class PackageBasedActionConfigBuilderTest {
         ActionNameBuilder actionNameBuilder = new SEOActionNameBuilder("true", "_");
 
         MyPackageConfig rootPkg = new MyPackageConfig();
-        rootPkg.setName("org.texturemedia.smarturls.actions#struts-default#");
+        rootPkg.setName("org.apache.struts2.convention.actions#struts-default#");
         rootPkg.setNamespace("");
         rootPkg.addParent(strutsDefault);
 
         MyPackageConfig subPkg = new MyPackageConfig();
-        subPkg.setName("org.texturemedia.smarturls.actions.nested#struts-default#/nested");
-        subPkg.setNamespace("/nested");
+        subPkg.setName("org.apache.struts2.convention.actions.action#struts-default#/action");
+        subPkg.setNamespace("/action");
         subPkg.addParent(strutsDefault);
 
         MyPackageConfig subParentPkg = new MyPackageConfig();
-        subParentPkg.setName("org.texturemedia.smarturls.actions.nested#foo-package#/nested");
-        subParentPkg.setNamespace("/nested");
+        subParentPkg.setName("org.apache.struts2.convention.actions.action#foo-package#/action");
+        subParentPkg.setNamespace("/action");
         subParentPkg.addParent(fooPackagePkg);
 
         MyPackageConfig fooPkg = new MyPackageConfig();
-        fooPkg.setName("org.texturemedia.smarturls.actions.nested#struts-default#/foo");
+        fooPkg.setName("org.apache.struts2.convention.actions.action#struts-default#/foo");
         fooPkg.setNamespace("/foo");
         fooPkg.addParent(strutsDefault);
 
         MyPackageConfig nsPkg = new MyPackageConfig();
-        nsPkg.setName("org.texturemedia.smarturls.actions.ns#struts-default#/ns");
-        nsPkg.setNamespace("/ns");
+        nsPkg.setName("org.apache.struts2.convention.actions.idx#struts-default#/idx");
+        nsPkg.setNamespace("/idx");
         nsPkg.addParent(strutsDefault);
 
         MyPackageConfig ns2Pkg = new MyPackageConfig();
-        ns2Pkg.setName("org.texturemedia.smarturls.actions.ns.ns2#struts-default#/ns/ns2");
-        ns2Pkg.setNamespace("/ns/ns2");
+        ns2Pkg.setName("org.apache.struts2.convention.actions.idx.idx2#struts-default#/idx/idx2");
+        ns2Pkg.setNamespace("/idx/idx2");
         ns2Pkg.addParent(strutsDefault);
 
         MyPackageConfig packageLevelPkg = new MyPackageConfig();
-        packageLevelPkg.setName("org.texturemedia.smarturls.actions.parentpackage#package-level#/parentpackage");
+        packageLevelPkg.setName("org.apache.struts2.convention.actions.parentpackage#package-level#/parentpackage");
         packageLevelPkg.setNamespace("/parentpackage");
         packageLevelPkg.addParent(packageLevelPackagePkg);
 
         MyPackageConfig differentPkg = new MyPackageConfig();
-        differentPkg.setName("org.texturemedia.smarturls.actions.parentpackage#different-package#/parentpackage");
+        differentPkg.setName("org.apache.struts2.convention.actions.parentpackage#different-package#/parentpackage");
         differentPkg.setNamespace("/parentpackage");
         differentPkg.addParent(differentPackagePkg);
 
         MyPackageConfig skipPkg = new MyPackageConfig();
-        skipPkg.setName("org.texturemedia.smarturls.actions.skip#struts-default#/skip");
+        skipPkg.setName("org.apache.struts2.convention.actions.skip#struts-default#/skip");
         skipPkg.setNamespace("/skip");
         skipPkg.addParent(strutsDefault);
 
         MyPackageConfig pkgLevelNamespacePkg = new MyPackageConfig();
-        pkgLevelNamespacePkg.setName("org.texturemedia.smarturls.actions.namespace#struts-default#/package-level");
+        pkgLevelNamespacePkg.setName("org.apache.struts2.convention.actions.namespace#struts-default#/package-level");
         pkgLevelNamespacePkg.setNamespace("/package-level");
         pkgLevelNamespacePkg.addParent(strutsDefault);
 
         MyPackageConfig classLevelNamespacePkg = new MyPackageConfig();
-        classLevelNamespacePkg.setName("org.texturemedia.smarturls.actions.namespace#struts-default#/class-level");
+        classLevelNamespacePkg.setName("org.apache.struts2.convention.actions.namespace#struts-default#/class-level");
         classLevelNamespacePkg.setNamespace("/class-level");
         classLevelNamespacePkg.addParent(strutsDefault);
 
         MyPackageConfig actionLevelNamespacePkg = new MyPackageConfig();
-        actionLevelNamespacePkg.setName("org.texturemedia.smarturls.actions.namespace#struts-default#/action-level");
+        actionLevelNamespacePkg.setName("org.apache.struts2.convention.actions.namespace#struts-default#/action-level");
         actionLevelNamespacePkg.setNamespace("/action-level");
         actionLevelNamespacePkg.addParent(strutsDefault);
 
@@ -167,13 +152,13 @@ public class PackageBasedActionConfigBuilderTest {
         expect(resultMapBuilder.build(NamespaceAction.class, "namespace", fooPkg)).andReturn(results);
         expect(resultMapBuilder.build(ParentPackageAction.class, "parent_package", subParentPkg)).andReturn(results);
 
-        expect(resultMapBuilder.build(org.texturemedia.smarturls.actions.ns.Index.class, "index", nsPkg)).andReturn(results);
-        expect(resultMapBuilder.build(org.texturemedia.smarturls.actions.ns.ns2.Index.class, "index", ns2Pkg)).andReturn(results);
+        expect(resultMapBuilder.build(org.apache.struts2.convention.actions.idx.Index.class, "index", nsPkg)).andReturn(results);
+        expect(resultMapBuilder.build(org.apache.struts2.convention.actions.idx.idx2.Index.class, "index", ns2Pkg)).andReturn(results);
 
         expect(resultMapBuilder.build(DefaultAction.class, "default", packageLevelPkg)).andReturn(results);
         expect(resultMapBuilder.build(DifferentParentPackageAction.class, "different_parent_package", differentPkg)).andReturn(results);
 
-        expect(resultMapBuilder.build(org.texturemedia.smarturls.actions.skip.Index.class, "index", skipPkg)).andReturn(results);
+        expect(resultMapBuilder.build(org.apache.struts2.convention.actions.skip.Index.class, "index", skipPkg)).andReturn(results);
 
         expect(resultMapBuilder.build(DefaultNamespaceAction.class, "default_namespace", pkgLevelNamespacePkg)).andReturn(results);
         expect(resultMapBuilder.build(ClassLevelAction.class, "class_level", classLevelNamespacePkg)).andReturn(results);
@@ -185,11 +170,11 @@ public class PackageBasedActionConfigBuilderTest {
         PackageBasedActionConfigBuilder builder = new PackageBasedActionConfigBuilder(configuration,
             actionNameBuilder, resultMapBuilder, of, "false");
         builder.setBaseResultLocation("/test-base-result-location");
-        builder.buildActionConfigs(null, "org.texturemedia.smarturls.actions");
+        builder.buildActionConfigs(null, "org.apache.struts2.convention.actions");
         verify(resultMapBuilder);
 
         // Check the package config
-        PackageConfig pkgConfig = configuration.getPackageConfig("org.texturemedia.smarturls.actions#struts-default#");
+        PackageConfig pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions#struts-default#");
         assertNotNull(pkgConfig);
         assertEquals(6, pkgConfig.getActionConfigs().size());
 
@@ -199,7 +184,7 @@ public class PackageBasedActionConfigBuilderTest {
         assertNull(ac.getMethodName());
         assertTrue(ac instanceof SmartURLsActionConfig);
         assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.texturemedia.smarturls.actions#struts-default#", ac.getPackageName());
+        assertEquals("org.apache.struts2.convention.actions#struts-default#", ac.getPackageName());
 
         ac = pkgConfig.getActionConfigs().get("multiple_annotation");
         assertNotNull(ac);
@@ -207,7 +192,7 @@ public class PackageBasedActionConfigBuilderTest {
         assertNull(ac.getMethodName());
         assertTrue(ac instanceof SmartURLsActionConfig);
         assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.texturemedia.smarturls.actions#struts-default#", ac.getPackageName());
+        assertEquals("org.apache.struts2.convention.actions#struts-default#", ac.getPackageName());
 
         ac = pkgConfig.getActionConfigs().get("single_annotation");
         assertNotNull(ac);
@@ -215,7 +200,7 @@ public class PackageBasedActionConfigBuilderTest {
         assertNull(ac.getMethodName());
         assertTrue(ac instanceof SmartURLsActionConfig);
         assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.texturemedia.smarturls.actions#struts-default#", ac.getPackageName());
+        assertEquals("org.apache.struts2.convention.actions#struts-default#", ac.getPackageName());
 
         ac = pkgConfig.getActionConfigs().get("base_result_location_annotation");
         assertNotNull(ac);
@@ -223,7 +208,7 @@ public class PackageBasedActionConfigBuilderTest {
         assertNull(ac.getMethodName());
         assertTrue(ac instanceof SmartURLsActionConfig);
         assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.texturemedia.smarturls.actions#struts-default#", ac.getPackageName());
+        assertEquals("org.apache.struts2.convention.actions#struts-default#", ac.getPackageName());
 
         ac = pkgConfig.getActionConfigs().get("skip");
         assertNotNull(ac);
@@ -231,18 +216,18 @@ public class PackageBasedActionConfigBuilderTest {
         assertNull(ac.getMethodName());
         assertTrue(ac instanceof SmartURLsActionConfig);
         assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.texturemedia.smarturls.actions#struts-default#", ac.getPackageName());
+        assertEquals("org.apache.struts2.convention.actions#struts-default#", ac.getPackageName());
 
-        ac = pkgConfig.getActionConfigs().get("ns");
+        ac = pkgConfig.getActionConfigs().get("idx");
         assertNotNull(ac);
-        assertEquals(org.texturemedia.smarturls.actions.ns.Index.class.getName(), ac.getClassName());
+        assertEquals(org.apache.struts2.convention.actions.idx.Index.class.getName(), ac.getClassName());
         assertNull(ac.getMethodName());
         assertTrue(ac instanceof SmartURLsActionConfig);
         assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.texturemedia.smarturls.actions.ns#struts-default#/ns", ac.getPackageName());
+        assertEquals("org.apache.struts2.convention.actions.idx#struts-default#/idx", ac.getPackageName());
 
         // Check the package config
-        pkgConfig = configuration.getPackageConfig("org.texturemedia.smarturls.actions.nested#struts-default#/nested");
+        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.action#struts-default#/action");
         assertNotNull(pkgConfig);
         assertEquals(4, pkgConfig.getActionConfigs().size());
 
@@ -252,7 +237,7 @@ public class PackageBasedActionConfigBuilderTest {
         assertNull(ac.getMethodName());
         assertTrue(ac instanceof SmartURLsActionConfig);
         assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.texturemedia.smarturls.actions.nested#struts-default#/nested", ac.getPackageName());
+        assertEquals("org.apache.struts2.convention.actions.action#struts-default#/action", ac.getPackageName());
 
         ac = pkgConfig.getActionConfigs().get("foo");
         assertNotNull(ac);
@@ -260,7 +245,7 @@ public class PackageBasedActionConfigBuilderTest {
         assertEquals("run", ac.getMethodName());
         assertTrue(ac instanceof SmartURLsActionConfig);
         assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.texturemedia.smarturls.actions.nested#struts-default#/nested", ac.getPackageName());
+        assertEquals("org.apache.struts2.convention.actions.action#struts-default#/action", ac.getPackageName());
 
         ac = pkgConfig.getActionConfigs().get("action1");
         assertNotNull(ac);
@@ -268,7 +253,7 @@ public class PackageBasedActionConfigBuilderTest {
         assertEquals("run1", ac.getMethodName());
         assertTrue(ac instanceof SmartURLsActionConfig);
         assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.texturemedia.smarturls.actions.nested#struts-default#/nested", ac.getPackageName());
+        assertEquals("org.apache.struts2.convention.actions.action#struts-default#/action", ac.getPackageName());
 
         ac = pkgConfig.getActionConfigs().get("action2");
         assertNotNull(ac);
@@ -276,10 +261,10 @@ public class PackageBasedActionConfigBuilderTest {
         assertEquals("run2", ac.getMethodName());
         assertTrue(ac instanceof SmartURLsActionConfig);
         assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.texturemedia.smarturls.actions.nested#struts-default#/nested", ac.getPackageName());
+        assertEquals("org.apache.struts2.convention.actions.action#struts-default#/action", ac.getPackageName());
 
         // Check the package config
-        pkgConfig = configuration.getPackageConfig("org.texturemedia.smarturls.actions.nested#foo-package#/nested");
+        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.action#foo-package#/action");
         assertNotNull(pkgConfig);
         assertEquals(1, pkgConfig.getActionConfigs().size());
 
@@ -289,10 +274,10 @@ public class PackageBasedActionConfigBuilderTest {
         assertNull(ac.getMethodName());
         assertTrue(ac instanceof SmartURLsActionConfig);
         assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.texturemedia.smarturls.actions.nested#foo-package#/nested", ac.getPackageName());
+        assertEquals("org.apache.struts2.convention.actions.action#foo-package#/action", ac.getPackageName());
 
         // Check the package config
-        pkgConfig = configuration.getPackageConfig("org.texturemedia.smarturls.actions.nested#struts-default#/foo");
+        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.action#struts-default#/foo");
         assertNotNull(pkgConfig);
         assertEquals(1, pkgConfig.getActionConfigs().size());
 
@@ -302,82 +287,82 @@ public class PackageBasedActionConfigBuilderTest {
         assertNull(ac.getMethodName());
         assertTrue(ac instanceof SmartURLsActionConfig);
         assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.texturemedia.smarturls.actions.nested#struts-default#/foo", ac.getPackageName());
+        assertEquals("org.apache.struts2.convention.actions.action#struts-default#/foo", ac.getPackageName());
 
-        // Check the ns config
-        pkgConfig = configuration.getPackageConfig("org.texturemedia.smarturls.actions.ns#struts-default#/ns");
+        // Check the idx config
+        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.idx#struts-default#/idx");
         assertNotNull(pkgConfig);
         System.out.println("Keys are " + pkgConfig.getActionConfigs().keySet());
         assertEquals(3, pkgConfig.getActionConfigs().size());
 
         ac = pkgConfig.getActionConfigs().get("index");
         assertNotNull(ac);
-        assertEquals(org.texturemedia.smarturls.actions.ns.Index.class.getName(), ac.getClassName());
+        assertEquals(org.apache.struts2.convention.actions.idx.Index.class.getName(), ac.getClassName());
         assertNull(ac.getMethodName());
         assertTrue(ac instanceof SmartURLsActionConfig);
         assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.texturemedia.smarturls.actions.ns#struts-default#/ns", ac.getPackageName());
+        assertEquals("org.apache.struts2.convention.actions.idx#struts-default#/idx", ac.getPackageName());
 
-        ac = pkgConfig.getActionConfigs().get("ns2");
+        ac = pkgConfig.getActionConfigs().get("idx2");
         assertNotNull(ac);
-        assertEquals(org.texturemedia.smarturls.actions.ns.ns2.Index.class.getName(), ac.getClassName());
+        assertEquals(org.apache.struts2.convention.actions.idx.idx2.Index.class.getName(), ac.getClassName());
         assertNull(ac.getMethodName());
         assertTrue(ac instanceof SmartURLsActionConfig);
         assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.texturemedia.smarturls.actions.ns.ns2#struts-default#/ns/ns2", ac.getPackageName());
+        assertEquals("org.apache.struts2.convention.actions.idx.idx2#struts-default#/idx/idx2", ac.getPackageName());
 
         ac = pkgConfig.getActionConfigs().get("");
         assertNotNull(ac);
-        assertEquals(org.texturemedia.smarturls.actions.ns.Index.class.getName(), ac.getClassName());
+        assertEquals(org.apache.struts2.convention.actions.idx.Index.class.getName(), ac.getClassName());
         assertNull(ac.getMethodName());
         assertTrue(ac instanceof SmartURLsActionConfig);
         assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.texturemedia.smarturls.actions.ns#struts-default#/ns", ac.getPackageName());
+        assertEquals("org.apache.struts2.convention.actions.idx#struts-default#/idx", ac.getPackageName());
 
-        // Check the ns2 config
-        pkgConfig = configuration.getPackageConfig("org.texturemedia.smarturls.actions.ns.ns2#struts-default#/ns/ns2");
+        // Check the idx2 config
+        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.idx.idx2#struts-default#/idx/idx2");
         assertNotNull(pkgConfig);
         assertEquals(2, pkgConfig.getActionConfigs().size());
 
         ac = pkgConfig.getActionConfigs().get("index");
         assertNotNull(ac);
-        assertEquals(org.texturemedia.smarturls.actions.ns.ns2.Index.class.getName(), ac.getClassName());
+        assertEquals(org.apache.struts2.convention.actions.idx.idx2.Index.class.getName(), ac.getClassName());
         assertNull(ac.getMethodName());
         assertTrue(ac instanceof SmartURLsActionConfig);
         assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.texturemedia.smarturls.actions.ns.ns2#struts-default#/ns/ns2", ac.getPackageName());
+        assertEquals("org.apache.struts2.convention.actions.idx.idx2#struts-default#/idx/idx2", ac.getPackageName());
 
         ac = pkgConfig.getActionConfigs().get("");
         assertNotNull(ac);
-        assertEquals(org.texturemedia.smarturls.actions.ns.ns2.Index.class.getName(), ac.getClassName());
+        assertEquals(org.apache.struts2.convention.actions.idx.idx2.Index.class.getName(), ac.getClassName());
         assertNull(ac.getMethodName());
         assertTrue(ac instanceof SmartURLsActionConfig);
         assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.texturemedia.smarturls.actions.ns.ns2#struts-default#/ns/ns2", ac.getPackageName());
+        assertEquals("org.apache.struts2.convention.actions.idx.idx2#struts-default#/idx/idx2", ac.getPackageName());
 
         // Check the skip config
-        pkgConfig = configuration.getPackageConfig("org.texturemedia.smarturls.actions.skip#struts-default#/skip");
+        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.skip#struts-default#/skip");
         assertNotNull(pkgConfig);
         assertEquals(2, pkgConfig.getActionConfigs().size());
 
         ac = pkgConfig.getActionConfigs().get("index");
         assertNotNull(ac);
-        assertEquals(org.texturemedia.smarturls.actions.skip.Index.class.getName(), ac.getClassName());
+        assertEquals(org.apache.struts2.convention.actions.skip.Index.class.getName(), ac.getClassName());
         assertNull(ac.getMethodName());
         assertTrue(ac instanceof SmartURLsActionConfig);
         assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.texturemedia.smarturls.actions.skip#struts-default#/skip", ac.getPackageName());
+        assertEquals("org.apache.struts2.convention.actions.skip#struts-default#/skip", ac.getPackageName());
 
         ac = pkgConfig.getActionConfigs().get("");
         assertNotNull(ac);
-        assertEquals(org.texturemedia.smarturls.actions.skip.Index.class.getName(), ac.getClassName());
+        assertEquals(org.apache.struts2.convention.actions.skip.Index.class.getName(), ac.getClassName());
         assertNull(ac.getMethodName());
         assertTrue(ac instanceof SmartURLsActionConfig);
         assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.texturemedia.smarturls.actions.skip#struts-default#/skip", ac.getPackageName());
+        assertEquals("org.apache.struts2.convention.actions.skip#struts-default#/skip", ac.getPackageName());
 
         // Check the package level annotation config
-        pkgConfig = configuration.getPackageConfig("org.texturemedia.smarturls.actions.parentpackage#package-level#/parentpackage");
+        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.parentpackage#package-level#/parentpackage");
         assertNotNull(pkgConfig);
         assertEquals(1, pkgConfig.getActionConfigs().size());
 
@@ -387,10 +372,10 @@ public class PackageBasedActionConfigBuilderTest {
         assertNull(ac.getMethodName());
         assertTrue(ac instanceof SmartURLsActionConfig);
         assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.texturemedia.smarturls.actions.parentpackage#package-level#/parentpackage", ac.getPackageName());
+        assertEquals("org.apache.struts2.convention.actions.parentpackage#package-level#/parentpackage", ac.getPackageName());
 
         // Check the package level override annotation config
-        pkgConfig = configuration.getPackageConfig("org.texturemedia.smarturls.actions.parentpackage#different-package#/parentpackage");
+        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.parentpackage#different-package#/parentpackage");
         assertNotNull(pkgConfig);
         assertEquals(1, pkgConfig.getActionConfigs().size());
 
@@ -400,10 +385,10 @@ public class PackageBasedActionConfigBuilderTest {
         assertNull(ac.getMethodName());
         assertTrue(ac instanceof SmartURLsActionConfig);
         assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.texturemedia.smarturls.actions.parentpackage#different-package#/parentpackage", ac.getPackageName());
+        assertEquals("org.apache.struts2.convention.actions.parentpackage#different-package#/parentpackage", ac.getPackageName());
 
         // Check the namespace at the package level
-        pkgConfig = configuration.getPackageConfig("org.texturemedia.smarturls.actions.namespace#struts-default#/package-level");
+        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.namespace#struts-default#/package-level");
         assertNotNull(pkgConfig);
         assertEquals(1, pkgConfig.getActionConfigs().size());
 
@@ -413,10 +398,10 @@ public class PackageBasedActionConfigBuilderTest {
         assertNull(ac.getMethodName());
         assertTrue(ac instanceof SmartURLsActionConfig);
         assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.texturemedia.smarturls.actions.namespace#struts-default#/package-level", ac.getPackageName());
+        assertEquals("org.apache.struts2.convention.actions.namespace#struts-default#/package-level", ac.getPackageName());
 
         // Check the namespace at the class level in a package that has a package level
-        pkgConfig = configuration.getPackageConfig("org.texturemedia.smarturls.actions.namespace#struts-default#/class-level");
+        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.namespace#struts-default#/class-level");
         assertNotNull(pkgConfig);
         assertEquals(1, pkgConfig.getActionConfigs().size());
 
@@ -426,10 +411,10 @@ public class PackageBasedActionConfigBuilderTest {
         assertNull(ac.getMethodName());
         assertTrue(ac instanceof SmartURLsActionConfig);
         assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.texturemedia.smarturls.actions.namespace#struts-default#/class-level", ac.getPackageName());
+        assertEquals("org.apache.struts2.convention.actions.namespace#struts-default#/class-level", ac.getPackageName());
 
         // Check the namespace at the action level in a package that has a package level
-        pkgConfig = configuration.getPackageConfig("org.texturemedia.smarturls.actions.namespace#struts-default#/action-level");
+        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.namespace#struts-default#/action-level");
         assertNotNull(pkgConfig);
         assertEquals(1, pkgConfig.getActionConfigs().size());
 
@@ -439,7 +424,7 @@ public class PackageBasedActionConfigBuilderTest {
         assertNull(ac.getMethodName());
         assertTrue(ac instanceof SmartURLsActionConfig);
         assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.texturemedia.smarturls.actions.namespace#struts-default#/action-level", ac.getPackageName());
+        assertEquals("org.apache.struts2.convention.actions.namespace#struts-default#/action-level", ac.getPackageName());
     }
 
     /**

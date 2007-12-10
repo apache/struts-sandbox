@@ -123,7 +123,7 @@ public class ConventionUnknownHandler implements UnknownHandler {
         String pathPrefix = determinePath(null, resultLocation, namespace);
         ActionConfig actionConfig = null;
 
-        // Try /ns/action.jsp if actionName is not empty, otherwise it will just be /.jsp
+        // Try /idx/action.jsp if actionName is not empty, otherwise it will just be /.jsp
         if (!actionName.equals("")) {
             for (String ext : resultsByExtension.keySet()) {
                 String path = string(pathPrefix, actionName, "." , ext);
@@ -264,7 +264,7 @@ public class ConventionUnknownHandler implements UnknownHandler {
         Result result = scanResultsByExtension(ns, actionName, pathPrefix, resultCode, actionContext);
 
         if (result == null) {
-            // Try /ns/action/index.jsp
+            // Try /idx/action/index.jsp
             for (String ext : resultsByExtension.keySet()) {
                 if (logger.isLoggable(Level.FINEST)) {
                     String fqan = ns + "/" + actionName;

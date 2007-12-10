@@ -13,10 +13,9 @@
  * either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.texturemedia.smarturls;
+package org.apache.struts2.convention;
 
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
+import junit.framework.TestCase;
 
 /**
  * <p>
@@ -25,8 +24,7 @@ import org.junit.Test;
  *
  * @author  Brian Pontarelli
  */
-public class SEOActionNameBuilderTest {
-    @Test
+public class SEOActionNameBuilderTest extends TestCase {
     public void testBuild() throws Exception {
         SEOActionNameBuilder builder = new SEOActionNameBuilder("true", "_");
         assertEquals("foo", builder.build("Foo"));
@@ -35,7 +33,6 @@ public class SEOActionNameBuilderTest {
         assertEquals("foo_bar_baz", builder.build("FooBarBazAction"));
     }
 
-    @Test
     public void testDash() throws Exception {
         SEOActionNameBuilder builder = new SEOActionNameBuilder("true", "-");
         assertEquals("foo", builder.build("Foo"));

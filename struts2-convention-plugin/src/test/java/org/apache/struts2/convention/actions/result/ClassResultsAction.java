@@ -13,21 +13,23 @@
  * either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.apache.struts2.convention.annotation;
+package org.apache.struts2.convention.actions.result;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.convention.annotation.Results;
 
 /**
  * <p>
- * This annotation allows for multiple {@link Action} annotations
- * to be used on a single method.
+ * This is a test action with multiple results.
  * </p>
+ *
+ * @author Brian Pontarelli
  */
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Actions {
-    Action[] value() default {};
+@Results({
+    @Result(name="error", location="action.jsp"),
+    @Result(name="input", location="foo.action", type="redirect-action"),
+    @Result(name="success", location="/WEB-INF/location/namespace/action-success.jsp"),
+    @Result(name="failure", location="/WEB-INF/location/namespace/action-failure.jsp")
+})
+public class ClassResultsAction {
 }

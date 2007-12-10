@@ -23,10 +23,9 @@ import javax.servlet.ServletContext;
 import org.easymock.EasyMock;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
-import org.texturemedia.smarturls.actions.BaseResultLocationAnnotationAction;
-import org.texturemedia.smarturls.actions.MultipleAnnotationAction;
-import org.texturemedia.smarturls.actions.NoAnnotationAction;
-import org.texturemedia.smarturls.actions.SingleAnnotationAction;
+import org.apache.struts2.convention.actions.ResultLocationAnnotationAction;
+import org.apache.struts2.convention.actions.result.ResultsAction;
+import org.apache.struts2.convention.actions.NoAnnotationAction;
 
 import com.opensymphony.xwork2.config.entities.PackageConfig;
 import com.opensymphony.xwork2.config.entities.ResultConfig;
@@ -83,7 +82,7 @@ public class DefaultResultMapBuilderTest {
         PackageConfig packageConfig = createPackageConfig("/namespace");
         DefaultResultMapBuilder builder = new DefaultResultMapBuilder(context, "dispatcher,velocity,freemarker");
         builder.setBaseResultLocation("/WEB-INF/notused");
-        Map<String, ResultConfig> results = builder.build(BaseResultLocationAnnotationAction.class,
+        Map<String, ResultConfig> results = builder.build(ResultLocationAnnotationAction.class,
             "action", packageConfig);
         verify(context, results, false);
     }
@@ -147,7 +146,7 @@ public class DefaultResultMapBuilderTest {
 
         DefaultResultMapBuilder builder = new DefaultResultMapBuilder(context, "dispatcher,velocity,freemarker");
         builder.setBaseResultLocation("/WEB-INF/location");
-        Map<String, ResultConfig> results = builder.build(MultipleAnnotationAction.class, "action", packageConfig);
+        Map<String, ResultConfig> results = builder.build(ResultsAction.class, "action", packageConfig);
         verify(context, results, true);
     }
 

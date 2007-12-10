@@ -13,21 +13,25 @@
  * either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.apache.struts2.convention.annotation;
+package org.apache.struts2.convention.actions.action;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.apache.struts2.convention.annotation.Action;
 
 /**
  * <p>
- * This annotation allows for multiple {@link Action} annotations
- * to be used on a single method.
+ * This is a test action.
  * </p>
+ *
+ * @author Brian Pontarelli
  */
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Actions {
-    Action[] value() default {};
+public class ActionNameAction {
+    @Action("action1")
+    public String run1() {
+        return null;
+    }
+
+    @Action("action2")
+    public String run2() {
+        return null;
+    }
 }
