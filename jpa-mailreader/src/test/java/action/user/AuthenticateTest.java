@@ -5,7 +5,7 @@ import entity.user.User;
 import entity.user.UserService;
 import entity.user.UserServiceImpl;
 
-public class autenticateTest extends TestCase {
+public class AuthenticateTest extends TestCase {
 
     UserService helper;
 

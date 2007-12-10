@@ -50,12 +50,12 @@ public class EntityManagerHelper {
      */
     static final String PERSISTENCE_UNIT = "entity";
 
-    private static final EntityManagerFactory emf;
+    private static final EntityManagerFactory factory;
     private static final ThreadLocal<EntityManager> threadLocal;
     private static final Log logger;
 
     static {
-        emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT);
+        factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT);
         threadLocal = new ThreadLocal<EntityManager>();
         logger = LogFactory.getLog(EntityManagerHelper.class);
     }
@@ -74,7 +74,7 @@ public class EntityManagerHelper {
     public static EntityManager getEntityManager() {
         EntityManager manager = threadLocal.get();
         if (manager == null || !manager.isOpen()) {
-            manager = emf.createEntityManager();
+            manager = factory.createEntityManager();
             threadLocal.set(manager);
         }
         return manager;

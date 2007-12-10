@@ -50,9 +50,9 @@ public class UserServiceImpl extends EntityService implements UserService {
         return result;
     }
 
-    public UserImpl findByName(String value) {
-        UserImpl result = (UserImpl) singleResult(UserImpl.FIND_BY_NAME,
-                UserImpl.NAME, value);
+    public User findByName(String value) {
+        UserImpl result = (UserImpl) singleResult(User.FIND_BY_NAME,
+                User.NAME, value);
         return result;
     }
 
