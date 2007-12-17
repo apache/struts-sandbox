@@ -16,7 +16,6 @@
 package org.apache.struts2.convention.actions.result;
 
 import org.apache.struts2.convention.annotation.Result;
-import org.apache.struts2.convention.annotation.Results;
 
 /**
  * <p>
@@ -25,11 +24,6 @@ import org.apache.struts2.convention.annotation.Results;
  *
  * @author Brian Pontarelli
  */
-@Results({
-    @Result(name="error", location="action.jsp"),
-    @Result(name="input", location="foo.action", type="redirect-action"),
-    @Result(name="success", location="/WEB-INF/location/namespace/action-success.jsp"),
-    @Result(name="failure", location="/WEB-INF/location/namespace/action-failure.jsp")
-})
-public class ClassResultsAction {
+@Result(name="error", location="error.jsp", params={"key", "value", "key1", "value1"})
+public class ClassLevelResultAction {
 }

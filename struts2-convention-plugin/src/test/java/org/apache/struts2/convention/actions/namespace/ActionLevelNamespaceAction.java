@@ -15,15 +15,18 @@
  */
 package org.apache.struts2.convention.actions.namespace;
 
-import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.Action;
 
 /**
  * <p>
- * This class uses the class level annotation override.
+ * This class uses the action level annotation override.
  * </p>
  *
  * @author Brian Pontarelli
  */
-@Namespace("/class-level")
-public class ClassLevelAction {
+public class ActionLevelNamespaceAction {
+    @Action("/action-level/action")
+    public String execute() {
+        return null;
+    }
 }

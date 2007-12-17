@@ -17,6 +17,9 @@ package org.apache.struts2.convention.annotation;
 
 import junit.framework.TestCase;
 
+import org.apache.struts2.convention.actions.DefaultResultPathAction;
+import org.apache.struts2.convention.actions.namespace.ActionLevelNamespaceAction;
+
 /**
  * <p>
  * This class tests the annotation tools.
@@ -25,7 +28,15 @@ import junit.framework.TestCase;
  * @author Brian Pontarelli
  */
 public class AnnotationToolsTest extends TestCase {
-    public void testFindAnnotation() {
-        
+    public void testFindAnnotationOnClass() {
+        ResultPath rl = AnnotationTools.findAnnotation(DefaultResultPathAction.class, ResultPath.class);
+        assertNotNull(rl);
+        assertEquals(rl.value(), "/WEB-INF/location");
+    }
+
+    public void testFindAnnotationOnPackage() {
+        Namespace ns = AnnotationTools.findAnnotation(ActionLevelNamespaceAction.class, Namespace.class);
+        assertNotNull(ns);
+        assertEquals(ns.value(), "/package-level");
     }
 }

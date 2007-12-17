@@ -13,20 +13,23 @@
  * either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.apache.struts2.convention.actions.namespace;
+package org.apache.struts2.convention.actions.result;
 
-import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.convention.annotation.Results;
 
 /**
  * <p>
- * This class uses the action level annotation override.
+ * This is a test action with multiple results.
  * </p>
  *
  * @author Brian Pontarelli
  */
-public class ActionLevelAction {
-    @Action("/action-level/action")
-    public String execute() {
-        return null;
-    }
+@Results({
+@Result(name="error", location="error.jsp", params={"key", "value", "key1", "value1"}),
+    @Result(name="input", location="foo.action", type="redirectAction"),
+    @Result(name="success", location="/WEB-INF/location/namespace/action-success.jsp"),
+    @Result(name="failure", location="/WEB-INF/location/namespace/action-failure.jsp")
+})
+public class ClassLevelResultsAction {
 }

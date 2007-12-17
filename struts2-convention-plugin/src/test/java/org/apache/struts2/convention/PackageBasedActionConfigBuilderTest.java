@@ -20,11 +20,32 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 
+import static org.apache.struts2.convention.ReflectionTools.*;
+import org.apache.struts2.convention.actions.DefaultResultPathAction;
+import org.apache.struts2.convention.actions.NoAnnotationAction;
+import org.apache.struts2.convention.actions.Skip;
+import org.apache.struts2.convention.actions.action.ActionNameAction;
+import org.apache.struts2.convention.actions.action.ActionNamesAction;
+import org.apache.struts2.convention.actions.action.SingleActionNameAction;
+import org.apache.struts2.convention.actions.action.TestAction;
+import org.apache.struts2.convention.actions.namespace.ActionLevelNamespaceAction;
+import org.apache.struts2.convention.actions.namespace.ClassLevelNamespaceAction;
+import org.apache.struts2.convention.actions.namespace.PackageLevelNamespaceAction;
+import org.apache.struts2.convention.actions.namespace2.DefaultNamespaceAction;
+import org.apache.struts2.convention.actions.parentpackage.ClassLevelParentPackageAction;
+import org.apache.struts2.convention.actions.parentpackage.PackageLevelParentPackageAction;
+import org.apache.struts2.convention.actions.result.ActionLevelResultAction;
+import org.apache.struts2.convention.actions.result.ActionLevelResultsAction;
+import org.apache.struts2.convention.actions.result.ClassLevelResultAction;
+import org.apache.struts2.convention.actions.result.ClassLevelResultsAction;
+import org.apache.struts2.convention.actions.resultpath.ClassLevelResultPathAction;
+import org.apache.struts2.convention.actions.resultpath.PackageLevelResultPathAction;
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Actions;
 import org.apache.struts2.dispatcher.ServletDispatcherResult;
 import org.easymock.EasyMock;
 import static org.easymock.EasyMock.*;
 
-import com.mockobjects.MockObject;
 import com.opensymphony.xwork2.ObjectFactory;
 import com.opensymphony.xwork2.config.Configuration;
 import com.opensymphony.xwork2.config.entities.ActionConfig;
@@ -62,15 +83,6 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
         configuration.addPackageConfig("package-level", packageLevelPackagePkg);
         configuration.addPackageConfig("different-package", differentPackagePkg);
 
-//        Configuration configuration = createNiceMock(Configuration.class);
-//        expect(configuration.getPackageConfig("struts-default")).andReturn(strutsDefault);
-//        expectLastCall().times(8);
-//        expect(configuration.getPackageConfig("foo-package")).andReturn(fooPackagePkg);
-//
-//        configuration.addPackageConfig(isA(String.class), isA(PackageConfig.class));
-//        configuration.rebuildRuntimeConfiguration();
-//        replay(configuration);
-
         ActionNameBuilder actionNameBuilder = new SEOActionNameBuilder("true", "_");
 
         MyPackageConfig rootPkg = new MyPackageConfig();
@@ -93,15 +105,15 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
         fooPkg.setNamespace("/foo");
         fooPkg.addParent(strutsDefault);
 
-        MyPackageConfig nsPkg = new MyPackageConfig();
-        nsPkg.setName("org.apache.struts2.convention.actions.idx#struts-default#/idx");
-        nsPkg.setNamespace("/idx");
-        nsPkg.addParent(strutsDefault);
+        MyPackageConfig idxPkg = new MyPackageConfig();
+        idxPkg.setName("org.apache.struts2.convention.actions.idx#struts-default#/idx");
+        idxPkg.setNamespace("/idx");
+        idxPkg.addParent(strutsDefault);
 
-        MyPackageConfig ns2Pkg = new MyPackageConfig();
-        ns2Pkg.setName("org.apache.struts2.convention.actions.idx.idx2#struts-default#/idx/idx2");
-        ns2Pkg.setNamespace("/idx/idx2");
-        ns2Pkg.addParent(strutsDefault);
+        MyPackageConfig idx2Pkg = new MyPackageConfig();
+        idx2Pkg.setName("org.apache.struts2.convention.actions.idx.idx2#struts-default#/idx/idx2");
+        idx2Pkg.setNamespace("/idx/idx2");
+        idx2Pkg.addParent(strutsDefault);
 
         MyPackageConfig packageLevelPkg = new MyPackageConfig();
         packageLevelPkg.setName("org.apache.struts2.convention.actions.parentpackage#package-level#/parentpackage");
@@ -133,298 +145,166 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
         actionLevelNamespacePkg.setNamespace("/action-level");
         actionLevelNamespacePkg.addParent(strutsDefault);
 
+        MyPackageConfig defaultNamespacePkg = new MyPackageConfig();
+        defaultNamespacePkg.setName("org.apache.struts2.convention.actions.namespace2#struts-default#/namespace2");
+        defaultNamespacePkg.setNamespace("/namespace2");
+        defaultNamespacePkg.addParent(strutsDefault);
+
+        MyPackageConfig resultPkg = new MyPackageConfig();
+        resultPkg.setName("org.apache.struts2.convention.actions.result#struts-default#/result");
+        resultPkg.setNamespace("/result");
+        resultPkg.addParent(strutsDefault);
+
+        MyPackageConfig resultPathPkg = new MyPackageConfig();
+        resultPathPkg.setName("org.apache.struts2.convention.actions.resultpath#struts-default#/resultpath");
+        resultPathPkg.setNamespace("/resultpath");
+        resultPathPkg.addParent(strutsDefault);
+
         ResultMapBuilder resultMapBuilder = createNiceMock(ResultMapBuilder.class);
         Map<String, ResultConfig> results = new HashMap<String, ResultConfig>();
-        expect(resultMapBuilder.build(NoAnnotationAction.class, "no_annotation", rootPkg)).
-            andReturn(results);
-        expect(resultMapBuilder.build(MultipleAnnotationAction.class, "multiple_annotation", rootPkg)).
-            andReturn(results);
-        expect(resultMapBuilder.build(BaseResultLocationAnnotationAction.class, "base_result_location_annotation", rootPkg)).
-            andReturn(results);
-        expect(resultMapBuilder.build(SingleAnnotationAction.class, "single_annotation", rootPkg)).
-            andReturn(results);
-        expect(resultMapBuilder.build(Skip.class, "skip", rootPkg)).andReturn(results);
 
-        expect(resultMapBuilder.build(TestAction.class, "test", subPkg)).andReturn(results);
-        expect(resultMapBuilder.build(ActionNameAction.class, "foo", subPkg)).andReturn(results);
-        expect(resultMapBuilder.build(ActionNamesAction.class, "action1", subPkg)).andReturn(results);
-        expect(resultMapBuilder.build(ActionNamesAction.class, "action2", subPkg)).andReturn(results);
-        expect(resultMapBuilder.build(NamespaceAction.class, "namespace", fooPkg)).andReturn(results);
-        expect(resultMapBuilder.build(ParentPackageAction.class, "parent_package", subParentPkg)).andReturn(results);
+        /* org.apache.struts2.convention.actions.action */
+        expect(resultMapBuilder.build(ActionNameAction.class, getAnnotation(ActionNameAction.class, "run1", Action.class), "action1", subPkg)).andReturn(results);
+        expect(resultMapBuilder.build(ActionNameAction.class, getAnnotation(ActionNameAction.class, "run2", Action.class), "action2", subPkg)).andReturn(results);
+        expect(resultMapBuilder.build(ActionNamesAction.class, getAnnotation(ActionNamesAction.class, "run", Actions.class).value()[0], "actions1", subPkg)).andReturn(results);
+        expect(resultMapBuilder.build(ActionNamesAction.class, getAnnotation(ActionNamesAction.class, "run", Actions.class).value()[1], "actions2", subPkg)).andReturn(results);
+        expect(resultMapBuilder.build(SingleActionNameAction.class, getAnnotation(SingleActionNameAction.class, "run", Action.class), "action", subPkg)).andReturn(results);
+        expect(resultMapBuilder.build(TestAction.class, null, "test", subPkg)).andReturn(results);
 
-        expect(resultMapBuilder.build(org.apache.struts2.convention.actions.idx.Index.class, "index", nsPkg)).andReturn(results);
-        expect(resultMapBuilder.build(org.apache.struts2.convention.actions.idx.idx2.Index.class, "index", ns2Pkg)).andReturn(results);
+        /* org.apache.struts2.convention.actions.idx */
+        /* org.apache.struts2.convention.actions.idx.idx2 */
+        expect(resultMapBuilder.build(org.apache.struts2.convention.actions.idx.Index.class, null, "index", idxPkg)).andReturn(results);
+        expect(resultMapBuilder.build(org.apache.struts2.convention.actions.idx.idx2.Index.class, null, "index", idx2Pkg)).andReturn(results);
 
-        expect(resultMapBuilder.build(DefaultAction.class, "default", packageLevelPkg)).andReturn(results);
-        expect(resultMapBuilder.build(DifferentParentPackageAction.class, "different_parent_package", differentPkg)).andReturn(results);
+        /* org.apache.struts2.convention.actions.namespace */
+        expect(resultMapBuilder.build(ActionLevelNamespaceAction.class, getAnnotation(ActionLevelNamespaceAction.class, "execute", Action.class), "action", actionLevelNamespacePkg)).andReturn(results);
+        expect(resultMapBuilder.build(ClassLevelNamespaceAction.class, null, "class-level", classLevelNamespacePkg)).andReturn(results);
+        expect(resultMapBuilder.build(PackageLevelNamespaceAction.class, null, "package-level", pkgLevelNamespacePkg)).andReturn(results);
 
-        expect(resultMapBuilder.build(org.apache.struts2.convention.actions.skip.Index.class, "index", skipPkg)).andReturn(results);
+        /* org.apache.struts2.convention.actions.namespace2 */
+        expect(resultMapBuilder.build(DefaultNamespaceAction.class, null, "default-namespace", defaultNamespacePkg)).andReturn(results);
 
-        expect(resultMapBuilder.build(DefaultNamespaceAction.class, "default_namespace", pkgLevelNamespacePkg)).andReturn(results);
-        expect(resultMapBuilder.build(ClassLevelAction.class, "class_level", classLevelNamespacePkg)).andReturn(results);
-        expect(resultMapBuilder.build(ActionLevelAction.class, "action_level", actionLevelNamespacePkg)).andReturn(results);
+        /* org.apache.struts2.convention.actions.parentpackage */
+        expect(resultMapBuilder.build(PackageLevelParentPackageAction.class, null, "package-level-parent-package", packageLevelPkg)).andReturn(results);
+        expect(resultMapBuilder.build(ClassLevelParentPackageAction.class, null, "class-level-parent-package", differentPkg)).andReturn(results);
+
+        /* org.apache.struts2.convention.actions.result */
+        expect(resultMapBuilder.build(ClassLevelResultAction.class, null, "class-level-result", resultPkg)).andReturn(results);
+        expect(resultMapBuilder.build(ClassLevelResultsAction.class, null, "class-level-results", resultPkg)).andReturn(results);
+        expect(resultMapBuilder.build(ActionLevelResultAction.class, null, "action-level-result", resultPkg)).andReturn(results);
+        expect(resultMapBuilder.build(ActionLevelResultsAction.class, null, "action-level-results", resultPkg)).andReturn(results);
+
+        /* org.apache.struts2.convention.actions.resultpath */
+        expect(resultMapBuilder.build(ClassLevelResultPathAction.class, null, "class-level-result-path", resultPathPkg)).andReturn(results);
+        expect(resultMapBuilder.build(PackageLevelResultPathAction.class, null, "package-level-result-path", resultPathPkg)).andReturn(results);
+
+        /* org.apache.struts2.convention.actions */
+        expect(resultMapBuilder.build(NoAnnotationAction.class, null, "no-annotation", rootPkg)).andReturn(results);
+        expect(resultMapBuilder.build(DefaultResultPathAction.class, null, "default-result-path", rootPkg)).andReturn(results);
+        expect(resultMapBuilder.build(Skip.class, null, "skip", rootPkg)).andReturn(results);
 
         EasyMock.replay(resultMapBuilder);
 
         ObjectFactory of = new ObjectFactory();
         PackageBasedActionConfigBuilder builder = new PackageBasedActionConfigBuilder(configuration,
-            actionNameBuilder, resultMapBuilder, of, "false");
-        builder.setBaseResultLocation("/test-base-result-location");
-        builder.buildActionConfigs(null, "org.apache.struts2.convention.actions");
+            actionNameBuilder, resultMapBuilder, of, "false", "org.apache.struts2.convention.actions",
+            null, null, "struts-default", "/default-result-path");
+        builder.buildActionConfigs();
         verify(resultMapBuilder);
 
-        // Check the package config
-        PackageConfig pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions#struts-default#");
+        /* org.apache.struts2.convention.actions.action */
+        PackageConfig pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.action#struts-default#/action");
         assertNotNull(pkgConfig);
         assertEquals(6, pkgConfig.getActionConfigs().size());
+        verifyActionConfig(pkgConfig, "action1", ActionNameAction.class, "run1", "/default-result-path");
+        verifyActionConfig(pkgConfig, "action2", ActionNameAction.class, "run2", "/default-result-path");
+        verifyActionConfig(pkgConfig, "actions1", ActionNamesAction.class, "run", "/default-result-path");
+        verifyActionConfig(pkgConfig, "actions2", ActionNamesAction.class, "run", "/default-result-path");
+        verifyActionConfig(pkgConfig, "action", SingleActionNameAction.class, "run", "/default-result-path");
+        verifyActionConfig(pkgConfig, "test", TestAction.class, "execute", "/default-result-path");
 
-        ActionConfig ac = pkgConfig.getActionConfigs().get("no_annotation");
-        assertNotNull(ac);
-        assertEquals(NoAnnotationAction.class.getName(), ac.getClassName());
-        assertNull(ac.getMethodName());
-        assertTrue(ac instanceof SmartURLsActionConfig);
-        assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.apache.struts2.convention.actions#struts-default#", ac.getPackageName());
-
-        ac = pkgConfig.getActionConfigs().get("multiple_annotation");
-        assertNotNull(ac);
-        assertEquals(MultipleAnnotationAction.class.getName(), ac.getClassName());
-        assertNull(ac.getMethodName());
-        assertTrue(ac instanceof SmartURLsActionConfig);
-        assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.apache.struts2.convention.actions#struts-default#", ac.getPackageName());
-
-        ac = pkgConfig.getActionConfigs().get("single_annotation");
-        assertNotNull(ac);
-        assertEquals(SingleAnnotationAction.class.getName(), ac.getClassName());
-        assertNull(ac.getMethodName());
-        assertTrue(ac instanceof SmartURLsActionConfig);
-        assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.apache.struts2.convention.actions#struts-default#", ac.getPackageName());
-
-        ac = pkgConfig.getActionConfigs().get("base_result_location_annotation");
-        assertNotNull(ac);
-        assertEquals(BaseResultLocationAnnotationAction.class.getName(), ac.getClassName());
-        assertNull(ac.getMethodName());
-        assertTrue(ac instanceof SmartURLsActionConfig);
-        assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.apache.struts2.convention.actions#struts-default#", ac.getPackageName());
-
-        ac = pkgConfig.getActionConfigs().get("skip");
-        assertNotNull(ac);
-        assertEquals(Skip.class.getName(), ac.getClassName());
-        assertNull(ac.getMethodName());
-        assertTrue(ac instanceof SmartURLsActionConfig);
-        assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.apache.struts2.convention.actions#struts-default#", ac.getPackageName());
-
-        ac = pkgConfig.getActionConfigs().get("idx");
-        assertNotNull(ac);
-        assertEquals(org.apache.struts2.convention.actions.idx.Index.class.getName(), ac.getClassName());
-        assertNull(ac.getMethodName());
-        assertTrue(ac instanceof SmartURLsActionConfig);
-        assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.apache.struts2.convention.actions.idx#struts-default#/idx", ac.getPackageName());
-
-        // Check the package config
-        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.action#struts-default#/action");
-        assertNotNull(pkgConfig);
-        assertEquals(4, pkgConfig.getActionConfigs().size());
-
-        ac = pkgConfig.getActionConfigs().get("test");
-        assertNotNull(ac);
-        assertEquals(TestAction.class.getName(), ac.getClassName());
-        assertNull(ac.getMethodName());
-        assertTrue(ac instanceof SmartURLsActionConfig);
-        assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.apache.struts2.convention.actions.action#struts-default#/action", ac.getPackageName());
-
-        ac = pkgConfig.getActionConfigs().get("foo");
-        assertNotNull(ac);
-        assertEquals(ActionNameAction.class.getName(), ac.getClassName());
-        assertEquals("run", ac.getMethodName());
-        assertTrue(ac instanceof SmartURLsActionConfig);
-        assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.apache.struts2.convention.actions.action#struts-default#/action", ac.getPackageName());
-
-        ac = pkgConfig.getActionConfigs().get("action1");
-        assertNotNull(ac);
-        assertEquals(ActionNamesAction.class.getName(), ac.getClassName());
-        assertEquals("run1", ac.getMethodName());
-        assertTrue(ac instanceof SmartURLsActionConfig);
-        assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.apache.struts2.convention.actions.action#struts-default#/action", ac.getPackageName());
-
-        ac = pkgConfig.getActionConfigs().get("action2");
-        assertNotNull(ac);
-        assertEquals(ActionNamesAction.class.getName(), ac.getClassName());
-        assertEquals("run2", ac.getMethodName());
-        assertTrue(ac instanceof SmartURLsActionConfig);
-        assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.apache.struts2.convention.actions.action#struts-default#/action", ac.getPackageName());
-
-        // Check the package config
-        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.action#foo-package#/action");
-        assertNotNull(pkgConfig);
-        assertEquals(1, pkgConfig.getActionConfigs().size());
-
-        ac = pkgConfig.getActionConfigs().get("parent_package");
-        assertNotNull(ac);
-        assertEquals(ParentPackageAction.class.getName(), ac.getClassName());
-        assertNull(ac.getMethodName());
-        assertTrue(ac instanceof SmartURLsActionConfig);
-        assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.apache.struts2.convention.actions.action#foo-package#/action", ac.getPackageName());
-
-        // Check the package config
-        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.action#struts-default#/foo");
-        assertNotNull(pkgConfig);
-        assertEquals(1, pkgConfig.getActionConfigs().size());
-
-        ac = pkgConfig.getActionConfigs().get("namespace");
-        assertNotNull(ac);
-        assertEquals(NamespaceAction.class.getName(), ac.getClassName());
-        assertNull(ac.getMethodName());
-        assertTrue(ac instanceof SmartURLsActionConfig);
-        assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.apache.struts2.convention.actions.action#struts-default#/foo", ac.getPackageName());
-
-        // Check the idx config
+        /* org.apache.struts2.convention.actions.idx */
         pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.idx#struts-default#/idx");
         assertNotNull(pkgConfig);
-        System.out.println("Keys are " + pkgConfig.getActionConfigs().keySet());
-        assertEquals(3, pkgConfig.getActionConfigs().size());
+        assertEquals(1, pkgConfig.getActionConfigs().size());
+        verifyActionConfig(pkgConfig, "", org.apache.struts2.convention.actions.idx.Index.class, "execute", "/default-result-path");
 
-        ac = pkgConfig.getActionConfigs().get("index");
-        assertNotNull(ac);
-        assertEquals(org.apache.struts2.convention.actions.idx.Index.class.getName(), ac.getClassName());
-        assertNull(ac.getMethodName());
-        assertTrue(ac instanceof SmartURLsActionConfig);
-        assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.apache.struts2.convention.actions.idx#struts-default#/idx", ac.getPackageName());
-
-        ac = pkgConfig.getActionConfigs().get("idx2");
-        assertNotNull(ac);
-        assertEquals(org.apache.struts2.convention.actions.idx.idx2.Index.class.getName(), ac.getClassName());
-        assertNull(ac.getMethodName());
-        assertTrue(ac instanceof SmartURLsActionConfig);
-        assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.apache.struts2.convention.actions.idx.idx2#struts-default#/idx/idx2", ac.getPackageName());
-
-        ac = pkgConfig.getActionConfigs().get("");
-        assertNotNull(ac);
-        assertEquals(org.apache.struts2.convention.actions.idx.Index.class.getName(), ac.getClassName());
-        assertNull(ac.getMethodName());
-        assertTrue(ac instanceof SmartURLsActionConfig);
-        assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.apache.struts2.convention.actions.idx#struts-default#/idx", ac.getPackageName());
-
-        // Check the idx2 config
+        /* org.apache.struts2.convention.actions.idx.idx2 */
         pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.idx.idx2#struts-default#/idx/idx2");
         assertNotNull(pkgConfig);
-        assertEquals(2, pkgConfig.getActionConfigs().size());
-
-        ac = pkgConfig.getActionConfigs().get("index");
-        assertNotNull(ac);
-        assertEquals(org.apache.struts2.convention.actions.idx.idx2.Index.class.getName(), ac.getClassName());
-        assertNull(ac.getMethodName());
-        assertTrue(ac instanceof SmartURLsActionConfig);
-        assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.apache.struts2.convention.actions.idx.idx2#struts-default#/idx/idx2", ac.getPackageName());
-
-        ac = pkgConfig.getActionConfigs().get("");
-        assertNotNull(ac);
-        assertEquals(org.apache.struts2.convention.actions.idx.idx2.Index.class.getName(), ac.getClassName());
-        assertNull(ac.getMethodName());
-        assertTrue(ac instanceof SmartURLsActionConfig);
-        assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.apache.struts2.convention.actions.idx.idx2#struts-default#/idx/idx2", ac.getPackageName());
-
-        // Check the skip config
-        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.skip#struts-default#/skip");
-        assertNotNull(pkgConfig);
-        assertEquals(2, pkgConfig.getActionConfigs().size());
-
-        ac = pkgConfig.getActionConfigs().get("index");
-        assertNotNull(ac);
-        assertEquals(org.apache.struts2.convention.actions.skip.Index.class.getName(), ac.getClassName());
-        assertNull(ac.getMethodName());
-        assertTrue(ac instanceof SmartURLsActionConfig);
-        assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.apache.struts2.convention.actions.skip#struts-default#/skip", ac.getPackageName());
-
-        ac = pkgConfig.getActionConfigs().get("");
-        assertNotNull(ac);
-        assertEquals(org.apache.struts2.convention.actions.skip.Index.class.getName(), ac.getClassName());
-        assertNull(ac.getMethodName());
-        assertTrue(ac instanceof SmartURLsActionConfig);
-        assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.apache.struts2.convention.actions.skip#struts-default#/skip", ac.getPackageName());
-
-        // Check the package level annotation config
-        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.parentpackage#package-level#/parentpackage");
-        assertNotNull(pkgConfig);
         assertEquals(1, pkgConfig.getActionConfigs().size());
+        verifyActionConfig(pkgConfig, "", org.apache.struts2.convention.actions.idx.idx2.Index.class, "execute", "/default-result-path");
 
-        ac = pkgConfig.getActionConfigs().get("default");
-        assertNotNull(ac);
-        assertEquals(DefaultAction.class.getName(), ac.getClassName());
-        assertNull(ac.getMethodName());
-        assertTrue(ac instanceof SmartURLsActionConfig);
-        assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.apache.struts2.convention.actions.parentpackage#package-level#/parentpackage", ac.getPackageName());
-
-        // Check the package level override annotation config
-        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.parentpackage#different-package#/parentpackage");
-        assertNotNull(pkgConfig);
-        assertEquals(1, pkgConfig.getActionConfigs().size());
-
-        ac = pkgConfig.getActionConfigs().get("different_parent_package");
-        assertNotNull(ac);
-        assertEquals(DifferentParentPackageAction.class.getName(), ac.getClassName());
-        assertNull(ac.getMethodName());
-        assertTrue(ac instanceof SmartURLsActionConfig);
-        assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.apache.struts2.convention.actions.parentpackage#different-package#/parentpackage", ac.getPackageName());
-
-        // Check the namespace at the package level
-        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.namespace#struts-default#/package-level");
-        assertNotNull(pkgConfig);
-        assertEquals(1, pkgConfig.getActionConfigs().size());
-
-        ac = pkgConfig.getActionConfigs().get("default_namespace");
-        assertNotNull(ac);
-        assertEquals(DefaultNamespaceAction.class.getName(), ac.getClassName());
-        assertNull(ac.getMethodName());
-        assertTrue(ac instanceof SmartURLsActionConfig);
-        assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.apache.struts2.convention.actions.namespace#struts-default#/package-level", ac.getPackageName());
-
-        // Check the namespace at the class level in a package that has a package level
-        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.namespace#struts-default#/class-level");
-        assertNotNull(pkgConfig);
-        assertEquals(1, pkgConfig.getActionConfigs().size());
-
-        ac = pkgConfig.getActionConfigs().get("class_level");
-        assertNotNull(ac);
-        assertEquals(ClassLevelAction.class.getName(), ac.getClassName());
-        assertNull(ac.getMethodName());
-        assertTrue(ac instanceof SmartURLsActionConfig);
-        assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.apache.struts2.convention.actions.namespace#struts-default#/class-level", ac.getPackageName());
-
-        // Check the namespace at the action level in a package that has a package level
+        /* org.apache.struts2.convention.actions.namespace action level */
         pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.namespace#struts-default#/action-level");
         assertNotNull(pkgConfig);
         assertEquals(1, pkgConfig.getActionConfigs().size());
+        verifyActionConfig(pkgConfig, "action", ActionLevelNamespaceAction.class, "execute", "/default-result-path");
 
-        ac = pkgConfig.getActionConfigs().get("action_level");
+        /* org.apache.struts2.convention.actions.namespace class level */
+        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.namespace#struts-default#/class-level");
+        assertNotNull(pkgConfig);
+        assertEquals(1, pkgConfig.getActionConfigs().size());
+        verifyActionConfig(pkgConfig, "class-level-namespace", ClassLevelNamespaceAction.class, "execute", "/default-result-path");
+
+        /* org.apache.struts2.convention.actions.namespace package level */
+        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.namespace#struts-default#/package-level");
+        assertNotNull(pkgConfig);
+        assertEquals(1, pkgConfig.getActionConfigs().size());
+        verifyActionConfig(pkgConfig, "package-level-namespace", PackageLevelNamespaceAction.class, "execute", "/default-result-path");
+
+        /* org.apache.struts2.convention.actions.namespace2 */
+        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.namespace2#struts-default#/namespace2");
+        assertNotNull(pkgConfig);
+        assertEquals(1, pkgConfig.getActionConfigs().size());
+        verifyActionConfig(pkgConfig, "default-namespace", DefaultNamespaceAction.class, "execute", "/default-result-path");
+
+        /* org.apache.struts2.convention.actions.parentpackage class level */
+        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.parentpackage#class-level#/parentpackage");
+        assertNotNull(pkgConfig);
+        assertEquals(1, pkgConfig.getActionConfigs().size());
+        verifyActionConfig(pkgConfig, "class-level-parent-package", ClassLevelParentPackageAction.class, "execute", "/default-result-path");
+
+        /* org.apache.struts2.convention.actions.parentpackage package level */
+        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.parentpackage#package-level#/parentpackage");
+        assertNotNull(pkgConfig);
+        assertEquals(1, pkgConfig.getActionConfigs().size());
+        verifyActionConfig(pkgConfig, "package-level-parent-package", PackageLevelParentPackageAction.class, "execute", "/default-result-path");
+
+        /* org.apache.struts2.convention.actions.result */
+        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.result#struts-default#/result");
+        assertNotNull(pkgConfig);
+        assertEquals(4, pkgConfig.getActionConfigs().size());
+        verifyActionConfig(pkgConfig, "class-level-result", ClassLevelResultAction.class, "execute", "/default-result-path");
+        verifyActionConfig(pkgConfig, "class-level-results", ClassLevelResultsAction.class, "execute", "/default-result-path");
+        verifyActionConfig(pkgConfig, "action-level-result", ActionLevelResultAction.class, "execute", "/default-result-path");
+        verifyActionConfig(pkgConfig, "action-level-results", ActionLevelResultsAction.class, "execute", "/default-result-path");
+
+        /* org.apache.struts2.convention.actions.resultpath */
+        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.resultpath#struts-default#/resultpath");
+        assertNotNull(pkgConfig);
+        assertEquals(2, pkgConfig.getActionConfigs().size());
+        verifyActionConfig(pkgConfig, "class-level-result-path", ClassLevelResultPathAction.class, "execute", "/class-level");
+        verifyActionConfig(pkgConfig, "package-level-result-path", PackageLevelResultPathAction.class, "execute", "/package-level");
+
+        /* org.apache.struts2.convention.actions */
+        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions#struts-default#/");
+        assertNotNull(pkgConfig);
+        assertEquals(3, pkgConfig.getActionConfigs().size());
+        verifyActionConfig(pkgConfig, "no-annotation", NoAnnotationAction.class, "execute", "/default-result-path");
+        verifyActionConfig(pkgConfig, "default-result-path", DefaultResultPathAction.class, "execute", "/default-result-path");
+        verifyActionConfig(pkgConfig, "skip", DefaultResultPathAction.class, "execute", "/default-result-path");
+    }
+
+    private void verifyActionConfig(PackageConfig pkgConfig, String actionName, Class<?> actionClass,
+            String methodName, String resultPath) {
+        ActionConfig ac = pkgConfig.getAllActionConfigs().get(actionName);
         assertNotNull(ac);
-        assertEquals(ActionLevelAction.class.getName(), ac.getClassName());
-        assertNull(ac.getMethodName());
-        assertTrue(ac instanceof SmartURLsActionConfig);
-        assertEquals("/test-base-result-location", ((SmartURLsActionConfig) ac).getBaseResultLocation());
-        assertEquals("org.apache.struts2.convention.actions.namespace#struts-default#/action-level", ac.getPackageName());
+        assertEquals(actionClass.getName(), ac.getClassName());
+        assertEquals(methodName, ac.getMethodName());
+        assertTrue(ac instanceof ConventionActionConfig);
+        assertEquals(resultPath, ((ConventionActionConfig) ac).getBaseResultLocation());
+        assertEquals(pkgConfig.getName(), ac.getPackageName());
     }
 
     /**

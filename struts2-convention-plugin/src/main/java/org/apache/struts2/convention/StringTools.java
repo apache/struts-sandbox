@@ -42,6 +42,6 @@ public class StringTools {
             return str.substring(0, index);
         }
 
-        return str;
+        return "";
     }
 }

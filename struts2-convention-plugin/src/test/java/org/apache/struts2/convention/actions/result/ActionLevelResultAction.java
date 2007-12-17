@@ -25,14 +25,9 @@ import org.apache.struts2.convention.annotation.Result;
  *
  * @author Brian Pontarelli
  */
-public class ResultsAction {
+public class ActionLevelResultAction {
     @Action(results = {
-        @Result(name="error", location="action.jsp"),
-        @Result(name="input", location="foo.action", type="redirect-action"),
-        @Result(name="success", location="/WEB-INF/location/namespace/action-success.jsp"),
-        @Result(name="failure", location="/WEB-INF/location/namespace/action-failure.jsp"),
-        @Result(name="resul1", location="/WEB-INF/location/namespace/action-result1.jsp"),
-        @Result(name="resul2", location="/WEB-INF/location/namespace/action-result2.jsp")
+        @Result(name="success", location="/WEB-INF/location/namespace/action-success.jsp")
     })
     public String execute() {
         return null;

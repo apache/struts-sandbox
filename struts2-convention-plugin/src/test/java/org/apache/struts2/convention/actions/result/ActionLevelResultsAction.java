@@ -13,14 +13,26 @@
  * either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.apache.struts2.convention.actions.namespace;
+package org.apache.struts2.convention.actions.result;
+
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Result;
 
 /**
  * <p>
- * This class uses the package level annotation.
+ * This is a test action with multiple results.
  * </p>
  *
  * @author Brian Pontarelli
  */
-public class DefaultNamespaceAction {
+public class ActionLevelResultsAction {
+    @Action(results = {
+        @Result(name="error", location="action.jsp"),
+        @Result(name="input", location="foo.action", type="redirectAction"),
+        @Result(name="success", location="/WEB-INF/location/namespace/action-success.jsp"),
+        @Result(name="failure", location="/WEB-INF/location/namespace/action-failure.jsp")
+    })
+    public String execute() {
+        return null;
+    }
 }

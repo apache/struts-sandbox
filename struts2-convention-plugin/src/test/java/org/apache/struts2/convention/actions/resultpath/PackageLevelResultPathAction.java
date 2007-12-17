@@ -13,17 +13,14 @@
  * either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.apache.struts2.convention.actions.parentpackage;
-
-import org.apache.struts2.convention.annotation.ParentPackage;
+package org.apache.struts2.convention.actions.resultpath;
 
 /**
  * <p>
- * This is a parent package usage action.
+ * This class is a test action with the default result path.
  * </p>
  *
  * @author Brian Pontarelli
  */
-@ParentPackage("different-package")
-public class DifferentParentPackageAction {
+public class PackageLevelResultPathAction {
 }

@@ -15,6 +15,9 @@
  */
 package org.apache.struts2.convention;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+
 /**
  * <p>
  * This class has some reflection helpers.
@@ -37,6 +40,23 @@ public class ReflectionTools {
             return true;
         } catch (NoSuchMethodException e) {
             return false;
+        }
+    }
+
+    /**
+     * Retrieves the annotation from the given method in the given class.
+     *
+     * @param   klass The class.
+     * @param   methodName The method.
+     * @param   annotationClass The annotation to get.
+     * @return  The annotation or null if it doesn't exist.
+     */
+    public static <T extends Annotation> T getAnnotation(Class<?> klass, String methodName, Class<T> annotationClass) {
+        try {
+            Method method = klass.getMethod(methodName);
+            return method.getAnnotation(annotationClass);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
         }
     }
 }

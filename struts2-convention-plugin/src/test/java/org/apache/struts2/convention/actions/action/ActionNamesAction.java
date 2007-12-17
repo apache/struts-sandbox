@@ -27,8 +27,8 @@ import org.apache.struts2.convention.annotation.Actions;
  */
 public class ActionNamesAction {
     @Actions({
-        @Action("action1"),
-        @Action("action2")
+        @Action("actions1"),
+        @Action("actions2")
     })
     public String run() {
         return null;

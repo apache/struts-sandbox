@@ -13,20 +13,17 @@
  * either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.apache.struts2.convention;
+package org.apache.struts2.convention.actions.parentpackage;
 
-import junit.framework.TestCase;
+import org.apache.struts2.convention.annotation.ParentPackage;
 
 /**
  * <p>
- * This tests the reflection tools.
+ * This is a parent package usage action.
  * </p>
  *
  * @author Brian Pontarelli
  */
-public class ReflectionToolsTest extends TestCase {
-    public void testContainsMethod() {
-        assertTrue(ReflectionTools.containsMethod(this.getClass(), "testContainsMethod"));
-        assertFalse(ReflectionTools.containsMethod(this.getClass(), "badMethod"));
-    }
+@ParentPackage("different-package")
+public class ClassLevelParentPackageAction {
 }

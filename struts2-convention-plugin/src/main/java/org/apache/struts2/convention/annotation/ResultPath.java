@@ -22,7 +22,7 @@ import java.lang.annotation.Target;
 
 /**
  * <p>
- * This annotation allows the base result location be to changed on a class
+ * This annotation allows the path to the results be to changed on a class
  * by class basis. This will favor the property name setting and then the
  * value.
  * </p>
@@ -42,7 +42,7 @@ import java.lang.annotation.Target;
  * <p>
  * The Convention plugin might find that the namespace is foo and the action
  * name is do_something and will need to find the results. Using this annotation
- * you can set the base of the result location to something like
+ * you can set the base path of the results to something like
  * <code>/WEB-INF/jsps</code> so that the Convention plugin will look in the
  * web application for files of this pattern:
  * </p>
@@ -55,15 +55,15 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.PACKAGE})
-public @interface ResultLocation {
+public @interface ResultPath {
     /**
-     * @return  The base result location to use for this action, instead of the default.
+     * @return  The base result path to use for this action, instead of the default.
      */
     String value() default "";
 
     /**
      * @return  The name of the property from the struts.properties file that contains the result
-     *          location for the action that contains this annotation. This property must be set
+     *          path for the action that contains this annotation. This property must be set
      *          and the struts.properties file must exist in the root of the classpath.
      */
     String property() default "";

@@ -14,7 +14,7 @@ Results are built first from the Result annotations at the class level. Next, th
  the resources available in the web application and in the classpath based on the result location,
  namespace of the action and action name (not anything to do with the code element names). Results
  are found for common result codes including, success, error, input, failure, etc. If a specific
- result doesn't exist using the result code then just the action namespace action name are used to
+ result doesn't exist using the result code then just the action namespace and action name are used to
  locate results. If there are still no results found, than a redirect is added back to the index
  action for the namespace, if one exists.
 

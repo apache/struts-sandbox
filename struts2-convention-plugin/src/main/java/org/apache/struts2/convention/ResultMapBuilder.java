@@ -36,7 +36,6 @@ public interface ResultMapBuilder {
      * Builds the result configurations given the action information.
      *
      * @param   actionClass The class of the action.
-     * @param   method The method name.
      * @param   annotation The action annotation.
      * @param   actionName The action name.
      * @param   packageConfig The package configuration that the action will be added to. @return
@@ -44,6 +43,6 @@ public interface ResultMapBuilder {
      *          than this should return an empty Map.
      * @return  The Results.
      */
-    Map<String, ResultConfig> build(Class<?> actionClass, String method, Action annotation,
-        String actionName, PackageConfig packageConfig);
+    Map<String, ResultConfig> build(Class<?> actionClass, Action annotation, String actionName,
+        PackageConfig packageConfig);
 }

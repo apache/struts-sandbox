@@ -35,7 +35,7 @@ public class ConventionActionConfig extends ActionConfig {
         return baseResultLocation;
     }
 
-    public void setBaseResultLocation(String baseResultLocation) {
+    public void setResultPath(String baseResultLocation) {
         this.baseResultLocation = baseResultLocation;
     }
 }

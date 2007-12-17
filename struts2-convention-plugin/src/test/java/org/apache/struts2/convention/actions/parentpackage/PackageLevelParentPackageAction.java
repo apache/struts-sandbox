@@ -22,5 +22,5 @@ package org.apache.struts2.convention.actions.parentpackage;
  *
  * @author Brian Pontarelli
  */
-public class DefaultAction {
+public class PackageLevelParentPackageAction {
 }

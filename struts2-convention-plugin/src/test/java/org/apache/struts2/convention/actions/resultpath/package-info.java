@@ -13,20 +13,6 @@
  * either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.apache.struts2.convention;
+@org.apache.struts2.convention.annotation.ResultPath("/package-level")
+package org.apache.struts2.convention.actions.resultpath;
 
-import junit.framework.TestCase;
-
-/**
- * <p>
- * This tests the reflection tools.
- * </p>
- *
- * @author Brian Pontarelli
- */
-public class ReflectionToolsTest extends TestCase {
-    public void testContainsMethod() {
-        assertTrue(ReflectionTools.containsMethod(this.getClass(), "testContainsMethod"));
-        assertFalse(ReflectionTools.containsMethod(this.getClass(), "badMethod"));
-    }
-}

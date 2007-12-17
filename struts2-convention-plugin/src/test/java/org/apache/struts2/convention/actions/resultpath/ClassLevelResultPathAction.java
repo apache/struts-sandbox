@@ -13,17 +13,17 @@
  * either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.apache.struts2.convention.actions;
+package org.apache.struts2.convention.actions.resultpath;
 
-import org.apache.struts2.convention.annotation.ResultLocation;
+import org.apache.struts2.convention.annotation.ResultPath;
 
 /**
  * <p>
- * This class is a test action with a result location annotation.
+ * This class is a test action with the default result path.
  * </p>
  *
  * @author Brian Pontarelli
  */
-@ResultLocation("/WEB-INF/location")
-public class ResultLocationAnnotationAction {
+@ResultPath("/class-level")
+public class ClassLevelResultPathAction {
 }

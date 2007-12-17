@@ -13,17 +13,17 @@
  * either express or implied. See the License for the specific
  * language governing permissions and limitations under the License.
  */
-package org.apache.struts2.convention.actions.result;
+package org.apache.struts2.convention.actions.namespace;
 
-import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.convention.annotation.Namespace;
 
 /**
  * <p>
- * This is a test action with multiple results.
+ * This class uses the class level annotation override.
  * </p>
  *
  * @author Brian Pontarelli
  */
-@Result(name="error", location="action.jsp")
-public class ClassResultAction {
+@Namespace("/class-level")
+public class ClassLevelNamespaceAction {
 }
