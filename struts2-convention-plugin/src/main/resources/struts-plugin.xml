@@ -29,9 +29,6 @@
 <struts>
   <bean type="com.opensymphony.xwork2.UnknownHandler" class="org.texturemedia.smarturls.SmartURLsUnknownHandler"/>
 
-  <bean type="org.texturemedia.smarturls.ComponentConfiguration" class="org.texturemedia.smarturls.DOMComponentConfiguration"/>
-  <bean type="org.texturemedia.smarturls.ComponentActionConfigBuilder" class="org.texturemedia.smarturls.DefaultComponentActionConfigBuilder"/>
-
   <bean type="org.texturemedia.smarturls.ActionConfigBuilder" class="org.texturemedia.smarturls.PackageBasedActionConfigBuilder"/>
   <bean type="org.texturemedia.smarturls.ActionNameBuilder" class="org.texturemedia.smarturls.SEOActionNameBuilder"/>
   <bean type="org.texturemedia.smarturls.ResultMapBuilder" class="org.texturemedia.smarturls.DefaultResultMapBuilder"/>
