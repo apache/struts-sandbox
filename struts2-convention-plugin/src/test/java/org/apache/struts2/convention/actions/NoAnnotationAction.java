@@ -23,4 +23,7 @@ package org.apache.struts2.convention.actions;
  * @author  Brian Pontarelli
  */
 public class NoAnnotationAction {
+    public String execute() {
+        return null;
+    }
 }

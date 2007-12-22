@@ -40,6 +40,7 @@ import org.apache.struts2.convention.actions.result.ClassLevelResultAction;
 import org.apache.struts2.convention.actions.result.ClassLevelResultsAction;
 import org.apache.struts2.convention.actions.resultpath.ClassLevelResultPathAction;
 import org.apache.struts2.convention.actions.resultpath.PackageLevelResultPathAction;
+import org.apache.struts2.convention.actions.skip.Index;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Actions;
 import org.apache.struts2.dispatcher.ServletDispatcherResult;
@@ -66,52 +67,47 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
         PackageConfig strutsDefault = makePackageConfig("struts-default", null, null, "dispatcher",
             new ResultTypeConfig.Builder("dispatcher", ServletDispatcherResult.class.getName()).
                 defaultResultParam("location").build());
-        PackageConfig fooPackagePkg = makePackageConfig("foo-package", null, null, null);
-        PackageConfig packageLevelPackagePkg = makePackageConfig("package-level", null, null, null);
-        PackageConfig differentPackagePkg = makePackageConfig("different-package", null, null, null);
+        PackageConfig packageLevelParentPkg = makePackageConfig("package-level", null, null, null);
+        PackageConfig classLevelParentPkg = makePackageConfig("class-level", null, null, null);
 
-        Configuration configuration = new DefaultConfiguration();
-        configuration.addPackageConfig("struts-default", strutsDefault);
-        configuration.addPackageConfig("foo-package", fooPackagePkg);
-        configuration.addPackageConfig("package-level", packageLevelPackagePkg);
-        configuration.addPackageConfig("different-package", differentPackagePkg);
-
-        ActionNameBuilder actionNameBuilder = new SEOActionNameBuilder("true", "_");
-        PackageConfig.Builder rootPkg = makePackageConfigBuilder("org.apache.struts2.convention.actions#struts-default#",
+        PackageConfig rootPkg = makePackageConfig("org.apache.struts2.convention.actions#struts-default#",
             "", strutsDefault, null);
-        PackageConfig.Builder subPkg = makePackageConfigBuilder("org.apache.struts2.convention.actions.action#struts-default#/action",
+        PackageConfig actionPkg = makePackageConfig("org.apache.struts2.convention.actions.action#struts-default#/action",
             "/action", strutsDefault, null);
-        PackageConfig.Builder idxPkg = makePackageConfigBuilder("org.apache.struts2.convention.actions.idx#struts-default#/idx",
+        PackageConfig idxPkg = makePackageConfig("org.apache.struts2.convention.actions.idx#struts-default#/idx",
             "/idx", strutsDefault, null);
-        PackageConfig.Builder idx2Pkg = makePackageConfigBuilder("org.apache.struts2.convention.actions.idx.idx2#struts-default#/idx/idx2",
+        PackageConfig idx2Pkg = makePackageConfig("org.apache.struts2.convention.actions.idx.idx2#struts-default#/idx/idx2",
             "/idx/idx2", strutsDefault, null);
-        PackageConfig.Builder packageLevelPkg = makePackageConfigBuilder("org.apache.struts2.convention.actions.parentpackage#package-level#/parentpackage",
-            "/parentpackage", packageLevelPackagePkg, null);
-        PackageConfig.Builder differentPkg = makePackageConfigBuilder("org.apache.struts2.convention.actions.parentpackage#different-package#/parentpackage",
-            "/parentpackage", differentPackagePkg, null);
-        PackageConfig.Builder pkgLevelNamespacePkg = makePackageConfigBuilder("org.apache.struts2.convention.actions.namespace#struts-default#/package-level",
+        PackageConfig packageLevelPkg = makePackageConfig("org.apache.struts2.convention.actions.parentpackage#package-level#/parentpackage",
+            "/parentpackage", packageLevelParentPkg, null);
+        PackageConfig differentPkg = makePackageConfig("org.apache.struts2.convention.actions.parentpackage#class-level#/parentpackage",
+            "/parentpackage", classLevelParentPkg, null);
+        PackageConfig pkgLevelNamespacePkg = makePackageConfig("org.apache.struts2.convention.actions.namespace#struts-default#/package-level",
             "/package-level", strutsDefault, null);
-        PackageConfig.Builder classLevelNamespacePkg = makePackageConfigBuilder("org.apache.struts2.convention.actions.namespace#struts-default#/class-level",
+        PackageConfig classLevelNamespacePkg = makePackageConfig("org.apache.struts2.convention.actions.namespace#struts-default#/class-level",
             "/class-level", strutsDefault, null);
-        PackageConfig.Builder actionLevelNamespacePkg = makePackageConfigBuilder("org.apache.struts2.convention.actions.namespace#struts-default#/action-level",
+        PackageConfig actionLevelNamespacePkg = makePackageConfig("org.apache.struts2.convention.actions.namespace#struts-default#/action-level",
             "/action-level", strutsDefault, null);
-        PackageConfig.Builder defaultNamespacePkg = makePackageConfigBuilder("org.apache.struts2.convention.actions.namespace2#struts-default#/namespace2",
+        PackageConfig defaultNamespacePkg = makePackageConfig("org.apache.struts2.convention.actions.namespace2#struts-default#/namespace2",
             "/namespace2", strutsDefault, null);
-        PackageConfig.Builder resultPkg = makePackageConfigBuilder("org.apache.struts2.convention.actions.result#struts-default#/result",
+        PackageConfig resultPkg = makePackageConfig("org.apache.struts2.convention.actions.result#struts-default#/result",
             "/result", strutsDefault, null);
-        PackageConfig.Builder resultPathPkg = makePackageConfigBuilder("org.apache.struts2.convention.actions.resultpath#struts-default#/resultpath",
+        PackageConfig resultPathPkg = makePackageConfig("org.apache.struts2.convention.actions.resultpath#struts-default#/resultpath",
             "/resultpath", strutsDefault, null);
+        PackageConfig skipPkg = makePackageConfig("org.apache.struts2.convention.actions.skip#struts-default#/skip",
+            "/skip", strutsDefault, null);
 
-        ResultMapBuilder resultMapBuilder = createNiceMock(ResultMapBuilder.class);
+        ResultMapBuilder resultMapBuilder = createStrictMock(ResultMapBuilder.class);
+        checkOrder(resultMapBuilder, false);
         Map<String, ResultConfig> results = new HashMap<String, ResultConfig>();
 
         /* org.apache.struts2.convention.actions.action */
-        expect(resultMapBuilder.build(ActionNameAction.class, getAnnotation(ActionNameAction.class, "run1", Action.class), "action1", subPkg)).andReturn(results);
-        expect(resultMapBuilder.build(ActionNameAction.class, getAnnotation(ActionNameAction.class, "run2", Action.class), "action2", subPkg)).andReturn(results);
-        expect(resultMapBuilder.build(ActionNamesAction.class, getAnnotation(ActionNamesAction.class, "run", Actions.class).value()[0], "actions1", subPkg)).andReturn(results);
-        expect(resultMapBuilder.build(ActionNamesAction.class, getAnnotation(ActionNamesAction.class, "run", Actions.class).value()[1], "actions2", subPkg)).andReturn(results);
-        expect(resultMapBuilder.build(SingleActionNameAction.class, getAnnotation(SingleActionNameAction.class, "run", Action.class), "action", subPkg)).andReturn(results);
-        expect(resultMapBuilder.build(TestAction.class, null, "test", subPkg)).andReturn(results);
+        expect(resultMapBuilder.build(ActionNameAction.class, getAnnotation(ActionNameAction.class, "run1", Action.class), "action1", actionPkg)).andReturn(results);
+        expect(resultMapBuilder.build(ActionNameAction.class, getAnnotation(ActionNameAction.class, "run2", Action.class), "action2", actionPkg)).andReturn(results);
+        expect(resultMapBuilder.build(ActionNamesAction.class, getAnnotation(ActionNamesAction.class, "run", Actions.class).value()[0], "actions1", actionPkg)).andReturn(results);
+        expect(resultMapBuilder.build(ActionNamesAction.class, getAnnotation(ActionNamesAction.class, "run", Actions.class).value()[1], "actions2", actionPkg)).andReturn(results);
+        expect(resultMapBuilder.build(SingleActionNameAction.class, getAnnotation(SingleActionNameAction.class, "run", Action.class), "action", actionPkg)).andReturn(results);
+        expect(resultMapBuilder.build(TestAction.class, null, "test", actionPkg)).andReturn(results);
 
         /* org.apache.struts2.convention.actions.idx */
         /* org.apache.struts2.convention.actions.idx.idx2 */
@@ -120,8 +116,8 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
 
         /* org.apache.struts2.convention.actions.namespace */
         expect(resultMapBuilder.build(ActionLevelNamespaceAction.class, getAnnotation(ActionLevelNamespaceAction.class, "execute", Action.class), "action", actionLevelNamespacePkg)).andReturn(results);
-        expect(resultMapBuilder.build(ClassLevelNamespaceAction.class, null, "class-level", classLevelNamespacePkg)).andReturn(results);
-        expect(resultMapBuilder.build(PackageLevelNamespaceAction.class, null, "package-level", pkgLevelNamespacePkg)).andReturn(results);
+        expect(resultMapBuilder.build(ClassLevelNamespaceAction.class, null, "class-level-namespace", classLevelNamespacePkg)).andReturn(results);
+        expect(resultMapBuilder.build(PackageLevelNamespaceAction.class, null, "package-level-namespace", pkgLevelNamespacePkg)).andReturn(results);
 
         /* org.apache.struts2.convention.actions.namespace2 */
         expect(resultMapBuilder.build(DefaultNamespaceAction.class, null, "default-namespace", defaultNamespacePkg)).andReturn(results);
@@ -133,8 +129,8 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
         /* org.apache.struts2.convention.actions.result */
         expect(resultMapBuilder.build(ClassLevelResultAction.class, null, "class-level-result", resultPkg)).andReturn(results);
         expect(resultMapBuilder.build(ClassLevelResultsAction.class, null, "class-level-results", resultPkg)).andReturn(results);
-        expect(resultMapBuilder.build(ActionLevelResultAction.class, null, "action-level-result", resultPkg)).andReturn(results);
-        expect(resultMapBuilder.build(ActionLevelResultsAction.class, null, "action-level-results", resultPkg)).andReturn(results);
+        expect(resultMapBuilder.build(ActionLevelResultAction.class, getAnnotation(ActionLevelResultAction.class, "execute", Action.class), "action-level-result", resultPkg)).andReturn(results);
+        expect(resultMapBuilder.build(ActionLevelResultsAction.class, getAnnotation(ActionLevelResultsAction.class, "execute", Action.class), "action-level-results", resultPkg)).andReturn(results);
 
         /* org.apache.struts2.convention.actions.resultpath */
         expect(resultMapBuilder.build(ClassLevelResultPathAction.class, null, "class-level-result-path", resultPathPkg)).andReturn(results);
@@ -145,8 +141,17 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
         expect(resultMapBuilder.build(DefaultResultPathAction.class, null, "default-result-path", rootPkg)).andReturn(results);
         expect(resultMapBuilder.build(Skip.class, null, "skip", rootPkg)).andReturn(results);
 
+        /* org.apache.struts2.convention.actions.skip */
+        expect(resultMapBuilder.build(Index.class, null, "index", skipPkg)).andReturn(results);
+
         EasyMock.replay(resultMapBuilder);
 
+        Configuration configuration = new DefaultConfiguration();
+        configuration.addPackageConfig("struts-default", strutsDefault);
+        configuration.addPackageConfig("package-level", packageLevelParentPkg);
+        configuration.addPackageConfig("class-level", classLevelParentPkg);
+
+        ActionNameBuilder actionNameBuilder = new SEOActionNameBuilder("true", "-");
         ObjectFactory of = new ObjectFactory();
         PackageBasedActionConfigBuilder builder = new PackageBasedActionConfigBuilder(configuration,
             actionNameBuilder, resultMapBuilder, of, "false", "org.apache.struts2.convention.actions",
@@ -158,114 +163,130 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
         PackageConfig pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.action#struts-default#/action");
         assertNotNull(pkgConfig);
         assertEquals(6, pkgConfig.getActionConfigs().size());
-        verifyActionConfig(pkgConfig, "action1", ActionNameAction.class, "run1");
-        verifyActionConfig(pkgConfig, "action2", ActionNameAction.class, "run2");
-        verifyActionConfig(pkgConfig, "actions1", ActionNamesAction.class, "run");
-        verifyActionConfig(pkgConfig, "actions2", ActionNamesAction.class, "run");
-        verifyActionConfig(pkgConfig, "action", SingleActionNameAction.class, "run");
-        verifyActionConfig(pkgConfig, "test", TestAction.class, "execute");
+        verifyActionConfig(pkgConfig, "action1", ActionNameAction.class, "run1", pkgConfig.getName());
+        verifyActionConfig(pkgConfig, "action2", ActionNameAction.class, "run2", pkgConfig.getName());
+        verifyActionConfig(pkgConfig, "actions1", ActionNamesAction.class, "run", pkgConfig.getName());
+        verifyActionConfig(pkgConfig, "actions2", ActionNamesAction.class, "run", pkgConfig.getName());
+        verifyActionConfig(pkgConfig, "action", SingleActionNameAction.class, "run", pkgConfig.getName());
+        verifyActionConfig(pkgConfig, "test", TestAction.class, "execute", pkgConfig.getName());
 
         /* org.apache.struts2.convention.actions.idx */
         pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.idx#struts-default#/idx");
         assertNotNull(pkgConfig);
-        assertEquals(1, pkgConfig.getActionConfigs().size());
-        verifyActionConfig(pkgConfig, "", org.apache.struts2.convention.actions.idx.Index.class, "execute");
+        assertEquals(3, pkgConfig.getActionConfigs().size());
+        verifyActionConfig(pkgConfig, "", org.apache.struts2.convention.actions.idx.Index.class, "execute", pkgConfig.getName());
+        verifyActionConfig(pkgConfig, "index", org.apache.struts2.convention.actions.idx.Index.class, "execute", pkgConfig.getName());
+        verifyActionConfig(pkgConfig, "idx2", org.apache.struts2.convention.actions.idx.idx2.Index.class, "execute",
+            "org.apache.struts2.convention.actions.idx.idx2#struts-default#/idx/idx2");
 
         /* org.apache.struts2.convention.actions.idx.idx2 */
         pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.idx.idx2#struts-default#/idx/idx2");
         assertNotNull(pkgConfig);
-        assertEquals(1, pkgConfig.getActionConfigs().size());
-        verifyActionConfig(pkgConfig, "", org.apache.struts2.convention.actions.idx.idx2.Index.class, "execute");
+        assertEquals(2, pkgConfig.getActionConfigs().size());
+        verifyActionConfig(pkgConfig, "", org.apache.struts2.convention.actions.idx.idx2.Index.class, "execute", pkgConfig.getName());
+        verifyActionConfig(pkgConfig, "index", org.apache.struts2.convention.actions.idx.idx2.Index.class, "execute", pkgConfig.getName());
 
         /* org.apache.struts2.convention.actions.namespace action level */
         pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.namespace#struts-default#/action-level");
         assertNotNull(pkgConfig);
         assertEquals(1, pkgConfig.getActionConfigs().size());
-        verifyActionConfig(pkgConfig, "action", ActionLevelNamespaceAction.class, "execute");
+        verifyActionConfig(pkgConfig, "action", ActionLevelNamespaceAction.class, "execute", pkgConfig.getName());
 
         /* org.apache.struts2.convention.actions.namespace class level */
         pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.namespace#struts-default#/class-level");
         assertNotNull(pkgConfig);
         assertEquals(1, pkgConfig.getActionConfigs().size());
-        verifyActionConfig(pkgConfig, "class-level-namespace", ClassLevelNamespaceAction.class, "execute");
+        verifyActionConfig(pkgConfig, "class-level-namespace", ClassLevelNamespaceAction.class, "execute", pkgConfig.getName());
 
         /* org.apache.struts2.convention.actions.namespace package level */
         pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.namespace#struts-default#/package-level");
         assertNotNull(pkgConfig);
         assertEquals(1, pkgConfig.getActionConfigs().size());
-        verifyActionConfig(pkgConfig, "package-level-namespace", PackageLevelNamespaceAction.class, "execute");
+        verifyActionConfig(pkgConfig, "package-level-namespace", PackageLevelNamespaceAction.class, "execute", pkgConfig.getName());
 
         /* org.apache.struts2.convention.actions.namespace2 */
         pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.namespace2#struts-default#/namespace2");
         assertNotNull(pkgConfig);
         assertEquals(1, pkgConfig.getActionConfigs().size());
-        verifyActionConfig(pkgConfig, "default-namespace", DefaultNamespaceAction.class, "execute");
+        verifyActionConfig(pkgConfig, "default-namespace", DefaultNamespaceAction.class, "execute", pkgConfig.getName());
 
         /* org.apache.struts2.convention.actions.parentpackage class level */
         pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.parentpackage#class-level#/parentpackage");
         assertNotNull(pkgConfig);
         assertEquals(1, pkgConfig.getActionConfigs().size());
-        verifyActionConfig(pkgConfig, "class-level-parent-package", ClassLevelParentPackageAction.class, "execute");
+        verifyActionConfig(pkgConfig, "class-level-parent-package", ClassLevelParentPackageAction.class, "execute", pkgConfig.getName());
 
         /* org.apache.struts2.convention.actions.parentpackage package level */
         pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.parentpackage#package-level#/parentpackage");
         assertNotNull(pkgConfig);
         assertEquals(1, pkgConfig.getActionConfigs().size());
-        verifyActionConfig(pkgConfig, "package-level-parent-package", PackageLevelParentPackageAction.class, "execute");
+        verifyActionConfig(pkgConfig, "package-level-parent-package", PackageLevelParentPackageAction.class, "execute", pkgConfig.getName());
 
         /* org.apache.struts2.convention.actions.result */
         pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.result#struts-default#/result");
         assertNotNull(pkgConfig);
         assertEquals(4, pkgConfig.getActionConfigs().size());
-        verifyActionConfig(pkgConfig, "class-level-result", ClassLevelResultAction.class, "execute");
-        verifyActionConfig(pkgConfig, "class-level-results", ClassLevelResultsAction.class, "execute");
-        verifyActionConfig(pkgConfig, "action-level-result", ActionLevelResultAction.class, "execute");
-        verifyActionConfig(pkgConfig, "action-level-results", ActionLevelResultsAction.class, "execute");
+        verifyActionConfig(pkgConfig, "class-level-result", ClassLevelResultAction.class, "execute", pkgConfig.getName());
+        verifyActionConfig(pkgConfig, "class-level-results", ClassLevelResultsAction.class, "execute", pkgConfig.getName());
+        verifyActionConfig(pkgConfig, "action-level-result", ActionLevelResultAction.class, "execute", pkgConfig.getName());
+        verifyActionConfig(pkgConfig, "action-level-results", ActionLevelResultsAction.class, "execute", pkgConfig.getName());
 
         /* org.apache.struts2.convention.actions.resultpath */
         pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.resultpath#struts-default#/resultpath");
         assertNotNull(pkgConfig);
         assertEquals(2, pkgConfig.getActionConfigs().size());
-        verifyActionConfig(pkgConfig, "class-level-result-path", ClassLevelResultPathAction.class, "execute");
-        verifyActionConfig(pkgConfig, "package-level-result-path", PackageLevelResultPathAction.class, "execute");
+        verifyActionConfig(pkgConfig, "class-level-result-path", ClassLevelResultPathAction.class, "execute", pkgConfig.getName());
+        verifyActionConfig(pkgConfig, "package-level-result-path", PackageLevelResultPathAction.class, "execute", pkgConfig.getName());
 
         /* org.apache.struts2.convention.actions */
-        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions#struts-default#/");
+        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions#struts-default#");
         assertNotNull(pkgConfig);
-        assertEquals(3, pkgConfig.getActionConfigs().size());
-        verifyActionConfig(pkgConfig, "no-annotation", NoAnnotationAction.class, "execute");
-        verifyActionConfig(pkgConfig, "default-result-path", DefaultResultPathAction.class, "execute");
-        verifyActionConfig(pkgConfig, "skip", DefaultResultPathAction.class, "execute");
+        System.out.println("actions " + pkgConfig.getActionConfigs());
+        assertEquals(4, pkgConfig.getActionConfigs().size());
+        verifyActionConfig(pkgConfig, "no-annotation", NoAnnotationAction.class, "execute", pkgConfig.getName());
+        verifyActionConfig(pkgConfig, "default-result-path", DefaultResultPathAction.class, "execute", pkgConfig.getName());
+        verifyActionConfig(pkgConfig, "skip", Skip.class, "execute", pkgConfig.getName());
+        verifyActionConfig(pkgConfig, "idx", org.apache.struts2.convention.actions.idx.Index.class, "execute",
+            "org.apache.struts2.convention.actions.idx#struts-default#/idx");
     }
 
     private void verifyActionConfig(PackageConfig pkgConfig, String actionName, Class<?> actionClass,
-        String methodName) {
+            String methodName, String packageName) {
         ActionConfig ac = pkgConfig.getAllActionConfigs().get(actionName);
         assertNotNull(ac);
         assertEquals(actionClass.getName(), ac.getClassName());
         assertEquals(methodName, ac.getMethodName());
-        assertEquals(pkgConfig.getName(), ac.getPackageName());
+        assertEquals(packageName, ac.getPackageName());
     }
 
     private PackageConfig makePackageConfig(String name, String namespace, PackageConfig parent,
             String defaultResultType, ResultTypeConfig... results) {
         PackageConfig.Builder builder = new PackageConfig.Builder(name);
-        builder.namespace(namespace).addParent(parent).defaultResultType(defaultResultType);
+        if (namespace != null) {
+            builder.namespace(namespace);
+        }
+        if (parent != null) {
+            builder.addParent(parent);
+        }
+        if (defaultResultType != null) {
+            builder.defaultResultType(defaultResultType);
+        }
         for (ResultTypeConfig result : results) {
             builder.addResultTypeConfig(result);
         }
 
-        return builder.build();
+        return new MyPackageConfig(builder.build());
     }
 
-    private PackageConfig.Builder makePackageConfigBuilder(String name, String namespace, PackageConfig parent,
-            String defaultResultType, ResultTypeConfig... results) {
-        PackageConfig.Builder builder = new PackageConfig.Builder(name);
-        builder.namespace(namespace).addParent(parent).defaultResultType(defaultResultType);
-        for (ResultTypeConfig result : results) {
-            builder.addResultTypeConfig(result);
+    public class MyPackageConfig extends PackageConfig {
+        protected MyPackageConfig(PackageConfig packageConfig) {
+            super(packageConfig);
         }
 
-        return builder;
+        public boolean equals(Object obj) {
+            PackageConfig other = (PackageConfig) obj;
+            return getName().equals(other.getName()) && getNamespace().equals(other.getNamespace()) &&
+                getParents().get(0) == other.getParents().get(0) && getParents().size() == other.getParents().size();
+        }
     }
 }

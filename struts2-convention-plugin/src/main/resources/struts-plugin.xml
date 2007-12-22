@@ -27,13 +27,23 @@
     "http://struts.apache.org/dtds/struts-2.0.dtd">
 
 <struts>
-    <bean type="com.opensymphony.xwork2.UnknownHandler" class="org.apache.struts2.codebehind.CodebehindUnknownHandler" />
-    <bean type="com.opensymphony.xwork2.config.PackageProvider" name="codebehind" class="org.apache.struts2.config.ClasspathPackageProvider" />
+  <bean type="com.opensymphony.xwork2.UnknownHandler" class="org.texturemedia.smarturls.SmartURLsUnknownHandler"/>
 
-    <constant name="struts.codebehind.pathPrefix" value="/"/>
-    <constant name="struts.codebehind.defaultPackage" value="codebehind-default"/>
-    <constant name="struts.mapper.alwaysSelectFullNamespace" value="true" />
+  <bean type="org.texturemedia.smarturls.ComponentConfiguration" class="org.texturemedia.smarturls.DOMComponentConfiguration"/>
+  <bean type="org.texturemedia.smarturls.ComponentActionConfigBuilder" class="org.texturemedia.smarturls.DefaultComponentActionConfigBuilder"/>
 
-    <package name="codebehind-default" extends="struts-default">
-    </package>    
+  <bean type="org.texturemedia.smarturls.ActionConfigBuilder" class="org.texturemedia.smarturls.PackageBasedActionConfigBuilder"/>
+  <bean type="org.texturemedia.smarturls.ActionNameBuilder" class="org.texturemedia.smarturls.SEOActionNameBuilder"/>
+  <bean type="org.texturemedia.smarturls.ResultMapBuilder" class="org.texturemedia.smarturls.DefaultResultMapBuilder"/>
+
+  <constant name="smarturls.base.result.location" value="/WEB-INF/content/"/>
+  <constant name="smarturls.action.default.parent.package" value="smarturls-default"/>
+  <constant name="smarturls.action.name.lowercase" value="true"/>
+  <constant name="smarturls.action.name.separator" value="-"/>
+  <constant name="smarturls.relative.result.types" value="dispatcher,velocity,freemarker"/>
+  <constant name="smarturls.redirect.to.slash" value="true"/>
+  <constant name="struts.mapper.alwaysSelectFullNamespace" value="true"/>
+
+  <package name="smarturls-default" extends="struts-default">
+  </package>
 </struts>

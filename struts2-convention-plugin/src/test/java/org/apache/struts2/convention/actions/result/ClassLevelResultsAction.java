@@ -32,4 +32,7 @@ import org.apache.struts2.convention.annotation.Results;
     @Result(name="failure", location="/WEB-INF/location/namespace/action-failure.jsp")
 })
 public class ClassLevelResultsAction {
+    public String execute() {
+        return null;
+    }
 }

@@ -23,4 +23,7 @@ package org.apache.struts2.convention.actions;
  * @author Brian Pontarelli
  */
 public class DefaultResultPathAction {
+    public String execute() {
+        return null;
+    }
 }

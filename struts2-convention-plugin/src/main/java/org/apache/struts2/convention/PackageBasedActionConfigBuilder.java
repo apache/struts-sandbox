@@ -239,7 +239,7 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
                 List<Action> actions = map.get(method);
                 for (Action action : actions) {
                     PackageConfig.Builder pkgCfg = defaultPackageConfig;
-                    if (!action.value().contains("/")) {
+                    if (action.value().contains("/")) {
                         pkgCfg = getPackageConfig(packageConfigs, defaultActionNamespace, actionPackage,
                             actionClass, action);
                     }
@@ -256,9 +256,6 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
         for (String packageName : packageNames) {
             configuration.addPackageConfig(packageName, packageConfigs.get(packageName).build());
         }
-
-        // Tell XWork to rebuild the runtime so that it will intercept the actions from now on
-        configuration.rebuildRuntimeConfiguration();
     }
 
     /**
@@ -324,7 +321,7 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
      * @return  The action name.
      */
     protected String determineActionName(Class<?> actionClass) {
-        String actionName = actionNameBuilder.build(actionClass.getName());
+        String actionName = actionNameBuilder.build(actionClass.getSimpleName());
         if (logger.isLoggable(Level.FINEST)) {
             logger.finest("Got actionName for class [" + actionClass + "] of [" + actionName + "]");
         }
@@ -377,24 +374,21 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
      * @param   pkgCfg The package the action configuration instance will belong to.
      * @param   actionClass The action class.
      * @param   actionName The name of the action.
-     * @param   method The method that the annotation was on (if the annotation is not null).
+     * @param   actionMethod The method that the annotation was on (if the annotation is not null) or
+     *          the default method (execute).
      * @param   annotation The ActionName annotation that might override the action name and possibly
      */
     protected void createActionConfig(PackageConfig.Builder pkgCfg, Class<?> actionClass, String actionName,
-            String method, Action annotation) {
-        String actionMethod = null;
+            String actionMethod, Action annotation) {
         if (annotation != null) {
             actionName = annotation.value() != null && annotation.value().equals(Action.DEFAULT_VALUE) ?
                 actionName : annotation.value();
             actionName = StringTools.lastToken(actionName, "/");
-            actionMethod = method;
         }
 
         ActionConfig.Builder actionConfig = new ActionConfig.Builder(pkgCfg.getName(),
             actionName, actionClass.getName());
-        if (actionMethod != null) {
-            actionConfig.methodName(actionMethod);
-        }
+        actionConfig.methodName(actionMethod);
 
         if (logger.isLoggable(Level.FINEST)) {
             logger.finest("Creating action config for class [" + actionClass + "], name [" + actionName +
@@ -402,7 +396,7 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
                 "]");
         }
 
-        Map<String, ResultConfig> results = resultMapBuilder.build(actionClass, annotation, actionName, pkgCfg);
+        Map<String, ResultConfig> results = resultMapBuilder.build(actionClass, annotation, actionName, pkgCfg.build());
         actionConfig.addResultConfigs(results);
 
         pkgCfg.addActionConfig(actionName, actionConfig.build());

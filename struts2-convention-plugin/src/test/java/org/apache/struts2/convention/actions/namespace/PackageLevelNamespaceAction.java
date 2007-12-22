@@ -23,4 +23,7 @@ package org.apache.struts2.convention.actions.namespace;
  * @author Brian Pontarelli
  */
 public class PackageLevelNamespaceAction {
+    public String execute() {
+        return null;
+    }
 }

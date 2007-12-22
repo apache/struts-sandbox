@@ -23,4 +23,7 @@ package org.apache.struts2.convention.actions.action;
  * @author Brian Pontarelli
  */
 public class TestAction {
+    public String execute() {
+        return null;
+    }
 }

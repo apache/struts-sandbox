@@ -24,6 +24,9 @@ import org.apache.struts2.convention.annotation.ParentPackage;
  *
  * @author Brian Pontarelli
  */
-@ParentPackage("different-package")
+@ParentPackage("class-level")
 public class ClassLevelParentPackageAction {
+    public String execute() {
+        return null;
+    }
 }

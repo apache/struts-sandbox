@@ -26,4 +26,7 @@ import org.apache.struts2.convention.annotation.ResultPath;
  */
 @ResultPath("/class-level")
 public class ClassLevelResultPathAction {
+    public String execute() {
+        return null;
+    }
 }

@@ -48,7 +48,7 @@ public class DefaultResultMapBuilderTest extends TestCase {
         ServletContext context = mockServletContext("/WEB-INF/location");
 
         // Test with a slash
-        PackageConfig.Builder packageConfig = createPackageConfigBuilder("/namespace");
+        PackageConfig packageConfig = createPackageConfigBuilder("/namespace");
         DefaultResultMapBuilder builder = new DefaultResultMapBuilder(context, new ConventionsServiceImpl("/WEB-INF/location"), "dispatcher,velocity,freemarker");
         Map<String, ResultConfig> results = builder.build(NoAnnotationAction.class, null, "action", packageConfig);
         verify(context, "/WEB-INF/location", results, false);
@@ -67,7 +67,7 @@ public class DefaultResultMapBuilderTest extends TestCase {
         EasyMock.replay(context);
 
         // Test with a slash
-        PackageConfig.Builder packageConfig = createPackageConfigBuilder("/namespace");
+        PackageConfig packageConfig = createPackageConfigBuilder("/namespace");
         DefaultResultMapBuilder builder = new DefaultResultMapBuilder(context, new ConventionsServiceImpl("/WEB-INF/location"), "dispatcher,velocity,freemarker");
         Map<String, ResultConfig> results = builder.build(NoAnnotationAction.class, null, "action", packageConfig);
         assertEquals(0, results.size());
@@ -78,7 +78,7 @@ public class DefaultResultMapBuilderTest extends TestCase {
         ServletContext context = mockServletContext("/class-level");
 
         // Test with a result path
-        PackageConfig.Builder packageConfig = createPackageConfigBuilder("/namespace");
+        PackageConfig packageConfig = createPackageConfigBuilder("/namespace");
         DefaultResultMapBuilder builder = new DefaultResultMapBuilder(context, new ConventionsServiceImpl("/not-used"), "dispatcher,velocity,freemarker");
         Map<String, ResultConfig> results = builder.build(ClassLevelResultPathAction.class, null, "action", packageConfig);
         verify(context, "/class-level", results, false);
@@ -95,7 +95,7 @@ public class DefaultResultMapBuilderTest extends TestCase {
         EasyMock.expect(context.getResourcePaths("/WEB-INF/location/namespace/")).andReturn(resources);
         EasyMock.replay(context);
 
-        PackageConfig.Builder packageConfig = createPackageConfigBuilder("/namespace");
+        PackageConfig packageConfig = createPackageConfigBuilder("/namespace");
 
         DefaultResultMapBuilder builder = new DefaultResultMapBuilder(context, new ConventionsServiceImpl("/WEB-INF/location"), "dispatcher,velocity,freemarker");
         Map<String, ResultConfig> results = builder.build(NoAnnotationAction.class, null, "no-annotation", packageConfig);
@@ -125,7 +125,7 @@ public class DefaultResultMapBuilderTest extends TestCase {
         EasyMock.expect(context.getResourcePaths("/WEB-INF/location/namespace/")).andReturn(resources);
         EasyMock.replay(context);
 
-        PackageConfig.Builder packageConfig = createPackageConfigBuilder("/namespace");
+        PackageConfig packageConfig = createPackageConfigBuilder("/namespace");
 
         DefaultResultMapBuilder builder = new DefaultResultMapBuilder(context, new ConventionsServiceImpl("/WEB-INF/location"), "dispatcher,velocity,freemarker");
         Map<String, ResultConfig> results = builder.build(ClassLevelResultAction.class, null, "class-level-result", packageConfig);
@@ -147,7 +147,7 @@ public class DefaultResultMapBuilderTest extends TestCase {
         EasyMock.expect(context.getResourcePaths("/WEB-INF/location/namespace/")).andReturn(resources);
         EasyMock.replay(context);
 
-        PackageConfig.Builder packageConfig = createPackageConfigBuilder("/namespace");
+        PackageConfig packageConfig = createPackageConfigBuilder("/namespace");
 
         DefaultResultMapBuilder builder = new DefaultResultMapBuilder(context, new ConventionsServiceImpl("/WEB-INF/location"), "dispatcher,velocity,freemarker");
         Map<String, ResultConfig> results = builder.build(ClassLevelResultsAction.class, null, "class-level-results", packageConfig);
@@ -185,7 +185,7 @@ public class DefaultResultMapBuilderTest extends TestCase {
         EasyMock.expect(context.getResourcePaths("/WEB-INF/location/namespace/")).andReturn(resources);
         EasyMock.replay(context);
 
-        PackageConfig.Builder packageConfig = createPackageConfigBuilder("/namespace");
+        PackageConfig packageConfig = createPackageConfigBuilder("/namespace");
 
         DefaultResultMapBuilder builder = new DefaultResultMapBuilder(context, new ConventionsServiceImpl("/WEB-INF/location"), "dispatcher,velocity,freemarker");
         Map<String, ResultConfig> results = builder.build(ActionLevelResultAction.class, getAnnotation(ActionLevelResultAction.class, "execute", Action.class), "action-level-result", packageConfig);
@@ -207,7 +207,7 @@ public class DefaultResultMapBuilderTest extends TestCase {
         EasyMock.expect(context.getResourcePaths("/WEB-INF/location/namespace/")).andReturn(resources);
         EasyMock.replay(context);
 
-        PackageConfig.Builder packageConfig = createPackageConfigBuilder("/namespace");
+        PackageConfig packageConfig = createPackageConfigBuilder("/namespace");
 
         DefaultResultMapBuilder builder = new DefaultResultMapBuilder(context, new ConventionsServiceImpl("/WEB-INF/location"), "dispatcher,velocity,freemarker");
         Map<String, ResultConfig> results = builder.build(ActionLevelResultsAction.class, getAnnotation(ActionLevelResultsAction.class, "execute", Action.class), "action-level-results", packageConfig);
@@ -237,8 +237,8 @@ public class DefaultResultMapBuilderTest extends TestCase {
         ServletContext context = EasyMock.createNiceMock(ServletContext.class);
 
         ResultTypeConfig resultType = new ResultTypeConfig.Builder("freemarker", "org.apache.struts2.dispatcher.ServletDispatcherResult").build();
-        PackageConfig.Builder packageConfig = new PackageConfig.Builder("package").
-            defaultResultType("dispatcher").addResultTypeConfig(resultType);
+        PackageConfig packageConfig = new PackageConfig.Builder("package").
+            defaultResultType("dispatcher").addResultTypeConfig(resultType).build();
 
         DefaultResultMapBuilder builder = new DefaultResultMapBuilder(context, new ConventionsServiceImpl("/WEB-INF/component"), "dispatcher,velocity,freemarker");
         Map<String, ResultConfig> results = builder.build(NoAnnotationAction.class, null, "no-annotation", packageConfig);
@@ -257,7 +257,7 @@ public class DefaultResultMapBuilderTest extends TestCase {
         assertEquals("/WEB-INF/component/no-annotation-foo.ftl", results.get("foo").getParams().get("location"));
     }
 
-    private PackageConfig.Builder createPackageConfigBuilder(String namespace) {
+    private PackageConfig createPackageConfigBuilder(String namespace) {
         ResultTypeConfig resultType = new ResultTypeConfig.Builder("dispatcher", "org.apache.struts2.dispatcher.ServletDispatcherResult").
             addParam("key", "value").addParam("key1", "value1").build();
 
@@ -272,7 +272,7 @@ public class DefaultResultMapBuilderTest extends TestCase {
             defaultResultType("dispatcher").
             addResultTypeConfig(resultType).
             addResultTypeConfig(redirect).
-            addResultTypeConfig(ftlResultType);
+            addResultTypeConfig(ftlResultType).build();
     }
 
     private ServletContext mockServletContext(String resultPath) {

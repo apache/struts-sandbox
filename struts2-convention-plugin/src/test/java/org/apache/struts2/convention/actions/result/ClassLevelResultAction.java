@@ -26,4 +26,7 @@ import org.apache.struts2.convention.annotation.Result;
  */
 @Result(name="error", location="error.jsp", params={"key", "value", "key1", "value1"})
 public class ClassLevelResultAction {
+    public String execute() {
+        return null;
+    }
 }

@@ -26,4 +26,7 @@ import org.apache.struts2.convention.annotation.Namespace;
  */
 @Namespace("/class-level")
 public class ClassLevelNamespaceAction {
+    public String execute() {
+        return null;
+    }
 }

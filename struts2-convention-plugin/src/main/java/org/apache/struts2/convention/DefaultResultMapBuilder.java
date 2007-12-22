@@ -116,7 +116,7 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
      */
     public Map<String, ResultConfig> build(Class<?> actionClass,
         org.apache.struts2.convention.annotation.Action annotation, String actionName,
-            PackageConfig.Builder packageConfig) {
+            PackageConfig packageConfig) {
 
         // Get the default result location from the annotation or configuration
         String defaultResultPath = conventionsService.determineResultPath(actionClass);
@@ -146,7 +146,7 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
         String resultPrefix = defaultResultPath + actionName;
 
         Map<String, ResultConfig> results = new HashMap<String, ResultConfig>();
-        Map<String, ResultTypeConfig> resultsByExtension = conventionsService.getResultTypesByExtension(packageConfig.build());
+        Map<String, ResultTypeConfig> resultsByExtension = conventionsService.getResultTypesByExtension(packageConfig);
         createFromResources(results, defaultResultPath, resultPrefix, actionName, packageConfig, resultsByExtension);
         if (annotation != null && annotation.results() != null && annotation.results().length > 0) {
             createFromAnnotations(results, defaultResultPath, packageConfig, annotation.results(),
@@ -180,7 +180,7 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
      * @param   resultsByExtension The map of extensions to result type configuration instances.
      */
     protected void createFromResources(Map<String, ResultConfig> results, final String resultPath,
-            final String resultPrefix, final String actionName, PackageConfig.Builder packageConfig,
+            final String resultPrefix, final String actionName, PackageConfig packageConfig,
             Map<String, ResultTypeConfig> resultsByExtension) {
         if (logger.isLoggable(Level.FINEST)) {
             logger.finest("Searching for results in the Servlet container at [" + resultPath +
@@ -242,7 +242,7 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
      * @param   resultsByExtension The map of extensions to result type configuration instances.
      */
     protected void makeResults(String path, String resultPrefix, Map<String, ResultConfig> results,
-            PackageConfig.Builder packageConfig, Map<String, ResultTypeConfig> resultsByExtension) {
+            PackageConfig packageConfig, Map<String, ResultTypeConfig> resultsByExtension) {
         if (path.startsWith(resultPrefix)) {
             int indexOfDot = path.indexOf('.', resultPrefix.length());
 
@@ -290,7 +290,7 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
     }
 
     protected void createFromAnnotations(Map<String, ResultConfig> resultConfigs,
-            String resultPath, PackageConfig.Builder packageConfig, Result[] results,
+            String resultPath, PackageConfig packageConfig, Result[] results,
             Class<?> actionClass, Map<String, ResultTypeConfig> resultsByExtension) {
         // Check for multiple results on the class
         for (Result result : results) {
@@ -315,10 +315,10 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
      *          targeted to some other action than this one.
      */
     @SuppressWarnings(value = {"unchecked"})
-    protected ResultConfig createResultConfig(ResultInfo info, PackageConfig.Builder packageConfig, Result result) {
+    protected ResultConfig createResultConfig(ResultInfo info, PackageConfig packageConfig, Result result) {
         // Look up by the type that was determined from the annotation or by the extension in the
         // ResultInfo class
-        ResultTypeConfig resultTypeConfig = packageConfig.getResultType(info.type);
+        ResultTypeConfig resultTypeConfig = packageConfig.getResultTypeConfigs().get(info.type);
         if (resultTypeConfig == null) {
             throw new ConfigurationException("The Result type [" + info.type + "] which is" +
                 " defined in the Result annotation or determined by the file extension or is the" +
@@ -371,14 +371,14 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
         public final String location;
         public final String type;
 
-        public ResultInfo(String name, String location, PackageConfig.Builder packageConfig,
+        public ResultInfo(String name, String location, PackageConfig packageConfig,
                 Map<String, ResultTypeConfig> resultsByExtension) {
             this.name = name;
             this.location = location;
             this.type = determineType(location, packageConfig, resultsByExtension);
         }
 
-        public ResultInfo(Result result, PackageConfig.Builder packageConfig, String resultPath,
+        public ResultInfo(Result result, PackageConfig packageConfig, String resultPath,
                 Class<?> actionClass, Map<String, ResultTypeConfig> resultsByExtension) {
             this.name = result.name();
             if (!StringTools.isTrimmedEmpty(result.type())) {
@@ -403,7 +403,7 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
             }
         }
 
-        String determineType(String location, PackageConfig.Builder packageConfig,
+        String determineType(String location, PackageConfig packageConfig,
                 Map<String, ResultTypeConfig> resultsByExtension) {
             int indexOfDot = location.lastIndexOf(".");
             if (indexOfDot > 0) {

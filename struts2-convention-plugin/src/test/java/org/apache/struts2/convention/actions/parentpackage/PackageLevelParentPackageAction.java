@@ -23,4 +23,7 @@ package org.apache.struts2.convention.actions.parentpackage;
  * @author Brian Pontarelli
  */
 public class PackageLevelParentPackageAction {
+    public String execute() {
+        return null;
+    }
 }
