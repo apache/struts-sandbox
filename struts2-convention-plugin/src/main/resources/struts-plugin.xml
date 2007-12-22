@@ -27,20 +27,20 @@
     "http://struts.apache.org/dtds/struts-2.0.dtd">
 
 <struts>
-  <bean type="com.opensymphony.xwork2.UnknownHandler" class="org.texturemedia.smarturls.SmartURLsUnknownHandler"/>
+  <bean type="com.opensymphony.xwork2.UnknownHandler" class="org.apache.struts2.convention.ConventionUnknownHandler"/>
 
-  <bean type="org.texturemedia.smarturls.ActionConfigBuilder" class="org.texturemedia.smarturls.PackageBasedActionConfigBuilder"/>
-  <bean type="org.texturemedia.smarturls.ActionNameBuilder" class="org.texturemedia.smarturls.SEOActionNameBuilder"/>
-  <bean type="org.texturemedia.smarturls.ResultMapBuilder" class="org.texturemedia.smarturls.DefaultResultMapBuilder"/>
+  <bean type="org.apache.struts2.convention.ActionConfigBuilder" class="org.apache.struts2.convention.PackageBasedActionConfigBuilder"/>
+  <bean type="org.apache.struts2.convention.ActionNameBuilder" class="org.apache.struts2.convention.SEOActionNameBuilder"/>
+  <bean type="org.apache.struts2.convention.ResultMapBuilder" class="org.apache.struts2.convention.DefaultResultMapBuilder"/>
 
-  <constant name="smarturls.base.result.location" value="/WEB-INF/content/"/>
-  <constant name="smarturls.action.default.parent.package" value="smarturls-default"/>
-  <constant name="smarturls.action.name.lowercase" value="true"/>
-  <constant name="smarturls.action.name.separator" value="-"/>
-  <constant name="smarturls.relative.result.types" value="dispatcher,velocity,freemarker"/>
-  <constant name="smarturls.redirect.to.slash" value="true"/>
+  <constant name="struts.convention.result.path" value="/WEB-INF/content/"/>
+  <constant name="struts.convention.default.parent.package" value="convention-default"/>
+  <constant name="struts.convention.action.name.lowercase" value="true"/>
+  <constant name="struts.convention.action.name.separator" value="-"/>
+  <constant name="struts.convention.relative.result.types" value="dispatcher,velocity,freemarker"/>
+  <constant name="struts.convention.redirect.to.slash" value="true"/>
   <constant name="struts.mapper.alwaysSelectFullNamespace" value="true"/>
 
-  <package name="smarturls-default" extends="struts-default">
+  <package name="convention-default" extends="struts-default">
   </package>
 </struts>

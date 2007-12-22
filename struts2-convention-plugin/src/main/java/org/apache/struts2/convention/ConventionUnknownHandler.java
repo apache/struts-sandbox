@@ -84,7 +84,7 @@ public class ConventionUnknownHandler implements UnknownHandler {
     public ConventionUnknownHandler(Configuration configuration, ObjectFactory objectFactory,
             ServletContext servletContext, ResultMapBuilder resultMapBuilder,
             ConventionsService conventionsService,
-            @Inject("struts.convention.action.default.parent.package") String defaultParentPackageName,
+            @Inject("struts.convention.default.parent.package") String defaultParentPackageName,
             @Inject("struts.convention.redirect.to.slash") String redirectToSlash) {
         this.configuration = configuration;
         this.objectFactory = objectFactory;
