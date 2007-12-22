@@ -39,7 +39,7 @@ public class StringTools {
     public static String upToLastToken(String str, String s) {
         int index = str.lastIndexOf(s);
         if (index >= 0) {
-            return str.substring(0, index);
+            return str.substring(0, index + 1);
         }
 
         return "";

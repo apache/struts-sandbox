@@ -26,7 +26,7 @@ import org.apache.struts2.convention.annotation.Results;
  * @author Brian Pontarelli
  */
 @Results({
-@Result(name="error", location="error.jsp", params={"key", "value", "key1", "value1"}),
+    @Result(name="error", location="error.jsp", params={"key", "ann-value", "key1", "ann-value1"}),
     @Result(name="input", location="foo.action", type="redirectAction"),
     @Result(name="success", location="/WEB-INF/location/namespace/action-success.jsp"),
     @Result(name="failure", location="/WEB-INF/location/namespace/action-failure.jsp")

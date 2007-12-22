@@ -44,5 +44,5 @@ public interface ResultMapBuilder {
      * @return  The Results.
      */
     Map<String, ResultConfig> build(Class<?> actionClass, Action annotation, String actionName,
-        PackageConfig packageConfig);
+        PackageConfig.Builder packageConfig);
 }

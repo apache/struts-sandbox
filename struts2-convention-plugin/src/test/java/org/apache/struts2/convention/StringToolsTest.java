@@ -40,8 +40,8 @@ public class StringToolsTest extends TestCase {
     }
 
     public void testUpToLastToken() {
-        assertEquals("/foo", StringTools.upToLastToken("/foo/bar", "/"));
-        assertEquals("/foo/bar", StringTools.upToLastToken("/foo/bar/baz", "/"));
+        assertEquals("/foo/", StringTools.upToLastToken("/foo/bar", "/"));
+        assertEquals("/foo/bar/", StringTools.upToLastToken("/foo/bar/baz", "/"));
         assertEquals("/", StringTools.upToLastToken("/foo", "/"));
         assertEquals("", StringTools.upToLastToken("foo", "/"));
     }

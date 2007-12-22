@@ -27,7 +27,7 @@ import org.apache.struts2.convention.annotation.Result;
  */
 public class ActionLevelResultsAction {
     @Action(results = {
-        @Result(name="error", location="action.jsp"),
+        @Result(name="error", location="error.jsp"),
         @Result(name="input", location="foo.action", type="redirectAction"),
         @Result(name="success", location="/WEB-INF/location/namespace/action-success.jsp"),
         @Result(name="failure", location="/WEB-INF/location/namespace/action-failure.jsp")

@@ -58,7 +58,6 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
     private final ResultMapBuilder resultMapBuilder;
     private final ObjectFactory objectFactory;
     private String defaultParentPackage = "struts-default";
-    private String resultPath;
     private boolean redirectToSlash;
     private String[] actionPackages;
     private String[] excludePackages;
@@ -84,7 +83,6 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
      *          configuration.
      * @param   packageLocators (Optional) A list of names used to find action packages.
      * @param   defaultParentPackage The default parent package for all the configuration.
-     * @param   resultPath The default result location.
      */
     @Inject
     public PackageBasedActionConfigBuilder(Configuration configuration, ActionNameBuilder actionNameBuilder,
@@ -93,8 +91,7 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
             @Inject(value = "struts.convention.action.packages", required = false) String actionPackages,
             @Inject(value = "struts.convention.exclude.packages", required = false) String excludePackages,
             @Inject(value = "struts.convention.package.locators", required = false) String packageLocators,
-            @Inject("struts.convention.default.parent.package") String defaultParentPackage,
-            @Inject("struts.convention.result.path") String resultPath) {
+            @Inject("struts.convention.default.parent.package") String defaultParentPackage) {
         if (StringTools.isTrimmedEmpty(actionPackages) && StringTools.isTrimmedEmpty(packageLocators)) {
             throw new ConfigurationException("At least a list of action packages or action package locators " +
                 "must be given using one of the properties [struts.convention.action.packages] or " +
@@ -106,16 +103,23 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
         this.resultMapBuilder = resultMapBuilder;
         this.objectFactory = objectFactory;
         this.redirectToSlash = Boolean.parseBoolean(redirectToSlash);
-        this.actionPackages = actionPackages.split("\\s*[,]\\s*");
-        this.excludePackages = excludePackages.split("\\s*[,]\\s*");
-        this.packageLocators = packageLocators.split("\\s*[,]\\s*");
+        if (actionPackages != null) {
+            this.actionPackages = actionPackages.split("\\s*[,]\\s*");
+        }
+
+        if (excludePackages != null) {
+            this.excludePackages = excludePackages.split("\\s*[,]\\s*");
+        }
+
+        if (packageLocators != null) {
+            this.packageLocators = packageLocators.split("\\s*[,]\\s*");
+        }
 
         if (logger.isLoggable(Level.FINEST)) {
             logger.finest("Setting action default parent package to [" + defaultParentPackage + "]");
         }
 
         this.defaultParentPackage = defaultParentPackage;
-        this.resultPath = resultPath;
     }
 
     /**
@@ -134,8 +138,15 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
                 Arrays.asList(actionPackages));
         }
 
-        Set<Class<?>> classes = findActionsInNamedPackages();
-        classes.addAll(findActionsUsingPackageLocators());
+        Set<Class<?>> classes = new HashSet<Class<?>>();
+        if (actionPackages != null) {
+            classes.addAll(findActionsInNamedPackages());
+        }
+
+        if (packageLocators != null) {
+            classes.addAll(findActionsUsingPackageLocators());
+        }
+
         buildConfiguration(classes);
     }
 
@@ -164,7 +175,7 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
     }
 
     protected void buildConfiguration(Set<Class<?>> classes) {
-        Map<String, PackageConfig> packageConfigs = new HashMap<String, PackageConfig>();
+        Map<String, PackageConfig.Builder> packageConfigs = new HashMap<String, PackageConfig.Builder>();
 
         for (Class<?> actionClass : classes) {
             // Tell the ObjectFactory about this class
@@ -187,7 +198,7 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
             String defaultActionNamespace = determineActionNamespace(actionClass);
             String defaultActionName = determineActionName(actionClass);
             String defaultActionMethod = "execute";
-            PackageConfig defaultPackageConfig = getPackageConfig(packageConfigs, defaultActionNamespace,
+            PackageConfig.Builder defaultPackageConfig = getPackageConfig(packageConfigs, defaultActionNamespace,
                 actionPackage, actionClass, null);
 
             // Verify that the annotations have no errors and also determine if the default action
@@ -227,7 +238,7 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
             for (String method : map.keySet()) {
                 List<Action> actions = map.get(method);
                 for (Action action : actions) {
-                    PackageConfig pkgCfg = defaultPackageConfig;
+                    PackageConfig.Builder pkgCfg = defaultPackageConfig;
                     if (!action.value().contains("/")) {
                         pkgCfg = getPackageConfig(packageConfigs, defaultActionNamespace, actionPackage,
                             actionClass, action);
@@ -239,6 +250,15 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
         }
 
         buildIndexActions(packageConfigs);
+
+        // Add the new actions to the configuration
+        Set<String> packageNames = packageConfigs.keySet();
+        for (String packageName : packageNames) {
+            configuration.addPackageConfig(packageName, packageConfigs.get(packageName).build());
+        }
+
+        // Tell XWork to rebuild the runtime so that it will intercept the actions from now on
+        configuration.rebuildRuntimeConfiguration();
     }
 
     /**
@@ -360,7 +380,7 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
      * @param   method The method that the annotation was on (if the annotation is not null).
      * @param   annotation The ActionName annotation that might override the action name and possibly
      */
-    protected void createActionConfig(PackageConfig pkgCfg, Class<?> actionClass, String actionName,
+    protected void createActionConfig(PackageConfig.Builder pkgCfg, Class<?> actionClass, String actionName,
             String method, Action annotation) {
         String actionMethod = null;
         if (annotation != null) {
@@ -370,15 +390,11 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
             actionMethod = method;
         }
 
-        ConventionActionConfig actionConfig = new ConventionActionConfig();
-        actionConfig.setClassName(actionClass.getName());
-        actionConfig.setPackageName(pkgCfg.getName());
+        ActionConfig.Builder actionConfig = new ActionConfig.Builder(pkgCfg.getName(),
+            actionName, actionClass.getName());
         if (actionMethod != null) {
-            actionConfig.setMethodName(actionMethod);
+            actionConfig.methodName(actionMethod);
         }
-
-        // Add the result path for the unknown handler
-        actionConfig.setResultPath(resultPath);
 
         if (logger.isLoggable(Level.FINEST)) {
             logger.finest("Creating action config for class [" + actionClass + "], name [" + actionName +
@@ -387,12 +403,12 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
         }
 
         Map<String, ResultConfig> results = resultMapBuilder.build(actionClass, annotation, actionName, pkgCfg);
-        actionConfig.setResults(results);
+        actionConfig.addResultConfigs(results);
 
-        pkgCfg.addActionConfig(actionName, actionConfig);
+        pkgCfg.addActionConfig(actionName, actionConfig.build());
     }
 
-    private PackageConfig getPackageConfig(final Map<String, PackageConfig> packageConfigs,
+    private PackageConfig.Builder getPackageConfig(final Map<String, PackageConfig.Builder> packageConfigs,
             String actionNamespace, final String actionPackage, final Class<?> actionClass,
             Action action) {
         if (action != null && !action.value().equals(Action.DEFAULT_VALUE)) {
@@ -432,12 +448,9 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
         // Grab based on package-namespace and if it exists, we need to ensure the existing one has
         // the correct parent package. If not, we need to create a new package config
         String name = actionPackage + "#" + parentPkg.getName() + "#" + actionNamespace;
-        PackageConfig pkgConfig = packageConfigs.get(name);
+        PackageConfig.Builder pkgConfig = packageConfigs.get(name);
         if (pkgConfig == null) {
-            pkgConfig = new PackageConfig();
-            pkgConfig.setName(name);
-            pkgConfig.setNamespace(actionNamespace);
-            pkgConfig.addParent(parentPkg);
+            pkgConfig = new PackageConfig.Builder(name).namespace(actionNamespace).addParent(parentPkg);
             packageConfigs.put(name, pkgConfig);
         }
 
@@ -461,10 +474,10 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
      *
      * @param   packageConfigs Used to store the actions.
      */
-    protected void buildIndexActions(Map<String, PackageConfig> packageConfigs) {
-        Map<String, PackageConfig> byNamespace = new HashMap<String, PackageConfig>();
-        Collection<PackageConfig> values = packageConfigs.values();
-        for (PackageConfig packageConfig : values) {
+    protected void buildIndexActions(Map<String, PackageConfig.Builder> packageConfigs) {
+        Map<String, PackageConfig.Builder> byNamespace = new HashMap<String, PackageConfig.Builder>();
+        Collection<PackageConfig.Builder> values = packageConfigs.values();
+        for (PackageConfig.Builder packageConfig : values) {
             byNamespace.put(packageConfig.getNamespace(), packageConfig);
         }
 
@@ -472,8 +485,8 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
         Set<String> namespaces = byNamespace.keySet();
         for (String namespace : namespaces) {
             // First see if the namespace has an index action
-            PackageConfig pkgConfig = byNamespace.get(namespace);
-            ActionConfig indexActionConfig = pkgConfig.getAllActionConfigs().get("index");
+            PackageConfig.Builder pkgConfig = byNamespace.get(namespace);
+            ActionConfig indexActionConfig = pkgConfig.build().getAllActionConfigs().get("index");
             if (indexActionConfig == null) {
                 continue;
             }
@@ -484,17 +497,15 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
                 if (lastSlash >= 0) {
                     String parentAction = namespace.substring(lastSlash + 1);
                     String parentNamespace = namespace.substring(0, lastSlash);
-                    PackageConfig parent = byNamespace.get(parentNamespace);
-                    if (parent == null || parent.getAllActionConfigs().get(parentAction) == null) {
+                    PackageConfig.Builder parent = byNamespace.get(parentNamespace);
+                    if (parent == null || parent.build().getAllActionConfigs().get(parentAction) == null) {
                         if (parent == null) {
-                            parent = new PackageConfig();
-                            parent.setName(parentNamespace);
-                            parent.setNamespace(parentNamespace);
-                            parent.addAllParents(pkgConfig.getParents());
+                            parent = new PackageConfig.Builder(parentNamespace).namespace(parentNamespace).
+                                addParents(pkgConfig.build().getParents());
                             packageConfigs.put(parentNamespace, parent);
                         }
 
-                        if (parent.getAllActionConfigs().get(parentAction) == null) {
+                        if (parent.build().getAllActionConfigs().get(parentAction) == null) {
                             parent.addActionConfig(parentAction, indexActionConfig);
                         }
                     } else if (logger.isLoggable(Level.FINEST)) {
@@ -505,18 +516,9 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
             }
 
             // Step #3
-            if (pkgConfig.getAllActionConfigs().get("") == null) {
+            if (pkgConfig.build().getAllActionConfigs().get("") == null) {
                 pkgConfig.addActionConfig("", indexActionConfig);
             }
         }
-
-        // Add the new actions to the configuration
-        Set<String> packageNames = packageConfigs.keySet();
-        for (String packageName : packageNames) {
-            configuration.addPackageConfig(packageName, packageConfigs.get(packageName));
-        }
-
-        // Tell XWork to rebuild the runtime so that it will intercept the actions from now on
-        configuration.rebuildRuntimeConfiguration();
     }
 }

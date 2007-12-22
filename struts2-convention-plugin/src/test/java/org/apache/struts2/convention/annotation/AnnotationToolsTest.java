@@ -17,8 +17,8 @@ package org.apache.struts2.convention.annotation;
 
 import junit.framework.TestCase;
 
-import org.apache.struts2.convention.actions.DefaultResultPathAction;
-import org.apache.struts2.convention.actions.namespace.ActionLevelNamespaceAction;
+import org.apache.struts2.convention.actions.namespace.PackageLevelNamespaceAction;
+import org.apache.struts2.convention.actions.resultpath.ClassLevelResultPathAction;
 
 /**
  * <p>
@@ -29,14 +29,14 @@ import org.apache.struts2.convention.actions.namespace.ActionLevelNamespaceActio
  */
 public class AnnotationToolsTest extends TestCase {
     public void testFindAnnotationOnClass() {
-        ResultPath rl = AnnotationTools.findAnnotation(DefaultResultPathAction.class, ResultPath.class);
+        ResultPath rl = AnnotationTools.findAnnotation(ClassLevelResultPathAction.class, ResultPath.class);
         assertNotNull(rl);
-        assertEquals(rl.value(), "/WEB-INF/location");
+        assertEquals("/class-level", rl.value());
     }
 
     public void testFindAnnotationOnPackage() {
-        Namespace ns = AnnotationTools.findAnnotation(ActionLevelNamespaceAction.class, Namespace.class);
+        Namespace ns = AnnotationTools.findAnnotation(PackageLevelNamespaceAction.class, Namespace.class);
         assertNotNull(ns);
-        assertEquals(ns.value(), "/package-level");
+        assertEquals("/package-level", ns.value());
     }
 }
