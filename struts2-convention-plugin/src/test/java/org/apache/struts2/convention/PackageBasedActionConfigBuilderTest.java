@@ -63,7 +63,15 @@ import com.opensymphony.xwork2.config.impl.DefaultConfiguration;
  * @author Brian Pontarelli
  */
 public class PackageBasedActionConfigBuilderTest extends TestCase {
-    public void testBuild() {
+    public void testActionPackages() {
+        run("org.apache.struts2.convention.actions", null, null);
+    }
+
+    public void testPackageLocators() {
+        run(null, "actions", null);
+    }
+
+    private void run(String actionPackages, String packageLocators, String excludePackages) {
         PackageConfig strutsDefault = makePackageConfig("struts-default", null, null, "dispatcher",
             new ResultTypeConfig.Builder("dispatcher", ServletDispatcherResult.class.getName()).
                 defaultResultParam("location").build());
@@ -154,8 +162,16 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
         ActionNameBuilder actionNameBuilder = new SEOActionNameBuilder("true", "-");
         ObjectFactory of = new ObjectFactory();
         PackageBasedActionConfigBuilder builder = new PackageBasedActionConfigBuilder(configuration,
-            actionNameBuilder, resultMapBuilder, of, "false", "org.apache.struts2.convention.actions",
-            null, null, "struts-default");
+            actionNameBuilder, resultMapBuilder, of, "false", "struts-default");
+        if (actionPackages != null) {
+            builder.setActionPackages(actionPackages);
+        }
+        if (packageLocators != null) {
+            builder.setPackageLocators(packageLocators);
+        }
+        if (excludePackages != null) {
+            builder.setExcludePackages(excludePackages);
+        }
         builder.buildActionConfigs();
         verify(resultMapBuilder);
 

@@ -19,10 +19,23 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
+ * This class is maintained in the Java.net Commons library and the test cases
+ * are located there. Any updates to this class should be done in that project
+ * and then migrated over.
+
  * <p>
- * This class is a copy from the Java.net Commons repository. The unit tests
- * are in that package and modifications to this class should be migrated back
- * to that repository.
+ * Locates files within the current ClassLoader/ClassPath. This
+ * class begins from a directory and locates all the files in that
+ * directory and possibly in sub-directories. For each file located
+ * either on the file system or in a JAR file the Test classes and
+ * interfaces defined in this class can be called to determine if
+ * it matches.
+ * </p>
+ *
+ * <p>
+ * When files are matched using the Test interfaces and classes
+ * from this class they are added to a set of matches. These matches can
+ * then be fetched and used however is required.
  * </p>
  *
  * @author  Brian Pontarelli
@@ -71,18 +84,28 @@ public class URLClassLoaderResolver extends AbstractClassLoaderResolver<URL> {
     }
 
     /**
-     * Makes a URL to the resource using the URL and relativePath given.
+     * Concatenates the strings together to for a URL.
      *
      * @param   baseURLSpec The base URL specification that might reference a JAR file or a File path.
      *          This does not include the dirName or the file name, but it will include a ! for JAR
      *          URLs.
      * @param   dirName The dirName that is appended to the URL.
      * @param   file The file to prepare.
+     * @return  The result.
+     */
+    protected String convertName(String baseURLSpec, String dirName, String file) {
+        return baseURLSpec + dirName + "/" + file;
+    }
+
+    /**
+     * Makes a URL to the resource using the URL and relativePath given.
+     *
+     * @param   spec The URL.
      * @return  Returns the URL which is the url parameter plus the relativePath parameter.
      */
-    protected URL prepare(String baseURLSpec, String dirName, String file) {
+    protected URL prepare(String spec) {
         try {
-            return new URL(baseURLSpec + dirName + "/" + file);
+            return new URL(spec);
         } catch (MalformedURLException e) {
             throw new IllegalArgumentException("Unable to make a URL", e);
         }

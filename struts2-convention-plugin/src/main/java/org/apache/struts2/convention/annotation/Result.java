@@ -33,7 +33,7 @@ import java.lang.annotation.Target;
  * @author Brian Pontarelli
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE, ElementType.METHOD})
+@Target({ElementType.TYPE})
 public @interface Result {
     /**
      * @return  The name of the result mapping. This is the value that is returned from the action

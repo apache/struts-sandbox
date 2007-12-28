@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -28,17 +29,20 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
-import java.util.ArrayList;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * This class is maintained in the Java.net Commons library and the test cases
+ * are located there. Any updates to this class should be done in that project
+ * and then migrated over.
+ *
  * <p>
- * This class is a copy from the Java.net Commons repository. The unit tests
- * are in that package and modifications to this class should be migrated back
- * to that repository.
+ * This class is mostly taken from XWork's resolver, but it also supports
+ * finding plain files (resources) in addition to classes. The sub-classes
+ * should be used directly in order to find classes or files.
  * </p>
  *
  * @author  Brian Pontarelli
@@ -56,6 +60,11 @@ public abstract class AbstractClassLoaderResolver<T> {
      * by Thread.currentThread().getContextClassLoader() will be used.
      */
     private ClassLoader classloader;
+
+    /**
+     * The list of directories or packages to exclude from the search.
+     */
+    private String[] exclusions;
 
     /**
      * Provides access to the matches discovered so far. If no calls have been made to any of the
@@ -104,11 +113,35 @@ public abstract class AbstractClassLoaderResolver<T> {
      * @param   dirNames One or more directory names to scan for resources.
      */
     public void find(Test<T> test, boolean recursive, String... dirNames) {
-        if (dirNames == null) {
+        find(test, recursive, new String[0], dirNames);
+    }
+
+    /**
+     * Attempts to discover resources that pass the test. Accumulated resources can be accessed by
+     * calling {@link #getMatches()}.
+     *
+     * @param   test The test implementation to determine matching resources.
+     * @param   recursive If true, this will recurse into sub-directories. If false, this will only
+     *          look in the directories given.
+     * @param   exclusions A list directories or packages to exclude from the results.
+     * @param   directories One or more directory names to scan for resources.
+     */
+    public void find(Test<T> test, boolean recursive, String[] exclusions, String... directories) {
+        if (directories == null) {
             return;
         }
 
-        for (String dir : dirNames) {
+        if (exclusions != null) {
+            this.exclusions = new String[exclusions.length];
+            for (int i = 0; i < exclusions.length; i++) {
+                this.exclusions[i] = exclusions[i].replace('.', '/');
+
+            }
+        } else {
+            this.exclusions = new String[0];
+        }
+
+        for (String dir : directories) {
             if (dir.endsWith("/")) {
                 dir = dir.substring(0, dir.length() - 1);
             }
@@ -144,10 +177,10 @@ public abstract class AbstractClassLoaderResolver<T> {
      * @param   test The test implementation to determine matching resources.
      * @param   recursive If true, this will recurse into sub-directories. If false, this will only
      *          look in the directories given.
-     * @param   exlcusions A list of fully qualified directories to exclude from the results.
+     * @param   exclusions A list directories or packages to exclude from the results.
      * @param   locators A list of locators that are used to locate directories to find resources in.
      */
-    public void findByLocators(Test<T> test, boolean recursive, String[] exlcusions, String... locators) {
+    public void findByLocators(Test<T> test, boolean recursive, String[] exclusions, String... locators) {
         List<URL> urls = getURLs("", "META-INF");
         if (urls == null) {
             return;
@@ -202,13 +235,7 @@ public abstract class AbstractClassLoaderResolver<T> {
             }
         }
 
-        if (exlcusions != null) {
-            for (String exlcusion : exlcusions) {
-                packages.remove(exlcusion);
-            }
-        }
-
-        find(test, recursive, packages.toArray(new String[packages.size()]));
+        find(test, recursive, exclusions, packages.toArray(new String[packages.size()]));
     }
 
     /**
@@ -217,9 +244,9 @@ public abstract class AbstractClassLoaderResolver<T> {
      * and if the Test returns true the resource is retained. Accumulated resources can be fetched by
      * calling {@link #getMatches()}.
      *
-     * @param   test An instance of {@link Test} that will be used to filter resources.
+     * @param   test An instance of {@link AbstractClassLoaderResolver.Test} that will be used to filter resources.
      * @param   recursive If true, this will recurse into sub-directories. If false, this will only
-     *          look in the directories given.
+*              look in the directories given.
      * @param   dirName The name of the directory from which to start scanning for resources.
      */
     protected void findInDirectory(Test<T> test, boolean recursive, String dirName) {
@@ -297,7 +324,7 @@ public abstract class AbstractClassLoaderResolver<T> {
     /**
      * Finds matches in a physical directory on a filesystem.  Examines all files within a directory.
      * If the File object is not a directory, it is passed to the Test class. In order to support
-     * handling Classes, this first calls the {@link #prepare(String, String, String)} to prepare the
+     * handling Classes, this first calls the {@link #prepare(String)} to prepare the
      * resource to be sent to the Test.
      *
      * @param   test A Test used to filter the resources that are discovered.
@@ -313,8 +340,12 @@ public abstract class AbstractClassLoaderResolver<T> {
      *          the values of <i>parent</i> would be <i>org/apache</i>.
      * @param   location A File object representing a directory.
      */
-    protected void loadResourcesInDirectory(Test<T> test, boolean recursive, String baseURLSpec, String dirName,
-            String parent, File location) {
+    protected void loadResourcesInDirectory(Test<T> test, boolean recursive, String baseURLSpec,
+            String dirName, String parent, File location) {
+        if (excluded(parent, false)) {
+            return;
+        }
+
         File[] files = location.listFiles();
         for (File file : files) {
             if (file.isDirectory() && recursive) {
@@ -354,8 +385,10 @@ public abstract class AbstractClassLoaderResolver<T> {
                         "] starting from [" + (dirName.length() + 1) + "]");
                 }
 
-                if (!entry.isDirectory() && (recursive && name.startsWith(dirName)) ||
-                        (!recursive && name.startsWith(dirName) && name.indexOf('/', dirName.length() + 1) == -1)) {
+                if (!entry.isDirectory() &&
+                        ((recursive && name.startsWith(dirName)) ||
+                            (!recursive && name.startsWith(dirName) && name.indexOf('/', dirName.length() + 1) == -1)) &&
+                        !excluded(name, true)) {
                     int index = name.lastIndexOf('/');
                     index = (index > 0) ? index : 0;
                     String dir = name.substring(0, index);
@@ -367,6 +400,25 @@ public abstract class AbstractClassLoaderResolver<T> {
             logger.log(Level.WARNING, "Could not search jar file [" + jarfile + "] for classes " +
                 "matching criteria [" + test + "] due to an IOException", ioe);
         }
+    }
+
+    protected boolean excluded(String name, boolean file) {
+        // If this is a URL it will be like foo/bar/baz.class, we just need the directory
+        if (file) {
+            int index = name.lastIndexOf("/");
+            if (index >= 0) {
+                name = name.substring(0, index);
+            }
+        }
+
+        for (String exclusion : exclusions) {
+            if (exclusion.endsWith("/*") && name.startsWith(exclusion.substring(0, exclusion.length() - 2)) ||
+                    name.equals(exclusion)) {
+               return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -382,23 +434,38 @@ public abstract class AbstractClassLoaderResolver<T> {
      * @param   path The relative path to the resource.
      */
     protected void addIfMatching(Test<T> test, String baseURLSpec, String dirName, String path) {
-        T t = prepare(baseURLSpec, dirName, path);
+        String spec = convertName(baseURLSpec, dirName, path);
+        if (spec == null) {
+            return;
+        }
+
+        T t = prepare(spec);
         if (t != null && test.test(t)) {
             matches.add(t);
         }
     }
 
     /**
-     * Prepares the path so that it can be sent to the tests.
+     * Converts the String from a file definition into the specific String that will be passed to the
+     * {@link #prepare(String)} method.
      *
      * @param   baseURLSpec The base URL specification that might reference a JAR file or a File path.
      *          This does not include the dirName or the file name, but it will include a ! for JAR
      *          URLs.
      * @param   dirName The part of the URL that is the directory from some base to the file.
-     * @param   file The file t be prepared.
+     * @param   file The file to be prepared.
+     * @return  The String and never null.
+     */
+    protected abstract String convertName(String baseURLSpec, String dirName, String file);
+
+    /**
+     * Prepares the path so that it can be sent to the tests.
+     *
+     * @param   spec The String to change into the correct Object type that will be sent to the Test
+     *          classes.
      * @return  The prepared Object.
      */
-    protected abstract T prepare(String baseURLSpec, String dirName, String file);
+    protected abstract T prepare(String spec);
 
     /**
      * This is the testing interface that is used to accept or reject resources.

@@ -15,16 +15,17 @@
  */
 package org.apache.struts2.convention;
 
-import java.util.ResourceBundle;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.ResourceBundle;
 
 import org.apache.struts2.convention.annotation.AnnotationTools;
 import org.apache.struts2.convention.annotation.ResultPath;
 
 import com.opensymphony.xwork2.config.ConfigurationException;
-import com.opensymphony.xwork2.config.entities.ResultTypeConfig;
+import com.opensymphony.xwork2.config.entities.ActionConfig;
 import com.opensymphony.xwork2.config.entities.PackageConfig;
+import com.opensymphony.xwork2.config.entities.ResultTypeConfig;
 import com.opensymphony.xwork2.inject.Inject;
 
 /**
@@ -37,6 +38,7 @@ import com.opensymphony.xwork2.inject.Inject;
 public class ConventionsServiceImpl implements ConventionsService {
     private String resultPath;
 
+    @Inject
     public ConventionsServiceImpl(@Inject("struts.convention.result.path") String resultPath) {
         this.resultPath = resultPath;
     }
@@ -76,12 +78,16 @@ public class ConventionsServiceImpl implements ConventionsService {
     /**
      * {@inheritDoc}
      */
-    public String determineResultPath(String className) {
+    public String determineResultPath(ActionConfig actionConfig) {
+        if (actionConfig == null) {
+            return resultPath;
+        }
+
         try {
-            return determineResultPath(Class.forName(className));
+            return determineResultPath(Class.forName(actionConfig.getClassName()));
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Invalid action class configuration that references an unknown " +
-                "class named [" + className + "]", e);
+                "class named [" + actionConfig.getClassName() + "]", e);
         }
     }
 

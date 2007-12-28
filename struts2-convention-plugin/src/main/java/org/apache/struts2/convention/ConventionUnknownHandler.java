@@ -16,10 +16,8 @@
 package org.apache.struts2.convention;
 
 import java.net.MalformedURLException;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,11 +35,9 @@ import com.opensymphony.xwork2.XWorkException;
 import com.opensymphony.xwork2.config.Configuration;
 import com.opensymphony.xwork2.config.ConfigurationException;
 import com.opensymphony.xwork2.config.entities.ActionConfig;
-import com.opensymphony.xwork2.config.entities.InterceptorMapping;
 import com.opensymphony.xwork2.config.entities.PackageConfig;
 import com.opensymphony.xwork2.config.entities.ResultConfig;
 import com.opensymphony.xwork2.config.entities.ResultTypeConfig;
-import com.opensymphony.xwork2.config.providers.InterceptorBuilder;
 import com.opensymphony.xwork2.inject.Inject;
 
 /**
@@ -202,14 +198,15 @@ public class ConventionUnknownHandler implements UnknownHandler {
         params.put(resultTypeConfig.getDefaultResultParam(), path);
 
         PackageConfig pkg = configuration.getPackageConfig(defaultParentPackageName);
-        List<InterceptorMapping> interceptors = InterceptorBuilder.constructInterceptorReference(pkg,
-            pkg.getFullDefaultInterceptorRef(), Collections.EMPTY_MAP, null, objectFactory);
+//        List<InterceptorMapping> interceptors = InterceptorBuilder.constructInterceptorReference(pkg,
+//            pkg.getFullDefaultInterceptorRef(), Collections.EMPTY_MAP, null, objectFactory);
         ResultConfig config = new ResultConfig.Builder(Action.SUCCESS, resultTypeConfig.getClassName()).
             addParams(params).build();
         results.put(Action.SUCCESS, config);
 
+        //addInterceptors(interceptors).
         return new ActionConfig.Builder(defaultParentPackageName, "execute", ActionSupport.class.getName()).
-            addResultConfigs(results).addInterceptors(interceptors).build();
+            addResultConfigs(results).build();
     }
 
     private Result scanResultsByExtension(String ns, String actionName, String pathPrefix,
@@ -335,31 +332,31 @@ public class ConventionUnknownHandler implements UnknownHandler {
      *
      * @param   actionConfig (Optional) The might be a ConventionActionConfig, from which we can get the
      *          default base result location of that specific action.
-     * @param   nameSpace The current URL namespace.
+     * @param   namespace The current URL namespace.
      * @return  The path prefix and never null.
      */
-    protected String determinePath(ActionConfig actionConfig, String nameSpace) {
-        String finalPrefix = conventionsService.determineResultPath(actionConfig.getClassName());
+    protected String determinePath(ActionConfig actionConfig, String namespace) {
+        String finalPrefix = conventionsService.determineResultPath(actionConfig);
 
         if (!finalPrefix.endsWith("/")) {
             finalPrefix += "/";
         }
 
-        if (nameSpace == null || "/".equals(nameSpace)) {
-            nameSpace = "";
+        if (namespace == null || "/".equals(namespace)) {
+            namespace = "";
         }
 
-        if (nameSpace.length() > 0) {
-            if (nameSpace.startsWith("/")) {
-                nameSpace = nameSpace.substring(1);
+        if (namespace.length() > 0) {
+            if (namespace.startsWith("/")) {
+                namespace = namespace.substring(1);
             }
 
-            if (!nameSpace.endsWith("/")) {
-                nameSpace += "/";
+            if (!namespace.endsWith("/")) {
+                namespace += "/";
             }
         }
 
-        return finalPrefix + nameSpace;
+        return finalPrefix + namespace;
     }
 
     /**

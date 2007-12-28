@@ -147,7 +147,8 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
 
         Map<String, ResultConfig> results = new HashMap<String, ResultConfig>();
         Map<String, ResultTypeConfig> resultsByExtension = conventionsService.getResultTypesByExtension(packageConfig);
-        createFromResources(results, defaultResultPath, resultPrefix, actionName, packageConfig, resultsByExtension);
+        createFromResources(actionClass, results, defaultResultPath, resultPrefix, actionName,
+            packageConfig, resultsByExtension);
         if (annotation != null && annotation.results() != null && annotation.results().length > 0) {
             createFromAnnotations(results, defaultResultPath, packageConfig, annotation.results(),
                 actionClass, resultsByExtension);
@@ -172,6 +173,7 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
      * Creates any result types from the resources available in the web application. This scans the
      * web application resources using the servlet context.
      *
+     * @param   actionClass The action class the results are being built for.
      * @param   results The results map to put the result configs created into.
      * @param   resultPath The calculated path to the resources.
      * @param   resultPrefix The prefix for the result. This is usually <code>/resultPath/actionName</code>.
@@ -179,9 +181,9 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
      * @param   packageConfig The package configuration which is passed along in order to determine
      * @param   resultsByExtension The map of extensions to result type configuration instances.
      */
-    protected void createFromResources(Map<String, ResultConfig> results, final String resultPath,
-            final String resultPrefix, final String actionName, PackageConfig packageConfig,
-            Map<String, ResultTypeConfig> resultsByExtension) {
+    protected void createFromResources(Class<?> actionClass, Map<String, ResultConfig> results,
+            final String resultPath, final String resultPrefix, final String actionName,
+            PackageConfig packageConfig, Map<String, ResultTypeConfig> resultsByExtension) {
         if (logger.isLoggable(Level.FINEST)) {
             logger.finest("Searching for results in the Servlet container at [" + resultPath +
                 "] with result prefix of [" + resultPrefix + "]");
@@ -196,7 +198,7 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
                     logger.finest("Processing resource path [" + path + "]");
                 }
 
-                makeResults(path, resultPrefix, results, packageConfig, resultsByExtension);
+                makeResults(actionClass, path, resultPrefix, results, packageConfig, resultsByExtension);
             }
         }
 
@@ -227,22 +229,24 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
             String urlStr = match.toString();
             int index = urlStr.lastIndexOf(resultPrefix);
             String path = urlStr.substring(index);
-            makeResults(path, resultPrefix, results, packageConfig, resultsByExtension);
+            makeResults(actionClass, path, resultPrefix, results, packageConfig, resultsByExtension);
         }
     }
 
     /**
      * Makes all the results for the given path.
      *
+     * @param   actionClass The action class the results are being built for.
      * @param   path The path to build the result for.
      * @param   resultPrefix The is the result prefix which is the result location plus the action name.
- *              This is used to determine if the path contains a result code or not.
+     *          This is used to determine if the path contains a result code or not.
      * @param   results The Map to place the result(s)
      * @param   packageConfig The package config the results belong to.
      * @param   resultsByExtension The map of extensions to result type configuration instances.
      */
-    protected void makeResults(String path, String resultPrefix, Map<String, ResultConfig> results,
-            PackageConfig packageConfig, Map<String, ResultTypeConfig> resultsByExtension) {
+    protected void makeResults(Class<?> actionClass, String path, String resultPrefix,
+            Map<String, ResultConfig> results, PackageConfig packageConfig,
+            Map<String, ResultTypeConfig> resultsByExtension) {
         if (path.startsWith(resultPrefix)) {
             int indexOfDot = path.indexOf('.', resultPrefix.length());
 
@@ -255,19 +259,19 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
                 }
 
                 if (!results.containsKey(Action.SUCCESS)) {
-                    ResultConfig success = createResultConfig(
+                    ResultConfig success = createResultConfig(actionClass,
                         new ResultInfo(Action.SUCCESS, path, packageConfig, resultsByExtension),
                         packageConfig, null);
                     results.put(Action.SUCCESS, success);
                 }
                 if (!results.containsKey(Action.INPUT)) {
-                    ResultConfig input = createResultConfig(
+                    ResultConfig input = createResultConfig(actionClass,
                         new ResultInfo(Action.INPUT, path, packageConfig, resultsByExtension),
                         packageConfig, null);
                     results.put(Action.INPUT, input);
                 }
                 if (!results.containsKey(Action.ERROR)) {
-                    ResultConfig error = createResultConfig(
+                    ResultConfig error = createResultConfig(actionClass,
                         new ResultInfo(Action.ERROR, path, packageConfig, resultsByExtension),
                         packageConfig, null);
                     results.put(Action.ERROR, error);
@@ -281,7 +285,7 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
                 }
 
                 String resultCode = path.substring(resultPrefix.length() + 1, indexOfDot);
-                ResultConfig result = createResultConfig(
+                ResultConfig result = createResultConfig(actionClass,
                     new ResultInfo(resultCode, path, packageConfig, resultsByExtension),
                     packageConfig, null);
                 results.put(resultCode, result);
@@ -294,7 +298,7 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
             Class<?> actionClass, Map<String, ResultTypeConfig> resultsByExtension) {
         // Check for multiple results on the class
         for (Result result : results) {
-            ResultConfig config = createResultConfig(
+            ResultConfig config = createResultConfig(actionClass,
                 new ResultInfo(result, packageConfig, resultPath, actionClass, resultsByExtension),
                 packageConfig, result);
             if (config != null) {
@@ -308,6 +312,7 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
      * information from the annotation and anything that isn't specified will be fetched from the
      * PackageConfig defaults (if they exist).
      *
+     * @param   actionClass The action class the results are being built for.
      * @param   info The result info that is used to create the ResultConfig instance.
      * @param   packageConfig The PackageConfig to use to fetch defaults for result and parameters.
      * @param   result (Optional) The result annotation to pull additional information from.
@@ -315,15 +320,17 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
      *          targeted to some other action than this one.
      */
     @SuppressWarnings(value = {"unchecked"})
-    protected ResultConfig createResultConfig(ResultInfo info, PackageConfig packageConfig, Result result) {
+    protected ResultConfig createResultConfig(Class<?> actionClass, ResultInfo info,
+            PackageConfig packageConfig, Result result) {
         // Look up by the type that was determined from the annotation or by the extension in the
         // ResultInfo class
-        ResultTypeConfig resultTypeConfig = packageConfig.getResultTypeConfigs().get(info.type);
+        ResultTypeConfig resultTypeConfig = packageConfig.getAllResultTypeConfigs().get(info.type);
         if (resultTypeConfig == null) {
             throw new ConfigurationException("The Result type [" + info.type + "] which is" +
-                " defined in the Result annotation or determined by the file extension or is the" +
-                " default result type for the PackageConfig of the action, could not be found as a" +
-                " result-type defined for the Struts/XWork package [" + packageConfig.getName() + "]");
+                " defined in the Result annotation on the class [" + actionClass + "] or determined" +
+                " by the file extension or is the default result type for the PackageConfig of the" +
+                " action, could not be found as a result-type defined for the Struts/XWork package [" +
+                packageConfig.getName() + "]");
         }
 
         // Add the default parameters for the result type config (if any)

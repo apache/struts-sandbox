@@ -17,6 +17,7 @@ package org.apache.struts2.convention;
 
 import java.util.Map;
 
+import com.opensymphony.xwork2.config.entities.ActionConfig;
 import com.opensymphony.xwork2.config.entities.PackageConfig;
 import com.opensymphony.xwork2.config.entities.ResultTypeConfig;
 
@@ -40,11 +41,12 @@ public interface ConventionsService {
     /**
      * Delegates to the other method but first looks up the Action's class using the given class name.
      *
-     * @param   className The name of the Action class.
-     * @return  The result location if it is set in the annotations otherwise, the default result
-     *          location is returned.
+     * @param   actionConfig (Optional) The configuration for the action that the result is being
+     *          built for or null if the default result path is needed.
+     * @return  The result location if it is set in the annotations for the class of the ActionConfig.
+     *          Otherwise, the default result location is returned.
      */
-    String determineResultPath(String className);
+    String determineResultPath(ActionConfig actionConfig);
 
     /**
      * Returns a mapping between the result type strings and the {@link ResultTypeConfig} instances

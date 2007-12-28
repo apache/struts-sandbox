@@ -57,8 +57,8 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
     private final ActionNameBuilder actionNameBuilder;
     private final ResultMapBuilder resultMapBuilder;
     private final ObjectFactory objectFactory;
-    private String defaultParentPackage = "struts-default";
-    private boolean redirectToSlash;
+    private final String defaultParentPackage;
+    private final boolean redirectToSlash;
     private String[] actionPackages;
     private String[] excludePackages;
     private String[] packageLocators;
@@ -77,49 +77,51 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
      *          action for indexes. If this is set to true, index actions are not created because
      *          the unknown handler will redirect from /foo to /foo/. The only action that is created
      *          is to the empty action in the namespace (e.g. the namespace /foo and the action "").
-     * @param   actionPackages (Optional) An optional list of action packages that this should create
-     *          configuration for.
-     * @param   excludePackages (Optional) A  list of packages that should be skipped when building
-     *          configuration.
-     * @param   packageLocators (Optional) A list of names used to find action packages.
      * @param   defaultParentPackage The default parent package for all the configuration.
      */
     @Inject
     public PackageBasedActionConfigBuilder(Configuration configuration, ActionNameBuilder actionNameBuilder,
             ResultMapBuilder resultMapBuilder, ObjectFactory objectFactory,
             @Inject("struts.convention.redirect.to.slash") String redirectToSlash,
-            @Inject(value = "struts.convention.action.packages", required = false) String actionPackages,
-            @Inject(value = "struts.convention.exclude.packages", required = false) String excludePackages,
-            @Inject(value = "struts.convention.package.locators", required = false) String packageLocators,
             @Inject("struts.convention.default.parent.package") String defaultParentPackage) {
-        if (StringTools.isTrimmedEmpty(actionPackages) && StringTools.isTrimmedEmpty(packageLocators)) {
-            throw new ConfigurationException("At least a list of action packages or action package locators " +
-                "must be given using one of the properties [struts.convention.action.packages] or " +
-                "[struts.convention.package.locators]");
-        }
 
         this.configuration = configuration;
         this.actionNameBuilder = actionNameBuilder;
         this.resultMapBuilder = resultMapBuilder;
         this.objectFactory = objectFactory;
         this.redirectToSlash = Boolean.parseBoolean(redirectToSlash);
-        if (actionPackages != null) {
-            this.actionPackages = actionPackages.split("\\s*[,]\\s*");
-        }
-
-        if (excludePackages != null) {
-            this.excludePackages = excludePackages.split("\\s*[,]\\s*");
-        }
-
-        if (packageLocators != null) {
-            this.packageLocators = packageLocators.split("\\s*[,]\\s*");
-        }
 
         if (logger.isLoggable(Level.FINEST)) {
             logger.finest("Setting action default parent package to [" + defaultParentPackage + "]");
         }
 
         this.defaultParentPackage = defaultParentPackage;
+    }
+
+    /**
+     * @param   actionPackages (Optional) An optional list of action packages that this should create
+     *          configuration for.
+     */
+    @Inject(value = "struts.convention.action.packages", required = false)
+    public void setActionPackages(String actionPackages) {
+        this.actionPackages = actionPackages.split("\\s*[,]\\s*");
+    }
+
+    /**
+     * @param   excludePackages (Optional) A  list of packages that should be skipped when building
+     *          configuration.
+     */
+    @Inject(value = "struts.convention.exclude.packages", required = false)
+    public void setExcludePackages(String excludePackages) {
+        this.excludePackages = excludePackages.split("\\s*[,]\\s*");
+    }
+
+    /**
+     * @param   packageLocators (Optional) A list of names used to find action packages.
+     */
+    @Inject(value = "struts.convention.package.locators", required = false)
+    public void setPackageLocators(String packageLocators) {
+        this.packageLocators = packageLocators.split("\\s*[,]\\s*");
     }
 
     /**
@@ -133,9 +135,23 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
      * {@link ResultMapBuilder} is used to create ResultConfig instances of the action.
      */
     public void buildActionConfigs() {
+        if (actionPackages == null && packageLocators == null) {
+            throw new ConfigurationException("At least a list of action packages or action package locators " +
+                "must be given using one of the properties [struts.convention.action.packages] or " +
+                "[struts.convention.package.locators]");
+        }
+
         if (logger.isLoggable(Level.FINEST)) {
-            logger.finest("Loading action configurations from action packages " +
-                Arrays.asList(actionPackages));
+            logger.finest("Loading action configurations");
+            if (actionPackages != null) {
+                logger.finest("Actions being loaded from action packages " + Arrays.asList(actionPackages));
+            }
+            if (packageLocators != null) {
+                logger.finest("Actions being loaded using package locators " + Arrays.asList(packageLocators));
+            }
+            if (excludePackages != null) {
+                logger.finest("Excluding actions from packages " + Arrays.asList(excludePackages));
+            }
         }
 
         Set<Class<?>> classes = new HashSet<Class<?>>();
@@ -511,6 +527,11 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
 
             // Step #3
             if (pkgConfig.build().getAllActionConfigs().get("") == null) {
+                if (logger.isLoggable(Level.FINEST)) {
+                    logger.finest("Creating index ActionConfig with an action name of [] for the action " +
+                        "class [" + indexActionConfig.getClassName() + "]");
+                }
+                
                 pkgConfig.addActionConfig("", indexActionConfig);
             }
         }

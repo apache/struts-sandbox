@@ -29,7 +29,7 @@ import java.lang.annotation.Target;
  * @author  Brian Pontarelli
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE, ElementType.METHOD})
+@Target({ElementType.TYPE})
 public @interface Results {
     Result[] value();
 }
