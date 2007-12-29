@@ -28,7 +28,7 @@ import com.opensymphony.xwork2.inject.Inject;
 /**
  * <p>
  * This class converts the class name into a SEO friendly name by recognizing
- * camel casing and inserting underscores. This also converts everything to
+ * camel casing and inserting dashes. This also converts everything to
  * lower case if desired. And this will also strip off the word <b>Action</b>
  * from the class name.
  * </p>

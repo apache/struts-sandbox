@@ -48,10 +48,7 @@ import com.opensymphony.xwork2.inject.Inject;
 
 /**
  * <p>
- * This class implements the ActionConfigBuilder interface and uses
- * a list of comma separated packages to find the actions. This uses
- * the XWork2 ResolverUtil to find the classes that implement the
- * XWork2 {@link com.opensymphony.xwork2.Action} interface or whose name ends in {@code Action}.
+ * This class implements the ActionConfigBuilder interface.
  * </p>
  *
  * @author Brian Pontarelli

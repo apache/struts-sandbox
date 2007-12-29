@@ -27,7 +27,7 @@ import java.lang.annotation.Target;
 
 /**
  * <p>
- * This annotation allows a class to define more than one {@link org.apache.struts2.convention.annotation.Result}
+ * This annotation allows a class to define more than one {@link Result}
  * annotations.
  * </p>
  *

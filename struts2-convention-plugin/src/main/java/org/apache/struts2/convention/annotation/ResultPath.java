@@ -46,14 +46,14 @@ import java.lang.annotation.Target;
  *
  * <p>
  * The Convention plugin might find that the namespace is foo and the action
- * name is do_something and will need to find the results. Using this annotation
+ * name is do-something and will need to find the results. Using this annotation
  * you can set the base path of the results to something like
  * <code>/WEB-INF/jsps</code> so that the Convention plugin will look in the
  * web application for files of this pattern:
  * </p>
  *
  * <pre>
- * /WEB-INF/jsps/foo/do_something-&lt;resultCode>.ext
+ * /WEB-INF/jsps/foo/do-something-&lt;resultCode>.ext
  * </pre>
  *
  * @author  Brian Pontarelli
@@ -62,7 +62,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE, ElementType.PACKAGE})
 public @interface ResultPath {
     /**
-     * @return  The base result path to use for this action, instead of the default.
+     * @return  The result path to use for this action, instead of the default.
      */
     String value() default "";
 

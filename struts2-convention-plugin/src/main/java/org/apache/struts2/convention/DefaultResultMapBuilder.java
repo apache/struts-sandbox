@@ -64,8 +64,6 @@ import com.opensymphony.xwork2.inject.Inject;
  * </p>
  *
  * <ul>
- * <li>The result-type is always the default result type for the XWork
- *  package. This current can not be modified.</li>
  * <li>The result config contains the location parameter, which is
  *  required by most result classes to figure out where to find the result.
  *  In addition, the config has all the parameters from the default result-type
@@ -76,22 +74,39 @@ import com.opensymphony.xwork2.inject.Inject;
  * After loading the files in the web application, this class will then
  * use any annotations on the action class to override what was found in
  * the web application files. These annotations are the {@link Result}
- * and {@link org.apache.struts2.convention.annotation.Results} annotations. These two annotations allow an action
+ * and {@link Results} annotations. These two annotations allow an action
  * to supply different or non-forward based results for specific return
  * values of an action method.
  * </p>
  *
  * <p>
- * The base result location used by this class for locating JSPs and other
+ * The result path used by this class for locating JSPs and other
  * such result files can be set using the Struts2 constant named
- * <b>struts.convention.base.result.location</b>.
+ * <strong>struts.convention.result.path</strong> or using the
+ * {@link org.apache.struts2.convention.annotation.ResultPath}
+ * annotation.
  * </p>
  *
  * <p>
- * Also, the base result location can be changed on an action class instance
- * basis by using the {@link org.apache.struts2.convention.annotation.ResultPath} annotation.
+ * This class will also locate and configure Results in the classpath,
+ * including velocity and FreeMarker templates inside the classpath.
  * </p>
  *
+ * <p>
+ * All results that are conigured from resources are given a type corresponding
+ * to the resources extension. The extensions and types are given in the
+ * table below:
+ * </p>
+ *
+ * <table>
+ * <tr><th>Extension</th><th>Type</th></tr>
+ * <tr><td>.jsp</td><td>dispatcher</td</tr>
+ * <tr><td>.html</td><td>dispatcher</td</tr>
+ * <tr><td>.htm</td><td>dispatcher</td</tr>
+ * <tr><td>.vm</td><td>velocity</td</tr>
+ * <tr><td>.ftl</td><td>freemarker</td</tr>
+ * </table>
+ * 
  * @author  Brian Pontarelli
  */
 public class DefaultResultMapBuilder implements ResultMapBuilder {

@@ -29,16 +29,20 @@ import com.opensymphony.xwork2.config.entities.ResultTypeConfig;
 /**
  * <p>
  * This interface defines the conventions that are used by the convention plugin.
+ * In most cases the methods on this class will provide the best default for any
+ * values and also handle locating overrides of the default via the annotations
+ * that are part of the plugin.
  * </p>
  *
- * @author Brian Pontarelli
+ * @author  Brian Pontarelli
  */
 public interface ConventionsService {
     /**
-     * Locates the result location from annotations on the action class or the package.
+     * Locates the result location from annotations on the action class or the package or returns the
+     * default if no annotations are present.
      *
      * @param   actionClass The action class.
-     * @return  The result location if it is set in the annotations otherwise, the default result
+     * @return  The result location if it is set in the annotations. Otherwise, the default result
      *          location is returned.
      */
     String determineResultPath(Class<?> actionClass);
@@ -49,7 +53,8 @@ public interface ConventionsService {
      * @param   actionConfig (Optional) The configuration for the action that the result is being
      *          built for or null if the default result path is needed.
      * @return  The result location if it is set in the annotations for the class of the ActionConfig.
-     *          Otherwise, the default result location is returned.
+     *          Otherwise, the default result location is returned. If null is passed in, the default
+     *          is returned,
      */
     String determineResultPath(ActionConfig actionConfig);
 

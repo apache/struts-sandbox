@@ -48,8 +48,18 @@ import com.opensymphony.xwork2.inject.Inject;
 /**
  * <p>
  * This class is the default unknown handler for all of the Convention
- * plugin integration with XWork.
+ * plugin integration with XWork. This handles instances when a URL doesn't
+ * have an action associated with it but does a viable result and also the
+ * instance where an action returns a result code that isn't already
+ * configured but there is a viable result for the code.
  * </p>
+ *
+ * <p>
+ * This class also handles all of the index actions using redirects
+ * and actions in nested packages. For example, if there is an action
+ * <strong>/foo/index</strong> and the URL <strong>/foo</strong> is used,
+ * this will render the index action in the /foo namespace.
+ * </p> 
  *
  * @author  Brian Pontarelli
  */

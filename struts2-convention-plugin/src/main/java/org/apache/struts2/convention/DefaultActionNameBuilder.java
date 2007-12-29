@@ -24,8 +24,11 @@ import com.opensymphony.xwork2.inject.Inject;
 
 /**
  * <p>
- * This class does nothing but strip the word <b>Action</b> from the end
- * of the class name and possible lower case the name as well.
+ * This class strips the word <b>Action</b> from the end of the class name
+ * and possibly lowercases the name as well depending on the value of the
+ * constant <strong>struts.convention.action.name.lowercase</strong>. If the
+ * constant is set to <strong>true</strong>, this class will lowercase all
+ * action names.
  * </p>
  *
  * @author Brian Pontarelli

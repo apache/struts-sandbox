@@ -35,7 +35,8 @@ import com.opensymphony.xwork2.inject.Inject;
 
 /**
  * <p>
- * This
+ * This class is the implementation of the {@link ConventionsService}
+ * interface and provides all of the defaults and annotation handling.
  * </p>
  *
  * @author Brian Pontarelli
@@ -43,6 +44,12 @@ import com.opensymphony.xwork2.inject.Inject;
 public class ConventionsServiceImpl implements ConventionsService {
     private String resultPath;
 
+    /**
+     * Constructs a new instance.
+     *
+     * @param   resultPath The result path that is configured in the Struts configuration files using
+     *          the constant name of <strong>struts.convention.result.path</strong>.
+     */
     @Inject
     public ConventionsServiceImpl(@Inject("struts.convention.result.path") String resultPath) {
         this.resultPath = resultPath;

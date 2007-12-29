@@ -25,13 +25,11 @@ package org.apache.struts2.convention;
  * This interface defines how the action configurations for the current
  * web application can be constructed. This must find all actions that
  * are not specifically defined in the struts XML files or any plugins.
- * Otherwise, the {@link ConventionUnknownHandler} will not be able to
- * handle the unknown actions. Furthermore, it must make every effort
- * to locate all action results as well. The {@link ConventionUnknownHandler}
- * doesn't handle unknown results at all and just throws exceptions.
+ * Furthermore, it must make every effort to locate all action results
+ * as well.
  * </p>
  *
- * @author Brian Pontarelli
+ * @author  Brian Pontarelli
  */
 public interface ActionConfigBuilder {
     /**
