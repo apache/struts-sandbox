@@ -158,7 +158,7 @@
 		<name>Exlolab repository</name>
 		<url>http://maven2.exoplatform.org/maven/</url>
 		<releases><enabled>true</enabled></releases>
-		<snapshots><enabled>false</enabled></releases>
+		<snapshots><enabled>false</enabled></snapshots>
 	</repository>
 	 
    </repositories>
