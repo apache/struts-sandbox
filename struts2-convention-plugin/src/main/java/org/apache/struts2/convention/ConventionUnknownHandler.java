@@ -59,7 +59,7 @@ import com.opensymphony.xwork2.inject.Inject;
  * and actions in nested packages. For example, if there is an action
  * <strong>/foo/index</strong> and the URL <strong>/foo</strong> is used,
  * this will render the index action in the /foo namespace.
- * </p> 
+ * </p>
  *
  * @author  Brian Pontarelli
  */
@@ -125,35 +125,24 @@ public class ConventionUnknownHandler implements UnknownHandler {
 
         // Try /idx/action.jsp if actionName is not empty, otherwise it will just be /.jsp
         if (!actionName.equals("")) {
-            for (String ext : resultsByExtension.keySet()) {
-                String path = string(pathPrefix, actionName, "." , ext);
-                if (logger.isLoggable(Level.FINEST)) {
-                    String fqan = namespace + "/" + actionName;
-                    logger.finest("Trying to locate the correct default result [" + path + "] for the FQ action [" +
-                        fqan + "] with an file extension of [" + ext + "] in the directory [" + pathPrefix + "]");
-                }
-
-                try {
-                    if (servletContext.getResource(path) != null) {
-                        actionConfig = buildActionConfig(path, resultsByExtension.get(ext));
-                        logger.finest("Found action config");
-                        break;
-                    }
-                } catch (MalformedURLException e) {
-                    logger.warning("Unable to parse path to the web application resource [" + path +
-                        "] skipping...");
-                }
+            Resource resource = findResource(resultsByExtension, pathPrefix, actionName);
+            if (resource != null) {
+                actionConfig = buildActionConfig(resource.path, resultsByExtension.get(resource.ext));
             }
         }
 
         if (actionConfig == null) {
+            Resource resource = findResource(resultsByExtension, pathPrefix, actionName, "/index");
+
             // If the URL is /foo and there is an action we can redirect to, send the redirect to /foo/.
             // However, if that action is not in the same namespace, it is the default, so I'm not going
             // to return that.
             if (!actionName.equals("") && redirectToSlash) {
+                ResultTypeConfig redirectResultTypeConfig = parentPackage.getAllResultTypeConfigs().get("redirect");
                 String redirectNamespace = namespace + "/" + actionName;
                 if (logger.isLoggable(Level.FINEST)) {
-                    logger.finest("Checking if there is an action named index in the namespace [" + redirectNamespace + "]");
+                    logger.finest("Checking if there is an action named index in the namespace [" +
+                        redirectNamespace + "]");
                 }
 
                 actionConfig = configuration.getRuntimeConfiguration().getActionConfig(redirectNamespace, "index");
@@ -163,45 +152,51 @@ public class ConventionUnknownHandler implements UnknownHandler {
                     PackageConfig packageConfig = configuration.getPackageConfig(actionConfig.getPackageName());
                     if (redirectNamespace.equals(packageConfig.getNamespace())) {
                         logger.finest("Action is not a default - redirecting");
-                        ResultTypeConfig redirectResultTypeConfig = resultsByExtension.get("redirect");
                         return buildActionConfig(redirectNamespace + "/", redirectResultTypeConfig);
                     }
 
                     logger.finest("Action was a default - NOT redirecting");
                 }
-            }
 
-            // Otherwise, if the URL is /foo or /foo/ look for index pages in /foo/
-            String resultPath = null;
-            String resultExt = null;
-            for (String ext : resultsByExtension.keySet()) {
-                if (logger.isLoggable(Level.FINEST)) {
-                    String fqan = namespace + "/" + actionName;
-                    logger.finest("Checking for [" + fqan + "/" + "index." + ext + "].");
-                }
-
-                String path = string(pathPrefix, actionName, "/index." , ext);
-                try {
-                    if (servletContext.getResource(path) != null) {
-                        resultPath = path;
-                        resultExt = ext;
-                        break;
-                    }
-                } catch (MalformedURLException e) {
-                    logger.warning("Unable to parse path to the web application resource [" + path +
-                        "] skipping...");
+                if (resource != null) {
+                    return buildActionConfig(redirectNamespace + "/", redirectResultTypeConfig);
                 }
             }
 
-            // If the URL is /foo and there is /foo/index.jsp, let's send a redirect to /foo/. If the URL is
-            // /foo/ (actionName is empty) and there is /foo/index.jsp, send a forward to that. Otherwise,
-            // just return null.
-            if (resultPath != null) {
-                actionConfig = buildActionConfig(resultPath, resultsByExtension.get(resultExt));
+            if (resource != null) {
+                // Otherwise, if the URL is /foo or /foo/ look for index pages in /foo/
+                actionConfig = buildActionConfig(resource.path, resultsByExtension.get(resource.ext));
             }
         }
 
         return actionConfig;
+    }
+
+    /**
+     * Finds a resource using the given path parts and all of the extensions in the map.
+     *
+     * @param   resultsByExtension Map of extension to result type config objects.
+     * @param   parts The parts of the resource.
+     * @return  The resource path or null.
+     */
+    protected Resource findResource(Map<String, ResultTypeConfig> resultsByExtension, String... parts) {
+        for (String ext : resultsByExtension.keySet()) {
+            String path = string(parts) + "." + ext;
+            if (logger.isLoggable(Level.FINEST)) {
+                logger.finest("Checking for [" + path + "].");
+            }
+
+            try {
+                if (servletContext.getResource(path) != null) {
+                    return new Resource(path, ext);
+                }
+            } catch (MalformedURLException e) {
+                logger.warning("Unable to parse path to the web application resource [" + path +
+                    "] skipping...");
+            }
+        }
+
+        return null;
     }
 
     protected ActionConfig buildActionConfig(String path, ResultTypeConfig resultTypeConfig) {
@@ -212,7 +207,7 @@ public class ConventionUnknownHandler implements UnknownHandler {
         }
         params.put(resultTypeConfig.getDefaultResultParam(), path);
 
-        PackageConfig pkg = configuration.getPackageConfig(defaultParentPackageName);
+//        PackageConfig pkg = configuration.getPackageConfig(defaultParentPackageName);
 //        List<InterceptorMapping> interceptors = InterceptorBuilder.constructInterceptorReference(pkg,
 //            pkg.getFullDefaultInterceptorRef(), Collections.EMPTY_MAP, null, objectFactory);
         ResultConfig config = new ResultConfig.Builder(Action.SUCCESS, resultTypeConfig.getClassName()).
@@ -380,4 +375,14 @@ public class ConventionUnknownHandler implements UnknownHandler {
 	public Object handleUnknownActionMethod(Object action, String methodName) throws NoSuchMethodException {
 		throw new NoSuchMethodException();
 	}
+
+    public static class Resource {
+        final String path;
+        final String ext;
+
+        public Resource(String path, String ext) {
+            this.path = path;
+            this.ext = ext;
+        }
+    }
 }
