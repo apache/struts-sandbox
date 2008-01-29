@@ -183,7 +183,7 @@ public class DefaultResultMapBuilderTest extends TestCase {
         assertEquals("ann-value", results.get("error").getParams().get("key"));
         assertEquals("ann-value1", results.get("error").getParams().get("key1"));
         assertEquals(1, results.get("input").getParams().size());
-        assertEquals("foo.action", results.get("input").getParams().get("location"));
+        assertEquals("foo.action", results.get("input").getParams().get("actionName"));
         assertEquals("org.apache.struts2.dispatcher.ServletActionRedirectResult", results.get("input").getClassName());
         assertEquals(3, results.get("failure").getParams().size());
         assertEquals("/WEB-INF/location/namespace/action-failure.jsp", results.get("failure").getParams().get("location"));
@@ -243,7 +243,7 @@ public class DefaultResultMapBuilderTest extends TestCase {
         assertEquals("value", results.get("success").getParams().get("key"));
         assertEquals("value1", results.get("success").getParams().get("key1"));
         assertEquals(1, results.get("input").getParams().size());
-        assertEquals("foo.action", results.get("input").getParams().get("location"));
+        assertEquals("foo.action", results.get("input").getParams().get("actionName"));
         assertEquals("org.apache.struts2.dispatcher.ServletActionRedirectResult", results.get("input").getClassName());
         assertEquals(3, results.get("failure").getParams().size());
         assertEquals("/WEB-INF/location/namespace/action-failure.jsp", results.get("failure").getParams().get("location"));
@@ -257,7 +257,8 @@ public class DefaultResultMapBuilderTest extends TestCase {
     public void testClassPath() throws Exception {
         ServletContext context = EasyMock.createNiceMock(ServletContext.class);
 
-        ResultTypeConfig resultType = new ResultTypeConfig.Builder("freemarker", "org.apache.struts2.dispatcher.ServletDispatcherResult").build();
+        ResultTypeConfig resultType = new ResultTypeConfig.Builder("freemarker", "org.apache.struts2.dispatcher.ServletDispatcherResult").
+            defaultResultParam("location").build();
         PackageConfig packageConfig = new PackageConfig.Builder("package").
             defaultResultType("dispatcher").addResultTypeConfig(resultType).build();
 
@@ -280,13 +281,13 @@ public class DefaultResultMapBuilderTest extends TestCase {
 
     private PackageConfig createPackageConfigBuilder(String namespace) {
         ResultTypeConfig resultType = new ResultTypeConfig.Builder("dispatcher", "org.apache.struts2.dispatcher.ServletDispatcherResult").
-            addParam("key", "value").addParam("key1", "value1").build();
+            addParam("key", "value").addParam("key1", "value1").defaultResultParam("location").build();
 
         ResultTypeConfig redirect  = new ResultTypeConfig.Builder("redirectAction",
-            "org.apache.struts2.dispatcher.ServletActionRedirectResult").build();
+            "org.apache.struts2.dispatcher.ServletActionRedirectResult").defaultResultParam("actionName").build();
 
         ResultTypeConfig ftlResultType = new ResultTypeConfig.Builder("freemarker",
-            "org.apache.struts2.views.freemarker.FreemarkerResult").build();
+            "org.apache.struts2.views.freemarker.FreemarkerResult").defaultResultParam("location").build();
 
         return new PackageConfig.Builder("package").
             namespace(namespace).

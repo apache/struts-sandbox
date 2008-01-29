@@ -87,6 +87,7 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
             @Inject("struts.convention.redirect.to.slash") String redirectToSlash,
             @Inject("struts.convention.default.parent.package") String defaultParentPackage) {
 
+        // Validate that the parameters are okay
         this.configuration = configuration;
         this.actionNameBuilder = actionNameBuilder;
         this.resultMapBuilder = resultMapBuilder;

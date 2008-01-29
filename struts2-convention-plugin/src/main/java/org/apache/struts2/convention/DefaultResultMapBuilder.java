@@ -106,7 +106,7 @@ import com.opensymphony.xwork2.inject.Inject;
  * <tr><td>.vm</td><td>velocity</td</tr>
  * <tr><td>.ftl</td><td>freemarker</td</tr>
  * </table>
- * 
+ *
  * @author  Brian Pontarelli
  */
 public class DefaultResultMapBuilder implements ResultMapBuilder {
@@ -364,8 +364,12 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
             params.putAll(createParameterMap(result.params()));
         }
 
-        if (info.location != null && !params.containsKey("location")) {
-            params.put("location", info.location);
+        // Map the location to the default param for the result or a param named location
+        if (info.location != null) {
+            String defaultParamName = resultTypeConfig.getDefaultResultParam();
+            if (!params.containsKey(defaultParamName)) {
+                params.put(defaultParamName, info.location);
+            }
         }
 
         return new ResultConfig.Builder(info.name, resultTypeConfig.getClassName()).addParams(params).build();
