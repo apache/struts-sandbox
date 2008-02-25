@@ -25,6 +25,7 @@ import org.apache.felix.framework.Felix;
 import org.apache.felix.framework.cache.BundleCache;
 import org.apache.felix.framework.util.FelixConstants;
 import org.apache.felix.framework.util.StringMap;
+import org.apache.felix.main.AutoActivator;
 import org.apache.struts2.osgi.loaders.VelocityBundleResourceLoader;
 import org.apache.struts2.views.velocity.VelocityManager;
 import org.apache.velocity.app.Velocity;
@@ -42,6 +43,7 @@ import com.opensymphony.xwork2.ObjectFactory;
 import com.opensymphony.xwork2.config.Configuration;
 import com.opensymphony.xwork2.config.ConfigurationException;
 import com.opensymphony.xwork2.config.ConfigurationProvider;
+import com.opensymphony.xwork2.config.PackageProvider;
 import com.opensymphony.xwork2.config.entities.PackageConfig;
 import com.opensymphony.xwork2.inject.ContainerBuilder;
 import com.opensymphony.xwork2.inject.Inject;
@@ -50,7 +52,7 @@ import com.opensymphony.xwork2.util.location.LocatableProperties;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
 
-public class OsgiConfigurationProvider implements ConfigurationProvider {
+public class OsgiConfigurationProvider implements PackageProvider {
     
     private static final Logger LOG = LoggerFactory.getLogger(OsgiConfigurationProvider.class);
 
@@ -128,10 +130,6 @@ public class OsgiConfigurationProvider implements ConfigurationProvider {
         return bundlesChanged;
     }
 
-    public void register(ContainerBuilder builder, LocatableProperties props)
-            throws ConfigurationException {
-    }
-    
     protected void loadOsgi() {
         //configuration properties 
         Properties systemProperties = getProperties("default.properties");
@@ -145,7 +143,9 @@ public class OsgiConfigurationProvider implements ConfigurationProvider {
             "org.osgi.framework; version=1.4.0," +
             "org.osgi.service.packageadmin; version=1.2.0," +
             "org.osgi.service.startlevel; version=1.0.0," +
-            "org.osgi.service.url; version=1.0.0" +
+            "org.osgi.service.url; version=1.0.0," +
+            "org.apache.struts2.dispatcher; version=1.0.0," +
+            "org.apache.xwork2; version=1.0.0" +
             getSystemPackages(systemProperties) + 
             strutsProperties.getProperty("xwork"));
 
@@ -157,8 +157,8 @@ public class OsgiConfigurationProvider implements ConfigurationProvider {
             sb.append(path).append(" ");
         }
         
-        //configMap.put(FelixConstants.AUTO_START_PROP + ".1",
-        //    sb.toString());
+        configMap.put(AutoActivator.AUTO_START_PROP + ".1",
+            sb.toString());
         configMap.put(BundleCache.CACHE_PROFILE_DIR_PROP, System.getProperty("java.io.tmpdir"));
         configMap.put(BundleCache.CACHE_DIR_PROP, "jim");
         configMap.put(FelixConstants.EMBEDDED_EXECUTION_PROP, "true");
@@ -171,8 +171,10 @@ public class OsgiConfigurationProvider implements ConfigurationProvider {
         try {
             List list = new ArrayList();
             list.add(new BundleRegistration());
+            list.add(new AutoActivator(configMap));
             // Now create an instance of the framework.
-            felix = new Felix(configMap, list);
+            Map configMap2 = new StringMap(configMap, false);
+            felix = new Felix(configMap2, list);
             felix.start();
         }
         catch (Exception ex) {
@@ -226,8 +228,8 @@ public class OsgiConfigurationProvider implements ConfigurationProvider {
         }
 
         public void bundleChanged(BundleEvent evt) {
-            if (evt.getType() == BundleEvent.INSTALLED) {
-                LOG.debug("Installed bundle "+evt.getBundle().getSymbolicName());
+            if (evt.getType() == BundleEvent.STARTED) {
+                LOG.info("Started bundle #1", evt.getBundle().getSymbolicName());
                 bundles.put(evt.getBundle().getLocation(), evt.getBundle());
                 bundlesChanged = true;
             }
