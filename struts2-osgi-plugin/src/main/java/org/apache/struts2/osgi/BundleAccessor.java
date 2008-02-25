@@ -10,6 +10,8 @@ import org.osgi.framework.BundleContext;
 
 public interface BundleAccessor {
 
+    String CURRENT_BUNDLE_NAME = "__bundle_name__";
+
     void setBundles(Map<String, Bundle> bundles);
 
     void setBundleContext(BundleContext bundleContext);
@@ -20,4 +22,5 @@ public interface BundleAccessor {
 
     URL loadResource(String name);
 
+    void setPackageToBundleMapping(Map<String, String> packageToBundle);
 }

@@ -15,6 +15,8 @@ import org.osgi.framework.BundleContext;
 
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
+import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.config.entities.ActionConfig;
 
 public class DefaultBundleAccessor implements BundleAccessor {
 
@@ -22,9 +24,9 @@ public class DefaultBundleAccessor implements BundleAccessor {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultBundleAccessor.class);
     
     private Map<String, Bundle> bundles = new HashMap<String, Bundle>();
-    private Map<String,String> classToBundle = new HashMap<String,String>();
     private BundleContext bundleContext;
-    
+    private Map<String, String> packageToBundle;
+
     public DefaultBundleAccessor() {
         self = this;
     }
@@ -36,35 +38,22 @@ public class DefaultBundleAccessor implements BundleAccessor {
     
     public void setBundles(Map<String,Bundle> bundles) {
         this.bundles = bundles;
-        classToBundle.clear();
     }
     
-    @Override
     public void setBundleContext(BundleContext bundleContext) {
         this.bundleContext = bundleContext;
     }
     
     public Class<?> loadClass(String className) throws ClassNotFoundException {
         Class cls = null;
-        if (classToBundle.containsKey(className)) {
-            bundles.get(classToBundle.get(className)).loadClass(className);
-        } else {
-            for (Entry<String,Bundle> entry : bundles.entrySet()) {
-                try {
-                    cls = entry.getValue().loadClass(className);
-                    if (cls != null) {
-                        classToBundle.put(className, entry.getKey());
-                    }
-                } catch (ClassNotFoundException ex) {
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug("class #1 not found in bundle #2", className, entry.getValue().getSymbolicName());
-                    }
-                }
-            }
+        Bundle bundle = getCurrentBundle();
+        if (bundle != null) {
+            bundle.loadClass(className);
+            LOG.debug("Located class #1 in bundle #2", className, bundle.getSymbolicName());
         }
-        
+
         if (cls == null) {
-            //try to find a bean with that id
+            //try to find a bean with that id (hack for spring that searches all bundles)
             try {
                 Object bean = SpringOSGiUtil.getBean(bundleContext, className);
                 if (bean != null)
@@ -80,31 +69,49 @@ public class DefaultBundleAccessor implements BundleAccessor {
         }
         return cls;
     }
-    
+
+    private Bundle getCurrentBundle() {
+        ActionContext ctx = ActionContext.getContext();
+        String bundleName = (String) ctx.get(CURRENT_BUNDLE_NAME);
+        if (bundleName != null) {
+            ActionConfig actionConfig = ctx.getActionInvocation().getProxy().getConfig();
+            bundleName = packageToBundle.get(actionConfig.getPackageName());
+        }
+        if (bundleName != null) {
+            return bundles.get(bundleName);
+        }
+        return null;
+    }
+
     public List<URL> loadResources(String name) throws IOException {
-        List<URL> resources = new ArrayList<URL>();
-        for (Entry<String,Bundle> entry : bundles.entrySet()) {
-            Enumeration e = entry.getValue().getResources(name);
+        Bundle bundle = getCurrentBundle();
+        if (bundle != null) {
+            List<URL> resources = new ArrayList<URL>();
+            Enumeration e = bundle.getResources(name);
             while (e.hasMoreElements()) {
                 resources.add((URL) e.nextElement());
             }
+            return resources;
         }
-        return resources;
+
+        return null;
     }
 
     public URL loadResource(String name) {
-        URL url = null;
-        for (Entry<String,Bundle> entry : bundles.entrySet()) {
-            url = entry.getValue().getResource(name);
-            if (url != null)
-                break;
+        Bundle bundle = getCurrentBundle();
+        if (bundle != null) {
+            return bundle.getResource(name);
         }
-        return url;
+        return null;
+    }
+
+    public void setPackageToBundleMapping(Map<String, String> packageToBundle) {
+        this.packageToBundle = packageToBundle;
     }
 
     public InputStream loadResourceAsStream(String name) throws IOException {
         URL url = loadResource(name);
-        if (url != null) {
+        if (url != null) { 
             return url.openStream();
         }
         return null;

@@ -58,7 +58,7 @@ public class OsgiConfigurationProvider implements ConfigurationProvider {
     private Map<String,Bundle> bundles = Collections.synchronizedMap(new HashMap<String,Bundle>());
     private Configuration configuration;
     private BundleContext bundleContext;
-    private ServletContext servletContext;
+    private BundleAccessor bundleAccessor;
     private boolean bundlesChanged = false;
 
     private ObjectFactory objectFactory;
@@ -67,11 +67,7 @@ public class OsgiConfigurationProvider implements ConfigurationProvider {
     public void setBundleAccessor(BundleAccessor acc) {
         acc.setBundles(bundles);
         acc.setBundleContext(bundleContext);
-    }
-    
-    @Inject
-    public void setServletContext(ServletContext ctx) {
-        this.servletContext = ctx;
+        this.bundleAccessor = acc;
     }
     
     @Inject
@@ -109,6 +105,7 @@ public class OsgiConfigurationProvider implements ConfigurationProvider {
         } catch (InvalidSyntaxException e) {
             throw new ConfigurationException(e);
         }
+        Map<String,String> packageToBundle = new HashMap<String,String>();
         Set bundleNames = new HashSet();
         if (refs != null) {
             for (ServiceReference ref : refs) {
@@ -118,10 +115,12 @@ public class OsgiConfigurationProvider implements ConfigurationProvider {
                     PackageLoader loader = (PackageLoader) bundleContext.getService(ref);
                     for (PackageConfig pkg : loader.loadPackages(ref.getBundle(),  bundleContext, objectFactory, configuration.getPackageConfigs())) {
                         configuration.addPackageConfig(pkg.getName(), pkg);
+                        packageToBundle.put(pkg.getName(), ref.getBundle().getSymbolicName());
                     }
                 }
             }
         }
+        bundleAccessor.setPackageToBundleMapping(packageToBundle);
         bundlesChanged = false;
     }
 
@@ -158,8 +157,8 @@ public class OsgiConfigurationProvider implements ConfigurationProvider {
             sb.append(path).append(" ");
         }
         
-        configMap.put(FelixConstants.AUTO_START_PROP + ".1",
-            sb.toString());
+        //configMap.put(FelixConstants.AUTO_START_PROP + ".1",
+        //    sb.toString());
         configMap.put(BundleCache.CACHE_PROFILE_DIR_PROP, System.getProperty("java.io.tmpdir"));
         configMap.put(BundleCache.CACHE_DIR_PROP, "jim");
         configMap.put(FelixConstants.EMBEDDED_EXECUTION_PROP, "true");
@@ -239,9 +238,7 @@ public class OsgiConfigurationProvider implements ConfigurationProvider {
      * Scans for classes starting at the package provided and descending into subpackages.
      * Each class is offered up to the Test as it is discovered, and if the Test returns
      * true the class is retained.  Accumulated classes can be fetched by calling
-     * {@link #getClasses()}.
      *
-     * @param test an instance of {@link Test} that will be used to filter classes
      * @param packageName the name of the package from which to start scanning for
      *        classes, e.g. {@code net.sourceforge.stripes}
      */
@@ -296,7 +293,6 @@ public class OsgiConfigurationProvider implements ConfigurationProvider {
      * the file is loaded and tested to see if it is acceptable according to the Test.  Operates
      * recursively to find classes within a folder structure matching the package structure.
      *
-     * @param test a Test used to filter the classes that are discovered
      * @param parent the package name up to this directory in the package hierarchy.  E.g. if
      *        /classes is in the classpath and we wish to examine files in /classes/org/apache then
      *        the values of <i>parent</i> would be <i>org/apache</i>
@@ -329,7 +325,6 @@ public class OsgiConfigurationProvider implements ConfigurationProvider {
      * matching the package structure.  If the File is not a JarFile or does not exist a warning
      * will be logged, but no error will be raised.
      *
-     * @param test a Test used to filter the classes that are discovered
      * @param parent the parent package under which classes must be in order to be considered
      * @param jarfile the jar file to be examined for classes
      */

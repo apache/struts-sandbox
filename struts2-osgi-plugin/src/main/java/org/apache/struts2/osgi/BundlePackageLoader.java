@@ -2,16 +2,13 @@ package org.apache.struts2.osgi;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
 import com.opensymphony.xwork2.ObjectFactory;
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.config.Configuration;
 import com.opensymphony.xwork2.config.ConfigurationException;
 import com.opensymphony.xwork2.config.entities.PackageConfig;
@@ -25,14 +22,27 @@ public class BundlePackageLoader implements PackageLoader {
     private static final Logger LOG = LoggerFactory.getLogger(BundlePackageLoader.class);
     
     public List<PackageConfig> loadPackages(Bundle bundle, BundleContext bundleContext, ObjectFactory objectFactory, Map<String,PackageConfig> pkgConfigs) throws ConfigurationException {
-        BundleConfigurationProvider prov = new BundleConfigurationProvider("struts.xml", bundle, bundleContext);
         Configuration config = new DefaultConfiguration("struts.xml");
-        for (PackageConfig pkg : pkgConfigs.values()) {
-            config.addPackageConfig(pkg.getName(), pkg);
+        ActionContext ctx = ActionContext.getContext();
+        if (ctx == null) {
+            ctx = new ActionContext(new HashMap());
+            ActionContext.setContext(ctx);
         }
-        prov.setObjectFactory(objectFactory);
-        prov.init(config);
-        prov.loadPackages();
+
+        try {
+            // Ensure all requested classes and resources will be resolved using the current bundle
+            ctx.put(BundleAccessor.CURRENT_BUNDLE_NAME, bundle.getSymbolicName());
+
+            BundleConfigurationProvider prov = new BundleConfigurationProvider("struts.xml", bundle, bundleContext);
+            for (PackageConfig pkg : pkgConfigs.values()) {
+                config.addPackageConfig(pkg.getName(), pkg);
+            }
+            prov.setObjectFactory(objectFactory);
+            prov.init(config);
+            prov.loadPackages();
+        } finally {
+            ctx.put(BundleAccessor.CURRENT_BUNDLE_NAME, null);
+        }
         return new ArrayList<PackageConfig>(config.getPackageConfigs().values());
     }
     
