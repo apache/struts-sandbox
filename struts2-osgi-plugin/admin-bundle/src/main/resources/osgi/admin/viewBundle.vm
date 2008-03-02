@@ -1,1 +1,92 @@
-This is a bundle view ${id}
+<html>
+<body>
+<table>
+    <tr>
+        <th>Id</th>
+        <td>$bundle.bundleId</td>
+    </tr>
+    <tr>
+        <th>Name</th>
+        <td>$bundle.symbolicName</td>
+    </tr>
+    <tr>
+        <th>Location</th>
+        <td>$bundle.location</td>
+    </tr>
+    <tr>
+        <th>State</th>
+        <td>$action.getBundleState($bundle)</td>
+    </tr>
+     <tr>
+        <th>Registered Services</th>
+        <td>
+            <ul>
+            #foreach ($service in $bundle.registeredServices)
+                <li>
+                    #foreach ($key in $service.propertyKeys)
+                        $key = $action.displayProperty($service.getProperty($key)) <br />
+                    #end
+                    #if ($service.usingBundles.length > 0)
+                        Used by:
+                        <ul>
+                            #foreach ($user in $service.usingBundles)
+                            <li>$user.symbolicName</li>
+                            #end
+                        </ul>
+                    #end
+                </li>
+            #end
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <th>Services in Use</th>
+        <td>
+            <ul>
+            #foreach ($service in $bundle.servicesInUse)
+                <li>
+                    #foreach ($key in $service.propertyKeys)
+                        $key = $action.displayProperty($service.getProperty($key)) <br />
+                    #end
+                    #if ($service.usingBundles.length > 0)
+                        Also used by:
+                        <ul>
+                            #foreach ($user in $service.usingBundles)
+                            <li>$user.symbolicName</li>
+                            #end
+                        </ul>
+                    #end
+                </li>
+            #end
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <th>Packages</th>
+        <td>
+            #foreach ($pkg in $packages)
+            <strong>$pkg.name</strong>
+            <ul>
+                #foreach ($name in $pkg.actionConfigs.keySet())
+                <li>$name</li>
+                #end
+            </ul>
+            #end
+        </td>
+    </tr>
+    <tr>
+        <th>Actions</th>
+        <td>
+            #if ($action.isAllowedAction($bundle, "start"))
+            <a href="bundle_${bundle.symbolicName}!start.action">Start</a>
+            #end
+
+            #if ($action.isAllowedAction($bundle, "stop"))
+            <a href="bundle_${bundle.symbolicName}!stop.action">Stop</a>
+            #end
+        </td>
+    </tr>
+
+</table>
+</body>
+</html>

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Map;
+import java.util.Set;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -12,9 +13,7 @@ public interface BundleAccessor {
 
     String CURRENT_BUNDLE_NAME = "__bundle_name__";
 
-    void setBundles(Map<String, Bundle> bundles);
-
-    void setBundleContext(BundleContext bundleContext);
+    void init(Map<String, Bundle> bundles, BundleContext bundleContext, Map<String, String> packageToBundle);
 
     Class loadClass(String name) throws ClassNotFoundException;
 
@@ -22,5 +21,8 @@ public interface BundleAccessor {
 
     URL loadResource(String name);
 
-    void setPackageToBundleMapping(Map<String, String> packageToBundle);
+    Map<String, Bundle> getBundles();
+
+    Set<String> getPackagesByBundle(Bundle bundle);
+
 }

@@ -67,8 +67,6 @@ public class OsgiConfigurationProvider implements PackageProvider {
 
     @Inject
     public void setBundleAccessor(BundleAccessor acc) {
-        acc.setBundles(bundles);
-        acc.setBundleContext(bundleContext);
         this.bundleAccessor = acc;
     }
     
@@ -122,7 +120,7 @@ public class OsgiConfigurationProvider implements PackageProvider {
                 }
             }
         }
-        bundleAccessor.setPackageToBundleMapping(packageToBundle);
+        bundleAccessor.init(bundles, bundleContext, packageToBundle);
         bundlesChanged = false;
     }
 
@@ -144,8 +142,12 @@ public class OsgiConfigurationProvider implements PackageProvider {
             "org.osgi.service.packageadmin; version=1.2.0," +
             "org.osgi.service.startlevel; version=1.0.0," +
             "org.osgi.service.url; version=1.0.0," +
+            "org.apache.struts2.osgi; version=1.0.0," +
             "org.apache.struts2.dispatcher; version=1.0.0," +
-            "org.apache.xwork2; version=1.0.0" +
+            "com.opensymphony.xwork2.config; version=1.0.0," +
+            "com.opensymphony.xwork2.config.entities; version=1.0.0," +
+            "com.opensymphony.xwork2.inject; version=1.0.0," +
+            "com.opensymphony.xwork2; version=1.0.0" +
             getSystemPackages(systemProperties) + 
             strutsProperties.getProperty("xwork"));
 
@@ -164,7 +166,7 @@ public class OsgiConfigurationProvider implements PackageProvider {
         configMap.put(FelixConstants.EMBEDDED_EXECUTION_PROP, "true");
         configMap.put(FelixConstants.SERVICE_URLHANDLERS_PROP, "false");
         configMap.put("org.osgi.framework.bootdelegation", "org.apache.*");
-        configMap.put("osgi.parentClassloader", "app");
+        //configMap.put("osgi.parentClassloader", "app");
         configMap.put("felix.log.level", "4");
         configMap.put(FelixConstants.BUNDLE_CLASSPATH, ".");
 
@@ -228,9 +230,10 @@ public class OsgiConfigurationProvider implements PackageProvider {
         }
 
         public void bundleChanged(BundleEvent evt) {
-            if (evt.getType() == BundleEvent.STARTED) {
+            if (evt.getType() == BundleEvent.STARTED && evt.getBundle().getSymbolicName() != null) {
                 LOG.info("Started bundle #1", evt.getBundle().getSymbolicName());
-                bundles.put(evt.getBundle().getLocation(), evt.getBundle());
+
+                bundles.put(evt.getBundle().getSymbolicName(), evt.getBundle());
                 bundlesChanged = true;
             }
         }

@@ -3,12 +3,15 @@ package org.apache.struts2.osgi;
 import java.util.Map;
 
 import com.opensymphony.xwork2.ObjectFactory;
+import com.opensymphony.xwork2.config.PackageProvider;
 import com.opensymphony.xwork2.inject.Container;
 import com.opensymphony.xwork2.inject.Inject;
+import org.apache.struts2.util.ObjectFactoryDestroyable;
 
-public class DelegatingObjectFactory extends ObjectFactory {
+public class DelegatingObjectFactory extends ObjectFactory implements ObjectFactoryDestroyable {
     private ObjectFactory delegateObjectFactory;
     private BundleAccessor bundleResourceLoader;
+    private OsgiConfigurationProvider osgiConfigurationProvider;
     
     @Inject
     public void setDelegateObjectFactory(@Inject Container container, 
@@ -44,6 +47,15 @@ public class DelegatingObjectFactory extends ObjectFactory {
             return bundleResourceLoader.loadClass(className);
         }
     }
-    
-    
+
+    public void destroy() {
+        if (osgiConfigurationProvider != null) {
+            osgiConfigurationProvider.destroy();
+        }
+    }
+
+    @Inject("osgi")
+    public void setOsgiConfigurationProvider(PackageProvider osgiConfigurationProvider) {
+        this.osgiConfigurationProvider = (OsgiConfigurationProvider) osgiConfigurationProvider;
+    }
 }

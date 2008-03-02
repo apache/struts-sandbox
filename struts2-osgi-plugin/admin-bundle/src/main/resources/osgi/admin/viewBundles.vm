@@ -1,1 +1,34 @@
-These are all bundles
+<html>
+<head>
+    <title>OSGi Bundles</title>
+</head>
+<body>
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>State</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        #foreach ($bundle in $bundles)
+        <tr>
+            <td>$bundle.symbolicName</td>
+            <td>$action.getBundleState($bundle)</td>
+            <td>
+                #if ($action.isAllowedAction($bundle, "start"))
+                <a href="bundle_${bundle.symbolicName}!start.action">Start</a>
+                #end
+
+                #if ($action.isAllowedAction($bundle, "stop"))
+                <a href="bundle_${bundle.symbolicName}!stop.action">Stop</a>
+                #end
+            </td>
+        </tr>
+        #end
+    </tbody>
+</table>
+</body>
+</html>

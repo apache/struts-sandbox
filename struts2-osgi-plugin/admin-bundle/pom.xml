@@ -16,6 +16,10 @@
 
 
   </dependencies>
+    <properties>
+        <jdkLevel>1.5</jdkLevel>
+    </properties>
+
 
   <build>
     <plugins>
@@ -34,5 +38,16 @@
         </configuration>
       </plugin>
     </plugins>
+    <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                      <source>1.5</source>
+                      <target>1.5</target>
+                    </configuration>
+                </plugin>
+            </plugins>
+    </pluginManagement>
   </build>
  </project>

@@ -3,11 +3,7 @@ package org.apache.struts2.osgi;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 import org.osgi.framework.Bundle;
@@ -16,6 +12,8 @@ import org.osgi.framework.BundleContext;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
 import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.ActionInvocation;
+import com.opensymphony.xwork2.ActionProxy;
 import com.opensymphony.xwork2.config.entities.ActionConfig;
 
 public class DefaultBundleAccessor implements BundleAccessor {
@@ -26,6 +24,7 @@ public class DefaultBundleAccessor implements BundleAccessor {
     private Map<String, Bundle> bundles = new HashMap<String, Bundle>();
     private BundleContext bundleContext;
     private Map<String, String> packageToBundle;
+    private Map<Bundle, Set<String>> packagesByBundle;
 
     public DefaultBundleAccessor() {
         self = this;
@@ -36,19 +35,28 @@ public class DefaultBundleAccessor implements BundleAccessor {
         return self;
     }
     
-    public void setBundles(Map<String,Bundle> bundles) {
-        this.bundles = bundles;
-    }
-    
-    public void setBundleContext(BundleContext bundleContext) {
+    public void init(Map<String,Bundle> bundles, BundleContext bundleContext, Map<String, String> packageToBundle) {
+        this.bundles = Collections.unmodifiableMap(bundles);
         this.bundleContext = bundleContext;
+        this.packageToBundle = Collections.unmodifiableMap(packageToBundle);
+        this.packagesByBundle = new HashMap<Bundle, Set<String>>();
+        for (Map.Entry<String,String> entry : packageToBundle.entrySet()) {
+            Bundle bundle = bundles.get(entry.getValue());
+            Set<String> pkgs = packagesByBundle.get(bundle);
+            if (pkgs == null) {
+                pkgs = new HashSet<String>();
+                packagesByBundle.put(bundle, pkgs);
+            }
+            pkgs.add(entry.getKey());
+        }
+        this.packagesByBundle = Collections.unmodifiableMap(packagesByBundle);
     }
     
     public Class<?> loadClass(String className) throws ClassNotFoundException {
         Class cls = null;
         Bundle bundle = getCurrentBundle();
         if (bundle != null) {
-            bundle.loadClass(className);
+            cls = bundle.loadClass(className);
             LOG.debug("Located class #1 in bundle #2", className, bundle.getSymbolicName());
         }
 
@@ -73,8 +81,10 @@ public class DefaultBundleAccessor implements BundleAccessor {
     private Bundle getCurrentBundle() {
         ActionContext ctx = ActionContext.getContext();
         String bundleName = (String) ctx.get(CURRENT_BUNDLE_NAME);
-        if (bundleName != null) {
-            ActionConfig actionConfig = ctx.getActionInvocation().getProxy().getConfig();
+        if (bundleName == null) {
+            ActionInvocation inv = ctx.getActionInvocation();
+            ActionProxy proxy = inv.getProxy();
+            ActionConfig actionConfig = proxy.getConfig();
             bundleName = packageToBundle.get(actionConfig.getPackageName());
         }
         if (bundleName != null) {
@@ -105,8 +115,12 @@ public class DefaultBundleAccessor implements BundleAccessor {
         return null;
     }
 
-    public void setPackageToBundleMapping(Map<String, String> packageToBundle) {
-        this.packageToBundle = packageToBundle;
+    public Map<String, Bundle> getBundles() {
+        return bundles;
+    }
+
+    public Set<String> getPackagesByBundle(Bundle bundle) {
+        return packagesByBundle.get(bundle);
     }
 
     public InputStream loadResourceAsStream(String name) throws IOException {

@@ -43,7 +43,9 @@ public class BundlePackageLoader implements PackageLoader {
         } finally {
             ctx.put(BundleAccessor.CURRENT_BUNDLE_NAME, null);
         }
-        return new ArrayList<PackageConfig>(config.getPackageConfigs().values());
+        List<PackageConfig> list = new ArrayList<PackageConfig>(config.getPackageConfigs().values());
+        list.removeAll(pkgConfigs.values());
+        return list;
     }
     
     static class BundleConfigurationProvider extends XmlConfigurationProvider {
