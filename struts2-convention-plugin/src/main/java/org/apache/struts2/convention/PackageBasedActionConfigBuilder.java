@@ -107,7 +107,9 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
      */
     @Inject(value = "struts.convention.action.packages", required = false)
     public void setActionPackages(String actionPackages) {
-        this.actionPackages = actionPackages.split("\\s*[,]\\s*");
+        if (!StringTools.isTrimmedEmpty(actionPackages)) {
+            this.actionPackages = actionPackages.split("\\s*[,]\\s*");
+        }
     }
 
     /**
@@ -116,7 +118,9 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
      */
     @Inject(value = "struts.convention.exclude.packages", required = false)
     public void setExcludePackages(String excludePackages) {
-        this.excludePackages = excludePackages.split("\\s*[,]\\s*");
+        if (!StringTools.isTrimmedEmpty(excludePackages)) {
+            this.excludePackages = excludePackages.split("\\s*[,]\\s*");
+        }
     }
 
     /**
