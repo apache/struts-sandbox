@@ -251,12 +251,12 @@ public abstract class AbstractClassLoaderResolver<T> {
      *
      * @param   test An instance of {@link AbstractClassLoaderResolver.Test} that will be used to filter resources.
      * @param   recursive If true, this will recurse into sub-directories. If false, this will only
-*              look in the directories given.
+     *              look in the directories given.
      * @param   dirName The name of the directory from which to start scanning for resources.
      */
     protected void findInDirectory(Test<T> test, boolean recursive, String dirName) {
         // Normalize the name just in case they passed in a package name
-        dirName = dirName.replace('.', '/');
+        dirName = dirName.replace('.', '/').replace('\\', '/');
 
         List<URL> urls = getURLs(dirName);
         if (urls == null) {

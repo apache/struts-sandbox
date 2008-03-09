@@ -21,6 +21,7 @@
 package org.apache.struts2.convention;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -201,6 +202,12 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
         Map<String, PackageConfig.Builder> packageConfigs = new HashMap<String, PackageConfig.Builder>();
 
         for (Class<?> actionClass : classes) {
+            // Skip all interfaces, enums, annotations, and abstract classes
+            if (actionClass.isAnnotation() || actionClass.isInterface() || actionClass.isEnum() ||
+                    (actionClass.getModifiers() & Modifier.ABSTRACT) != 0) {
+                continue;
+            }
+
             // Tell the ObjectFactory about this class
             try {
                 objectFactory.getClassInstance(actionClass.getName());
