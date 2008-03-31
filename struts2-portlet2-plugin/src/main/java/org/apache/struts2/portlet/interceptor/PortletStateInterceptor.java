@@ -25,7 +25,6 @@ import java.util.Map;
 import javax.portlet.ActionResponse;
 import javax.portlet.RenderRequest;
 
-import org.apache.struts2.portlet.PortletActionConstants;
 import org.apache.struts2.portlet.dispatcher.DirectRenderFromEventAction;
 
 import com.opensymphony.xwork2.ActionInvocation;
@@ -36,7 +35,9 @@ import com.opensymphony.xwork2.util.ValueStack;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
 
-public class PortletStateInterceptor extends AbstractInterceptor implements PortletActionConstants {
+import static org.apache.struts2.portlet.PortletContstants.*;
+
+public class PortletStateInterceptor extends AbstractInterceptor {
 
 	private final static Logger LOG = LoggerFactory.getLogger(PortletStateInterceptor.class);
 

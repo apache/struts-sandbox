@@ -23,7 +23,9 @@ package org.apache.struts2.portlet;
 import org.apache.struts2.portlet.dispatcher.DispatcherServlet;
 
 /**
- * Interface defining some constants used in the Struts portlet implementation
+ * Interface defining some constants used in the Struts portlet implementation.
+ * 
+ * @deprecated Use the {@link PortletContstants} class instead.
  *
  */
 public interface PortletActionConstants {
@@ -52,17 +54,13 @@ public interface PortletActionConstants {
      * Constant used for the render phase (
      * {@link javax.portlet.Portlet#render(javax.portlet.RenderRequest, javax.portlet.RenderResponse)})
      */
-    Integer RENDER_PHASE = new Integer(1);
+    Integer RENDER_PHASE = PortletContstants.RENDER_PHASE;
 
     /**
      * Constant used for the event phase (
      * {@link javax.portlet.Portlet#processAction(javax.portlet.ActionRequest, javax.portlet.ActionResponse)})
      */
-    Integer ACTION_PHASE = new Integer(2);
-    
-    Integer EVENT_PHASE = new Integer(3);
-    
-    Integer SERVE_RESOURCE_PHASE = new Integer(4);
+    Integer EVENT_PHASE = PortletContstants.ACTION_PHASE;
 
     /**
      * Key used for looking up and storing the

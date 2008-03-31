@@ -26,11 +26,8 @@ import java.util.Map;
 import javax.portlet.ActionResponse;
 import javax.portlet.RenderRequest;
 
-import junit.framework.TestCase;
-
 import org.apache.struts2.StrutsTestCase;
 import org.apache.struts2.dispatcher.DefaultActionSupport;
-import org.apache.struts2.portlet.PortletActionConstants;
 import org.apache.struts2.portlet.dispatcher.DirectRenderFromEventAction;
 import org.easymock.EasyMock;
 
@@ -39,7 +36,9 @@ import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.util.ValueStack;
 import com.opensymphony.xwork2.util.ValueStackFactory;
 
-public class PortletStateInterceptorTest extends StrutsTestCase implements PortletActionConstants {
+import static org.apache.struts2.portlet.PortletContstants.*;
+
+public class PortletStateInterceptorTest extends StrutsTestCase {
 
 	private PortletStateInterceptor interceptor;
 	

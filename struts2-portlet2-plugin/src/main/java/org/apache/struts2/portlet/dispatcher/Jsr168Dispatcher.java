@@ -57,7 +57,6 @@ import org.apache.struts2.dispatcher.SessionMap;
 import org.apache.struts2.dispatcher.mapper.ActionMapper;
 import org.apache.struts2.dispatcher.mapper.ActionMapping;
 import org.apache.struts2.dispatcher.multipart.MultiPartRequestWrapper;
-import org.apache.struts2.portlet.PortletActionConstants;
 import org.apache.struts2.portlet.PortletApplicationMap;
 import org.apache.struts2.portlet.PortletRequestMap;
 import org.apache.struts2.portlet.PortletSessionMap;
@@ -77,6 +76,8 @@ import com.opensymphony.xwork2.util.LocalizedTextUtil;
 import com.opensymphony.xwork2.util.TextUtils;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
+
+import static org.apache.struts2.portlet.PortletContstants.*;
 
 /**
  * <!-- START SNIPPET: javadoc -->
@@ -186,8 +187,7 @@ import com.opensymphony.xwork2.util.logging.LoggerFactory;
  *  &lt;!-- END SNIPPET: example --&gt;
  * </pre>
  */
-public class Jsr168Dispatcher extends GenericPortlet implements StrutsStatics,
-		PortletActionConstants {
+public class Jsr168Dispatcher extends GenericPortlet implements StrutsStatics {
 
 	private static final Logger LOG = LoggerFactory
 			.getLogger(Jsr168Dispatcher.class);

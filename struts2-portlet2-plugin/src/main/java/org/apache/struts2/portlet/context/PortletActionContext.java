@@ -33,9 +33,10 @@ import javax.portlet.RenderResponse;
 
 import org.apache.struts2.StrutsStatics;
 import org.apache.struts2.dispatcher.mapper.ActionMapping;
-import org.apache.struts2.portlet.PortletActionConstants;
 
 import com.opensymphony.xwork2.ActionContext;
+
+import static org.apache.struts2.portlet.PortletContstants.*;
 
 
 /**
@@ -43,7 +44,7 @@ import com.opensymphony.xwork2.ActionContext;
  *
  * @version $Revision: 564279 $ $Date: 2007-08-09 19:00:49 +0200 (Thu, 09 Aug 2007) $
  */
-public class PortletActionContext implements PortletActionConstants {
+public class PortletActionContext {
 
     /**
      * Get the PortletConfig of the portlet that is executing.
@@ -152,14 +153,14 @@ public class PortletActionContext implements PortletActionConstants {
      * @return <code>true</code> if the Portlet is executing in render phase.
      */
     public static boolean isRender() {
-        return PortletActionConstants.RENDER_PHASE.equals(getPhase());
+        return RENDER_PHASE.equals(getPhase());
     }
 
     /**
      * @return <code>true</code> if the Portlet is executing in the event phase.
      */
     public static boolean isAction() {
-        return PortletActionConstants.ACTION_PHASE.equals(getPhase());
+        return ACTION_PHASE.equals(getPhase());
     }
 
     /**
@@ -205,7 +206,7 @@ public class PortletActionContext implements PortletActionConstants {
     }
 
 	public static boolean isEvent() {
-		return PortletActionConstants.EVENT_PHASE.equals(getPhase());
+		return EVENT_PHASE.equals(getPhase());
 	}
 
 }

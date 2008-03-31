@@ -20,6 +20,8 @@
  */
 package org.apache.struts2.portlet.util;
 
+import static org.apache.struts2.portlet.PortletContstants.*;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Iterator;
@@ -36,13 +38,11 @@ import javax.portlet.RenderResponse;
 import javax.portlet.WindowState;
 
 import org.apache.struts2.StrutsException;
-import org.apache.struts2.portlet.PortletActionConstants;
 import org.apache.struts2.portlet.context.PortletActionContext;
 
 import com.opensymphony.xwork2.util.TextUtils;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
-
 /**
  * Helper class for creating Portlet URLs. Portlet URLs are fundamentally different from regular
  * servlet URLs since they never target the application itself; all requests go through the portlet
@@ -68,7 +68,7 @@ public class PortletUrlHelper {
      * @param state The WindowState of the URL.
      * @return The URL String.
      */
-    public static String buildUrl(String action, String namespace, String method, Map params,
+    public static String buildUrl(String action, String namespace, String method, Map<String, Object> params,
             String type, String mode, String state) {
         return buildUrl(action, namespace, method, params, null, type, mode, state,
                 true, true);
@@ -79,7 +79,7 @@ public class PortletUrlHelper {
      *
      * @see #buildUrl(String, String, Map, String, String, String)
      */
-    public static String buildUrl(String action, String namespace, String method, Map params,
+    public static String buildUrl(String action, String namespace, String method, Map<String, Object> params,
             String scheme, String type, String portletMode, String windowState,
             boolean includeContext, boolean encodeResult) {
     	StringBuffer resultingAction = new StringBuffer();
@@ -116,7 +116,7 @@ public class PortletUrlHelper {
         	resultingAction.append("!").append(method);
         }
         LOG.debug("Resulting actionPath: " + resultingAction);
-        params.put(PortletActionConstants.ACTION_PARAM, new String[] { resultingAction.toString() });
+        params.put(ACTION_PARAM, new String[] { resultingAction.toString() });
 
         BaseURL url = null;
         if ("action".equalsIgnoreCase(type)) {
@@ -132,7 +132,7 @@ public class PortletUrlHelper {
             url = response.createRenderURL();
         }
 
-        params.put(PortletActionConstants.MODE_PARAM, portletMode);
+        params.put(MODE_PARAM, new String[]{portletMode});
         url.setParameters(ensureParamsAreStringArrays(params));
 
         if ("HTTPS".equalsIgnoreCase(scheme)) {
@@ -240,16 +240,16 @@ public class PortletUrlHelper {
      * @param params The parameters to the URL.
      * @return A Map with all parameters as String arrays.
      */
-    public static Map ensureParamsAreStringArrays(Map params) {
-        Map result = null;
+    public static Map<String, String[]> ensureParamsAreStringArrays(Map<String, Object> params) {
+        Map<String, String[]> result = null;
         if (params != null) {
-            result = new LinkedHashMap(params.size());
-            Iterator it = params.keySet().iterator();
+            result = new LinkedHashMap<String, String[]>(params.size());
+            Iterator<String> it = params.keySet().iterator();
             while (it.hasNext()) {
-                Object key = it.next();
+                String key = it.next();
                 Object val = params.get(key);
                 if (val instanceof String[]) {
-                    result.put(key, val);
+                    result.put(key, (String[])val);
                 } else {
                     result.put(key, new String[] { val.toString() });
                 }

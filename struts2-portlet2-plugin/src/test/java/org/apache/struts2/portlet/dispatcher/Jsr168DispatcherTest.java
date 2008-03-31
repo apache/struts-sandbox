@@ -40,7 +40,6 @@ import javax.portlet.WindowState;
 
 import org.apache.struts2.StrutsConstants;
 import org.apache.struts2.dispatcher.mapper.ActionMapping;
-import org.apache.struts2.portlet.PortletActionConstants;
 import org.easymock.EasyMock;
 import org.jmock.Mock;
 import org.jmock.cglib.MockObjectTestCase;
@@ -56,11 +55,13 @@ import com.opensymphony.xwork2.ActionProxy;
 import com.opensymphony.xwork2.ActionProxyFactory;
 import com.opensymphony.xwork2.util.ValueStack;
 
+import static org.apache.struts2.portlet.PortletContstants.*;
+
 /**
  * Jsr168DispatcherTest. Insert description.
  *
  */
-public class Jsr168DispatcherTest extends MockObjectTestCase implements PortletActionConstants {
+public class Jsr168DispatcherTest extends MockObjectTestCase {
 
 	private final String MULTIPART_REQUEST = "-----------------------------4827543632391\r\n" 
 		+ "Content-Disposition: form-data; name=\"upload\"; filename=\"test.txt\"\r\n"
@@ -87,7 +88,7 @@ public class Jsr168DispatcherTest extends MockObjectTestCase implements PortletA
         dispatcher = new Jsr168Dispatcher();
     }
 
-    private void initPortletConfig(final Map initParams, final Map attributes) {
+    private void initPortletConfig(final Map<String, String> initParams, final Map<String, Object> attributes) {
         mockConfig = mock(PortletConfig.class);
         mockCtx = mock(PortletContext.class);
         mockConfig.stubs().method(ANYTHING);
@@ -146,21 +147,21 @@ public class Jsr168DispatcherTest extends MockObjectTestCase implements PortletA
 
         PortletMode mode = PortletMode.VIEW;
 
-        Map requestParams = new HashMap();
-        requestParams.put(PortletActionConstants.ACTION_PARAM, new String[]{"/view/testAction"});
+        Map<String, String[]> requestParams = new HashMap<String, String[]>();
+        requestParams.put(ACTION_PARAM, new String[]{"/view/testAction"});
         requestParams.put(EVENT_ACTION, new String[]{"true"});
-        requestParams.put(PortletActionConstants.MODE_PARAM, new String[]{mode.toString()});
+        requestParams.put(MODE_PARAM, new String[]{mode.toString()});
 
-        Map sessionMap = new HashMap();
+        Map<String, Object> sessionMap = new HashMap<String, Object>();
 
 
 
-        Map initParams = new HashMap();
+        Map<String, String> initParams = new HashMap<String, String>();
         initParams.put("viewNamespace", "/view");
         initParams.put(StrutsConstants.STRUTS_ALWAYS_SELECT_FULL_NAMESPACE, "true");
 
-        initPortletConfig(initParams, new HashMap());
-        initRequest(requestParams, new HashMap(), sessionMap, new HashMap(), PortletMode.VIEW, WindowState.NORMAL, false, null);
+        initPortletConfig(initParams, new HashMap<String, Object>());
+        initRequest(requestParams, new HashMap<String, Object>(), sessionMap, PortletMode.VIEW, WindowState.NORMAL, false, null);
         setupActionFactory("/view", "testAction", "success", EasyMock.createNiceMock(ValueStack.class));
 
         mockInvocation.expects(once()).method("getStack").will(
@@ -183,16 +184,16 @@ public class Jsr168DispatcherTest extends MockObjectTestCase implements PortletA
         final Mock mockResponse = mock(ActionResponse.class);
 
         PortletMode mode = PortletMode.VIEW;
-        Map initParams = new HashMap();
+        Map<String, String> initParams = new HashMap<String, String>();
         initParams.put("viewNamespace", "/view");
 
-        Map requestParams = new HashMap();
-        requestParams.put(PortletActionConstants.ACTION_PARAM, new String[]{"/view/testAction"});
-        requestParams.put(PortletActionConstants.MODE_PARAM, new String[]{mode.toString()});
+        Map<String, String[]> requestParams = new HashMap<String, String[]>();
+        requestParams.put(ACTION_PARAM, new String[]{"/view/testAction"});
+        requestParams.put(MODE_PARAM, new String[]{mode.toString()});
 
         initParams.put(StrutsConstants.STRUTS_ALWAYS_SELECT_FULL_NAMESPACE, "true");
-        initPortletConfig(initParams, new HashMap());
-        initRequest(requestParams, new HashMap(), new HashMap(), new HashMap(), PortletMode.VIEW, WindowState.NORMAL, true, null);
+        initPortletConfig(initParams, new HashMap<String, Object>());
+        initRequest(requestParams, new HashMap<String, Object>(), new HashMap<String, Object>(), PortletMode.VIEW, WindowState.NORMAL, true, null);
         setupActionFactory("/view", "testAction", "success", EasyMock.createNiceMock(ValueStack.class));
         //mockSession.expects(once()).method("setAttribute").with(new Constraint[]{eq(PortletActionConstants.LAST_MODE), eq(PortletMode.VIEW)});
         try {
@@ -213,13 +214,12 @@ public class Jsr168DispatcherTest extends MockObjectTestCase implements PortletA
      * @param requestParams The request parameters
      * @param requestAttributes The request attributes
      * @param sessionParams The session attributes
-     * @param renderParams The render parameters. Will only be set if <code>isEvent</code> is <code>true</code>
      * @param mode The portlet mode
      * @param state The portlet window state
      * @param isEvent <code>true</code> when the request is an ActionRequest.
      * @param locale The locale. If <code>null</code>, the request will return <code>Locale.getDefault()</code>
      */
-    private void initRequest(Map requestParams, Map requestAttributes, Map sessionParams, Map renderParams, PortletMode mode, WindowState state, boolean isEvent, Locale locale) {
+    private void initRequest(Map<String, String[]> requestParams, Map<String, Object> requestAttributes, Map<String, Object> sessionParams, PortletMode mode, WindowState state, boolean isEvent, Locale locale) {
         mockRequest = isEvent ? mock(ActionRequest.class) : mock(RenderRequest.class);
         mockSession = mock(PortletSession.class);
         mockSession.stubs().method(ANYTHING);
@@ -242,11 +242,11 @@ public class Jsr168DispatcherTest extends MockObjectTestCase implements PortletA
         mockRequest.stubs().method("getWindowState").will(returnValue(state));
     }
 
-    private void setupParamStub(Map requestParams, Mock mockRequest, String method) {
-        Map newMap = new HashMap();
-        Iterator it = requestParams.keySet().iterator();
+    private void setupParamStub(Map<String, String[]> requestParams, Mock mockRequest, String method) {
+        Map<String, String> newMap = new HashMap<String, String>();
+        Iterator<String> it = requestParams.keySet().iterator();
         while(it.hasNext()) {
-            Object key = it.next();
+            String key = it.next();
             String[] val = (String[])requestParams.get(key);
             newMap.put(key, val[0]);
         }
@@ -276,19 +276,19 @@ public class Jsr168DispatcherTest extends MockObjectTestCase implements PortletA
         mockResponse.stubs().method(ANYTHING);
         PortletMode mode = PortletMode.EDIT;
 
-        Map requestParams = new HashMap();
-        requestParams.put(PortletActionConstants.ACTION_PARAM, new String[]{"/view/testAction"});
+        Map<String, String[]> requestParams = new HashMap<String, String[]>();
+        requestParams.put(ACTION_PARAM, new String[]{"/view/testAction"});
         requestParams.put(EVENT_ACTION, new String[]{"false"});
-        requestParams.put(PortletActionConstants.MODE_PARAM, new String[]{PortletMode.VIEW.toString()});
+        requestParams.put(MODE_PARAM, new String[]{PortletMode.VIEW.toString()});
 
-        Map sessionMap = new HashMap();
+        Map<String, Object> sessionMap = new HashMap<String, Object>();
 
-        Map initParams = new HashMap();
+        Map<String, String> initParams = new HashMap<String, String>();
         initParams.put("viewNamespace", "/view");
         initParams.put("editNamespace", "/edit");
 
-        initPortletConfig(initParams, new HashMap());
-        initRequest(requestParams, new HashMap(), sessionMap, new HashMap(), mode, WindowState.NORMAL, false, null);
+        initPortletConfig(initParams, new HashMap<String, Object>());
+        initRequest(requestParams, new HashMap<String, Object>(), sessionMap, mode, WindowState.NORMAL, false, null);
         setupActionFactory("/edit", "default", "success", EasyMock.createNiceMock(ValueStack.class));
 
         mockInvocation.expects(once()).method("getStack").will(
@@ -319,10 +319,10 @@ public class Jsr168DispatcherTest extends MockObjectTestCase implements PortletA
     	Map<String, String[]> paramMap = new HashMap<String, String[]>();
     	Map<String, Object> sessionMap = new HashMap<String, Object>();
     	Map<String, Object> applicationMap = new HashMap<String, Object>();
-    	initPortletConfig(new HashMap(), new HashMap());
+    	initPortletConfig(new HashMap<String, String>(), new HashMap<String, Object>());
     	MockPortletConfig config = new MockPortletConfig(ctx);
     	dispatcher.init(config);
-    	dispatcher.createContextMap(requestMap, paramMap, sessionMap, applicationMap, request, response, config, PortletActionConstants.ACTION_PHASE);
+    	dispatcher.createContextMap(requestMap, paramMap, sessionMap, applicationMap, request, response, config, ACTION_PHASE);
     	assertNotNull("Caption was not found in parameter map!", paramMap.get("caption"));
     	assertEquals("TestCaption", paramMap.get("caption")[0]);
     }

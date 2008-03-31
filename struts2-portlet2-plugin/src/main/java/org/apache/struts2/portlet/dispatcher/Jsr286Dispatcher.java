@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.portlet.Event;
 import javax.portlet.EventRequest;
 import javax.portlet.EventResponse;
 import javax.portlet.PortletException;
@@ -20,6 +19,8 @@ import com.opensymphony.xwork2.util.TextUtils;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
 
+import static org.apache.struts2.portlet.PortletContstants.*;
+
 public class Jsr286Dispatcher extends Jsr168Dispatcher {
 
 	private final static Logger LOG = LoggerFactory.getLogger(Jsr286Dispatcher.class);
@@ -31,7 +32,6 @@ public class Jsr286Dispatcher extends Jsr168Dispatcher {
 		LOG.debug("Entering processEvent");
 		resetActionContext();
 		try {
-			Event event = request.getEvent();
 			// We'll use the event name as the "action"
 			serviceAction(request, response, getActionMapping(request),
 					getRequestMap(request), getParameterMap(request),
