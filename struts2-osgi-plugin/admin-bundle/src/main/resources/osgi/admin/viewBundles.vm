@@ -15,7 +15,9 @@
     <tbody>
         #foreach ($bundle in $bundles)
         <tr>
-            <td>$bundle.symbolicName</td>
+            <td>
+                <a href="bundle_${bundle.symbolicName}!view.action">$bundle.symbolicName</a>
+            </td>
             <td>$action.getBundleState($bundle)</td>
             <td>
                 #if ($action.isAllowedAction($bundle, "start"))
@@ -24,6 +26,10 @@
 
                 #if ($action.isAllowedAction($bundle, "stop"))
                 <a href="bundle_${bundle.symbolicName}!stop.action">Stop</a>
+                #end
+                
+                #if ($action.isAllowedAction($bundle, "update"))
+                <a href="bundle_${bundle.symbolicName}!update.action">Update</a>
                 #end
             </td>
         </tr>

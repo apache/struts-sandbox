@@ -38,6 +38,11 @@ public class BundlesAction extends DefaultActionSupport {
         return view();
     }
 
+    public String update() throws BundleException {
+        Bundle bundle = bundleAccessor.getBundles().get(id);
+        bundle.update();
+        return view();
+    }
 
     public String getId() {
         return id;
@@ -90,10 +95,14 @@ public class BundlesAction extends DefaultActionSupport {
     }
 
     public boolean isAllowedAction(Bundle bundle, String val) {
+        int state = bundle.getState();
         if ("start".equals(val)) {
-            return bundle.getState() == Bundle.INSTALLED;
+            return state == Bundle.RESOLVED;
         } else if ("stop".equals(val)) {
-            return bundle.getState() == Bundle.ACTIVE;
+            return state == Bundle.ACTIVE;
+        } else if ("update".equals(val)) {
+            return state == Bundle.ACTIVE || state == Bundle.INSTALLED
+                    || state == Bundle.RESOLVED;
         }
         throw new IllegalArgumentException("Invalid state");
     }

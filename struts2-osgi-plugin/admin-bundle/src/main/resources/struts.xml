@@ -4,9 +4,8 @@
     "http://struts.apache.org/dtds/struts-2.0.dtd">
 
 <struts>
-
     <package name="bundle-admin" namespace="/osgi/admin" extends="struts-default">
-        <action name="bundle_*" class="org.apache.struts2.osgi.admin.BundlesAction" method="view">
+        <action name="bundle_*!*" class="org.apache.struts2.osgi.admin.BundlesAction" method="{2}">
             <param name="id">{1}</param>
             <result type="velocity">viewBundle.vm</result>
         </action>
@@ -14,5 +13,4 @@
             <result type="velocity">viewBundles.vm</result>
         </action>
     </package>
-
 </struts>
