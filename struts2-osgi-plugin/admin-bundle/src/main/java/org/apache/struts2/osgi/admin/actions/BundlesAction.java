@@ -1,4 +1,4 @@
-package org.apache.struts2.osgi.admin;
+package org.apache.struts2.osgi.admin.actions;
 
 import org.apache.struts2.dispatcher.DefaultActionSupport;
 import org.apache.struts2.osgi.BundleAccessor;
@@ -28,19 +28,34 @@ public class BundlesAction extends DefaultActionSupport {
 
     public String start() throws BundleException {
         Bundle bundle = bundleAccessor.getBundles().get(id);
-        bundle.start();
+        try {
+            bundle.start();
+        } catch (Exception e) {
+            addActionError(e.toString());
+        }
+
         return view();
     }
 
     public String stop() throws BundleException {
         Bundle bundle = bundleAccessor.getBundles().get(id);
-        bundle.stop();
+        try {
+            bundle.stop();
+        } catch (Exception e) {
+            addActionError(e.toString());
+        }
+
         return view();
     }
 
     public String update() throws BundleException {
         Bundle bundle = bundleAccessor.getBundles().get(id);
-        bundle.update();
+        try {
+            bundle.update();
+        } catch (Exception e) {
+            addActionError(e.toString());
+        }
+
         return view();
     }
 

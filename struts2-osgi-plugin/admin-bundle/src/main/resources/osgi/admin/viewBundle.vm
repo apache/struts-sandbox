@@ -1,82 +1,93 @@
 <html>
+    <head>
+        #surl ("var=mainCss" "value=/static/main.css" "includeParams=none")
+        <link rel="stylesheet" type="text/css" href="$mainCss" />
+    </head>
 <body>
-<table>
-    <tr>
-        <th>Id</th>
-        <td>$bundle.bundleId</td>
+
+<div class="right">
+    #surl ("var=bundlesUrl" "nampespace=/osgi/admin" "action=bundles" "includeParams=none")
+    <a href="$bundlesUrl">Installed Bundles</a>
+</div>
+
+#sactionerror ()
+
+<table class="bundleDetails" style="clear:both">
+    <tr class="detailRow">
+        <td class="rowTitle">Id</td>
+        <td class="rowValue">$bundle.bundleId</td>
     </tr>
-    <tr>
-        <th>Name</th>
-        <td>$bundle.symbolicName</td>
+    <tr class="detailRow">
+        <td class="rowTitle">Name</td>
+        <td class="rowValue">$bundle.symbolicName</td>
     </tr>
-    <tr>
-        <th>Location</th>
-        <td>$bundle.location</td>
+    <tr class="detailRow">
+        <td class="rowTitle">Location</td>
+        <td class="rowValue">$bundle.location</td>
     </tr>
-    <tr>
-        <th>State</th>
-        <td>$action.getBundleState($bundle)</td>
+    <tr class="detailRow">
+        <td class="rowTitle">State</td>
+        <td class="rowValue">$action.getBundleState($bundle)</td>
     </tr>
-     <tr>
-        <th>Registered Services</th>
-        <td>
-            <ul>
+    <tr class="detailRow">
+        <td class="rowTitle">Registered Services</td>
+        <td class="rowValue">
             #foreach ($service in $bundle.registeredServices)
-                <li>
+                <table class="properties">
                     #foreach ($key in $service.propertyKeys)
-                        $key = $action.displayProperty($service.getProperty($key)) <br />
+                        <tr>
+                            <td class="name">$key</td>
+                            <td>$action.displayProperty($service.getProperty($key))</td>
+                        </tr>
                     #end
-                    #if ($service.usingBundles.length > 0)
-                        Used by:
-                        <ul>
-                            #foreach ($user in $service.usingBundles)
-                            <li>$user.symbolicName</li>
-                            #end
-                        </ul>
-                    #end
-                </li>
+                </table>
+                <br/>
             #end
-            </ul>
         </td>
     </tr>
-    <tr>
-        <th>Services in Use</th>
-        <td>
-            <ul>
+    <tr class="detailRow">
+        <td class="rowTitle">Services in Use</td>
+        <td class="rowValue">
             #foreach ($service in $bundle.servicesInUse)
-                <li>
+                <table class="properties">
                     #foreach ($key in $service.propertyKeys)
-                        $key = $action.displayProperty($service.getProperty($key)) <br />
+                        <tr>
+                            <td class="name">$key</td>
+                            <td>$action.displayProperty($service.getProperty($key))</td>
+                        </tr>
                     #end
-                    #if ($service.usingBundles.length > 0)
-                        Also used by:
-                        <ul>
-                            #foreach ($user in $service.usingBundles)
-                            <li>$user.symbolicName</li>
-                            #end
-                        </ul>
-                    #end
-                </li>
+                </table>
+                <br/>
             #end
-            </ul>
         </td>
     </tr>
-    <tr>
-        <th>Packages</th>
-        <td>
+    <tr class="detailRow">
+        <td class="rowTitle">Packages</td>
+        <td class="rowValue">
             #foreach ($pkg in $packages)
-            <strong>$pkg.name</strong>
-            <ul>
-                #foreach ($name in $pkg.actionConfigs.keySet())
-                <li>$name</li>
-                #end
-            </ul>
+                <table class="properties">
+                    <tr>
+                        <td class="name">Name</td>
+                        <td>$pkg.name</td>
+                    </tr>
+                    <tr>
+                        <td class="name">Actions</td>
+                        <td>
+                            <ul>
+                                #foreach ($name in $pkg.actionConfigs.keySet())
+                                    <li>$name</li>
+                                #end
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+                <br/>
             #end
         </td>
     </tr>
-    <tr>
-        <th>Actions</th>
-        <td>
+    <tr class="detailRow">
+        <td class="rowTitle">Actions</td>
+        <td class="rowValue">
             #if ($action.isAllowedAction($bundle, "start"))
             <a href="bundle_${bundle.symbolicName}!start.action">Start</a>
             #end
@@ -84,13 +95,12 @@
             #if ($action.isAllowedAction($bundle, "stop"))
             <a href="bundle_${bundle.symbolicName}!stop.action">Stop</a>
             #end
-            
+
             #if ($action.isAllowedAction($bundle, "update"))
             <a href="bundle_${bundle.symbolicName}!update.action">Update</a>
             #end
         </td>
     </tr>
-
 </table>
 </body>
 </html>

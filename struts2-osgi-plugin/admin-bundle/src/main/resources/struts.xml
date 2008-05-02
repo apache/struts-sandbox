@@ -5,12 +5,22 @@
 
 <struts>
     <package name="bundle-admin" namespace="/osgi/admin" extends="struts-default">
-        <action name="bundle_*!*" class="org.apache.struts2.osgi.admin.BundlesAction" method="{2}">
+        <action name="bundle_*!*" class="org.apache.struts2.osgi.admin.actions.BundlesAction" method="{2}">
             <param name="id">{1}</param>
             <result type="velocity">viewBundle.vm</result>
         </action>
-        <action name="bundles" class="org.apache.struts2.osgi.admin.BundlesAction" method="index">
+
+        <action name="bundles" class="org.apache.struts2.osgi.admin.actions.BundlesAction" method="index">
             <result type="velocity">viewBundles.vm</result>
+        </action>
+
+
+        <action name="execCommand" class="org.apache.struts2.osgi.admin.actions.ShellAction">
+            <result type="freemarker">commandResult.ftl</result>
+        </action>
+
+        <action name="shell">
+            <result type="freemarker">shell.ftl</result>
         </action>
     </package>
 </struts>

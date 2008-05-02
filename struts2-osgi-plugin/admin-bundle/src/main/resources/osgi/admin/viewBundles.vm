@@ -1,10 +1,12 @@
 <html>
 <head>
     <title>OSGi Bundles</title>
+    #surl ("var=mainCss" "value=/static/main.css" "includeParams=none")
+    <link rel="stylesheet" type="text/css" href="$mainCss" />
 </head>
 <body>
 
-<table>
+<table class="properties">
     <thead>
         <tr>
             <th>Name</th>
@@ -27,7 +29,7 @@
                 #if ($action.isAllowedAction($bundle, "stop"))
                 <a href="bundle_${bundle.symbolicName}!stop.action">Stop</a>
                 #end
-                
+
                 #if ($action.isAllowedAction($bundle, "update"))
                 <a href="bundle_${bundle.symbolicName}!update.action">Update</a>
                 #end
