@@ -7,11 +7,11 @@
     <package name="bundle-admin" namespace="/osgi/admin" extends="struts-default">
         <action name="bundle_*!*" class="org.apache.struts2.osgi.admin.actions.BundlesAction" method="{2}">
             <param name="id">{1}</param>
-            <result type="velocity">viewBundle.vm</result>
+            <result type="freemarker">viewBundle.ftl</result>
         </action>
 
         <action name="bundles" class="org.apache.struts2.osgi.admin.actions.BundlesAction" method="index">
-            <result type="velocity">viewBundles.vm</result>
+            <result type="freemarker">viewBundles.ftl</result>
         </action>
 
 

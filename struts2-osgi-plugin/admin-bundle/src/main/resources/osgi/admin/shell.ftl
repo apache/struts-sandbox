@@ -28,10 +28,14 @@
 <title>OSGi Console</title>
 </head>
 <body>
+<div class="right">
+    <@s.url var="bundlesUrl" nampespace="/osgi/admin" action="bundles" includeParams="none" />
+    <a href="${bundlesUrl}">Installed Bundles</a>
+</div>
 <div id="shell" >
    <form onsubmit="return false" id="wc-form">
         <div class="wc-results" id="wc-result">
-             Welcome to the OSGi console! Type help to see the list of available commands.
+             Welcome to the OSGi console! Type 'help' to see the list of available commands.
              <br />
              :-&gt;
         </div>
