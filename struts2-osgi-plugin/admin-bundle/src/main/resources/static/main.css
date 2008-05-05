@@ -15,6 +15,7 @@
 .rowTitle {
 	width: 141px;
 	font-weight: bold;
+	vertical-align: top;
 }
 
 
@@ -32,6 +33,7 @@ table.properties td {
 
 table.properties td.name {
 	background-color: #C3D9FF;
+	vertical-align: top;
 }
 
 table.properties th {
