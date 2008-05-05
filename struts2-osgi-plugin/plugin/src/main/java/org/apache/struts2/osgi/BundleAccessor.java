@@ -8,6 +8,8 @@ import java.util.Set;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 
 public interface BundleAccessor {
 
@@ -24,5 +26,9 @@ public interface BundleAccessor {
     Map<String, Bundle> getBundles();
 
     Set<String> getPackagesByBundle(Bundle bundle);
+
+    Object getService(ServiceReference ref);
+
+    ServiceReference getServiceReference(String className);
 
 }

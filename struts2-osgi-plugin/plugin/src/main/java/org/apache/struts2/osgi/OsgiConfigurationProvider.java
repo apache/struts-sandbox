@@ -7,6 +7,8 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.security.CodeSource;
+import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -26,9 +28,11 @@ import org.apache.felix.framework.cache.BundleCache;
 import org.apache.felix.framework.util.FelixConstants;
 import org.apache.felix.framework.util.StringMap;
 import org.apache.felix.main.AutoActivator;
+import org.apache.felix.shell.ShellService;
 import org.apache.struts2.osgi.loaders.VelocityBundleResourceLoader;
 import org.apache.struts2.views.velocity.VelocityManager;
 import org.apache.velocity.app.Velocity;
+import org.apache.velocity.util.StringUtils;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -56,6 +60,15 @@ public class OsgiConfigurationProvider implements PackageProvider {
     
     private static final Logger LOG = LoggerFactory.getLogger(OsgiConfigurationProvider.class);
 
+    private static final String SYSTEM_PACKAGES = "org.osgi.framework; version=1.4.0,"
+            + "org.osgi.service.packageadmin; version=1.2.0," + "org.osgi.service.startlevel; version=1.0.0,"
+            + "org.osgi.service.url; version=1.0.0," + "org.apache.struts2.osgi; version=1.0.0,"
+            + "org.apache.struts2.dispatcher; version=1.0.0," + "com.opensymphony.xwork2.config; version=1.0.0,"
+            + "com.opensymphony.xwork2.config.entities; version=1.0.0,"
+            + "com.opensymphony.xwork2.inject; version=1.0.0," + "com.opensymphony.xwork2; version=1.0.0";
+
+    private static final String AUTO_START_BUNDLES = "file:bundles/org.apache.felix.shell-1.1.0-SNAPSHOT.jar ";
+
     private Felix felix;
     private Map<String,Bundle> bundles = Collections.synchronizedMap(new HashMap<String,Bundle>());
     private Configuration configuration;
@@ -74,7 +87,7 @@ public class OsgiConfigurationProvider implements PackageProvider {
     public void setObjectFactory(ObjectFactory factory) {
         this.objectFactory = factory;
     }
-    
+
     @Inject
     public void setVelocityManager(VelocityManager vm) {
         Properties props = new Properties();
@@ -83,16 +96,16 @@ public class OsgiConfigurationProvider implements PackageProvider {
         props.setProperty(Velocity.RESOURCE_LOADER, "strutsfile,strutsclass,osgi");
         vm.setVelocityProperties(props);
     }
-    
+
     public void destroy() {
         try {
             felix.stop();
         } catch (BundleException e) {
             LOG.error("Failed to stop Felix", e);
         }
-        bundles = null; 
+        bundles = null;
     }
-    
+
     public void init(Configuration configuration) throws ConfigurationException {
         loadOsgi();
         this.configuration = configuration;
@@ -131,37 +144,28 @@ public class OsgiConfigurationProvider implements PackageProvider {
     protected void loadOsgi() {
         //configuration properties 
         Properties systemProperties = getProperties("default.properties");
-        
+
         //struts specific properties
         Properties strutsProperties = getProperties("struts-osgi.properties");
-        
+
         Map configMap = new StringMap(false);
-        
+
         configMap.put(Constants.FRAMEWORK_SYSTEMPACKAGES,
-            "org.osgi.framework; version=1.4.0," +
-            "org.osgi.service.packageadmin; version=1.2.0," +
-            "org.osgi.service.startlevel; version=1.0.0," +
-            "org.osgi.service.url; version=1.0.0," +
-            "org.apache.struts2.osgi; version=1.0.0," +
-            "org.apache.struts2.dispatcher; version=1.0.0," +
-            "com.opensymphony.xwork2.config; version=1.0.0," +
-            "com.opensymphony.xwork2.config.entities; version=1.0.0," +
-            "com.opensymphony.xwork2.inject; version=1.0.0," +
-            "com.opensymphony.xwork2; version=1.0.0" +
-            getSystemPackages(systemProperties) + 
+                SYSTEM_PACKAGES +
+            getSystemPackages(systemProperties) +
             strutsProperties.getProperty("xwork"));
 
         Set<String> bundlePaths = new HashSet<String>(findInPackage("bundles"));
         LOG.info("Loading Struts bundles "+bundlePaths);
-        
+
         StringBuilder sb = new StringBuilder();
         for (String path : bundlePaths) {
             sb.append(path).append(" ");
         }
-        
+
         configMap.put(AutoActivator.AUTO_START_PROP + ".1",
-            sb.toString());
-        configMap.put(BundleCache.CACHE_PROFILE_DIR_PROP, System.getProperty("java.io.tmpdir"));
+            sb.toString() + getJarUrl(ShellService.class));
+        configMap.put(BundleCache.CACHE_PROFILE_DIR_PROP, System.getProperty("java.io.tmpdir") + ".felix-cache");
         configMap.put(BundleCache.CACHE_DIR_PROP, "jim");
         configMap.put(FelixConstants.EMBEDDED_EXECUTION_PROP, "true");
         configMap.put(FelixConstants.SERVICE_URLHANDLERS_PROP, "false");
@@ -182,7 +186,7 @@ public class OsgiConfigurationProvider implements PackageProvider {
         catch (Exception ex) {
             throw new ConfigurationException("Couldn't start Felix (OSGi)", ex);
         }
-        
+
         // Wait for all bundles to load
         while (bundles.size() < bundlePaths.size()) {
             try {
@@ -192,12 +196,19 @@ public class OsgiConfigurationProvider implements PackageProvider {
             }
         }
     }
-    
+
+    private String getJarUrl(Class clazz) {
+        ProtectionDomain protectionDomain = clazz.getProtectionDomain();
+        CodeSource codeSource = protectionDomain.getCodeSource();
+        URL loc = codeSource.getLocation();
+        return loc.toString();
+    }
+
     private String getSystemPackages(Properties properties) {
         String jreVersion = "jre-" + System.getProperty("java.version").substring(0, 3);
         return properties.getProperty(jreVersion);
     }
-    
+
     private Properties getProperties(String fileName) {
         URL propertiesURL = OsgiConfigurationProvider.class.getClassLoader().getResource(
             fileName);
@@ -218,7 +229,7 @@ public class OsgiConfigurationProvider implements PackageProvider {
         }
         return properties;
     }
-    
+
     class BundleRegistration implements BundleActivator, BundleListener {
 
         public void start(BundleContext context) throws Exception {
@@ -238,7 +249,7 @@ public class OsgiConfigurationProvider implements PackageProvider {
             }
         }
     }
-    
+
     /**
      * Scans for classes starting at the package provided and descending into subpackages.
      * Each class is offered up to the Test as it is discovered, and if the Test returns

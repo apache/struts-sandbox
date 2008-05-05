@@ -13,4 +13,5 @@
     <constant name="struts.objectFactory" value="osgi" />
     <constant name="struts.objectFactory.delegate" value="struts" />
     <constant name="struts.freemarker.manager.classname" value="org.apache.struts2.osgi.BundleFreemarkerManager" />
+    <constant name="struts.staticContentLoader" value="org.apache.struts2.osgi.loaders.StaticContentBundleResourceLoader" />
 </struts>

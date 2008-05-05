@@ -8,6 +8,8 @@ import java.util.Map.Entry;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
@@ -34,7 +36,15 @@ public class DefaultBundleAccessor implements BundleAccessor {
     public static DefaultBundleAccessor getInstance() {
         return self;
     }
-    
+
+    public Object getService(ServiceReference ref) {
+        return bundleContext.getService(ref);
+    }
+
+    public ServiceReference getServiceReference(String className) {
+        return bundleContext.getServiceReference(className);
+    }
+
     public void init(Map<String,Bundle> bundles, BundleContext bundleContext, Map<String, String> packageToBundle) {
         this.bundles = Collections.unmodifiableMap(bundles);
         this.bundleContext = bundleContext;
@@ -104,6 +114,25 @@ public class DefaultBundleAccessor implements BundleAccessor {
             return resources;
         }
 
+        return null;
+    }
+
+    public URL loadResourceFromAllBundles(String name) throws IOException {
+        for (Map.Entry<String, Bundle> entry : bundles.entrySet()) {
+            Enumeration e = entry.getValue().getResources(name);
+            if (e.hasMoreElements()) {
+                return (URL) e.nextElement();
+            }
+        }
+
+        return null;
+    }
+
+    public InputStream loadResourceFromAllBundlesAsStream(String name) throws IOException {
+        URL url = loadResourceFromAllBundles(name);
+        if (url != null) {
+            return url.openStream();
+        }
         return null;
     }
 
