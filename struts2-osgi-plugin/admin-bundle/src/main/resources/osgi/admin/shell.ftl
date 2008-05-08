@@ -25,6 +25,7 @@
 <link rel="stylesheet" type="text/css" href="<@s.url value="/static/shell.css" />" />
 <script src=" <@s.url value="/static/shell.js" />"></script>
 <script src="<@s.url value="/static/dojo.js" />"></script>
+<link rel="stylesheet" type="text/css" href="<@s.url value="/static/main.css" />" />
 <title>OSGi Console</title>
 </head>
 <body>
@@ -40,6 +41,7 @@
              :-&gt;
         </div>
         <@s.url var="execUrl" namespace="/osgi/admin" action="execCommand" />
+        <label for"command">Command:</label>
         <input name="command" onkeyup="keyEvent(event, '${execUrl}')" class="wc-command" id="wc-command" type="text" />
     </form>
 </div>

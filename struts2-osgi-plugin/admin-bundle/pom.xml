@@ -1,9 +1,10 @@
-<?xml version="1.0"?>
-<project>
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.apache.struts2.osgi.admin</groupId>
-	<artifactId>admin-bundle</artifactId>
-	<packaging>bundle</packaging>
+	<groupId>org.apache.struts.osgi</groupId>
+	<artifactId>struts2-admin-bundle</artifactId>
+	<packaging>jar</packaging>
 	<name>Struts 2 OSGi Admin Bundle</name>
 	<version>1.0-SNAPSHOT</version>
 
@@ -21,6 +22,20 @@
 
 	<build>
 		<plugins>
+		    <plugin>
+		    	<groupId>org.apache.maven.plugins</groupId>
+		    	<artifactId>maven-jar-plugin</artifactId>
+		    	<configuration>
+		    		<archive>
+		    			<manifestFile>
+		    				src/main/resources/META-INF/MANIFEST.MF
+		    			</manifestFile>
+		    		</archive>
+		    	</configuration>
+		    </plugin>
+		    <!--
+			Commented out until
+			https://issues.apache.org/jira/browse/FELIX-549 is solved
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
@@ -32,13 +47,17 @@
 						<Export-Package>
 							org.apache.struts2.osgi.admin*
 						</Export-Package>
-						<Import-Package>*,com.opensymphony.xwork2</Import-Package>
+						<Import-Package>
+						    com.opensymphony.xwork2,
+                            *
+						</Import-Package>
 						<Bundle-Activator>
 							org.apache.struts2.osgi.admin.MyBundleActivator
 						</Bundle-Activator>
 					</instructions>
 				</configuration>
 			</plugin>
+			-->
 		</plugins>
 		<pluginManagement>
 			<plugins>
