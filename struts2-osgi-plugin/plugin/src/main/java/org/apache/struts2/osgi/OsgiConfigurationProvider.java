@@ -5,11 +5,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.security.CodeSource;
 import java.security.ProtectionDomain;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -21,8 +23,7 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
-import javax.servlet.ServletContext;
-
+import org.apache.felix.fileinstall.FileInstall;
 import org.apache.felix.framework.Felix;
 import org.apache.felix.framework.cache.BundleCache;
 import org.apache.felix.framework.util.FelixConstants;
@@ -32,7 +33,6 @@ import org.apache.felix.shell.ShellService;
 import org.apache.struts2.osgi.loaders.VelocityBundleResourceLoader;
 import org.apache.struts2.views.velocity.VelocityManager;
 import org.apache.velocity.app.Velocity;
-import org.apache.velocity.util.StringUtils;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -42,32 +42,26 @@ import org.osgi.framework.BundleListener;
 import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
+import org.osgi.util.tracker.ServiceTracker;
 
 import com.opensymphony.xwork2.ObjectFactory;
 import com.opensymphony.xwork2.config.Configuration;
 import com.opensymphony.xwork2.config.ConfigurationException;
-import com.opensymphony.xwork2.config.ConfigurationProvider;
 import com.opensymphony.xwork2.config.PackageProvider;
 import com.opensymphony.xwork2.config.entities.PackageConfig;
-import com.opensymphony.xwork2.inject.ContainerBuilder;
 import com.opensymphony.xwork2.inject.Inject;
-import com.opensymphony.xwork2.util.ResolverUtil.Test;
-import com.opensymphony.xwork2.util.location.LocatableProperties;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
 
 public class OsgiConfigurationProvider implements PackageProvider {
-    
+
+    private static final String FELIX_LOG_LEVEL = "felix.log.level";
+
     private static final Logger LOG = LoggerFactory.getLogger(OsgiConfigurationProvider.class);
 
-    private static final String SYSTEM_PACKAGES = "org.osgi.framework; version=1.4.0,"
-            + "org.osgi.service.packageadmin; version=1.2.0," + "org.osgi.service.startlevel; version=1.0.0,"
-            + "org.osgi.service.url; version=1.0.0," + "org.apache.struts2.osgi; version=1.0.0,"
-            + "org.apache.struts2.dispatcher; version=1.0.0," + "com.opensymphony.xwork2.config; version=1.0.0,"
-            + "com.opensymphony.xwork2.config.entities; version=1.0.0,"
-            + "com.opensymphony.xwork2.inject; version=1.0.0," + "com.opensymphony.xwork2; version=1.0.0";
-
-    private static final String AUTO_START_BUNDLES = "file:bundles/org.apache.felix.shell-1.1.0-SNAPSHOT.jar ";
+    private static final String FELIX_FILEINSTALL_POLL = "felix.fileinstall.poll";
+    private static final String FELIX_FILEINSTALL_DIR = "felix.fileinstall.dir";
+    private static final String FELIX_FILEINSTALL_DEBUG = "felix.fileinstall.debug";
 
     private Felix felix;
     private Map<String,Bundle> bundles = Collections.synchronizedMap(new HashMap<String,Bundle>());
@@ -82,7 +76,7 @@ public class OsgiConfigurationProvider implements PackageProvider {
     public void setBundleAccessor(BundleAccessor acc) {
         this.bundleAccessor = acc;
     }
-    
+
     @Inject
     public void setObjectFactory(ObjectFactory factory) {
         this.objectFactory = factory;
@@ -119,7 +113,7 @@ public class OsgiConfigurationProvider implements PackageProvider {
             throw new ConfigurationException(e);
         }
         Map<String,String> packageToBundle = new HashMap<String,String>();
-        Set bundleNames = new HashSet();
+        Set<String> bundleNames = new HashSet<String>();
         if (refs != null) {
             for (ServiceReference ref : refs) {
                 if (!bundleNames.contains(ref.getBundle().getSymbolicName())) {
@@ -142,19 +136,18 @@ public class OsgiConfigurationProvider implements PackageProvider {
     }
 
     protected void loadOsgi() {
-        //configuration properties 
+        //configuration properties
         Properties systemProperties = getProperties("default.properties");
 
-        //struts specific properties
-        Properties strutsProperties = getProperties("struts-osgi.properties");
+        //struts, xwork and felix exported packages
+        Properties packages = getProperties("struts-osgi.properties");
 
-        Map configMap = new StringMap(false);
+        Map<String, String> configMap = new StringMap(false);
 
-        configMap.put(Constants.FRAMEWORK_SYSTEMPACKAGES,
-                SYSTEM_PACKAGES +
-            getSystemPackages(systemProperties) +
-            strutsProperties.getProperty("xwork"));
+        configMap.put(Constants.FRAMEWORK_SYSTEMPACKAGES, packages.getProperty("packages")
+                + getSystemPackages(systemProperties));
 
+        // find bundles
         Set<String> bundlePaths = new HashSet<String>(findInPackage("bundles"));
         LOG.info("Loading Struts bundles "+bundlePaths);
 
@@ -163,19 +156,33 @@ public class OsgiConfigurationProvider implements PackageProvider {
             sb.append(path).append(" ");
         }
 
-        configMap.put(AutoActivator.AUTO_START_PROP + ".1",
-            sb.toString() + getJarUrl(ShellService.class));
+        // Add shell and File Install bundles activation
+        sb.append(getJarUrl(ShellService.class)).append(" ");
+        //sb.append(getJarUrl(FileInstall.class)).append(" ");
+        //sb.append(getJarUrl(ServiceTracker.class));
+
+        //autostart bundles
+        configMap.put(AutoActivator.AUTO_START_PROP + ".1", sb.toString());
+
+        // Bundle cache
         configMap.put(BundleCache.CACHE_PROFILE_DIR_PROP, System.getProperty("java.io.tmpdir") + ".felix-cache");
         configMap.put(BundleCache.CACHE_DIR_PROP, "jim");
+
+        // File Install
+        String bundlesDir = Thread.currentThread().getContextClassLoader().getResource("bundles").getPath();
+        configMap.put(OsgiConfigurationProvider.FELIX_FILEINSTALL_POLL, "5000");
+        configMap.put(OsgiConfigurationProvider.FELIX_FILEINSTALL_DIR, bundlesDir);
+        configMap.put(OsgiConfigurationProvider.FELIX_FILEINSTALL_DEBUG, "1");
+
+        //other properties
         configMap.put(FelixConstants.EMBEDDED_EXECUTION_PROP, "true");
         configMap.put(FelixConstants.SERVICE_URLHANDLERS_PROP, "false");
         configMap.put("org.osgi.framework.bootdelegation", "org.apache.*");
-        //configMap.put("osgi.parentClassloader", "app");
-        configMap.put("felix.log.level", "4");
+        configMap.put(OsgiConfigurationProvider.FELIX_LOG_LEVEL, "4");
         configMap.put(FelixConstants.BUNDLE_CLASSPATH, ".");
 
         try {
-            List list = new ArrayList();
+            List<BundleActivator> list = new ArrayList<BundleActivator>();
             list.add(new BundleRegistration());
             list.add(new AutoActivator(configMap));
             // Now create an instance of the framework.
