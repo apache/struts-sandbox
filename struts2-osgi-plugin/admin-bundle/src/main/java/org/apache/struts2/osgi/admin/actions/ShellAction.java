@@ -15,7 +15,6 @@ import com.opensymphony.xwork2.inject.Inject;
 
 public class ShellAction extends ActionSupport {
     private String command;
-    private String error;
     private String output;
 
     public String execute() {
@@ -25,18 +24,21 @@ public class ShellAction extends ActionSupport {
         PrintStream outStream = new PrintStream(outByteStream);
         PrintStream errStream = new PrintStream(errByteStream);
 
+        String outString = null;
+        String errString = null;
         try {
             ShellService shellService = ServicesFactory.getInstance().getShellService();
             shellService.executeCommand(command, outStream, errStream);
-            output = outByteStream.toString();
-            error = errByteStream.toString();
+            outString = outByteStream.toString();
+            errString = errByteStream.toString();
         } catch (Exception e) {
-            error = e.getMessage();
+            errString = e.getMessage();
         } finally {
             outStream.close();
             errStream.close();
         }
 
+        output = errString != null && errString.length() > 0 ? errString : outString;
         return Action.SUCCESS;
     }
 
@@ -46,10 +48,6 @@ public class ShellAction extends ActionSupport {
 
     public void setCommand(String command) {
         this.command = command;
-    }
-
-    public String getError() {
-        return error;
     }
 
     public String getOutput() {

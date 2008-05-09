@@ -110,7 +110,14 @@ public class BundlesAction extends DefaultActionSupport {
     }
 
     public boolean isAllowedAction(Bundle bundle, String val) {
-        int state = bundle.getState();
+        int state = -1;
+        try {
+            state = bundle.getState();
+        } catch (Exception e) {
+            addActionError("Unable to determine bundle state: " + e.getMessage());
+            return false;
+        }
+
         if ("start".equals(val)) {
             return state == Bundle.RESOLVED;
         } else if ("stop".equals(val)) {
