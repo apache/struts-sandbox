@@ -20,10 +20,9 @@
  */
 package org.apache.struts2.convention;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.opensymphony.xwork2.inject.Inject;
+import com.opensymphony.xwork2.util.logging.Logger;
+import com.opensymphony.xwork2.util.logging.LoggerFactory;
 
 /**
  * <p>
@@ -34,7 +33,7 @@ import com.opensymphony.xwork2.inject.Inject;
  * </p>
  */
 public class SEOActionNameBuilder implements ActionNameBuilder {
-    private static final Logger logger = Logger.getLogger(SEOActionNameBuilder.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(SEOActionNameBuilder.class);
     private static final String ACTION = "Action";
     private boolean lowerCase;
     private String separator;
@@ -75,8 +74,8 @@ public class SEOActionNameBuilder implements ActionNameBuilder {
             actionName = actionName.toLowerCase();
         }
 
-        if (logger.isLoggable(Level.FINEST)) {
-            logger.finest("Changed action name from [" + className + "] to [" + actionName + "]");
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("Changed action name from [#0] to [#1]", className, actionName);
         }
 
         return actionName;

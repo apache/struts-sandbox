@@ -24,8 +24,7 @@ import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.servlet.ServletContext;
 
 import org.apache.struts2.util.ClassLoaderUtils;
@@ -44,6 +43,8 @@ import com.opensymphony.xwork2.config.entities.PackageConfig;
 import com.opensymphony.xwork2.config.entities.ResultConfig;
 import com.opensymphony.xwork2.config.entities.ResultTypeConfig;
 import com.opensymphony.xwork2.inject.Inject;
+import com.opensymphony.xwork2.util.logging.Logger;
+import com.opensymphony.xwork2.util.logging.LoggerFactory;
 
 /**
  * <p>
@@ -62,7 +63,7 @@ import com.opensymphony.xwork2.inject.Inject;
  * </p>
  */
 public class ConventionUnknownHandler implements UnknownHandler {
-    private static final Logger logger = Logger.getLogger(ConventionUnknownHandler.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(ConventionUnknownHandler.class);
     protected Configuration configuration;
     protected ObjectFactory objectFactory;
     protected ServletContext servletContext;
@@ -138,22 +139,25 @@ public class ConventionUnknownHandler implements UnknownHandler {
             if (!actionName.equals("") && redirectToSlash) {
                 ResultTypeConfig redirectResultTypeConfig = parentPackage.getAllResultTypeConfigs().get("redirect");
                 String redirectNamespace = namespace + "/" + actionName;
-                if (logger.isLoggable(Level.FINEST)) {
-                    logger.finest("Checking if there is an action named index in the namespace [" +
-                        redirectNamespace + "]");
+                if (LOG.isTraceEnabled()) {
+                    LOG.trace("Checking if there is an action named index in the namespace [#0]",
+                            redirectNamespace);
                 }
 
                 actionConfig = configuration.getRuntimeConfiguration().getActionConfig(redirectNamespace, "index");
                 if (actionConfig != null) {
-                    logger.finest("Found action config");
+                    if (LOG.isTraceEnabled())
+                        LOG.trace("Found action config");
 
                     PackageConfig packageConfig = configuration.getPackageConfig(actionConfig.getPackageName());
                     if (redirectNamespace.equals(packageConfig.getNamespace())) {
-                        logger.finest("Action is not a default - redirecting");
+                        if (LOG.isTraceEnabled())
+                            LOG.trace("Action is not a default - redirecting");
                         return buildActionConfig(redirectNamespace + "/", redirectResultTypeConfig);
                     }
 
-                    logger.finest("Action was a default - NOT redirecting");
+                    if (LOG.isTraceEnabled())
+                        LOG.trace("Action was a default - NOT redirecting");
                 }
 
                 if (resource != null) {
@@ -180,8 +184,8 @@ public class ConventionUnknownHandler implements UnknownHandler {
     protected Resource findResource(Map<String, ResultTypeConfig> resultsByExtension, String... parts) {
         for (String ext : resultsByExtension.keySet()) {
             String path = string(parts) + "." + ext;
-            if (logger.isLoggable(Level.FINEST)) {
-                logger.finest("Checking for [" + path + "].");
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("Checking for [#0]", path);
             }
 
             try {
@@ -189,8 +193,8 @@ public class ConventionUnknownHandler implements UnknownHandler {
                     return new Resource(path, ext);
                 }
             } catch (MalformedURLException e) {
-                logger.warning("Unable to parse path to the web application resource [" + path +
-                    "] skipping...");
+                if (LOG.isErrorEnabled())
+                    LOG.error("Unable to parse path to the web application resource [#0] skipping...", path);
             }
         }
 
@@ -222,11 +226,11 @@ public class ConventionUnknownHandler implements UnknownHandler {
         Map<String, ResultTypeConfig> resultsByExtension = conventionsService.getResultTypesByExtension(parentPackage);
         Result result = null;
         for (String ext : resultsByExtension.keySet()) {
-            if (logger.isLoggable(Level.FINEST)) {
+            if (LOG.isTraceEnabled()) {
                 String fqan = ns + "/" + actionName;
-                logger.finest("Trying to locate the correct result for the FQ action [" + fqan +
-                    "] with an file extension of [" + ext + "] in the directory [" + pathPrefix + "] " +
-                    "and a result code of [" + resultCode + "]");
+                LOG.trace("Trying to locate the correct result for the FQ action [#0]"
+                        + " with an file extension of [#1] in the directory [#2] " + "and a result code of [#3]",
+                        fqan, ext, pathPrefix, resultCode);
             }
 
             String path = string(pathPrefix, actionName, "-", resultCode, "." , ext);
@@ -265,9 +269,9 @@ public class ConventionUnknownHandler implements UnknownHandler {
             // Try /idx/action/index.jsp
             Map<String, ResultTypeConfig> resultsByExtension = conventionsService.getResultTypesByExtension(pkg);
             for (String ext : resultsByExtension.keySet()) {
-                if (logger.isLoggable(Level.FINEST)) {
+                if (LOG.isTraceEnabled()) {
                     String fqan = ns + "/" + actionName;
-                    logger.finest("Checking for [" + fqan + "/" + "index." + ext + "].");
+                    LOG.trace("Checking for [#0/index.#1]", fqan, ext);
                 }
 
                 String path = string(pathPrefix, actionName, "/index", "-", resultCode, ".", ext);
@@ -290,20 +294,28 @@ public class ConventionUnknownHandler implements UnknownHandler {
     protected Result findResult(String path, String resultCode, String ext, ActionContext actionContext,
             Map<String, ResultTypeConfig> resultsByExtension) {
         try {
-            logger.finest("Checking ServletContext for [" + path + "]");
+            boolean traceEnabled = LOG.isTraceEnabled();
+            if (traceEnabled)
+                LOG.trace("Checking ServletContext for [#0]", path);
+
             if (servletContext.getResource(path) != null) {
-                logger.finest("Found");
+                if (traceEnabled)
+                    LOG.trace("Found");
                 return buildResult(path, resultCode, resultsByExtension.get(ext), actionContext);
             }
 
-            logger.finest("Checking ClasLoader for [" + path + "]");
+            if (traceEnabled)
+                LOG.trace("Checking ClasLoader for #0", path);
+
             String classLoaderPath = path.startsWith("/") ? path.substring(1, path.length()) : path;
             if (ClassLoaderUtils.getResource(classLoaderPath, getClass()) != null) {
-                logger.finest("Found");
+                if (traceEnabled)
+                    LOG.trace("Found");
                 return buildResult(path, resultCode, resultsByExtension.get(ext), actionContext);
             }
         } catch (MalformedURLException e) {
-            logger.warning("Unable to parse template path: "+path+", skipping...");
+            if (LOG.isErrorEnabled())
+                LOG.error("Unable to parse template path: [#0] skipping...", path);
         }
 
         return null;

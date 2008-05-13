@@ -36,8 +36,9 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import com.opensymphony.xwork2.util.logging.Logger;
+import com.opensymphony.xwork2.util.logging.LoggerFactory;
 
 /**
  * This class is maintained in the Java.net Commons library and the test cases
@@ -51,7 +52,7 @@ import java.util.logging.Logger;
  * </p>
  */
 public abstract class AbstractClassLoaderResolver<T> {
-    private static final Logger logger = Logger.getLogger(AbstractClassLoaderResolver.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractClassLoaderResolver.class);
 
     /**
      * The set of matches being accumulated.
@@ -234,7 +235,8 @@ public abstract class AbstractClassLoaderResolver<T> {
                     }
                 }
             } catch (IOException ioe) {
-                logger.log(Level.WARNING, "Could not read ClassPath entries", ioe);
+                if (LOG.isErrorEnabled())
+                    LOG.error("Could not read ClassPath entries", ioe);
             }
         }
 
@@ -274,7 +276,8 @@ public abstract class AbstractClassLoaderResolver<T> {
                     loadResourcesInJar(test, recursive, baseURLSpec, dirName, file);
                 }
             } catch (IOException ioe) {
-                logger.log(Level.WARNING, "Could not read ClassPath entries", ioe);
+                if (LOG.isErrorEnabled())
+                    LOG.error("Could not read ClassPath entries", ioe);
             }
         }
     }
@@ -283,8 +286,8 @@ public abstract class AbstractClassLoaderResolver<T> {
         ClassLoader loader = getClassLoader();
         List<URL> urls = new ArrayList<URL>();
         for (String dirName : dirNames) {
-            if (logger.isLoggable(Level.FINEST)) {
-                logger.finest("Looking up resources in directory [" + dirName + "]");
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("Looking up resources in directory [#0]", dirName);
             }
 
             try {
@@ -294,7 +297,8 @@ public abstract class AbstractClassLoaderResolver<T> {
                     urls.add(url);
                 }
             } catch (IOException ioe) {
-                logger.log(Level.WARNING, "Could not read driectory [" + dirName + "]", ioe);
+                if (LOG.isErrorEnabled())
+                    LOG.error("Could not read driectory [#0]", ioe, dirName);
             }
         }
 
@@ -316,9 +320,8 @@ public abstract class AbstractClassLoaderResolver<T> {
             urlPath = urlPath.substring(0, index);
         }
 
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("Scanning for resources in [" + urlPath + "] matching criteria [" +
-                test + "]");
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("Scanning for resources in [#0] matching criteria [#1]", urlPath, test.toString());
         }
 
         return urlPath;
@@ -382,10 +385,11 @@ public abstract class AbstractClassLoaderResolver<T> {
 
             while ((entry = jarStream.getNextJarEntry()) != null) {
                 String name = entry.getName();
-                if (logger.isLoggable(Level.FINEST)) {
-                    logger.finest("Checking JAR entry [" + name + "] against [" + dirName +
-                        "] where index of / is [" + name.indexOf('/', dirName.length() + 1) +
-                        "] starting from [" + (dirName.length() + 1) + "]");
+                if (LOG.isTraceEnabled()) {
+                    LOG.trace("Checking JAR entry [#0] against [#1]" +
+                    		" where index of / is [#2] starting from [#3]",
+                    		name, dirName, String.valueOf(name.indexOf('/', dirName.length() + 1)),
+                    		String.valueOf(dirName.length() + 1));
                 }
 
                 if (!entry.isDirectory() &&
@@ -400,8 +404,9 @@ public abstract class AbstractClassLoaderResolver<T> {
                 }
             }
         } catch (IOException ioe) {
-            logger.log(Level.WARNING, "Could not search jar file [" + jarfile + "] for classes " +
-                "matching criteria [" + test + "] due to an IOException", ioe);
+            if (LOG.isErrorEnabled())
+                LOG.error("Could not search jar file [#0] for classes " +
+                        "matching criteria [#1] due to an IOException", ioe, jarfile.toString(), test.toString());
         }
     }
 

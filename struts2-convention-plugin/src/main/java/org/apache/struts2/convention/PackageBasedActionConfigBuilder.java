@@ -30,8 +30,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Actions;
@@ -46,6 +44,8 @@ import com.opensymphony.xwork2.config.entities.ActionConfig;
 import com.opensymphony.xwork2.config.entities.PackageConfig;
 import com.opensymphony.xwork2.config.entities.ResultConfig;
 import com.opensymphony.xwork2.inject.Inject;
+import com.opensymphony.xwork2.util.logging.Logger;
+import com.opensymphony.xwork2.util.logging.LoggerFactory;
 
 /**
  * <p>
@@ -53,7 +53,7 @@ import com.opensymphony.xwork2.inject.Inject;
  * </p>
  */
 public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
-    private static final Logger logger = Logger.getLogger(PackageBasedActionConfigBuilder.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(PackageBasedActionConfigBuilder.class);
     private final Configuration configuration;
     private final ActionNameBuilder actionNameBuilder;
     private final ResultMapBuilder resultMapBuilder;
@@ -93,8 +93,8 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
         this.objectFactory = objectFactory;
         this.redirectToSlash = Boolean.parseBoolean(redirectToSlash);
 
-        if (logger.isLoggable(Level.FINEST)) {
-            logger.finest("Setting action default parent package to [" + defaultParentPackage + "]");
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("Setting action default parent package to [#0]", defaultParentPackage);
         }
 
         this.defaultParentPackage = defaultParentPackage;
@@ -147,16 +147,16 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
                 "[struts.convention.package.locators]");
         }
 
-        if (logger.isLoggable(Level.FINEST)) {
-            logger.finest("Loading action configurations");
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("Loading action configurations");
             if (actionPackages != null) {
-                logger.finest("Actions being loaded from action packages " + Arrays.asList(actionPackages));
+                LOG.trace("Actions being loaded from action packages " + Arrays.asList(actionPackages));
             }
             if (packageLocators != null) {
-                logger.finest("Actions being loaded using package locators " + Arrays.asList(packageLocators));
+                LOG.trace("Actions being loaded using package locators " + Arrays.asList(packageLocators));
             }
             if (excludePackages != null) {
-                logger.finest("Excluding actions from packages " + Arrays.asList(excludePackages));
+                LOG.trace("Excluding actions from packages " + Arrays.asList(excludePackages));
             }
         }
 
@@ -217,9 +217,8 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
 
             // Determine the action package
             String actionPackage = actionClass.getPackage().getName();
-            if (logger.isLoggable(Level.FINEST)) {
-                logger.finest("Processing class [" + actionClass.getName() + "] in package [" +
-                    actionPackage + "]");
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("Processing class [#0] in package [#1]", actionClass.getName(), actionPackage);
             }
 
             // Determine the default namespace and action name
@@ -301,9 +300,8 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
         // Check if there is a class or package level annotation for the namespace
         Namespace ns = AnnotationTools.findAnnotation(actionClass, Namespace.class);
         if (ns != null) {
-            if (logger.isLoggable(Level.FINEST)) {
-                logger.finest("Using non-default action namespace from Namespace annotation of [" +
-                    ns.value() + "]");
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("Using non-default action namespace from Namespace annotation of [#0]", ns.value());
             }
 
             return ns.value();
@@ -350,8 +348,8 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
      */
     protected String determineActionName(Class<?> actionClass) {
         String actionName = actionNameBuilder.build(actionClass.getSimpleName());
-        if (logger.isLoggable(Level.FINEST)) {
-            logger.finest("Got actionName for class [" + actionClass + "] of [" + actionName + "]");
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("Got actionName for class [#0] of [#1]", actionClass.toString(), actionName);
         }
 
         return actionName;
@@ -418,10 +416,9 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
             actionName, actionClass.getName());
         actionConfig.methodName(actionMethod);
 
-        if (logger.isLoggable(Level.FINEST)) {
-            logger.finest("Creating action config for class [" + actionClass + "], name [" + actionName +
-                "] and package name [" + pkgCfg.getName() + "] in namespace [" + pkgCfg.getNamespace() +
-                "]");
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("Creating action config for class [#0], name [#1] and package name [#2] in namespace [#3]",
+                    actionClass.toString(), actionName, pkgCfg.getName(), pkgCfg.getNamespace());
         }
 
         Map<String, ResultConfig> results = resultMapBuilder.build(actionClass, annotation, actionName, pkgCfg.build());
@@ -434,9 +431,8 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
             String actionNamespace, final String actionPackage, final Class<?> actionClass,
             Action action) {
         if (action != null && !action.value().equals(Action.DEFAULT_VALUE)) {
-            if (logger.isLoggable(Level.FINEST)) {
-                logger.finest("Using non-default action namespace from the Action annotation of [" +
-                    action.value() + "]");
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("Using non-default action namespace from the Action annotation of [#0]", action.value());
             }
             actionNamespace = StringTools.upToLastToken(action.value(), "/");
         }
@@ -445,8 +441,8 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
         ParentPackage parent = AnnotationTools.findAnnotation(actionClass, ParentPackage.class);
         String parentName = null;
         if (parent != null) {
-            if (logger.isLoggable(Level.FINEST)) {
-                logger.finest("Using non-default parent package from annotation of [" + parent.value() + "]");
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("Using non-default parent package from annotation of [#0]", parent.value());
             }
 
             parentName = parent.value();
@@ -476,9 +472,8 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
             packageConfigs.put(name, pkgConfig);
         }
 
-        if (logger.isLoggable(Level.FINEST)) {
-            logger.finest("Created package config named [" + name + "] with a namespace [" +
-                actionNamespace + "]");
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("Created package config named [#0] with a namespace [#1]", name, actionNamespace);
         }
 
         return pkgConfig;
@@ -530,18 +525,18 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
                         if (parent.build().getAllActionConfigs().get(parentAction) == null) {
                             parent.addActionConfig(parentAction, indexActionConfig);
                         }
-                    } else if (logger.isLoggable(Level.FINEST)) {
-                        logger.finest("The parent namespace [" + parentNamespace + "] already contains " +
-                            "an action [" + parentAction + "]");
+                    } else if (LOG.isTraceEnabled()) {
+                        LOG.trace("The parent namespace [#0] already contains " +
+                            "an action [#1]", parentNamespace, parentAction);
                     }
                 }
             }
 
             // Step #3
             if (pkgConfig.build().getAllActionConfigs().get("") == null) {
-                if (logger.isLoggable(Level.FINEST)) {
-                    logger.finest("Creating index ActionConfig with an action name of [] for the action " +
-                        "class [" + indexActionConfig.getClassName() + "]");
+                if (LOG.isTraceEnabled()) {
+                    LOG.trace("Creating index ActionConfig with an action name of [] for the action " +
+                        "class [#0]", indexActionConfig.getClassName());
                 }
 
                 pkgConfig.addActionConfig("", indexActionConfig);

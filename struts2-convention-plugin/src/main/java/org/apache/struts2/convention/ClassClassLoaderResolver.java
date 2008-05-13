@@ -22,8 +22,9 @@ package org.apache.struts2.convention;
 
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import com.opensymphony.xwork2.util.logging.Logger;
+import com.opensymphony.xwork2.util.logging.LoggerFactory;
 
 /**
  * This class is maintained in the Java.net Commons library and the test cases
@@ -47,7 +48,7 @@ import java.util.logging.Logger;
  * </p>
  */
 public class ClassClassLoaderResolver extends AbstractClassLoaderResolver<Class<?>> {
-    private static final Logger logger = Logger.getLogger(ClassClassLoaderResolver.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(ClassClassLoaderResolver.class);
 
     /**
      * A Test that checks to see if each class is assignable to the provided class. Note
@@ -185,14 +186,14 @@ public class ClassClassLoaderResolver extends AbstractClassLoaderResolver<Class<
     protected Class<?> prepare(String spec) {
         try {
             ClassLoader loader = getClassLoader();
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("Converting resource [" + spec + "] to Class<?>");
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("Converting resource [#0] to Class<?>", spec);
             }
 
             return loader.loadClass(spec);
         } catch (Throwable t) {
-            logger.warning("Could not load class [" + spec + "] due to a [" + t.getClass().getName() +
-                "] with message [" + t.getMessage() + "]");
+            if (LOG.isErrorEnabled())
+                LOG.error("Could not load class [#0]", t, spec);
             throw new IllegalArgumentException("Could not load class [" + spec + "]", t);
         }
     }

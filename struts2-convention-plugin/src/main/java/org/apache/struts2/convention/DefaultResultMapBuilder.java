@@ -26,8 +26,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.servlet.ServletContext;
 
 import org.apache.struts2.convention.annotation.Result;
@@ -39,6 +38,8 @@ import com.opensymphony.xwork2.config.entities.PackageConfig;
 import com.opensymphony.xwork2.config.entities.ResultConfig;
 import com.opensymphony.xwork2.config.entities.ResultTypeConfig;
 import com.opensymphony.xwork2.inject.Inject;
+import com.opensymphony.xwork2.util.logging.Logger;
+import com.opensymphony.xwork2.util.logging.LoggerFactory;
 
 /**
  * <p>
@@ -108,7 +109,7 @@ import com.opensymphony.xwork2.inject.Inject;
  * </table>
  */
 public class DefaultResultMapBuilder implements ResultMapBuilder {
-    private static final Logger logger = Logger.getLogger(DefaultResultMapBuilder.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultResultMapBuilder.class);
     private final ServletContext servletContext;
     private Set<String> relativeResultTypes;
     private ConventionsService conventionsService;
@@ -152,8 +153,8 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
             defaultResultPath = defaultResultPath + namespace;
         }
 
-        if (logger.isLoggable(Level.FINEST)) {
-            logger.finest("Using final calculated namespace [" + namespace + "]");
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("Using final calculated namespace [#0]", namespace);
         }
 
         // Add that ending slash for concatentation
@@ -202,9 +203,9 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
     protected void createFromResources(Class<?> actionClass, Map<String, ResultConfig> results,
             final String resultPath, final String resultPrefix, final String actionName,
             PackageConfig packageConfig, Map<String, ResultTypeConfig> resultsByExtension) {
-        if (logger.isLoggable(Level.FINEST)) {
-            logger.finest("Searching for results in the Servlet container at [" + resultPath +
-                "] with result prefix of [" + resultPrefix + "]");
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("Searching for results in the Servlet container at [#0]" +
+            		" with result prefix of [#1]", resultPath, resultPrefix);
         }
 
         // Build from web application using the ServletContext
@@ -212,8 +213,8 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
         Set<String> paths = servletContext.getResourcePaths(resultPath);
         if (paths != null) {
             for (String path : paths) {
-                if (logger.isLoggable(Level.FINEST)) {
-                    logger.finest("Processing resource path [" + path + "]");
+                if (LOG.isTraceEnabled()) {
+                    LOG.trace("Processing resource path [#0]", path);
                 }
 
                 makeResults(actionClass, path, resultPrefix, results, packageConfig, resultsByExtension);
@@ -223,9 +224,10 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
         // Building from the classpath
         String classPathLocation = resultPath.startsWith("/") ?
             resultPath.substring(1, resultPath.length()) : resultPath;
-        if (logger.isLoggable(Level.FINEST)) {
-            logger.finest("Searching for results in the class path at [" + classPathLocation +
-                "] with a result prefix of [" + resultPrefix + "] and action name [" + actionName + "]");
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("Searching for results in the class path at [#0]"
+                    + " with a result prefix of [#1] and action name [#2]", classPathLocation, resultPrefix,
+                    actionName);
         }
 
         URLClassLoaderResolver resolver = new URLClassLoaderResolver();
@@ -240,8 +242,8 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
 
         Set<URL> matches = resolver.getMatches();
         for (URL match : matches) {
-            if (logger.isLoggable(Level.FINEST)) {
-                logger.finest("Processing URL [" + match + "]");
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("Processing URL [#0]", match.toString());
             }
 
             String urlStr = match.toString();
@@ -270,10 +272,10 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
 
             // This case is when the path doesn't contain a result code
             if (indexOfDot == resultPrefix.length()) {
-                if (logger.isLoggable(Level.FINEST)) {
-                    logger.finest("The result file [" + path + "] has no result code and therefore" +
+                if (LOG.isTraceEnabled()) {
+                    LOG.trace("The result file [#0] has no result code and therefore" +
                         " will be associated with success, input and error by default. This might" +
-                        " be overridden by another result file or an annotation.");
+                        " be overridden by another result file or an annotation.", path);
                 }
 
                 if (!results.containsKey(Action.SUCCESS)) {
@@ -297,9 +299,9 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
 
             // This case is when the path contains a result code
             } else if (indexOfDot > resultPrefix.length()) {
-                if (logger.isLoggable(Level.FINEST)) {
-                    logger.finest("The result file [" + path + "] has a result code and therefore" +
-                        " will be associated with only that result code.");
+                if (LOG.isTraceEnabled()) {
+                    LOG.trace("The result file [#0] has a result code and therefore" +
+                        " will be associated with only that result code.", path);
                 }
 
                 String resultCode = path.substring(resultPrefix.length() + 1, indexOfDot);
@@ -387,8 +389,8 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
             String key = parms[i];
             String value = parms[i + 1];
             map.put(key, value);
-            if (logger.isLoggable(Level.FINEST)) {
-                logger.finest("Adding parmeter ["+ key + ":" + value + "] to result.");
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("Adding parmeter [#0:#1] to result", key, value);
             }
         }
 
