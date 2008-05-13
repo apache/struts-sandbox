@@ -26,6 +26,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * <!-- START SNIPPET: javadoc -->
  * <p>
  * This annotation allows the path to the results be to changed on a class
  * by class basis. This will favor the property name setting and then the
@@ -55,6 +56,7 @@ import java.lang.annotation.Target;
  * <pre>
  * /WEB-INF/jsps/foo/do-something-&lt;resultCode>.ext
  * </pre>
+ *  <!-- END SNIPPET: javadoc -->
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.PACKAGE})

@@ -26,6 +26,7 @@ import java.lang.annotation.Target;
 import java.lang.annotation.ElementType;
 
 /**
+ * <!-- START SNIPPET: javadoc -->
  * <p>
  * This annotation defines how actions can modify the namespace
  * that they are added to. This overrides the behavior of the
@@ -80,6 +81,7 @@ import java.lang.annotation.ElementType;
  * <li>The namespace as determined using the Java package name and the
  *  standard convention based naming.</li>
  * </ol>
+ * <!-- END SNIPPET: javadoc -->
  */
 @Target({ElementType.PACKAGE, ElementType.TYPE})
 @Retention(value = RetentionPolicy.RUNTIME)

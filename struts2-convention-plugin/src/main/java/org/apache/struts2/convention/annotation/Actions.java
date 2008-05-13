@@ -26,10 +26,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * <!-- START SNIPPET: javadoc -->
  * <p>
  * This annotation allows for multiple {@link Action} annotations
  * to be used on a single method.
  * </p>
+ * <!-- END SNIPPET: javadoc -->
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)

@@ -26,10 +26,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * <!-- START SNIPPET: javadoc -->
  * <p>
  * This annotation allows a class to define more than one {@link Result}
  * annotations.
  * </p>
+ * <!-- END SNIPPET: javadoc -->
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})

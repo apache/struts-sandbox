@@ -26,6 +26,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * <!-- START SNIPPET: javadoc -->
  * <p>
  * This annotation allows actions to modify the parent package
  * that they are using. Since XWork packages are created by
@@ -65,6 +66,7 @@ import java.lang.annotation.Target;
  * <li>Any ParentPackage annotations placed in the package-info.java file</li>
  * <li>The struts configuration property <strong>struts.convention.default.parent.package</strong></li>
  * </ol>
+ * <!-- END SNIPPET: javadoc -->
  */
 @Target({ElementType.TYPE, ElementType.PACKAGE})
 @Retention(value = RetentionPolicy.RUNTIME)

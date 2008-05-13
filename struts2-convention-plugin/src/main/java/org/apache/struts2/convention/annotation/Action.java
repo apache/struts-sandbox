@@ -26,6 +26,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * <!-- START SNIPPET: javadoc -->
  * <p>
  * This annotation can be used to control the URL that maps to
  * a specific method in an Action class. By default, the method
@@ -35,12 +36,10 @@ import java.lang.annotation.Target;
  * method. This also allows developers to specify multiple URLs
  * that will be handled by a single class or a single method.
  * </p>
- *
  * <p>
  * This can also be used via the {@link Actions} annotation
  * to associate multiple URLs with a single method.
  * </p>
- *
  * <p>
  * Here's an example:
  * </p>
@@ -51,6 +50,7 @@ import java.lang.annotation.Target;
  *   public String execute() {}
  * }
  * </pre>
+ * <!-- END SNIPPET: javadoc -->
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)

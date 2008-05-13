@@ -26,6 +26,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * <!-- START SNIPPET: javadoc -->
  * <p>
  * This annotation is used to specify non-convention based results for
  * the Struts convention handling. This annotation is added to a class
@@ -59,6 +60,7 @@ import java.lang.annotation.Target;
  * public String execute() {
  * }
  * </pre>
+ * <!-- END SNIPPET: javadoc -->
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
