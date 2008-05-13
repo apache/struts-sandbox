@@ -20,8 +20,11 @@
  */
 package org.apache.struts2.convention;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import junit.framework.TestCase;
 
@@ -33,6 +36,7 @@ import org.apache.struts2.convention.actions.action.ActionNameAction;
 import org.apache.struts2.convention.actions.action.ActionNamesAction;
 import org.apache.struts2.convention.actions.action.SingleActionNameAction;
 import org.apache.struts2.convention.actions.action.TestAction;
+import org.apache.struts2.convention.actions.interceptor.InterceptorsAction;
 import org.apache.struts2.convention.actions.namespace.ActionLevelNamespaceAction;
 import org.apache.struts2.convention.actions.namespace.ClassLevelNamespaceAction;
 import org.apache.struts2.convention.actions.namespace.PackageLevelNamespaceAction;
@@ -52,13 +56,24 @@ import org.apache.struts2.dispatcher.ServletDispatcherResult;
 import org.easymock.EasyMock;
 import static org.easymock.EasyMock.*;
 
+import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.ObjectFactory;
 import com.opensymphony.xwork2.config.Configuration;
 import com.opensymphony.xwork2.config.entities.ActionConfig;
+import com.opensymphony.xwork2.config.entities.InterceptorConfig;
+import com.opensymphony.xwork2.config.entities.InterceptorMapping;
+import com.opensymphony.xwork2.config.entities.InterceptorStackConfig;
 import com.opensymphony.xwork2.config.entities.PackageConfig;
 import com.opensymphony.xwork2.config.entities.ResultConfig;
 import com.opensymphony.xwork2.config.entities.ResultTypeConfig;
 import com.opensymphony.xwork2.config.impl.DefaultConfiguration;
+import com.opensymphony.xwork2.inject.Container;
+import com.opensymphony.xwork2.inject.Scope.Strategy;
+import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
+import com.opensymphony.xwork2.interceptor.Interceptor;
+import com.opensymphony.xwork2.ognl.OgnlReflectionProvider;
+import com.opensymphony.xwork2.util.reflection.ReflectionProvider;
+import com.opensymphony.xwork2.validator.ValidationInterceptor;
 
 /**
  * <p>
@@ -75,9 +90,24 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
     }
 
     private void run(String actionPackages, String packageLocators, String excludePackages) {
+        //setup interceptors
+        List<InterceptorConfig> defaultInterceptors = new ArrayList<InterceptorConfig>();
+        defaultInterceptors.add(makeInterceptorConfig("interceptor-1"));
+        defaultInterceptors.add(makeInterceptorConfig("interceptor-2"));
+        defaultInterceptors.add(makeInterceptorConfig("interceptor-3"));
+
+        //setup interceptor stacks
+        List<InterceptorStackConfig> defaultInterceptorStacks = new ArrayList<InterceptorStackConfig>();
+        defaultInterceptorStacks.add(makeInterceptorStackConfig("stack-1", "interceptor-1", "interceptor-2"));
+        defaultInterceptorStacks.add(makeInterceptorStackConfig("stack-2", "interceptor-3", "stack-1"));
+
+        //setup results
+        ResultTypeConfig[] defaultResults = new ResultTypeConfig[] { new ResultTypeConfig.Builder("dispatcher",
+                ServletDispatcherResult.class.getName()).defaultResultParam("location").build() };
+
         PackageConfig strutsDefault = makePackageConfig("struts-default", null, null, "dispatcher",
-            new ResultTypeConfig.Builder("dispatcher", ServletDispatcherResult.class.getName()).
-                defaultResultParam("location").build());
+                defaultResults, defaultInterceptors, defaultInterceptorStacks);
+
         PackageConfig packageLevelParentPkg = makePackageConfig("package-level", null, null, null);
         PackageConfig classLevelParentPkg = makePackageConfig("class-level", null, null, null);
 
@@ -89,6 +119,8 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
             "/idx", strutsDefault, null);
         PackageConfig idx2Pkg = makePackageConfig("org.apache.struts2.convention.actions.idx.idx2#struts-default#/idx/idx2",
             "/idx/idx2", strutsDefault, null);
+        PackageConfig interceptorRefsPkg = makePackageConfig("org.apache.struts2.convention.actions.interceptor#struts-default#/interceptor",
+                "/interceptor", strutsDefault, null);
         PackageConfig packageLevelPkg = makePackageConfig("org.apache.struts2.convention.actions.parentpackage#package-level#/parentpackage",
             "/parentpackage", packageLevelParentPkg, null);
         PackageConfig differentPkg = makePackageConfig("org.apache.struts2.convention.actions.parentpackage#class-level#/parentpackage",
@@ -125,6 +157,11 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
         expect(resultMapBuilder.build(org.apache.struts2.convention.actions.idx.Index.class, null, "index", idxPkg)).andReturn(results);
         expect(resultMapBuilder.build(org.apache.struts2.convention.actions.idx.idx2.Index.class, null, "index", idx2Pkg)).andReturn(results);
 
+        /* org.apache.struts2.convention.actions.interceptor */
+        expect(resultMapBuilder.build(InterceptorsAction.class, getAnnotation(InterceptorsAction.class, "run1", Action.class), "action100", interceptorRefsPkg)).andReturn(results);
+        expect(resultMapBuilder.build(InterceptorsAction.class, getAnnotation(InterceptorsAction.class, "run2", Action.class), "action200", interceptorRefsPkg)).andReturn(results);
+        expect(resultMapBuilder.build(InterceptorsAction.class, getAnnotation(InterceptorsAction.class, "run3", Action.class), "action300", interceptorRefsPkg)).andReturn(results);
+
         /* org.apache.struts2.convention.actions.namespace */
         expect(resultMapBuilder.build(ActionLevelNamespaceAction.class, getAnnotation(ActionLevelNamespaceAction.class, "execute", Action.class), "action", actionLevelNamespacePkg)).andReturn(results);
         expect(resultMapBuilder.build(ClassLevelNamespaceAction.class, null, "class-level-namespace", classLevelNamespacePkg)).andReturn(results);
@@ -157,7 +194,15 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
 
         EasyMock.replay(resultMapBuilder);
 
-        Configuration configuration = new DefaultConfiguration();
+        Configuration configuration = new DefaultConfiguration() {
+
+            @Override
+            public Container getContainer() {
+                return new DummyContainer();
+            }
+
+        };
+
         configuration.addPackageConfig("struts-default", strutsDefault);
         configuration.addPackageConfig("package-level", packageLevelParentPkg);
         configuration.addPackageConfig("class-level", classLevelParentPkg);
@@ -257,6 +302,15 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
         verifyActionConfig(pkgConfig, "class-level-result-path", ClassLevelResultPathAction.class, "execute", pkgConfig.getName());
         verifyActionConfig(pkgConfig, "package-level-result-path", PackageLevelResultPathAction.class, "execute", pkgConfig.getName());
 
+        /* org.apache.struts2.convention.actions.interceptorRefs */
+        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.interceptor#struts-default#/interceptor");
+        assertNotNull(pkgConfig);
+        assertEquals(3, pkgConfig.getActionConfigs().size());
+        verifyActionConfigInterceptors(pkgConfig, "action100", "interceptor-1");
+        verifyActionConfigInterceptors(pkgConfig, "action200", "interceptor-1", "interceptor-2");
+        verifyActionConfigInterceptors(pkgConfig, "action300", "interceptor-3", "stack-1");
+
+
         /* org.apache.struts2.convention.actions */
         pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions#struts-default#");
         assertNotNull(pkgConfig);
@@ -267,6 +321,7 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
         verifyActionConfig(pkgConfig, "skip", Skip.class, "execute", pkgConfig.getName());
         verifyActionConfig(pkgConfig, "idx", org.apache.struts2.convention.actions.idx.Index.class, "execute",
             "org.apache.struts2.convention.actions.idx#struts-default#/idx");
+
     }
 
     private void verifyActionConfig(PackageConfig pkgConfig, String actionName, Class<?> actionClass,
@@ -278,8 +333,24 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
         assertEquals(packageName, ac.getPackageName());
     }
 
+    private void verifyActionConfigInterceptors(PackageConfig pkgConfig, String actionName, String... refs) {
+        ActionConfig ac = pkgConfig.getAllActionConfigs().get(actionName);
+        assertNotNull(ac);
+        List<InterceptorMapping> interceptorMappings = ac.getInterceptors();
+        for (int i = 0; i < interceptorMappings.size(); i++) {
+            InterceptorMapping interceptorMapping = interceptorMappings.get(i);
+            assertEquals(refs[i], interceptorMapping.getName());
+        }
+    }
+
     private PackageConfig makePackageConfig(String name, String namespace, PackageConfig parent,
             String defaultResultType, ResultTypeConfig... results) {
+        return makePackageConfig(name, namespace, parent, defaultResultType, results, null, null);
+    }
+
+    private PackageConfig makePackageConfig(String name, String namespace, PackageConfig parent,
+            String defaultResultType, ResultTypeConfig[] results, List<InterceptorConfig> interceptors,
+            List<InterceptorStackConfig> interceptorStacks) {
         PackageConfig.Builder builder = new PackageConfig.Builder(name);
         if (namespace != null) {
             builder.namespace(namespace);
@@ -290,11 +361,35 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
         if (defaultResultType != null) {
             builder.defaultResultType(defaultResultType);
         }
-        for (ResultTypeConfig result : results) {
-            builder.addResultTypeConfig(result);
+        if (results != null) {
+            for (ResultTypeConfig result : results) {
+                builder.addResultTypeConfig(result);
+            }
+        }
+        if (interceptors != null) {
+            for (InterceptorConfig ref : interceptors) {
+                builder.addInterceptorConfig(ref);
+            }
+        }
+        if (interceptorStacks != null) {
+            for (InterceptorStackConfig ref : interceptorStacks) {
+                builder.addInterceptorStackConfig(ref);
+            }
         }
 
         return new MyPackageConfig(builder.build());
+    }
+
+    private InterceptorConfig makeInterceptorConfig(String name) {
+        InterceptorConfig.Builder builder = new InterceptorConfig.Builder(name, "com.opensymphony.xwork2.validator.ValidationInterceptor");
+        return builder.build();
+    }
+
+    private InterceptorStackConfig makeInterceptorStackConfig(String name, String... interceptors) {
+        InterceptorStackConfig.Builder builder = new InterceptorStackConfig.Builder(name);
+        for (String interceptor : interceptors)
+            builder.addInterceptor(new InterceptorMapping(interceptor, new ValidationInterceptor()));
+        return builder.build();
     }
 
     public class MyPackageConfig extends PackageConfig {
@@ -307,5 +402,49 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
             return getName().equals(other.getName()) && getNamespace().equals(other.getNamespace()) &&
                 getParents().get(0) == other.getParents().get(0) && getParents().size() == other.getParents().size();
         }
+    }
+
+    public class DummyContainer implements Container {
+
+        public <T> T getInstance(Class<T> type) {
+            try {
+                T obj = type.newInstance();
+                if (obj instanceof ObjectFactory) {
+                    ((ObjectFactory)obj).setReflectionProvider(new OgnlReflectionProvider() {
+
+                        @Override
+                        public void setProperties(Map properties, Object o) {
+                        }
+                    });
+                }
+                return obj;
+            } catch (Exception e) {
+               throw new RuntimeException(e);
+            }
+        }
+
+        public <T> T getInstance(Class<T> type, String name) {
+            return null;
+        }
+
+        public Set<String> getInstanceNames(Class<?> type) {
+            return null;
+        }
+
+        public void inject(Object o) {
+
+        }
+
+        public <T> T inject(Class<T> implementation) {
+            return null;
+        }
+
+        public void removeScopeStrategy() {
+
+        }
+
+        public void setScopeStrategy(Strategy scopeStrategy) {
+        }
+
     }
 }

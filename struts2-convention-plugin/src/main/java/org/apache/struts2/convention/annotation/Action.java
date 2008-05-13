@@ -74,4 +74,10 @@ public @interface Action {
      * @return  The results for the action.
      */
     Result[] results() default {};
+
+    /**
+     * Allows action methods to specify what interceptors must be applied to it.
+     * @return Interceptors to be applied to the action
+     */
+    InterceptorRef[] interceptorRefs() default {};
 }

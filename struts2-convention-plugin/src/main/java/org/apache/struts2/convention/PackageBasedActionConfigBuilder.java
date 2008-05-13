@@ -27,6 +27,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -34,6 +35,7 @@ import java.util.Set;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Actions;
 import org.apache.struts2.convention.annotation.AnnotationTools;
+import org.apache.struts2.convention.annotation.InterceptorRef;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
 
@@ -41,8 +43,10 @@ import com.opensymphony.xwork2.ObjectFactory;
 import com.opensymphony.xwork2.config.Configuration;
 import com.opensymphony.xwork2.config.ConfigurationException;
 import com.opensymphony.xwork2.config.entities.ActionConfig;
+import com.opensymphony.xwork2.config.entities.InterceptorMapping;
 import com.opensymphony.xwork2.config.entities.PackageConfig;
 import com.opensymphony.xwork2.config.entities.ResultConfig;
+import com.opensymphony.xwork2.config.providers.InterceptorBuilder;
 import com.opensymphony.xwork2.inject.Inject;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
@@ -421,10 +425,38 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
                     actionClass.toString(), actionName, pkgCfg.getName(), pkgCfg.getNamespace());
         }
 
+        //build interceptors
+        List<InterceptorMapping> interceptors = buildInterceptors(pkgCfg, actionName, annotation);
+        actionConfig.addInterceptors(interceptors);
+
+        //build results
         Map<String, ResultConfig> results = resultMapBuilder.build(actionClass, annotation, actionName, pkgCfg.build());
         actionConfig.addResultConfigs(results);
 
         pkgCfg.addActionConfig(actionName, actionConfig.build());
+    }
+
+    private List<InterceptorMapping> buildInterceptors(PackageConfig.Builder builder, String actionName, Action annotation) {
+        List<InterceptorMapping> interceptorList = new ArrayList<InterceptorMapping>(10);
+
+        if (annotation != null) {
+            InterceptorRef[] interceptors = annotation.interceptorRefs();
+            if (interceptors != null) {
+                for (InterceptorRef interceptor : interceptors) {
+                    if (LOG.isTraceEnabled())
+                        LOG.trace("Adding interceptor [#0] to [#1]", interceptor.value(), actionName);
+                    interceptorList.addAll(buildInterceptorList(builder, interceptor));
+                }
+            }
+        }
+
+        return interceptorList;
+    }
+
+    private List<InterceptorMapping> buildInterceptorList(PackageConfig.Builder builder, InterceptorRef ref) {
+        return InterceptorBuilder.constructInterceptorReference(builder, ref.value(), new LinkedHashMap(),
+                builder.build().getLocation(), (ObjectFactory) configuration.getContainer().getInstance(
+                        ObjectFactory.class));
     }
 
     private PackageConfig.Builder getPackageConfig(final Map<String, PackageConfig.Builder> packageConfigs,
