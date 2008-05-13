@@ -42,8 +42,6 @@ import java.net.URL;
  * from this class they are added to a set of matches. These matches can
  * then be fetched and used however is required.
  * </p>
- *
- * @author  Brian Pontarelli
  */
 public class URLClassLoaderResolver extends AbstractClassLoaderResolver<URL> {
 

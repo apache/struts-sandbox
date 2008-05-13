@@ -33,8 +33,6 @@ import com.opensymphony.xwork2.config.entities.ResultConfig;
  * The action information is supplied and the result is a mapping of
  * ResultConfig instances to the result name.
  * </p>
- *
- * @author Brian Pontarelli
  */
 public interface ResultMapBuilder {
     /**

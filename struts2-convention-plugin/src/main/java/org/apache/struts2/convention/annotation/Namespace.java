@@ -80,8 +80,6 @@ import java.lang.annotation.ElementType;
  * <li>The namespace as determined using the Java package name and the
  *  standard convention based naming.</li>
  * </ol>
- *
- * @author  Brian Pontarelli
  */
 @Target({ElementType.PACKAGE, ElementType.TYPE})
 @Retention(value = RetentionPolicy.RUNTIME)

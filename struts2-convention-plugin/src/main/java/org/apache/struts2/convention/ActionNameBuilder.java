@@ -25,8 +25,6 @@ package org.apache.struts2.convention;
  * This interface defines the method that is used to create action
  * names based on the name of a class.
  * </p>
- *
- * @author Brian Pontarelli
  */
 public interface ActionNameBuilder {
     /**

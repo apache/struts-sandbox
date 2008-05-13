@@ -51,8 +51,6 @@ import java.lang.annotation.Target;
  *   public String execute() {}
  * }
  * </pre>
- *
- * @author  Brian Pontarelli
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)

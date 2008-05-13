@@ -30,8 +30,6 @@ import com.opensymphony.xwork2.inject.Inject;
  * constant is set to <strong>true</strong>, this class will lowercase all
  * action names.
  * </p>
- *
- * @author Brian Pontarelli
  */
 public class DefaultActionNameBuilder implements ActionNameBuilder {
     private static final String ACTION = "Action";

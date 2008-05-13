@@ -33,8 +33,6 @@ import com.opensymphony.xwork2.config.entities.ResultTypeConfig;
  * values and also handle locating overrides of the default via the annotations
  * that are part of the plugin.
  * </p>
- *
- * @author  Brian Pontarelli
  */
 public interface ConventionsService {
     /**

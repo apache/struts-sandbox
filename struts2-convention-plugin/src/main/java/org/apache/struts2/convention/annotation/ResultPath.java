@@ -55,8 +55,6 @@ import java.lang.annotation.Target;
  * <pre>
  * /WEB-INF/jsps/foo/do-something-&lt;resultCode>.ext
  * </pre>
- *
- * @author  Brian Pontarelli
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.PACKAGE})

@@ -30,8 +30,6 @@ import java.lang.annotation.Target;
  * This annotation allows a class to define more than one {@link Result}
  * annotations.
  * </p>
- *
- * @author  Brian Pontarelli
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})

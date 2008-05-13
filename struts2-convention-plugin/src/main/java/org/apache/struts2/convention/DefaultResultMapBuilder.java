@@ -106,8 +106,6 @@ import com.opensymphony.xwork2.inject.Inject;
  * <tr><td>.vm</td><td>velocity</td</tr>
  * <tr><td>.ftl</td><td>freemarker</td</tr>
  * </table>
- *
- * @author  Brian Pontarelli
  */
 public class DefaultResultMapBuilder implements ResultMapBuilder {
     private static final Logger logger = Logger.getLogger(DefaultResultMapBuilder.class.getName());

@@ -65,8 +65,6 @@ import java.lang.annotation.Target;
  * <li>Any ParentPackage annotations placed in the package-info.java file</li>
  * <li>The struts configuration property <strong>struts.convention.default.parent.package</strong></li>
  * </ol>
- *
- * @author  Brian Pontarelli
  */
 @Target({ElementType.TYPE, ElementType.PACKAGE})
 @Retention(value = RetentionPolicy.RUNTIME)

@@ -32,8 +32,6 @@ import com.opensymphony.xwork2.inject.Inject;
  * lower case if desired. And this will also strip off the word <b>Action</b>
  * from the class name.
  * </p>
- *
- * @author  Brian Pontarelli
  */
 public class SEOActionNameBuilder implements ActionNameBuilder {
     private static final Logger logger = Logger.getLogger(SEOActionNameBuilder.class.getName());

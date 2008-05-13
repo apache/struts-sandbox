@@ -49,8 +49,6 @@ import java.util.logging.Logger;
  * finding plain files (resources) in addition to classes. The sub-classes
  * should be used directly in order to find classes or files.
  * </p>
- *
- * @author  Brian Pontarelli
  */
 public abstract class AbstractClassLoaderResolver<T> {
     private static final Logger logger = Logger.getLogger(AbstractClassLoaderResolver.class.getName());

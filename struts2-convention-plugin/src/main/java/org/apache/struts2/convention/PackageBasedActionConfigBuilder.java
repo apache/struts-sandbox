@@ -51,8 +51,6 @@ import com.opensymphony.xwork2.inject.Inject;
  * <p>
  * This class implements the ActionConfigBuilder interface.
  * </p>
- *
- * @author Brian Pontarelli
  */
 public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
     private static final Logger logger = Logger.getLogger(PackageBasedActionConfigBuilder.class.getName());

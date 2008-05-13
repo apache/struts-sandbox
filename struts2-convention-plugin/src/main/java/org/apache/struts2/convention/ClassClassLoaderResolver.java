@@ -45,8 +45,6 @@ import java.util.logging.Logger;
  * from this class that are added to a set of matches. These matches can
  * then be fetched and used however is required.
  * </p>
- *
- * @author  Brian Pontarelli
  */
 public class ClassClassLoaderResolver extends AbstractClassLoaderResolver<Class<?>> {
     private static final Logger logger = Logger.getLogger(ClassClassLoaderResolver.class.getName());

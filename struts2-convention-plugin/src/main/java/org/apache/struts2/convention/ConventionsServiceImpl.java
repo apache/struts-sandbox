@@ -38,8 +38,6 @@ import com.opensymphony.xwork2.inject.Inject;
  * This class is the implementation of the {@link ConventionsService}
  * interface and provides all of the defaults and annotation handling.
  * </p>
- *
- * @author Brian Pontarelli
  */
 public class ConventionsServiceImpl implements ConventionsService {
     private String resultPath;

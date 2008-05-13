@@ -24,8 +24,6 @@ package org.apache.struts2.convention;
  * <p>
  * This class is a String helper.
  * </p>
- *
- * @author  Brian Pontarelli
  */
 public class StringTools {
     public static boolean isTrimmedEmpty(String s) {

@@ -35,8 +35,6 @@ import com.opensymphony.xwork2.util.location.LocatableProperties;
  * logic and instead delegates to the configured instance of the
  * {@link ActionConfigBuilder} interface.
  * </p>
- *
- * @author Brian Pontarelli
  */
 public class ClasspathConfigurationProvider implements ConfigurationProvider {
     private ActionConfigBuilder actionConfigBuilder;

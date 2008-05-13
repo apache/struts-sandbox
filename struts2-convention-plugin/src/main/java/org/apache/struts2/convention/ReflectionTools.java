@@ -27,8 +27,6 @@ import java.lang.reflect.Method;
  * <p>
  * This class has some reflection helpers.
  * </p>
- *
- * @author Brian Pontarelli
  */
 public class ReflectionTools {
     /**

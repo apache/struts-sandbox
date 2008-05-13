@@ -28,8 +28,6 @@ package org.apache.struts2.convention;
  * Furthermore, it must make every effort to locate all action results
  * as well.
  * </p>
- *
- * @author  Brian Pontarelli
  */
 public interface ActionConfigBuilder {
     /**

@@ -60,8 +60,6 @@ import com.opensymphony.xwork2.inject.Inject;
  * <strong>/foo/index</strong> and the URL <strong>/foo</strong> is used,
  * this will render the index action in the /foo namespace.
  * </p>
- *
- * @author  Brian Pontarelli
  */
 public class ConventionUnknownHandler implements UnknownHandler {
     private static final Logger logger = Logger.getLogger(ConventionUnknownHandler.class.getName());

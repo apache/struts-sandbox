@@ -26,8 +26,6 @@ import java.lang.annotation.Annotation;
  * <p>
  * This class provides helper methods for dealing with annotations.
  * </p>
- *
- * @author  Brian Pontarelli
  */
 public class AnnotationTools {
 
