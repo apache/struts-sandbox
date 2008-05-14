@@ -1,5 +1,5 @@
 /*
- * $ID$
+ * $Id: ActionLevelResultAction.java 655902 2008-05-13 15:15:12Z bpontarelli $
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,31 +18,31 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.struts2.convention;
-
-import java.util.List;
+package org.apache.struts2.convention.actions.interceptor;
 
 import org.apache.struts2.convention.annotation.Action;
-
-import com.opensymphony.xwork2.config.entities.InterceptorMapping;
-import com.opensymphony.xwork2.config.entities.PackageConfig;
+import org.apache.struts2.convention.annotation.InterceptorRef;
 
 /**
  * <p>
- * This interface defines how interceptors are built from
- * annotations.
+ * This is a test action with one interceptor at the action level.
  * </p>
  */
-public interface InterceptorMapBuilder {
-	/**
-     * Builds the interceptor configurations given the action information.
-     *
-     * @param   actionClass The class of the action.
-     * @param   annotation The action annotation.
-     * @param   actionName The action name.
-     * @param   builder The package configuration builder.
-     * @return  The mapping of the interceptors. If there were none found
-     *          then this should return an empty List.
-     */
-	List<InterceptorMapping> build(Class<?> actionClass, PackageConfig.Builder builder, String actionName, Action annotation);
+@InterceptorRef("interceptor-1")
+public class ActionLevelInterceptorAction {
+
+    @Action(value = "action500")
+    public String run1() throws Exception {
+        return null;
+    }
+
+    @Action(value = "action600", interceptorRefs = @InterceptorRef("interceptor-2"))
+    public String run2() throws Exception {
+        return null;
+    }
+
+    @Action(value = "action700", interceptorRefs = @InterceptorRef("stack-1"))
+    public String run3() throws Exception {
+        return null;
+    }
 }

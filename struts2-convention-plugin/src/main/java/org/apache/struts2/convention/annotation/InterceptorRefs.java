@@ -28,25 +28,13 @@ import java.lang.annotation.Target;
 /**
  * <!-- START SNIPPET: javadoc -->
  * <p>
- * This annotation allows an interceptor to be applied to an action. If
- * this annotation is used at the class level, then the interceptor
- * will be applied to all actions defined on that class, and will be applied
- * before the ones defined at the method level.
+ * This annotation allows a class to define more than one {@link InterceptorRef}
+ * annotations.
  * </p>
  * <!-- END SNIPPET: javadoc -->
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface InterceptorRef {
-    /**
-     * @return name of the interceptor or interceptor stack
-     */
-    String value();
-
-    /**
-     * @return  The parameters passed to the interceptor. This is a list of strings that form a name/value
-     *          pair chain, since creating a Map for annotations is not possible. An example would be:
-     *          <code>{"key", "value", "key2", "value2"}</code>.
-     */
-    String[] params() default {};
+@Target({ElementType.TYPE})
+public @interface InterceptorRefs {
+    InterceptorRef[] value();
 }

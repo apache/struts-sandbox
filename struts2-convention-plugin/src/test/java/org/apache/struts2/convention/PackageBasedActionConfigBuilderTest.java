@@ -20,6 +20,12 @@
  */
 package org.apache.struts2.convention;
 
+import static org.apache.struts2.convention.ReflectionTools.getAnnotation;
+import static org.easymock.EasyMock.checkOrder;
+import static org.easymock.EasyMock.createStrictMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.verify;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +34,6 @@ import java.util.Set;
 
 import junit.framework.TestCase;
 
-import static org.apache.struts2.convention.ReflectionTools.*;
 import org.apache.struts2.convention.actions.DefaultResultPathAction;
 import org.apache.struts2.convention.actions.NoAnnotationAction;
 import org.apache.struts2.convention.actions.Skip;
@@ -36,6 +41,9 @@ import org.apache.struts2.convention.actions.action.ActionNameAction;
 import org.apache.struts2.convention.actions.action.ActionNamesAction;
 import org.apache.struts2.convention.actions.action.SingleActionNameAction;
 import org.apache.struts2.convention.actions.action.TestAction;
+import org.apache.struts2.convention.actions.interceptor.ActionLevelInterceptor2Action;
+import org.apache.struts2.convention.actions.interceptor.ActionLevelInterceptor3Action;
+import org.apache.struts2.convention.actions.interceptor.ActionLevelInterceptorAction;
 import org.apache.struts2.convention.actions.interceptor.InterceptorsAction;
 import org.apache.struts2.convention.actions.namespace.ActionLevelNamespaceAction;
 import org.apache.struts2.convention.actions.namespace.ClassLevelNamespaceAction;
@@ -54,9 +62,7 @@ import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Actions;
 import org.apache.struts2.dispatcher.ServletDispatcherResult;
 import org.easymock.EasyMock;
-import static org.easymock.EasyMock.*;
 
-import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.ObjectFactory;
 import com.opensymphony.xwork2.config.Configuration;
 import com.opensymphony.xwork2.config.entities.ActionConfig;
@@ -69,11 +75,7 @@ import com.opensymphony.xwork2.config.entities.ResultTypeConfig;
 import com.opensymphony.xwork2.config.impl.DefaultConfiguration;
 import com.opensymphony.xwork2.inject.Container;
 import com.opensymphony.xwork2.inject.Scope.Strategy;
-import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
-import com.opensymphony.xwork2.interceptor.Interceptor;
 import com.opensymphony.xwork2.ognl.OgnlReflectionProvider;
-import com.opensymphony.xwork2.util.reflection.ReflectionProvider;
-import com.opensymphony.xwork2.validator.ValidationInterceptor;
 
 /**
  * <p>
@@ -163,6 +165,13 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
         expect(resultMapBuilder.build(InterceptorsAction.class, getAnnotation(InterceptorsAction.class, "run2", Action.class), "action200", interceptorRefsPkg)).andReturn(results);
         expect(resultMapBuilder.build(InterceptorsAction.class, getAnnotation(InterceptorsAction.class, "run3", Action.class), "action300", interceptorRefsPkg)).andReturn(results);
         expect(resultMapBuilder.build(InterceptorsAction.class, getAnnotation(InterceptorsAction.class, "run4", Action.class), "action400", interceptorRefsPkg)).andReturn(results);
+
+        expect(resultMapBuilder.build(ActionLevelInterceptorAction.class, getAnnotation(ActionLevelInterceptorAction.class, "run1", Action.class), "action500", interceptorRefsPkg)).andReturn(results);
+        expect(resultMapBuilder.build(ActionLevelInterceptorAction.class, getAnnotation(ActionLevelInterceptorAction.class, "run2", Action.class), "action600", interceptorRefsPkg)).andReturn(results);
+        expect(resultMapBuilder.build(ActionLevelInterceptorAction.class, getAnnotation(ActionLevelInterceptorAction.class, "run3", Action.class), "action700", interceptorRefsPkg)).andReturn(results);
+
+        expect(resultMapBuilder.build(ActionLevelInterceptor2Action.class, getAnnotation(ActionLevelInterceptor2Action.class, "run1", Action.class), "action800", interceptorRefsPkg)).andReturn(results);
+        expect(resultMapBuilder.build(ActionLevelInterceptor3Action.class, getAnnotation(ActionLevelInterceptor3Action.class, "run1", Action.class), "action900", interceptorRefsPkg)).andReturn(results);
 
         /* org.apache.struts2.convention.actions.namespace */
         expect(resultMapBuilder.build(ActionLevelNamespaceAction.class, getAnnotation(ActionLevelNamespaceAction.class, "execute", Action.class), "action", actionLevelNamespacePkg)).andReturn(results);
@@ -309,12 +318,21 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
         /* org.apache.struts2.convention.actions.interceptorRefs */
         pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.interceptor#struts-default#/interceptor");
         assertNotNull(pkgConfig);
-        assertEquals(4, pkgConfig.getActionConfigs().size());
+        assertEquals(9, pkgConfig.getActionConfigs().size());
         verifyActionConfigInterceptors(pkgConfig, "action100", "interceptor-1");
         verifyActionConfigInterceptors(pkgConfig, "action200", "interceptor-1", "interceptor-2");
         verifyActionConfigInterceptors(pkgConfig, "action300", "interceptor-1", "interceptor-2");
         verifyActionConfigInterceptors(pkgConfig, "action400", "interceptor-1", "interceptor-1", "interceptor-2");
-        
+
+        // Interceptors at class level
+        verifyActionConfigInterceptors(pkgConfig, "action500", "interceptor-1");
+        verifyActionConfigInterceptors(pkgConfig, "action600", "interceptor-1", "interceptor-2");
+        verifyActionConfigInterceptors(pkgConfig, "action700", "interceptor-1", "interceptor-1", "interceptor-2");
+
+        //multiple interceptor at class level
+        verifyActionConfigInterceptors(pkgConfig, "action800", "interceptor-1", "interceptor-2");
+        verifyActionConfigInterceptors(pkgConfig, "action900", "interceptor-1", "interceptor-1", "interceptor-2");
+
         /* org.apache.struts2.convention.actions */
         pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions#struts-default#");
         assertNotNull(pkgConfig);

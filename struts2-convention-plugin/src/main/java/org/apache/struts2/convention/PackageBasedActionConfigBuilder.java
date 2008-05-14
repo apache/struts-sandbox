@@ -430,7 +430,7 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
         }
 
         //build interceptors
-        List<InterceptorMapping> interceptors = interceptorMapBuilder.build(pkgCfg, actionName, annotation);
+        List<InterceptorMapping> interceptors = interceptorMapBuilder.build(actionClass, pkgCfg, actionName, annotation);
         actionConfig.addInterceptors(interceptors);
 
         //build results

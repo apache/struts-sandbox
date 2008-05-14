@@ -26,7 +26,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.AnnotationTools;
 import org.apache.struts2.convention.annotation.InterceptorRef;
+import org.apache.struts2.convention.annotation.InterceptorRefs;
 
 import com.opensymphony.xwork2.ObjectFactory;
 import com.opensymphony.xwork2.config.Configuration;
@@ -35,6 +37,7 @@ import com.opensymphony.xwork2.config.entities.InterceptorMapping;
 import com.opensymphony.xwork2.config.entities.PackageConfig;
 import com.opensymphony.xwork2.config.providers.InterceptorBuilder;
 import com.opensymphony.xwork2.inject.Inject;
+import com.opensymphony.xwork2.util.AnnotationUtils;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
 
@@ -49,27 +52,46 @@ public class DefaultInterceptorMapBuilder implements InterceptorMapBuilder {
 
 	private Configuration configuration;
 
-	public List<InterceptorMapping> build(PackageConfig.Builder builder,
+	public List<InterceptorMapping> build(Class<?> actionClass, PackageConfig.Builder builder,
 			String actionName, Action annotation) {
 		List<InterceptorMapping> interceptorList = new ArrayList<InterceptorMapping>(
 				10);
 
+		//from @InterceptorRefs annotation
+        InterceptorRefs interceptorRefs = AnnotationTools.findAnnotation(actionClass, InterceptorRefs.class);
+        if (interceptorRefs != null)
+            interceptorList.addAll(build(interceptorRefs.value(), actionName, builder));
+
+        //from @InterceptorRef annotation
+        InterceptorRef interceptorRef = AnnotationTools.findAnnotation(actionClass, InterceptorRef.class);
+        if (interceptorRef != null)
+            interceptorList.addAll(build(new InterceptorRef[] {interceptorRef}, actionName, builder));
+
+		//from @Action annotation
 		if (annotation != null) {
 			InterceptorRef[] interceptors = annotation.interceptorRefs();
 			if (interceptors != null) {
-				for (InterceptorRef interceptor : interceptors) {
-					if (LOG.isTraceEnabled())
-						LOG.trace("Adding interceptor [#0] to [#1]",
-								interceptor.value(), actionName);
-					Map<String, String> params = createParameterMap(interceptor
-							.params());
-					interceptorList.addAll(buildInterceptorList(builder,
-							interceptor, params));
-				}
+			    interceptorList.addAll(build(interceptors, actionName, builder));
 			}
 		}
 
 		return interceptorList;
+	}
+
+	protected List<InterceptorMapping> build(InterceptorRef[] interceptors, String actionName, PackageConfig.Builder builder) {
+	    List<InterceptorMapping> interceptorList = new ArrayList<InterceptorMapping>(
+                10);
+	    for (InterceptorRef interceptor : interceptors) {
+            if (LOG.isTraceEnabled())
+                LOG.trace("Adding interceptor [#0] to [#1]",
+                        interceptor.value(), actionName);
+            Map<String, String> params = createParameterMap(interceptor
+                    .params());
+            interceptorList.addAll(buildInterceptorList(builder,
+                    interceptor, params));
+        }
+
+	    return interceptorList;
 	}
 
 	protected Map<String, String> createParameterMap(String[] parms) {
