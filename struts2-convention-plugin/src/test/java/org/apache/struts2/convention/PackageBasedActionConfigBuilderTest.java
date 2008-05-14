@@ -98,8 +98,9 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
 
         //setup interceptor stacks
         List<InterceptorStackConfig> defaultInterceptorStacks = new ArrayList<InterceptorStackConfig>();
-        defaultInterceptorStacks.add(makeInterceptorStackConfig("stack-1", "interceptor-1", "interceptor-2"));
-        defaultInterceptorStacks.add(makeInterceptorStackConfig("stack-2", "interceptor-3", "stack-1"));
+        InterceptorMapping interceptor1 = new InterceptorMapping("interceptor-1", new TestInterceptor());
+        InterceptorMapping interceptor2 = new InterceptorMapping("interceptor-2", new TestInterceptor());
+        defaultInterceptorStacks.add(makeInterceptorStackConfig("stack-1", interceptor1, interceptor2));
 
         //setup results
         ResultTypeConfig[] defaultResults = new ResultTypeConfig[] { new ResultTypeConfig.Builder("dispatcher",
@@ -161,6 +162,7 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
         expect(resultMapBuilder.build(InterceptorsAction.class, getAnnotation(InterceptorsAction.class, "run1", Action.class), "action100", interceptorRefsPkg)).andReturn(results);
         expect(resultMapBuilder.build(InterceptorsAction.class, getAnnotation(InterceptorsAction.class, "run2", Action.class), "action200", interceptorRefsPkg)).andReturn(results);
         expect(resultMapBuilder.build(InterceptorsAction.class, getAnnotation(InterceptorsAction.class, "run3", Action.class), "action300", interceptorRefsPkg)).andReturn(results);
+        expect(resultMapBuilder.build(InterceptorsAction.class, getAnnotation(InterceptorsAction.class, "run4", Action.class), "action400", interceptorRefsPkg)).andReturn(results);
 
         /* org.apache.struts2.convention.actions.namespace */
         expect(resultMapBuilder.build(ActionLevelNamespaceAction.class, getAnnotation(ActionLevelNamespaceAction.class, "execute", Action.class), "action", actionLevelNamespacePkg)).andReturn(results);
@@ -209,8 +211,10 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
 
         ActionNameBuilder actionNameBuilder = new SEOActionNameBuilder("true", "-");
         ObjectFactory of = new ObjectFactory();
+        DefaultInterceptorMapBuilder interceptorBuilder = new DefaultInterceptorMapBuilder();
+        interceptorBuilder.setConfiguration(configuration);
         PackageBasedActionConfigBuilder builder = new PackageBasedActionConfigBuilder(configuration,
-            actionNameBuilder, resultMapBuilder, of, "false", "struts-default");
+            actionNameBuilder, resultMapBuilder, interceptorBuilder ,of, "false", "struts-default");
         if (actionPackages != null) {
             builder.setActionPackages(actionPackages);
         }
@@ -305,12 +309,12 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
         /* org.apache.struts2.convention.actions.interceptorRefs */
         pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.interceptor#struts-default#/interceptor");
         assertNotNull(pkgConfig);
-        assertEquals(3, pkgConfig.getActionConfigs().size());
+        assertEquals(4, pkgConfig.getActionConfigs().size());
         verifyActionConfigInterceptors(pkgConfig, "action100", "interceptor-1");
         verifyActionConfigInterceptors(pkgConfig, "action200", "interceptor-1", "interceptor-2");
-        verifyActionConfigInterceptors(pkgConfig, "action300", "interceptor-3", "stack-1");
-
-
+        verifyActionConfigInterceptors(pkgConfig, "action300", "interceptor-1", "interceptor-2");
+        verifyActionConfigInterceptors(pkgConfig, "action400", "interceptor-1", "interceptor-1", "interceptor-2");
+        
         /* org.apache.struts2.convention.actions */
         pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions#struts-default#");
         assertNotNull(pkgConfig);
@@ -381,14 +385,14 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
     }
 
     private InterceptorConfig makeInterceptorConfig(String name) {
-        InterceptorConfig.Builder builder = new InterceptorConfig.Builder(name, "com.opensymphony.xwork2.validator.ValidationInterceptor");
+        InterceptorConfig.Builder builder = new InterceptorConfig.Builder(name, "org.apache.struts2.convention.TestInterceptor");
         return builder.build();
     }
 
-    private InterceptorStackConfig makeInterceptorStackConfig(String name, String... interceptors) {
+    private InterceptorStackConfig makeInterceptorStackConfig(String name, InterceptorMapping... interceptors) {
         InterceptorStackConfig.Builder builder = new InterceptorStackConfig.Builder(name);
-        for (String interceptor : interceptors)
-            builder.addInterceptor(new InterceptorMapping(interceptor, new ValidationInterceptor()));
+        for (InterceptorMapping interceptor : interceptors)
+            builder.addInterceptor(interceptor);
         return builder.build();
     }
 

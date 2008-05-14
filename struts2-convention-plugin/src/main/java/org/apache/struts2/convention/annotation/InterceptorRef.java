@@ -35,5 +35,15 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface InterceptorRef {
+    /**
+     * @return name of the interceptor or interceptor stack
+     */
     String value();
+    
+    /**
+     * @return  The parameters passed to the interceptor. This is a list of strings that form a name/value
+     *          pair chain, since creating a Map for annotations is not possible. An example would be:
+     *          <code>{"key", "value", "key2", "value2"}</code>.
+     */
+    String[] params() default {};
 }

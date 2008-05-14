@@ -32,6 +32,7 @@
   <bean type="org.apache.struts2.convention.ActionConfigBuilder" class="org.apache.struts2.convention.PackageBasedActionConfigBuilder"/>
   <bean type="org.apache.struts2.convention.ActionNameBuilder" class="org.apache.struts2.convention.SEOActionNameBuilder"/>
   <bean type="org.apache.struts2.convention.ResultMapBuilder" class="org.apache.struts2.convention.DefaultResultMapBuilder"/>
+  <bean type="org.apache.struts2.convention.InterceptorMapBuilder" class="org.apache.struts2.convention.DefaultInterceptorMapBuilder"/>
   <bean type="org.apache.struts2.convention.ConventionsService" class="org.apache.struts2.convention.ConventionsServiceImpl"/>
 
   <bean type="com.opensymphony.xwork2.config.PackageProvider" class="org.apache.struts2.convention.ClasspathConfigurationProvider"/>

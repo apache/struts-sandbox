@@ -39,8 +39,13 @@ public class InterceptorsAction {
         return null;
     }
 
-    @Action(value = "action300", interceptorRefs = @InterceptorRef("stack-2"))
+    @Action(value = "action300", interceptorRefs = {@InterceptorRef("interceptor-1"), @InterceptorRef("interceptor-2")})
     public String run3() {
+        return null;
+    }
+    
+    @Action(value = "action400", interceptorRefs = {@InterceptorRef("interceptor-1"), @InterceptorRef("stack-1")})
+    public String run4() {
         return null;
     }
 }

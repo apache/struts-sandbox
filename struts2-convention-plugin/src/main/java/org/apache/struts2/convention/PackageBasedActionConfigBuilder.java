@@ -61,6 +61,7 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
     private final Configuration configuration;
     private final ActionNameBuilder actionNameBuilder;
     private final ResultMapBuilder resultMapBuilder;
+    private final InterceptorMapBuilder interceptorMapBuilder;
     private final ObjectFactory objectFactory;
     private final String defaultParentPackage;
     private final boolean redirectToSlash;
@@ -77,6 +78,8 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
      *          names.
      * @param   resultMapBuilder The result map builder used to create ResultConfig mappings for each
      *          action.
+     * @param   interceptorMapBuilder The interceptor map builder used to create InterceptorConfig mappings for each
+     *          action.
      * @param   objectFactory The ObjectFactory used to create the actions and such.
      * @param   redirectToSlash A boolean parameter that controls whether or not this will create an
      *          action for indexes. If this is set to true, index actions are not created because
@@ -86,7 +89,7 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
      */
     @Inject
     public PackageBasedActionConfigBuilder(Configuration configuration, ActionNameBuilder actionNameBuilder,
-            ResultMapBuilder resultMapBuilder, ObjectFactory objectFactory,
+            ResultMapBuilder resultMapBuilder, InterceptorMapBuilder interceptorMapBuilder, ObjectFactory objectFactory,
             @Inject("struts.convention.redirect.to.slash") String redirectToSlash,
             @Inject("struts.convention.default.parent.package") String defaultParentPackage) {
 
@@ -94,6 +97,7 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
         this.configuration = configuration;
         this.actionNameBuilder = actionNameBuilder;
         this.resultMapBuilder = resultMapBuilder;
+        this.interceptorMapBuilder = interceptorMapBuilder;
         this.objectFactory = objectFactory;
         this.redirectToSlash = Boolean.parseBoolean(redirectToSlash);
 
@@ -426,7 +430,7 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
         }
 
         //build interceptors
-        List<InterceptorMapping> interceptors = buildInterceptors(pkgCfg, actionName, annotation);
+        List<InterceptorMapping> interceptors = interceptorMapBuilder.build(pkgCfg, actionName, annotation);
         actionConfig.addInterceptors(interceptors);
 
         //build results
@@ -434,29 +438,6 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
         actionConfig.addResultConfigs(results);
 
         pkgCfg.addActionConfig(actionName, actionConfig.build());
-    }
-
-    private List<InterceptorMapping> buildInterceptors(PackageConfig.Builder builder, String actionName, Action annotation) {
-        List<InterceptorMapping> interceptorList = new ArrayList<InterceptorMapping>(10);
-
-        if (annotation != null) {
-            InterceptorRef[] interceptors = annotation.interceptorRefs();
-            if (interceptors != null) {
-                for (InterceptorRef interceptor : interceptors) {
-                    if (LOG.isTraceEnabled())
-                        LOG.trace("Adding interceptor [#0] to [#1]", interceptor.value(), actionName);
-                    interceptorList.addAll(buildInterceptorList(builder, interceptor));
-                }
-            }
-        }
-
-        return interceptorList;
-    }
-
-    private List<InterceptorMapping> buildInterceptorList(PackageConfig.Builder builder, InterceptorRef ref) {
-        return InterceptorBuilder.constructInterceptorReference(builder, ref.value(), new LinkedHashMap(),
-                builder.build().getLocation(), (ObjectFactory) configuration.getContainer().getInstance(
-                        ObjectFactory.class));
     }
 
     private PackageConfig.Builder getPackageConfig(final Map<String, PackageConfig.Builder> packageConfigs,
