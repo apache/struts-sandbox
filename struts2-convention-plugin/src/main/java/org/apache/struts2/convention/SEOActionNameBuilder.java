@@ -34,7 +34,7 @@ import com.opensymphony.xwork2.util.logging.LoggerFactory;
  */
 public class SEOActionNameBuilder implements ActionNameBuilder {
     private static final Logger LOG = LoggerFactory.getLogger(SEOActionNameBuilder.class);
-    private static final String ACTION = "Action";
+    private String actionSuffix = "Action";
     private boolean lowerCase;
     private String separator;
 
@@ -45,12 +45,23 @@ public class SEOActionNameBuilder implements ActionNameBuilder {
         this.separator = separator;
     }
 
+    /**
+     * @param   actionSuffix (Optional) Classes that end with these value will be mapped as actions
+     *          (defaults to "Action")
+     */
+    @Inject(value = "struts.convention.action.suffix", required = false)
+    public void setActionSuffix(String actionSuffix) {
+        if (!StringTools.isTrimmedEmpty(actionSuffix)) {
+            this.actionSuffix = actionSuffix;
+        }
+    }
+
     public String build(String className) {
         String actionName = className;
 
         // Truncate Action suffix if found
-        if (actionName.endsWith(ACTION)) {
-            actionName = actionName.substring(0, actionName.length() - ACTION.length());
+        if (actionName.endsWith(actionSuffix)) {
+            actionName = actionName.substring(0, actionName.length() - actionSuffix.length());
         }
 
         // Convert to underscores

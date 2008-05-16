@@ -68,6 +68,9 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
     private String[] actionPackages;
     private String[] excludePackages;
     private String[] packageLocators;
+    private boolean disableActionScanning = false;
+    private String actionSuffix = "Action";
+    private boolean checkImplementsAction = true;
 
     /**
      * Constructs actions based on a list of packages.
@@ -120,6 +123,26 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
     }
 
     /**
+     * @param   actionPackages (Optional) Map classes that implement com.opensymphony.xwork2.Action
+     *          as actions
+     */
+    @Inject(value = "struts.convention.action.checkImplementsAction", required = false)
+    public void setCheckImplementsAction(String checkImplementsAction) {
+        this.checkImplementsAction = "true".equals(checkImplementsAction);
+    }
+
+    /**
+     * @param   actionSuffix (Optional) Classes that end with these value will be mapped as actions
+     *          (defaults to "Action")
+     */
+    @Inject(value = "struts.convention.action.suffix", required = false)
+    public void setActionSuffix(String actionSuffix) {
+        if (!StringTools.isTrimmedEmpty(actionSuffix)) {
+            this.actionSuffix = actionSuffix;
+        }
+    }
+
+    /**
      * @param   excludePackages (Optional) A  list of packages that should be skipped when building
      *          configuration.
      */
@@ -149,55 +172,61 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
      * {@link ResultMapBuilder} is used to create ResultConfig instances of the action.
      */
     public void buildActionConfigs() {
-        if (actionPackages == null && packageLocators == null) {
-            throw new ConfigurationException("At least a list of action packages or action package locators " +
-                "must be given using one of the properties [struts.convention.action.packages] or " +
-                "[struts.convention.package.locators]");
-        }
+        if (!disableActionScanning ) {
+            if (actionPackages == null && packageLocators == null) {
+                throw new ConfigurationException("At least a list of action packages or action package locators " +
+                    "must be given using one of the properties [struts.convention.action.packages] or " +
+                    "[struts.convention.package.locators]");
+            }
 
-        if (LOG.isTraceEnabled()) {
-            LOG.trace("Loading action configurations");
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("Loading action configurations");
+                if (actionPackages != null) {
+                    LOG.trace("Actions being loaded from action packages " + Arrays.asList(actionPackages));
+                }
+                if (packageLocators != null) {
+                    LOG.trace("Actions being loaded using package locators " + Arrays.asList(packageLocators));
+                }
+                if (excludePackages != null) {
+                    LOG.trace("Excluding actions from packages " + Arrays.asList(excludePackages));
+                }
+            }
+
+            Set<Class<?>> classes = new HashSet<Class<?>>();
             if (actionPackages != null) {
-                LOG.trace("Actions being loaded from action packages " + Arrays.asList(actionPackages));
+                classes.addAll(findActionsInNamedPackages());
             }
+
             if (packageLocators != null) {
-                LOG.trace("Actions being loaded using package locators " + Arrays.asList(packageLocators));
+                classes.addAll(findActionsUsingPackageLocators());
             }
-            if (excludePackages != null) {
-                LOG.trace("Excluding actions from packages " + Arrays.asList(excludePackages));
-            }
-        }
 
-        Set<Class<?>> classes = new HashSet<Class<?>>();
-        if (actionPackages != null) {
-            classes.addAll(findActionsInNamedPackages());
+            buildConfiguration(classes);
         }
-
-        if (packageLocators != null) {
-            classes.addAll(findActionsUsingPackageLocators());
-        }
-
-        buildConfiguration(classes);
     }
 
     protected Set<Class<?>> findActionsInNamedPackages() {
         ClassClassLoaderResolver resolver = new ClassClassLoaderResolver();
-        resolver.find(new ClassClassLoaderResolver.Test<Class<?>>() {
-            public boolean test(Class type) {
-                return com.opensymphony.xwork2.Action.class.isAssignableFrom(type) ||
-                    type.getSimpleName().endsWith("Action");
-            }
-        }, true, actionPackages);
+        resolver.find(getClassLoaderResolverTest(), true, actionPackages);
 
         return resolver.getMatches();
+    }
+
+    protected ClassClassLoaderResolver.Test<Class<?>> getClassLoaderResolverTest() {
+        return new ClassClassLoaderResolver.Test<Class<?>>() {
+            public boolean test(Class type) {
+                return (checkImplementsAction && com.opensymphony.xwork2.Action.class.isAssignableFrom(type)) ||
+                    type.getSimpleName().endsWith(actionSuffix);
+            }
+        };
     }
 
     protected Set<Class<?>> findActionsUsingPackageLocators() {
         ClassClassLoaderResolver resolver = new ClassClassLoaderResolver();
         resolver.findByLocators(new ClassClassLoaderResolver.Test<Class<?>>() {
             public boolean test(Class<?> type) {
-                return com.opensymphony.xwork2.Action.class.isAssignableFrom(type) ||
-                    type.getSimpleName().endsWith("Action");
+                return (checkImplementsAction && com.opensymphony.xwork2.Action.class.isAssignableFrom(type)) ||
+                    type.getSimpleName().endsWith(actionSuffix);
             }
         }, true, excludePackages, packageLocators);
 
@@ -555,5 +584,9 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
                 pkgConfig.addActionConfig("", indexActionConfig);
             }
         }
+    }
+
+    public void setDisableActionScanning(boolean disableActionScanning) {
+        this.disableActionScanning = disableActionScanning;
     }
 }

@@ -38,6 +38,8 @@
   <bean type="com.opensymphony.xwork2.config.PackageProvider" class="org.apache.struts2.convention.ClasspathConfigurationProvider"/>
 
   <constant name="struts.convention.result.path" value="/WEB-INF/content/"/>
+  <constant name="struts.convention.action.suffix" value="Action"/>
+  <constant name="struts.convention.action.checkImplementsAction" value="true"/>
   <constant name="struts.convention.default.parent.package" value="convention-default"/>
   <constant name="struts.convention.action.name.lowercase" value="true"/>
   <constant name="struts.convention.action.name.separator" value="-"/>
