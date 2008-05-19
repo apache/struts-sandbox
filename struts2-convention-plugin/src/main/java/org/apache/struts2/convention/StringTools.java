@@ -20,6 +20,11 @@
  */
 package org.apache.struts2.convention;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import com.opensymphony.xwork2.config.ConfigurationException;
+
 /**
  * <p>
  * This class is a String helper.
@@ -46,5 +51,25 @@ public class StringTools {
         }
 
         return "";
+    }
+
+    public static Map<String, String> createParameterMap(String[] parms) {
+        Map<String, String> map = new HashMap<String, String>();
+        int subtract = parms.length % 2;
+        if (subtract != 0) {
+            throw new ConfigurationException(
+                    "'params' is a string array "
+                            + "and they must be in a key value pair configuration. It looks like you"
+                            + " have specified an odd number of parameters and there should only be an even number."
+                            + " (e.g. params = {\"key\", \"value\"})");
+        }
+
+        for (int i = 0; i < parms.length; i = i + 2) {
+            String key = parms[i];
+            String value = parms[i + 1];
+            map.put(key, value);
+        }
+
+        return map;
     }
 }

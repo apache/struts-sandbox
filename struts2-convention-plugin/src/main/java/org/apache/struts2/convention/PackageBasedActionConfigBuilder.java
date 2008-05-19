@@ -501,6 +501,10 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
         Map<String, ResultConfig> results = resultMapBuilder.build(actionClass, annotation, actionName, pkgCfg.build());
         actionConfig.addResultConfigs(results);
 
+        //add params
+        if (annotation != null)
+            actionConfig.addParams(StringTools.createParameterMap(annotation.params()));
+
         pkgCfg.addActionConfig(actionName, actionConfig.build());
     }
 

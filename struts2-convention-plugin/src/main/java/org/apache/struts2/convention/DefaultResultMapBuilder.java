@@ -361,7 +361,7 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
 
         // Handle the annotation
         if (result != null) {
-            params.putAll(createParameterMap(result.params()));
+            params.putAll(StringTools.createParameterMap(result.params()));
         }
 
         // Map the location to the default param for the result or a param named location
@@ -373,28 +373,6 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
         }
 
         return new ResultConfig.Builder(info.name, resultTypeConfig.getClassName()).addParams(params).build();
-    }
-
-    protected Map<String, String> createParameterMap(String[] parms) {
-        Map<String, String> map = new HashMap<String, String>();
-        int subtract = parms.length % 2;
-        if (subtract != 0) {
-            throw new ConfigurationException("The Result annotation uses an array of strings for" +
-                " parameters and they must be in a key value pair configuration. It looks like you" +
-                " have specified an odd number of parameters and there should only be an even number." +
-                " (e.g. params = {\"key\", \"value\"})");
-        }
-
-        for (int i = 0; i < parms.length; i = i + 2) {
-            String key = parms[i];
-            String value = parms[i + 1];
-            map.put(key, value);
-            if (LOG.isTraceEnabled()) {
-                LOG.trace("Adding parmeter [#0:#1] to result", key, value);
-            }
-        }
-
-        return map;
     }
 
     class ResultInfo {

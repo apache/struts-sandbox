@@ -80,4 +80,11 @@ public @interface Action {
      * @return Interceptors to be applied to the action
      */
     InterceptorRef[] interceptorRefs() default {};
+
+    /**
+     * @return  The parameters passed to the action. This is a list of strings that form a name/value
+     *          pair chain since creating a Map for annotations is not possible. An example would be:
+     *          <code>{"key", "value", "key2", "value2"}</code>.
+     */
+    String[] params() default {};
 }
