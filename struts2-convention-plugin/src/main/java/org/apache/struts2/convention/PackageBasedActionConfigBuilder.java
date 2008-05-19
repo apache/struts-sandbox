@@ -69,8 +69,10 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
     private String[] excludePackages;
     private String[] packageLocators;
     private boolean disableActionScanning = false;
+    private boolean disableGlobalActionScanning = false;
     private String actionSuffix = "Action";
     private boolean checkImplementsAction = true;
+    private boolean mapAllMatches = false;
 
     /**
      * Constructs actions based on a list of packages.
@@ -109,6 +111,22 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
         }
 
         this.defaultParentPackage = defaultParentPackage;
+    }
+
+    /**
+     * @param disableActionScanning Disable scanning for actions
+     */
+    @Inject(value = "struts.convention.action.disableScanning", required = false)
+    public void setDisableActionScanning(String disableActionScanning) {
+        this.disableActionScanning = "true".equals(disableActionScanning);
+    }
+
+    /**
+     * @param disableActionScanning If set to true, only the named packages will be scanned
+     */
+    @Inject(value = "struts.convention.action.disableGlobalScanning", required = false)
+    public void setDisableGlobalActionScanning(String disableGlobalActionScanning) {
+        this.disableGlobalActionScanning = "true".equals(disableGlobalActionScanning);
     }
 
     /**
@@ -162,6 +180,16 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
     }
 
     /**
+     * @param   packageLocators (Optional) Map actions that match the "*${Suffix}" pattern
+     *                          even if they don't have a default method. The mapping from
+     *                          the url to the action will be delegated the action mapper.
+     */
+    @Inject(value = "struts.convention.action.mapAllMatches", required = false)
+    public void setMapAllMatches(String mapAllMatches) {
+        this.mapAllMatches  = "true".equals(mapAllMatches);
+    }
+
+    /**
      * Builds the action configurations by loading all classes in the packages specified by the
      * property <b>struts.convention.action.packages</b> and then figuring out which classes implement Action
      * or have Action in their name. Next, if this class is in a Java package that hasn't been
@@ -197,7 +225,7 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
                 classes.addAll(findActionsInNamedPackages());
             }
 
-            if (packageLocators != null) {
+            if (packageLocators != null && !disableGlobalActionScanning) {
                 classes.addAll(findActionsUsingPackageLocators());
             }
 
@@ -311,6 +339,13 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
                     createActionConfig(pkgCfg, actionClass, defaultActionName, method, action);
                 }
             }
+
+            // some actions will not have any @Action or a default method, like the rest actions
+            // where the action mapper is the one that finds the right method at runtime
+            if (map.isEmpty() && mapAllMatches) {
+                Action actionAnnotation = actionClass.getAnnotation(Action.class);
+                createActionConfig(defaultPackageConfig, actionClass, defaultActionName, null, actionAnnotation);
+            }
         }
 
         buildIndexActions(packageConfigs);
@@ -325,7 +360,7 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
     /**
      * Determines the namespace for the action based on the action class. If there is a {@link Namespace}
      * annotation on the class (including parent classes) or on the package that the class is in, than
-     * it is used. Otherwise, the Java package name that the class is in is used inconjunction with
+     * it is used. Otherwise, the Java package name that the class is in is used in conjunction with
      * either the <b>struts.convention.action.packages</b> or <b>struts.convention.package.locators</b>
      * configuration values. These are used to determine which part of the Java package name should
      * be converted into the namespace for the XWork PackageConfig.
@@ -584,9 +619,5 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
                 pkgConfig.addActionConfig("", indexActionConfig);
             }
         }
-    }
-
-    public void setDisableActionScanning(boolean disableActionScanning) {
-        this.disableActionScanning = disableActionScanning;
     }
 }

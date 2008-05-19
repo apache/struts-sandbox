@@ -354,10 +354,15 @@ public abstract class AbstractClassLoaderResolver<T> {
 
         File[] files = location.listFiles();
         for (File file : files) {
-            if (file.isDirectory() && recursive) {
-                loadResourcesInDirectory(test, recursive, baseURLSpec, dirName, parent + "/" + file.getName(), file);
-            } else if (!file.isDirectory()) {
-                addIfMatching(test, baseURLSpec, parent, file.getName());
+            try {
+                if (file.isDirectory() && recursive) {
+                    loadResourcesInDirectory(test, recursive, baseURLSpec, dirName, parent + "/" + file.getName(), file);
+                } else if (!file.isDirectory()) {
+                    addIfMatching(test, baseURLSpec, parent, file.getName());
+                }
+            } catch (Exception ex) {
+                if (LOG.isErrorEnabled())
+                    LOG.error("Unable to scan [#0] for resources", ex, file.toString());
             }
         }
     }
@@ -420,7 +425,9 @@ public abstract class AbstractClassLoaderResolver<T> {
         }
 
         for (String exclusion : exclusions) {
-            if (exclusion.endsWith("/*") && name.startsWith(exclusion.substring(0, exclusion.length() - 2)) ||
+            String tmpName = name.endsWith("/") ? name : name + "/";
+            //adding "/" to the name, otherwise "org/apache/struts/*" will filter "org/apache/struts2" out
+            if (exclusion.endsWith("/*") && tmpName.startsWith(exclusion.substring(0, exclusion.length() - 1)) ||
                     name.equals(exclusion)) {
                return true;
             }
