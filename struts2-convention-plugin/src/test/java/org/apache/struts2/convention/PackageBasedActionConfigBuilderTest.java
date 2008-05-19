@@ -41,6 +41,8 @@ import org.apache.struts2.convention.actions.action.ActionNameAction;
 import org.apache.struts2.convention.actions.action.ActionNamesAction;
 import org.apache.struts2.convention.actions.action.SingleActionNameAction;
 import org.apache.struts2.convention.actions.action.TestAction;
+import org.apache.struts2.convention.actions.exception.ExceptionsActionLevelAction;
+import org.apache.struts2.convention.actions.exception.ExceptionsMethodLevelAction;
 import org.apache.struts2.convention.actions.interceptor.ActionLevelInterceptor2Action;
 import org.apache.struts2.convention.actions.interceptor.ActionLevelInterceptor3Action;
 import org.apache.struts2.convention.actions.interceptor.ActionLevelInterceptorAction;
@@ -67,6 +69,7 @@ import org.easymock.EasyMock;
 import com.opensymphony.xwork2.ObjectFactory;
 import com.opensymphony.xwork2.config.Configuration;
 import com.opensymphony.xwork2.config.entities.ActionConfig;
+import com.opensymphony.xwork2.config.entities.ExceptionMappingConfig;
 import com.opensymphony.xwork2.config.entities.InterceptorConfig;
 import com.opensymphony.xwork2.config.entities.InterceptorMapping;
 import com.opensymphony.xwork2.config.entities.InterceptorStackConfig;
@@ -119,6 +122,8 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
             "", strutsDefault, null);
         PackageConfig paramsPkg = makePackageConfig("org.apache.struts2.convention.actions.params#struts-default#/params",
                 "/params", strutsDefault, null);
+        PackageConfig exceptionPkg = makePackageConfig("org.apache.struts2.convention.actions.exception#struts-default#/exception",
+                "/exception", strutsDefault, null);
         PackageConfig actionPkg = makePackageConfig("org.apache.struts2.convention.actions.action#struts-default#/action",
             "/action", strutsDefault, null);
         PackageConfig idxPkg = makePackageConfig("org.apache.struts2.convention.actions.idx#struts-default#/idx",
@@ -165,6 +170,10 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
 
         /* org.apache.struts2.convention.actions.params */
         expect(resultMapBuilder.build(ActionParamsMethodLevelAction.class, getAnnotation(ActionParamsMethodLevelAction.class, "run1", Action.class), "actionParam1", paramsPkg)).andReturn(results);
+
+        /* org.apache.struts2.convention.actions.exception */
+        expect(resultMapBuilder.build(ExceptionsMethodLevelAction.class, getAnnotation(ExceptionsMethodLevelAction.class, "run1", Action.class), "exception1", exceptionPkg)).andReturn(results);
+        expect(resultMapBuilder.build(ExceptionsActionLevelAction.class, getAnnotation(ExceptionsActionLevelAction.class, "execute", Action.class), "exceptions-action-level", exceptionPkg)).andReturn(results);
 
         /* org.apache.struts2.convention.actions.interceptor */
         expect(resultMapBuilder.build(InterceptorsAction.class, getAnnotation(InterceptorsAction.class, "run1", Action.class), "action100", interceptorRefsPkg)).andReturn(results);
@@ -264,6 +273,43 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
         assertEquals(2, params.size());
         assertEquals("val1", params.get("param1"));
         assertEquals("val2", params.get("param2"));
+
+        /* org.apache.struts2.convention.actions.params */
+        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.exception#struts-default#/exception");
+        assertNotNull(pkgConfig);
+        assertEquals(2, pkgConfig.getActionConfigs().size());
+
+        ac = pkgConfig.getAllActionConfigs().get("exception1");
+        assertNotNull(ac);
+        List<ExceptionMappingConfig> exceptions = ac.getExceptionMappings();
+        assertNotNull(exceptions);
+        assertEquals(2, exceptions.size());
+        ExceptionMappingConfig exception = exceptions.get(0);
+        assertEquals("NPE1", exception.getExceptionClassName());
+        assertEquals("success", exception.getResult());
+        exception = exceptions.get(1);
+        assertEquals("NPE2", exception.getExceptionClassName());
+        assertEquals("success", exception.getResult());
+        params = exception.getParams();
+        assertNotNull(params);
+        assertEquals(1, params.size());
+        assertEquals("val1", params.get("param1"));
+
+        ac = pkgConfig.getAllActionConfigs().get("exceptions-action-level");
+        assertNotNull(ac);
+        exceptions = ac.getExceptionMappings();
+        assertNotNull(exceptions);
+        assertEquals(2, exceptions.size());
+        exception = exceptions.get(0);
+        assertEquals("NPE1", exception.getExceptionClassName());
+        assertEquals("success", exception.getResult());
+        exception = exceptions.get(1);
+        assertEquals("NPE2", exception.getExceptionClassName());
+        assertEquals("success", exception.getResult());
+        params = exception.getParams();
+        assertNotNull(params);
+        assertEquals(1, params.size());
+        assertEquals("val1", params.get("param1"));
 
         /* org.apache.struts2.convention.actions.idx */
         pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.idx#struts-default#/idx");

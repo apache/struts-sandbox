@@ -35,6 +35,8 @@ import java.util.Set;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Actions;
 import org.apache.struts2.convention.annotation.AnnotationTools;
+import org.apache.struts2.convention.annotation.ExceptionMapping;
+import org.apache.struts2.convention.annotation.ExceptionMappings;
 import org.apache.struts2.convention.annotation.InterceptorRef;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -43,11 +45,13 @@ import com.opensymphony.xwork2.ObjectFactory;
 import com.opensymphony.xwork2.config.Configuration;
 import com.opensymphony.xwork2.config.ConfigurationException;
 import com.opensymphony.xwork2.config.entities.ActionConfig;
+import com.opensymphony.xwork2.config.entities.ExceptionMappingConfig;
 import com.opensymphony.xwork2.config.entities.InterceptorMapping;
 import com.opensymphony.xwork2.config.entities.PackageConfig;
 import com.opensymphony.xwork2.config.entities.ResultConfig;
 import com.opensymphony.xwork2.config.providers.InterceptorBuilder;
 import com.opensymphony.xwork2.inject.Inject;
+import com.opensymphony.xwork2.util.DomHelper;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
 
@@ -505,7 +509,34 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
         if (annotation != null)
             actionConfig.addParams(StringTools.createParameterMap(annotation.params()));
 
+        //add exception mappings from annotation
+        if (annotation != null && annotation.exceptionMappings() != null)
+            actionConfig.addExceptionMappings(buildExceptionMappings(annotation.exceptionMappings(), actionName));
+
+        //add exception mapping from class
+        ExceptionMappings exceptionMappings = actionClass.getAnnotation(ExceptionMappings.class);
+        if (exceptionMappings != null)
+            actionConfig.addExceptionMappings(buildExceptionMappings(exceptionMappings.value(), actionName));
+
+        //add
         pkgCfg.addActionConfig(actionName, actionConfig.build());
+    }
+
+    private List<ExceptionMappingConfig> buildExceptionMappings(ExceptionMapping[] exceptions, String actionName) {
+        List<ExceptionMappingConfig> exceptionMappings = new ArrayList<ExceptionMappingConfig>();
+
+        for (ExceptionMapping exceptionMapping : exceptions) {
+            if (LOG.isTraceEnabled())
+                LOG.trace("Mapping exception [#0] to result [#1] for action [#2]", exceptionMapping.exception(),
+                        exceptionMapping.result(), actionName);
+            ExceptionMappingConfig.Builder builder = new ExceptionMappingConfig.Builder(null, exceptionMapping
+                    .exception(), exceptionMapping.result());
+            if (exceptionMapping.params() != null)
+                builder.addParams(StringTools.createParameterMap(exceptionMapping.params()));
+            exceptionMappings.add(builder.build());
+        }
+
+        return exceptionMappings;
     }
 
     private PackageConfig.Builder getPackageConfig(final Map<String, PackageConfig.Builder> packageConfigs,

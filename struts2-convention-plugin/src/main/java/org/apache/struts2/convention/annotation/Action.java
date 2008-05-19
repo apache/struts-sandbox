@@ -87,4 +87,9 @@ public @interface Action {
      *          <code>{"key", "value", "key2", "value2"}</code>.
      */
     String[] params() default {};
+
+    /**
+     * @return Maps return codes to exceptions. The "exceptions" interceptor must be applied to the action.
+     */
+    ExceptionMapping[] exceptionMappings() default {};
 }
