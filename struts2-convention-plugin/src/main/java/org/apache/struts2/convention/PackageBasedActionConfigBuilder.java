@@ -39,6 +39,7 @@ import org.apache.struts2.convention.annotation.ExceptionMapping;
 import org.apache.struts2.convention.annotation.ExceptionMappings;
 import org.apache.struts2.convention.annotation.InterceptorRef;
 import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.Namespaces;
 import org.apache.struts2.convention.annotation.ParentPackage;
 
 import com.opensymphony.xwork2.ObjectFactory;
@@ -291,64 +292,66 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
             }
 
             // Determine the default namespace and action name
-            String defaultActionNamespace = determineActionNamespace(actionClass);
-            String defaultActionName = determineActionName(actionClass);
-            String defaultActionMethod = "execute";
-            PackageConfig.Builder defaultPackageConfig = getPackageConfig(packageConfigs, defaultActionNamespace,
-                actionPackage, actionClass, null);
+            List<String> namespaces = determineActionNamespace(actionClass);
+            for (String namespace : namespaces) {
+                String defaultActionName = determineActionName(actionClass);
+                String defaultActionMethod = "execute";
+                PackageConfig.Builder defaultPackageConfig = getPackageConfig(packageConfigs, namespace,
+                    actionPackage, actionClass, null);
 
-            // Verify that the annotations have no errors and also determine if the default action
-            // configuration should still be built or not.
-            Map<String, List<Action>> map = getActionAnnotations(actionClass);
-            Set<String> actionNames = new HashSet<String>();
-            if (!map.containsKey(defaultActionMethod) && ReflectionTools.containsMethod(actionClass, defaultActionMethod)) {
-                boolean found = false;
+                // Verify that the annotations have no errors and also determine if the default action
+                // configuration should still be built or not.
+                Map<String, List<Action>> map = getActionAnnotations(actionClass);
+                Set<String> actionNames = new HashSet<String>();
+                if (!map.containsKey(defaultActionMethod) && ReflectionTools.containsMethod(actionClass, defaultActionMethod)) {
+                    boolean found = false;
+                    for (String method : map.keySet()) {
+                        List<Action> actions = map.get(method);
+                        for (Action action : actions) {
+
+                            // Check if there are duplicate action names in the annotations.
+                            String actionName = action.value().equals(Action.DEFAULT_VALUE) ? defaultActionName : action.value();
+                            if (actionNames.contains(actionName)) {
+                                throw new ConfigurationException("The action class [" + actionClass +
+                                    "] contains two methods with an action name annotation whose value " +
+                                    "is the same (they both might be empty as well).");
+                            } else {
+                                actionNames.add(actionName);
+                            }
+
+                            // Check this annotation is the default action
+                            if (action.value().equals(Action.DEFAULT_VALUE)) {
+                                found = true;
+                            }
+                        }
+                    }
+
+                    // Build the default
+                    if (!found) {
+                        createActionConfig(defaultPackageConfig, actionClass, defaultActionName, defaultActionMethod, null);
+                    }
+                }
+
+                // Build the actions for the annotations
                 for (String method : map.keySet()) {
                     List<Action> actions = map.get(method);
                     for (Action action : actions) {
-
-                        // Check if there are duplicate action names in the annotations.
-                        String actionName = action.value().equals(Action.DEFAULT_VALUE) ? defaultActionName : action.value();
-                        if (actionNames.contains(actionName)) {
-                            throw new ConfigurationException("The action class [" + actionClass +
-                                "] contains two methods with an action name annotation whose value " +
-                                "is the same (they both might be empty as well).");
-                        } else {
-                            actionNames.add(actionName);
+                        PackageConfig.Builder pkgCfg = defaultPackageConfig;
+                        if (action.value().contains("/")) {
+                            pkgCfg = getPackageConfig(packageConfigs, namespace, actionPackage,
+                                actionClass, action);
                         }
 
-                        // Check this annotation is the default action
-                        if (action.value().equals(Action.DEFAULT_VALUE)) {
-                            found = true;
-                        }
+                        createActionConfig(pkgCfg, actionClass, defaultActionName, method, action);
                     }
                 }
 
-                // Build the default
-                if (!found) {
-                    createActionConfig(defaultPackageConfig, actionClass, defaultActionName, defaultActionMethod, null);
+                // some actions will not have any @Action or a default method, like the rest actions
+                // where the action mapper is the one that finds the right method at runtime
+                if (map.isEmpty() && mapAllMatches) {
+                    Action actionAnnotation = actionClass.getAnnotation(Action.class);
+                    createActionConfig(defaultPackageConfig, actionClass, defaultActionName, null, actionAnnotation);
                 }
-            }
-
-            // Build the actions for the annotations
-            for (String method : map.keySet()) {
-                List<Action> actions = map.get(method);
-                for (Action action : actions) {
-                    PackageConfig.Builder pkgCfg = defaultPackageConfig;
-                    if (action.value().contains("/")) {
-                        pkgCfg = getPackageConfig(packageConfigs, defaultActionNamespace, actionPackage,
-                            actionClass, action);
-                    }
-
-                    createActionConfig(pkgCfg, actionClass, defaultActionName, method, action);
-                }
-            }
-
-            // some actions will not have any @Action or a default method, like the rest actions
-            // where the action mapper is the one that finds the right method at runtime
-            if (map.isEmpty() && mapAllMatches) {
-                Action actionAnnotation = actionClass.getAnnotation(Action.class);
-                createActionConfig(defaultPackageConfig, actionClass, defaultActionName, null, actionAnnotation);
             }
         }
 
@@ -362,7 +365,7 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
     }
 
     /**
-     * Determines the namespace for the action based on the action class. If there is a {@link Namespace}
+     * Determines the namespace(s) for the action based on the action class. If there is a {@link Namespace}
      * annotation on the class (including parent classes) or on the package that the class is in, than
      * it is used. Otherwise, the Java package name that the class is in is used in conjunction with
      * either the <b>struts.convention.action.packages</b> or <b>struts.convention.package.locators</b>
@@ -372,16 +375,38 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
      * @param   actionClass The action class.
      * @return  The namespace or an empty string.
      */
-    protected String determineActionNamespace(Class<?> actionClass) {
+    protected List<String> determineActionNamespace(Class<?> actionClass) {
+        List<String> namespaces = new ArrayList<String>();
+
         // Check if there is a class or package level annotation for the namespace
-        Namespace ns = AnnotationTools.findAnnotation(actionClass, Namespace.class);
-        if (ns != null) {
+        //single namespace
+        Namespace namespaceAnnotation = AnnotationTools.findAnnotation(actionClass, Namespace.class);
+        if (namespaceAnnotation != null) {
             if (LOG.isTraceEnabled()) {
-                LOG.trace("Using non-default action namespace from Namespace annotation of [#0]", ns.value());
+                LOG.trace("Using non-default action namespace from Namespace annotation of [#0]", namespaceAnnotation.value());
             }
 
-            return ns.value();
+            namespaces.add(namespaceAnnotation.value());
         }
+
+        //multiple annotations
+        Namespaces namespacesAnnotation = AnnotationTools.findAnnotation(actionClass, Namespaces.class);
+        if (namespacesAnnotation != null) {
+            if (LOG.isTraceEnabled()) {
+                StringBuilder sb = new StringBuilder();
+                for (Namespace namespace : namespacesAnnotation.value())
+                    sb.append(namespace.value()).append(",");
+                sb.deleteCharAt(sb.length() - 1);
+                LOG.trace("Using non-default action namespaces from Namespaces annotation of [#0]", sb.toString());
+            }
+
+            for (Namespace namespace : namespacesAnnotation.value())
+                namespaces.add(namespace.value());
+        }
+
+        //don't use default if there are annotations
+        if (!namespaces.isEmpty())
+            return namespaces;
 
         String pkg = actionClass.getPackage().getName();
         String pkgPart = null;
@@ -409,11 +434,13 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
             final int indexOfDot = pkgPart.lastIndexOf('.');
             if (indexOfDot >= 0) {
                 String convertedNamespace = actionNameBuilder.build(pkgPart.substring(0, indexOfDot));
-                return "/" + convertedNamespace.replace('.', '/');
+                namespaces.add("/" + convertedNamespace.replace('.', '/'));
+                return namespaces;
             }
         }
 
-        return "";
+        namespaces.add("");
+        return namespaces;
     }
 
     /**

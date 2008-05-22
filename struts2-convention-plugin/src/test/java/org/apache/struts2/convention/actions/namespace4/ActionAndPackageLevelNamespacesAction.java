@@ -18,32 +18,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.struts2.convention.actions.params;
+package org.apache.struts2.convention.actions.namespace4;
 
-import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.Namespaces;
 
-public class ActionParamsMethodLevelAction {
-    private String param1;
-    private String param2;
-
-    @Action(value = "actionParam1", params = {"param1", "val1", "param2", "val2"})
-    public String run1() throws Exception {
+@Namespaces({
+    @Namespace("/namespaces3"),
+})
+public class ActionAndPackageLevelNamespacesAction {
+    public String execute() {
         return null;
-    }
-
-    public String getParam1() {
-        return param1;
-    }
-
-    public void setParam1(String param1) {
-        this.param1 = param1;
-    }
-
-    public String getParam2() {
-        return param2;
-    }
-
-    public void setParam2(String param2) {
-        this.param2 = param2;
     }
 }

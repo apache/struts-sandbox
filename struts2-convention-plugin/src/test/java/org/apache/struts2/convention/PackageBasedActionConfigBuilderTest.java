@@ -51,6 +51,8 @@ import org.apache.struts2.convention.actions.namespace.ActionLevelNamespaceActio
 import org.apache.struts2.convention.actions.namespace.ClassLevelNamespaceAction;
 import org.apache.struts2.convention.actions.namespace.PackageLevelNamespaceAction;
 import org.apache.struts2.convention.actions.namespace2.DefaultNamespaceAction;
+import org.apache.struts2.convention.actions.namespace3.ActionLevelNamespacesAction;
+import org.apache.struts2.convention.actions.namespace4.ActionAndPackageLevelNamespacesAction;
 import org.apache.struts2.convention.actions.params.ActionParamsMethodLevelAction;
 import org.apache.struts2.convention.actions.parentpackage.ClassLevelParentPackageAction;
 import org.apache.struts2.convention.actions.parentpackage.PackageLevelParentPackageAction;
@@ -144,6 +146,14 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
             "/action-level", strutsDefault, null);
         PackageConfig defaultNamespacePkg = makePackageConfig("org.apache.struts2.convention.actions.namespace2#struts-default#/namespace2",
             "/namespace2", strutsDefault, null);
+        PackageConfig namespaces1Pkg = makePackageConfig("org.apache.struts2.convention.actions.namespace3#struts-default#/namespaces1",
+                "/namespaces1", strutsDefault, null);
+        PackageConfig namespaces2Pkg = makePackageConfig("org.apache.struts2.convention.actions.namespace3#struts-default#/namespaces2",
+                "/namespaces2", strutsDefault, null);
+        PackageConfig namespaces3Pkg = makePackageConfig("org.apache.struts2.convention.actions.namespace4#struts-default#/namespaces3",
+                "/namespaces3", strutsDefault, null);
+        PackageConfig namespaces4Pkg = makePackageConfig("org.apache.struts2.convention.actions.namespace4#struts-default#/namespaces4",
+                "/namespaces4", strutsDefault, null);
         PackageConfig resultPkg = makePackageConfig("org.apache.struts2.convention.actions.result#struts-default#/result",
             "/result", strutsDefault, null);
         PackageConfig resultPathPkg = makePackageConfig("org.apache.struts2.convention.actions.resultpath#struts-default#/resultpath",
@@ -195,6 +205,14 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
 
         /* org.apache.struts2.convention.actions.namespace2 */
         expect(resultMapBuilder.build(DefaultNamespaceAction.class, null, "default-namespace", defaultNamespacePkg)).andReturn(results);
+
+        /* org.apache.struts2.convention.actions.namespace3 */
+        expect(resultMapBuilder.build(ActionLevelNamespacesAction.class, null, "action-level-namespaces", namespaces1Pkg)).andReturn(results);
+        expect(resultMapBuilder.build(ActionLevelNamespacesAction.class, null, "action-level-namespaces", namespaces2Pkg)).andReturn(results);
+
+        /* org.apache.struts2.convention.actions.namespace4 */
+        expect(resultMapBuilder.build(ActionAndPackageLevelNamespacesAction.class, null, "action-and-package-level-namespaces", namespaces3Pkg)).andReturn(results);
+        expect(resultMapBuilder.build(ActionAndPackageLevelNamespacesAction.class, null, "action-and-package-level-namespaces", namespaces4Pkg)).andReturn(results);
 
         /* org.apache.struts2.convention.actions.parentpackage */
         expect(resultMapBuilder.build(PackageLevelParentPackageAction.class, null, "package-level-parent-package", packageLevelPkg)).andReturn(results);
@@ -261,6 +279,34 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
         verifyActionConfig(pkgConfig, "actions2", ActionNamesAction.class, "run", pkgConfig.getName());
         verifyActionConfig(pkgConfig, "action", SingleActionNameAction.class, "run", pkgConfig.getName());
         verifyActionConfig(pkgConfig, "test", TestAction.class, "execute", pkgConfig.getName());
+
+        /* org.apache.struts2.convention.actions.namespace3 */
+        //action on namespace1 (action level)
+        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.namespace3#struts-default#/namespaces1");
+        assertNotNull(pkgConfig);
+        assertEquals(1, pkgConfig.getActionConfigs().size());
+        verifyActionConfig(pkgConfig, "action-level-namespaces", ActionLevelNamespacesAction.class, "execute", pkgConfig.getName());
+
+        //action on namespace2 (action level)
+        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.namespace3#struts-default#/namespaces2");
+        assertNotNull(pkgConfig);
+        assertEquals(1, pkgConfig.getActionConfigs().size());
+        verifyActionConfig(pkgConfig, "action-level-namespaces", ActionLevelNamespacesAction.class, "execute", pkgConfig.getName());
+
+        /* org.apache.struts2.convention.actions.namespace4 */
+        //action on namespace3 (action level)
+        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.namespace4#struts-default#/namespaces3");
+        assertNotNull(pkgConfig);
+        assertEquals(1, pkgConfig.getActionConfigs().size());
+        verifyActionConfig(pkgConfig, "action-and-package-level-namespaces", ActionAndPackageLevelNamespacesAction.class, "execute", pkgConfig.getName());
+
+        //action on namespace4 (package level)
+        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.namespace4#struts-default#/namespaces4");
+        assertNotNull(pkgConfig);
+        assertEquals(1, pkgConfig.getActionConfigs().size());
+        verifyActionConfig(pkgConfig, "action-and-package-level-namespaces", ActionAndPackageLevelNamespacesAction.class, "execute", pkgConfig.getName());
+
+
 
         /* org.apache.struts2.convention.actions.params */
         pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.params#struts-default#/params");

@@ -18,32 +18,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.struts2.convention.actions.params;
+package org.apache.struts2.convention.annotation;
 
-import org.apache.struts2.convention.annotation.Action;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public class ActionParamsMethodLevelAction {
-    private String param1;
-    private String param2;
-
-    @Action(value = "actionParam1", params = {"param1", "val1", "param2", "val2"})
-    public String run1() throws Exception {
-        return null;
-    }
-
-    public String getParam1() {
-        return param1;
-    }
-
-    public void setParam1(String param1) {
-        this.param1 = param1;
-    }
-
-    public String getParam2() {
-        return param2;
-    }
-
-    public void setParam2(String param2) {
-        this.param2 = param2;
-    }
+/**
+ * <!-- START SNIPPET: javadoc -->
+ * <p>
+ * This annotation allows actions to be defined in more than one {@link Namespace}
+ * </p>
+ * <!-- END SNIPPET: javadoc -->
+ */
+@Target({ElementType.PACKAGE, ElementType.TYPE})
+@Retention(value = RetentionPolicy.RUNTIME)
+public @interface Namespaces {
+    Namespace[] value();
 }
