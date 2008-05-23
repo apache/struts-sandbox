@@ -24,7 +24,7 @@ import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.Namespaces;
 
 @Namespaces({
-    @Namespace("/namespaces3"),
+    @Namespace("/namespaces3")
 })
 public class ActionAndPackageLevelNamespacesAction {
     public String execute() {
