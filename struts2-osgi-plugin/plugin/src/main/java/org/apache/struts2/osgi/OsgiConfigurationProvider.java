@@ -5,25 +5,14 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.security.CodeSource;
 import java.security.ProtectionDomain;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
-import org.apache.felix.fileinstall.FileInstall;
 import org.apache.felix.framework.Felix;
 import org.apache.felix.framework.cache.BundleCache;
 import org.apache.felix.framework.util.FelixConstants;
@@ -42,7 +31,9 @@ import org.osgi.framework.BundleListener;
 import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
-import org.osgi.util.tracker.ServiceTracker;
+import org.twdata.pkgscanner.ExportPackage;
+import org.twdata.pkgscanner.PackageScanner;
+import static org.twdata.pkgscanner.PackageScanner.*;
 
 import com.opensymphony.xwork2.ObjectFactory;
 import com.opensymphony.xwork2.config.Configuration;
@@ -145,7 +136,9 @@ public class OsgiConfigurationProvider implements PackageProvider {
         Map<String, String> configMap = new StringMap(false);
 
         configMap.put(Constants.FRAMEWORK_SYSTEMPACKAGES, packages.getProperty("packages")
+                + "," + getScannedPackages(packages)
                 + getSystemPackages(systemProperties));
+
 
         // find bundles
         Set<String> bundlePaths = new HashSet<String>(findInPackage("bundles"));
@@ -177,7 +170,6 @@ public class OsgiConfigurationProvider implements PackageProvider {
         //other properties
         configMap.put(FelixConstants.EMBEDDED_EXECUTION_PROP, "true");
         configMap.put(FelixConstants.SERVICE_URLHANDLERS_PROP, "false");
-        configMap.put("org.osgi.framework.bootdelegation", "org.apache.*");
         configMap.put(OsgiConfigurationProvider.FELIX_LOG_LEVEL, "4");
         configMap.put(FelixConstants.BUNDLE_CLASSPATH, ".");
 
@@ -214,6 +206,40 @@ public class OsgiConfigurationProvider implements PackageProvider {
     private String getSystemPackages(Properties properties) {
         String jreVersion = "jre-" + System.getProperty("java.version").substring(0, 3);
         return properties.getProperty(jreVersion);
+    }
+
+    String getScannedPackages(Properties props) {
+        Collection<ExportPackage> exports = new PackageScanner()
+                .select(
+                    jars(
+                         include(toArray(props.getProperty("scanning.jar.includes"))),
+                         exclude(toArray(props.getProperty("scanning.jar.excludes")))),
+                    packages(
+                         include(toArray(props.getProperty("scanning.package.includes"))),
+                         exclude(toArray(props.getProperty("scanning.package.excludes")))))
+                .scan();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Export-Package: ");
+        for (Iterator<ExportPackage> i = exports.iterator(); i.hasNext(); ) {
+            ExportPackage pkg = i.next();
+            sb.append(pkg.getPackageName());
+            if (pkg.getVersion() != null) {
+                sb.append(";version=").append(pkg.getVersion());
+            }
+            if (i.hasNext()) {
+                sb.append(",");
+            }
+        }
+        return sb.toString();
+    }
+
+    String[] toArray(String val) {
+        if (val != null) {
+            return val.split("\\s*,\\s*");
+        } else {
+            return new String[]{};
+        }
     }
 
     private Properties getProperties(String fileName) {
