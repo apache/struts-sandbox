@@ -17,9 +17,11 @@ public class OsgiConfigurationProviderTest extends TestCase {
         OsgiConfigurationProvider prov = new OsgiConfigurationProvider();
         Properties props = new Properties();
         props.setProperty("scanning.jar.includes", "*.jar");
-        props.setProperty("scanning.package.includes", "com.opensymphony.xwork2.*, org.apache.struts2.*,ognl.*,freemarker.*, org.apache.velocity.*");
+        props.setProperty("scanning.package.includes", "com.opensymphony.xwork2*, org.apache.struts2*,ognl*,freemarker*, org.apache.velocity*, javax.servlet*");
         String export = prov.getScannedPackages(props);
         assertNotNull(export);
+        assertTrue(export.contains("javax.servlet;"));
+        assertTrue(export.contains("javax.servlet.http;"));
         assertTrue(export.length() > 20);
 
     }
