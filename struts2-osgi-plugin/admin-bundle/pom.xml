@@ -4,9 +4,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.apache.struts.osgi</groupId>
 	<artifactId>struts2-admin-bundle</artifactId>
+    <version>1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>Struts 2 OSGi Admin Bundle</name>
-	<version>1.0-SNAPSHOT</version>
 
 	<dependencies>
 		<dependency>
@@ -14,6 +14,14 @@
 			<artifactId>struts2-osgi-plugin</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+            <version>3.8.1</version>
+        </dependency>
+
+ 
 	</dependencies>
 
 	<properties>
@@ -33,9 +41,6 @@
 		    		</archive>
 		    	</configuration>
 		    </plugin>
-		    <!--
-			Commented out until
-			https://issues.apache.org/jira/browse/FELIX-549 is solved
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
@@ -57,7 +62,6 @@
 					</instructions>
 				</configuration>
 			</plugin>
-			-->
 		</plugins>
 		<pluginManagement>
 			<plugins>
@@ -71,4 +75,5 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+
 </project>
