@@ -266,7 +266,7 @@ public abstract class AbstractClassLoaderResolver<T> {
         for (URL url : urls) {
             try {
                 String urlStr = url.toString();
-                String baseURLSpec = urlStr.substring(0, urlStr.indexOf(dirName));
+                String baseURLSpec = StringTools.isTrimmedEmpty(dirName) ? urlStr : urlStr.substring(0, urlStr.indexOf(dirName));
                 String urlPath = urlToFilePath(test, url);
 
                 File file = new File(urlPath);
