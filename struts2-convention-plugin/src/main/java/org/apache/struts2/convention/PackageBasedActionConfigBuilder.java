@@ -74,7 +74,7 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
     private String[] excludePackages;
     private String[] packageLocators;
     private boolean disableActionScanning = false;
-    private boolean disableGlobalActionScanning = false;
+    private boolean disablePackageLocatorsScanning = false;
     private String actionSuffix = "Action";
     private boolean checkImplementsAction = true;
     private boolean mapAllMatches = false;
@@ -129,9 +129,9 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
     /**
      * @param disableActionScanning If set to true, only the named packages will be scanned
      */
-    @Inject(value = "struts.convention.action.disableGlobalScanning", required = false)
-    public void setDisableGlobalActionScanning(String disableGlobalActionScanning) {
-        this.disableGlobalActionScanning = "true".equals(disableGlobalActionScanning);
+    @Inject(value = "struts.convention.package.locators.disable", required = false)
+    public void setDisablePackageLocatorsScanning(String disablePackageLocatorsScanning) {
+        this.disablePackageLocatorsScanning = "true".equals(disablePackageLocatorsScanning);
     }
 
     /**
@@ -230,7 +230,7 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
                 classes.addAll(findActionsInNamedPackages());
             }
 
-            if (packageLocators != null && !disableGlobalActionScanning) {
+            if (packageLocators != null && !disablePackageLocatorsScanning) {
                 classes.addAll(findActionsUsingPackageLocators());
             }
 
