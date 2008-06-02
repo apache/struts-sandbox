@@ -20,6 +20,7 @@
  */
 package org.apache.struts2.convention;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -38,6 +39,8 @@ import com.opensymphony.xwork2.config.entities.PackageConfig;
 import com.opensymphony.xwork2.config.entities.ResultConfig;
 import com.opensymphony.xwork2.config.entities.ResultTypeConfig;
 import com.opensymphony.xwork2.inject.Inject;
+import com.opensymphony.xwork2.util.finder.ResourceFinder;
+import com.opensymphony.xwork2.util.finder.Test;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
 
@@ -230,27 +233,41 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
                     actionName);
         }
 
-        URLClassLoaderResolver resolver = new URLClassLoaderResolver();
-        resolver.find(new URLClassLoaderResolver.NameTest() {
+        ResourceFinder finder = new ResourceFinder(classPathLocation);
+        try {
+            Map<String, URL> matches = finder.getResourcesMap("");
+            if (matches != null) {
+                Test<URL> resourceTest = getResourceTest(resultPath, actionName);
+                for (Map.Entry<String, URL> entry : matches.entrySet()) {
+                    if (resourceTest.test(entry.getValue())) {
+                        if (LOG.isTraceEnabled()) {
+                            LOG.trace("Processing URL [#0]", entry.getKey());
+                        }
+
+                        String urlStr = entry.getValue().toString();
+                        int index = urlStr.lastIndexOf(resultPrefix);
+                        String path = urlStr.substring(index);
+                        makeResults(actionClass, path, resultPrefix, results, packageConfig, resultsByExtension);
+                    }
+
+                }
+            }
+        } catch (IOException ex) {
+           if (LOG.isErrorEnabled())
+               LOG.error("Unable to scan directory [#0] for results", ex, classPathLocation);
+        }
+
+    }
+
+    private Test<URL> getResourceTest(final String resultPath, final String actionName) {
+        return new Test<URL>() {
             public boolean test(URL url) {
                 String urlStr = url.toString();
                 int index = urlStr.lastIndexOf(resultPath);
                 String path = urlStr.substring(index + resultPath.length());
                 return path.startsWith(actionName);
             }
-        }, false, classPathLocation);
-
-        Set<URL> matches = resolver.getMatches();
-        for (URL match : matches) {
-            if (LOG.isTraceEnabled()) {
-                LOG.trace("Processing URL [#0]", match.toString());
-            }
-
-            String urlStr = match.toString();
-            int index = urlStr.lastIndexOf(resultPrefix);
-            String path = urlStr.substring(index);
-            makeResults(actionClass, path, resultPrefix, results, packageConfig, resultsByExtension);
-        }
+        };
     }
 
     /**

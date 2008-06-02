@@ -20,6 +20,7 @@
  */
 package org.apache.struts2.convention;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -27,7 +28,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -37,7 +37,6 @@ import org.apache.struts2.convention.annotation.Actions;
 import org.apache.struts2.convention.annotation.AnnotationTools;
 import org.apache.struts2.convention.annotation.ExceptionMapping;
 import org.apache.struts2.convention.annotation.ExceptionMappings;
-import org.apache.struts2.convention.annotation.InterceptorRef;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.Namespaces;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -50,9 +49,10 @@ import com.opensymphony.xwork2.config.entities.ExceptionMappingConfig;
 import com.opensymphony.xwork2.config.entities.InterceptorMapping;
 import com.opensymphony.xwork2.config.entities.PackageConfig;
 import com.opensymphony.xwork2.config.entities.ResultConfig;
-import com.opensymphony.xwork2.config.providers.InterceptorBuilder;
 import com.opensymphony.xwork2.inject.Inject;
-import com.opensymphony.xwork2.util.DomHelper;
+import com.opensymphony.xwork2.util.finder.ClassFinder;
+import com.opensymphony.xwork2.util.finder.Test;
+import com.opensymphony.xwork2.util.finder.UrlSet;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
 
@@ -73,6 +73,8 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
     private String[] actionPackages;
     private String[] excludePackages;
     private String[] packageLocators;
+    private String[] excludeJars;
+    private boolean disableJarScanning = true;
     private boolean disableActionScanning = false;
     private boolean disablePackageLocatorsScanning = false;
     private String actionSuffix = "Action";
@@ -124,6 +126,23 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
     @Inject(value = "struts.convention.action.disableScanning", required = false)
     public void setDisableActionScanning(String disableActionScanning) {
         this.disableActionScanning = "true".equals(disableActionScanning);
+    }
+
+    /**
+     * @param exlcudeJars Comma separated list of regular expressions of jars to be exluded.
+     *                    Ignored if "struts.convention.action.disableJarScanning" is true
+     */
+    @Inject(value = "struts.convention.action.excludeJars", required = false)
+    public void setExcludeJars(String excludeJars) {
+        this.excludeJars = excludeJars.split("\\s*[,]\\s*");;
+    }
+
+    /**
+     * @param disableJarScanning Disable scanning jar files for actions
+     */
+    @Inject(value = "struts.convention.action.disableJarScanning", required = false)
+    public void setDisableJarScanning(String disableJarScanning) {
+        this.disableJarScanning = "true".equals(disableJarScanning);
     }
 
     /**
@@ -225,48 +244,112 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
                 }
             }
 
-            Set<Class<?>> classes = new HashSet<Class<?>>();
-            if (actionPackages != null) {
-                classes.addAll(findActionsInNamedPackages());
-            }
-
-            if (packageLocators != null && !disablePackageLocatorsScanning) {
-                classes.addAll(findActionsUsingPackageLocators());
-            }
-
+            Set<Class> classes = findActions();
             buildConfiguration(classes);
         }
     }
 
-    protected Set<Class<?>> findActionsInNamedPackages() {
-        ClassClassLoaderResolver resolver = new ClassClassLoaderResolver();
-        resolver.find(getClassLoaderResolverTest(), true, actionPackages);
+    @SuppressWarnings("unchecked")
+    protected Set<Class> findActions() {
+        Set<Class> classes = new HashSet<Class>();
+        try {
+            if (actionPackages != null || (packageLocators != null && !disablePackageLocatorsScanning)) {
+                ClassFinder finder = new ClassFinder(getClassLoader(), buildUrlSet().getUrls(), true);
 
-        return resolver.getMatches();
+                // named packages
+                if (actionPackages != null) {
+                    for (String packageName : actionPackages) {
+                        Test<ClassFinder.ClassInfo> test = getPackageFinderTest(packageName);
+                        classes.addAll(finder.findClasses(test));
+                    }
+                }
+
+                //package locators
+                if (packageLocators != null && !disablePackageLocatorsScanning) {
+                    for (String packageLocator : packageLocators) {
+                        Test<ClassFinder.ClassInfo> test = getPackageLocatorTest(packageLocator);
+                        classes.addAll(finder.findClasses(test));
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            if (LOG.isErrorEnabled())
+                LOG.error("Unable to scan named packages", ex);
+        }
+
+        return classes;
     }
 
-    protected ClassClassLoaderResolver.Test<Class<?>> getClassLoaderResolverTest() {
-        return new ClassClassLoaderResolver.Test<Class<?>>() {
-            public boolean test(Class type) {
-                return (checkImplementsAction && com.opensymphony.xwork2.Action.class.isAssignableFrom(type)) ||
-                    type.getSimpleName().endsWith(actionSuffix);
+    private UrlSet buildUrlSet() throws IOException {
+        UrlSet urlSet = new UrlSet(getClassLoader());
+
+        urlSet = urlSet.exclude(ClassLoader.getSystemClassLoader().getParent());
+        urlSet = urlSet.excludeJavaExtDirs();
+        urlSet = urlSet.excludeJavaEndorsedDirs();
+        urlSet = urlSet.excludeJavaHome();
+        urlSet = urlSet.excludePaths(System.getProperty("sun.boot.class.path", ""));
+        urlSet = urlSet.exclude(".*/JavaVM.framework/.*");
+
+        if (disableJarScanning) {
+            urlSet = urlSet.exclude(".*?jar(!/)?");
+        } else if (excludeJars != null) {
+            for (String pattern : excludeJars) {
+                urlSet = urlSet.exclude(pattern.trim());
+            }
+        }
+
+        return urlSet;
+    }
+
+    private ClassLoader getClassLoader() {
+        return Thread.currentThread().getContextClassLoader();
+    }
+
+    protected Test<ClassFinder.ClassInfo> getPackageFinderTest(final String packageName) {
+        // so "my.package" does not match "my.package2.test"
+        final String strictPackageName = packageName + ".";
+        return new Test<ClassFinder.ClassInfo>() {
+            public boolean test(ClassFinder.ClassInfo classInfo) {
+                String classPackageName = classInfo.getPackageName();
+                boolean inPackage = classPackageName.equals(packageName) || classPackageName.startsWith(strictPackageName);
+                boolean nameMatches = classInfo.getName().endsWith(actionSuffix);
+
+                try {
+                    return inPackage && (nameMatches ||  (checkImplementsAction && com.opensymphony.xwork2.Action.class.isAssignableFrom(classInfo.get())));
+                } catch (ClassNotFoundException ex) {
+                    if (LOG.isErrorEnabled())
+                        LOG.error("Unable to load class [#0]", ex, classInfo.getName());
+                    return false;
+                }
             }
         };
     }
 
-    protected Set<Class<?>> findActionsUsingPackageLocators() {
-        ClassClassLoaderResolver resolver = new ClassClassLoaderResolver();
-        resolver.findByLocators(new ClassClassLoaderResolver.Test<Class<?>>() {
-            public boolean test(Class<?> type) {
-                return (checkImplementsAction && com.opensymphony.xwork2.Action.class.isAssignableFrom(type)) ||
-                    type.getSimpleName().endsWith(actionSuffix);
-            }
-        }, true, excludePackages, packageLocators);
+    protected Test<ClassFinder.ClassInfo> getPackageLocatorTest(final String packageLocator) {
+        return new Test<ClassFinder.ClassInfo>() {
+            public boolean test(ClassFinder.ClassInfo classInfo) {
+                String packageName = classInfo.getPackageName();
+                if (packageName.length() > 0) {
+                    String[] splitted = packageName.split("\\.");
 
-        return resolver.getMatches();
+                    boolean packageMatches = StringTools.contains(splitted, packageLocator, false);
+                    boolean nameMatches = classInfo.getName().endsWith(actionSuffix);
+
+                    try {
+                        return packageMatches && (nameMatches ||  (checkImplementsAction && com.opensymphony.xwork2.Action.class.isAssignableFrom(classInfo.get())));
+                    } catch (ClassNotFoundException ex) {
+                        if (LOG.isErrorEnabled())
+                            LOG.error("Unable to load class [#0]", ex, classInfo.getName());
+                        return false;
+                    }
+                } else
+                    return false;
+            }
+        };
     }
 
-    protected void buildConfiguration(Set<Class<?>> classes) {
+    @SuppressWarnings("unchecked")
+    protected void buildConfiguration(Set<Class> classes) {
         Map<String, PackageConfig.Builder> packageConfigs = new HashMap<String, PackageConfig.Builder>();
 
         for (Class<?> actionClass : classes) {

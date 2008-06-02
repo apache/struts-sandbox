@@ -41,6 +41,7 @@ import org.apache.struts2.convention.actions.action.ActionNameAction;
 import org.apache.struts2.convention.actions.action.ActionNamesAction;
 import org.apache.struts2.convention.actions.action.SingleActionNameAction;
 import org.apache.struts2.convention.actions.action.TestAction;
+import org.apache.struts2.convention.actions.action.TestExtends;
 import org.apache.struts2.convention.actions.exception.ExceptionsActionLevelAction;
 import org.apache.struts2.convention.actions.exception.ExceptionsMethodLevelAction;
 import org.apache.struts2.convention.actions.interceptor.ActionLevelInterceptor2Action;
@@ -172,6 +173,7 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
         expect(resultMapBuilder.build(ActionNamesAction.class, getAnnotation(ActionNamesAction.class, "run", Actions.class).value()[1], "actions2", actionPkg)).andReturn(results);
         expect(resultMapBuilder.build(SingleActionNameAction.class, getAnnotation(SingleActionNameAction.class, "run", Action.class), "action", actionPkg)).andReturn(results);
         expect(resultMapBuilder.build(TestAction.class, null, "test", actionPkg)).andReturn(results);
+        expect(resultMapBuilder.build(TestExtends.class, null, "test-extends", actionPkg)).andReturn(results);
 
         /* org.apache.struts2.convention.actions.idx */
         /* org.apache.struts2.convention.actions.idx.idx2 */
@@ -257,6 +259,7 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
         interceptorBuilder.setConfiguration(configuration);
         PackageBasedActionConfigBuilder builder = new PackageBasedActionConfigBuilder(configuration,
             actionNameBuilder, resultMapBuilder, interceptorBuilder ,of, "false", "struts-default");
+        builder.setDisableJarScanning("true");
         if (actionPackages != null) {
             builder.setActionPackages(actionPackages);
         }
@@ -272,13 +275,14 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
         /* org.apache.struts2.convention.actions.action */
         PackageConfig pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.action#struts-default#/action");
         assertNotNull(pkgConfig);
-        assertEquals(6, pkgConfig.getActionConfigs().size());
+        assertEquals(7, pkgConfig.getActionConfigs().size());
         verifyActionConfig(pkgConfig, "action1", ActionNameAction.class, "run1", pkgConfig.getName());
         verifyActionConfig(pkgConfig, "action2", ActionNameAction.class, "run2", pkgConfig.getName());
         verifyActionConfig(pkgConfig, "actions1", ActionNamesAction.class, "run", pkgConfig.getName());
         verifyActionConfig(pkgConfig, "actions2", ActionNamesAction.class, "run", pkgConfig.getName());
         verifyActionConfig(pkgConfig, "action", SingleActionNameAction.class, "run", pkgConfig.getName());
         verifyActionConfig(pkgConfig, "test", TestAction.class, "execute", pkgConfig.getName());
+        verifyActionConfig(pkgConfig, "test-extends", TestExtends.class, "execute", pkgConfig.getName());
 
         /* org.apache.struts2.convention.actions.namespace3 */
         //action on namespace1 (action level)

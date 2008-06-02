@@ -44,6 +44,17 @@ public class StringTools {
         return str;
     }
 
+    public static boolean contains(String[] strings, String value, boolean ignoreCase) {
+        if (strings != null) {
+            for (String string :  strings) {
+                if (string.equals(value) || (ignoreCase && string.equalsIgnoreCase(value)))
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
     public static String upToLastToken(String str, String s) {
         int index = str.lastIndexOf(s);
         if (index >= 0) {
