@@ -116,6 +116,7 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
     private final ServletContext servletContext;
     private Set<String> relativeResultTypes;
     private ConventionsService conventionsService;
+    private boolean flatResultLayout = true;
 
     /**
      * Constructs the SimpleResultMapBuilder using the given result location.
@@ -131,6 +132,16 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
         this.servletContext = servletContext;
         this.relativeResultTypes = new HashSet<String>(Arrays.asList(relativeResultTypes.split("\\s*[,]\\s*")));
         this.conventionsService = conventionsService;
+    }
+
+    /**
+     * @param flatResultLayout If 'true' result resources will be expected to be in the form
+     *          ${namespace}/${actionName}-${result}.${extension}, otherwise in the form
+     *          ${namespace}/${actionName}/${result}.${extension}
+     */
+    @Inject("struts.convention.result.flatLayout")
+    public void setFlatResultLayout(String flatResultLayout) {
+        this.flatResultLayout = "true".equals(flatResultLayout);
     }
 
     /**
@@ -213,7 +224,7 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
 
         // Build from web application using the ServletContext
         @SuppressWarnings("unchecked")
-        Set<String> paths = servletContext.getResourcePaths(resultPath);
+        Set<String> paths = servletContext.getResourcePaths(flatResultLayout ? resultPath : resultPrefix);
         if (paths != null) {
             for (String path : paths) {
                 if (LOG.isTraceEnabled()) {
@@ -288,7 +299,7 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
             int indexOfDot = path.indexOf('.', resultPrefix.length());
 
             // This case is when the path doesn't contain a result code
-            if (indexOfDot == resultPrefix.length()) {
+            if (indexOfDot == resultPrefix.length() || !flatResultLayout) {
                 if (LOG.isTraceEnabled()) {
                     LOG.trace("The result file [#0] has no result code and therefore" +
                         " will be associated with success, input and error by default. This might" +
