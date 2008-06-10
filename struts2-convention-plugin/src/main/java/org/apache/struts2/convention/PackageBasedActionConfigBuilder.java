@@ -35,6 +35,7 @@ import java.util.Set;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Actions;
 import org.apache.struts2.convention.annotation.AnnotationTools;
+import org.apache.struts2.convention.annotation.DefaultInterceptorRef;
 import org.apache.struts2.convention.annotation.ExceptionMapping;
 import org.apache.struts2.convention.annotation.ExceptionMappings;
 import org.apache.struts2.convention.annotation.Namespace;
@@ -692,6 +693,15 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
         if (pkgConfig == null) {
             pkgConfig = new PackageConfig.Builder(name).namespace(actionNamespace).addParent(parentPkg);
             packageConfigs.put(name, pkgConfig);
+
+            //check for @DefaultInterceptorRef in the package
+            DefaultInterceptorRef defaultInterceptorRef = AnnotationTools.findAnnotation(actionClass, DefaultInterceptorRef.class);
+            if (defaultInterceptorRef != null) {
+                pkgConfig.defaultInterceptorRef(defaultInterceptorRef.value());
+
+                if (LOG.isTraceEnabled())
+                    LOG.trace("Setting [#0] as the default interceptor ref for [#1]", defaultInterceptorRef.value(), pkgConfig.getName());
+            }
         }
 
         if (LOG.isTraceEnabled()) {

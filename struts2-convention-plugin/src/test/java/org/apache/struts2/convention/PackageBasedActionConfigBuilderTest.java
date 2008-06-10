@@ -42,6 +42,7 @@ import org.apache.struts2.convention.actions.action.ActionNamesAction;
 import org.apache.struts2.convention.actions.action.SingleActionNameAction;
 import org.apache.struts2.convention.actions.action.TestAction;
 import org.apache.struts2.convention.actions.action.TestExtends;
+import org.apache.struts2.convention.actions.defaultinterceptor.SingleActionNameAction2;
 import org.apache.struts2.convention.actions.exception.ExceptionsActionLevelAction;
 import org.apache.struts2.convention.actions.exception.ExceptionsMethodLevelAction;
 import org.apache.struts2.convention.actions.interceptor.ActionLevelInterceptor2Action;
@@ -125,6 +126,8 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
             "", strutsDefault, null);
         PackageConfig paramsPkg = makePackageConfig("org.apache.struts2.convention.actions.params#struts-default#/params",
                 "/params", strutsDefault, null);
+        PackageConfig defaultInterceptorPkg = makePackageConfig("org.apache.struts2.convention.actions.defaultinterceptor#struts-default#/defaultinterceptor",
+                "/defaultinterceptor", strutsDefault, null);
         PackageConfig exceptionPkg = makePackageConfig("org.apache.struts2.convention.actions.exception#struts-default#/exception",
                 "/exception", strutsDefault, null);
         PackageConfig actionPkg = makePackageConfig("org.apache.struts2.convention.actions.action#struts-default#/action",
@@ -182,6 +185,9 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
 
         /* org.apache.struts2.convention.actions.params */
         expect(resultMapBuilder.build(ActionParamsMethodLevelAction.class, getAnnotation(ActionParamsMethodLevelAction.class, "run1", Action.class), "actionParam1", paramsPkg)).andReturn(results);
+
+        /* org.apache.struts2.convention.actions.defaultinterceptor */
+        expect(resultMapBuilder.build(SingleActionNameAction2.class, getAnnotation(SingleActionNameAction2.class, "execute", Action.class), "action345", defaultInterceptorPkg)).andReturn(results);
 
         /* org.apache.struts2.convention.actions.exception */
         expect(resultMapBuilder.build(ExceptionsMethodLevelAction.class, getAnnotation(ExceptionsMethodLevelAction.class, "run1", Action.class), "exception1", exceptionPkg)).andReturn(results);
@@ -369,6 +375,11 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
         verifyActionConfig(pkgConfig, "index", org.apache.struts2.convention.actions.idx.Index.class, "execute", pkgConfig.getName());
         verifyActionConfig(pkgConfig, "idx2", org.apache.struts2.convention.actions.idx.idx2.Index.class, "execute",
             "org.apache.struts2.convention.actions.idx.idx2#struts-default#/idx/idx2");
+
+        /* org.apache.struts2.convention.actions.defaultinterceptor */
+        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.defaultinterceptor#struts-default#/defaultinterceptor");
+        assertNotNull(pkgConfig);
+        assertEquals("validationWorkflowStack", pkgConfig.getDefaultInterceptorRef());
 
         /* org.apache.struts2.convention.actions.idx.idx2 */
         pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.idx.idx2#struts-default#/idx/idx2");
