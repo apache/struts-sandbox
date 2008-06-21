@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+    
+<struts>
+
+    <package name="jst-default">
+        <result-types>
+            <result-type name="jst" class="org.apache.struts2.jst.JSTResult"/>
+        </result-types>
+    </package>    
+
+</struts>
