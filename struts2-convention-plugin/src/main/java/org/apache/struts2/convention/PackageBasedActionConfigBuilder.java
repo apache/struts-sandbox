@@ -371,8 +371,8 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
 
             // Determine the action package
             String actionPackage = actionClass.getPackage().getName();
-            if (LOG.isTraceEnabled()) {
-                LOG.trace("Processing class [#0] in package [#1]", actionClass.getName(), actionPackage);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Processing class [#0] in package [#1]", actionClass.getName(), actionPackage);
             }
 
             // Determine the default namespace and action name
