@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <bean type="org.apache.struts2.components.template.TemplateEngine" name="gxp" class="org.apache.struts2.gxp.template.GxpTemplateEngine" />
+    <constant name="struts.ui.templateSuffix" value="gxp"/>
+</struts>

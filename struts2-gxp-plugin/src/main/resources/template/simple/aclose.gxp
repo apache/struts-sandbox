@@ -1,0 +1,5 @@
+<gxp:template name='simple.aclose'
+              xmlns='http://www.w3.org/1999/xhtml'
+              xmlns:gxp='http://google.com/2001/gxp'>
+[Close template]
+</gxp:template>
