@@ -603,8 +603,8 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
             actionName, actionClass.getName());
         actionConfig.methodName(actionMethod);
 
-        if (LOG.isTraceEnabled()) {
-            LOG.trace("Creating action config for class [#0], name [#1] and package name [#2] in namespace [#3]",
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Creating action config for class [#0], name [#1] and package name [#2] in namespace [#3]",
                     actionClass.toString(), actionName, pkgCfg.getName(), pkgCfg.getNamespace());
         }
 
