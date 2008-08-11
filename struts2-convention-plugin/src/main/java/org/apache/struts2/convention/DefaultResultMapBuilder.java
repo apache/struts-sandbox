@@ -448,7 +448,12 @@ public class DefaultResultMapBuilder implements ResultMapBuilder {
             int indexOfDot = location.lastIndexOf(".");
             if (indexOfDot > 0) {
                 String extension = location.substring(indexOfDot + 1);
-                return resultsByExtension.get(extension).getName();
+                ResultTypeConfig resultTypeConfig = resultsByExtension.get(extension);
+                if (resultTypeConfig != null) {
+                    return resultTypeConfig.getName();
+                } else
+                    throw new ConfigurationException("Unable to find a result type for extension [" + extension + "] " +
+                    		"in location attribute [" + location + "].");
             } else {
                 return packageConfig.getFullDefaultResultType();
             }
