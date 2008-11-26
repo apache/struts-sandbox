@@ -26,17 +26,16 @@ import static org.easymock.EasyMock.createStrictMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.verify;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.net.MalformedURLException;
+import java.lang.reflect.Method;
 
 import junit.framework.TestCase;
 
 import org.apache.struts2.convention.actions.DefaultResultPathAction;
 import org.apache.struts2.convention.actions.NoAnnotationAction;
 import org.apache.struts2.convention.actions.Skip;
+import org.apache.struts2.convention.actions.chain.ChainedAction;
 import org.apache.struts2.convention.actions.action.ActionNameAction;
 import org.apache.struts2.convention.actions.action.ActionNamesAction;
 import org.apache.struts2.convention.actions.action.SingleActionNameAction;
@@ -71,6 +70,10 @@ import org.apache.struts2.dispatcher.ServletDispatcherResult;
 import org.easymock.EasyMock;
 
 import com.opensymphony.xwork2.ObjectFactory;
+import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.Result;
+import com.opensymphony.xwork2.ActionChainResult;
+import com.opensymphony.xwork2.util.reflection.ReflectionException;
 import com.opensymphony.xwork2.config.Configuration;
 import com.opensymphony.xwork2.config.entities.ActionConfig;
 import com.opensymphony.xwork2.config.entities.ExceptionMappingConfig;
@@ -84,6 +87,9 @@ import com.opensymphony.xwork2.config.impl.DefaultConfiguration;
 import com.opensymphony.xwork2.inject.Container;
 import com.opensymphony.xwork2.inject.Scope.Strategy;
 import com.opensymphony.xwork2.ognl.OgnlReflectionProvider;
+import com.opensymphony.xwork2.ognl.OgnlUtil;
+
+import javax.servlet.ServletContext;
 
 /**
  * <p>
@@ -91,15 +97,15 @@ import com.opensymphony.xwork2.ognl.OgnlReflectionProvider;
  * </p>
  */
 public class PackageBasedActionConfigBuilderTest extends TestCase {
-    public void testActionPackages() {
+    public void testActionPackages() throws MalformedURLException {
         run("org.apache.struts2.convention.actions", null, null);
     }
 
-    public void testPackageLocators() {
+    public void testPackageLocators() throws MalformedURLException {
         run(null, "actions", null);
     }
 
-    private void run(String actionPackages, String packageLocators, String excludePackages) {
+    private void run(String actionPackages, String packageLocators, String excludePackages) throws MalformedURLException {
         //setup interceptors
         List<InterceptorConfig> defaultInterceptors = new ArrayList<InterceptorConfig>();
         defaultInterceptors.add(makeInterceptorConfig("interceptor-1"));
@@ -113,8 +119,10 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
         defaultInterceptorStacks.add(makeInterceptorStackConfig("stack-1", interceptor1, interceptor2));
 
         //setup results
-        ResultTypeConfig[] defaultResults = new ResultTypeConfig[] { new ResultTypeConfig.Builder("dispatcher",
-                ServletDispatcherResult.class.getName()).defaultResultParam("location").build() };
+        ResultTypeConfig[] defaultResults = new ResultTypeConfig[]{new ResultTypeConfig.Builder("dispatcher",
+                ServletDispatcherResult.class.getName()).defaultResultParam("location").build(),
+                new ResultTypeConfig.Builder("chain",
+                        ActionChainResult.class.getName()).defaultResultParam("actionName").build()};
 
         PackageConfig strutsDefault = makePackageConfig("struts-default", null, null, "dispatcher",
                 defaultResults, defaultInterceptors, defaultInterceptorStacks);
@@ -164,6 +172,8 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
             "/resultpath", strutsDefault, null);
         PackageConfig skipPkg = makePackageConfig("org.apache.struts2.convention.actions.skip#struts-default#/skip",
             "/skip", strutsDefault, null);
+        PackageConfig chainPkg = makePackageConfig("org.apache.struts2.convention.actions.chain#struts-default#/chain",
+            "/chain", strutsDefault, null);
 
         ResultMapBuilder resultMapBuilder = createStrictMock(ResultMapBuilder.class);
         checkOrder(resultMapBuilder, false);
@@ -243,6 +253,10 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
 
         /* org.apache.struts2.convention.actions.skip */
         expect(resultMapBuilder.build(Index.class, null, "index", skipPkg)).andReturn(results);
+
+        /* org.apache.struts2.convention.actions.chain */
+        expect(resultMapBuilder.build(ChainedAction.class, getAnnotation(ChainedAction.class, "foo", Action.class), "foo", chainPkg)).andReturn(results);
+        expect(resultMapBuilder.build(ChainedAction.class, getAnnotation(ChainedAction.class, "bar", Action.class), "foo-bar", chainPkg)).andReturn(results);
 
         EasyMock.replay(resultMapBuilder);
 
@@ -469,6 +483,20 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
         verifyActionConfig(pkgConfig, "idx", org.apache.struts2.convention.actions.idx.Index.class, "execute",
             "org.apache.struts2.convention.actions.idx#struts-default#/idx");
 
+        //test unknown handler automatic chaining
+        pkgConfig = configuration.getPackageConfig("org.apache.struts2.convention.actions.chain#struts-default#/chain");
+        ServletContext context = EasyMock.createNiceMock(ServletContext.class);
+        EasyMock.replay(context);
+
+        ObjectFactory workingFactory = configuration.getContainer().getInstance(ObjectFactory.class);
+        ConventionUnknownHandler uh = new ConventionUnknownHandler(configuration, workingFactory, context, resultMapBuilder, new ConventionsServiceImpl(""), "struts-default", null);
+        ActionContext actionContext = new ActionContext(Collections.EMPTY_MAP);
+
+        Result result = uh.handleUnknownResult(actionContext, "foo", pkgConfig.getActionConfigs().get("foo"), "bar");
+        assertNotNull(result);
+        assertTrue(result instanceof ActionChainResult);
+        ActionChainResult chainResult = (ActionChainResult) result;
+        ActionChainResult chainResultToCompare = new ActionChainResult("/chain", "foo-bar", "bar");
     }
 
     private void verifyActionConfig(PackageConfig pkgConfig, String actionName, Class<?> actionClass,
@@ -560,7 +588,13 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
                     ((ObjectFactory)obj).setReflectionProvider(new OgnlReflectionProvider() {
 
                         @Override
-                        public void setProperties(Map properties, Object o) {
+                        public void setProperties(Map<String, String> properties, Object o) {
+                        }
+
+                        public void setProperties(Map<String, String> properties, Object o, Map<String, Object> context, boolean throwPropertyExceptions) throws ReflectionException {
+                            if (o instanceof ActionChainResult) {
+                                ((ActionChainResult)o).setActionName(properties.get("actionName"));
+                            }
                         }
                     });
                 }

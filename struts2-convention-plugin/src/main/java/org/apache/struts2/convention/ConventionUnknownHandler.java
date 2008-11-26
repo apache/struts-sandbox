@@ -288,6 +288,22 @@ public class ConventionUnknownHandler implements UnknownHandler {
             }
         }
 
+        if (result == null && resultCode != null) {
+            //try to find an action to chain to. If the source action is "foo" and
+            //the result is "bar", we will try to find an action called "foo-bar"
+            //in the same package
+            String chainedTo = new StringBuilder(actionName).append("-").append(resultCode).toString();
+            ActionConfig chainedToConfig = pkg.getActionConfigs().get(chainedTo);
+            if (chainedToConfig != null) {
+                if (LOG.isTraceEnabled()) {
+                    LOG.trace("Action [#0] used as chain result for [#1] and result [#2]", chainedTo, actionName, resultCode);
+                }
+
+                ResultTypeConfig chainResultType = pkg.getAllResultTypeConfigs().get("chain");
+                result = buildResult(chainedTo, resultCode, chainResultType, actionContext);
+            }
+        }
+
         return result;
     }
 
