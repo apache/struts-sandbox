@@ -136,4 +136,9 @@ public class PortletUrlRenderer implements UrlRenderer {
 		
 	}
 
+	public void beforeRenderUrl(URL arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
