@@ -102,7 +102,7 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
     }
 
     public void testPackageLocators() throws MalformedURLException {
-        run(null, "actions", null);
+        run(null, "actions,dontfind", null);
     }
 
     private void run(String actionPackages, String packageLocators, String excludePackages) throws MalformedURLException {
@@ -289,6 +289,7 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
         if (excludePackages != null) {
             builder.setExcludePackages(excludePackages);
         }
+        builder.setPackageLocatorsBase("org.apache.struts2.convention.actions");
         builder.buildActionConfigs();
         verify(resultMapBuilder);
 

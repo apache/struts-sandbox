@@ -75,6 +75,7 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
     private String[] excludePackages;
     private String[] packageLocators;
     private String[] excludeJars;
+    private String packageLocatorsBasePackage;
     private boolean disableJarScanning = true;
     private boolean disableActionScanning = false;
     private boolean disablePackageLocatorsScanning = false;
@@ -205,7 +206,16 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
     }
 
     /**
-     * @param   packageLocators (Optional) Map actions that match the "*${Suffix}" pattern
+     * @param   packageLocatorsBasePackage (Optional) If set, only packages that start with this
+     * name will be scanned for actions.
+     */
+    @Inject(value = "struts.convention.package.locators.basePackage", required = false)
+    public void setPackageLocatorsBase(String packageLocatorsBasePackage) {
+        this.packageLocatorsBasePackage = packageLocatorsBasePackage;
+    }        
+
+    /**
+     * @param   mapAllMatches (Optional) Map actions that match the "*${Suffix}" pattern
      *                          even if they don't have a default method. The mapping from
      *                          the url to the action will be delegated the action mapper.
      */
@@ -330,7 +340,7 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
         return new Test<ClassFinder.ClassInfo>() {
             public boolean test(ClassFinder.ClassInfo classInfo) {
                 String packageName = classInfo.getPackageName();
-                if (packageName.length() > 0) {
+                if (packageName.length() > 0 && (packageLocatorsBasePackage == null || packageName.startsWith(packageLocatorsBasePackage))) {
                     String[] splitted = packageName.split("\\.");
 
                     boolean packageMatches = StringTools.contains(splitted, packageLocator, false);
