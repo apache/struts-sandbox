@@ -204,7 +204,7 @@ public class PortletActionRedirectResult extends PortletResult {
 			}
 		}
 
-		StringBuffer tmpLocation = new StringBuffer(actionMapper.getUriFromActionMapping(new ActionMapping(actionName,
+		StringBuilder tmpLocation = new StringBuilder(actionMapper.getUriFromActionMapping(new ActionMapping(actionName,
 				(portletNamespace == null ? namespace : portletNamespace + namespace), method, null)));
 		UrlHelper.buildParametersString(requestParameters, tmpLocation, "&");
 
