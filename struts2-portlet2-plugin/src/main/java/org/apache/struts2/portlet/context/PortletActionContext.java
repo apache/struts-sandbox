@@ -164,6 +164,13 @@ public class PortletActionContext {
     }
 
     /**
+     * @return <code>true</code> if the Portlet is executing in the resource phase.
+     */
+    public static boolean isResource() {
+        return SERVE_RESOURCE_PHASE.equals(getPhase());
+    }
+
+    /**
      * @return The current ActionContext.
      */
     private static ActionContext getContext() {

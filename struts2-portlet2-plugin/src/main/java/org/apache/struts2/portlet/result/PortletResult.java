@@ -28,7 +28,8 @@ import javax.portlet.PortletContext;
 import javax.portlet.PortletException;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletRequestDispatcher;
-import javax.portlet.RenderRequest;
+import javax.portlet.PortletRequest;
+import javax.portlet.MimeResponse;
 import javax.portlet.RenderResponse;
 import javax.portlet.StateAwareResponse;
 import javax.servlet.ServletContext;
@@ -87,8 +88,8 @@ public class PortletResult extends StrutsResultSupport implements PortletActionC
 	 */
 	public void doExecute(String finalLocation, ActionInvocation actionInvocation) throws Exception {
 
-		if (PortletActionContext.isRender()) {
-			executeRenderResult(finalLocation);
+		if (PortletActionContext.isRender() || PortletActionContext.isResource()) {
+			executeMimeResult(finalLocation);
 		} else if (PortletActionContext.isAction() || PortletActionContext.isEvent()) {
 			executeActionResult(finalLocation, actionInvocation);
 		} else {
@@ -125,7 +126,8 @@ public class PortletResult extends StrutsResultSupport implements PortletActionC
 	 * @param invocation
 	 */
 	protected void executeActionResult(String finalLocation, ActionInvocation invocation) throws Exception {
-		LOG.debug("Executing result in Event phase");
+        String phase = (PortletActionContext.isEvent()) ? "Event" : "Action";
+		LOG.debug("Executing result in "+phase+" phase");
 		StateAwareResponse res = (StateAwareResponse)PortletActionContext.getResponse();
 		Map sessionMap = invocation.getInvocationContext().getSession();
 		LOG.debug("Setting event render parameter: " + finalLocation);
@@ -168,38 +170,38 @@ public class PortletResult extends StrutsResultSupport implements PortletActionC
 		}
 	}
 
-	/**
-	 * Executes the render result.
-	 * 
-	 * @param finalLocation
-	 * @throws PortletException
-	 * @throws IOException
-	 */
-	protected void executeRenderResult(final String finalLocation) throws PortletException, IOException {
-		LOG.debug("Executing result in Render phase");
-		PortletContext ctx = PortletActionContext.getPortletContext();
-		RenderRequest req = PortletActionContext.getRenderRequest();
-		RenderResponse res = PortletActionContext.getRenderResponse();
-		res.setContentType(contentType);
-		if (TextUtils.stringSet(title)) {
-			res.setTitle(title);
+    /**
+     * Executes the render result.
+     * 
+     * @param finalLocation
+     * @throws PortletException
+     * @throws IOException
+     */
+    protected void executeMimeResult(final String finalLocation) throws PortletException, IOException {
+        LOG.debug("Executing mime result");
+        PortletContext ctx = PortletActionContext.getPortletContext();
+        PortletRequest req = PortletActionContext.getRequest();
+        MimeResponse res = (MimeResponse)PortletActionContext.getResponse();
+        res.setContentType(contentType);
+		if (TextUtils.stringSet(title) && res instanceof RenderResponse) {
+		    ((RenderResponse)res).setTitle(title);
 		}
-		LOG.debug("Location: " + finalLocation);
-		if (useDispatcherServlet) {
-			req.setAttribute(DISPATCH_TO, finalLocation);
-			PortletRequestDispatcher dispatcher = ctx.getNamedDispatcher(dispatcherServletName);
-			if(dispatcher == null) {
-				throw new PortletException("Could not locate dispatcher servlet \"" + dispatcherServletName + "\". Please configure it in your web.xml file");
-			}
-			dispatcher.include(req, res);
-		} else {
-			PortletRequestDispatcher dispatcher = ctx.getRequestDispatcher(finalLocation);
-			if (dispatcher == null) {
-				throw new PortletException("Could not locate dispatcher for '" + finalLocation + "'");
-			}
-			dispatcher.include(req, res);
-		}
-	}
+        LOG.debug("Location: " + finalLocation);
+        if (useDispatcherServlet) {
+            req.setAttribute(DISPATCH_TO, finalLocation);
+            PortletRequestDispatcher dispatcher = ctx.getNamedDispatcher(dispatcherServletName);
+            if(dispatcher == null) {
+                throw new PortletException("Could not locate dispatcher servlet \"" + dispatcherServletName + "\". Please configure it in your web.xml file");
+            }
+            dispatcher.include(req, res);
+        } else {
+            PortletRequestDispatcher dispatcher = ctx.getRequestDispatcher(finalLocation);
+            if (dispatcher == null) {
+                throw new PortletException("Could not locate dispatcher for '" + finalLocation + "'");
+            }
+            dispatcher.include(req, res);
+        }
+    }
 
 	/**
 	 * Sets the content type.

@@ -33,8 +33,8 @@ import javax.portlet.BaseURL;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletSecurityException;
 import javax.portlet.PortletURL;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
+import javax.portlet.PortletRequest;
+import javax.portlet.MimeResponse;
 import javax.portlet.WindowState;
 
 import org.apache.struts2.StrutsException;
@@ -47,8 +47,8 @@ import com.opensymphony.xwork2.util.logging.LoggerFactory;
  * Helper class for creating Portlet URLs. Portlet URLs are fundamentally different from regular
  * servlet URLs since they never target the application itself; all requests go through the portlet
  * container and must therefore be programatically constructed using the
- * {@link javax.portlet.RenderResponse#createActionURL()} and
- * {@link javax.portlet.RenderResponse#createRenderURL()} APIs.
+ * {@link javax.portlet.MimeResponse#createActionURL()} and
+ * {@link javax.portlet.MimeResponse#createRenderURL()} APIs.
  *
  */
 public class PortletUrlHelper {
@@ -83,13 +83,13 @@ public class PortletUrlHelper {
             String scheme, String type, String portletMode, String windowState,
             boolean includeContext, boolean encodeResult) {
     	StringBuffer resultingAction = new StringBuffer();
-        RenderRequest request = PortletActionContext.getRenderRequest();
-        RenderResponse response = PortletActionContext.getRenderResponse();
+        PortletRequest request = PortletActionContext.getRequest();
+        MimeResponse response = (MimeResponse)PortletActionContext.getResponse();
         LOG.debug("Creating url. Action = " + action + ", Namespace = "
                 + namespace + ", Type = " + type);
         namespace = prependNamespace(namespace, portletMode);
         if (!TextUtils.stringSet(portletMode)) {
-            portletMode = PortletActionContext.getRenderRequest().getPortletMode().toString();
+            portletMode = PortletActionContext.getRequest().getPortletMode().toString();
         }
         String result = null;
         int paramStartIndex = action.indexOf('?');
@@ -170,7 +170,7 @@ public class PortletUrlHelper {
      */
     private static String prependNamespace(String namespace, String portletMode) {
         StringBuffer sb = new StringBuffer();
-        PortletMode mode = PortletActionContext.getRenderRequest().getPortletMode();
+        PortletMode mode = PortletActionContext.getRequest().getPortletMode();
         if(TextUtils.stringSet(portletMode)) {
             mode = new PortletMode(portletMode);
         }
@@ -228,8 +228,8 @@ public class PortletUrlHelper {
                 throw new StrutsException("Encoding "+ENCODING+" not found");
             }
         }
-        RenderResponse resp = PortletActionContext.getRenderResponse();
-        RenderRequest req = PortletActionContext.getRenderRequest();
+        MimeResponse resp = (MimeResponse)PortletActionContext.getResponse();
+        PortletRequest req = PortletActionContext.getRequest();
         return resp.encodeURL(req.getContextPath() + sb.toString());
     }
 
@@ -261,12 +261,12 @@ public class PortletUrlHelper {
     /**
      * Convert the given String to a WindowState object.
      *
-     * @param portletReq The RenderRequest.
+     * @param portletReq The PortletRequest.
      * @param windowState The WindowState as a String.
      * @return The WindowState that mathces the <tt>windowState</tt> String, or if
      * the Sring is blank, the current WindowState.
      */
-    private static WindowState getWindowState(RenderRequest portletReq,
+    private static WindowState getWindowState(PortletRequest portletReq,
             String windowState) {
         WindowState state = portletReq.getWindowState();
         if (TextUtils.stringSet(windowState)) {
@@ -288,12 +288,12 @@ public class PortletUrlHelper {
     /**
      * Convert the given String to a PortletMode object.
      *
-     * @param portletReq The RenderRequest.
+     * @param portletReq The PortletRequest.
      * @param portletMode The PortletMode as a String.
      * @return The PortletMode that mathces the <tt>portletMode</tt> String, or if
      * the Sring is blank, the current PortletMode.
      */
-    private static PortletMode getPortletMode(RenderRequest portletReq,
+    private static PortletMode getPortletMode(PortletRequest portletReq,
             String portletMode) {
         PortletMode mode = portletReq.getPortletMode();
 
