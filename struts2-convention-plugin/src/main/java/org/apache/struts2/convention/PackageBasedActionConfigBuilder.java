@@ -641,6 +641,15 @@ public class PackageBasedActionConfigBuilder implements ActionConfigBuilder {
 
         //add
         pkgCfg.addActionConfig(actionName, actionConfig.build());
+
+        //check if an action with the same name exists on that package (from XML config probably)
+        PackageConfig existingPkg = configuration.getPackageConfig(pkgCfg.getName());
+        if (existingPkg != null) {
+            // there is a package already with that name, check action
+            ActionConfig existingActionConfig = existingPkg.getActionConfigs().get(actionName);
+            if (existingActionConfig != null && LOG.isWarnEnabled())
+                LOG.warn("Duplicated action definition in package [#0] with name [#1]. First definition was loaded from [#3]", pkgCfg.getName(), actionName, existingActionConfig.getLocation().toString());
+        }
     }
 
     private List<ExceptionMappingConfig> buildExceptionMappings(ExceptionMapping[] exceptions, String actionName) {
