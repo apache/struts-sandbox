@@ -490,7 +490,7 @@ public class PackageBasedActionConfigBuilderTest extends TestCase {
         EasyMock.replay(context);
 
         ObjectFactory workingFactory = configuration.getContainer().getInstance(ObjectFactory.class);
-        ConventionUnknownHandler uh = new ConventionUnknownHandler(configuration, workingFactory, context, resultMapBuilder, new ConventionsServiceImpl(""), "struts-default", null);
+        ConventionUnknownHandler uh = new ConventionUnknownHandler(configuration, workingFactory, context, resultMapBuilder, new ConventionsServiceImpl(""), "struts-default", null, "-");
         ActionContext actionContext = new ActionContext(Collections.EMPTY_MAP);
 
         Result result = uh.handleUnknownResult(actionContext, "foo", pkgConfig.getActionConfigs().get("foo"), "bar");

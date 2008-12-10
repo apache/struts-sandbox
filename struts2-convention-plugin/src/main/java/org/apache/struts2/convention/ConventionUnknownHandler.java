@@ -73,6 +73,7 @@ public class ConventionUnknownHandler implements UnknownHandler {
 
     private boolean redirectToSlash;
     private ConventionsService conventionsService;
+    private String nameSeparator;
 
     /**
      * Constructs the unknown handler.
@@ -89,19 +90,22 @@ public class ConventionUnknownHandler implements UnknownHandler {
      *          unknown actions in the same manner as Apache, Tomcat and other web servers. This
      *          handling will send back a redirect for URLs such as /foo to /foo/ if there doesn't
      *          exist an action that responds to /foo.
+     * @param   nameSeparator The character used as word separator in the action names. "-" by default
      */
     @Inject
     public ConventionUnknownHandler(Configuration configuration, ObjectFactory objectFactory,
             ServletContext servletContext, ResultMapBuilder resultMapBuilder,
             ConventionsService conventionsService,
             @Inject("struts.convention.default.parent.package") String defaultParentPackageName,
-            @Inject("struts.convention.redirect.to.slash") String redirectToSlash) {
+            @Inject("struts.convention.redirect.to.slash") String redirectToSlash,
+            @Inject("struts.convention.action.name.separator") String nameSeparator) {
         this.configuration = configuration;
         this.objectFactory = objectFactory;
         this.servletContext = servletContext;
         this.resultMapBuilder = resultMapBuilder;
         this.conventionsService = conventionsService;
         this.defaultParentPackageName = defaultParentPackageName;
+        this.nameSeparator = nameSeparator;
 
         this.parentPackage = configuration.getPackageConfig(defaultParentPackageName);
         if (parentPackage == null) {
@@ -233,7 +237,7 @@ public class ConventionUnknownHandler implements UnknownHandler {
                         fqan, ext, pathPrefix, resultCode);
             }
 
-            String path = string(pathPrefix, actionName, "-", resultCode, "." , ext);
+            String path = string(pathPrefix, actionName, nameSeparator, resultCode, "." , ext);
             result = findResult(path, resultCode, ext, actionContext, resultsByExtension);
             if (result != null) {
                 break;
@@ -274,7 +278,7 @@ public class ConventionUnknownHandler implements UnknownHandler {
                     LOG.trace("Checking for [#0/index.#1]", fqan, ext);
                 }
 
-                String path = string(pathPrefix, actionName, "/index", "-", resultCode, ".", ext);
+                String path = string(pathPrefix, actionName, "/index", nameSeparator, resultCode, ".", ext);
                 result = findResult(path, resultCode, ext, actionContext, resultsByExtension);
                 if (result != null) {
                     break;
@@ -292,7 +296,7 @@ public class ConventionUnknownHandler implements UnknownHandler {
             //try to find an action to chain to. If the source action is "foo" and
             //the result is "bar", we will try to find an action called "foo-bar"
             //in the same package
-            String chainedTo = new StringBuilder(actionName).append("-").append(resultCode).toString();
+            String chainedTo = new StringBuilder(actionName).append(nameSeparator).append(resultCode).toString();
             ActionConfig chainedToConfig = pkg.getActionConfigs().get(chainedTo);
             if (chainedToConfig != null) {
                 if (LOG.isTraceEnabled()) {
