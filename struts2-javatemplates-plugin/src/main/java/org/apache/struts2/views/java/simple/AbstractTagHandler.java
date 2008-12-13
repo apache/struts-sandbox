@@ -40,10 +40,13 @@ public class AbstractTagHandler implements TagHandler {
     protected boolean altSyntax;
 
     public void characters(String text) throws IOException {
-        if (nextTagHandler != null) {
-            nextTagHandler.characters(text);
-        }
+        characters(text, true);
+    }
 
+    public void characters(String text, boolean encode) throws IOException {
+        if (nextTagHandler != null) {
+            nextTagHandler.characters(text, encode);
+        }
     }
 
     public void end(String name) throws IOException {

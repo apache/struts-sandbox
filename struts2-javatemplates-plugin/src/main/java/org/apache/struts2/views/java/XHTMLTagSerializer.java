@@ -24,13 +24,18 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.apache.struts2.components.template.TemplateRenderingContext;
+import com.opensymphony.xwork2.util.TextUtils;
 
 public class XHTMLTagSerializer implements TagSerializer {
 
     private Writer writer;
     
     public void characters(String text) throws IOException {
-        writer.write(text);
+        characters(text, true);
+    }
+
+    public void characters(String text, boolean encode) throws IOException {
+        writer.write(encode ? TextUtils.htmlEncode(text) : text);
     }
 
     public void end(String name) throws IOException {

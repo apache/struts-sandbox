@@ -1,5 +1,5 @@
 /*
- * $Id: BaseTemplateEngine.java 471756 2006-11-06 15:01:43Z husted $
+ * $Id$
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,19 +18,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.struts2.views.java;
+package org.apache.struts2.views.java.simple;
 
-import java.io.IOException;
+public class Bean {
+    private int intField;
+    private String stringField;
 
-import org.apache.struts2.components.template.TemplateRenderingContext;
+    public int getIntField() {
+        return intField;
+    }
 
-public interface TagHandler {
-    
-    void setNext(TagHandler next);
-    void setup(TemplateRenderingContext context);
-    
-    void start(String name, Attributes a) throws IOException;
-    void end(String name) throws IOException;
-    void characters(String text) throws IOException;
-    void characters(String text, boolean encode) throws IOException;
+    public void setIntField(int intField) {
+        this.intField = intField;
+    }
+
+    public String getStringField() {
+        return stringField;
+    }
+
+    public void setStringField(String stringField) {
+        this.stringField = stringField;
+    }
 }

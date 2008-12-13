@@ -29,6 +29,9 @@ import org.apache.struts2.util.ContainUtil;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Map;
+import java.util.List;
+
+import com.opensymphony.xwork2.util.ValueStack;
 
 public class SelectHandler extends AbstractTagHandler implements TagGenerator {
     private Writer writer;
@@ -40,22 +43,22 @@ public class SelectHandler extends AbstractTagHandler implements TagGenerator {
     }
 
     public void generate() throws IOException {
-        Map<String,Object> params = context.getParameters();
+        Map<String, Object> params = context.getParameters();
         Attributes a = new Attributes();
 
         Object value = params.get("nameValue");
 
         a.addDefaultToEmpty("name", params.get("name"))
-         .addIfExists("size", params.get("size"))
-         .addIfExists("value", value, false)
-         .addIfTrue("disabled", params.get("disabled"))
-         .addIfTrue("readonly", params.get("readonly"))
-         .addIfTrue("multiple", params.get("multiple"))
-         .addIfExists("tabindex", params.get("tagindex"))
-         .addIfExists("id", params.get("id"))
-         .addIfExists("class", params.get("cssClass"))
-         .addIfExists("style", params.get("cssStyle"))
-         .addIfExists("title", params.get("title"));
+                .addIfExists("size", params.get("size"))
+                .addIfExists("value", value, false)
+                .addIfTrue("disabled", params.get("disabled"))
+                .addIfTrue("readonly", params.get("readonly"))
+                .addIfTrue("multiple", params.get("multiple"))
+                .addIfExists("tabindex", params.get("tagindex"))
+                .addIfExists("id", params.get("id"))
+                .addIfExists("class", params.get("cssClass"))
+                .addIfExists("style", params.get("cssStyle"))
+                .addIfExists("title", params.get("title"));
         super.start("select", a);
 
         //options
@@ -68,17 +71,37 @@ public class SelectHandler extends AbstractTagHandler implements TagGenerator {
             writeOption(headerKey, headerValue, selected);
         }
 
+        List list = (List) params.get("list");
+        String listKey = (String) params.get("listKey");
+        String listValue = (String) params.get("listValue");
+        ValueStack stack = this.context.getStack();
+        if (list != null) {
+            for (Object item : list) {
+                stack.push(item);
+
+                //key
+                Object itemKey = findValue(listKey != null ? listKey : "top");
+                String itemKeyStr = itemKey != null ? itemKey.toString() : "";
+                //value
+                Object itemValue = findValue(listValue != null ? listValue : "top");
+                String itemValueStr = itemValue != null ? itemValue.toString() : "";
+
+                boolean selected = ContainUtil.contains(value, params.get(itemKey));
+                writeOption(itemKeyStr, itemValueStr, selected);
+
+                stack.pop();
+            }
+        }
+
         super.end("select");
     }
 
     private void writeOption(String value, String text, boolean selected) throws IOException {
-        writer.write("<option value=\"");
-        writer.write(TextUtil.escapeHTML(value));
-        writer.write("\"");
-        if (selected)
-            writer.write(" selected=\"selected\" ");
-        writer.write(">");        
-        writer.write(TextUtil.escapeHTML(text));
-        writer.write("</option>");
+        Attributes attrs = new Attributes();
+        attrs.addIfExists("value", value)
+                .addIfTrue("selected", selected);
+        start("option", attrs);
+        characters(text);
+        end("option");
     }
 }
