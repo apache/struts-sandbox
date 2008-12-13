@@ -21,15 +21,23 @@
 package org.apache.struts2.views.java.simple;
 
 import java.io.IOException;
+import java.util.Map;
 
 import org.apache.struts2.components.template.TemplateRenderingContext;
 import org.apache.struts2.views.java.TagHandler;
 import org.apache.struts2.views.java.Attributes;
+import org.apache.struts2.views.util.ContextUtil;
+import org.apache.struts2.StrutsConstants;
+import com.opensymphony.xwork2.util.TextParseUtil;
+import com.opensymphony.xwork2.util.ValueStack;
+import com.opensymphony.xwork2.inject.Container;
+import com.opensymphony.xwork2.ActionContext;
 
 public class AbstractTagHandler implements TagHandler {
-    
+
     protected TagHandler nextTagHandler;
     protected TemplateRenderingContext context;
+    protected boolean altSyntax;
 
     public void characters(String text) throws IOException {
         if (nextTagHandler != null) {
@@ -58,6 +66,47 @@ public class AbstractTagHandler implements TagHandler {
 
     public void setup(TemplateRenderingContext context) {
         this.context = context;
+        this.altSyntax = ContextUtil.isUseAltSyntax(context.getStack().getContext());
+        processParams();
     }
 
+    protected void processParams() {
+    }
+
+    protected String findString(String expr) {
+        return (String) findValue(expr, String.class);
+    }
+
+    protected Object findValue(String expr) {
+        if (expr == null) {
+            return null;
+        }
+
+        ValueStack stack = context.getStack();
+        if (altSyntax) {
+            // does the expression start with %{ and end with }? if so, just cut it off!
+            if (expr.startsWith("%{") && expr.endsWith("}")) {
+                expr = expr.substring(2, expr.length() - 1);
+            }
+        }
+
+        return stack.findValue(expr);
+    }
+
+    private Object findValue(String expr, Class toType) {
+        ValueStack stack = context.getStack();
+
+        if (altSyntax && toType == String.class) {
+            return TextParseUtil.translateVariables('%', expr, stack);
+        } else {
+            if (altSyntax) {
+                // does the expression start with %{ and end with }? if so, just cut it off!
+                if (expr.startsWith("%{") && expr.endsWith("}")) {
+                    expr = expr.substring(2, expr.length() - 1);
+                }
+            }
+
+            return stack.findValue(expr, toType);
+        }
+    }
 }

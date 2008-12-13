@@ -5,17 +5,17 @@
     <parent>
         <groupId>org.apache.struts</groupId>
         <artifactId>struts2-plugins</artifactId>
-        <version>2.0.2-SNAPSHOT</version>
+        <version>2.1.3-SNAPSHOT</version>
     </parent>
     <groupId>org.apache.struts</groupId>
     <artifactId>struts2-javatemplates-plugin</artifactId>
     <packaging>jar</packaging>
     <name>Struts 2 Java Templates Plugin</name>
-    
+
     <scm>
-       <connection>scm:svn:http://svn.apache.org/repos/asf/struts/sandbox/trunk/struts2-javatemplates-plugin/</connection>
-       <developerConnection>scm:svn:https://svn.apache.org/repos/asf/struts/sandbox/trunk/struts2-javatemplates-plugin/</developerConnection>
-       <url>http://svn.apache.org/viewcvs.cgi/struts/sandbox/trunk/struts2-javatemplates-plugin/</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/struts/sandbox/trunk/struts2-javatemplates-plugin/</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/struts/sandbox/trunk/struts2-javatemplates-plugin/</developerConnection>
+        <url>http://svn.apache.org/viewcvs.cgi/struts/sandbox/trunk/struts2-javatemplates-plugin/</url>
     </scm>
 
     <dependencies>
@@ -37,5 +37,23 @@
             <scope>test</scope>
             <version>2.2</version>
         </dependency>
-   </dependencies>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <inherited>true</inherited>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

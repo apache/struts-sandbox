@@ -22,19 +22,32 @@ package org.apache.struts2.views.java.simple;
 
 import org.apache.struts2.views.java.TagGenerator;
 import org.apache.struts2.views.java.Attributes;
+import org.apache.struts2.views.util.TextUtil;
+import org.apache.struts2.components.template.TemplateRenderingContext;
+import org.apache.struts2.util.ContainUtil;
 
 import java.io.IOException;
+import java.io.Writer;
 import java.util.Map;
 
 public class SelectHandler extends AbstractTagHandler implements TagGenerator {
+    private Writer writer;
+
+    @Override
+    public void setup(TemplateRenderingContext context) {
+        super.setup(context);
+        this.writer = context.getWriter();
+    }
 
     public void generate() throws IOException {
         Map<String,Object> params = context.getParameters();
         Attributes a = new Attributes();
 
+        Object value = params.get("nameValue");
+
         a.addDefaultToEmpty("name", params.get("name"))
          .addIfExists("size", params.get("size"))
-         .addIfExists("value", params.get("nameValue"), false)
+         .addIfExists("value", value, false)
          .addIfTrue("disabled", params.get("disabled"))
          .addIfTrue("readonly", params.get("readonly"))
          .addIfTrue("multiple", params.get("multiple"))
@@ -44,6 +57,28 @@ public class SelectHandler extends AbstractTagHandler implements TagGenerator {
          .addIfExists("style", params.get("cssStyle"))
          .addIfExists("title", params.get("title"));
         super.start("select", a);
+
+        //options
+
+        //header
+        String headerKey = (String) params.get("headerKey");
+        String headerValue = (String) params.get("headerValue");
+        if (headerKey != null && headerValue != null) {
+            boolean selected = ContainUtil.contains(value, params.get("headerKey"));
+            writeOption(headerKey, headerValue, selected);
+        }
+
         super.end("select");
+    }
+
+    private void writeOption(String value, String text, boolean selected) throws IOException {
+        writer.write("<option value=\"");
+        writer.write(TextUtil.escapeHTML(value));
+        writer.write("\"");
+        if (selected)
+            writer.write(" selected=\"selected\" ");
+        writer.write(">");        
+        writer.write(TextUtil.escapeHTML(text));
+        writer.write("</option>");
     }
 }

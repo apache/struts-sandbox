@@ -44,7 +44,8 @@ public class Attributes extends LinkedHashMap<String,String> {
     public Attributes addIfExists(String attrName, Object paramValue, boolean encode) {
         if (paramValue != null) {
             String val = paramValue.toString();
-            put(attrName, (encode ? TextUtils.htmlEncode(val) : val));
+            if (val.trim().length() > 0)
+                put(attrName, (encode ? TextUtils.htmlEncode(val) : val));
         }
         return this;
     }
