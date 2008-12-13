@@ -24,14 +24,19 @@ import org.apache.struts2.views.java.TagGenerator;
 import org.apache.struts2.views.java.Attributes;
 import org.apache.struts2.views.util.TextUtil;
 import org.apache.struts2.components.template.TemplateRenderingContext;
+import org.apache.struts2.components.OptGroup;
+import org.apache.struts2.components.ListUIBean;
 import org.apache.struts2.util.ContainUtil;
+import org.apache.struts2.util.MakeIterator;
 
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Map;
 import java.util.List;
+import java.util.Iterator;
 
 import com.opensymphony.xwork2.util.ValueStack;
+import com.opensymphony.xwork2.util.TextUtils;
 
 public class SelectHandler extends AbstractTagHandler implements TagGenerator {
     private Writer writer;
@@ -71,25 +76,35 @@ public class SelectHandler extends AbstractTagHandler implements TagGenerator {
             writeOption(headerKey, headerValue, selected);
         }
 
-        List list = (List) params.get("list");
+        Object listObj = params.get("list");
         String listKey = (String) params.get("listKey");
         String listValue = (String) params.get("listValue");
         ValueStack stack = this.context.getStack();
-        if (list != null) {
-            for (Object item : list) {
+        if (listObj != null) {
+            Iterator itt = MakeIterator.convert(listObj);
+            while (itt.hasNext()) {
+                Object item = itt.next();
                 stack.push(item);
 
                 //key
                 Object itemKey = findValue(listKey != null ? listKey : "top");
-                String itemKeyStr = itemKey != null ? itemKey.toString() : "";
+                String itemKeyStr = TextUtils.noNull(itemKey.toString());
                 //value
                 Object itemValue = findValue(listValue != null ? listValue : "top");
-                String itemValueStr = itemValue != null ? itemValue.toString() : "";
+                String itemValueStr = TextUtils.noNull(itemValue.toString());
 
-                boolean selected = ContainUtil.contains(value, params.get(itemKey));
+                boolean selected = ContainUtil.contains(value, itemKey);
                 writeOption(itemKeyStr, itemValueStr, selected);
 
                 stack.pop();
+            }
+        }
+
+        //opt group
+        List<ListUIBean> listUIBeans = (List<ListUIBean>) params.get(OptGroup.INTERNAL_LIST_UI_BEAN_LIST_PARAMETER_KEY);
+        if (listUIBeans != null) {
+            for (ListUIBean listUIBean : listUIBeans) {
+                writeOptionGroup(listUIBean, value);
             }
         }
 
@@ -100,8 +115,41 @@ public class SelectHandler extends AbstractTagHandler implements TagGenerator {
         Attributes attrs = new Attributes();
         attrs.addIfExists("value", value)
                 .addIfTrue("selected", selected);
+
         start("option", attrs);
         characters(text);
         end("option");
+    }
+
+    private void writeOptionGroup(ListUIBean listUIBean, Object value) throws IOException {
+        Map params = listUIBean.getParameters();
+        Attributes attrs = new Attributes();
+        attrs.addIfExists("label", params.get("label"))
+                .addIfTrue("disabled", params.get("disabled"));
+        start("optgroup", attrs);
+
+        //options
+        ValueStack stack = context.getStack();
+        Object listObj = params.get("list");
+        if (listObj != null) {
+            Iterator itt = MakeIterator.convert(listObj);
+            String listKey = (String) params.get("listKey");
+            String listValue = (String) params.get("listValue");
+            while (itt.hasNext()) {
+                Object optGroupBean = itt.next();
+                stack.push(optGroupBean);
+
+                Object tmpKey = stack.findValue(listKey != null ? listKey : "top");
+                String tmpKeyStr = TextUtils.noNull(tmpKey.toString());
+                Object tmpValue = stack.findValue(listValue != null ? listValue : "top");
+                String tmpValueStr = TextUtils.noNull(tmpValue.toString());
+                boolean selected = ContainUtil.contains(value, tmpKeyStr);
+                writeOption(tmpKeyStr, tmpValueStr, selected);
+
+                stack.pop();
+            }
+        }
+
+        end("optgroup");
     }
 }

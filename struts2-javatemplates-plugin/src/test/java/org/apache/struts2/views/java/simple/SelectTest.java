@@ -28,6 +28,7 @@ import com.opensymphony.xwork2.util.ValueStack;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class SelectTest extends AbstractTestCase {
     private Bean bean1;
@@ -43,7 +44,7 @@ public class SelectTest extends AbstractTestCase {
         tag.setCssClass("class");
         tag.setCssStyle("style");
         tag.setTitle("title");
-       
+
         tag.processParams();
         map.putAll(tag.getParameters());
         theme.renderTag("select", context);
@@ -82,6 +83,35 @@ public class SelectTest extends AbstractTestCase {
         assertEquals(expected, output);
     }
 
+    public void testRenderSelectWithMapOptions() {
+        SelectEx tag = new SelectEx(stack, request, response);
+
+        tag.setList("%{#{'key0' : 'val'}}");
+
+        tag.processParams();
+        map.putAll(tag.getParameters());
+        theme.renderTag("select", context);
+        String output = writer.getBuffer().toString();
+        String expected = s("<select name=''><option value='key0'>val</option></select>");
+        assertEquals(expected, output);
+    }
+
+    public void testRenderSelectWithOptionSelected() {
+        SelectEx tag = new SelectEx(stack, request, response);
+
+        tag.setList("%{list}");
+        tag.setListKey("intField");
+        tag.setListValue("stringField");
+        tag.setValue("%{'1'}");
+
+        tag.processParams();
+        map.putAll(tag.getParameters());
+        theme.renderTag("select", context);
+        String output = writer.getBuffer().toString();
+        String expected = s("<select name='' value='1'><option value='1' selected='selected'>val</option></select>");
+        assertEquals(expected, output);
+    }
+
     @Override
     protected void setUpStack() {
         super.setUpStack();
@@ -91,8 +121,18 @@ public class SelectTest extends AbstractTestCase {
 
 
         expectFind("'key0'", String.class, "key0");
+        expectFind("'key1'", String.class, "key1");
         expectFind("'val'", String.class, "val");
+        expectFind("'val1'", String.class, "val1");
+        expectFind("'1'", "1");
         expectFind("list", Arrays.asList(bean1));
+        expectFind("key", "key0");
+        expectFind("value", "val");
+        expectFind("#{'key0' : 'val'}", new HashMap() {
+            {
+                put("key0", "val");
+            }
+        });
 
         expectFind("intField", 1);
         expectFind("stringField", "val");
