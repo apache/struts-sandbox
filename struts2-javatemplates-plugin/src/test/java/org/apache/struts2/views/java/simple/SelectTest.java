@@ -32,6 +32,26 @@ import java.util.Arrays;
 public class SelectTest extends AbstractTestCase {
     private Bean bean1;
 
+    public void testRenderSelect() {
+        SelectEx tag = new SelectEx(stack, request, response);
+        tag.setName("name_");
+        tag.setSize("10");
+        tag.setDisabled("true");
+        tag.setMultiple("true");
+        tag.setTabindex("1");
+        tag.setId("id_");
+        tag.setCssClass("class");
+        tag.setCssStyle("style");
+        tag.setTitle("title");
+       
+        tag.processParams();
+        map.putAll(tag.getParameters());
+        theme.renderTag("select", context);
+        String output = writer.getBuffer().toString();
+        String expected = s("<select name='name_' size='10' tabindex='1' id='id_' class='class' style='style' title='title'></select>");
+        assertEquals(expected, output);
+    }
+
     public void testRenderSelectWithHeader() {
         SelectEx tag = new SelectEx(stack, request, response);
 

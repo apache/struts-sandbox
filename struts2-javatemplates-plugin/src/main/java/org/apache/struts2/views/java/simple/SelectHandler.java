@@ -54,7 +54,7 @@ public class SelectHandler extends AbstractTagHandler implements TagGenerator {
                 .addIfTrue("disabled", params.get("disabled"))
                 .addIfTrue("readonly", params.get("readonly"))
                 .addIfTrue("multiple", params.get("multiple"))
-                .addIfExists("tabindex", params.get("tagindex"))
+                .addIfExists("tabindex", params.get("tabindex"))
                 .addIfExists("id", params.get("id"))
                 .addIfExists("class", params.get("cssClass"))
                 .addIfExists("style", params.get("cssStyle"))
