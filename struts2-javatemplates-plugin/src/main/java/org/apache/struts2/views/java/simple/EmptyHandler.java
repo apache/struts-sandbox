@@ -18,13 +18,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.struts2.views.java;
+package org.apache.struts2.views.java.simple;
 
-import java.io.Writer;
-
-import org.apache.struts2.components.template.TemplateRenderingContext;
-
-public interface Theme {
-    public String getName();
-    public void renderTag(String name, TemplateRenderingContext context);
+//does nothing
+public class EmptyHandler extends AbstractTagHandler {
 }

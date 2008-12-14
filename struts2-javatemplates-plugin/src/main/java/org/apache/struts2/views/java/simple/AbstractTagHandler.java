@@ -33,7 +33,7 @@ import com.opensymphony.xwork2.util.ValueStack;
 import com.opensymphony.xwork2.inject.Container;
 import com.opensymphony.xwork2.ActionContext;
 
-public class AbstractTagHandler implements TagHandler {
+public abstract class AbstractTagHandler implements TagHandler {
 
     protected TagHandler nextTagHandler;
     protected TemplateRenderingContext context;
