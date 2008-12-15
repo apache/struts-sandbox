@@ -20,28 +20,13 @@
  */
 package org.apache.struts2.views.java.simple;
 
-import com.opensymphony.xwork2.util.ValueStack;
-import com.opensymphony.xwork2.util.TextParseUtil;
-import junit.framework.TestCase;
-import org.apache.struts2.components.Component;
 import org.apache.struts2.components.TextField;
-import org.apache.struts2.components.template.Template;
-import org.apache.struts2.components.template.TemplateRenderingContext;
-import org.apache.struts2.views.util.ContextUtil;
-import org.easymock.EasyMock;
+import org.apache.struts2.components.UIBean;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.StringWriter;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
-
-public class TextFieldTest extends AbstractTestCase {
+public class TextFieldTest extends AbstractCommonAttributesTest {
+    private TextField tag;
 
     public void testRenderTextField() {
-        TestFieldEx tag = new TestFieldEx(stack, request, response);
-
         tag.setName("name");
         tag.setValue("val1");
         tag.setSize("10");
@@ -55,7 +40,7 @@ public class TextFieldTest extends AbstractTestCase {
         tag.setTitle("title");
 
 
-        tag.processParams();
+        tag.evaluateParams();
         map.putAll(tag.getParameters());
         theme.renderTag("textfield", context);
         String output = writer.getBuffer().toString();
@@ -63,50 +48,19 @@ public class TextFieldTest extends AbstractTestCase {
         assertEquals(expected, output);
     }
 
-    public void testRenderTextFieldScriptingAttrs() {
-        TestFieldEx tag = new TestFieldEx(stack, request, response);
-
-        applyScriptingAttrs(tag);
-
-        tag.processParams();
-        map.putAll(tag.getParameters());
-        theme.renderTag("textfield", context);
-        String output = writer.getBuffer().toString();
-
-        assertScriptingAttrs(output);
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        this.tag = new TextField(stack, request, response);
     }
 
-     public void testRenderTextFieldCommonAttrs() {
-        TestFieldEx tag = new TestFieldEx(stack, request, response);
-
-        applyCommonAttrs(tag);
-
-        tag.processParams();
-        map.putAll(tag.getParameters());
-        theme.renderTag("textfield", context);
-        String output = writer.getBuffer().toString();
-
-        assertCommongAttrs(output);
+    @Override
+    protected UIBean getUIBean() {
+        return tag;
     }
 
-    class TestFieldEx extends TextField {
-        public TestFieldEx(ValueStack stack, HttpServletRequest request, HttpServletResponse response) {
-            super(stack, request, response);
-        }
-
-        public void processParams() {
-            //these methods are protected 
-            evaluateParams();
-            evaluateExtraParams();
-        }
-
-        public boolean altSyntax() {
-            return true;
-        }
-
-        protected Object findValue(String expr, Class toType) {
-            return doFindValue(expr, toType);
-        }
+    @Override
+    protected String getTagName() {
+        return "textfield";
     }
-
 }

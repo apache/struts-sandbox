@@ -29,7 +29,7 @@ import com.opensymphony.xwork2.util.TextUtils;
 public class XHTMLTagSerializer implements TagSerializer {
 
     private Writer writer;
-    
+
     public void characters(String text) throws IOException {
         characters(text, true);
     }
@@ -47,22 +47,25 @@ public class XHTMLTagSerializer implements TagSerializer {
     public void setNext(TagHandler next) {
     }
 
-    public void start(String name, Attributes a) throws IOException {
+    public void start(String name, Attributes attrs) throws IOException {
         writer.write("<");
         writer.write(name);
-        for (String key : a.keySet()) {
-            writer.write(" ");
-            writer.write(key);
-            writer.write("=\"");
-            writer.write(a.get(key));
-            writer.write("\"");
+        if (attrs != null) {
+            for (String key : attrs.keySet()) {
+                writer.write(" ");
+                writer.write(key);
+                writer.write("=\"");
+                writer.write(attrs.get(key));
+                writer.write("\"");
+            }
         }
+
         writer.write(">");
     }
 
     public void setup(TemplateRenderingContext context) {
         this.writer = context.getWriter();
-        
+
     }
 
 }

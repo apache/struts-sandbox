@@ -20,26 +20,13 @@
  */
 package org.apache.struts2.views.java.simple;
 
-import org.apache.struts2.components.Select;
 import org.apache.struts2.components.Form;
+import org.apache.struts2.components.UIBean;
 import org.apache.struts2.components.UrlRenderer;
 import org.easymock.EasyMock;
-import com.opensymphony.xwork2.util.ValueStack;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-public class FormTest extends AbstractTestCase {
-    private FormEx tag;
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        tag = new FormEx(stack, request, response);
-        UrlRenderer renderer = EasyMock.createNiceMock(UrlRenderer.class);
-        EasyMock.replay(renderer);
-        tag.setUrlRenderer(renderer);
-    }
+public class FormTest extends AbstractCommonAttributesTest {
+    private Form tag;
 
     public void testRenderForm() {
         tag.setName("name_");
@@ -57,7 +44,7 @@ public class FormTest extends AbstractTestCase {
         tag.setEnctype("enc");
         tag.setMethod("post");
 
-        tag.processParams();
+        tag.evaluateParams();
         map.putAll(tag.getParameters());
         theme.renderTag("form", context);
         String output = writer.getBuffer().toString();
@@ -66,7 +53,7 @@ public class FormTest extends AbstractTestCase {
     }
 
     public void testDefaultMethod() {
-        tag.processParams();
+        tag.evaluateParams();
         map.putAll(tag.getParameters());
         theme.renderTag("form", context);
         String output = writer.getBuffer().toString();
@@ -74,43 +61,22 @@ public class FormTest extends AbstractTestCase {
         assertEquals(expected, output);
     }
 
-
-    public void testRenderScriptingAttrs() {
-
-        applyScriptingAttrs(tag);
-
-        tag.processParams();
-        map.putAll(tag.getParameters());
-        theme.renderTag("form", context);
-        String output = writer.getBuffer().toString();
-
-        assertScriptingAttrs(output);
+    @Override
+    protected UIBean getUIBean() {
+        return tag;
     }
 
-    public void testRenderCommonAttrs() {
-
-        applyCommonAttrs(tag);
-
-        tag.processParams();
-        map.putAll(tag.getParameters());
-        theme.renderTag("form", context);
-        String output = writer.getBuffer().toString();
-
-        assertCommongAttrs(output);
+    @Override
+    protected String getTagName() {
+        return "form";
     }
 
-    class FormEx extends Form {
-        public FormEx(ValueStack stack, HttpServletRequest request, HttpServletResponse response) {
-            super(stack, request, response);
-        }
-
-        public void processParams() {
-            //these methods are protected
-            evaluateParams();
-        }
-
-        public boolean altSyntax() {
-            return true;
-        }
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        tag = new Form(stack, request, response);
+        UrlRenderer renderer = EasyMock.createNiceMock(UrlRenderer.class);
+        EasyMock.replay(renderer);
+        tag.setUrlRenderer(renderer);
     }
 }

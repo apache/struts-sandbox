@@ -1,27 +1,25 @@
 package org.apache.struts2.views.java.simple;
 
+import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
+import com.opensymphony.xwork2.inject.Container;
+import com.opensymphony.xwork2.util.ValueStack;
 import junit.framework.TestCase;
+import org.apache.struts2.StrutsConstants;
 import org.apache.struts2.components.Component;
 import org.apache.struts2.components.UIBean;
 import org.apache.struts2.components.template.Template;
 import org.apache.struts2.components.template.TemplateRenderingContext;
-import org.apache.struts2.StrutsConstants;
 import org.easymock.EasyMock;
-
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Stack;
-import java.io.StringWriter;
-
-import com.opensymphony.xwork2.util.ValueStack;
-import com.opensymphony.xwork2.ActionContext;
-import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
-import com.opensymphony.xwork2.inject.Container;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Stack;
 
-public abstract class AbstractTestCase extends TestCase {
+public abstract class AbstractTest extends TestCase {
     private Map<String, String> scriptingAttrs = new HashMap<String, String>();
     private Map<String, String> commonAttrs = new HashMap<String, String>();
 
@@ -37,6 +35,9 @@ public abstract class AbstractTestCase extends TestCase {
     protected HttpServletRequest request;
     protected HttpServletResponse response;
 
+    protected abstract UIBean getUIBean();
+
+    protected abstract String getTagName();
 
     @Override
     protected void setUp() throws Exception {
@@ -82,7 +83,6 @@ public abstract class AbstractTestCase extends TestCase {
         stackContext.put(ActionContext.CONTAINER, container);
 
 
-
         EasyMock.replay(stack);
         EasyMock.replay(container);
     }
@@ -95,7 +95,7 @@ public abstract class AbstractTestCase extends TestCase {
         EasyMock.expect(stack.findValue(expr, toClass)).andReturn(returnVal);
     }
 
-     protected void expectFind(String expr, Object returnVal) {
+    protected void expectFind(String expr, Object returnVal) {
         EasyMock.expect(stack.findValue(expr)).andReturn(returnVal);
     }
 
@@ -149,7 +149,7 @@ public abstract class AbstractTestCase extends TestCase {
 
     public class ConverterEx extends XWorkConverter {
         public ConverterEx() {
-            
+
         }
     }
 }

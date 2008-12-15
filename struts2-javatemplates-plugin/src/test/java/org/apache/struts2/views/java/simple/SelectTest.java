@@ -20,21 +20,17 @@
  */
 package org.apache.struts2.views.java.simple;
 
-import org.apache.struts2.components.TextField;
 import org.apache.struts2.components.Select;
-import org.easymock.EasyMock;
-import com.opensymphony.xwork2.util.ValueStack;
+import org.apache.struts2.components.UIBean;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class SelectTest extends AbstractTestCase {
+public class SelectTest extends AbstractCommonAttributesTest {
     private Bean bean1;
+    private Select tag;
 
     public void testRenderSelect() {
-        SelectEx tag = new SelectEx(stack, request, response);
         tag.setName("name_");
         tag.setSize("10");
         tag.setDisabled("true");
@@ -45,7 +41,7 @@ public class SelectTest extends AbstractTestCase {
         tag.setCssStyle("style");
         tag.setTitle("title");
 
-        tag.processParams();
+        tag.evaluateParams();
         map.putAll(tag.getParameters());
         theme.renderTag("select", context);
         String output = writer.getBuffer().toString();
@@ -54,13 +50,11 @@ public class SelectTest extends AbstractTestCase {
     }
 
     public void testRenderSelectWithHeader() {
-        SelectEx tag = new SelectEx(stack, request, response);
-
         tag.setList("%{{'key0', 'key1'}}");
         tag.setHeaderKey("%{'key0'}");
         tag.setHeaderValue("%{'val'}");
 
-        tag.processParams();
+        tag.evaluateParams();
         map.putAll(tag.getParameters());
         theme.renderTag("select", context);
         String output = writer.getBuffer().toString();
@@ -69,13 +63,11 @@ public class SelectTest extends AbstractTestCase {
     }
 
     public void testRenderSelectWithOptions() {
-        SelectEx tag = new SelectEx(stack, request, response);
-
         tag.setList("%{list}");
         tag.setListKey("intField");
         tag.setListValue("stringField");
 
-        tag.processParams();
+        tag.evaluateParams();
         map.putAll(tag.getParameters());
         theme.renderTag("select", context);
         String output = writer.getBuffer().toString();
@@ -84,11 +76,9 @@ public class SelectTest extends AbstractTestCase {
     }
 
     public void testRenderSelectWithMapOptions() {
-        SelectEx tag = new SelectEx(stack, request, response);
-
         tag.setList("%{#{'key0' : 'val'}}");
 
-        tag.processParams();
+        tag.evaluateParams();
         map.putAll(tag.getParameters());
         theme.renderTag("select", context);
         String output = writer.getBuffer().toString();
@@ -97,19 +87,33 @@ public class SelectTest extends AbstractTestCase {
     }
 
     public void testRenderSelectWithOptionSelected() {
-        SelectEx tag = new SelectEx(stack, request, response);
-
         tag.setList("%{list}");
         tag.setListKey("intField");
         tag.setListValue("stringField");
         tag.setValue("%{'1'}");
 
-        tag.processParams();
+        tag.evaluateParams();
         map.putAll(tag.getParameters());
         theme.renderTag("select", context);
         String output = writer.getBuffer().toString();
         String expected = s("<select name='' value='1'><option value='1' selected='selected'>val</option></select>");
         assertEquals(expected, output);
+    }
+
+    @Override
+    protected UIBean getUIBean() {
+        return tag;
+    }
+
+    @Override
+    protected String getTagName() {
+        return "select";
+    }
+
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        this.tag = new Select(stack, request, response);
     }
 
     @Override
@@ -136,20 +140,5 @@ public class SelectTest extends AbstractTestCase {
 
         expectFind("intField", 1);
         expectFind("stringField", "val");
-    }
-
-    class SelectEx extends Select {
-        public SelectEx(ValueStack stack, HttpServletRequest request, HttpServletResponse response) {
-            super(stack, request, response);
-        }
-
-        public void processParams() {
-            //these methods are protected
-            evaluateParams();
-        }
-
-        public boolean altSyntax() {
-            return true;
-        }
     }
 }
