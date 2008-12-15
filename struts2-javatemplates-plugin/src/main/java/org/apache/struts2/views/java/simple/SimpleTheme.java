@@ -40,9 +40,12 @@ public class SimpleTheme extends DefaultTheme {
             put("a", new FactoryList(AnchorHandler.class, ScriptingEventsHandler.class, CommonAttributesHandler.class));
             put("checkbox", new FactoryList(CheckboxHandler.class, ScriptingEventsHandler.class, CommonAttributesHandler.class));
             put("file", new FactoryList(FileHandler.class, ScriptingEventsHandler.class, CommonAttributesHandler.class));
+            put("password", new FactoryList(PasswordHandler.class, ScriptingEventsHandler.class, CommonAttributesHandler.class));
+            put("label", new FactoryList(LabelHandler.class, ScriptingEventsHandler.class, CommonAttributesHandler.class));
             put("actionerror", new FactoryList(ActionErrorHandler.class));
             put("actionmessage", new FactoryList(ActionMessageHandler.class));
             put("head", new FactoryList(HeadHandler.class));
+            put("hidden", new FactoryList(HiddenHandler.class));
             put("fielderror", new FactoryList(FieldErrorHandler.class));
             put("div", new FactoryList(DivHandler.class, ScriptingEventsHandler.class, CommonAttributesHandler.class));
             put("empty", new FactoryList(EmptyHandler.class));

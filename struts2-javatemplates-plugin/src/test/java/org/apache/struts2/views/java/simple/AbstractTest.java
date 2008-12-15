@@ -41,7 +41,7 @@ public abstract class AbstractTest extends TestCase {
 
     @Override
     protected void setUp() throws Exception {
-        super.setUp();    //To change body of overridden methods use File | Settings | File Templates.
+        super.setUp();    
         scriptingAttrs.put("onclick", "onclick_");
         scriptingAttrs.put("ondblclick", "ondblclick_");
         scriptingAttrs.put("onmousedown", "onmousedown_");
