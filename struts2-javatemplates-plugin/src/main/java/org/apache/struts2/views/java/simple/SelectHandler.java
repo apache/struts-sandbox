@@ -39,14 +39,6 @@ import com.opensymphony.xwork2.util.ValueStack;
 import com.opensymphony.xwork2.util.TextUtils;
 
 public class SelectHandler extends AbstractTagHandler implements TagGenerator {
-    private Writer writer;
-
-    @Override
-    public void setup(TemplateRenderingContext context) {
-        super.setup(context);
-        this.writer = context.getWriter();
-    }
-
     public void generate() throws IOException {
         Map<String, Object> params = context.getParameters();
         Attributes a = new Attributes();
