@@ -1,5 +1,5 @@
 /*
- * $Id: Bean.java 726216 2008-12-13 14:58:16Z musachy $
+ * $Id$
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,54 +20,37 @@
  */
 package org.apache.struts2.views.java.simple;
 
-import org.apache.struts2.components.Checkbox;
+import org.apache.struts2.components.File;
 import org.apache.struts2.components.UIBean;
 
-public class CheckboxTest extends AbstractCommonAttributesTest {
-    private Checkbox tag;
+public class FileTest extends AbstractCommonAttributesTest {
+    private File tag;
 
-    public void testRenderCheckbox() {
-        tag.setName("name_");
+    public void testRenderTextField() {
+        tag.setName("name");
+        tag.setValue("val1");
+        tag.setSize("10");
         tag.setDisabled("true");
+        tag.setAccept("accept_");
         tag.setTabindex("1");
-        tag.setId("id_");
-        tag.setCssClass("class");
-        tag.setCssStyle("style");
+        tag.setId("id1");
+        tag.setCssClass("class1");
+        tag.setCssStyle("style1");
         tag.setTitle("title");
-        tag.setFieldValue("xyz");
+
 
         tag.evaluateParams();
         map.putAll(tag.getParameters());
         theme.renderTag(getTagName(), context);
         String output = writer.getBuffer().toString();
-        String expected = s("<input type='checkbox' name='name_' value='xyz' tabindex='1' id='id_' class='class' style='style' title='title'></input><input type='hidden' id='__checkbox_id_' name='__checkbox_name_' value='__checkbox_xyz'></input>");
+        String expected = s("<input name='name' size='10' value='val1' accept='accept_' tabindex='1' id='id1' class='class1' style='style1' title='title'></input>");
         assertEquals(expected, output);
-    }
-
-    public void testRenderCheckboxWithNameValue() {
-        tag.setName("name_");
-        tag.setValue("%{someValue}");
-        tag.setDisabled("true");
-
-        tag.evaluateParams();
-        map.putAll(tag.getParameters());
-        theme.renderTag(getTagName(), context);
-        String output = writer.getBuffer().toString();
-        String expected = s("<input type='checkbox' name='name_' value='true' checked='checked' id='name_'></input><input type='hidden' id='__checkbox_name_' name='__checkbox_name_' value='__checkbox_true'></input>");
-        assertEquals(expected, output);
-    }
-
-    @Override
-    protected void setUpStack() {
-        super.setUpStack();
-
-        expectFind("someValue", Boolean.class, true);
     }
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        tag = new Checkbox(stack, request, response);
+        this.tag = new File(stack, request, response);
     }
 
     @Override
@@ -77,6 +60,7 @@ public class CheckboxTest extends AbstractCommonAttributesTest {
 
     @Override
     protected String getTagName() {
-        return "checkbox";
+        return "file";
     }
 }
+

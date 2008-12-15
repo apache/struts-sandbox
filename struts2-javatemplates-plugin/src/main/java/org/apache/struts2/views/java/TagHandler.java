@@ -25,12 +25,16 @@ import org.apache.struts2.components.template.TemplateRenderingContext;
 import java.io.IOException;
 
 public interface TagHandler {
-    
+
     void setNext(TagHandler next);
+
     void setup(TemplateRenderingContext context);
-    
+
     void start(String name, Attributes a) throws IOException;
+
     void end(String name) throws IOException;
+
     void characters(String text) throws IOException;
+
     void characters(String text, boolean encode) throws IOException;
 }

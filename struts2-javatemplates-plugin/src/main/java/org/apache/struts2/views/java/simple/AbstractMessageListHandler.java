@@ -63,11 +63,11 @@ public abstract class AbstractMessageListHandler extends AbstractTagHandler impl
     /*
      * Expression used to get list from stack
      */
-    protected abstract String getListExpression(); 
+    protected abstract String getListExpression();
 
     /*
-     * default class for span element
-     */
+    * default class for span element
+    */
     protected abstract String getItemClass();
 }
 

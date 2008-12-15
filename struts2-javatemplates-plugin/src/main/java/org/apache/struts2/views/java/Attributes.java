@@ -24,21 +24,21 @@ import com.opensymphony.xwork2.util.TextUtils;
 
 import java.util.LinkedHashMap;
 
-public class Attributes extends LinkedHashMap<String,String> {
+public class Attributes extends LinkedHashMap<String, String> {
 
     public Attributes add(String key, String value) {
         return add(key, value, true);
     }
-    
+
     public Attributes add(String key, String value, boolean encode) {
         put(key, (encode ? TextUtils.htmlEncode(value) : value));
         return this;
     }
-    
+
     public Attributes addIfExists(String attrName, Object paramValue) {
         return addIfExists(attrName, paramValue, true);
     }
-    
+
     public Attributes addIfExists(String attrName, Object paramValue, boolean encode) {
         if (paramValue != null) {
             String val = paramValue.toString();
@@ -47,21 +47,21 @@ public class Attributes extends LinkedHashMap<String,String> {
         }
         return this;
     }
-    
+
     public Attributes addIfTrue(String attrName, Object paramValue) {
         if (paramValue != null) {
-            if ((paramValue instanceof Boolean && ((Boolean)paramValue).booleanValue()) ||
-                (Boolean.valueOf(paramValue.toString()).booleanValue())) {
+            if ((paramValue instanceof Boolean && ((Boolean) paramValue).booleanValue()) ||
+                    (Boolean.valueOf(paramValue.toString()).booleanValue())) {
                 put(attrName, attrName);
             }
         }
         return this;
     }
-    
+
     public Attributes addDefaultToEmpty(String attrName, Object paramValue) {
         return addDefaultToEmpty(attrName, paramValue, true);
     }
-    
+
     public Attributes addDefaultToEmpty(String attrName, Object paramValue, boolean encode) {
         if (paramValue != null) {
             String val = paramValue.toString();

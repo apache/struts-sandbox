@@ -20,42 +20,31 @@
  */
 package org.apache.struts2.views.java.simple;
 
-import org.apache.struts2.components.Property;
 import org.apache.struts2.views.java.Attributes;
 import org.apache.struts2.views.java.TagGenerator;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.util.Map;
 
 public class TextFieldHandler extends AbstractTagHandler implements TagGenerator {
 
     public void generate() throws IOException {
-        Map<String,Object> params = context.getParameters();
+        Map<String, Object> params = context.getParameters();
         Attributes a = new Attributes();
         a.put("type", "text");
-        
+
         a.addDefaultToEmpty("name", params.get("name"))
-         .addIfExists("size", params.get("size"))
-         .addIfExists("maxlength", params.get("maxlength"))
-         .addIfExists("value", params.get("nameValue"), false)
-         .addIfTrue("disabled", params.get("disabled"))
-         .addIfTrue("readonly", params.get("readonly"))
-         .addIfExists("tabindex", params.get("tabindex"))
-         .addIfExists("id", params.get("id"))
-         .addIfExists("class", params.get("cssClass"))
-         .addIfExists("style", params.get("cssStyle"))
-         .addIfExists("title", params.get("title"));
+                .addIfExists("size", params.get("size"))
+                .addIfExists("maxlength", params.get("maxlength"))
+                .addIfExists("value", params.get("nameValue"), false)
+                .addIfTrue("disabled", params.get("disabled"))
+                .addIfTrue("readonly", params.get("readonly"))
+                .addIfExists("tabindex", params.get("tabindex"))
+                .addIfExists("id", params.get("id"))
+                .addIfExists("class", params.get("cssClass"))
+                .addIfExists("style", params.get("cssStyle"))
+                .addIfExists("title", params.get("title"));
         super.start("input", a);
         super.end("input");
     }
-    
-    private String evalProperty(Object rawValue) {
-        Property prop = new Property(context.getStack());
-        prop.setValue(rawValue.toString());
-        StringWriter writer = new StringWriter();
-        prop.start(writer);
-        return writer.toString();
-    }
-    
 }

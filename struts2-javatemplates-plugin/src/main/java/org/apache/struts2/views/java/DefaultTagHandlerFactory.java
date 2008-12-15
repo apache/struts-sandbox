@@ -23,11 +23,11 @@ package org.apache.struts2.views.java;
 public class DefaultTagHandlerFactory implements TagHandlerFactory {
 
     private Class tagHandlerClass;
-    
+
     public DefaultTagHandlerFactory(Class tagHandlerClass) {
         this.tagHandlerClass = tagHandlerClass;
     }
-    
+
     public TagHandler create(TagHandler next) {
         try {
             TagHandler th = (TagHandler) tagHandlerClass.newInstance();

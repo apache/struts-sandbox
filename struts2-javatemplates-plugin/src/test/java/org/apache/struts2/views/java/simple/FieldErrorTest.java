@@ -68,7 +68,7 @@ public class FieldErrorTest extends AbstractTest {
         assertEquals(expected, output);
     }
 
-     public void testRenderFieldErrorWithoutOneFieldName() {
+    public void testRenderFieldErrorWithoutOneFieldName() {
         this.fieldNames.remove(1);
 
         tag.evaluateParams();
@@ -92,7 +92,7 @@ public class FieldErrorTest extends AbstractTest {
 
     @Override
     protected void setUp() throws Exception {
-        this.errors = new HashMap<String, List<String>>(){
+        this.errors = new HashMap<String, List<String>>() {
             {
                 put("field1", Arrays.asList("not good", "bad"));
                 put("field2", Arrays.asList("bad to the bone"));

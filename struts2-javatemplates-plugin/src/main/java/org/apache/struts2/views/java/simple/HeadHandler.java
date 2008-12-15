@@ -1,5 +1,5 @@
 /*
- * $Id: SelectHandler.java 726340 2008-12-14 02:45:05Z musachy $
+ * $Id$
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,13 +20,24 @@
  */
 package org.apache.struts2.views.java.simple;
 
-public class ActionErrorHandler extends AbstractMessageListHandler {
-    protected String getListExpression() {
-        return "actionErrors";
-    }
+import org.apache.struts2.views.java.Attributes;
+import org.apache.struts2.views.java.TagGenerator;
 
-    @Override
-    protected String getItemClass() {
-        return "errorMessage";
+import java.io.IOException;
+import java.util.Map;
+
+public class HeadHandler extends AbstractTagHandler implements TagGenerator {
+
+    public void generate() throws IOException {
+        Map<String, Object> params = context.getParameters();
+        Attributes attrs = new Attributes();
+        attrs.put("type", "text/javascript");
+
+        StringBuilder sb = new StringBuilder((String) findValue("base"));
+        sb.append("/struts/utils.js");
+        attrs.put("src", sb.toString());
+
+        super.start("script", attrs);
+        super.end("script");
     }
 }

@@ -24,5 +24,6 @@ import org.apache.struts2.components.template.TemplateRenderingContext;
 
 public interface Theme {
     public String getName();
+
     public void renderTag(String name, TemplateRenderingContext context);
 }

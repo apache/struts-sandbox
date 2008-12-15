@@ -32,22 +32,24 @@ import java.util.List;
 public class SimpleTheme extends DefaultTheme {
 
     public SimpleTheme() {
-        setHandlerFactories(new HashMap<String,List<TagHandlerFactory>>() {{
+        setHandlerFactories(new HashMap<String, List<TagHandlerFactory>>() {{
             put("text", new FactoryList(TextFieldHandler.class, ScriptingEventsHandler.class, CommonAttributesHandler.class));
             put("textfield", new FactoryList(TextFieldHandler.class, ScriptingEventsHandler.class, CommonAttributesHandler.class));
             put("select", new FactoryList(SelectHandler.class, ScriptingEventsHandler.class, CommonAttributesHandler.class));
             put("form", new FactoryList(FormHandler.class, ScriptingEventsHandler.class, CommonAttributesHandler.class));
             put("a", new FactoryList(AnchorHandler.class, ScriptingEventsHandler.class, CommonAttributesHandler.class));
             put("checkbox", new FactoryList(CheckboxHandler.class, ScriptingEventsHandler.class, CommonAttributesHandler.class));
+            put("file", new FactoryList(FileHandler.class, ScriptingEventsHandler.class, CommonAttributesHandler.class));
             put("actionerror", new FactoryList(ActionErrorHandler.class));
             put("actionmessage", new FactoryList(ActionMessageHandler.class));
+            put("head", new FactoryList(HeadHandler.class));
             put("fielderror", new FactoryList(FieldErrorHandler.class));
             put("div", new FactoryList(DivHandler.class, ScriptingEventsHandler.class, CommonAttributesHandler.class));
             put("empty", new FactoryList(EmptyHandler.class));
         }});
         setName("simple");
     }
-    
+
     private class FactoryList extends ArrayList<TagHandlerFactory> {
         public FactoryList(Class... classes) {
             super();

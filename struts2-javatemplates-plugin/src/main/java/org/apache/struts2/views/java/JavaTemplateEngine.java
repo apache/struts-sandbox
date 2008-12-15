@@ -33,7 +33,7 @@ public class JavaTemplateEngine extends BaseTemplateEngine {
     private Themes themes = new Themes() {{
         add(new SimpleTheme());
     }};
-    
+
     @Override
     protected String getSuffix() {
         return "java";
@@ -44,18 +44,18 @@ public class JavaTemplateEngine extends BaseTemplateEngine {
         Template t = templateContext.getTemplate();
         Theme theme = themes.get(t.getTheme());
         if (theme == null) {
-            throw new StrutsException("Cannot render tag "+t.getName()+" because theme "+t.getTheme()+" is not found.");
+            throw new StrutsException("Cannot render tag " + t.getName() + " because theme " + t.getTheme() + " is not found.");
         }
         theme.renderTag(t.getName(), templateContext);
     }
-    
+
     private class Themes {
-        private HashMap<String,Theme> themes = new HashMap<String,Theme>();
-        
+        private HashMap<String, Theme> themes = new HashMap<String, Theme>();
+
         public void add(Theme theme) {
             themes.put(theme.getName(), theme);
         }
-        
+
         public Theme get(String name) {
             return themes.get(name);
         }

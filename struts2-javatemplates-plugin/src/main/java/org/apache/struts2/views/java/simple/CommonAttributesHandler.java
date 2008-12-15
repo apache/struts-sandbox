@@ -34,5 +34,5 @@ public class CommonAttributesHandler extends AbstractTagHandler {
         a.addIfExists("accesskey", context.getParameters().get("accesskey"));
         super.start(name, a);
     }
-    
+
 }
