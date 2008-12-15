@@ -20,11 +20,11 @@
  */
 package org.apache.struts2.views.java;
 
+import com.opensymphony.xwork2.util.TextUtils;
+import org.apache.struts2.components.template.TemplateRenderingContext;
+
 import java.io.IOException;
 import java.io.Writer;
-
-import org.apache.struts2.components.template.TemplateRenderingContext;
-import com.opensymphony.xwork2.util.TextUtils;
 
 public class XHTMLTagSerializer implements TagSerializer {
 

@@ -2,10 +2,9 @@ package org.apache.struts2.views.java.simple;
 
 import org.apache.struts2.components.ActionError;
 import org.apache.struts2.components.UIBean;
-import org.apache.struts2.components.Anchor;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ActionMessageTest extends AbstractTest {
     private ActionError tag;

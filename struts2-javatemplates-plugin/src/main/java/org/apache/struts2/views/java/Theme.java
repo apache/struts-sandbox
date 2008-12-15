@@ -20,8 +20,6 @@
  */
 package org.apache.struts2.views.java;
 
-import java.io.Writer;
-
 import org.apache.struts2.components.template.TemplateRenderingContext;
 
 public interface Theme {

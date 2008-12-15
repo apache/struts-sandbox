@@ -20,13 +20,13 @@
  */
 package org.apache.struts2.views.java.simple;
 
+import org.apache.struts2.components.Property;
+import org.apache.struts2.views.java.Attributes;
+import org.apache.struts2.views.java.TagGenerator;
+
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Map;
-
-import org.apache.struts2.components.Property;
-import org.apache.struts2.views.java.TagGenerator;
-import org.apache.struts2.views.java.Attributes;
 
 public class TextFieldHandler extends AbstractTagHandler implements TagGenerator {
 

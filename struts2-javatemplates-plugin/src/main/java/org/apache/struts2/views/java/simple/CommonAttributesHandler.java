@@ -20,7 +20,6 @@
  */
 package org.apache.struts2.views.java.simple;
 
-import org.apache.struts2.views.java.simple.AbstractTagHandler;
 import org.apache.struts2.views.java.Attributes;
 
 import java.io.IOException;

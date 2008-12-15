@@ -20,11 +20,9 @@
  */
 package org.apache.struts2.views.java;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import com.opensymphony.xwork2.util.TextUtils;
+
+import java.util.LinkedHashMap;
 
 public class Attributes extends LinkedHashMap<String,String> {
 

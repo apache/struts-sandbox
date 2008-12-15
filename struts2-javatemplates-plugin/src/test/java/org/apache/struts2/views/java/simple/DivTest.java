@@ -20,9 +20,8 @@
  */
 package org.apache.struts2.views.java.simple;
 
-import org.apache.struts2.components.Anchor;
-import org.apache.struts2.components.UIBean;
 import org.apache.struts2.components.Div;
+import org.apache.struts2.components.UIBean;
 
 public class DivTest extends AbstractCommonAttributesTest {
     private Div tag;

@@ -20,13 +20,13 @@
  */
 package org.apache.struts2.views.java;
 
+import org.apache.struts2.StrutsException;
+import org.apache.struts2.components.template.TemplateRenderingContext;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.struts2.StrutsException;
-import org.apache.struts2.components.template.TemplateRenderingContext;
 
 public class DefaultTheme implements Theme {
 

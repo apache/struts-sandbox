@@ -20,14 +20,12 @@
  */
 package org.apache.struts2.views.java.simple;
 
-import org.apache.struts2.views.java.TagGenerator;
 import org.apache.struts2.views.java.Attributes;
-import org.apache.struts2.util.MakeIterator;
+import org.apache.struts2.views.java.TagGenerator;
 
 import java.io.IOException;
-import java.util.Map;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class FieldErrorHandler extends AbstractTagHandler implements TagGenerator {
     @Override

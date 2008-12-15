@@ -20,23 +20,19 @@
  */
 package org.apache.struts2.views.java.simple;
 
-import org.apache.struts2.views.java.TagGenerator;
-import org.apache.struts2.views.java.Attributes;
-import org.apache.struts2.views.util.TextUtil;
-import org.apache.struts2.components.template.TemplateRenderingContext;
-import org.apache.struts2.components.OptGroup;
+import com.opensymphony.xwork2.util.TextUtils;
+import com.opensymphony.xwork2.util.ValueStack;
 import org.apache.struts2.components.ListUIBean;
+import org.apache.struts2.components.OptGroup;
 import org.apache.struts2.util.ContainUtil;
 import org.apache.struts2.util.MakeIterator;
+import org.apache.struts2.views.java.Attributes;
+import org.apache.struts2.views.java.TagGenerator;
 
 import java.io.IOException;
-import java.io.Writer;
-import java.util.Map;
-import java.util.List;
 import java.util.Iterator;
-
-import com.opensymphony.xwork2.util.ValueStack;
-import com.opensymphony.xwork2.util.TextUtils;
+import java.util.List;
+import java.util.Map;
 
 public class SelectHandler extends AbstractTagHandler implements TagGenerator {
     public void generate() throws IOException {

@@ -20,7 +20,5 @@
  */
 package org.apache.struts2.views.java;
 
-import java.io.Writer;
-
 public interface TagSerializer extends TagHandler {
 }

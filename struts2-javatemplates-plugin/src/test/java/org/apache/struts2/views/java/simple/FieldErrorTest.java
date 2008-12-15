@@ -20,10 +20,14 @@
  */
 package org.apache.struts2.views.java.simple;
 
-import org.apache.struts2.components.UIBean;
 import org.apache.struts2.components.FieldError;
+import org.apache.struts2.components.UIBean;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class FieldErrorTest extends AbstractTest {
     private FieldError tag;

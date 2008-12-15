@@ -1,12 +1,11 @@
 package org.apache.struts2.views.java.simple;
 
-import org.apache.struts2.views.java.TagGenerator;
+import com.opensymphony.xwork2.util.TextUtils;
 import org.apache.struts2.views.java.Attributes;
+import org.apache.struts2.views.java.TagGenerator;
 
 import java.io.IOException;
 import java.util.Map;
-
-import com.opensymphony.xwork2.util.TextUtils;
 
 public class CheckboxHandler extends AbstractTagHandler implements TagGenerator {
     @Override

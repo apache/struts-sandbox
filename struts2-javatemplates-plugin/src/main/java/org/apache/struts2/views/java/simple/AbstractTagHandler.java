@@ -20,18 +20,14 @@
  */
 package org.apache.struts2.views.java.simple;
 
-import java.io.IOException;
-import java.util.Map;
-
-import org.apache.struts2.components.template.TemplateRenderingContext;
-import org.apache.struts2.views.java.TagHandler;
-import org.apache.struts2.views.java.Attributes;
-import org.apache.struts2.views.util.ContextUtil;
-import org.apache.struts2.StrutsConstants;
 import com.opensymphony.xwork2.util.TextParseUtil;
 import com.opensymphony.xwork2.util.ValueStack;
-import com.opensymphony.xwork2.inject.Container;
-import com.opensymphony.xwork2.ActionContext;
+import org.apache.struts2.components.template.TemplateRenderingContext;
+import org.apache.struts2.views.java.Attributes;
+import org.apache.struts2.views.java.TagHandler;
+import org.apache.struts2.views.util.ContextUtil;
+
+import java.io.IOException;
 
 public abstract class AbstractTagHandler implements TagHandler {
 

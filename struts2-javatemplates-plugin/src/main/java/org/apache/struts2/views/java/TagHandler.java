@@ -20,9 +20,9 @@
  */
 package org.apache.struts2.views.java;
 
-import java.io.IOException;
-
 import org.apache.struts2.components.template.TemplateRenderingContext;
+
+import java.io.IOException;
 
 public interface TagHandler {
     

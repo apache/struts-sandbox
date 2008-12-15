@@ -20,9 +20,9 @@
  */
 package org.apache.struts2.views.java.simple;
 
+import org.apache.struts2.views.java.DefaultTagHandlerFactory;
 import org.apache.struts2.views.java.DefaultTheme;
 import org.apache.struts2.views.java.TagHandlerFactory;
-import org.apache.struts2.views.java.DefaultTagHandlerFactory;
 import org.apache.struts2.views.java.XHTMLTagSerializer;
 
 import java.util.ArrayList;

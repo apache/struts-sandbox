@@ -20,14 +20,13 @@
  */
 package org.apache.struts2.views.java;
 
-import java.util.HashMap;
-
 import org.apache.struts2.StrutsException;
 import org.apache.struts2.components.template.BaseTemplateEngine;
 import org.apache.struts2.components.template.Template;
 import org.apache.struts2.components.template.TemplateRenderingContext;
-import org.apache.struts2.views.java.Theme;
 import org.apache.struts2.views.java.simple.SimpleTheme;
+
+import java.util.HashMap;
 
 public class JavaTemplateEngine extends BaseTemplateEngine {
 

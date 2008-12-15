@@ -20,14 +20,6 @@
  */
 package org.apache.struts2.views.java.simple;
 
-import org.apache.struts2.views.java.TagGenerator;
-import org.apache.struts2.views.java.Attributes;
-import org.apache.struts2.util.MakeIterator;
-
-import java.io.IOException;
-import java.util.Map;
-import java.util.Iterator;
-
 public class ActionErrorHandler extends AbstractMessageListHandler {
     protected String getListExpression() {
         return "actionErrors";
