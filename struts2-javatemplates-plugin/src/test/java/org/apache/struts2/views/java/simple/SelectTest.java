@@ -43,7 +43,7 @@ public class SelectTest extends AbstractCommonAttributesTest {
 
         tag.evaluateParams();
         map.putAll(tag.getParameters());
-        theme.renderTag("select", context);
+        theme.renderTag(getTagName(), context);
         String output = writer.getBuffer().toString();
         String expected = s("<select name='name_' size='10' tabindex='1' id='id_' class='class' style='style' title='title'></select>");
         assertEquals(expected, output);
@@ -56,7 +56,7 @@ public class SelectTest extends AbstractCommonAttributesTest {
 
         tag.evaluateParams();
         map.putAll(tag.getParameters());
-        theme.renderTag("select", context);
+        theme.renderTag(getTagName(), context);
         String output = writer.getBuffer().toString();
         String expected = s("<select name=''><option value='key0'>val</option></select>");
         assertEquals(expected, output);
@@ -69,7 +69,7 @@ public class SelectTest extends AbstractCommonAttributesTest {
 
         tag.evaluateParams();
         map.putAll(tag.getParameters());
-        theme.renderTag("select", context);
+        theme.renderTag(getTagName(), context);
         String output = writer.getBuffer().toString();
         String expected = s("<select name=''><option value='1'>val</option></select>");
         assertEquals(expected, output);
@@ -80,7 +80,7 @@ public class SelectTest extends AbstractCommonAttributesTest {
 
         tag.evaluateParams();
         map.putAll(tag.getParameters());
-        theme.renderTag("select", context);
+        theme.renderTag(getTagName(), context);
         String output = writer.getBuffer().toString();
         String expected = s("<select name=''><option value='key0'>val</option></select>");
         assertEquals(expected, output);
@@ -94,7 +94,7 @@ public class SelectTest extends AbstractCommonAttributesTest {
 
         tag.evaluateParams();
         map.putAll(tag.getParameters());
-        theme.renderTag("select", context);
+        theme.renderTag(getTagName(), context);
         String output = writer.getBuffer().toString();
         String expected = s("<select name='' value='1'><option value='1' selected='selected'>val</option></select>");
         assertEquals(expected, output);

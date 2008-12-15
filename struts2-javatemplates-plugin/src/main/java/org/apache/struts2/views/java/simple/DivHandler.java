@@ -1,5 +1,5 @@
 /*
- * $Id: SelectHandler.java 726340 2008-12-14 02:45:05Z musachy $
+ * $Id: CommonAttributesHandler.java 726340 2008-12-14 02:45:05Z musachy $
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -22,19 +22,21 @@ package org.apache.struts2.views.java.simple;
 
 import org.apache.struts2.views.java.TagGenerator;
 import org.apache.struts2.views.java.Attributes;
-import org.apache.struts2.util.MakeIterator;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.Iterator;
 
-public class ActionErrorHandler extends AbstractMessageListHandler {
-    protected String getListExpression() {
-        return "actionErrors";
-    }
-
+public class DivHandler extends AbstractTagHandler implements TagGenerator {
     @Override
-    protected String getItemClass() {
-        return "errorMessage"; 
+    public void generate() throws IOException {
+        Map<String, Object> params = context.getParameters();
+        Attributes attrs = new Attributes();
+        attrs.addIfExists("name", params.get("name"))
+                .addIfExists("id", params.get("id"))
+                .addIfExists("class", params.get("cssClass"))
+                .addIfExists("style", params.get("cssStyle"))
+                .addIfExists("title", params.get("title"));
+        start("div", attrs);
+        end("div");
     }
 }

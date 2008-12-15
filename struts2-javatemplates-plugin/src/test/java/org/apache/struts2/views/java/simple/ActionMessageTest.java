@@ -1,33 +1,13 @@
-/*
- * $Id: Bean.java 726216 2008-12-13 14:58:16Z musachy $
- *
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
 package org.apache.struts2.views.java.simple;
 
 import org.apache.struts2.components.ActionError;
-import org.apache.struts2.components.Anchor;
 import org.apache.struts2.components.UIBean;
+import org.apache.struts2.components.Anchor;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 
-public class ActionErrorTest extends AbstractTest {
+public class ActionMessageTest extends AbstractTest {
     private ActionError tag;
     private List<String> errors;
 
@@ -50,7 +30,7 @@ public class ActionErrorTest extends AbstractTest {
         map.putAll(tag.getParameters());
         theme.renderTag(getTagName(), context);
         String output = writer.getBuffer().toString();
-        String expected = s("<ul><li><span style='style' class='errorMessage'>this clas is bad</span></li><li><span style='style' class='errorMessage'>baaaaad</span></li></ul>");
+        String expected = s("<ul><li><span style='style' class='actionMessage'>this clas is bad</span></li><li><span style='style' class='actionMessage'>baaaaad</span></li></ul>");
         assertEquals(expected, output);
     }
 
@@ -77,16 +57,17 @@ public class ActionErrorTest extends AbstractTest {
     @Override
     protected void setUpStack() {
         super.setUpStack();
-        expectFind("actionErrors", this.errors);
+        expectFind("actionMessages", this.errors);
     }
 
     @Override
     protected UIBean getUIBean() {
-        return new Anchor(stack, request, response);
+        return tag;
     }
 
     @Override
     protected String getTagName() {
-        return "actionerror";
+        return "actionmessage";
     }
 }
+
