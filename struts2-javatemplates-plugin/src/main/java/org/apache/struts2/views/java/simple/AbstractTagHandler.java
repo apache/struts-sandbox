@@ -23,6 +23,7 @@ package org.apache.struts2.views.java.simple;
 import com.opensymphony.xwork2.util.TextParseUtil;
 import com.opensymphony.xwork2.util.ValueStack;
 import org.apache.struts2.components.template.TemplateRenderingContext;
+import org.apache.struts2.components.Component;
 import org.apache.struts2.views.java.Attributes;
 import org.apache.struts2.views.java.TagHandler;
 import org.apache.struts2.views.util.ContextUtil;
@@ -82,14 +83,7 @@ public abstract class AbstractTagHandler implements TagHandler {
         }
 
         ValueStack stack = context.getStack();
-        if (altSyntax) {
-            // does the expression start with %{ and end with }? if so, just cut it off!
-            if (expr.startsWith("%{") && expr.endsWith("}")) {
-                expr = expr.substring(2, expr.length() - 1);
-            }
-        }
-
-        return stack.findValue(expr);
+        return stack.findValue(Component.stripExpressionIfAltSyntax(stack, expr));
     }
 
     private Object findValue(String expr, Class toType) {
@@ -98,14 +92,7 @@ public abstract class AbstractTagHandler implements TagHandler {
         if (altSyntax && toType == String.class) {
             return TextParseUtil.translateVariables('%', expr, stack);
         } else {
-            if (altSyntax) {
-                // does the expression start with %{ and end with }? if so, just cut it off!
-                if (expr.startsWith("%{") && expr.endsWith("}")) {
-                    expr = expr.substring(2, expr.length() - 1);
-                }
-            }
-
-            return stack.findValue(expr, toType);
+            return stack.findValue(Component.stripExpressionIfAltSyntax(stack, expr), toType);
         }
     }
 }
