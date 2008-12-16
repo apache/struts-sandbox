@@ -28,6 +28,9 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 
+/**
+ *  Base class for ActionError and ActionMessage 
+ */
 public abstract class AbstractMessageListHandler extends AbstractTagHandler implements TagGenerator {
     @Override
     public void generate() throws IOException {

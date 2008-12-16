@@ -24,6 +24,9 @@ import com.opensymphony.xwork2.util.TextUtils;
 
 import java.util.LinkedHashMap;
 
+/**
+ * Map of tag attributes, used for rendering the tags
+ */
 public class Attributes extends LinkedHashMap<String, String> {
 
     public Attributes add(String key, String value) {
@@ -35,10 +38,24 @@ public class Attributes extends LinkedHashMap<String, String> {
         return this;
     }
 
+    /**
+     * Add a key/value pair to the attributes only if the value is not null. Value
+     * is html encoded
+     * @param attrName attribute name
+     * @param paramValue value of attribute
+     * @return this
+     */
     public Attributes addIfExists(String attrName, Object paramValue) {
         return addIfExists(attrName, paramValue, true);
     }
 
+    /**
+     * Add a key/value pair to the attributes only if the value is not null.
+     * @param attrName attribute name
+     * @param paramValue value of attribute
+     * @param encode html encode the value
+     * @return this
+     */
     public Attributes addIfExists(String attrName, Object paramValue, boolean encode) {
         if (paramValue != null) {
             String val = paramValue.toString();
@@ -48,6 +65,13 @@ public class Attributes extends LinkedHashMap<String, String> {
         return this;
     }
 
+    /**
+     * Add a key/value pair to the attributes only if the value is not null and is a boolean with a
+     * value of 'true'. Value is html encoded
+     * @param attrName attribute name
+     * @param paramValue value of attribute
+     * @return this
+     */
     public Attributes addIfTrue(String attrName, Object paramValue) {
         if (paramValue != null) {
             if ((paramValue instanceof Boolean && ((Boolean) paramValue).booleanValue()) ||
@@ -58,10 +82,24 @@ public class Attributes extends LinkedHashMap<String, String> {
         return this;
     }
 
+    /**
+     * Add a key/value pair to the attributes, if the value is null, it will be set as an empty string.
+     * Value is html encoded.
+     * @param attrName attribute name
+     * @param paramValue value of attribute
+     * @return this
+     */
     public Attributes addDefaultToEmpty(String attrName, Object paramValue) {
         return addDefaultToEmpty(attrName, paramValue, true);
     }
 
+    /**
+     * Add a key/value pair to the attributes, if the value is null, it will be set as an empty string.
+     * @param attrName attribute name
+     * @param paramValue value of attribute
+     * @param encode html encode the value
+     * @return this
+     */
     public Attributes addDefaultToEmpty(String attrName, Object paramValue, boolean encode) {
         if (paramValue != null) {
             String val = paramValue.toString();

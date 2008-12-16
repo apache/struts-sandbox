@@ -58,7 +58,7 @@ public class SubmitTest extends AbstractCommonAttributesTest {
         tag.setCssClass("class1");
         tag.setCssStyle("style1");
         tag.setTitle("title");
-        tag.setLabel("Just as soon as I belong, than it's time I disappear");
+        tag.setLabel("Just as soon as I belong, than its time I disappear");
         tag.setType("button");
 
 
@@ -66,7 +66,7 @@ public class SubmitTest extends AbstractCommonAttributesTest {
         map.putAll(tag.getParameters());
         theme.renderTag(getTagName(), context);
         String output = writer.getBuffer().toString();
-        String expected = s("<button name='name' type='submit' value='val1' tabindex='1' id='id1' class='class1' style='style1'>Just as soon as I belong, than it's time I disappear</button>");
+        String expected = s("<button name='name' type='submit' value='val1' tabindex='1' id='id1' class='class1' style='style1'>Just as soon as I belong, than its time I disappear</button>");
         assertEquals(expected, output);
     }
 
@@ -121,7 +121,7 @@ public class SubmitTest extends AbstractCommonAttributesTest {
         map.putAll(tag.getParameters());
         theme.renderTag(getTagName(), context);
         String output = writer.getBuffer().toString();
-        String expected = s("<button name='name' type='submit' value='val1' tabindex='1' id='id1' class='class1' style='style1'><span>hey hey hey, here I go now</span></button>");
+        String expected = s("<input src='http://somesource/image.gif' type='image' alt='alt text'></input>");
         assertEquals(expected, output);
     }
 

@@ -20,5 +20,8 @@
  */
 package org.apache.struts2.views.java;
 
+/**
+ * Implementations of this class build the html representation of the tag
+ */
 public interface TagSerializer extends TagHandler {
 }

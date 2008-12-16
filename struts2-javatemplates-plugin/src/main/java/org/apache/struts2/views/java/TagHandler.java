@@ -30,11 +30,33 @@ public interface TagHandler {
 
     void setup(TemplateRenderingContext context);
 
-    void start(String name, Attributes a) throws IOException;
+    /**
+     * Write a tag openening, with its attributes
+     * @param name name of the tag
+     * @param attributes attributes of the tag
+     * @throws IOException
+     */
+    void start(String name, Attributes attributes) throws IOException;
 
+    /**
+     * Writes a tag close
+     * @param name name of the tag
+     * @throws IOException
+     */
     void end(String name) throws IOException;
 
+    /**
+     * Writes to the inner text of a tag. By default the body is html encoded
+     * @param text tag body.
+     * @throws IOException
+     */
     void characters(String text) throws IOException;
 
+    /**
+     * Writes to the inner text of a tag
+     * @param text tag body
+     * @param encode html encode the body
+     * @throws IOException
+     */
     void characters(String text, boolean encode) throws IOException;
 }

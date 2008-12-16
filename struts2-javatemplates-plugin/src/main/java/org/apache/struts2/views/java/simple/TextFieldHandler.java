@@ -30,9 +30,10 @@ public class TextFieldHandler extends AbstractTagHandler implements TagGenerator
 
     public void generate() throws IOException {
         Map<String, Object> params = context.getParameters();
-        Attributes a = new Attributes();
+        Attributes attr = new Attributes();
 
-        a.addDefaultToEmpty("name", params.get("name"))
+        attr.add("type", "text")
+                .addDefaultToEmpty("name", params.get("name"))
                 .addIfExists("size", params.get("size"))
                 .addIfExists("maxlength", params.get("maxlength"))
                 .addIfExists("value", params.get("nameValue"), false)
@@ -43,7 +44,7 @@ public class TextFieldHandler extends AbstractTagHandler implements TagGenerator
                 .addIfExists("class", params.get("cssClass"))
                 .addIfExists("style", params.get("cssStyle"))
                 .addIfExists("title", params.get("title"));
-        super.start("input", a);
+        super.start("input", attr);
         super.end("input");
     }
 }

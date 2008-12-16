@@ -24,6 +24,9 @@ import org.apache.struts2.views.java.Attributes;
 
 import java.io.IOException;
 
+/**
+ * Adds attributes from common-attributes.ftl
+ */
 public class CommonAttributesHandler extends AbstractTagHandler {
 
     /* (non-Javadoc)

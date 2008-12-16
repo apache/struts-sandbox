@@ -26,6 +26,9 @@ import org.apache.struts2.components.template.TemplateRenderingContext;
 import java.io.IOException;
 import java.io.Writer;
 
+/**
+ * Write tags as XHTML
+ */
 public class XHTMLTagSerializer implements TagSerializer {
 
     private Writer writer;
@@ -65,7 +68,5 @@ public class XHTMLTagSerializer implements TagSerializer {
 
     public void setup(TemplateRenderingContext context) {
         this.writer = context.getWriter();
-
     }
-
 }

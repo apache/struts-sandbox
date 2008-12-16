@@ -3,7 +3,7 @@ package org.apache.struts2.views.java.simple;
 import org.apache.struts2.components.UIBean;
 
 public abstract class AbstractCommonAttributesTest extends AbstractTest {
-    public void testRenderTextFieldScriptingAttrs() {
+    public void testRenderTextFieldScriptingAttrs() throws Exception {
         UIBean tag = getUIBean();
 
         applyScriptingAttrs(tag);
@@ -16,7 +16,7 @@ public abstract class AbstractCommonAttributesTest extends AbstractTest {
         assertScriptingAttrs(output);
     }
 
-    public void testRenderTextFieldCommonAttrs() {
+    public void testRenderTextFieldCommonAttrs() throws Exception {
         UIBean tag = getUIBean();
 
 

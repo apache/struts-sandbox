@@ -25,6 +25,9 @@ import org.apache.struts2.views.java.Attributes;
 import java.io.IOException;
 import java.util.Map;
 
+/**
+ * Adds attributes from scripting-event.ftl
+ */
 public class ScriptingEventsHandler extends AbstractTagHandler {
 
     /* (non-Javadoc)

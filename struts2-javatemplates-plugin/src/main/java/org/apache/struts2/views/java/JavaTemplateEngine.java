@@ -28,6 +28,9 @@ import org.apache.struts2.views.java.simple.SimpleTheme;
 
 import java.util.HashMap;
 
+/**
+ * Template engine that renders tags using java implementations
+ */
 public class JavaTemplateEngine extends BaseTemplateEngine {
 
     private Themes themes = new Themes() {{
@@ -44,7 +47,7 @@ public class JavaTemplateEngine extends BaseTemplateEngine {
         Template t = templateContext.getTemplate();
         Theme theme = themes.get(t.getTheme());
         if (theme == null) {
-            throw new StrutsException("Cannot render tag " + t.getName() + " because theme " + t.getTheme() + " is not found.");
+            throw new StrutsException("Cannot render tag [" + t.getName() + "] because theme [" + t.getTheme() + "] was not found.");
         }
         theme.renderTag(t.getName(), templateContext);
     }

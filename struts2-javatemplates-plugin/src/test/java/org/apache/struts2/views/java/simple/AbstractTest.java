@@ -35,7 +35,7 @@ public abstract class AbstractTest extends TestCase {
     protected HttpServletRequest request;
     protected HttpServletResponse response;
 
-    protected abstract UIBean getUIBean();
+    protected abstract UIBean getUIBean() throws Exception;
 
     protected abstract String getTagName();
 

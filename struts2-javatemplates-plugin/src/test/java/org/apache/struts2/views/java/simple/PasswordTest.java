@@ -88,7 +88,9 @@ public class PasswordTest extends AbstractCommonAttributesTest {
     }
 
     @Override
-    protected UIBean getUIBean() {
+    protected UIBean getUIBean() throws Exception {
+        super.setUp();
+        this.tag = new Password(stack, request, response);
         return tag;
     }
 
