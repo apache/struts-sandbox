@@ -31,7 +31,6 @@ public class TextFieldHandler extends AbstractTagHandler implements TagGenerator
     public void generate() throws IOException {
         Map<String, Object> params = context.getParameters();
         Attributes a = new Attributes();
-        a.put("type", "text");
 
         a.addDefaultToEmpty("name", params.get("name"))
                 .addIfExists("size", params.get("size"))

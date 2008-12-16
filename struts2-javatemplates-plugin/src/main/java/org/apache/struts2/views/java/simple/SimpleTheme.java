@@ -42,7 +42,11 @@ public class SimpleTheme extends DefaultTheme {
             put("file", new FactoryList(FileHandler.class, ScriptingEventsHandler.class, CommonAttributesHandler.class));
             put("password", new FactoryList(PasswordHandler.class, ScriptingEventsHandler.class, CommonAttributesHandler.class));
             put("label", new FactoryList(LabelHandler.class, ScriptingEventsHandler.class, CommonAttributesHandler.class));
+            put("reset", new FactoryList(ResetHandler.class, ScriptingEventsHandler.class, CommonAttributesHandler.class));
+            put("submit", new FactoryList(SubmitHandler.class, ScriptingEventsHandler.class, CommonAttributesHandler.class));
+            put("textarea", new FactoryList(TextAreaHandler.class, ScriptingEventsHandler.class, CommonAttributesHandler.class));
             put("actionerror", new FactoryList(ActionErrorHandler.class));
+            put("token", new FactoryList(TokenHandler.class));
             put("actionmessage", new FactoryList(ActionMessageHandler.class));
             put("head", new FactoryList(HeadHandler.class));
             put("hidden", new FactoryList(HiddenHandler.class));

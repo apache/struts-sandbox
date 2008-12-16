@@ -20,8 +20,12 @@
  */
 package org.apache.struts2.views.java;
 
-public class DefaultTagHandlerFactory implements TagHandlerFactory {
+import com.opensymphony.xwork2.util.logging.Logger;
+import com.opensymphony.xwork2.util.logging.LoggerFactory;
 
+public class DefaultTagHandlerFactory implements TagHandlerFactory {
+   private static final Logger LOG = LoggerFactory.getLogger(DefaultTagHandlerFactory.class);
+          
     private Class tagHandlerClass;
 
     public DefaultTagHandlerFactory(Class tagHandlerClass) {
@@ -34,14 +38,14 @@ public class DefaultTagHandlerFactory implements TagHandlerFactory {
             th.setNext(next);
             return th;
         } catch (IllegalArgumentException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            if (LOG.isErrorEnabled())
+                LOG.error("Failed to instantiate tag handler class [#0]", e, tagHandlerClass.getName());
         } catch (InstantiationException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            if (LOG.isErrorEnabled())
+                LOG.error("Failed to instantiate tag handler class [#0]", e, tagHandlerClass.getName());
         } catch (IllegalAccessException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            if (LOG.isErrorEnabled())
+                LOG.error("Failed to instantiate tag handler class [#0]", e, tagHandlerClass.getName());
         }
         return null;
     }
