@@ -28,6 +28,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.LinkedHashMap;
 
 public class FieldErrorTest extends AbstractTest {
     private FieldError tag;
@@ -92,7 +93,7 @@ public class FieldErrorTest extends AbstractTest {
 
     @Override
     protected void setUp() throws Exception {
-        this.errors = new HashMap<String, List<String>>() {
+        this.errors = new LinkedHashMap<String, List<String>>() {
             {
                 put("field1", Arrays.asList("not good", "bad"));
                 put("field2", Arrays.asList("bad to the bone"));
