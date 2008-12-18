@@ -55,6 +55,7 @@ public class SubmitHandler extends AbstractTagHandler implements TagGenerator {
             start("input", attrs);
         } else {
             attrs.addIfExists("name", params.get("name"))
+                    .add("type", "submit")
                     .addIfExists("value", params.get("nameValue"), false)
                     .addIfTrue("disabled", params.get("disabled"))
                     .addIfExists("tabindex", params.get("tabindex"))
@@ -62,7 +63,7 @@ public class SubmitHandler extends AbstractTagHandler implements TagGenerator {
                     .addIfExists("class", params.get("cssClass"))
                     .addIfExists("style", params.get("cssStyle"));
 
-            start("submit", attrs);
+            start("input", attrs);
         }
     }
 
@@ -89,7 +90,7 @@ public class SubmitHandler extends AbstractTagHandler implements TagGenerator {
                     characters(body, false);
                 end("input");
             } else
-                end("submit");
+                end("input");
         }
     }
 }
