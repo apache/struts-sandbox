@@ -26,6 +26,8 @@ import org.apache.struts2.views.java.Attributes;
 import java.io.IOException;
 import java.util.Map;
 
+import com.opensymphony.xwork2.util.TextUtils;
+
 public class LabelHandler extends AbstractTagHandler implements TagGenerator {
 
     public void generate() throws IOException {
@@ -39,6 +41,9 @@ public class LabelHandler extends AbstractTagHandler implements TagGenerator {
                 .addIfExists("style", params.get("cssStyle"))
                 .addIfExists("title", params.get("title"));
         super.start("label", a);
+        String value = (String) params.get("nameValue");
+        if (TextUtils.stringSet(value))
+            characters(value);
         super.end("label");
     }
 }

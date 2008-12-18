@@ -31,7 +31,7 @@ public class HeadTest extends AbstractTest {
         map.putAll(tag.getParameters());
         theme.renderTag(getTagName(), context);
         String output = writer.getBuffer().toString();
-        String expected = s("<script type='text/javascript' src='/la-base/struts/utils.js'></script>");
+        String expected = s("<script type='text/javascript' src='/some/path/struts/utils.js'></script>");
         assertEquals(expected, output);
     }
 
@@ -39,12 +39,6 @@ public class HeadTest extends AbstractTest {
     protected void setUp() throws Exception {
         super.setUp();
         this.tag = new Head(stack, request, response);
-    }
-
-    @Override
-    protected void setUpStack() {
-        super.setUpStack();
-        expectFind("base", "/la-base");
     }
 
     @Override

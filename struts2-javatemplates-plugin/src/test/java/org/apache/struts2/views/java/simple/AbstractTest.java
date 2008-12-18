@@ -6,6 +6,7 @@ import com.opensymphony.xwork2.inject.Container;
 import com.opensymphony.xwork2.util.ValueStack;
 import junit.framework.TestCase;
 import org.apache.struts2.StrutsConstants;
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.components.Component;
 import org.apache.struts2.components.UIBean;
 import org.apache.struts2.components.template.Template;
@@ -71,8 +72,9 @@ public abstract class AbstractTest extends TestCase {
         context = new TemplateRenderingContext(template, writer, stack, map, null);
         stackContext.put(Component.COMPONENT_STACK, new Stack());
 
-        request = EasyMock.createMock(HttpServletRequest.class);
-        response = EasyMock.createMock(HttpServletResponse.class);
+        request = EasyMock.createNiceMock(HttpServletRequest.class);
+        EasyMock.expect(request.getContextPath()).andReturn("/some/path").anyTimes();
+        response = EasyMock.createNiceMock(HttpServletResponse.class);
 
         EasyMock.expect(stack.getContext()).andReturn(stackContext).anyTimes();
 
@@ -83,8 +85,12 @@ public abstract class AbstractTest extends TestCase {
         stackContext.put(ActionContext.CONTAINER, container);
 
 
+        EasyMock.replay(request);
         EasyMock.replay(stack);
         EasyMock.replay(container);
+
+        ActionContext.setContext(new ActionContext(stackContext));
+        ServletActionContext.setRequest(request);
     }
 
     protected static String s(String input) {

@@ -22,9 +22,12 @@ package org.apache.struts2.views.java.simple;
 
 import org.apache.struts2.views.java.Attributes;
 import org.apache.struts2.views.java.TagGenerator;
+import org.apache.struts2.ServletActionContext;
 
 import java.io.IOException;
 import java.util.Map;
+
+import com.opensymphony.xwork2.ActionContext;
 
 public class HeadHandler extends AbstractTagHandler implements TagGenerator {
 
@@ -33,7 +36,10 @@ public class HeadHandler extends AbstractTagHandler implements TagGenerator {
         Attributes attrs = new Attributes();
         attrs.put("type", "text/javascript");
 
-        StringBuilder sb = new StringBuilder((String) findValue("base"));
+        String base = ServletActionContext.getRequest().getContextPath();
+        StringBuilder sb = new StringBuilder();
+        if (base != null)
+            sb.append(base);
         sb.append("/struts/utils.js");
         attrs.put("src", sb.toString());
 
