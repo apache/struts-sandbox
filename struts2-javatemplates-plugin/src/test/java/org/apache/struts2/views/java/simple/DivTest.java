@@ -37,6 +37,7 @@ public class DivTest extends AbstractCommonAttributesTest {
         tag.evaluateParams();
         map.putAll(tag.getParameters());
         theme.renderTag(getTagName(), context);
+        theme.renderTag(getTagName() + "-close", context);
         String output = writer.getBuffer().toString();
         String expected = s("<div name='name_' id='id_' class='class' style='style' title='title'></div>");
         assertEquals(expected, output);

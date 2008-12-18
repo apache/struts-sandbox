@@ -20,6 +20,13 @@
  */
 package org.apache.struts2.views.java.simple;
 
+import org.apache.struts2.views.java.TagGenerator;
+
+import java.io.IOException;
+
 //does nothing
-public class EmptyHandler extends AbstractTagHandler {
+public class EmptyHandler extends AbstractTagHandler implements TagGenerator {
+    @Override
+    public void generate() throws IOException {
+    }
 }

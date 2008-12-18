@@ -44,6 +44,12 @@ public class FormHandler extends AbstractTagHandler implements TagGenerator {
                 .addIfExists("accept-charset", params.get("acceptcharset"));
         attrs.add("method", params.containsKey("method") ? (String) params.get("method") : "post");
         start("form", attrs);
-        end("form");
+    }
+
+    public static class CloseHandler extends AbstractTagHandler implements TagGenerator {
+        @Override
+        public void generate() throws IOException {
+            end("form");
+        }
     }
 }

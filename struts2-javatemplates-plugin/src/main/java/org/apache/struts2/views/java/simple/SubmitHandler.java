@@ -57,8 +57,6 @@ public class SubmitHandler extends AbstractTagHandler implements TagGenerator {
                 if (TextUtils.stringSet(label))
                     characters(label, false);
             }
-
-            end("button");
         } else if ("image".equals(type)) {
             if (TextUtils.stringSet(body))
                 characters(body, false);
@@ -67,7 +65,6 @@ public class SubmitHandler extends AbstractTagHandler implements TagGenerator {
                     .addIfExists("alt", params.get("label"));
 
             start("input", attrs);
-            end("input");
         } else {
             attrs.addIfExists("name", params.get("name"))
                     .addIfExists("value", params.get("nameValue"), false)
@@ -78,7 +75,22 @@ public class SubmitHandler extends AbstractTagHandler implements TagGenerator {
                     .addIfExists("style", params.get("cssStyle"));
 
             start("submit", attrs);
-            end("submit");
+        }
+    }
+
+    public static class CloseHandler extends AbstractTagHandler implements TagGenerator {
+        @Override
+        public void generate() throws IOException {
+            Map<String, Object> params = context.getParameters();
+            Attributes attrs = new Attributes();
+
+            String type = TextUtils.noNull((String) params.get("type"), "input");
+            if ("button".equals(type))
+                end("button");
+            else if ("image".equals(type))
+                end("input");
+            else
+                end("submit");
         }
     }
 }

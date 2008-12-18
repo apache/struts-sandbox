@@ -40,6 +40,12 @@ public class AnchorHandler extends AbstractTagHandler implements TagGenerator {
                 .addIfExists("title", params.get("title"))
                 .addIfExists("tabindex", params.get("tabindex"));
         start("a", attrs);
-        end("a");
+    }
+
+    public static class CloseHandler extends AbstractTagHandler implements TagGenerator {
+        @Override
+        public void generate() throws IOException {
+            end("a");
+        }
     }
 }

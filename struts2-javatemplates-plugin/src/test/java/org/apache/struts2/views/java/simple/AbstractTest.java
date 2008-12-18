@@ -147,6 +147,7 @@ public abstract class AbstractTest extends TestCase {
             return val == null ? null : val;
     }
 
+    //XWorkConverter doesnt have a public onstructor (the one with parameters will require mor config)
     public class ConverterEx extends XWorkConverter {
         public ConverterEx() {
 

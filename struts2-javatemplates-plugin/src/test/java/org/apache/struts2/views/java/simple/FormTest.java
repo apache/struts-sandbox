@@ -47,6 +47,7 @@ public class FormTest extends AbstractCommonAttributesTest {
         tag.evaluateParams();
         map.putAll(tag.getParameters());
         theme.renderTag(getTagName(), context);
+        theme.renderTag(getTagName() + "-close", context);
         String output = writer.getBuffer().toString();
         String expected = s("<form name='name_' id='id_' onsubmit='submit' onreset='reset' target='target_' enctype='enc' class='class_' style='style_' title='title' accept-charset='charset_' method='post'></form>");
         assertEquals(expected, output);
@@ -56,6 +57,7 @@ public class FormTest extends AbstractCommonAttributesTest {
         tag.evaluateParams();
         map.putAll(tag.getParameters());
         theme.renderTag(getTagName(), context);
+        theme.renderTag(getTagName() + "-close", context);
         String output = writer.getBuffer().toString();
         String expected = s("<form method='post'></form>");
         assertEquals(expected, output);
