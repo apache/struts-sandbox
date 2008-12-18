@@ -48,7 +48,6 @@ public class SimpleTheme extends DefaultTheme {
             put("submit", new FactoryList(SubmitHandler.class, ScriptingEventsHandler.class, CommonAttributesHandler.class));
             put("submit-close", new FactoryList(SubmitHandler.CloseHandler.class));
             put("textarea", new FactoryList(TextAreaHandler.class, ScriptingEventsHandler.class, CommonAttributesHandler.class));
-            put("textarea-close", new FactoryList(TextAreaHandler.CloseHandler.class));
             put("actionerror", new FactoryList(ActionErrorHandler.class));
             put("token", new FactoryList(TokenHandler.class));
             put("actionmessage", new FactoryList(ActionMessageHandler.class));
