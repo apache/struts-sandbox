@@ -45,10 +45,17 @@ public class TextAreaHandler extends AbstractTagHandler implements TagGenerator 
                 .addIfExists("class", params.get("cssClass"))
                 .addIfExists("style", params.get("cssStyle"))
                 .addIfExists("title", params.get("title"));
-        super.start("textarea", attrs);
-        String value = (String) params.get("nameValue");
-        if (TextUtils.stringSet(value))
-            characters(value);
-        super.end("textarea");
+        start("textarea", attrs);
+    }
+
+    public static class CloseHandler extends AbstractTagHandler implements TagGenerator {
+        @Override
+        public void generate() throws IOException {
+            Map<String, Object> params = context.getParameters();
+            String value = (String) params.get("nameValue");
+            if (TextUtils.stringSet(value))
+                characters(value);
+            end("textarea");
+        }
     }
 }
