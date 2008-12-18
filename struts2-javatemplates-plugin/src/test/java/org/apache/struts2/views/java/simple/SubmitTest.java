@@ -38,19 +38,21 @@ public class SubmitTest extends AbstractCommonAttributesTest {
         tag.setTitle("title");
         tag.setLabel("some label");
         tag.setType("button");
-        tag.addParameter("body", "<span>hey hey hey, here I go now</span>");
-
 
         tag.evaluateParams();
         map.putAll(tag.getParameters());
         theme.renderTag(getTagName(), context);
+
+        tag.addParameter("body", "<span>hey hey hey, here I go now</span>");
+        map.clear();
+        map.putAll(tag.getParameters());
         theme.renderTag(getTagName() + "-close", context);
         String output = writer.getBuffer().toString();
         String expected = s("<button name='name' type='submit' value='val1' tabindex='1' id='id1' class='class1' style='style1'><span>hey hey hey, here I go now</span></button>");
         assertEquals(expected, output);
     }
 
-     public void testRenderButtonWithLabel() {
+    public void testRenderButtonWithLabel() {
         tag.setName("name");
         tag.setValue("val1");
         tag.setDisabled("true");
@@ -127,6 +129,25 @@ public class SubmitTest extends AbstractCommonAttributesTest {
         theme.renderTag(getTagName() + "-close", context);
         String output = writer.getBuffer().toString();
         String expected = s("<input src='http://somesource/image.gif' type='image' alt='alt text'></input>");
+        assertEquals(expected, output);
+    }
+
+    public void testRenderButtonImageWithBody() {
+        tag.setSrc("http://somesource/image.gif");
+        tag.setLabel("alt text");
+        tag.setType("image");
+
+
+        tag.evaluateParams();
+        map.putAll(tag.getParameters());
+        theme.renderTag(getTagName(), context);
+        map.clear();
+        tag.setType("image");
+        tag.addParameter("body", "<span>hey hey hey, here I go now</span>");
+        map.putAll(tag.getParameters());
+        theme.renderTag(getTagName() + "-close", context);
+        String output = writer.getBuffer().toString();
+        String expected = s("<input src='http://somesource/image.gif' type='image' alt='alt text'><span>hey hey hey, here I go now</span></input>");
         assertEquals(expected, output);
     }
 

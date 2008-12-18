@@ -35,7 +35,6 @@ public class SubmitHandler extends AbstractTagHandler implements TagGenerator {
         Attributes attrs = new Attributes();
 
         String type = TextUtils.noNull((String) params.get("type"), "input");
-        String body = (String) params.get("body");
 
         if ("button".equals(type)) {
             attrs.addIfExists("name", params.get("name"))
@@ -48,18 +47,7 @@ public class SubmitHandler extends AbstractTagHandler implements TagGenerator {
                     .addIfExists("style", params.get("cssStyle"));
 
             start("button", attrs);
-
-            //button body
-            if (TextUtils.stringSet(body))
-                characters(body, false);
-            else if (params.containsKey("label")) {
-                String label = (String) params.get("label");
-                if (TextUtils.stringSet(label))
-                    characters(label, false);
-            }
         } else if ("image".equals(type)) {
-            if (TextUtils.stringSet(body))
-                characters(body, false);
             attrs.addIfExists("src", params.get("src"), false)
                     .add("type", "image")
                     .addIfExists("alt", params.get("label"));
@@ -83,13 +71,24 @@ public class SubmitHandler extends AbstractTagHandler implements TagGenerator {
         public void generate() throws IOException {
             Map<String, Object> params = context.getParameters();
             Attributes attrs = new Attributes();
+            String body = (String) params.get("body");
 
             String type = TextUtils.noNull((String) params.get("type"), "input");
-            if ("button".equals(type))
+            if ("button".equals(type)) {
+                //button body
+                if (TextUtils.stringSet(body))
+                    characters(body, false);
+                else if (params.containsKey("label")) {
+                    String label = (String) params.get("label");
+                    if (TextUtils.stringSet(label))
+                        characters(label, false);
+                }
                 end("button");
-            else if ("image".equals(type))
+            } else if ("image".equals(type)) {
+                if (TextUtils.stringSet(body))
+                    characters(body, false);
                 end("input");
-            else
+            } else
                 end("submit");
         }
     }
