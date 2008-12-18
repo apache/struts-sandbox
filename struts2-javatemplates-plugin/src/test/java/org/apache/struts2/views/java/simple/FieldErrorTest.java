@@ -70,8 +70,7 @@ public class FieldErrorTest extends AbstractTest {
     }
 
     public void testRenderFieldErrorWithoutOneFieldName() {
-        this.fieldNames.remove(1);
-
+        tag.setFieldName("field1");
         tag.evaluateParams();
         map.putAll(tag.getParameters());
         theme.renderTag(getTagName(), context);

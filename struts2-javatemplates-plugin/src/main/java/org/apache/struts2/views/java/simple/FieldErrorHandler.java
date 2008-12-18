@@ -32,7 +32,7 @@ public class FieldErrorHandler extends AbstractTagHandler implements TagGenerato
     public void generate() throws IOException {
         Map<String, Object> params = context.getParameters();
         Map<String, List<String>> errors = (Map<String, List<String>>) findValue("fieldErrors");
-        List<String> fieldErrorFieldNames = (List<String>) findValue("fieldErrorFieldNames");
+        List<String> fieldErrorFieldNames = (List<String>) params.get("errorFieldNames");
 
         if (fieldErrorFieldNames != null && !fieldErrorFieldNames.isEmpty()) {
             //wrapping ul
