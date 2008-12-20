@@ -39,7 +39,7 @@ public class ActionErrorTest extends AbstractTest {
         map.putAll(tag.getParameters());
         theme.renderTag(getTagName(), context);
         String output = writer.getBuffer().toString();
-        String expected = s("<ul><li><span style='style' class='class'>this clas is bad</span></li><li><span style='style' class='class'>baaaaad</span></li></ul>");
+        String expected = s("<ul style='style' class='class'><li><span>this clas is bad</span></li><li><span>baaaaad</span></li></ul>");
         assertEquals(expected, output);
     }
 
@@ -50,7 +50,7 @@ public class ActionErrorTest extends AbstractTest {
         map.putAll(tag.getParameters());
         theme.renderTag(getTagName(), context);
         String output = writer.getBuffer().toString();
-        String expected = s("<ul><li><span style='style' class='errorMessage'>this clas is bad</span></li><li><span style='style' class='errorMessage'>baaaaad</span></li></ul>");
+        String expected = s("<ul style='style' class='errorMessage'><li><span>this clas is bad</span></li><li><span>baaaaad</span></li></ul>");
         assertEquals(expected, output);
     }
 

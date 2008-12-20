@@ -6,7 +6,7 @@ public class ActionMessageHandler extends AbstractMessageListHandler {
     }
 
     @Override
-    protected String getItemClass() {
+    protected String getDefaultClass() {
         return "actionMessage";
     }
 }

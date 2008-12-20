@@ -26,7 +26,7 @@ public class ActionErrorHandler extends AbstractMessageListHandler {
     }
 
     @Override
-    protected String getItemClass() {
+    protected String getDefaultClass() {
         return "errorMessage";
     }
 }

@@ -29,7 +29,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- *  Base class for ActionError and ActionMessage 
+ * Base class for ActionError and ActionMessage
  */
 public abstract class AbstractMessageListHandler extends AbstractTagHandler implements TagGenerator {
     @Override
@@ -40,7 +40,10 @@ public abstract class AbstractMessageListHandler extends AbstractTagHandler impl
         if (errorsObj != null) {
             Iterator itt = MakeIterator.convert(errorsObj);
             if (itt.hasNext()) {
-                start("ul", null);
+                Attributes attrs = new Attributes();
+                attrs.addIfExists("style", params.get("cssStyle"))
+                        .add("class", params.containsKey("cssClass") ? (String) params.get("cssClass") : getDefaultClass());
+                start("ul", attrs);
                 while (itt.hasNext()) {
                     String error = (String) itt.next();
 
@@ -48,11 +51,7 @@ public abstract class AbstractMessageListHandler extends AbstractTagHandler impl
                     start("li", null);
 
                     //span for error
-                    Attributes attrs = new Attributes();
-                    attrs.addIfExists("style", params.get("cssStyle"))
-                            .add("class", params.containsKey("cssClass") ? (String) params.get("cssClass") : getItemClass());
-
-                    start("span", attrs);
+                    start("span", null);
                     characters(error);
                     end("span");
                     end("li");
@@ -69,8 +68,8 @@ public abstract class AbstractMessageListHandler extends AbstractTagHandler impl
     protected abstract String getListExpression();
 
     /*
-    * default class for span element
+    * default class for UL element
     */
-    protected abstract String getItemClass();
+    protected abstract String getDefaultClass();
 }
 

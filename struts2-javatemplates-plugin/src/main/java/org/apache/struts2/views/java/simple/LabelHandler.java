@@ -35,7 +35,7 @@ public class LabelHandler extends AbstractTagHandler implements TagGenerator {
         Attributes a = new Attributes();
 
         a.addDefaultToEmpty("name", params.get("name"))
-                .addIfExists("for", "for")
+                .addIfExists("for", params.get("for"))
                 .addIfExists("id", params.get("id"))
                 .addIfExists("class", params.get("cssClass"))
                 .addIfExists("style", params.get("cssStyle"))
