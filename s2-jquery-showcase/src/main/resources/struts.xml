@@ -1,0 +1,27 @@
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+    <package name="s2-jquery-showcase" extends="struts-default" namespace="/">
+        <default-interceptor-ref name="jsonValidationWorkflowStack"/>
+        <action name="SimpleFormPostNonAjaxResponse_*" method="{1}" class="org.apache.struts2.jquery.actions.MessageAction">
+            <result name="input">/WEB-INF/content/form/SimpleFormPostNonAjaxResponse-input.jsp</result>
+            <result>/WEB-INF/content/form/SimpleFormPostNonAjaxResponse.jsp</result>
+        </action>
+        <action name="SimpleFormGetNonAjaxResponse_*" method="{1}" class="org.apache.struts2.jquery.actions.MessageAction">
+            <result name="input">/WEB-INF/content/form/SimpleFormGetNonAjaxResponse-input.jsp</result>
+            <result>/WEB-INF/content/form/SimpleFormGetNonAjaxResponse.jsp</result>
+        </action>
+        <action name="SimpleFormPostAjaxResponse_*" method="{1}" class="org.apache.struts2.jquery.actions.MessageAction">
+            <result name="input">/WEB-INF/content/form/SimpleFormPostAjaxResponse-input.jsp</result>
+            <result>/WEB-INF/content/form/SimpleFormPostAjaxResponse.jsp</result>
+        </action>
+        <action name="SimpleFormGetAjaxResponse_*" method="{1}" class="org.apache.struts2.jquery.actions.MessageAction">
+            <result name="input">/WEB-INF/content/form/SimpleFormGetAjaxResponse-input.jsp</result>
+            <result>/WEB-INF/content/form/SimpleFormGetAjaxResponse.jsp</result>
+        </action>
+    </package>
+
+</struts>
