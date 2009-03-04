@@ -12,6 +12,7 @@
 <tr><td><a href="SimpleFormGetNonAjaxResponse">SimpleFormGetNonAjaxResponse</a></td></tr>
 <tr><td><a href="SimpleFormPostAjaxResponse">SimpleFormPostAjaxResponse</a></td></tr>
 <tr><td><a href="SimpleFormGetAjaxResponse">SimpleFormGetAjaxResponse</a></td></tr>
+<tr><td><a href="FormWithResetGetReqAjaxResp">FormWithResetGetReqAjaxResp</a></td></tr>
 </tbody></table>
 </body>
 </html>
