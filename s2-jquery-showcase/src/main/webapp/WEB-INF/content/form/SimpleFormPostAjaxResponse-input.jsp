@@ -12,6 +12,7 @@
 </head>
 <body>
 <sjx:form id="indexForm" method="post" validate="true"
+          namespace="/form"
           action="SimpleFormPostAjaxResponse"
           ajaxResult="true" ajaxResultHandler="handleAjaxResponse" >
 <sjx:textfield key="msg" />
