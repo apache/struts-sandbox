@@ -6,6 +6,10 @@
 
     <package name="s2-jquery-showcase" extends="struts-default" namespace="/">
         <default-interceptor-ref name="jsonValidationWorkflowStack"/>
+
+        <action name="showcase">
+            <result>/WEB-INF/content/index.jsp</result>
+        </action>
         <action name="SimpleFormPostNonAjaxResponse_*" method="{1}" class="org.apache.struts2.jquery.actions.MessageAction">
             <result name="input">/WEB-INF/content/form/SimpleFormPostNonAjaxResponse-input.jsp</result>
             <result>/WEB-INF/content/form/SimpleFormPostNonAjaxResponse.jsp</result>
