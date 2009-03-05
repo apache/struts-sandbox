@@ -13,7 +13,7 @@
 <body>
 <sjx:form id="indexForm" method="get" validate="true"
           namespace="/form"
-          action="SimpleFormPostAjaxResponse"
+          action="FormWithResetGetReqAjaxResp"
           ajaxResult="true" ajaxResultHandler="handleAjaxResponse" >
 <sjx:textfield key="msg" />
 <sjx:submit />

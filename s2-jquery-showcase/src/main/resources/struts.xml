@@ -8,9 +8,5 @@
             <result>/WEB-INF/content/index.jsp</result>
         </action>
 
-        <action name="FormWithResetGetReqAjaxResp_*" method="{1}" class="org.apache.struts2.jquery.actions.MessageAction">
-            <result name="input">/WEB-INF/content/form/SimpleFormWithResetGetAjaxResp-input.jsp</result>
-            <result>/WEB-INF/content/form/SimpleFormWithResetGetAjaxResponse.jsp</result>
-        </action>
     </package>
 </struts>

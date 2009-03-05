@@ -15,12 +15,12 @@ public class MessageAction extends ActionSupport {
     private String msg;
 
     @Actions({
-            @Action("SimpleFormWithResetGetAjaxResponse"),
-            @Action("SimpleFormGetAjaxResponse"),
             @Action("SimpleFormGetAjaxResponse"),
             @Action("SimpleFormPostAjaxResponse"),
             @Action("SimpleFormGetNonAjaxResponse"),
-            @Action("SimpleFormPostNonAjaxResponse")
+            @Action("SimpleFormPostNonAjaxResponse"),
+            @Action("FormWithResetGetReqAjaxResp"),
+            @Action("FormWithResetPostReqAjaxResp")
     })
     public String execute() {
         return ActionSupport.SUCCESS;

@@ -22,6 +22,15 @@
            <s:url var="url" namespace="/form" action="SimpleFormGetAjaxResponse-input"/>
            <s:a href="%{#url}">Simple Form Get Ajax</s:a>
        </li>
+       <li>
+           <s:url var="url" namespace="/form" action="FormWithResetGetReqAjaxResp-input"/>
+           <s:a href="%{#url}">Form With Reset Get Ajax Response</s:a>
+       </li>
+       <li>
+           <s:url var="url" namespace="/form" action="FormWithResetPostReqAjaxResp-input"/>
+           <s:a href="%{#url}">Form With Reset Post Ajax Response</s:a>
+       </li>
+
    </ul>
 </body>
 </html>

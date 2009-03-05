@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="selenium.base" href="http://localhost:8080/s2-jquery-showcase/SimpleFormPostAjaxResponse_input.action" />
+<link rel="selenium.base" href="http://localhost:8080/s2-jquery-showcase/form/SimpleFormPostAjaxResponse-input" />
 <title>SimpleFormPostAjaxResponse</title>
 </head>
 <body>
@@ -13,7 +13,7 @@
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>/s2-jquery-showcase/SimpleFormPostAjaxResponse_input.action</td>
+	<td>/s2-jquery-showcase/form/SimpleFormPostAjaxResponse-input</td>
 	<td></td>
 </tr>
 <tr>
