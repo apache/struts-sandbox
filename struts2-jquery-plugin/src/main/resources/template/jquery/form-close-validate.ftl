@@ -48,17 +48,16 @@ alert("formData = " + debugStr); -->
     }
 
     function validateFormCb_${parameters.id}( responseText, textStatus ) {
-        // var form = $("${parameters.id}").get(0); // need the actual DOM element, not the JQuery obj
-        var form = document.getElementById("${parameters.id}");
+        
         //clear previous validation errors, if any
-        StrutsUtils.clearValidationErrors(form);
+        StrutsJQueryUtils.clearValidationErrors("${parameters.id}");
 
         //get errors from response
-        var errorsObject = StrutsUtils.getValidationErrors(responseText);
+        var errorsObject = StrutsJQueryUtils.getValidationErrors(responseText);
 
         //show errors, if any
         if(errorsObject && errorsObject.fieldErrors) {
-            StrutsUtils.showValidationErrors(form, errorsObject);
+            StrutsJQueryUtils.showValidationErrors("${parameters.id}", errorsObject);
         }
         else {
 <#if (parameters.ajaxResult?default(false) == true ) && parameters.method?contains("post")>

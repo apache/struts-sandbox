@@ -3,8 +3,9 @@ package org.apache.struts2.jquery.components;
 import org.apache.struts2.components.Form;
 import org.apache.struts2.views.annotations.StrutsTagAttribute;
 import org.apache.struts2.views.annotations.StrutsTag;
-import org.apache.struts2.jquery.JQueryPluginStatics;
+import org.apache.struts2.jquery.JQueryPluginConstants;
 import com.opensymphony.xwork2.util.ValueStack;
+import com.opensymphony.xwork2.inject.Inject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,6 +33,12 @@ public class JQueryForm extends Form {
     }
 
     @Override
+    @Inject(JQueryPluginConstants.DEFAULT_THEME)
+    public void setDefaultUITheme(String theme) {
+        this.defaultUITheme = theme;
+    }
+
+    @Override
     public void evaluateParams() {
         super.evaluateParams();
 
@@ -41,11 +48,6 @@ public class JQueryForm extends Form {
         if (ajaxResultHandler != null ) {
             addParameter("ajaxResultHandler", findString(ajaxResultHandler));
         }
-    }
-
-    @Override
-    public String getTheme() {
-        return JQueryPluginStatics.THEME_NAME;
     }
 
     @StrutsTagAttribute(description="for specifying whether the result of the action of this form will be processed " +

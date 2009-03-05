@@ -23,7 +23,7 @@
    TODO rather than going with traditional onclick handler, it would be nice to move to $().live("click", ...
 -->
 <#if parameters.validate?default(true) == true>
-	<script type="text/javascript" src="${base}/struts/xhtml/validation.js"></script>
+	<script type="text/javascript" src="${base}/struts/jquery/validation.js"></script>
 	<#if parameters.onsubmit??>
 		${tag.addParameter('onsubmit', "${parameters.onsubmit}; return validateForm_${parameters.id}();")}
 	<#else>

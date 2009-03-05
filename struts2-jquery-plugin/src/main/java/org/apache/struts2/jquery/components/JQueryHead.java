@@ -2,8 +2,9 @@ package org.apache.struts2.jquery.components;
 
 import org.apache.struts2.components.Head;
 import org.apache.struts2.views.annotations.StrutsTag;
-import org.apache.struts2.jquery.JQueryPluginStatics;
+import org.apache.struts2.jquery.JQueryPluginConstants;
 import com.opensymphony.xwork2.util.ValueStack;
+import com.opensymphony.xwork2.inject.Inject;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -27,8 +28,9 @@ public class JQueryHead extends Head {
     }
 
     @Override
-    public String getTheme() {
-        return JQueryPluginStatics.THEME_NAME;
+    @Inject(JQueryPluginConstants.DEFAULT_THEME)
+    public void setDefaultUITheme(String theme) {
+        this.defaultUITheme = theme;
     }
 
 }

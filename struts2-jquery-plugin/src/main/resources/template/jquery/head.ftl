@@ -1,6 +1,6 @@
 <#--
 /*
- * $Id: head.ftl 590812 2007-10-31 20:32:54Z apetrelli $
+ * $Id: $
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -21,6 +21,6 @@
  */
 -->
 <link rel="stylesheet" href="<@s.url value='/struts/xhtml/styles.css' includeParams='none' encode='false' />" type="text/css"/>
-<#include "/${parameters.templateDir}/simple/head.ftl" />
+<script src="${base}/struts/jqueryUtils.js" type="text/javascript"></script>
 
-<script src="http://jqueryjs.googlecode.com/files/jquery-1.3.2.min.js" type="text/javascript"></script>
+<script src="http://jqueryjs.googlecode.com/files/jquery-1.3.2.js" type="text/javascript"></script>

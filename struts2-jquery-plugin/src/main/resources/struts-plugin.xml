@@ -45,4 +45,6 @@
         </result-types>
     </package>    
     -->
+    <constant name="struts.jquery.default.theme" value="jquery" />
+
 </struts>
