@@ -50,6 +50,7 @@ StrutsJQueryUtils.showValidationErrors = function(form, errors) {
   }
 };
 
+/*
 StrutsJQueryUtils.firstElement  = function(parentNode, tagName) {
   var node = parentNode.firstChild;
   while(node && node.nodeType != 1){
@@ -85,7 +86,7 @@ StrutsJQueryUtils.previousElement = function(node, tagName) {
   }
   return node;  
 };
-
+*/
 StrutsJQueryUtils.addOnLoad = function(func) {
   $().ready(func);
 };

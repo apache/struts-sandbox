@@ -41,6 +41,16 @@ function addError(e, errorText) {
 }
 
 function addErrorJquery(e, errorText) {
+    var parentRow = $(e).parent("tr").get(0);
+    $(parentRow).before(
+        $("<tr></tr>").attr("errorFor", e).html(
+            $("<td></td>").attr("colspan", "2").html(
+                $("<span></span>").addClass("errorMessage").html(errorText)
+                    )
+                )
+            );
+    $("label[for="+ e +"]").addClass('errorLabel');
+    /*
     try {
         var row = (e.type ? e : e[0]);
         while(row.nodeName.toUpperCase() != "TR") {
@@ -73,4 +83,5 @@ function addErrorJquery(e, errorText) {
     } catch (e) {
         alert(e);
     }
+    */
 }
