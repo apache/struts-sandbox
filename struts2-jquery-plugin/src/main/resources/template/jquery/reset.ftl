@@ -26,6 +26,6 @@
     align="${parameters.align?html}"<#t/>
 </#if>
 ><#t/>
-<#include "/${parameters.templateDir}/simple/reset.ftl" />
+<#include "/${parameters.templateDir}/jquery-simple/reset.ftl" />
 </div><#t/>
 <#include "/${parameters.templateDir}/xhtml/controlfooter.ftl" />

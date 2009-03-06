@@ -1,6 +1,6 @@
 <#--
 /*
- * $Id: submit.ftl 720258 2008-11-24 19:05:16Z musachy $
+ * $Id: form-close.ftl 590812 2007-10-31 20:32:54Z apetrelli $
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,11 +19,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+ TODO Need to check on elements like inputtransferselect and doubleselect
 -->
-<tr>
-    <td colspan="2"><div <#rt/>
-<#if parameters.align??>
-    align="${parameters.align?html}"<#t/>
+<#include "/${parameters.templateDir}/simple/form-close.ftl" />
+<#include "/${parameters.templateDir}/jquery-simple/form-close-validate.ftl" />
+<#if parameters.focusElement?if_exists != "">
+<script type="text/javascript">
+    StrutsUtils.addOnLoad(function() {
+        var element = document.getElementById("${parameters.focusElement?html}");
+        if(element) {
+            element.focus();
+        }
+    });
+</script>
 </#if>
-><#t/>
-<#include "/${parameters.templateDir}/jquery-simple/submit.ftl" />

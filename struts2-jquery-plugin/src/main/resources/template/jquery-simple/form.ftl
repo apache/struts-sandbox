@@ -1,6 +1,6 @@
 <#--
 /*
- * $Id: submit.ftl 720258 2008-11-24 19:05:16Z musachy $
+ * $Id$
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,10 +20,13 @@
  * under the License.
  */
 -->
-<tr>
-    <td colspan="2"><div <#rt/>
-<#if parameters.align??>
-    align="${parameters.align?html}"<#t/>
+<#include "/${parameters.templateDir}/jquery-simple/form-validate.ftl" />
+<#include "/${parameters.templateDir}/simple/form-common.ftl" />
+<#if parameters.validate?default(true) == true>
+  onreset="${parameters.onreset?default('clearErrorMessages(\'${parameters.id}\');clearErrorLabels(\'${parameters.id}\');')}"
+<#else>
+  <#if parameters.onreset??>
+  onreset="${parameters.onreset?html}"
+  </#if>
 </#if>
-><#t/>
-<#include "/${parameters.templateDir}/jquery-simple/submit.ftl" />
+>

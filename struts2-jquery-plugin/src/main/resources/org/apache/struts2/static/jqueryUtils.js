@@ -43,8 +43,7 @@ StrutsJQueryUtils.showValidationErrors = function(form, errors) {
   if(errors.fieldErrors) {
     for(var fieldName in errors.fieldErrors) {
       for(var i = 0; i < errors.fieldErrors[fieldName].length; i++) {
-        addErrorJquery( $("input[name=\""+fieldName+"\"]").attr("id"),
-                 errors.fieldErrors[fieldName][i]);
+        addError( $("input[name=\""+fieldName+"\"]").attr("id"), errors.fieldErrors[fieldName][i]);
       }
     }
   }
@@ -60,4 +59,12 @@ StrutsJQueryUtils.addEventListener = function(element, name, observer, capture) 
   } else if (element.attachEvent) {
     element.attachEvent('on' + name, observer);
   }
+};
+
+StrutsJQueryUtils.keyValueizeForm = function(formId) {
+    var formData = { };
+    $("#"+formId).find("input").each( function() {
+      formData[$(this).attr('name')] = $(this).val();
+    });
+    return formData ;
 };

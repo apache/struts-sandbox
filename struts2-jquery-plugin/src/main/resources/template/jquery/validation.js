@@ -32,7 +32,7 @@ function clearErrorLabels(form) {
 }
 
 function clearErrorLabelsJquery(form) {
-    $("#"+form).find(".errorLabel").removeClass("errorLabel");
+    $("#"+form).find(".errorLabel").toggleClass("errorLabel");
 }
 
 function addError(e, errorText) {

@@ -1,3 +1,3 @@
-<#include "/${parameters.templateDir}/simple/submit-close.ftl" />
+<#include "/${parameters.templateDir}/jquery-simple/submit-close.ftl" />
 </div><#t/>
 <#include "/${parameters.templateDir}/xhtml/controlfooter.ftl" />

@@ -1,6 +1,6 @@
 <#--
 /*
- * $Id: submit.ftl 720258 2008-11-24 19:05:16Z musachy $
+ * $Id$
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,10 +20,19 @@
  * under the License.
  */
 -->
-<tr>
-    <td colspan="2"><div <#rt/>
-<#if parameters.align??>
-    align="${parameters.align?html}"<#t/>
+<#if parameters.ajaxResult?default(true) == true>
+<script type="text/javascript">
+<#--TODO add tests for funky datatypes like Date obj returned from the datepicker
+    TODO consider ids that contain a period... valid for struts, invalid for jquery
+    -->
+    function validateForm_${parameters.id}() {
+        var formData = StrutsJQueryUtils.keyValueizeForm("${parameters.id}");
+<#if parameters.method?contains("post") >
+        $.post("${parameters.action}", formData, ${parameters.ajaxResultHandler} );
+<#else>
+        $.get("${parameters.action}", formData, ${parameters.ajaxResultHandler} );
 </#if>
-><#t/>
-<#include "/${parameters.templateDir}/jquery-simple/submit.ftl" />
+        return false;
+    }
+</script>
+</#if>

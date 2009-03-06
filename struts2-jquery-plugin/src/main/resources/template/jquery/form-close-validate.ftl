@@ -26,19 +26,8 @@
     TODO consider ids that contain a period... valid for struts, invalid for jquery
     -->
     function validateForm_${parameters.id}() {
-        var formData = {'struts.enableJSONValidation': true};
-        $("#${parameters.id}").find(":input").each( function() {
-            formData[$(this).attr('name')] = $(this).val();
-        });
-<#--
-        // var formData = $("#${parameters.id}").serialize() + '&struts.enableJSONValidation=true';
-
-var debugStr = "";
-jQuery.each(formData, function(i, val) {
-    debugStr = debugStr + i + "=>" + val + ", ";
-});
-alert("formData = " + debugStr); -->
-
+        var formData = StrutsJQueryUtils.keyValueizeForm("${parameters.id}");
+        formData['struts.enableJSONValidation'] = true;
 <#if parameters.method?contains("post") >
         $.post("${parameters.action}", formData, validateFormCb_${parameters.id} );
 <#else>
@@ -61,16 +50,10 @@ alert("formData = " + debugStr); -->
         }
         else {
 <#if (parameters.ajaxResult?default(false) == true ) && parameters.method?contains("post")>
-            var formData = { };
-            $("#${parameters.id}").find(":input").each( function() {
-                formData[$(this).attr('name')] = $(this).val();
-            });
+            var formData = StrutsJQueryUtils.keyValueizeForm("${parameters.id}");;
             $.post("${parameters.action}", formData, ${parameters.ajaxResultHandler} );
 <#elseif (parameters.ajaxResult?default(false) == true )>
-            var formData = { };
-            $("#${parameters.id}").find(":input").each( function() {
-                formData[$(this).attr('name')] = $(this).val();
-            });
+            var formData = StrutsJQueryUtils.keyValueizeForm("${parameters.id}");
             $.get("${parameters.action}", formData, ${parameters.ajaxResultHandler} );
 <#else>
             var form = document.getElementById("${parameters.id}");

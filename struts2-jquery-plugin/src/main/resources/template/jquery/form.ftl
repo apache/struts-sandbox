@@ -20,14 +20,5 @@
  * under the License.
  */
 -->
-<#include "/${parameters.templateDir}/jquery/form-validate.ftl" />
-<#include "/${parameters.templateDir}/simple/form-common.ftl" />
-<#if parameters.validate?default(true) == true>
-  onreset="${parameters.onreset?default('clearErrorMessages(\'${parameters.id}\');clearErrorLabels(\'${parameters.id}\');')}"
-<#else>
-  <#if parameters.onreset??>
-  onreset="${parameters.onreset?html}"
-  </#if>
-</#if>
->
+<#include "/${parameters.templateDir}/jquery-simple/form.ftl" />
 <#include "/${parameters.templateDir}/xhtml/control.ftl" />

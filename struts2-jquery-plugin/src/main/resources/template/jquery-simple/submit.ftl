@@ -20,10 +20,4 @@
  * under the License.
  */
 -->
-<tr>
-    <td colspan="2"><div <#rt/>
-<#if parameters.align??>
-    align="${parameters.align?html}"<#t/>
-</#if>
-><#t/>
-<#include "/${parameters.templateDir}/jquery-simple/submit.ftl" />
+<#include "/${parameters.templateDir}/simple/submit.ftl" />

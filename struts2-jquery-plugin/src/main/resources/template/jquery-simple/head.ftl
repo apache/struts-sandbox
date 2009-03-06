@@ -1,6 +1,6 @@
 <#--
 /*
- * $Id: submit.ftl 720258 2008-11-24 19:05:16Z musachy $
+ * $Id: $
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,10 +20,6 @@
  * under the License.
  */
 -->
-<tr>
-    <td colspan="2"><div <#rt/>
-<#if parameters.align??>
-    align="${parameters.align?html}"<#t/>
-</#if>
-><#t/>
-<#include "/${parameters.templateDir}/jquery-simple/submit.ftl" />
+<script src="${base}/struts/jqueryUtils.js" type="text/javascript"></script>
+
+<script src="http://jqueryjs.googlecode.com/files/jquery-1.3.2.js" type="text/javascript"></script>
