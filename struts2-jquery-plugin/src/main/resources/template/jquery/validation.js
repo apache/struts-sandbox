@@ -1,5 +1,5 @@
 /*
- * $Id: validation.js 692578 2008-09-05 23:30:16Z davenewton $
+ * $Id$
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -24,8 +24,7 @@ function clearErrorMessages(form) {
 }
 
 function clearErrorMessagesJquery(form) {
-
-    $("#"+form+" > tr[errorFor]").remove();
+    $("#"+form).find("tr[errorFor]").remove();
 }
 
 function clearErrorLabels(form) {
@@ -33,7 +32,7 @@ function clearErrorLabels(form) {
 }
 
 function clearErrorLabelsJquery(form) {
-    $("#"+form+"> .errorLabel").removeClass("errorLabel");
+    $("#"+form).find(".errorLabel").removeClass("errorLabel");
 }
 
 function addError(e, errorText) {
