@@ -25,7 +25,7 @@ function clearErrorMessages(form) {
 
 function clearErrorMessagesJquery(form) {
 
-    $("#"+form+" > tr[errorFor!=null]").remove();
+    $("#"+form+" > tr[errorFor]").remove();
 }
 
 function clearErrorLabels(form) {
@@ -33,7 +33,7 @@ function clearErrorLabels(form) {
 }
 
 function clearErrorLabelsJquery(form) {
-    $("#"+form+"> .errorLabel").addClass("label").removeClass("errorLabel");
+    $("#"+form+"> .errorLabel").removeClass("errorLabel");
 }
 
 function addError(e, errorText) {
@@ -41,47 +41,13 @@ function addError(e, errorText) {
 }
 
 function addErrorJquery(e, errorText) {
-    var parentRow = $(e).parent("tr").get(0);
-    $(parentRow).before(
-        $("<tr></tr>").attr("errorFor", e).html(
-            $("<td></td>").attr("colspan", "2").html(
-                $("<span></span>").addClass("errorMessage").html(errorText)
-                    )
-                )
-            );
-    $("label[for="+ e +"]").addClass('errorLabel');
-    /*
-    try {
-        var row = (e.type ? e : e[0]);
-        while(row.nodeName.toUpperCase() != "TR") {
-            row = row.parentNode;
-        }
-        var table = row.parentNode;
-        var error = document.createTextNode(errorText);
-        var tr = document.createElement("tr");
-        var td = document.createElement("td");
-        var span = document.createElement("span");
-        td.align = "center";
-        td.valign = "top";
-        td.colSpan = 2;
-        span.setAttribute("class", "errorMessage");
-        span.setAttribute("className", "errorMessage"); //ie hack cause ie does not support setAttribute
-        span.appendChild(error);
-        td.appendChild(span);
-        tr.appendChild(td);
-        tr.setAttribute("errorFor", e.id);
-        table.insertBefore(tr, row);
 
-        // update the label too
-        //if labelposition is 'top' the label is on the row above
-        var labelRow = row.cells.length > 1 ? row : StrutsUtils.previousElement(tr, "tr");
-        var label = labelRow.cells[0].getElementsByTagName("label")[0];
-        if (label) {
-            label.setAttribute("class", "errorLabel");
-            label.setAttribute("className", "errorLabel"); //ie hack cause ie does not support setAttribute
-        }
-    } catch (e) {
-        alert(e);
-    }
-    */
+    $("#"+e).closest("tr").before(
+      $(document.createElement("tr")).attr({errorFor:e}).html(
+        $(document.createElement("td")).attr({colspan:2}).html(
+          $(document.createElement("span")).addClass("errorMessage").html(errorText)
+                )
+            )
+        );
+    $("label[for="+ e +"]").addClass('errorLabel');
 }

@@ -73,6 +73,7 @@ alert("formData = " + debugStr); -->
             });
             $.get("${parameters.action}", formData, ${parameters.ajaxResultHandler} );
 <#else>
+            var form = document.getElementById("${parameters.id}");
             form.submit();
 </#if>
         }

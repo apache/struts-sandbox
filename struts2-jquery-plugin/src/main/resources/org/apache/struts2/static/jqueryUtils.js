@@ -38,55 +38,18 @@ StrutsJQueryUtils.clearValidationErrors = function(formId) {
 // shows validation errors using functions from xhtml/validation.js
 // or css_xhtml/validation.js
 StrutsJQueryUtils.showValidationErrors = function(form, errors) {
-  StrutsJQueryUtils.clearValidationErrors(form, errors);
+  StrutsJQueryUtils.clearValidationErrors(form);
     
   if(errors.fieldErrors) {
     for(var fieldName in errors.fieldErrors) {
       for(var i = 0; i < errors.fieldErrors[fieldName].length; i++) {
-        addErrorJquery( $("#"+form+" > input[name="+fieldName+"]"), 
+        addErrorJquery( $("input[name=\""+fieldName+"\"]").attr("id"),
                  errors.fieldErrors[fieldName][i]);
       }
     }
   }
 };
 
-/*
-StrutsJQueryUtils.firstElement  = function(parentNode, tagName) {
-  var node = parentNode.firstChild;
-  while(node && node.nodeType != 1){
-    node = node.nextSibling;
-  }
-  if(tagName && node && node.tagName && node.tagName.toLowerCase() != tagName.toLowerCase()) {
-    node = StrutsJQueryUtils.nextElement(node, tagName);
-  }
-  return node;  
-};
-
-StrutsJQueryUtils.nextElement = function(node, tagName) {
-  if(!node) { return null; }
-  do {
-    node = node.nextSibling;
-  } while(node && node.nodeType != 1);
-
-  if(node && tagName && tagName.toLowerCase() != node.tagName.toLowerCase()) {
-    return StrutsJQueryUtils.nextElement(node, tagName);
-  }
-  return node;  
-};
-
-StrutsJQueryUtils.previousElement = function(node, tagName) {
-  if(!node) { return null; }
-  if(tagName) { tagName = tagName.toLowerCase(); }
-  do {
-    node = node.previousSibling;
-  } while(node && node.nodeType != 1);
-  
-  if(node && tagName && tagName.toLowerCase() != node.tagName.toLowerCase()) {
-    return StrutsJQueryUtils.previousElement(node, tagName);
-  }
-  return node;  
-};
-*/
 StrutsJQueryUtils.addOnLoad = function(func) {
   $().ready(func);
 };
