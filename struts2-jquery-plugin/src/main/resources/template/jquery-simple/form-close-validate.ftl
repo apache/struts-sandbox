@@ -25,7 +25,7 @@
 <#--TODO add tests for funky datatypes like Date obj returned from the datepicker
     TODO consider ids that contain a period... valid for struts, invalid for jquery
     -->
-    function validateForm_${parameters.id}() {
+    function handleForm_${parameters.id}() {
         var formData = StrutsJQueryUtils.keyValueizeForm("${parameters.id}");
 <#if parameters.method?contains("post") >
         $.post("${parameters.action}", formData, ${parameters.ajaxResultHandler} );

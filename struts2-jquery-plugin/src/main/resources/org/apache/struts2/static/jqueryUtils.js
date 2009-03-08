@@ -33,6 +33,7 @@ StrutsJQueryUtils.getValidationErrors = function(data) {
 
 StrutsJQueryUtils.clearValidationErrors = function(formId) {
   clearErrorMessages(formId);
+  clearErrorLabels(formId);
 };  
 
 // shows validation errors using functions from xhtml/validation.js

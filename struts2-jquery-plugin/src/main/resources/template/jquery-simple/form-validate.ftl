@@ -25,8 +25,8 @@
 <#if parameters.validate?default(true) == true>
 	<script type="text/javascript" src="${base}/struts/jquery/validation.js"></script>
 	<#if parameters.onsubmit??>
-		${tag.addParameter('onsubmit', "${parameters.onsubmit}; return validateForm_${parameters.id}();")}
+		${tag.addParameter('onsubmit', "${parameters.onsubmit}; return handleForm_${parameters.id}();")}
 	<#else>
-		${tag.addParameter('onsubmit', "return validateForm_${parameters.id}();")}
+		${tag.addParameter('onsubmit', "return handleForm_${parameters.id}();")}
 	</#if>
 </#if>

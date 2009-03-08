@@ -25,18 +25,18 @@
 <#--TODO add tests for funky datatypes like Date obj returned from the datepicker
     TODO consider ids that contain a period... valid for struts, invalid for jquery
     -->
-    function validateForm_${parameters.id}() {
+    function handleForm_${parameters.id}() {
         var formData = StrutsJQueryUtils.keyValueizeForm("${parameters.id}");
         formData['struts.enableJSONValidation'] = true;
 <#if parameters.method?contains("post") >
-        $.post("${parameters.action}", formData, validateFormCb_${parameters.id} );
+        $.post("${parameters.action}", formData, handleFormCb_${parameters.id} );
 <#else>
-        $.get("${parameters.action}", formData, validateFormCb_${parameters.id} );
+        $.get("${parameters.action}", formData, handleFormCb_${parameters.id} );
 </#if>
         return false;
     }
 
-    function validateFormCb_${parameters.id}( responseText, textStatus ) {
+    function handleFormCb_${parameters.id}( responseText, textStatus ) {
         
         //clear previous validation errors, if any
         StrutsJQueryUtils.clearValidationErrors("${parameters.id}");
