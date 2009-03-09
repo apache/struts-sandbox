@@ -44,12 +44,12 @@ import java.util.List;
         description = "Renders a date picker",
         allowDynamicAttributes = true)
 public class JQueryDatepicker extends JQueryTextField {
-     final protected static Logger LOG = LoggerFactory.getLogger(JQueryDatepicker.class);
+    final protected static Logger LOG = LoggerFactory.getLogger(JQueryDatepicker.class);
 
     private static final String TEMPLATE = "datepicker";
     final private static String RFC3339_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
     final private static String RFC3339_PATTERN = "{0,date," + RFC3339_FORMAT + "}";
-    
+
     //see http://docs.jquery.com/UI/Datepicker/%24.datepicker.formatDate
     private String displayFormat;
 
@@ -63,30 +63,46 @@ public class JQueryDatepicker extends JQueryTextField {
 
         if (displayFormat != null)
             addParameter("displayFormat", findString(displayFormat));
+        else
+            addParameter("displayFormat", "yy-mm-dd");
 
-        if(parameters.containsKey("value")) {
-            addParameter("nameValue", parameters.get("value"));
-        } else {
-            if(parameters.containsKey("name")) {
-                addParameter("nameValue", format(findValue((String)parameters.get("name"))));
+        Object currentValue = null;
+        if (parameters.containsKey("value")) {
+            addParameter("displayValue", parameters.get("value"));
+            currentValue = parameters.get("value");
+        } else if (parameters.containsKey("name")) {
+            currentValue = findValue((String) parameters.get("name"));
+        }
+
+        if (currentValue != null) {
+            Date date = getDate(currentValue);
+            if (date != null) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+                String formattedDate = MessageFormat.format(RFC3339_PATTERN, date);
+                addParameter("nameValue", formattedDate);
+                addParameter("year", calendar.get(Calendar.YEAR));
+                addParameter("day", calendar.get(Calendar.DAY_OF_MONTH));
+                addParameter("month", calendar.get(Calendar.MONTH));
             }
         }
     }
 
-    private String format(Object obj) {
-        if(obj == null)
+    private Date getDate(Object obj) {
+        SimpleDateFormat simpleDisplayFormat = new SimpleDateFormat(displayFormat);
+        if (obj == null)
             return null;
 
-        if(obj instanceof Date) {
-            return MessageFormat.format(RFC3339_PATTERN, (Date) obj);
-        } else if(obj instanceof Calendar) {
-            return MessageFormat.format(RFC3339_PATTERN, ((Calendar) obj).getTime());
-        }
-        else {
+        if (obj instanceof Date) {
+            return (Date) obj;
+        } else if (obj instanceof Calendar) {
+            return ((Calendar) obj).getTime();
+        } else {
             // try to parse a date
             String dateStr = obj.toString();
-            if(dateStr.equalsIgnoreCase("today"))
-                return MessageFormat.format(RFC3339_PATTERN, new Date());
+            if (dateStr.equalsIgnoreCase("today")) {
+                return new Date();
+            }
 
 
             Date date = null;
@@ -101,7 +117,7 @@ public class JQueryDatepicker extends JQueryTextField {
             if (this.displayFormat != null) {
                 try {
                     SimpleDateFormat displayFormat = new SimpleDateFormat(
-                        (String) getParameters().get("displayFormat"));
+                            (String) getParameters().get("displayFormat"));
                     formats.add(displayFormat);
                 } catch (Exception e) {
                 }
@@ -111,16 +127,16 @@ public class JQueryDatepicker extends JQueryTextField {
                 try {
                     date = format.parse(dateStr);
                     if (date != null)
-                        return MessageFormat.format(RFC3339_PATTERN, date);
+                        return date;
                 } catch (Exception e) {
                     //keep going
                 }
             }
 
-           // last resource, assume already in correct/default format
-           if (LOG.isDebugEnabled())
-               LOG.debug("Unable to parse date " + dateStr);
-           return dateStr;
+            // last resource, assume already in correct/default format
+            if (LOG.isDebugEnabled())
+                LOG.debug("Unable to parse date " + dateStr);
+            return null;
         }
     }
 

@@ -28,8 +28,8 @@
 <#if parameters.maxlength??>
  maxlength="${parameters.maxlength?html}"<#rt/>
 </#if>
-<#if parameters.nameValue??>
- value="<@s.property value="parameters.nameValue"/>"<#rt/>
+<#if parameters.displayValue??>
+ value="<@s.property value="parameters.displayValue"/>"<#rt/>
 </#if>
 <#if parameters.disabled?default(false)>
  disabled="disabled"<#rt/>
@@ -51,15 +51,20 @@
 <#include "/${parameters.templateDir}/simple/common-attributes.ftl" />
 <#include "/${parameters.templateDir}/simple/dynamic-attributes.ftl" />
 />
-<input type="text" name="${parameters.name?default("")?html}" id="${parameters.id?html}_hidden" />
+<input type="text" name="${parameters.name?default("")?html}" id="${parameters.id?html}_hidden"
+<#if parameters.nameValue??>
+value="<@s.property value="parameters.nameValue"/>"<#rt/>
+</#if>
+/>
 <script type="text/javascript">
     $(function() {
         $("#${parameters.id?html}").datepicker({
             altField: "#${parameters.id?html}_hidden",
-            altFormat: "yy-mm-dd'T'00:00:00"
-            <#if parameters.displayFormat??>
-            ,dateFormat : "${parameters.displayFormat?html}"
-            </#if>
+            altFormat: "yy-mm-dd'T'00:00:00",
+            dateFormat : "${parameters.displayFormat?html}"
         });
+        <#if parameters.year?? && parameters.month?? && parameters.day??>
+        $("#${parameters.id?html}").val($.datepicker.formatDate("${parameters.displayFormat?html}", new Date(${parameters.year?c}, ${parameters.month}, ${parameters.day})));
+        </#if>
     });
 </script>
