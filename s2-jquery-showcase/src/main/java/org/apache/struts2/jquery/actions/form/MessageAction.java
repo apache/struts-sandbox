@@ -15,6 +15,9 @@ public class MessageAction extends ActionSupport {
     private String msg;
 
     @Actions({
+            @Action("/simple-theme/SimpleFormPostAjaxResponse"),
+            @Action("/simple-theme/SimpleFormPostNonAjaxResponse"),
+            @Action("/simple-theme/FormWithResetPostReqAjaxResp"),
             @Action("SimpleFormGetAjaxResponse"),
             @Action("SimpleFormPostAjaxResponse"),
             @Action("SimpleFormGetNonAjaxResponse"),
