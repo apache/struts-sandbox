@@ -32,7 +32,7 @@
        </li>
 
        <li>
-           <s:url var="url" value="/simple-theme/Datepicker"/>
+           <s:url var="url" value="/form/date-input"/>
            <s:a href="%{#url}">Date Picker</s:a>
        </li>
 

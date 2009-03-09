@@ -9,7 +9,7 @@
 </head>
 <body>
 <s:form id="indexForm" method="post" namespace="/form" action="date" theme="simple">
-    <sjx:datepicker name="date" displayFormat="mm dd yy" theme="jquery-simple"/>
+    <sjx:datepicker name="date" displayFormat="mm dd yy" theme="jquery-simple" value="date"/>
     <s:submit />
 </s:form>
 </body>
