@@ -5,14 +5,7 @@
 <title>Hello World!</title>
 <sjx:head />
     <script type="text/javascript">
-        function handleAjaxResponse(data, textStatus) {
-            var formData = StrutsJQueryUtils.keyValueizeForm("indexForm");
-            formData['struts.enableJSONValidation'] = true;
-            $.post("/s2-jquery-showcase/form/SimpleFormPostNonAjaxResponse", formData, handleFormCb_indexForm);
-            return false;
-        }
-
-        function handleFormCb_indexForm(responseText, textStatus) {
+        function handleAjaxResponse(responseText, textStatus) {
 
             //clear previous validation errors, if any
             $("#errors").empty();
@@ -25,23 +18,29 @@
                 for (var fieldName in errorsObject.fieldErrors) {
                     for (var i = 0; i < errorsObject.fieldErrors[fieldName].length; i++) {
                         $("#errors").html(
-                                $("#errors").html() + "<br/>" + errorsObject.fieldErrors[fieldName][i]
+                             $("#errors").html() + "<br/>" + errorsObject.fieldErrors[fieldName][i]
                                 );
                     }
                 }
             }
             else {
-                $("#messages").append(responseText + "<br />\n");
-                // alert(textStatus);
+                var formData = StrutsJQueryUtils.keyValueizeForm("indexForm");
+                formData["struts.enableJSONValidation"] = false;
+                $.post("/s2-jquery-showcase/simple-theme/SimpleFormPostAjaxResponse", formData, handleFormCb);
             }
+        }
+
+        function handleFormCb(responseText, textStatus) {
+            $("#messages").append(responseText + "<br />\n");
         }
     </script>
 </head>
 <body>
 <sjx:form theme="jquery-simple" id="indexForm" method="post" validate="true"
-          namespace="/form" action="SimpleFormPostAjaxResponse"
+          namespace="/simple-theme" action="SimpleFormPostAjaxResponse"
           ajaxResult="true" ajaxResultHandler="handleAjaxResponse" >
 <sjx:textfield key="msg" />
+    <input type="hidden" id="struts.enableJSONValidation" name="struts.enableJSONValidation" value="true" />
 <sjx:submit />
 </sjx:form>
 <div id="messages"></div>
