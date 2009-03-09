@@ -14,6 +14,9 @@
 <tr><td><a href="SimpleFormGetAjaxResponse">SimpleFormGetAjaxResponse</a></td></tr>
 <tr><td><a href="FormWithResetGetReqAjaxResp">FormWithResetGetReqAjaxResp</a></td></tr>
 <tr><td><a href="FormWithResetPostReqAjaxResp">FormWithResetPostReqAjaxResp</a></td></tr>
+<tr><td><a href="FormPostNonAjaxResponseSimpleTheme">FormPostNonAjaxResponseSimpleTheme</a></td></tr>
+<tr><td><a href="FormPostAjaxResponseSimpleTheme">FormPostAjaxResponseSimpleTheme</a></td></tr>
+<tr><td><a href="FormWithResetGetReqAjaxRespSimpleTheme">FormWithResetGetReqAjaxRespSimpleTheme</a></td></tr>
 </tbody></table>
 </body>
 </html>
