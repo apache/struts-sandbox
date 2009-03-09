@@ -6,7 +6,34 @@
 <sjx:head />
     <script type="text/javascript">
         function handleAjaxResponse(data, textStatus) {
-            $("#messages").append(data + "<br />\n");
+            var formData = StrutsJQueryUtils.keyValueizeForm("indexForm");
+            formData['struts.enableJSONValidation'] = true;
+            $.post("/s2-jquery-showcase/form/SimpleFormPostNonAjaxResponse", formData, handleFormCb_indexForm);
+            return false;
+        }
+
+        function handleFormCb_indexForm(responseText, textStatus) {
+
+            //clear previous validation errors, if any
+            $("#errors").empty();
+
+            //get errors from response
+            var errorsObject = StrutsJQueryUtils.getValidationErrors(responseText);
+
+            //show errors, if any
+            if (errorsObject && errorsObject.fieldErrors) {
+                for (var fieldName in errorsObject.fieldErrors) {
+                    for (var i = 0; i < errorsObject.fieldErrors[fieldName].length; i++) {
+                        $("#errors").html(
+                                $("#errors").html() + "<br/>" + errorsObject.fieldErrors[fieldName][i]
+                                );
+                    }
+                }
+            }
+            else {
+                $("#messages").append(responseText + "<br />\n");
+                // alert(textStatus);
+            }
         }
     </script>
 </head>
