@@ -31,6 +31,11 @@
            <s:a href="%{#url}">Form With Reset Post Ajax Response</s:a>
        </li>
 
+       <li>
+           <s:url var="url" value="/simple-theme/Datepicker"/>
+           <s:a href="%{#url}">Date Picker</s:a>
+       </li>
+
    </ul>
 </body>
 </html>

@@ -8,5 +8,6 @@
             <result>/WEB-INF/content/index.jsp</result>
         </action>
 
+        
     </package>
 </struts>
