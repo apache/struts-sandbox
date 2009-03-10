@@ -28,6 +28,7 @@
     Unparsable Date: <sjx:datepicker name="date7" displayFormat="mm dd yy" theme="jquery-simple" value="%{'Not a Date'}" />
     Options from an inline map:<sjx:datepicker name="date8" theme="jquery-simple" options='{"maxDate" : "+1m"}'/>
     Options from an object:<sjx:datepicker name="date9" theme="jquery-simple" options="ops"/>
+    No Month or Year dropdown:<sjx:datepicker name="date10" theme="jquery-simple" changeMonth="false" changeYear="false"/>
     <s:submit />
 </s:form>
 </body>
