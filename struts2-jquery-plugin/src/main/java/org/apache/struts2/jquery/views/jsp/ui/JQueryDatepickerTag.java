@@ -32,6 +32,7 @@ public class JQueryDatepickerTag extends JQueryTextFieldTag {
     private String displayFormat;
     private String imageUrl;
     private String imageTooltip;
+    private String options;
 
     public Component getBean(ValueStack stack, HttpServletRequest req, HttpServletResponse res) {
         return new JQueryDatepicker(stack, req, res);
@@ -43,6 +44,7 @@ public class JQueryDatepickerTag extends JQueryTextFieldTag {
         picker.setDisplayFormat(displayFormat);
         picker.setImageTooltip(imageTooltip);
         picker.setImageUrl(imageUrl);
+        picker.setOptions(options);
     }
 
     public void setDisplayFormat(String displayFormat) {
@@ -55,5 +57,9 @@ public class JQueryDatepickerTag extends JQueryTextFieldTag {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public void setOptions(String options) {
+        this.options = options;
     }
 }

@@ -22,6 +22,7 @@ package org.apache.struts2.jquery.components;
 
 import com.opensymphony.xwork2.inject.Inject;
 import com.opensymphony.xwork2.util.ValueStack;
+import com.opensymphony.xwork2.util.TextUtils;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
 import org.apache.struts2.jquery.JQueryPluginConstants;
@@ -37,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @StrutsTag(
         name = "datepicker",
@@ -54,6 +56,7 @@ public class JQueryDatepicker extends JQueryTextField {
     private String displayFormat;
     private String imageUrl;
     private String imageTooltip;
+    private String options;
 
     public JQueryDatepicker(ValueStack stack, HttpServletRequest request, HttpServletResponse response) {
         super(stack, request, response);
@@ -76,6 +79,12 @@ public class JQueryDatepicker extends JQueryTextField {
         else
             addParameter("imageTooltip", "Pick a date");
 
+        if (this.options != null) {
+            String ops = findString(this.options);
+            if (TextUtils.stringSet(ops))
+                addParameter("options", TextUtils.escapeJavaScript(ops));
+        }
+
         Object currentValue = null;
         if (parameters.containsKey("nameValue")) {
             currentValue = parameters.get("nameValue");
@@ -93,12 +102,19 @@ public class JQueryDatepicker extends JQueryTextField {
                 addParameter("year", calendar.get(Calendar.YEAR));
                 addParameter("day", calendar.get(Calendar.DAY_OF_MONTH));
                 addParameter("month", calendar.get(Calendar.MONTH));
+            } else {
+                //the value could not be parsed into a Date, display as is
+                addParameter("displayValue", currentValue.toString());
             }
         }
     }
 
+    @Override
+    protected Class getValueClassType() {
+        return Object.class;
+    }
+
     private Date getDate(Object obj) {
-        SimpleDateFormat simpleDisplayFormat = new SimpleDateFormat(displayFormat);
         if (obj == null)
             return null;
 
@@ -113,8 +129,6 @@ public class JQueryDatepicker extends JQueryTextField {
                 return new Date();
             }
 
-
-            Date date = null;
             //formats used to parse the date
             List<DateFormat> formats = new ArrayList<DateFormat>();
             formats.add(new SimpleDateFormat(RFC3339_FORMAT));
@@ -134,7 +148,7 @@ public class JQueryDatepicker extends JQueryTextField {
 
             for (DateFormat format : formats) {
                 try {
-                    date = format.parse(dateStr);
+                    Date date = format.parse(dateStr);
                     if (date != null)
                         return date;
                 } catch (Exception e) {
@@ -149,6 +163,9 @@ public class JQueryDatepicker extends JQueryTextField {
         }
     }
 
+    public static void main(String[] s) {
+        System.out.print(SimpleDateFormat.getDateInstance(DateFormat.SHORT).format(new Date()));
+    }
     protected String getDefaultTemplate() {
         return TEMPLATE;
     }
@@ -174,4 +191,9 @@ public class JQueryDatepicker extends JQueryTextField {
         this.imageUrl = imageUrl;
     }
 
+    @StrutsTagAttribute(description = "The name of a variable(or a javascript map) that contains additional options to be passed to JQuery" +
+            " Datepicker")
+    public void setOptions(String options) {
+        this.options = options;
+    }
 }

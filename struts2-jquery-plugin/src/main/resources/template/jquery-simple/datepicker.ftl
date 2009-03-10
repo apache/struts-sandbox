@@ -60,7 +60,7 @@ value="<@s.property value="parameters.nameValue"/>"<#rt/>
 />
 <script type="text/javascript">
     $(function() {
-        $("#${parameters.id?html}").datepicker({
+        var ops = {
             altField: "#${parameters.id?html}_hidden",
             altFormat: "yy-mm-dd'T'00:00:00",
             dateFormat : "${parameters.displayFormat?html}",
@@ -72,7 +72,17 @@ value="<@s.property value="parameters.nameValue"/>"<#rt/>
             buttonImageOnly: true,
             showOn: "both",
             buttonText: "${parameters.imageTooltip}"
-        });
+        };
+
+        <#if parameters.options??>
+            var ops2 = window["${parameters.options}"];
+            if (!ops2) {
+                ops2 = eval ("( ${parameters.options} )" );
+            }
+            $.extend(ops, ops2);
+        </#if>
+
+        $("#${parameters.id?html}").datepicker(ops);
         <#if parameters.year?? && parameters.month?? && parameters.day??>
         $("#${parameters.id?html}").val($.datepicker.formatDate("${parameters.displayFormat?html}", new Date(${parameters.year?c}, ${parameters.month}, ${parameters.day})));
         </#if>
