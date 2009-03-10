@@ -59,34 +59,35 @@ value="<@s.property value="parameters.nameValue"/>"<#rt/>
 </#if>
 />
 <script type="text/javascript">
-    $(function() {
-        var ops = {
-            altField: "#${parameters.id?html}_hidden",
-            altFormat: "yy-mm-dd'T'00:00:00",
-            dateFormat : "${parameters.displayFormat?html}",
-            <#if parameters.imageUrl??>
-                buttonImage: "${parameters.imageUrl}",
-            <#else>
-                buttonImage: "${base}/struts/images/dateIcon.gif",
-            </#if>
-            buttonImageOnly: true,
-            showOn: "both",
-            buttonText: "${parameters.imageTooltip}",
-            changeMonth: ${parameters.changeMonth},
-            changeYear: ${parameters.changeYear}
-        };
-
-        <#if parameters.options??>
-            var ops2 = window["${parameters.options}"];
-            if (!ops2) {
-                ops2 = eval ("( ${parameters.options} )" );
-            }
-            $.extend(ops, ops2);
+$(function() {
+    var ops = {
+        altField: "#${parameters.id?html}_hidden",
+        altFormat: "yy-mm-dd'T'00:00:00",
+        dateFormat : "${parameters.displayFormat?html}",
+        <#if parameters.imageUrl??>
+        buttonImage: "${parameters.imageUrl}",
+        <#else>
+        buttonImage: "${base}/struts/images/dateIcon.gif",
         </#if>
+        buttonImageOnly: true,
+        showOn: "both",
+        buttonText: "${parameters.imageTooltip}",
+        changeMonth: ${parameters.changeMonth},
+        changeYear: ${parameters.changeYear}
+    };
 
-        $("#${parameters.id?html}").datepicker(ops);
-        <#if parameters.year?? && parameters.month?? && parameters.day??>
-        $("#${parameters.id?html}").val($.datepicker.formatDate("${parameters.displayFormat?html}", new Date(${parameters.year?c}, ${parameters.month}, ${parameters.day})));
-        </#if>
-    });
+    <#if parameters.options??>
+    var opsStr = "${parameters.options}";
+    var ops2 = window[opsStr];
+    if (!ops2) {
+        ops2 = eval ("( " + opsStr + " )" );
+    }
+    $.extend(ops, ops2);
+    </#if>
+
+    $("#${parameters.id?html}").datepicker(ops);
+    <#if parameters.year?? && parameters.month?? && parameters.day??>
+    $("#${parameters.id?html}").val($.datepicker.formatDate("${parameters.displayFormat?html}", new Date(${parameters.year?c}, ${parameters.month}, ${parameters.day})));
+    </#if>
+});
 </script>
