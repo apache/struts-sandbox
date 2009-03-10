@@ -64,8 +64,14 @@ value="<@s.property value="parameters.nameValue"/>"<#rt/>
             altField: "#${parameters.id?html}_hidden",
             altFormat: "yy-mm-dd'T'00:00:00",
             dateFormat : "${parameters.displayFormat?html}",
-            buttonImage: '${base}/struts/images/dateIcon.gif',
-            buttonImageOnly: true
+            <#if parameters.imageUrl??>
+                buttonImage: "${parameters.imageUrl}",
+            <#else>
+                buttonImage: "${base}/struts/images/dateIcon.gif",
+            </#if>
+            buttonImageOnly: true,
+            showOn: "both",
+            buttonText: "${parameters.imageTooltip}"
         });
         <#if parameters.year?? && parameters.month?? && parameters.day??>
         $("#${parameters.id?html}").val($.datepicker.formatDate("${parameters.displayFormat?html}", new Date(${parameters.year?c}, ${parameters.month}, ${parameters.day})));

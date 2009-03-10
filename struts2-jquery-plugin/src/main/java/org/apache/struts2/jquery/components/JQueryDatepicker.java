@@ -52,6 +52,8 @@ public class JQueryDatepicker extends JQueryTextField {
 
     //see http://docs.jquery.com/UI/Datepicker/%24.datepicker.formatDate
     private String displayFormat;
+    private String imageUrl;
+    private String imageTooltip;
 
     public JQueryDatepicker(ValueStack stack, HttpServletRequest request, HttpServletResponse response) {
         super(stack, request, response);
@@ -65,6 +67,14 @@ public class JQueryDatepicker extends JQueryTextField {
             addParameter("displayFormat", findString(displayFormat));
         else
             addParameter("displayFormat", "yy-mm-dd");
+
+        if (imageUrl != null)
+            addParameter("imageUrl", findString(imageUrl));
+
+        if (imageTooltip != null)
+            addParameter("imageTooltip", findString(imageTooltip));
+        else
+            addParameter("imageTooltip", "Pick a date");
 
         Object currentValue = null;
         if (parameters.containsKey("value")) {
@@ -154,4 +164,15 @@ public class JQueryDatepicker extends JQueryTextField {
     public void setDisplayFormat(String displayFormat) {
         this.displayFormat = displayFormat;
     }
+
+    @StrutsTagAttribute(description = "Tooltip for the calendar image", defaultValue = "Pick a date")
+    public void setImageTooltip(String imageTooltip) {
+        this.imageTooltip = imageTooltip;
+    }
+
+    @StrutsTagAttribute(description = "Image used for the calendar button")
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
 }

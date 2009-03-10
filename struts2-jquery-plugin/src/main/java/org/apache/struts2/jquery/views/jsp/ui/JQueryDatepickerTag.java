@@ -30,6 +30,8 @@ import javax.servlet.http.HttpServletResponse;
 
 public class JQueryDatepickerTag extends JQueryTextFieldTag {
     private String displayFormat;
+    private String imageUrl;
+    private String imageTooltip;
 
     public Component getBean(ValueStack stack, HttpServletRequest req, HttpServletResponse res) {
         return new JQueryDatepicker(stack, req, res);
@@ -39,9 +41,19 @@ public class JQueryDatepickerTag extends JQueryTextFieldTag {
         super.populateParams();
         JQueryDatepicker picker = ((JQueryDatepicker) component);
         picker.setDisplayFormat(displayFormat);
+        picker.setImageTooltip(imageTooltip);
+        picker.setImageUrl(imageUrl);
     }
 
     public void setDisplayFormat(String displayFormat) {
         this.displayFormat = displayFormat;
+    }
+
+    public void setImageTooltip(String imageTooltip) {
+        this.imageTooltip = imageTooltip;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
