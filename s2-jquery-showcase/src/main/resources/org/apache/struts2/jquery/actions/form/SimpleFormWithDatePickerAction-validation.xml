@@ -1,0 +1,16 @@
+<!DOCTYPE validators PUBLIC "-//OpenSymphony Group//XWork Validator 1.0.2//EN"
+       "http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
+<validators>
+  <field name="msg">
+      <field-validator type="requiredstring">
+          <message>You must enter a message.</message>
+      </field-validator>
+  </field>
+    <field name="date">
+      <field-validator type="date">
+          <param name="min">01/01/1900</param>
+          <param name="max">01/01/2000</param>
+          <message>You must enter a date before 2000.</message>
+      </field-validator>
+  </field>
+</validators>
