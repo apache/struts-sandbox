@@ -24,12 +24,22 @@ public class MessageAction extends ActionSupport {
             @Action("SimpleFormPostNonAjaxResponse"),
             @Action("FormWithResetGetReqAjaxResp"),
             @Action("FormWithResetPostReqAjaxResp")
-    })
+    }) @Override 
     public String execute() {
         return ActionSupport.SUCCESS;
     }
 
-    @SkipValidation
+    @Actions({
+            @Action("/simple-theme/SimpleFormPostAjaxResponse-input"),
+            @Action("/simple-theme/SimpleFormPostNonAjaxResponse-input"),
+            @Action("/simple-theme/FormWithResetPostReqAjaxResp-input"),
+            @Action("SimpleFormGetAjaxResponse-input"),
+            @Action("SimpleFormPostAjaxResponse-input"),
+            @Action("SimpleFormGetNonAjaxResponse-input"),
+            @Action("SimpleFormPostNonAjaxResponse-input"),
+            @Action("FormWithResetGetReqAjaxResp-input"),
+            @Action("FormWithResetPostReqAjaxResp-input")
+    }) @SkipValidation @Override
     public String input() {
         return ActionSupport.INPUT;
     }

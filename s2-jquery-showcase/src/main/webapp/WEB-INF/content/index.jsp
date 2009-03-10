@@ -30,7 +30,18 @@
            <s:url var="url" namespace="/form" action="FormWithResetPostReqAjaxResp-input"/>
            <s:a href="%{#url}">Form With Reset Post Ajax Response</s:a>
        </li>
-
+       <li>
+           <s:url var="url" namespace="/simple-theme" action="FormWithResetPostReqAjaxResp-input"/>
+           <s:a href="%{#url}">Form With Reset Post Request Ajax Response (simple theme)</s:a>
+       </li>
+       <li>
+           <s:url var="url" namespace="/simple-theme" action="SimpleFormPostAjaxResponse-input"/>
+           <s:a href="%{#url}">Simple Form Post Ajax Response (simple theme)</s:a>
+       </li>
+       <li>
+           <s:url var="url" namespace="/simple-theme" action="SimpleFormPostNonAjaxResponse-input"/>
+           <s:a href="%{#url}">Simple Form Post Non-Ajax Response (simple theme)</s:a>
+       </li>
        <li>
            <s:url var="url" value="/form/date-input"/>
            <s:a href="%{#url}">Date Picker</s:a>
