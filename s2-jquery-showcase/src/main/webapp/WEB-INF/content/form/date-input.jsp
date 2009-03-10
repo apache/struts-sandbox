@@ -9,7 +9,9 @@
 </head>
 <body>
 <s:form id="indexForm" method="post" namespace="/form" action="date" theme="simple">
-    <sjx:datepicker name="date" displayFormat="mm dd yy" theme="jquery-simple" value="date" readonly="true" imageTooltip="Select a date"/>
+    <sjx:datepicker name="date" displayFormat="mm dd yy" theme="jquery-simple" value="%{date}" readonly="true" imageTooltip="Select a date"/>
+    <sjx:datepicker name="date1" displayFormat="mm dd yy" theme="jquery-simple" value="%{calendar}" readonly="true" imageTooltip="Select a date"/>
+    <sjx:datepicker name="date2" displayFormat="mm dd yy" theme="jquery-simple" value="%{shortFormat}" readonly="true" imageTooltip="Select a date"/>
     <s:submit />
 </s:form>
 </body>
