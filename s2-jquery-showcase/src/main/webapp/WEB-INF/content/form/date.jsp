@@ -5,8 +5,9 @@
 <html>
 <head>
 <title>Posted Date</title>
+<sjx:head />
 </head>
 <body>
-Date: <span id="date"><s:property value="date" /></span>
+<sjx:datepicker name="date" displayFormat="mm dd yy" theme="jquery-simple" readonly="true" imageTooltip="Select a date"/>
 </body>
 </html>
