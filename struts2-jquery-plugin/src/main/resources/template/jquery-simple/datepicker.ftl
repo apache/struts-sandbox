@@ -71,7 +71,9 @@ value="<@s.property value="parameters.nameValue"/>"<#rt/>
             </#if>
             buttonImageOnly: true,
             showOn: "both",
-            buttonText: "${parameters.imageTooltip}"
+            buttonText: "${parameters.imageTooltip}",
+            changeMonth: ${parameters.changeMonth},
+            changeYear: ${parameters.changeYear}
         };
 
         <#if parameters.options??>

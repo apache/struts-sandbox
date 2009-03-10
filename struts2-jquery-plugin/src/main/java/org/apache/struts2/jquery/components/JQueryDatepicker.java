@@ -57,6 +57,8 @@ public class JQueryDatepicker extends JQueryTextField {
     private String imageUrl;
     private String imageTooltip;
     private String options;
+    private String changeYear;
+    private String changeMonth;
 
     public JQueryDatepicker(ValueStack stack, HttpServletRequest request, HttpServletResponse response) {
         super(stack, request, response);
@@ -78,6 +80,16 @@ public class JQueryDatepicker extends JQueryTextField {
             addParameter("imageTooltip", findString(imageTooltip));
         else
             addParameter("imageTooltip", "Pick a date");
+
+        if (this.changeMonth != null)
+            addParameter("changeMonth", findString(this.changeMonth));
+        else
+            addParameter("changeMonth", "true");
+
+        if (this.changeYear != null)
+            addParameter("changeYear", findString(this.changeYear));
+        else
+            addParameter("changeYear", "true");
 
         if (this.options != null) {
             String ops = findString(this.options);
@@ -166,6 +178,7 @@ public class JQueryDatepicker extends JQueryTextField {
     public static void main(String[] s) {
         System.out.print(SimpleDateFormat.getDateInstance(DateFormat.SHORT).format(new Date()));
     }
+
     protected String getDefaultTemplate() {
         return TEMPLATE;
     }
@@ -195,5 +208,15 @@ public class JQueryDatepicker extends JQueryTextField {
             " Datepicker")
     public void setOptions(String options) {
         this.options = options;
+    }
+
+    @StrutsTagAttribute(description = "Allows you to change the month by selecting from a drop-down list", type = "Boolean", defaultValue = "true")
+    public void setChangeMonth(String changeMonth) {
+        this.changeMonth = changeMonth;
+    }
+
+    @StrutsTagAttribute(description = "Allows you to change the year by selecting from a drop-down list", type = "Boolean", defaultValue = "true")
+    public void setChangeYear(String changeYear) {
+        this.changeYear = changeYear;
     }
 }

@@ -33,6 +33,8 @@ public class JQueryDatepickerTag extends JQueryTextFieldTag {
     private String imageUrl;
     private String imageTooltip;
     private String options;
+    private String changeYear;
+    private String changeMonth;
 
     public Component getBean(ValueStack stack, HttpServletRequest req, HttpServletResponse res) {
         return new JQueryDatepicker(stack, req, res);
@@ -45,6 +47,8 @@ public class JQueryDatepickerTag extends JQueryTextFieldTag {
         picker.setImageTooltip(imageTooltip);
         picker.setImageUrl(imageUrl);
         picker.setOptions(options);
+        picker.setChangeMonth(changeMonth);
+        picker.setChangeYear(changeYear);
     }
 
     public void setDisplayFormat(String displayFormat) {
@@ -61,5 +65,13 @@ public class JQueryDatepickerTag extends JQueryTextFieldTag {
 
     public void setOptions(String options) {
         this.options = options;
+    }
+
+    public void setChangeYear(String changeYear) {
+        this.changeYear = changeYear;
+    }
+
+    public void setChangeMonth(String changeMonth) {
+        this.changeMonth = changeMonth;
     }
 }
