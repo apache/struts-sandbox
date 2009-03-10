@@ -20,6 +20,7 @@
  * under the License.
  */
 -->
+<div class="s2-jquery-datepicker">
 <input type="text"<#rt/>
  name="struts.${parameters.name?default("")?html}"<#rt/>
 <#if parameters.get("size")??>
@@ -51,7 +52,8 @@
 <#include "/${parameters.templateDir}/simple/common-attributes.ftl" />
 <#include "/${parameters.templateDir}/simple/dynamic-attributes.ftl" />
 />
-<input type="text" name="${parameters.name?default("")?html}" id="${parameters.id?html}_hidden"
+</div>
+<input type="hidden" name="${parameters.name?default("")?html}" id="${parameters.id?html}_hidden"
 <#if parameters.nameValue??>
 value="<@s.property value="parameters.nameValue"/>"<#rt/>
 </#if>
@@ -61,7 +63,9 @@ value="<@s.property value="parameters.nameValue"/>"<#rt/>
         $("#${parameters.id?html}").datepicker({
             altField: "#${parameters.id?html}_hidden",
             altFormat: "yy-mm-dd'T'00:00:00",
-            dateFormat : "${parameters.displayFormat?html}"
+            dateFormat : "${parameters.displayFormat?html}",
+            buttonImage: '${base}/struts/images/dateIcon.gif',
+            buttonImageOnly: true
         });
         <#if parameters.year?? && parameters.month?? && parameters.day??>
         $("#${parameters.id?html}").val($.datepicker.formatDate("${parameters.displayFormat?html}", new Date(${parameters.year?c}, ${parameters.month}, ${parameters.day})));

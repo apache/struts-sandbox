@@ -22,7 +22,11 @@
 -->
 <script src="${base}/struts/jqueryUtils.js" type="text/javascript"></script>
 
-<script src="http://jqueryjs.googlecode.com/files/jquery-1.3.2.js" type="text/javascript"></script>
-<script src="http://jqueryui.com/latest/ui/ui.core.js" type="text/javascript"></script>
-<script src="http://jqueryui.com/latest/ui/ui.datepicker.js" type="text/javascript"></script>
+<script src="${base}/struts/js/jquery-1.3.2.min.js" type="text/javascript"></script>
+<script src="${base}/struts/js/jquery-ui-1.7.custom.min.js" type="text/javascript"></script>
+
+<link href="${base}/struts/css/smoothness/jquery-ui-1.7.custom.css" rel="stylesheet" type="text/css" />
+<link href="${base}/struts/css/smoothness/main.css" rel="stylesheet" type="text/css" />
+
+
 
