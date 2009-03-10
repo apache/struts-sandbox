@@ -77,9 +77,8 @@ public class JQueryDatepicker extends JQueryTextField {
             addParameter("imageTooltip", "Pick a date");
 
         Object currentValue = null;
-        if (parameters.containsKey("value")) {
-            addParameter("displayValue", parameters.get("value"));
-            currentValue = parameters.get("value");
+        if (parameters.containsKey("nameValue")) {
+            currentValue = parameters.get("nameValue");
         } else if (parameters.containsKey("name")) {
             currentValue = findValue((String) parameters.get("name"));
         }
