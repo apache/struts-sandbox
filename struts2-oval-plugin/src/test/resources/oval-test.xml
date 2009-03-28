@@ -1,0 +1,44 @@
+<!DOCTYPE xwork PUBLIC
+    "-//OpenSymphony Group//XWork 2.0//EN"
+    "http://www.opensymphony.com/xwork/xwork-2.0.dtd"
+ >
+
+<xwork>
+    <package namespace="oval" name="oval-test">
+        <result-types>
+            <result-type name="void" class="org.apache.struts2.interceptor.VoidResult"/>
+        </result-types>
+        <interceptors>
+            <interceptor name="ovalValidation" class="org.apache.struts2.interceptor.OValValidationInterceptor"/>
+        </interceptors>
+
+        <action name="simpleField" class="org.apache.struts2.interceptor.SimpleField">
+            <interceptor-ref name="ovalValidation" />
+            <result type="void"></result>
+        </action>
+        <action name="simpleMethod" class="org.apache.struts2.interceptor.SimpleMethod">
+            <interceptor-ref name="ovalValidation" />
+            <result type="void"></result>
+        </action>
+        <action name="simpleFieldOGNL" class="org.apache.struts2.interceptor.SimpleFieldOGNLExpression">
+            <interceptor-ref name="ovalValidation" />
+            <result type="void"></result>
+        </action>
+        <action name="simpleFieldI18n" class="org.apache.struts2.interceptor.SimpleFieldI18n">
+            <interceptor-ref name="ovalValidation" />
+            <result type="void"></result>
+        </action>
+        <action name="simpleFieldI18nDefaultKey" class="org.apache.struts2.interceptor.SimpleFieldI18nDefaultKey">
+            <interceptor-ref name="ovalValidation" />
+            <result type="void"></result>
+        </action>
+        <action name="fieldsWidthProfiles13" class="org.apache.struts2.interceptor.FieldsWithProfiles" method="run1">
+            <interceptor-ref name="ovalValidation" />
+            <result type="void"></result>
+        </action>
+        <action name="fieldsWidthProfiles2" class="org.apache.struts2.interceptor.FieldsWithProfiles" method="run2">
+            <interceptor-ref name="ovalValidation" />
+            <result type="void"></result>
+        </action>
+    </package>
+</xwork>
