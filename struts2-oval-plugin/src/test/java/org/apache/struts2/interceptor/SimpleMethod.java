@@ -31,11 +31,11 @@ public class SimpleMethod extends ActionSupport {
     @IsInvariant
     @NotNull
     @Length(max = 4)
-    public String getName() {
+    public String getSomeName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setSomeName(String name) {
         this.name = name;
     }
 }

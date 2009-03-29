@@ -34,6 +34,7 @@ import net.sf.oval.Validator;
 import net.sf.oval.ConstraintViolation;
 import net.sf.oval.context.FieldContext;
 import net.sf.oval.context.OValContext;
+import net.sf.oval.context.MethodReturnValueContext;
 
 import java.util.List;
 import java.lang.reflect.Method;
@@ -46,13 +47,6 @@ import org.apache.commons.lang.xwork.StringUtils;
  */
 public class OValValidationInterceptor extends MethodFilterInterceptor {
     private static final Logger LOG = LoggerFactory.getLogger(OValValidationInterceptor.class);
-
-    private ReflectionProvider reflectionProvider;
-
-    @Inject
-    public void setReflectionProvider(ReflectionProvider reflectionProvider) {
-        this.reflectionProvider = reflectionProvider;
-    }
 
     protected String doIntercept(ActionInvocation invocation) throws Exception {
         Object action = invocation.getAction();
@@ -100,8 +94,12 @@ public class OValValidationInterceptor extends MethodFilterInterceptor {
 
                 if (isActionError(violation))
                     validatorContext.addActionError(message);
-                else
+                else {
+                    String className = action.getClass().getName();
+                    //the default OVal message shows the field name as ActionClass.fieldName
+                    message = StringUtils.removeStart(message, className + ".");
                     validatorContext.addFieldError(extractFieldName(violation), message);
+                }
             }
         }
 
@@ -115,6 +113,15 @@ public class OValValidationInterceptor extends MethodFilterInterceptor {
         OValContext context = violation.getContext();
         if (context instanceof FieldContext) {
             return ((FieldContext) context).getField().getName();
+        } else if (context instanceof MethodReturnValueContext) {
+            String methodName = ((MethodReturnValueContext) context).getMethod().getName();
+            if (methodName.startsWith("get")) {
+                return StringUtils.uncapitalize(StringUtils.removeStart(methodName, "get"));
+            } else if (methodName.startsWith("is")) {
+                return StringUtils.uncapitalize(StringUtils.removeStart(methodName, "is"));
+            }
+
+            return methodName;
         }
 
         return violation.getCheckName();

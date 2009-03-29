@@ -37,7 +37,7 @@ public class OValValidationInterceptorTest extends XWorkTestCase {
         Map<String, List<String>> fieldErrors = ((ValidationAware) baseActionProxy.getAction()).getFieldErrors();
         assertNotNull(fieldErrors);
         assertEquals(1, fieldErrors.size());
-        assertValue(fieldErrors, "name", Arrays.asList("org.apache.struts2.interceptor.SimpleField.name cannot be null"));
+        assertValue(fieldErrors, "name", Arrays.asList("name cannot be null"));
     }
 
     public void testSimpleFieldNegative() throws Exception {
@@ -61,7 +61,7 @@ public class OValValidationInterceptorTest extends XWorkTestCase {
         Map<String, List<String>> fieldErrors = action.getFieldErrors();
         assertNotNull(fieldErrors);
         assertEquals(1, fieldErrors.size());
-        assertNotNull(fieldErrors.get("firstName"));
+        assertNotNull(fieldErrors.get("name"));
     }
 
     public void testSimpleMethod() throws Exception {
@@ -72,7 +72,7 @@ public class OValValidationInterceptorTest extends XWorkTestCase {
         Map<String, List<String>> fieldErrors = action.getFieldErrors();
         assertNotNull(fieldErrors);
         assertEquals(1, fieldErrors.size());
-        assertNotNull(fieldErrors.get("firstName"));
+        assertNotNull(fieldErrors.get("someName"));
     }
 
     public void testSimpleFieldOGNLExpression() throws Exception {
@@ -83,7 +83,7 @@ public class OValValidationInterceptorTest extends XWorkTestCase {
         Map<String, List<String>> fieldErrors = action.getFieldErrors();
         assertNotNull(fieldErrors);
         assertEquals(1, fieldErrors.size());
-        assertNotNull(fieldErrors.get("firstName"));
+        assertNotNull(fieldErrors.get("name"));
     }
 
      public void testFieldsWithMultipleProfiles() throws Exception {
