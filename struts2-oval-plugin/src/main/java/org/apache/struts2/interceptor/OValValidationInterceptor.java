@@ -21,8 +21,10 @@
 package org.apache.struts2.interceptor;
 
 import com.opensymphony.xwork2.interceptor.MethodFilterInterceptor;
+import com.opensymphony.xwork2.interceptor.PrefixMethodInvocationUtil;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.ActionProxy;
+import com.opensymphony.xwork2.Validateable;
 import com.opensymphony.xwork2.inject.Inject;
 import com.opensymphony.xwork2.validator.ValidatorContext;
 import com.opensymphony.xwork2.validator.DelegatingValidatorContext;
@@ -48,6 +50,32 @@ import org.apache.commons.lang.xwork.StringUtils;
 public class OValValidationInterceptor extends MethodFilterInterceptor {
     private static final Logger LOG = LoggerFactory.getLogger(OValValidationInterceptor.class);
 
+    private final static String VALIDATE_PREFIX = "validate";
+    private final static String ALT_VALIDATE_PREFIX = "validateDo";
+
+    private boolean alwaysInvokeValidate = true;
+    private boolean programmatic = true;
+
+    /**
+     * Determines if {@link com.opensymphony.xwork2.Validateable}'s <code>validate()</code> should be called,
+     * as well as methods whose name that start with "validate". Defaults to "true".
+     *
+     * @param programmatic <tt>true</tt> then <code>validate()</code> is invoked.
+     */
+    public void setProgrammatic(boolean programmatic) {
+        this.programmatic = programmatic;
+    }
+
+    /**
+     * Determines if {@link com.opensymphony.xwork2.Validateable}'s <code>validate()</code> should always
+     * be invoked. Default to "true".
+     *
+     * @param alwaysInvokeValidate <tt>true</tt> then <code>validate()</code> is always invoked.
+     */
+    public void setAlwaysInvokeValidate(String alwaysInvokeValidate) {
+        this.alwaysInvokeValidate = Boolean.parseBoolean(alwaysInvokeValidate);
+    }
+
     protected String doIntercept(ActionInvocation invocation) throws Exception {
         Object action = invocation.getAction();
         ActionProxy proxy = invocation.getProxy();
@@ -58,6 +86,50 @@ public class OValValidationInterceptor extends MethodFilterInterceptor {
             LOG.debug("Validating [#0/#1] with method [#2]", invocation.getProxy().getNamespace(), invocation.getProxy().getActionName(), methodName);
         }
 
+        //OVal vallidatio (no XML yet)
+        performOValValidation(action, valueStack, methodName);
+
+        //Validatable.valiedate() and validateX()
+        performProgrammaticValidation(invocation, action);
+
+        return invocation.invoke();
+    }
+
+    private void performProgrammaticValidation(ActionInvocation invocation, Object action) throws Exception {
+        if (action instanceof Validateable && programmatic) {
+            // keep exception that might occured in validateXXX or validateDoXXX
+            Exception exception = null;
+
+            Validateable validateable = (Validateable) action;
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Invoking validate() on action [#0]", validateable.toString());
+            }
+
+            try {
+                PrefixMethodInvocationUtil.invokePrefixMethod(
+                        invocation,
+                        new String[]{VALIDATE_PREFIX, ALT_VALIDATE_PREFIX});
+            }
+            catch (Exception e) {
+                // If any exception occurred while doing reflection, we want
+                // validate() to be executed
+                LOG.warn("An exception occured while executing the prefix method", e);
+                exception = e;
+            }
+
+
+            if (alwaysInvokeValidate) {
+                validateable.validate();
+            }
+
+            if (exception != null) {
+                // rethrow if something is wrong while doing validateXXX / validateDoXXX
+                throw exception;
+            }
+        }
+    }
+
+    protected void performOValValidation(Object action, ValueStack valueStack, String methodName) throws NoSuchMethodException {
         Validator validator = new Validator();
         //if the method is annotated with a @Profiles annotation, use those profiles
         Method method = action.getClass().getMethod(methodName, new Class[0]);
@@ -102,8 +174,6 @@ public class OValValidationInterceptor extends MethodFilterInterceptor {
                 }
             }
         }
-
-        return invocation.invoke();
     }
 
     /**

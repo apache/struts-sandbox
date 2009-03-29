@@ -30,6 +30,8 @@ public class SimpleField extends ActionSupport{
     @NotEmpty
     @Length(max = 3)
     private String name;
+    private boolean validateCalled;
+    private boolean validateExecuteCalled;
 
     public String getName() {
         return name;
@@ -37,5 +39,21 @@ public class SimpleField extends ActionSupport{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void validate() {
+        this.validateCalled = true;
+    }
+
+    public void validateExecute() {
+        this.validateExecuteCalled = true;
+    }
+
+    public boolean isValidateCalled() {
+        return validateCalled;
+    }
+
+    public boolean isValidateExecuteCalled() {
+        return validateExecuteCalled;
     }
 }
