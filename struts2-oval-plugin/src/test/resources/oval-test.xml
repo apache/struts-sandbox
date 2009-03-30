@@ -13,7 +13,7 @@
             <interceptor name="ovalValidation" class="org.apache.struts2.interceptor.OValValidationInterceptor"/>
         </interceptors>
 
-        <action name="simpleFieldsXML" class="org.apache.struts2.interceptor.SimpleFieldsXml">
+        <action name="simpleFieldsXML" class="org.apache.struts2.interceptor.SimpleFieldsXML">
             <interceptor-ref name="ovalValidation"/>
             <result type="void"></result>
         </action>

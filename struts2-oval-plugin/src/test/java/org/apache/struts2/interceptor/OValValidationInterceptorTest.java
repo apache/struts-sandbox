@@ -29,6 +29,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.oval.configuration.Configurer;
+
 public class OValValidationInterceptorTest extends XWorkTestCase {
     public void testSimpleFieldsXML() throws Exception {
         ActionProxy baseActionProxy = actionProxyFactory.createActionProxy("oval", "simpleFieldsXML", null, null);
@@ -38,7 +40,20 @@ public class OValValidationInterceptorTest extends XWorkTestCase {
         assertNotNull(fieldErrors);
         assertEquals(2, fieldErrors.size());
         assertValue(fieldErrors, "firstName", Arrays.asList("firstName cannot be null"));
-        assertValue(fieldErrors, "lastName", Arrays.asList("lastName cannot be empty"));
+        assertValue(fieldErrors, "lastName", Arrays.asList("lastName cannot be null"));
+    }
+
+    public void testXMLLoadCaching() {
+        OValValidationManager manager = container.getInstance(OValValidationManager.class);
+        List<Configurer> configurers = manager.getConfigurers(SimpleFieldsXML.class, "simpleFieldsXML");
+        assertNotNull(configurers);
+        assertEquals(1, configurers.size());
+
+        //load again and check it is the same instance
+        List<Configurer> configurers2 = manager.getConfigurers(SimpleFieldsXML.class, "simpleFieldsXML");
+        assertNotNull(configurers2);
+        assertEquals(1, configurers2.size());
+        assertSame(configurers.get(0), configurers2.get(0));
     }
 
     public void testSimpleField() throws Exception {

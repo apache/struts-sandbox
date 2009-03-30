@@ -4,12 +4,11 @@ import com.opensymphony.xwork2.ActionSupport;
 import net.sf.oval.constraint.NotEmpty;
 import net.sf.oval.constraint.NotNull;
 
-public class SimpleFieldsXml extends ActionSupport {
-    @NotNull
+public class SimpleFieldsXML extends ActionSupport {
     private String firstName;
 
-    @NotEmpty
-    private String lastName = "";
+    @NotNull
+    private String lastName;
 
     public String getFirstName() {
         return firstName;

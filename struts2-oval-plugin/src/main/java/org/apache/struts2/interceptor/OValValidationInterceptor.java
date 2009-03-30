@@ -35,6 +35,7 @@ import net.sf.oval.Validator;
 import net.sf.oval.ConstraintViolation;
 import net.sf.oval.configuration.xml.XMLConfigurer;
 import net.sf.oval.configuration.Configurer;
+import net.sf.oval.configuration.annotation.AnnotationsConfigurer;
 import net.sf.oval.context.FieldContext;
 import net.sf.oval.context.OValContext;
 import net.sf.oval.context.MethodReturnValueContext;

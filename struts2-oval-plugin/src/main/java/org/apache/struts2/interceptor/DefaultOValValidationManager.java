@@ -6,6 +6,7 @@ import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
 import net.sf.oval.configuration.xml.XMLConfigurer;
 import net.sf.oval.configuration.Configurer;
+import net.sf.oval.configuration.annotation.AnnotationsConfigurer;
 
 import java.util.List;
 import java.util.Map;
@@ -27,10 +28,22 @@ public class DefaultOValValidationManager implements OValValidationManager {
 
         if (validatorCache.containsKey(validatorKey)) {
             if (FileManager.isReloadingConfigs()) {
-                validatorCache.put(validatorKey, buildXMLConfigurers(clazz, context, true, null));
+                List<Configurer> configurers = buildXMLConfigurers(clazz, context, true, null);
+
+                //add an annotation configurer
+                AnnotationsConfigurer annotationsConfigurer = new AnnotationsConfigurer();
+                configurers.add(annotationsConfigurer);
+
+                validatorCache.put(validatorKey, configurers);
             }
         } else {
-            validatorCache.put(validatorKey, buildXMLConfigurers(clazz, context, false, null));
+            List<Configurer> configurers = buildXMLConfigurers(clazz, context, false, null);
+
+            //add an annotation configurer
+            AnnotationsConfigurer annotationsConfigurer = new AnnotationsConfigurer();
+            configurers.add(annotationsConfigurer);
+
+            validatorCache.put(validatorKey, configurers);
         }
 
         // get the set of validator configs
@@ -45,21 +58,21 @@ public class DefaultOValValidationManager implements OValValidationManager {
     }
 
     private List<Configurer> buildXMLConfigurers(Class clazz, String context, boolean checkFile, Set<String> checked) {
-        List<Configurer> xmlConfigurers = new ArrayList<Configurer>();
+        List<Configurer> configurers = new ArrayList<Configurer>();
 
         if (checked == null) {
             checked = new TreeSet<String>();
         } else if (checked.contains(clazz.getName())) {
-            return xmlConfigurers;
+            return configurers;
         }
 
         if (clazz.isInterface()) {
             for (Class anInterface : clazz.getInterfaces()) {
-                xmlConfigurers.addAll(buildXMLConfigurers(anInterface, context, checkFile, checked));
+                configurers.addAll(buildXMLConfigurers(anInterface, context, checkFile, checked));
             }
         } else {
             if (!clazz.equals(Object.class)) {
-                xmlConfigurers.addAll(buildXMLConfigurers(clazz.getSuperclass(), context, checkFile, checked));
+                configurers.addAll(buildXMLConfigurers(clazz.getSuperclass(), context, checkFile, checked));
             }
         }
 
@@ -69,24 +82,24 @@ public class DefaultOValValidationManager implements OValValidationManager {
                 continue;
             }
 
-            addIfNotNull(xmlConfigurers, buildClassValidatorConfigs(anInterface1, checkFile));
+            addIfNotNull(configurers, buildClassValidatorConfigs(anInterface1, checkFile));
 
             if (context != null) {
-                addIfNotNull(xmlConfigurers, buildAliasValidatorConfigs(anInterface1, context, checkFile));
+                addIfNotNull(configurers, buildAliasValidatorConfigs(anInterface1, context, checkFile));
             }
 
             checked.add(anInterface1.getName());
         }
 
-        addIfNotNull(xmlConfigurers, buildClassValidatorConfigs(clazz, checkFile));
+        addIfNotNull(configurers, buildClassValidatorConfigs(clazz, checkFile));
 
         if (context != null) {
-            addIfNotNull(xmlConfigurers, buildAliasValidatorConfigs(clazz, context, checkFile));
+            addIfNotNull(configurers, buildAliasValidatorConfigs(clazz, context, checkFile));
         }
 
         checked.add(clazz.getName());
 
-        return xmlConfigurers;
+        return configurers;
     }
 
     protected void addIfNotNull(List<Configurer> configurers, Configurer configurer) {
@@ -120,6 +133,7 @@ public class DefaultOValValidationManager implements OValValidationManager {
                     XMLConfigurer configurer = new XMLConfigurer();
                     configurer.fromXML(is);
                     validatorFileCache.put(fileName, configurer);
+                    return configurer;
                 }
             } finally {
                 if (is != null) {
