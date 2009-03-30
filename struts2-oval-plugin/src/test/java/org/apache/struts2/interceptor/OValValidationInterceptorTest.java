@@ -30,6 +30,17 @@ import java.util.List;
 import java.util.Map;
 
 public class OValValidationInterceptorTest extends XWorkTestCase {
+    public void testSimpleFieldsXML() throws Exception {
+        ActionProxy baseActionProxy = actionProxyFactory.createActionProxy("oval", "simpleFieldsXML", null, null);
+        baseActionProxy.execute();
+
+        Map<String, List<String>> fieldErrors = ((ValidationAware) baseActionProxy.getAction()).getFieldErrors();
+        assertNotNull(fieldErrors);
+        assertEquals(2, fieldErrors.size());
+        assertValue(fieldErrors, "firstName", Arrays.asList("firstName cannot be null"));
+        assertValue(fieldErrors, "lastName", Arrays.asList("lastName cannot be empty"));
+    }
+
     public void testSimpleField() throws Exception {
         ActionProxy baseActionProxy = actionProxyFactory.createActionProxy("oval", "simpleField", null, null);
         baseActionProxy.execute();

@@ -31,9 +31,10 @@ import com.opensymphony.xwork2.validator.DelegatingValidatorContext;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
 import com.opensymphony.xwork2.util.ValueStack;
-import com.opensymphony.xwork2.util.reflection.ReflectionProvider;
 import net.sf.oval.Validator;
 import net.sf.oval.ConstraintViolation;
+import net.sf.oval.configuration.xml.XMLConfigurer;
+import net.sf.oval.configuration.Configurer;
 import net.sf.oval.context.FieldContext;
 import net.sf.oval.context.OValContext;
 import net.sf.oval.context.MethodReturnValueContext;
@@ -50,11 +51,17 @@ import org.apache.commons.lang.xwork.StringUtils;
 public class OValValidationInterceptor extends MethodFilterInterceptor {
     private static final Logger LOG = LoggerFactory.getLogger(OValValidationInterceptor.class);
 
-    private final static String VALIDATE_PREFIX = "validate";
-    private final static String ALT_VALIDATE_PREFIX = "validateDo";
+    protected final static String VALIDATE_PREFIX = "validate";
+    protected final static String ALT_VALIDATE_PREFIX = "validateDo";
 
-    private boolean alwaysInvokeValidate = true;
-    private boolean programmatic = true;
+    protected boolean alwaysInvokeValidate = true;
+    protected boolean programmatic = true;
+    protected OValValidationManager validationManager;
+
+    @Inject
+    public void setValidationManager(OValValidationManager validationManager) {
+        this.validationManager = validationManager;
+    }
 
     /**
      * Determines if {@link com.opensymphony.xwork2.Validateable}'s <code>validate()</code> should be called,
@@ -81,13 +88,14 @@ public class OValValidationInterceptor extends MethodFilterInterceptor {
         ActionProxy proxy = invocation.getProxy();
         ValueStack valueStack = invocation.getStack();
         String methodName = proxy.getMethod();
+        String context = proxy.getActionName();
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Validating [#0/#1] with method [#2]", invocation.getProxy().getNamespace(), invocation.getProxy().getActionName(), methodName);
         }
 
         //OVal vallidatio (no XML yet)
-        performOValValidation(action, valueStack, methodName);
+        performOValValidation(action, valueStack, methodName, context);
 
         //Validatable.valiedate() and validateX()
         performProgrammaticValidation(invocation, action);
@@ -109,14 +117,12 @@ public class OValValidationInterceptor extends MethodFilterInterceptor {
                 PrefixMethodInvocationUtil.invokePrefixMethod(
                         invocation,
                         new String[]{VALIDATE_PREFIX, ALT_VALIDATE_PREFIX});
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 // If any exception occurred while doing reflection, we want
                 // validate() to be executed
                 LOG.warn("An exception occured while executing the prefix method", e);
                 exception = e;
             }
-
 
             if (alwaysInvokeValidate) {
                 validateable.validate();
@@ -129,10 +135,14 @@ public class OValValidationInterceptor extends MethodFilterInterceptor {
         }
     }
 
-    protected void performOValValidation(Object action, ValueStack valueStack, String methodName) throws NoSuchMethodException {
-        Validator validator = new Validator();
+    protected void performOValValidation(Object action, ValueStack valueStack, String methodName, String context) throws NoSuchMethodException {
+        Class clazz = action.getClass();
+        //read validation from xmls
+        List<Configurer> configurers = validationManager.getConfigurers(clazz, context);
+
+        Validator validator = configurers.isEmpty() ? new Validator() : new Validator(configurers);
         //if the method is annotated with a @Profiles annotation, use those profiles
-        Method method = action.getClass().getMethod(methodName, new Class[0]);
+        Method method = clazz.getMethod(methodName, new Class[0]);
         if (method != null) {
             Profiles profiles = method.getAnnotation(Profiles.class);
             if (profiles != null) {
@@ -167,7 +177,7 @@ public class OValValidationInterceptor extends MethodFilterInterceptor {
                 if (isActionError(violation))
                     validatorContext.addActionError(message);
                 else {
-                    String className = action.getClass().getName();
+                    String className = clazz.getName();
                     //the default OVal message shows the field name as ActionClass.fieldName
                     message = StringUtils.removeStart(message, className + ".");
                     validatorContext.addFieldError(extractFieldName(violation), message);
@@ -175,6 +185,7 @@ public class OValValidationInterceptor extends MethodFilterInterceptor {
             }
         }
     }
+
 
     /**
      * Get field name, used to add the validation error to fieldErrors

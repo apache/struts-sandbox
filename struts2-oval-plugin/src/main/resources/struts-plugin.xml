@@ -26,6 +26,8 @@
         "http://struts.apache.org/dtds/struts-2.0.dtd">
 
 <struts>
+    <bean type="org.apache.struts2.interceptor.OValValidationManager" class="org.apache.struts2.interceptor.DefaultOValValidationManager" />
+    
     <package name="oval-default" extends="struts-default">
            <interceptors>
                <interceptor name="ovalValidation" class="org.apache.struts2.interceptor.OValValidationInterceptor" />
