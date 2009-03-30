@@ -42,6 +42,7 @@ import net.sf.oval.context.MethodReturnValueContext;
 
 import java.util.List;
 import java.lang.reflect.Method;
+import java.lang.reflect.Field;
 
 import org.apache.struts2.validation.Profiles;
 import org.apache.commons.lang.xwork.StringUtils;
@@ -89,7 +90,7 @@ public class OValValidationInterceptor extends MethodFilterInterceptor {
         ActionProxy proxy = invocation.getProxy();
         ValueStack valueStack = invocation.getStack();
         String methodName = proxy.getMethod();
-        String context = proxy.getActionName();
+        String context = proxy.getConfig().getName();
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Validating [#0/#1] with method [#2]", invocation.getProxy().getNamespace(), invocation.getProxy().getActionName(), methodName);
@@ -167,7 +168,7 @@ public class OValValidationInterceptor extends MethodFilterInterceptor {
                 String key = violation.getMessage();
 
                 //push the validator into the stack
-                valueStack.push(violation);
+                valueStack.push(violation.getContext());
                 String message = key;
                 try {
                     message = validatorContext.getText(key);
@@ -178,10 +179,8 @@ public class OValValidationInterceptor extends MethodFilterInterceptor {
                 if (isActionError(violation))
                     validatorContext.addActionError(message);
                 else {
-                    String className = clazz.getName();
-                    //the default OVal message shows the field name as ActionClass.fieldName
-                    message = StringUtils.removeStart(message, className + ".");
-                    validatorContext.addFieldError(extractFieldName(violation), message);
+                    ValidationError validationError = buildValidationError(violation, message);
+                    validatorContext.addFieldError(validationError.getFieldName(), validationError.getMessage());
                 }
             }
         }
@@ -189,24 +188,41 @@ public class OValValidationInterceptor extends MethodFilterInterceptor {
 
 
     /**
-     * Get field name, used to add the validation error to fieldErrors
+     * Get field name and message, used to add the validation error to fieldErrors
      */
-    protected String extractFieldName(ConstraintViolation violation) {
+    protected ValidationError buildValidationError(ConstraintViolation violation, String message) {
         OValContext context = violation.getContext();
         if (context instanceof FieldContext) {
-            return ((FieldContext) context).getField().getName();
+            Field field = ((FieldContext) context).getField();
+            String className = field.getDeclaringClass().getName();
+
+            //the default OVal message shows the field name as ActionClass.fieldName
+            String finalMessage = StringUtils.removeStart(message, className + ".");
+
+            return new ValidationError(field.getName(), finalMessage);
         } else if (context instanceof MethodReturnValueContext) {
-            String methodName = ((MethodReturnValueContext) context).getMethod().getName();
+            Method method = ((MethodReturnValueContext) context).getMethod();
+            String className = method.getDeclaringClass().getName();
+            String methodName = method.getName();
+
+            //the default OVal message shows the field name as ActionClass.fieldName
+            String finalMessage = StringUtils.removeStart(message, className + ".");
+
+            String fieldName = null;
             if (methodName.startsWith("get")) {
-                return StringUtils.uncapitalize(StringUtils.removeStart(methodName, "get"));
+                fieldName = StringUtils.uncapitalize(StringUtils.removeStart(methodName, "get"));
             } else if (methodName.startsWith("is")) {
-                return StringUtils.uncapitalize(StringUtils.removeStart(methodName, "is"));
+                fieldName = StringUtils.uncapitalize(StringUtils.removeStart(methodName, "is"));
             }
 
-            return methodName;
+            //the result will have the full method name, like "getName()", replace it by "name" (obnly if it is a field)
+            if (fieldName != null)
+                finalMessage = finalMessage.replaceAll(methodName + "\\(.*?\\)", fieldName);
+
+            return new ValidationError(StringUtils.defaultString(fieldName, methodName), finalMessage);
         }
 
-        return violation.getCheckName();
+        return new ValidationError(violation.getCheckName(), message);
     }
 
     /**
@@ -214,5 +230,23 @@ public class OValValidationInterceptor extends MethodFilterInterceptor {
      */
     protected boolean isActionError(ConstraintViolation violation) {
         return false;
+    }
+
+    class ValidationError {
+        private String fieldName;
+        private String message;
+
+        ValidationError(String fieldName, String message) {
+            this.fieldName = fieldName;
+            this.message = message;
+        }
+
+        public String getFieldName() {
+            return fieldName;
+        }
+
+        public String getMessage() {
+            return message;
+        }
     }
 }

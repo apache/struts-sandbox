@@ -4,7 +4,8 @@
         >
 
 <xwork>
-    <bean type="org.apache.struts2.interceptor.OValValidationManager" class="org.apache.struts2.interceptor.DefaultOValValidationManager" />
+    <bean type="org.apache.struts2.interceptor.OValValidationManager" class="org.apache.struts2.interceptor.DummyDefaultOValValidationManager"/>
+    <constant name="struts.enable.SlashesInActionNames" value="true"/>
     <package namespace="oval" name="oval-test">
         <result-types>
             <result-type name="void" class="org.apache.struts2.interceptor.VoidResult"/>
@@ -13,7 +14,23 @@
             <interceptor name="ovalValidation" class="org.apache.struts2.interceptor.OValValidationInterceptor"/>
         </interceptors>
 
+        <action name="simpleFieldsXMLChild" class="org.apache.struts2.interceptor.SimpleFieldsXMLChild">
+            <interceptor-ref name="ovalValidation"/>
+            <result type="void"></result>
+        </action>
+        <action name="validationInMethods" class="org.apache.struts2.interceptor.ValidationInMethods">
+            <interceptor-ref name="ovalValidation"/>
+            <result type="void"></result>
+        </action>
+        <action name="simpleFieldsXML/*" class="org.apache.struts2.interceptor.SimpleFieldsXML">
+            <interceptor-ref name="ovalValidation"/>
+            <result type="void"></result>
+        </action>
         <action name="simpleFieldsXML" class="org.apache.struts2.interceptor.SimpleFieldsXML">
+            <interceptor-ref name="ovalValidation"/>
+            <result type="void"></result>
+        </action>
+        <action name="simpleFieldsXMLCaching" class="org.apache.struts2.interceptor.SimpleFieldsXML">
             <interceptor-ref name="ovalValidation"/>
             <result type="void"></result>
         </action>

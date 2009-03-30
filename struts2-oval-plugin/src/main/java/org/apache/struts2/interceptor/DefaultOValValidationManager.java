@@ -19,9 +19,9 @@ import java.util.HashMap;
 public class DefaultOValValidationManager implements OValValidationManager {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultOValValidationManager.class);
 
-    private static final String VALIDATION_CONFIG_SUFFIX = "-validation.xml";
-    private final Map<String, List<Configurer>> validatorCache = new HashMap<String, List<Configurer>>();
-    private final Map<String, Configurer> validatorFileCache = new HashMap<String, Configurer>();
+    protected static final String VALIDATION_CONFIG_SUFFIX = "-validation.xml";
+    protected final Map<String, List<Configurer>> validatorCache = new HashMap<String, List<Configurer>>();
+    protected final Map<String, Configurer> validatorFileCache = new HashMap<String, Configurer>();
 
     public synchronized List<Configurer> getConfigurers(Class clazz, String context) {
         final String validatorKey = buildValidatorKey(clazz, context);

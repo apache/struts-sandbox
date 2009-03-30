@@ -43,16 +43,52 @@ public class OValValidationInterceptorTest extends XWorkTestCase {
         assertValue(fieldErrors, "lastName", Arrays.asList("lastName cannot be null"));
     }
 
+    public void testValidationInMethods() throws Exception {
+        ActionProxy baseActionProxy = actionProxyFactory.createActionProxy("oval", "validationInMethods", null, null);
+        baseActionProxy.execute();
+
+        Map<String, List<String>> fieldErrors = ((ValidationAware) baseActionProxy.getAction()).getFieldErrors();
+        assertNotNull(fieldErrors);
+        assertEquals(4, fieldErrors.size());
+        assertValue(fieldErrors, "name", Arrays.asList("name cannot be null"));
+        assertValue(fieldErrors, "SisyphusHasTheAnswer", Arrays.asList("SisyphusHasTheAnswer() cannot be null"));
+        assertValue(fieldErrors, "thereAnyMeaningInLife", Arrays.asList("thereAnyMeaningInLife cannot be null"));
+        assertValue(fieldErrors, "theManingOfLife", Arrays.asList("theManingOfLife cannot be null"));
+    }
+
+    public void testSimpleFieldsInheritedXML() throws Exception {
+        ActionProxy baseActionProxy = actionProxyFactory.createActionProxy("oval", "simpleFieldsXMLChild", null, null);
+        baseActionProxy.execute();
+
+        Map<String, List<String>> fieldErrors = ((ValidationAware) baseActionProxy.getAction()).getFieldErrors();
+        assertNotNull(fieldErrors);
+        assertEquals(3, fieldErrors.size());
+        assertValue(fieldErrors, "firstName", Arrays.asList("firstName cannot be null"));
+        assertValue(fieldErrors, "lastName", Arrays.asList("lastName cannot be null"));
+        assertValue(fieldErrors, "middleName", Arrays.asList("middleName cannot be null"));
+    }
+
+    public void testSlashesInNameWithWildcardsHitsCache() throws Exception {
+        ActionProxy baseActionProxy = actionProxyFactory.createActionProxy("oval", "simpleFieldsXML/test", null, null);
+        baseActionProxy.execute();
+               
+        ActionProxy baseActionProxy2 = actionProxyFactory.createActionProxy("oval", "simpleFieldsXML/test2", null, null);
+        baseActionProxy2.execute();
+
+        DummyDefaultOValValidationManager manager = (DummyDefaultOValValidationManager) container.getInstance(OValValidationManager.class);
+        assertEquals(1, manager.getCache().size());
+    }
+
     public void testXMLLoadCaching() {
         OValValidationManager manager = container.getInstance(OValValidationManager.class);
-        List<Configurer> configurers = manager.getConfigurers(SimpleFieldsXML.class, "simpleFieldsXML");
+        List<Configurer> configurers = manager.getConfigurers(SimpleFieldsXML.class, "simpleFieldsXMLCaching");
         assertNotNull(configurers);
-        assertEquals(1, configurers.size());
+        assertEquals(2, configurers.size());
 
         //load again and check it is the same instance
-        List<Configurer> configurers2 = manager.getConfigurers(SimpleFieldsXML.class, "simpleFieldsXML");
+        List<Configurer> configurers2 = manager.getConfigurers(SimpleFieldsXML.class, "simpleFieldsXMLCaching");
         assertNotNull(configurers2);
-        assertEquals(1, configurers2.size());
+        assertEquals(2, configurers2.size());
         assertSame(configurers.get(0), configurers2.get(0));
     }
 
@@ -209,7 +245,6 @@ public class OValValidationInterceptorTest extends XWorkTestCase {
         assertNotNull(values);
         assertEquals(expectedValues, values);
     }
-
 
     @Override
     protected void setUp() throws Exception {
