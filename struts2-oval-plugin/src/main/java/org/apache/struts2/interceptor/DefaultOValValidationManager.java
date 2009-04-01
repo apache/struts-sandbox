@@ -1,19 +1,20 @@
 package org.apache.struts2.interceptor;
 
-import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.inject.Inject;
 import com.opensymphony.xwork2.util.FileManager;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
-import net.sf.oval.configuration.xml.XMLConfigurer;
 import net.sf.oval.configuration.Configurer;
 import net.sf.oval.configuration.annotation.AnnotationsConfigurer;
+import net.sf.oval.configuration.annotation.JPAAnnotationsConfigurer;
+import net.sf.oval.configuration.xml.XMLConfigurer;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.HashMap;
 
 
 public class DefaultOValValidationManager implements OValValidationManager {
@@ -23,6 +24,13 @@ public class DefaultOValValidationManager implements OValValidationManager {
     protected final Map<String, List<Configurer>> validatorCache = new HashMap<String, List<Configurer>>();
     protected final Map<String, Configurer> validatorFileCache = new HashMap<String, Configurer>();
 
+    protected boolean validateJPAAnnotations;
+
+    @Inject("struts.oval.validateJPAAnnotations")
+    public void setValidateJPAAnnotations(String validateJPAAnnotations) {
+        this.validateJPAAnnotations = "true".equalsIgnoreCase(validateJPAAnnotations);
+    }
+
     public synchronized List<Configurer> getConfigurers(Class clazz, String context) {
         final String validatorKey = buildValidatorKey(clazz, context);
 
@@ -31,23 +39,30 @@ public class DefaultOValValidationManager implements OValValidationManager {
                 List<Configurer> configurers = buildXMLConfigurers(clazz, context, true, null);
 
                 //add an annotation configurer
-                AnnotationsConfigurer annotationsConfigurer = new AnnotationsConfigurer();
-                configurers.add(annotationsConfigurer);
-
+                addAditionalConfigurers(configurers);
                 validatorCache.put(validatorKey, configurers);
             }
         } else {
             List<Configurer> configurers = buildXMLConfigurers(clazz, context, false, null);
 
             //add an annotation configurer
-            AnnotationsConfigurer annotationsConfigurer = new AnnotationsConfigurer();
-            configurers.add(annotationsConfigurer);
-
+            addAditionalConfigurers(configurers);
             validatorCache.put(validatorKey, configurers);
         }
 
         // get the set of validator configs
         return validatorCache.get(validatorKey);
+    }
+
+    private void addAditionalConfigurers(List<Configurer> configurers) {
+        AnnotationsConfigurer annotationsConfigurer = new AnnotationsConfigurer();
+        configurers.add(annotationsConfigurer);
+
+        if (validateJPAAnnotations) {
+            if (LOG.isDebugEnabled())
+                LOG.debug("Adding support for JPA annotations validations in OVal");
+            configurers.add(new JPAAnnotationsConfigurer());
+        }
     }
 
     protected static String buildValidatorKey(Class clazz, String context) {

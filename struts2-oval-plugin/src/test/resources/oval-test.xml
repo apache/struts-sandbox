@@ -6,6 +6,7 @@
 <xwork>
     <bean type="org.apache.struts2.interceptor.OValValidationManager" class="org.apache.struts2.interceptor.DummyDefaultOValValidationManager"/>
     <constant name="struts.enable.SlashesInActionNames" value="true"/>
+    <constant name="struts.oval.validateJPAAnnotations" value="true" />
     <package namespace="oval" name="oval-test">
         <result-types>
             <result-type name="void" class="org.apache.struts2.interceptor.VoidResult"/>
@@ -14,6 +15,10 @@
             <interceptor name="ovalValidation" class="org.apache.struts2.interceptor.OValValidationInterceptor"/>
         </interceptors>
 
+        <action name="simpleFieldsJPA" class="org.apache.struts2.interceptor.SimpleFieldJPAAnnotations">
+            <interceptor-ref name="ovalValidation"/>
+            <result type="void"></result>
+        </action>
         <action name="simpleFieldsXMLChild" class="org.apache.struts2.interceptor.SimpleFieldsXMLChild">
             <interceptor-ref name="ovalValidation"/>
             <result type="void"></result>

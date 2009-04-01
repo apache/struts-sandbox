@@ -43,6 +43,16 @@ public class OValValidationInterceptorTest extends XWorkTestCase {
         assertValue(fieldErrors, "lastName", Arrays.asList("lastName cannot be null"));
     }
 
+     public void testSimpleFieldsJPAAnnotations() throws Exception {
+        ActionProxy baseActionProxy = actionProxyFactory.createActionProxy("oval", "simpleFieldsJPA", null, null);
+        baseActionProxy.execute();
+
+        Map<String, List<String>> fieldErrors = ((ValidationAware) baseActionProxy.getAction()).getFieldErrors();
+        assertNotNull(fieldErrors);
+        assertEquals(1, fieldErrors.size());
+        assertValue(fieldErrors, "firstName", Arrays.asList("firstName cannot be null"));
+    }
+
     public void testValidationInMethods() throws Exception {
         ActionProxy baseActionProxy = actionProxyFactory.createActionProxy("oval", "validationInMethods", null, null);
         baseActionProxy.execute();
