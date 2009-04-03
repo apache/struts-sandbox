@@ -67,7 +67,7 @@ public class DefaultBundleAccessor implements BundleAccessor {
         Bundle bundle = getCurrentBundle();
         if (bundle != null) {
             cls = bundle.loadClass(className);
-            LOG.debug("Located class #1 in bundle #2", className, bundle.getSymbolicName());
+            LOG.debug("Located class [#0] in bundle [#1]", className, bundle.getSymbolicName());
         }
 
         if (cls == null) {
@@ -78,7 +78,7 @@ public class DefaultBundleAccessor implements BundleAccessor {
                     cls = bean.getClass();
             } catch (Exception e) {
                 if (LOG.isDebugEnabled())
-                    LOG.debug("Unable to find bean #1", className);
+                    LOG.debug("Unable to find bean [#0]", className);
             }
         }
         

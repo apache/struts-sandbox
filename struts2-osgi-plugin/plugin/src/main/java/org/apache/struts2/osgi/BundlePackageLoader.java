@@ -53,7 +53,7 @@ public class BundlePackageLoader implements PackageLoader {
         private BundleContext bundleContext;
 
         public BundleConfigurationProvider(String filename, Bundle bundle, BundleContext bundleContext) { 
-            super(filename, true);
+            super(filename, false);
             this.bundle = bundle;
             this.bundleContext = bundleContext;
         }
@@ -62,8 +62,7 @@ public class BundlePackageLoader implements PackageLoader {
         @Override
         protected Iterator<URL> getConfigurationUrls(String fileName) throws IOException {
             Enumeration<URL> e = bundle.getResources("struts.xml");
-            Iterator<URL> iter = new EnumeratorIterator<URL>(e);
-            return iter;
+            return e.hasMoreElements() ? new EnumeratorIterator<URL>(e) : null;
         }
         
         /* 
@@ -76,14 +75,14 @@ public class BundlePackageLoader implements PackageLoader {
                 return bundle.loadClass(className) != null;
             } catch (Exception e) {
                 if (LOG.isDebugEnabled())
-                    LOG.debug("Unable to find class #1 in bundle #2", className, bundle.getSymbolicName());
+                    LOG.debug("Unable to find class [#0] in bundle [#1]", className, bundle.getSymbolicName());
 
                 //try to find a bean with that id
                 try {
                     return SpringOSGiUtil.isValidBean(bundleContext, className);
                 } catch (Exception e1) {
                     if (LOG.isDebugEnabled())
-                        LOG.debug("Unable to find bean #1", className);
+                        LOG.debug("Unable to find bean [#0]", className);
                 }
                 
                 return false;

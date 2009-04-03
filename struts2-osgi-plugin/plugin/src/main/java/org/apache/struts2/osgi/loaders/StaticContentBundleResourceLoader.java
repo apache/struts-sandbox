@@ -11,7 +11,6 @@ import org.apache.struts2.osgi.DefaultBundleAccessor;
  *
  */
 public class StaticContentBundleResourceLoader extends DefaultStaticContentLoader {
-    @Override
     protected InputStream findInputStream(String path) throws IOException {
         return DefaultBundleAccessor.getInstance().loadResourceFromAllBundlesAsStream(path);
     }
