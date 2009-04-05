@@ -20,53 +20,41 @@
  */
 package org.apache.struts2.osgi;
 
-import org.apache.felix.framework.Felix;
-import org.apache.felix.framework.util.FelixConstants;
-import org.apache.felix.main.Main;
-import org.apache.felix.main.AutoActivator;
-import org.apache.felix.shell.ShellService;
-import org.apache.commons.lang.xwork.StringUtils;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleException;
-import org.osgi.framework.Constants;
-import org.osgi.framework.BundleActivator;
-import org.osgi.util.tracker.ServiceTracker;
-
-import java.util.Map;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Properties;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-import java.util.jar.JarEntry;
-import java.util.jar.JarInputStream;
-import java.util.jar.JarFile;
-import java.util.jar.Manifest;
-import java.util.jar.Attributes;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FilenameFilter;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.security.CodeSource;
-import java.security.ProtectionDomain;
-
+import com.opensymphony.xwork2.config.ConfigurationException;
 import com.opensymphony.xwork2.inject.Inject;
+import com.opensymphony.xwork2.util.URLUtil;
+import com.opensymphony.xwork2.util.finder.ResourceFinder;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
-import com.opensymphony.xwork2.util.finder.ResourceFinder;
-import com.opensymphony.xwork2.util.URLUtil;
-import com.opensymphony.xwork2.config.ConfigurationException;
+import org.apache.commons.lang.xwork.StringUtils;
+import org.apache.felix.framework.Felix;
+import org.apache.felix.framework.util.FelixConstants;
+import org.apache.felix.main.AutoActivator;
+import org.apache.felix.main.Main;
+import org.apache.felix.shell.ShellService;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.Constants;
+import org.osgi.service.log.LogService;
+import org.osgi.util.tracker.ServiceTracker;
+
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.net.URL;
+import java.security.CodeSource;
+import java.security.ProtectionDomain;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+import java.util.jar.JarFile;
+import java.util.jar.Manifest;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Apache felix implementation of an OsgiHost
@@ -119,6 +107,7 @@ public class FelixOsgiHost implements OsgiHost {
         configProps.put(FelixConstants.SERVICE_URLHANDLERS_PROP, "false");
         configProps.put(FelixConstants.LOG_LEVEL_PROP, "4");
         configProps.put(FelixConstants.BUNDLE_CLASSPATH, ".");
+        configProps.put(FelixConstants.FRAMEWORK_BEGINNING_STARTLEVEL, "2");        
 
         try {
             List<BundleActivator> list = new ArrayList<BundleActivator>();
@@ -147,47 +136,55 @@ public class FelixOsgiHost implements OsgiHost {
     }
 
     private int addAutoStartBundles(Properties configProps) {
-        List<String> bundleJars = new ArrayList<String>();
+        //starts system bundles in level 1
+        List<String> bundleJarsLevel1 = new ArrayList<String>();
+        bundleJarsLevel1.add(getJarUrl(ShellService.class));
+        bundleJarsLevel1.add(getJarUrl(ServiceTracker.class));
+        bundleJarsLevel1.add(getJarUrl(LogService.class));
+
+        configProps.put(AutoActivator.AUTO_START_PROP + ".1", StringUtils.join(bundleJarsLevel1, " "));
+
+        //start app bundles in level2
+        List<String> bundleJarsLevel2 = new ArrayList<String>();
         try {
             ResourceFinder finder = new ResourceFinder();
             URL url = finder.find("bundles");
-            if ("file".equals(url.getProtocol())) {
-                File bundlerDir = new File(url.toURI());
-                File[] bundles = bundlerDir.listFiles(new FilenameFilter() {
-                    @Override
-                    public boolean accept(File file, String name) {
-                        return StringUtils.endsWith(name, ".jar");
+            if (url != null) {
+                if ("file".equals(url.getProtocol())) {
+                    File bundlerDir = new File(url.toURI());
+                    File[] bundles = bundlerDir.listFiles(new FilenameFilter() {
+                        @Override
+                        public boolean accept(File file, String name) {
+                            return StringUtils.endsWith(name, ".jar");
+                        }
+                    });
+
+                    if (bundles != null && bundles.length > 0) {
+                        //add all the bundles to the list
+                        for (File bundle : bundles) {
+                            String externalForm = bundle.toURI().toURL().toExternalForm();
+                            if (LOG.isDebugEnabled())
+                                LOG.debug("Adding bundle [#0]", externalForm);
+                            bundleJarsLevel2.add(externalForm);
+                         }
+
+                    } else if (LOG.isDebugEnabled()) {
+                        LOG.debug("No bundles found under the 'bundles' directory");
                     }
-                });
-
-                if (bundles != null && bundles.length > 0) {
-                    //add all the bundles to the list
-                    for (File bundle : bundles) {
-                        String externalForm = bundle.toURI().toURL().toExternalForm();
-                        if (LOG.isDebugEnabled())
-                            LOG.debug("Adding bundle [#0]", externalForm);
-                        bundleJars.add(externalForm);
-                     }
-
-                } else if (LOG.isDebugEnabled()) {
-                    LOG.debug("No bundles found under the 'bundles' directory");
-                }
-            }
+                } else if (LOG.isWarnEnabled())
+                    LOG.warn("Unable to read 'bundles' directory");
+            } else if (LOG.isWarnEnabled())
+                LOG.warn("The 'bundles' directory was not found");
         } catch (Exception e) {
             if (LOG.isWarnEnabled())
                 LOG.warn("Unable load bundles from the 'bundles' directory", e);
             return 0;
         }
 
-        // Add shell and File Install bundles activation
-        bundleJars.add(getJarUrl(ShellService.class));
-        //sb.append(getJarUrl(FileInstall.class)).append(" ");
-        bundleJars.add(getJarUrl(ServiceTracker.class));
+        //autostart bundles in leve 2
+        configProps.put(AutoActivator.AUTO_START_PROP + ".2", StringUtils.join(bundleJarsLevel2, " "));
 
-        //autostart bundles
-        configProps.put(AutoActivator.AUTO_START_PROP + ".1", StringUtils.join(bundleJars, " "));
-
-        return bundleJars.size();
+        return bundleJarsLevel1.size() + bundleJarsLevel2.size();
     }
 
     private String getJarUrl(Class clazz) {
