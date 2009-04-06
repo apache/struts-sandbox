@@ -8,8 +8,9 @@ import org.osgi.framework.BundleContext;
 
 import com.opensymphony.xwork2.ObjectFactory;
 import com.opensymphony.xwork2.config.ConfigurationException;
+import com.opensymphony.xwork2.config.PackageProvider;
 import com.opensymphony.xwork2.config.entities.PackageConfig;
 
 public interface PackageLoader {
-    List<PackageConfig> loadPackages(Bundle bundle, BundleContext bundleContext, ObjectFactory objectFactory, Map<String,PackageConfig> map) throws ConfigurationException;
+    List<PackageConfig> loadPackages(Bundle bundle, BundleContext bundleContext, ObjectFactory objectFactory, Map<String, PackageConfig> map) throws ConfigurationException;
 }

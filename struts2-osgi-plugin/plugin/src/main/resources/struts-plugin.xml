@@ -10,11 +10,15 @@
     <bean name="osgi" type="com.opensymphony.xwork2.ObjectFactory" class="org.apache.struts2.osgi.DelegatingObjectFactory" />
     <bean name="osgi" type="com.opensymphony.xwork2.config.PackageProvider" class="org.apache.struts2.osgi.OsgiConfigurationProvider" />
     <bean name="felix" type="org.apache.struts2.osgi.OsgiHost" class="org.apache.struts2.osgi.FelixOsgiHost" />
+    <bean name="osgi" type="com.opensymphony.xwork2.util.finder.ClassLoaderInterface" class="org.apache.struts2.osgi.BundleClassLoaderInterface" />
     
     <constant name="struts.objectFactory" value="osgi" />
     <constant name="struts.objectFactory.delegate" value="struts" />
     <constant name="struts.freemarker.manager.classname" value="org.apache.struts2.osgi.BundleFreemarkerManager" />
     <constant name="struts.staticContentLoader" value="org.apache.struts2.osgi.loaders.StaticContentBundleResourceLoader" />
 
+    <constant name="struts.convention.action.includeJars" value="jar:file:.*?/bundles/.*?\.jar(!/)?" />
+
     <constant name="struts.osgi.clearBundleCache" value="true" />
+    <constant name="struts.osgi.startRunLevel" value="2" />
 </struts>

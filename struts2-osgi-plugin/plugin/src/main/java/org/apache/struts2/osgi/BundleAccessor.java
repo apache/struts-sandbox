@@ -31,4 +31,5 @@ public interface BundleAccessor {
 
     ServiceReference getServiceReference(String className);
 
+    void addPackageFromBundle(Bundle bundle, String packageName);
 }

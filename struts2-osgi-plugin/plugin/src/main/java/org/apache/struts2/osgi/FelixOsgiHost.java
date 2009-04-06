@@ -72,6 +72,7 @@ public class FelixOsgiHost implements OsgiHost {
     private List<? extends BundleActivator> extraBundleActivators;
     private boolean cleanBundleCache;
     private static Pattern versionPattern = Pattern.compile("([\\d])+[\\.-]");
+    private String startRunLevel;
 
     protected void startFelix() {
         //load properties from felix embedded file
@@ -107,7 +108,7 @@ public class FelixOsgiHost implements OsgiHost {
         configProps.put(FelixConstants.SERVICE_URLHANDLERS_PROP, "false");
         configProps.put(FelixConstants.LOG_LEVEL_PROP, "4");
         configProps.put(FelixConstants.BUNDLE_CLASSPATH, ".");
-        configProps.put(FelixConstants.FRAMEWORK_BEGINNING_STARTLEVEL, "2");        
+        configProps.put(FelixConstants.FRAMEWORK_BEGINNING_STARTLEVEL, startRunLevel);        
 
         try {
             List<BundleActivator> list = new ArrayList<BundleActivator>();
@@ -210,7 +211,7 @@ public class FelixOsgiHost implements OsgiHost {
      */
     private void addExportedPackages(Properties strutsConfigProps, Properties configProps) {
         String[] rootPackages = StringUtils.split((String) strutsConfigProps.get("scanning.package.includes"), ",");
-        ResourceFinder finder = new ResourceFinder(StringUtils.EMPTY, OsgiConfigurationProvider.class.getClassLoader());
+        ResourceFinder finder = new ResourceFinder(StringUtils.EMPTY);
         List<String> exportedPackages = new ArrayList<String>();
         //build a list of subpackages
         for (String rootPackage : rootPackages) {
@@ -326,5 +327,10 @@ public class FelixOsgiHost implements OsgiHost {
     @Inject("struts.osgi.clearBundleCache")
     public void setCleanBundleCache(String cleanBundleCache) {
         this.cleanBundleCache = "true".equalsIgnoreCase(cleanBundleCache);
+    }
+
+    @Inject("struts.osgi.startRunLevel")
+    public void setStartRunLevel(String startRunLevel) {
+        this.startRunLevel = startRunLevel;
     }
 }

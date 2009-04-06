@@ -9,8 +9,10 @@ import org.osgi.framework.BundleContext;
 
 import com.opensymphony.xwork2.ObjectFactory;
 import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.inject.Inject;
 import com.opensymphony.xwork2.config.Configuration;
 import com.opensymphony.xwork2.config.ConfigurationException;
+import com.opensymphony.xwork2.config.PackageProvider;
 import com.opensymphony.xwork2.config.entities.PackageConfig;
 import com.opensymphony.xwork2.config.impl.DefaultConfiguration;
 import com.opensymphony.xwork2.config.providers.XmlConfigurationProvider;
@@ -20,7 +22,7 @@ import com.opensymphony.xwork2.util.logging.LoggerFactory;
 
 public class BundlePackageLoader implements PackageLoader {
     private static final Logger LOG = LoggerFactory.getLogger(BundlePackageLoader.class);
-    
+
     public List<PackageConfig> loadPackages(Bundle bundle, BundleContext bundleContext, ObjectFactory objectFactory, Map<String,PackageConfig> pkgConfigs) throws ConfigurationException {
         Configuration config = new DefaultConfiguration("struts.xml");
         ActionContext ctx = ActionContext.getContext();
@@ -43,8 +45,10 @@ public class BundlePackageLoader implements PackageLoader {
         } finally {
             ctx.put(BundleAccessor.CURRENT_BUNDLE_NAME, null);
         }
+
         List<PackageConfig> list = new ArrayList<PackageConfig>(config.getPackageConfigs().values());
         list.removeAll(pkgConfigs.values());
+        
         return list;
     }
     
@@ -79,7 +83,7 @@ public class BundlePackageLoader implements PackageLoader {
 
                 //try to find a bean with that id
                 try {
-                    return SpringOSGiUtil.isValidBean(bundleContext, className);
+                    return OsgiUtil.isValidBean(bundleContext, className);
                 } catch (Exception e1) {
                     if (LOG.isDebugEnabled())
                         LOG.debug("Unable to find bean [#0]", className);

@@ -3,6 +3,7 @@ package org.apache.struts2.osgi;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.MalformedURLException;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -18,11 +19,14 @@ import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.ActionProxy;
 import com.opensymphony.xwork2.config.entities.ActionConfig;
 
+/**
+ * Helper class that find resources and loads classes from the list of bundles
+ */
 public class DefaultBundleAccessor implements BundleAccessor {
 
     private static DefaultBundleAccessor self;
     private static final Logger LOG = LoggerFactory.getLogger(DefaultBundleAccessor.class);
-    
+
     private Map<String, Bundle> bundles = new HashMap<String, Bundle>();
     private BundleContext bundleContext;
     private Map<String, String> packageToBundle;
@@ -31,8 +35,7 @@ public class DefaultBundleAccessor implements BundleAccessor {
     public DefaultBundleAccessor() {
         self = this;
     }
-    
-    // todo: this is crap
+
     public static DefaultBundleAccessor getInstance() {
         return self;
     }
@@ -45,35 +48,54 @@ public class DefaultBundleAccessor implements BundleAccessor {
         return bundleContext.getServiceReference(className);
     }
 
-    public void init(Map<String,Bundle> bundles, BundleContext bundleContext, Map<String, String> packageToBundle) {
+    public void init(Map<String, Bundle> bundles, BundleContext bundleContext, Map<String, String> packageToBundle) {
         this.bundles = Collections.unmodifiableMap(bundles);
         this.bundleContext = bundleContext;
-        this.packageToBundle = Collections.unmodifiableMap(packageToBundle);
+        this.packageToBundle = packageToBundle;
         this.packagesByBundle = new HashMap<Bundle, Set<String>>();
-        for (Map.Entry<String,String> entry : packageToBundle.entrySet()) {
+        for (Map.Entry<String, String> entry : packageToBundle.entrySet()) {
             Bundle bundle = bundles.get(entry.getValue());
-            Set<String> pkgs = packagesByBundle.get(bundle);
-            if (pkgs == null) {
-                pkgs = new HashSet<String>();
-                packagesByBundle.put(bundle, pkgs);
-            }
-            pkgs.add(entry.getKey());
+            addPackageFromBundle(bundle, entry.getKey());
         }
-        this.packagesByBundle = Collections.unmodifiableMap(packagesByBundle);
     }
-    
+
+    /**
+     *  Add as Bundle -> Package mapping 
+     * @param bundle the bundle where the package was loaded from
+     * @param packageName the anme of the loaded package
+     */
+    public void addPackageFromBundle(Bundle bundle, String packageName) {
+        this.packageToBundle.put(packageName, bundle.getSymbolicName());
+        Set<String> pkgs = packagesByBundle.get(bundle);
+        if (pkgs == null) {
+            pkgs = new HashSet<String>();
+            packagesByBundle.put(bundle, pkgs);
+        }
+        pkgs.add(packageName);
+    }
+
     public Class<?> loadClass(String className) throws ClassNotFoundException {
         Class cls = null;
+
         Bundle bundle = getCurrentBundle();
         if (bundle != null) {
             cls = bundle.loadClass(className);
             LOG.debug("Located class [#0] in bundle [#1]", className, bundle.getSymbolicName());
         }
 
+        //try all the bundles
+        for (Bundle bundle2 : bundles.values()) {
+            try {
+                return bundle2.loadClass(className);
+            } catch (Exception ex) {
+                //ignore
+            }
+        }
+
         if (cls == null) {
             //try to find a bean with that id (hack for spring that searches all bundles)
             try {
-                Object bean = SpringOSGiUtil.getBean(bundleContext, className);
+                Object bean = OsgiUtil.getBean(bundleContext, className);
                 if (bean != null)
                     cls = bean.getClass();
             } catch (Exception e) {
@@ -81,9 +103,9 @@ public class DefaultBundleAccessor implements BundleAccessor {
                     LOG.debug("Unable to find bean [#0]", className);
             }
         }
-        
+
         if (cls == null) {
-            throw new ClassNotFoundException("Unable to find class "+className+" in bundles");
+            throw new ClassNotFoundException("Unable to find class " + className + " in bundles");
         }
         return cls;
     }
@@ -104,12 +126,16 @@ public class DefaultBundleAccessor implements BundleAccessor {
     }
 
     public List<URL> loadResources(String name) throws IOException {
+        return loadResources(name, false);
+    }
+
+    public List<URL> loadResources(String name, boolean translate) throws IOException {
         Bundle bundle = getCurrentBundle();
         if (bundle != null) {
             List<URL> resources = new ArrayList<URL>();
             Enumeration e = bundle.getResources(name);
             while (e.hasMoreElements()) {
-                resources.add((URL) e.nextElement());
+                resources.add(translate ? OsgiUtil.translateBundleURLToJarURL((URL) e.nextElement(), getCurrentBundle()) : (URL) e.nextElement());
             }
             return resources;
         }
@@ -137,10 +163,24 @@ public class DefaultBundleAccessor implements BundleAccessor {
     }
 
     public URL loadResource(String name) {
+        return loadResource(name, false);
+    }
+
+    public URL loadResource(String name, boolean translate) {
         Bundle bundle = getCurrentBundle();
         if (bundle != null) {
-            return bundle.getResource(name);
+            URL url = bundle.getResource(name);
+            try {
+                return translate ? OsgiUtil.translateBundleURLToJarURL(url, getCurrentBundle()) : url;
+            } catch (Exception e) {
+                if (LOG.isErrorEnabled()) {
+                    LOG.error("Unable to translate bunfle URL to jar URL", e);
+                }
+
+                return null;
+            }
         }
+
         return null;
     }
 
@@ -154,7 +194,7 @@ public class DefaultBundleAccessor implements BundleAccessor {
 
     public InputStream loadResourceAsStream(String name) throws IOException {
         URL url = loadResource(name);
-        if (url != null) { 
+        if (url != null) {
             return url.openStream();
         }
         return null;
