@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!DOCTYPE struts PUBLIC
-    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
-    "http://struts.apache.org/dtds/struts-2.0.dtd">
+    "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN"
+    "http://struts.apache.org/dtds/struts-2.1.7.dtd">
     
-<struts>
-    <bean type="org.apache.struts2.osgi.BundleAccessor" class="org.apache.struts2.osgi.DefaultBundleAccessor" />
-    <bean type="org.apache.struts2.osgi.PackageLoader" class="org.apache.struts2.osgi.BundlePackageLoader" />
-    <bean name="osgi" type="com.opensymphony.xwork2.ObjectFactory" class="org.apache.struts2.osgi.DelegatingObjectFactory" />
-    <bean name="osgi" type="com.opensymphony.xwork2.config.PackageProvider" class="org.apache.struts2.osgi.OsgiConfigurationProvider" />
-    <bean name="felix" type="org.apache.struts2.osgi.OsgiHost" class="org.apache.struts2.osgi.FelixOsgiHost" />
-    <bean name="osgi" type="com.opensymphony.xwork2.util.finder.ClassLoaderInterface" class="org.apache.struts2.osgi.BundleClassLoaderInterface" />
-    
+<struts order="10">
     <constant name="struts.objectFactory" value="osgi" />
     <constant name="struts.objectFactory.delegate" value="struts" />
     <constant name="struts.freemarker.manager.classname" value="org.apache.struts2.osgi.BundleFreemarkerManager" />
@@ -20,5 +13,13 @@
     <constant name="struts.convention.action.includeJars" value="jar:file:.*?/bundles/.*?\.jar(!/)?" />
 
     <constant name="struts.osgi.clearBundleCache" value="true" />
-    <constant name="struts.osgi.startRunLevel" value="2" />
+    <constant name="struts.osgi.startRunLevel" value="3" />
+
+    <bean type="org.apache.struts2.osgi.BundleAccessor" class="org.apache.struts2.osgi.DefaultBundleAccessor" />
+    <bean type="org.apache.struts2.osgi.PackageLoader" class="org.apache.struts2.osgi.BundlePackageLoader" />
+    <bean name="osgi" type="com.opensymphony.xwork2.ObjectFactory" class="org.apache.struts2.osgi.DelegatingObjectFactory" />
+    <bean name="springOsgi" type="com.opensymphony.xwork2.ObjectFactory" class="org.apache.struts2.osgi.SpringOsgiObjectFactory" />
+    <bean name="osgi" type="com.opensymphony.xwork2.config.PackageProvider" class="org.apache.struts2.osgi.OsgiConfigurationProvider" />
+    <bean name="felix" type="org.apache.struts2.osgi.OsgiHost" class="org.apache.struts2.osgi.FelixOsgiHost" />
+    <bean name="osgi" type="com.opensymphony.xwork2.util.finder.ClassLoaderInterface" class="org.apache.struts2.osgi.BundleClassLoaderInterface" />
 </struts>

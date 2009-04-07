@@ -31,4 +31,5 @@ public interface OsgiHost {
     void init() throws Exception;
     void setExtraBundleActivators(List<? extends BundleActivator> extraBundleActivators);
     Map<String, Bundle> getBundles();
+    void addBundle(Bundle bundle);
 }

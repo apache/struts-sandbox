@@ -41,16 +41,33 @@ public class DefaultBundleAccessor implements BundleAccessor {
     }
 
     public Object getService(ServiceReference ref) {
-        return bundleContext.getService(ref);
+        return bundleContext != null ? bundleContext.getService(ref) : null;
     }
 
     public ServiceReference getServiceReference(String className) {
-        return bundleContext.getServiceReference(className);
+        return bundleContext != null ? bundleContext.getServiceReference(className) : null;
     }
 
-    public void init(Map<String, Bundle> bundles, BundleContext bundleContext, Map<String, String> packageToBundle) {
+    public ServiceReference[] getAllServiceReferences(String className) {
+        if (bundleContext != null) {
+            try {
+                return bundleContext.getServiceReferences(className, null);
+            } catch (InvalidSyntaxException e) {
+                //cannot happen we are passing null as the param
+                if (LOG.isErrorEnabled())
+                    LOG.error("Invalid syntaxt for service lookup", e);
+            }
+        }
+
+        return null;
+    }
+
+    public ServiceReference[] getServiceReferences(String className, String params) throws InvalidSyntaxException {
+        return bundleContext != null ? bundleContext.getServiceReferences(className, params) : null;
+    }
+
+    public void init(Map<String, Bundle> bundles, Map<String, String> packageToBundle) {
         this.bundles = Collections.unmodifiableMap(bundles);
-        this.bundleContext = bundleContext;
         this.packageToBundle = packageToBundle;
         this.packagesByBundle = new HashMap<Bundle, Set<String>>();
         for (Map.Entry<String, String> entry : packageToBundle.entrySet()) {
@@ -89,18 +106,6 @@ public class DefaultBundleAccessor implements BundleAccessor {
                 return bundle2.loadClass(className);
             } catch (Exception ex) {
                 //ignore
-            }
-        }
-
-        if (cls == null) {
-            //try to find a bean with that id (hack for spring that searches all bundles)
-            try {
-                Object bean = OsgiUtil.getBean(bundleContext, className);
-                if (bean != null)
-                    cls = bean.getClass();
-            } catch (Exception e) {
-                if (LOG.isDebugEnabled())
-                    LOG.debug("Unable to find bean [#0]", className);
             }
         }
 
@@ -198,5 +203,9 @@ public class DefaultBundleAccessor implements BundleAccessor {
             return url.openStream();
         }
         return null;
+    }
+
+    public void setBundleContext(BundleContext bundleContext) {
+        this.bundleContext = bundleContext;
     }
 }

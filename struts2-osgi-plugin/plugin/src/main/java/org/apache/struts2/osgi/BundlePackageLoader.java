@@ -68,30 +68,6 @@ public class BundlePackageLoader implements PackageLoader {
             Enumeration<URL> e = bundle.getResources("struts.xml");
             return e.hasMoreElements() ? new EnumeratorIterator<URL>(e) : null;
         }
-        
-        /* 
-         * Try to find the class (className) on this bundle. If the class it not found,
-         * try to find an Spring bean with that name. 
-         */
-        @Override
-        protected boolean verifyAction(String className, String name, Location loc) {
-            try {
-                return bundle.loadClass(className) != null;
-            } catch (Exception e) {
-                if (LOG.isDebugEnabled())
-                    LOG.debug("Unable to find class [#0] in bundle [#1]", className, bundle.getSymbolicName());
-
-                //try to find a bean with that id
-                try {
-                    return OsgiUtil.isValidBean(bundleContext, className);
-                } catch (Exception e1) {
-                    if (LOG.isDebugEnabled())
-                        LOG.debug("Unable to find bean [#0]", className);
-                }
-                
-                return false;
-            }
-        }
     }
     
     static class EnumeratorIterator<E> implements Iterator<E> {

@@ -78,6 +78,7 @@ public class OsgiConfigurationProvider implements PackageProvider {
         } catch (InvalidSyntaxException e) {
             throw new ConfigurationException(e);
         }
+        
         Map<String, String> packageToBundle = new HashMap<String, String>();
         Set<String> bundleNames = new HashSet<String>();
         if (refs != null) {
@@ -96,7 +97,7 @@ public class OsgiConfigurationProvider implements PackageProvider {
                 }
             }
         }
-        bundleAccessor.init(osgiHost.getBundles(), bundleContext, packageToBundle);
+        bundleAccessor.init(osgiHost.getBundles(), packageToBundle);
 
         //reload container that will load configuration based on bundles (like convention plugin)
         reloadExtraProviders(configuration.getContainer());
@@ -185,6 +186,7 @@ public class OsgiConfigurationProvider implements PackageProvider {
         public void start(BundleContext context) throws Exception {
             context.addBundleListener(this);
             bundleContext = context;
+            bundleAccessor.setBundleContext(bundleContext);
         }
 
         public void stop(BundleContext ctx) throws Exception {
@@ -195,7 +197,7 @@ public class OsgiConfigurationProvider implements PackageProvider {
                 if (LOG.isDebugEnabled())
                     LOG.debug("Started bundle [#0]", evt.getBundle().getSymbolicName());
 
-                osgiHost.getBundles().put(evt.getBundle().getSymbolicName(), evt.getBundle());
+                osgiHost.addBundle(evt.getBundle());
                 bundlesChanged = true;
             }
         }

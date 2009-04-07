@@ -26,18 +26,20 @@ import com.opensymphony.xwork2.util.URLUtil;
 import com.opensymphony.xwork2.util.finder.ResourceFinder;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
+import com.opensymphony.xwork2.ActionContext;
 import org.apache.commons.lang.xwork.StringUtils;
 import org.apache.felix.framework.Felix;
 import org.apache.felix.framework.util.FelixConstants;
 import org.apache.felix.main.AutoActivator;
 import org.apache.felix.main.Main;
 import org.apache.felix.shell.ShellService;
+import org.apache.struts2.StrutsStatics;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.Constants;
-import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTracker;
 
+import javax.servlet.ServletContext;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -63,16 +65,13 @@ import java.util.regex.Pattern;
 public class FelixOsgiHost implements OsgiHost {
     private static final Logger LOG = LoggerFactory.getLogger(FelixOsgiHost.class);
 
-    private static final String FELIX_FILEINSTALL_POLL = "felix.fileinstall.poll";
-    private static final String FELIX_FILEINSTALL_DIR = "felix.fileinstall.dir";
-    private static final String FELIX_FILEINSTALL_DEBUG = "felix.fileinstall.debug";
-
     private Felix felix;
     private Map<String, Bundle> bundles = Collections.synchronizedMap(new HashMap<String, Bundle>());
     private List<? extends BundleActivator> extraBundleActivators;
     private boolean cleanBundleCache;
     private static Pattern versionPattern = Pattern.compile("([\\d])+[\\.-]");
     private String startRunLevel;
+    private ServletContext servletContext;
 
     protected void startFelix() {
         //load properties from felix embedded file
@@ -90,13 +89,10 @@ public class FelixOsgiHost implements OsgiHost {
         int bundlePaths = addAutoStartBundles(configProps);
 
         // Bundle cache
-        configProps.setProperty(Constants.FRAMEWORK_STORAGE, System.getProperty("java.io.tmpdir") + ".felix-cache");
-
-        // File Install
-        /*String bundlesDir = Thread.currentThread().getContextClassLoader().getResource("bundles").getPath();
-        configProps.put(OsgiConfigurationProvider.FELIX_FILEINSTALL_POLL, "5000");
-        configProps.put(OsgiConfigurationProvider.FELIX_FILEINSTALL_DIR, bundlesDir);
-        configProps.put(OsgiConfigurationProvider.FELIX_FILEINSTALL_DEBUG, "1");*/
+        String storageDir = System.getProperty("java.io.tmpdir") + ".felix-cache";
+        configProps.setProperty(Constants.FRAMEWORK_STORAGE, storageDir);
+        if (LOG.isDebugEnabled())
+            LOG.debug("Storing bundle at [#0]", storageDir);
 
         if (cleanBundleCache) {
             if (LOG.isDebugEnabled())
@@ -108,7 +104,7 @@ public class FelixOsgiHost implements OsgiHost {
         configProps.put(FelixConstants.SERVICE_URLHANDLERS_PROP, "false");
         configProps.put(FelixConstants.LOG_LEVEL_PROP, "4");
         configProps.put(FelixConstants.BUNDLE_CLASSPATH, ".");
-        configProps.put(FelixConstants.FRAMEWORK_BEGINNING_STARTLEVEL, startRunLevel);        
+        configProps.put(FelixConstants.FRAMEWORK_BEGINNING_STARTLEVEL, startRunLevel);
 
         try {
             List<BundleActivator> list = new ArrayList<BundleActivator>();
@@ -134,6 +130,8 @@ public class FelixOsgiHost implements OsgiHost {
                 LOG.error("An error occured while waiting for bundle activation", e);
             }
         }
+
+        addSpringOSGiSupport();
     }
 
     private int addAutoStartBundles(Properties configProps) {
@@ -141,20 +139,34 @@ public class FelixOsgiHost implements OsgiHost {
         List<String> bundleJarsLevel1 = new ArrayList<String>();
         bundleJarsLevel1.add(getJarUrl(ShellService.class));
         bundleJarsLevel1.add(getJarUrl(ServiceTracker.class));
-        bundleJarsLevel1.add(getJarUrl(LogService.class));
+
+        //add third party bundles in level 2
+        List<String> bundleJarsLevel2 = new ArrayList<String>();
+        bundleJarsLevel2.addAll(getBundlesInDir("bundles/other"));
+
+        //start app bundles in level 3
+        List<String> bundleJarsLevel3 = new ArrayList<String>();
+        bundleJarsLevel2.addAll(getBundlesInDir("bundles"));
+
 
         configProps.put(AutoActivator.AUTO_START_PROP + ".1", StringUtils.join(bundleJarsLevel1, " "));
+        configProps.put(AutoActivator.AUTO_START_PROP + ".2", StringUtils.join(bundleJarsLevel2, " "));
+        configProps.put(AutoActivator.AUTO_START_PROP + ".3", StringUtils.join(bundleJarsLevel3, " "));
 
-        //start app bundles in level2
-        List<String> bundleJarsLevel2 = new ArrayList<String>();
+
+        return bundleJarsLevel1.size() + bundleJarsLevel2.size() + bundleJarsLevel3.size();
+    }
+
+    private List<String> getBundlesInDir(String dir) {
+        List<String> bundleJars = new ArrayList<String>();
         try {
+
             ResourceFinder finder = new ResourceFinder();
-            URL url = finder.find("bundles");
+            URL url = finder.find(dir);
             if (url != null) {
                 if ("file".equals(url.getProtocol())) {
                     File bundlerDir = new File(url.toURI());
                     File[] bundles = bundlerDir.listFiles(new FilenameFilter() {
-                        @Override
                         public boolean accept(File file, String name) {
                             return StringUtils.endsWith(name, ".jar");
                         }
@@ -166,26 +178,41 @@ public class FelixOsgiHost implements OsgiHost {
                             String externalForm = bundle.toURI().toURL().toExternalForm();
                             if (LOG.isDebugEnabled())
                                 LOG.debug("Adding bundle [#0]", externalForm);
-                            bundleJarsLevel2.add(externalForm);
-                         }
+                            bundleJars.add(externalForm);
+                        }
 
                     } else if (LOG.isDebugEnabled()) {
-                        LOG.debug("No bundles found under the 'bundles' directory");
+                        LOG.debug("No bundles found under the [#0] directory", dir);
                     }
                 } else if (LOG.isWarnEnabled())
-                    LOG.warn("Unable to read 'bundles' directory");
+                    LOG.warn("Unable to read [#0] directory", dir);
             } else if (LOG.isWarnEnabled())
-                LOG.warn("The 'bundles' directory was not found");
+                LOG.warn("The [#0] directory was not found", dir);
         } catch (Exception e) {
             if (LOG.isWarnEnabled())
-                LOG.warn("Unable load bundles from the 'bundles' directory", e);
-            return 0;
+                LOG.warn("Unable load bundles from the [#0] directory", e, dir);
         }
+        return bundleJars;
+    }
 
-        //autostart bundles in leve 2
-        configProps.put(AutoActivator.AUTO_START_PROP + ".2", StringUtils.join(bundleJarsLevel2, " "));
-
-        return bundleJarsLevel1.size() + bundleJarsLevel2.size();
+    private void addSpringOSGiSupport() {
+        // see the javadoc for org.springframework.osgi.web.context.support.OsgiBundleXmlWebApplicationContext for more details
+        // OsgiBundleXmlWebApplicationContext expects the the BundleContext to be set in the ServletContext under the attribute
+        // OsgiBundleXmlWebApplicationContext.BUNDLE_CONTEXT_ATTRIBUTE
+        try {
+            Class clazz = Class.forName("org.springframework.osgi.web.context.support.OsgiBundleXmlWebApplicationContext");
+            String key = (String) clazz.getDeclaredField("BUNDLE_CONTEXT_ATTRIBUTE").get(null);
+            servletContext.setAttribute(key, felix.getBundleContext());
+        } catch (ClassNotFoundException e) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Spring OSGi support is not enabled");
+            }
+        } catch (Exception e) {
+            if (LOG.isErrorEnabled()) {
+                LOG.error("The API of Spring OSGi has changed and the field [#0] is no longer available. The OSGi plugin needs to be updated", e,
+                        "org.springframework.osgi.web.context.support.OsgiBundleXmlWebApplicationContext.BUNDLE_CONTEXT_ATTRIBUTE");
+            }
+        }
     }
 
     private String getJarUrl(Class clazz) {
@@ -275,7 +302,7 @@ public class FelixOsgiHost implements OsgiHost {
     static String getVersionFromString(String str) {
         Matcher matcher = versionPattern.matcher(str);
         List<String> parts = new ArrayList<String>();
-        while(matcher.find()) {
+        while (matcher.find()) {
             parts.add(matcher.group(1));
         }
 
@@ -283,7 +310,7 @@ public class FelixOsgiHost implements OsgiHost {
         if (parts.size() == 0)
             return "1.0.0";
 
-        while(parts.size() < 3)
+        while (parts.size() < 3)
             parts.add("0");
 
         return StringUtils.join(parts, ".");
@@ -294,8 +321,8 @@ public class FelixOsgiHost implements OsgiHost {
         try {
             return finder.findProperties(fileName);
         } catch (IOException e) {
-           if (LOG.isErrorEnabled())
-               LOG.error("Unable to read property file [#]", fileName);
+            if (LOG.isErrorEnabled())
+                LOG.error("Unable to read property file [#]", fileName);
             return new Properties();
         }
     }
@@ -308,7 +335,11 @@ public class FelixOsgiHost implements OsgiHost {
     }
 
     public Map<String, Bundle> getBundles() {
-        return bundles;
+        return Collections.unmodifiableMap(bundles);
+    }
+
+    public void addBundle(Bundle bundle) {
+        bundles.put(bundle.getSymbolicName(), bundle);
     }
 
     public void destroy() throws Exception {
@@ -332,5 +363,10 @@ public class FelixOsgiHost implements OsgiHost {
     @Inject("struts.osgi.startRunLevel")
     public void setStartRunLevel(String startRunLevel) {
         this.startRunLevel = startRunLevel;
+    }
+
+    @Inject
+    public void setServletContext(ServletContext servletContext) {
+        this.servletContext = servletContext;
     }
 }

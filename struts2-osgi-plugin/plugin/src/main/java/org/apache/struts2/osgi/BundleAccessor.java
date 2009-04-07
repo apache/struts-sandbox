@@ -15,7 +15,7 @@ public interface BundleAccessor {
 
     String CURRENT_BUNDLE_NAME = "__bundle_name__";
 
-    void init(Map<String, Bundle> bundles, BundleContext bundleContext, Map<String, String> packageToBundle);
+    void init(Map<String, Bundle> bundles, Map<String, String> packageToBundle);
 
     Class loadClass(String name) throws ClassNotFoundException;
 
@@ -31,5 +31,11 @@ public interface BundleAccessor {
 
     ServiceReference getServiceReference(String className);
 
+    ServiceReference[] getServiceReferences(String className, String params) throws InvalidSyntaxException;
+
+    public ServiceReference[] getAllServiceReferences(String className);
+
     void addPackageFromBundle(Bundle bundle, String packageName);
+
+    void setBundleContext(BundleContext bundleContext);
 }
