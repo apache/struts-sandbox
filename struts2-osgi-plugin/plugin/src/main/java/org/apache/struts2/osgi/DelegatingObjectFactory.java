@@ -58,7 +58,11 @@ public class DelegatingObjectFactory extends ObjectFactory implements ObjectFact
     }
 
     public Object buildBean(String className, Map<String, Object> extraContext, boolean injectInternal) throws Exception {
-        return delegateObjectFactory.buildBean(className, extraContext, injectInternal);
+        try {
+            return delegateObjectFactory.buildBean(className, extraContext, injectInternal);
+        } catch (Exception e) {
+            return bundleResourceLoader.loadClass(className).newInstance();
+        }
     }
 
     @Override

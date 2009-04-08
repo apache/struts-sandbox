@@ -7,7 +7,11 @@
 
 <div class="right">
     <@s.url var="bundlesUrl" nampespace="/osgi/admin" action="bundles" includeParams="none" />
+    <@s.url var="osgiShellUrl" namespace="/osgi/admin" action="shell" includeParams="none" />
+    <a href="${bundlesUrl}"><img src='<@s.url value="/static/search.gif"/>'</a>
     <a href="${bundlesUrl}">Installed Bundles</a>
+    <a href="${bundlesUrl}"><img src='<@s.url value="/static/terminal.gif"/>'</a>
+    <a href="${osgiShellUrl}">OSGi Shell</a>
 </div>
 
 <@s.actionerror />

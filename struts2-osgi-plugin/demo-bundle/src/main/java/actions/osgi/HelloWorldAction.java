@@ -22,6 +22,10 @@ public class HelloWorldAction extends ActionSupport {
         this.message = message;
     }
 
+    public String getSimpleMessage() {
+        return "Hello!!!";
+    }
+
     public String toString() {
         StringBuilder sb = new StringBuilder("{message:");
         sb.append(message != null ? message.getText() : "null");

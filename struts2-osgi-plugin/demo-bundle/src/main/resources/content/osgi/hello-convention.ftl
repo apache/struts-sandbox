@@ -5,6 +5,6 @@
     <body>
         This is an action mapped by the Convention plugin, using a FreeMarker result.
         <br />
-        Message from Action: ${message.text} 
+        Message from Action: ${simpleMessage} 
     </body>
 </html>

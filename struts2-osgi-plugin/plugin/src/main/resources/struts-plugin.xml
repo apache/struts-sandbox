@@ -15,6 +15,9 @@
     <constant name="struts.osgi.clearBundleCache" value="true" />
     <constant name="struts.osgi.startRunLevel" value="3" />
 
+    <!--1 = error, 2 = warning, 3 = information, and 4 = debug -->
+    <constant name="struts.osgi.logLevel" value="1" />
+
     <bean type="org.apache.struts2.osgi.BundleAccessor" class="org.apache.struts2.osgi.DefaultBundleAccessor" />
     <bean type="org.apache.struts2.osgi.PackageLoader" class="org.apache.struts2.osgi.BundlePackageLoader" />
     <bean name="osgi" type="com.opensymphony.xwork2.ObjectFactory" class="org.apache.struts2.osgi.DelegatingObjectFactory" />

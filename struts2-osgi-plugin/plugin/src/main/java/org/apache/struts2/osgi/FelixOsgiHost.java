@@ -73,6 +73,7 @@ public class FelixOsgiHost implements OsgiHost {
     private static Pattern versionPattern = Pattern.compile("([\\d])+[\\.-]");
     private String startRunLevel;
     private ServletContext servletContext;
+    private String logLevel;
 
     protected void startFelix() {
         //load properties from felix embedded file
@@ -103,7 +104,7 @@ public class FelixOsgiHost implements OsgiHost {
 
         //other properties
         configProps.put(FelixConstants.SERVICE_URLHANDLERS_PROP, "false");
-        configProps.put(FelixConstants.LOG_LEVEL_PROP, "4");
+        configProps.put(FelixConstants.LOG_LEVEL_PROP, logLevel);
         configProps.put(FelixConstants.BUNDLE_CLASSPATH, ".");
         configProps.put(FelixConstants.FRAMEWORK_BEGINNING_STARTLEVEL, startRunLevel);
 
@@ -135,7 +136,7 @@ public class FelixOsgiHost implements OsgiHost {
         addSpringOSGiSupport();
     }
 
-    private int addAutoStartBundles(Properties configProps) {
+    protected int addAutoStartBundles(Properties configProps) {
         //starts system bundles in level 1
         List<String> bundleJarsLevel1 = new ArrayList<String>();
         bundleJarsLevel1.add(getJarUrl(ShellService.class));
@@ -147,7 +148,7 @@ public class FelixOsgiHost implements OsgiHost {
 
         //start app bundles in level 3
         List<String> bundleJarsLevel3 = new ArrayList<String>();
-        bundleJarsLevel2.addAll(getBundlesInDir("bundles"));
+        bundleJarsLevel3.addAll(getBundlesInDir("bundles"));
 
 
         configProps.put(AutoActivator.AUTO_START_PROP + ".1", StringUtils.join(bundleJarsLevel1, " "));
@@ -158,7 +159,7 @@ public class FelixOsgiHost implements OsgiHost {
         return bundleJarsLevel1.size() + bundleJarsLevel2.size() + bundleJarsLevel3.size();
     }
 
-    private List<String> getBundlesInDir(String dir) {
+    protected List<String> getBundlesInDir(String dir) {
         List<String> bundleJars = new ArrayList<String>();
         try {
 
@@ -196,7 +197,7 @@ public class FelixOsgiHost implements OsgiHost {
         return bundleJars;
     }
 
-    private void addSpringOSGiSupport() {
+    protected void addSpringOSGiSupport() {
         // see the javadoc for org.springframework.osgi.web.context.support.OsgiBundleXmlWebApplicationContext for more details
         // OsgiBundleXmlWebApplicationContext expects the the BundleContext to be set in the ServletContext under the attribute
         // OsgiBundleXmlWebApplicationContext.BUNDLE_CONTEXT_ATTRIBUTE
@@ -216,14 +217,14 @@ public class FelixOsgiHost implements OsgiHost {
         }
     }
 
-    private String getJarUrl(Class clazz) {
+    protected String getJarUrl(Class clazz) {
         ProtectionDomain protectionDomain = clazz.getProtectionDomain();
         CodeSource codeSource = protectionDomain.getCodeSource();
         URL loc = codeSource.getLocation();
         return loc.toString();
     }
 
-    private void replaceSystemPackages(Properties properties) {
+    protected void replaceSystemPackages(Properties properties) {
         //Felix has a way to load the config file and substitution expressions
         //but the method does not have a way to specify the file (other than in an env variable)
 
@@ -237,7 +238,7 @@ public class FelixOsgiHost implements OsgiHost {
     /*
         Find subpackages of the packages defined in the property file and export them
      */
-    private void addExportedPackages(Properties strutsConfigProps, Properties configProps) {
+    protected void addExportedPackages(Properties strutsConfigProps, Properties configProps) {
         String[] rootPackages = StringUtils.split((String) strutsConfigProps.get("scanning.package.includes"), ",");
         ResourceFinder finder = new ResourceFinder(StringUtils.EMPTY);
         List<String> exportedPackages = new ArrayList<String>();
@@ -273,7 +274,7 @@ public class FelixOsgiHost implements OsgiHost {
     /**
      * Gets the version used to export the packages. it tries to get it from MANIFEST.MF, or the file name
      */
-    private String getVersion(URL url) {
+    protected String getVersion(URL url) {
         if ("jar".equals(url.getProtocol())) {
             try {
                 JarFile jarFile = new JarFile(new File(URLUtil.normalizeToFileProtocol(url).toURI()));
@@ -300,7 +301,7 @@ public class FelixOsgiHost implements OsgiHost {
     /**
      * Extracts numbers followed by "." or "-" from the string and joins them with "."
      */
-    static String getVersionFromString(String str) {
+    protected static String getVersionFromString(String str) {
         Matcher matcher = versionPattern.matcher(str);
         List<String> parts = new ArrayList<String>();
         while (matcher.find()) {
@@ -317,7 +318,7 @@ public class FelixOsgiHost implements OsgiHost {
         return StringUtils.join(parts, ".");
     }
 
-    private Properties getProperties(String fileName) {
+    protected Properties getProperties(String fileName) {
         ResourceFinder finder = new ResourceFinder("");
         try {
             return finder.findProperties(fileName);
@@ -369,5 +370,10 @@ public class FelixOsgiHost implements OsgiHost {
     @Inject
     public void setServletContext(ServletContext servletContext) {
         this.servletContext = servletContext;
+    }
+
+    @Inject("struts.osgi.logLevel")
+    public void setLogLevel(String logLevel) {
+        this.logLevel = logLevel;
     }
 }

@@ -22,6 +22,7 @@
 package org.apache.struts2.osgi;
 
 import com.opensymphony.xwork2.ObjectFactory;
+import com.opensymphony.xwork2.util.ClassLoaderUtil;
 import com.opensymphony.xwork2.inject.Inject;
 import org.osgi.framework.ServiceReference;
 
@@ -37,7 +38,16 @@ public class SpringOsgiObjectFactory extends ObjectFactory {
     private BundleAccessor bundleAccessor;
 
     public Object buildBean(String className, Map<String, Object> extraContext, boolean injectInternal) throws Exception {
-        return containsBean(className) ? getBean(className) : super.buildBean(className, extraContext, injectInternal);
+        if (containsBean(className))
+            return getBean(className);
+        else {
+            Class clazz = ClassLoaderUtil.loadClass(className, SpringOsgiObjectFactory.class);
+            Object object = clazz.newInstance();
+            if (injectInternal)
+                injectInternalBeans(object);
+            return object;
+        }
+
     }
 
     public Object buildBean(Class clazz, Map<String, Object> extraContext) throws Exception {
@@ -45,7 +55,7 @@ public class SpringOsgiObjectFactory extends ObjectFactory {
     }
 
     public Class getClassInstance(String className) throws ClassNotFoundException {
-        return containsBean(className) ? getBean(className).getClass() : super.getClassInstance(className);
+        return containsBean(className) ? getBean(className).getClass() :  ClassLoaderUtil.loadClass(className, SpringOsgiObjectFactory.class);
     }
 
     protected Object getBean(String beanName) {

@@ -39,3 +39,7 @@ table.properties td.name {
 table.properties th {
     background-color: #C3D9FF;
 }
+
+img {
+    border-style: none;
+}

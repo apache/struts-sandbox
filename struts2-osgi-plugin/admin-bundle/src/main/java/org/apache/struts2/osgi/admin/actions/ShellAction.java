@@ -49,8 +49,8 @@ public class ShellAction extends ActionSupport {
         String errString = null;
         try {
             executeCommand(command, outStream, errStream);
-            outString = outByteStream.toString();
-            errString = errByteStream.toString();
+            outString = outByteStream.toString().trim();
+            errString = errByteStream.toString().trim();
         } catch (Exception e) {
             errString = e.getMessage();
         } finally {

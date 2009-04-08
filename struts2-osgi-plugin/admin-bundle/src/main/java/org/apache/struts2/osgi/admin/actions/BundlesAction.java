@@ -28,6 +28,7 @@ import java.util.List;
 
 import org.apache.struts2.dispatcher.DefaultActionSupport;
 import org.apache.struts2.osgi.BundleAccessor;
+import org.apache.struts2.osgi.DefaultBundleAccessor;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 
@@ -41,6 +42,10 @@ public class BundlesAction extends DefaultActionSupport {
 
     private BundleAccessor bundleAccessor;
     private Configuration configuration;
+
+    public BundlesAction() {
+         this.bundleAccessor = DefaultBundleAccessor.getInstance();
+    }
 
     public String index() {
         return SUCCESS;
@@ -93,11 +98,6 @@ public class BundlesAction extends DefaultActionSupport {
 
     public Bundle getBundle() {
         return bundleAccessor.getBundles().get(id);
-    }
-
-    @Inject
-    public void setBundleAccessor(BundleAccessor bundleAccessor) {
-        this.bundleAccessor = bundleAccessor;
     }
 
     public List<PackageConfig> getPackages() {
