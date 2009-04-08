@@ -18,7 +18,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.struts2.interceptor;
+package org.apache.struts2.oval.interceptor;
 
 import com.opensymphony.xwork2.ActionProxy;
 import com.opensymphony.xwork2.ValidationAware;
@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.oval.configuration.Configurer;
+import org.apache.struts2.oval.interceptor.OValValidationManager;
 
 public class OValValidationInterceptorTest extends XWorkTestCase {
     public void testSimpleFieldsXML() throws Exception {
@@ -91,12 +92,12 @@ public class OValValidationInterceptorTest extends XWorkTestCase {
 
     public void testXMLLoadCaching() {
         OValValidationManager manager = container.getInstance(OValValidationManager.class);
-        List<Configurer> configurers = manager.getConfigurers(SimpleFieldsXML.class, "simpleFieldsXMLCaching");
+        List<Configurer> configurers = manager.getConfigurers(SimpleFieldsXML.class, "simpleFieldsXMLCaching", false);
         assertNotNull(configurers);
         assertEquals(2, configurers.size());
 
         //load again and check it is the same instance
-        List<Configurer> configurers2 = manager.getConfigurers(SimpleFieldsXML.class, "simpleFieldsXMLCaching");
+        List<Configurer> configurers2 = manager.getConfigurers(SimpleFieldsXML.class, "simpleFieldsXMLCaching", false);
         assertNotNull(configurers2);
         assertEquals(2, configurers2.size());
         assertSame(configurers.get(0), configurers2.get(0));

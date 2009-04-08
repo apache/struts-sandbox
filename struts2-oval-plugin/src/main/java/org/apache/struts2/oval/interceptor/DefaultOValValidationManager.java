@@ -1,4 +1,4 @@
-package org.apache.struts2.interceptor;
+package org.apache.struts2.oval.interceptor;
 
 import com.opensymphony.xwork2.inject.Inject;
 import com.opensymphony.xwork2.util.FileManager;
@@ -26,12 +26,8 @@ public class DefaultOValValidationManager implements OValValidationManager {
 
     protected boolean validateJPAAnnotations;
 
-    @Inject("struts.oval.validateJPAAnnotations")
-    public void setValidateJPAAnnotations(String validateJPAAnnotations) {
-        this.validateJPAAnnotations = "true".equalsIgnoreCase(validateJPAAnnotations);
-    }
-
-    public synchronized List<Configurer> getConfigurers(Class clazz, String context) {
+    public synchronized List<Configurer> getConfigurers(Class clazz, String context, boolean validateJPAAnnotations) {
+        this.validateJPAAnnotations =validateJPAAnnotations;
         final String validatorKey = buildValidatorKey(clazz, context);
 
         if (validatorCache.containsKey(validatorKey)) {

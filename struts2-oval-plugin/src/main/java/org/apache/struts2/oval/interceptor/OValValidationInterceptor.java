@@ -18,7 +18,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.struts2.interceptor;
+package org.apache.struts2.oval.interceptor;
 
 import com.opensymphony.xwork2.interceptor.MethodFilterInterceptor;
 import com.opensymphony.xwork2.interceptor.PrefixMethodInvocationUtil;
@@ -33,9 +33,7 @@ import com.opensymphony.xwork2.util.logging.LoggerFactory;
 import com.opensymphony.xwork2.util.ValueStack;
 import net.sf.oval.Validator;
 import net.sf.oval.ConstraintViolation;
-import net.sf.oval.configuration.xml.XMLConfigurer;
 import net.sf.oval.configuration.Configurer;
-import net.sf.oval.configuration.annotation.AnnotationsConfigurer;
 import net.sf.oval.context.FieldContext;
 import net.sf.oval.context.OValContext;
 import net.sf.oval.context.MethodReturnValueContext;
@@ -44,7 +42,7 @@ import java.util.List;
 import java.lang.reflect.Method;
 import java.lang.reflect.Field;
 
-import org.apache.struts2.validation.Profiles;
+import org.apache.struts2.oval.annotation.Profiles;
 import org.apache.commons.lang.xwork.StringUtils;
 
 /*
@@ -59,10 +57,18 @@ public class OValValidationInterceptor extends MethodFilterInterceptor {
     protected boolean alwaysInvokeValidate = true;
     protected boolean programmatic = true;
     protected OValValidationManager validationManager;
+    private boolean validateJPAAnnotations;
 
     @Inject
     public void setValidationManager(OValValidationManager validationManager) {
         this.validationManager = validationManager;
+    }
+
+    /**
+     * Enable OVal support fopr JPA
+     */
+    public void setValidateJPAAnnotations(boolean validateJPAAnnotations) {
+        this.validateJPAAnnotations = validateJPAAnnotations;
     }
 
     /**
@@ -140,7 +146,7 @@ public class OValValidationInterceptor extends MethodFilterInterceptor {
     protected void performOValValidation(Object action, ValueStack valueStack, String methodName, String context) throws NoSuchMethodException {
         Class clazz = action.getClass();
         //read validation from xmls
-        List<Configurer> configurers = validationManager.getConfigurers(clazz, context);
+        List<Configurer> configurers = validationManager.getConfigurers(clazz, context, validateJPAAnnotations);
 
         Validator validator = configurers.isEmpty() ? new Validator() : new Validator(configurers);
         //if the method is annotated with a @Profiles annotation, use those profiles

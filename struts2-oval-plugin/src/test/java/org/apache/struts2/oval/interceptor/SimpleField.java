@@ -18,7 +18,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.struts2.interceptor;
+package org.apache.struts2.oval.interceptor;
 
 import net.sf.oval.constraint.Length;
 import net.sf.oval.constraint.NotEmpty;

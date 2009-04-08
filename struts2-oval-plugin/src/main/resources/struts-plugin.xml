@@ -26,12 +26,12 @@
         "http://struts.apache.org/dtds/struts-2.0.dtd">
 
 <struts>
-    <bean type="org.apache.struts2.interceptor.OValValidationManager" class="org.apache.struts2.interceptor.DefaultOValValidationManager" />
+    <bean type="org.apache.struts2.oval.interceptor.OValValidationManager" class="org.apache.struts2.oval.interceptor.DefaultOValValidationManager" />
     <constant name="struts.oval.validateJPAAnnotations" value="false" />
     
     <package name="oval-default" extends="struts-default">
            <interceptors>
-               <interceptor name="ovalValidation" class="org.apache.struts2.interceptor.OValValidationInterceptor" />
+               <interceptor name="ovalValidation" class="org.apache.struts2.oval.interceptor.OValValidationInterceptor" />
 
                <interceptor-stack name="ovalValidationStack">
                    <interceptor-ref name="exception"/>

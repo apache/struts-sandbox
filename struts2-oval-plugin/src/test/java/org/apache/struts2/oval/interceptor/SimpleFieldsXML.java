@@ -1,4 +1,4 @@
-package org.apache.struts2.interceptor;
+package org.apache.struts2.oval.interceptor;
 
 import com.opensymphony.xwork2.ActionSupport;
 import net.sf.oval.constraint.NotEmpty;

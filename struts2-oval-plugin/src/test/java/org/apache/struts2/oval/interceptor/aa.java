@@ -18,35 +18,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.struts2.interceptor;
+package org.apache.struts2.oval.interceptor;
 
-import com.opensymphony.xwork2.ActionSupport;
-import net.sf.oval.constraint.NotNull;
-import net.sf.oval.configuration.annotation.IsInvariant;
+import net.sf.oval.configuration.Configurer;
 
-public class ValidationInMethods extends ActionSupport {
-    @IsInvariant
-    @NotNull
-    public String getName() {
-        return null;
-    }
+import java.util.List;
+import java.util.Map;
 
-    @IsInvariant
-    @NotNull
-    public Boolean isThereAnyMeaningInLife() {
-        return null;
-    }
+import org.apache.struts2.oval.interceptor.DefaultOValValidationManager;
 
-    @IsInvariant 
-    @NotNull
-    public String getTheManingOfLife() {
-        return null;
-    }
-
-    @IsInvariant
-    @NotNull
-    public String SisyphusHasTheAnswer() {
-        //some method annotated, whose name is not a field
-        return null;
+//just to expose the cache
+class DummyDefaultOValValidationManager extends DefaultOValValidationManager {
+    public Map<String, List<Configurer>> getCache() {
+        return validatorCache;
     }
 }

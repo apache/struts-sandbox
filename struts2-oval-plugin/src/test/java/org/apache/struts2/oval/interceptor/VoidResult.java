@@ -18,22 +18,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.struts2.interceptor;
+package org.apache.struts2.oval.interceptor;
 
-import com.opensymphony.xwork2.ActionSupport;
-import net.sf.oval.constraint.NotNull;
-import net.sf.oval.constraint.NotEmpty;
-import net.sf.oval.constraint.Length;
+import com.opensymphony.xwork2.Result;
+import com.opensymphony.xwork2.ActionInvocation;
 
-public class SimpleFieldI18n  extends ActionSupport {
-    @NotNull(message = "notnull.field")
-    private String name;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+public class VoidResult implements Result {
+    public void execute(ActionInvocation invocation) throws Exception {
     }
 }

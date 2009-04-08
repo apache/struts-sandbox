@@ -18,24 +18,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.struts2.interceptor;
+package org.apache.struts2.oval.annotation;
 
-import net.sf.oval.constraint.NotNull;
-import net.sf.oval.constraint.NotEmpty;
-import net.sf.oval.constraint.Length;
-import net.sf.oval.constraint.Assert;
-import com.opensymphony.xwork2.ActionSupport;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.lang.annotation.ElementType;
 
-public class SimpleFieldOGNLExpression extends ActionSupport {
-
-    @Assert(expr = "_value == 'Meursault'", lang = "ognl")
-    private String name;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+/*
+   Defines a list of profiles to be activated by OVal when calling a method in an action
+ */
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface Profiles {
+    String[] value();
 }

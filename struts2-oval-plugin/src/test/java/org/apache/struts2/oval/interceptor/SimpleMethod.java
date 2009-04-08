@@ -18,53 +18,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.struts2.interceptor;
+package org.apache.struts2.oval.interceptor;
 
 import com.opensymphony.xwork2.ActionSupport;
+import net.sf.oval.constraint.Length;
 import net.sf.oval.constraint.NotNull;
-import org.apache.struts2.validation.Profiles;
+import net.sf.oval.configuration.annotation.IsInvariant;
 
-public class FieldsWithProfiles extends ActionSupport {
-    @NotNull(profiles = "1")
-    private String firstName;
+public class SimpleMethod extends ActionSupport {
+    private String name;
 
-    @NotNull(profiles = "2")
-    private String middleName;
-
-    @NotNull(profiles = "3")
-    private String lastName;
-
-    @Profiles({"1", "3"})
-    public void run1() {
-
+    @IsInvariant
+    @NotNull
+    @Length(max = 4)
+    public String getSomeName() {
+        return name;
     }
 
-    @Profiles({"2"})
-    public void run2() {
-
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getMiddleName() {
-        return middleName;
-    }
-
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
+    public void setSomeName(String name) {
+        this.name = name;
     }
 }

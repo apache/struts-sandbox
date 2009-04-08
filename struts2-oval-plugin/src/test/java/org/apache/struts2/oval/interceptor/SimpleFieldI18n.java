@@ -18,18 +18,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.struts2.validation;
+package org.apache.struts2.oval.interceptor;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import java.lang.annotation.ElementType;
+import com.opensymphony.xwork2.ActionSupport;
+import net.sf.oval.constraint.NotNull;
+import net.sf.oval.constraint.NotEmpty;
+import net.sf.oval.constraint.Length;
 
-/*
-   Defines a list of profiles to be activated by OVal when calling a method in an action
- */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-public @interface Profiles {
-    String[] value();
+public class SimpleFieldI18n  extends ActionSupport {
+    @NotNull(message = "notnull.field")
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
