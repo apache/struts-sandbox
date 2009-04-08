@@ -63,6 +63,7 @@ public class OsgiConfigurationProvider implements PackageProvider {
         try {
             osgiHost.setExtraBundleActivators(Arrays.asList(new BundleRegistrationListener()));
             osgiHost.init();
+            bundleAccessor.setBundles(osgiHost.getBundles());
         } catch (Exception e) {
             if (LOG.isErrorEnabled())
                 LOG.error("Failed to start the OSGi container", e);
@@ -78,26 +79,43 @@ public class OsgiConfigurationProvider implements PackageProvider {
         } catch (InvalidSyntaxException e) {
             throw new ConfigurationException(e);
         }
-        
+
+
+        //init action contect
+        ActionContext ctx = ActionContext.getContext();
+        if (ctx == null) {
+            ctx = new ActionContext(new HashMap());
+            ActionContext.setContext(ctx);
+        }
+
         Map<String, String> packageToBundle = new HashMap<String, String>();
         Set<String> bundleNames = new HashSet<String>();
+        
         if (refs != null) {
             for (ServiceReference ref : refs) {
-                if (!bundleNames.contains(ref.getBundle().getSymbolicName())) {
-                    bundleNames.add(ref.getBundle().getSymbolicName());
+                String bundleName = ref.getBundle().getSymbolicName();
+                if (!bundleNames.contains(bundleName)) {
+                    bundleNames.add(bundleName);
 
                     if (LOG.isDebugEnabled())
-                        LOG.debug("Loading packages from bundle [#0]", ref.getBundle().getSymbolicName());
+                        LOG.debug("Loading packages from bundle [#0]", bundleName);
 
                     PackageLoader loader = (PackageLoader) bundleContext.getService(ref);
-                    for (PackageConfig pkg : loader.loadPackages(ref.getBundle(), bundleContext, objectFactory, configuration.getPackageConfigs())) {
-                        configuration.addPackageConfig(pkg.getName(), pkg);
-                        packageToBundle.put(pkg.getName(), ref.getBundle().getSymbolicName());
+                    try {
+                        ctx.put(BundleAccessor.CURRENT_BUNDLE_NAME, bundleName);
+                        for (PackageConfig pkg : loader.loadPackages(ref.getBundle(), bundleContext, objectFactory, configuration.getPackageConfigs())) {
+                            configuration.addPackageConfig(pkg.getName(), pkg);
+                            packageToBundle.put(pkg.getName(), bundleName);
+                        }
+                    } finally {
+                        ctx.put(BundleAccessor.CURRENT_BUNDLE_NAME, null);                        
                     }
                 }
             }
         }
-        bundleAccessor.init(osgiHost.getBundles(), packageToBundle);
+
+        //add the loaded packages to the BundleAccessor
+        bundleAccessor.setPackageToBundle(packageToBundle);
 
         //reload container that will load configuration based on bundles (like convention plugin)
         reloadExtraProviders(configuration.getContainer());

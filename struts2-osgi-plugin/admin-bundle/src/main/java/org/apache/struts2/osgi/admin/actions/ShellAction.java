@@ -1,17 +1,13 @@
 package org.apache.struts2.osgi.admin.actions;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.PrintStream;
 
-import org.apache.struts2.osgi.BundleAccessor;
 import org.apache.struts2.osgi.admin.services.ServicesFactory;
 import org.apache.struts2.osgi.admin.services.shell.ShellService;
-import org.osgi.framework.ServiceReference;
 
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionSupport;
-import com.opensymphony.xwork2.inject.Inject;
 
 public class ShellAction extends ActionSupport {
     private String command;

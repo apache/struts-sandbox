@@ -15,13 +15,15 @@ public interface BundleAccessor {
 
     String CURRENT_BUNDLE_NAME = "__bundle_name__";
 
-    void init(Map<String, Bundle> bundles, Map<String, String> packageToBundle);
+    void setPackageToBundle(Map<String, String> packageToBundle);
 
     Class loadClass(String name) throws ClassNotFoundException;
 
     InputStream loadResourceAsStream(String name) throws IOException;
 
-    URL loadResource(String name);
+    InputStream loadResourceFromAllBundlesAsStream(String name) throws IOException;
+
+    URL loadResourceFromAllBundles(String name) throws IOException;
 
     Map<String, Bundle> getBundles();
 
@@ -38,4 +40,6 @@ public interface BundleAccessor {
     void addPackageFromBundle(Bundle bundle, String packageName);
 
     void setBundleContext(BundleContext bundleContext);
+
+    void setBundles(Map<String, Bundle> bundles);
 }

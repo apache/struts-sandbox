@@ -26,13 +26,17 @@ import org.osgi.framework.ServiceReference;
 
 import java.util.Map;
 
+/**
+ * This Object factory uses the ActionContext(s) published by Spring OSGi
+ * to lookup beans
+ */
 public class SpringOsgiObjectFactory extends ObjectFactory {
     private final static String SPRING_SERVICE_NAME = "org.springframework.context.ApplicationContext";
 
     private BundleAccessor bundleAccessor;
 
     public Object buildBean(String className, Map<String, Object> extraContext, boolean injectInternal) throws Exception {
-        return containsBean(className) ? getBean(className) : super.buildBean(className, extraContext);
+        return containsBean(className) ? getBean(className) : super.buildBean(className, extraContext, injectInternal);
     }
 
     public Object buildBean(Class clazz, Map<String, Object> extraContext) throws Exception {

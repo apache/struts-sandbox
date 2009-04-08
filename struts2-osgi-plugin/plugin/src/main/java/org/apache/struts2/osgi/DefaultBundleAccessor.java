@@ -66,8 +66,7 @@ public class DefaultBundleAccessor implements BundleAccessor {
         return bundleContext != null ? bundleContext.getServiceReferences(className, params) : null;
     }
 
-    public void init(Map<String, Bundle> bundles, Map<String, String> packageToBundle) {
-        this.bundles = Collections.unmodifiableMap(bundles);
+    public void setPackageToBundle(Map<String, String> packageToBundle) {
         this.packageToBundle = packageToBundle;
         this.packagesByBundle = new HashMap<Bundle, Set<String>>();
         for (Map.Entry<String, String> entry : packageToBundle.entrySet()) {
@@ -92,27 +91,15 @@ public class DefaultBundleAccessor implements BundleAccessor {
     }
 
     public Class<?> loadClass(String className) throws ClassNotFoundException {
-        Class cls = null;
-
         Bundle bundle = getCurrentBundle();
         if (bundle != null) {
-            cls = bundle.loadClass(className);
-            LOG.debug("Located class [#0] in bundle [#1]", className, bundle.getSymbolicName());
+            Class cls = bundle.loadClass(className);
+            if (LOG.isTraceEnabled())
+                LOG.debug("Located class [#0] in bundle [#1]", className, bundle.getSymbolicName());
+            return cls;
         }
 
-        //try all the bundles
-        for (Bundle bundle2 : bundles.values()) {
-            try {
-                return bundle2.loadClass(className);
-            } catch (Exception ex) {
-                //ignore
-            }
-        }
-
-        if (cls == null) {
-            throw new ClassNotFoundException("Unable to find class " + className + " in bundles");
-        }
-        return cls;
+        throw new ClassNotFoundException("Unable to find class " + className);
     }
 
     private Bundle getCurrentBundle() {
@@ -207,5 +194,9 @@ public class DefaultBundleAccessor implements BundleAccessor {
 
     public void setBundleContext(BundleContext bundleContext) {
         this.bundleContext = bundleContext;
+    }
+
+    public void setBundles(Map<String, Bundle> bundles) {
+        this.bundles = Collections.unmodifiableMap(bundles);
     }
 }

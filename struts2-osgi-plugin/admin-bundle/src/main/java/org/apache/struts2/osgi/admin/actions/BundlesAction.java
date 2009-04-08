@@ -1,15 +1,18 @@
 package org.apache.struts2.osgi.admin.actions;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
 import org.apache.struts2.dispatcher.DefaultActionSupport;
 import org.apache.struts2.osgi.BundleAccessor;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
-import com.opensymphony.xwork2.inject.Inject;
-import com.opensymphony.xwork2.config.entities.PackageConfig;
-import com.opensymphony.xwork2.config.Configuration;
 
-import java.util.*;
-import java.lang.reflect.Array;
+import com.opensymphony.xwork2.config.Configuration;
+import com.opensymphony.xwork2.config.entities.PackageConfig;
+import com.opensymphony.xwork2.inject.Inject;
 
 public class BundlesAction extends DefaultActionSupport {
 

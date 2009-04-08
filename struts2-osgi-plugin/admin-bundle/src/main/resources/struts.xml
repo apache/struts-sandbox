@@ -5,6 +5,8 @@
 
 <struts>
     <package name="bundle-admin" namespace="/osgi/admin" extends="struts-default">
+        <default-action-ref name="bundles" />
+        
         <action name="bundle_*!*" class="org.apache.struts2.osgi.admin.actions.BundlesAction" method="{2}">
             <param name="id">{1}</param>
             <result type="freemarker">viewBundle.ftl</result>
