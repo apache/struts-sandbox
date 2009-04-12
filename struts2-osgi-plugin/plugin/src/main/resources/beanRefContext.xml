@@ -4,7 +4,7 @@
     <bean id="parent-context-bean" class="org.springframework.context.support.ClassPathXmlApplicationContext">
         <constructor-arg>
             <list>
-                <value>classpath*:applicationContext.xml</value>
+                <value>classpath*:/spring/*.xml</value>
             </list>
         </constructor-arg>
     </bean>

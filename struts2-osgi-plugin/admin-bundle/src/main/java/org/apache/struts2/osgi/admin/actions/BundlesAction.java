@@ -29,6 +29,7 @@ import java.util.List;
 import org.apache.struts2.dispatcher.DefaultActionSupport;
 import org.apache.struts2.osgi.BundleAccessor;
 import org.apache.struts2.osgi.DefaultBundleAccessor;
+import org.apache.struts2.osgi.OsgiHost;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 
@@ -42,6 +43,7 @@ public class BundlesAction extends DefaultActionSupport {
 
     private BundleAccessor bundleAccessor;
     private Configuration configuration;
+    private OsgiHost osgiHost;
 
     public BundlesAction() {
          this.bundleAccessor = DefaultBundleAccessor.getInstance();
@@ -56,7 +58,7 @@ public class BundlesAction extends DefaultActionSupport {
     }
 
     public String start() throws BundleException {
-        Bundle bundle = bundleAccessor.getBundles().get(id);
+        Bundle bundle = osgiHost.getBundles().get(id);
         try {
             bundle.start();
         } catch (Exception e) {
@@ -67,7 +69,7 @@ public class BundlesAction extends DefaultActionSupport {
     }
 
     public String stop() throws BundleException {
-        Bundle bundle = bundleAccessor.getBundles().get(id);
+        Bundle bundle = osgiHost.getBundles().get(id);
         try {
             bundle.stop();
         } catch (Exception e) {
@@ -78,7 +80,7 @@ public class BundlesAction extends DefaultActionSupport {
     }
 
     public String update() throws BundleException {
-        Bundle bundle = bundleAccessor.getBundles().get(id);
+        Bundle bundle = osgiHost.getBundles().get(id);
         try {
             bundle.update();
         } catch (Exception e) {
@@ -97,7 +99,7 @@ public class BundlesAction extends DefaultActionSupport {
     }
 
     public Bundle getBundle() {
-        return bundleAccessor.getBundles().get(id);
+        return osgiHost.getBundles().get(id);
     }
 
     public List<PackageConfig> getPackages() {
@@ -110,7 +112,7 @@ public class BundlesAction extends DefaultActionSupport {
     }
 
     public Collection<Bundle> getBundles() {
-        return bundleAccessor.getBundles().values();
+        return osgiHost.getBundles().values();
     }
 
     public String displayProperty(Object obj) {
@@ -156,5 +158,10 @@ public class BundlesAction extends DefaultActionSupport {
     @Inject
     public void setConfiguration(Configuration configuration) {
         this.configuration = configuration;
+    }
+
+    @Inject
+    public void setOsgiHost(OsgiHost osgiHost) {
+        this.osgiHost = osgiHost;
     }
 }

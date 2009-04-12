@@ -46,8 +46,6 @@ public interface BundleAccessor {
 
     URL loadResourceFromAllBundles(String name) throws IOException;
 
-    Map<String, Bundle> getBundles();
-
     Set<String> getPackagesByBundle(Bundle bundle);
 
     Object getService(ServiceReference ref);
@@ -62,5 +60,5 @@ public interface BundleAccessor {
 
     void setBundleContext(BundleContext bundleContext);
 
-    void setBundles(Map<String, Bundle> bundles);
+    void setOsgiHost(OsgiHost osgiHost);
 }

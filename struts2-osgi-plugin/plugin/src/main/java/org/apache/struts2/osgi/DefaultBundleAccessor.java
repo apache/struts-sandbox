@@ -38,6 +38,7 @@ import com.opensymphony.xwork2.util.logging.LoggerFactory;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.ActionProxy;
+import com.opensymphony.xwork2.inject.Inject;
 import com.opensymphony.xwork2.config.entities.ActionConfig;
 
 /**
@@ -48,10 +49,10 @@ public class DefaultBundleAccessor implements BundleAccessor {
     private static DefaultBundleAccessor self;
     private static final Logger LOG = LoggerFactory.getLogger(DefaultBundleAccessor.class);
 
-    private Map<String, Bundle> bundles = new HashMap<String, Bundle>();
     private BundleContext bundleContext;
     private Map<String, String> packageToBundle;
     private Map<Bundle, Set<String>> packagesByBundle;
+    private OsgiHost osgiHost;
 
     public DefaultBundleAccessor() {
         self = this;
@@ -76,7 +77,7 @@ public class DefaultBundleAccessor implements BundleAccessor {
             } catch (InvalidSyntaxException e) {
                 //cannot happen we are passing null as the param
                 if (LOG.isErrorEnabled())
-                    LOG.error("Invalid syntaxt for service lookup", e);
+                    LOG.error("Invalid syntax for service lookup", e);
             }
         }
 
@@ -91,7 +92,7 @@ public class DefaultBundleAccessor implements BundleAccessor {
         this.packageToBundle = packageToBundle;
         this.packagesByBundle = new HashMap<Bundle, Set<String>>();
         for (Map.Entry<String, String> entry : packageToBundle.entrySet()) {
-            Bundle bundle = bundles.get(entry.getValue());
+            Bundle bundle = osgiHost.getActiveBundles().get(entry.getValue());
             addPackageFromBundle(bundle, entry.getKey());
         }
     }
@@ -133,7 +134,7 @@ public class DefaultBundleAccessor implements BundleAccessor {
             bundleName = packageToBundle.get(actionConfig.getPackageName());
         }
         if (bundleName != null) {
-            return bundles.get(bundleName);
+            return osgiHost.getActiveBundles().get(bundleName);
         }
         return null;
     }
@@ -157,7 +158,7 @@ public class DefaultBundleAccessor implements BundleAccessor {
     }
 
     public URL loadResourceFromAllBundles(String name) throws IOException {
-        for (Map.Entry<String, Bundle> entry : bundles.entrySet()) {
+        for (Map.Entry<String, Bundle> entry : osgiHost.getActiveBundles().entrySet()) {
             Enumeration e = entry.getValue().getResources(name);
             if (e.hasMoreElements()) {
                 return (URL) e.nextElement();
@@ -187,7 +188,7 @@ public class DefaultBundleAccessor implements BundleAccessor {
                 return translate ? OsgiUtil.translateBundleURLToJarURL(url, getCurrentBundle()) : url;
             } catch (Exception e) {
                 if (LOG.isErrorEnabled()) {
-                    LOG.error("Unable to translate bunfle URL to jar URL", e);
+                    LOG.error("Unable to translate bundle URL to jar URL", e);
                 }
 
                 return null;
@@ -195,10 +196,6 @@ public class DefaultBundleAccessor implements BundleAccessor {
         }
 
         return null;
-    }
-
-    public Map<String, Bundle> getBundles() {
-        return bundles;
     }
 
     public Set<String> getPackagesByBundle(Bundle bundle) {
@@ -217,7 +214,7 @@ public class DefaultBundleAccessor implements BundleAccessor {
         this.bundleContext = bundleContext;
     }
 
-    public void setBundles(Map<String, Bundle> bundles) {
-        this.bundles = Collections.unmodifiableMap(bundles);
+    public void setOsgiHost(OsgiHost osgiHost) {
+        this.osgiHost = osgiHost;
     }
 }

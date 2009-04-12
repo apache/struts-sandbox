@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 /**
  * If a class implements BundleContextAware, this interceptor will call the setBundleContext(BundleContext)
- * method on it
+ * method on it. If a class implements ServiceAware<T>, this interceptor will call setService(List<T>)
  */
 public class OsgiInterceptor extends AbstractInterceptor {
     private static final Logger LOG = LoggerFactory.getLogger(OsgiInterceptor.class);

@@ -67,8 +67,10 @@ public class OsgiConfigurationProvider implements PackageProvider {
     public void init(Configuration configuration) throws ConfigurationException {
         osgiHost = (OsgiHost) servletContext.getAttribute(StrutsOsgiListener.OSGI_HOST);
         bundleContext = osgiHost.getBundleContext();
-        bundleAccessor.setBundles(osgiHost.getBundles());
         bundleAccessor.setBundleContext(bundleContext);
+        // I can't figure out why BundleAccessor doesn't get the OsgiHost injected
+        //for reason it always gets a new instace...weird
+        bundleAccessor.setOsgiHost(osgiHost);
         this.configuration = configuration;
     }
 

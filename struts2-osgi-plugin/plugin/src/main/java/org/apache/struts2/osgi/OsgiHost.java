@@ -37,7 +37,8 @@ public interface OsgiHost {
     String OSGI_BUNDLE_CONTEXT = "__struts_osgi_bundle_context"; 
 
     void destroy() throws Exception;
-    void init(ServletContext servletContext) throws Exception;
+    void init(ServletContext servletContext);
     Map<String, Bundle> getBundles();
+    Map<String, Bundle> getActiveBundles();
     BundleContext getBundleContext();
 }

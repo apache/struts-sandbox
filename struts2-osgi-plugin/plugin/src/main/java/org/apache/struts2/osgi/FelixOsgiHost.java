@@ -71,7 +71,7 @@ public class FelixOsgiHost implements OsgiHost, BundleListener {
 
     private Felix felix;
     private Map<String, Bundle> bundles = Collections.synchronizedMap(new HashMap<String, Bundle>());
-    private static Pattern versionPattern = Pattern.compile("([\\d])+[\\.-]");
+    private static final Pattern versionPattern = Pattern.compile("([\\d])+[\\.-]");
     private ServletContext servletContext;
 
     protected void startFelix() {
@@ -87,7 +87,7 @@ public class FelixOsgiHost implements OsgiHost, BundleListener {
         addExportedPackages(strutsConfigProps, configProps);
 
         //find bundles and adde em to autostart property
-        int bundlePaths = addAutoStartBundles(configProps);
+        addAutoStartBundles(configProps);
 
         // Bundle cache
         String storageDir = System.getProperty("java.io.tmpdir") + ".felix-cache";
@@ -342,8 +342,22 @@ public class FelixOsgiHost implements OsgiHost, BundleListener {
         }
     }
 
+    /**
+     * This bundle map will not change, but the status of the bundles can change over time.
+     * Use getActiveBundles() for active bundles
+     */
     public Map<String, Bundle> getBundles() {
         return Collections.unmodifiableMap(bundles);
+    }
+
+    public Map<String, Bundle> getActiveBundles() {
+        Map<String, Bundle> activeBundleMap = new HashMap<String, Bundle>();
+        for (Map.Entry<String, Bundle> entry : bundles.entrySet()) {
+            if (entry.getValue().getState() == Bundle.ACTIVE)
+                activeBundleMap.put(entry.getKey(), entry.getValue());
+        }
+
+        return activeBundleMap;
     }
 
     public BundleContext getBundleContext() {
@@ -358,7 +372,7 @@ public class FelixOsgiHost implements OsgiHost, BundleListener {
         }
     }
 
-    public void init(ServletContext servletContext) throws Exception {
+    public void init(ServletContext servletContext) {
         this.servletContext = servletContext;
         startFelix();
     }
@@ -368,8 +382,13 @@ public class FelixOsgiHost implements OsgiHost, BundleListener {
      */
     public void bundleChanged(BundleEvent evt) {
         Bundle bundle = evt.getBundle();
-        if (evt.getType() == BundleEvent.STARTED && bundle.getSymbolicName() != null) {
-            this.bundles.put(bundle.getSymbolicName(), bundle);            
+        String bundleName = bundle.getSymbolicName();
+        if (bundleName != null) {
+            switch (evt.getType()) {
+                case BundleEvent.STARTED:
+                    this.bundles.put(bundleName, bundle);
+                    break;
+            }
         }
     }
 }
