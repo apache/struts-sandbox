@@ -1,13 +1,19 @@
 package actions.osgi;
 
 import com.opensymphony.xwork2.ActionSupport;
-import org.apache.struts2.convention.annotation.ParentPackage;
-import org.apache.struts2.convention.annotation.ResultPath;
 import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.ResultPath;
+import org.apache.struts2.osgi.interceptor.BundleContextAware;
+import org.apache.struts2.osgi.interceptor.ServiceAware;
+import org.osgi.framework.BundleContext;
+import org.springframework.context.ApplicationContext;
+
+import java.util.List;
 
 @ResultPath("/content")
-public class HelloWorldAction extends ActionSupport {
+public class HelloWorldAction extends ActionSupport implements BundleContextAware, ServiceAware<ApplicationContext> {
     private Message message;
+    private BundleContext bundleContext;
 
     @Action("hello-convention")
     public String execute() {
@@ -31,5 +37,13 @@ public class HelloWorldAction extends ActionSupport {
         sb.append(message != null ? message.getText() : "null");
         sb.append("}");
         return sb.toString();
+    }
+
+    public void setBundleContext(BundleContext context) {
+        this.bundleContext = context;
+    }
+
+    public void setServices(List<ApplicationContext> service) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 }

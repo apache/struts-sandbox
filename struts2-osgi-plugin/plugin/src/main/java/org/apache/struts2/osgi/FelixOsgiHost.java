@@ -38,6 +38,9 @@ import org.apache.struts2.StrutsStatics;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.Constants;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleListener;
+import org.osgi.framework.BundleEvent;
 import org.osgi.util.tracker.ServiceTracker;
 
 import javax.servlet.ServletContext;
@@ -63,17 +66,13 @@ import java.util.regex.Pattern;
  * Apache felix implementation of an OsgiHost
  * See http://felix.apache.org/site/apache-felix-framework-launching-and-embedding.html
  */
-public class FelixOsgiHost implements OsgiHost {
+public class FelixOsgiHost implements OsgiHost, BundleListener {
     private static final Logger LOG = LoggerFactory.getLogger(FelixOsgiHost.class);
 
     private Felix felix;
     private Map<String, Bundle> bundles = Collections.synchronizedMap(new HashMap<String, Bundle>());
-    private List<? extends BundleActivator> extraBundleActivators;
-    private boolean cleanBundleCache;
     private static Pattern versionPattern = Pattern.compile("([\\d])+[\\.-]");
-    private String startRunLevel;
     private ServletContext servletContext;
-    private String logLevel;
 
     protected void startFelix() {
         //load properties from felix embedded file
@@ -96,7 +95,8 @@ public class FelixOsgiHost implements OsgiHost {
         if (LOG.isDebugEnabled())
             LOG.debug("Storing bundle at [#0]", storageDir);
 
-        if (cleanBundleCache) {
+        String cleanBundleCache = getServletContextParam("struts.osgi.cleanBundleCache", "true");
+        if ("true".equalsIgnoreCase(cleanBundleCache)) {
             if (LOG.isDebugEnabled())
                 LOG.debug("Clearing bundle cache");
             configProps.put(FelixConstants.FRAMEWORK_STORAGE_CLEAN, FelixConstants.FRAMEWORK_STORAGE_CLEAN_ONFIRSTINIT);
@@ -104,15 +104,24 @@ public class FelixOsgiHost implements OsgiHost {
 
         //other properties
         configProps.put(FelixConstants.SERVICE_URLHANDLERS_PROP, "false");
-        configProps.put(FelixConstants.LOG_LEVEL_PROP, logLevel);
+        configProps.put(FelixConstants.LOG_LEVEL_PROP, getServletContextParam("struts.osgi.logLevel", "1"));
         configProps.put(FelixConstants.BUNDLE_CLASSPATH, ".");
-        configProps.put(FelixConstants.FRAMEWORK_BEGINNING_STARTLEVEL, startRunLevel);
+        configProps.put(FelixConstants.FRAMEWORK_BEGINNING_STARTLEVEL, getServletContextParam("struts.osgi.runLevel", "3"));
 
         try {
             List<BundleActivator> list = new ArrayList<BundleActivator>();
-            if (extraBundleActivators != null)
-                list.addAll(extraBundleActivators);
             list.add(new AutoActivator(configProps));
+
+            //this activator just hooks this class as a BundleListener
+            list.add(new BundleActivator() {
+                public void start(BundleContext bundleContext) throws Exception {
+                    bundleContext.addBundleListener(FelixOsgiHost.this);
+                }
+
+                public void stop(BundleContext bundleContext) throws Exception {
+                }
+            });
+
             configProps.put(FelixConstants.SYSTEMBUNDLE_ACTIVATORS_PROP, list);
 
             felix = new Felix(configProps);
@@ -121,19 +130,23 @@ public class FelixOsgiHost implements OsgiHost {
                 LOG.trace("Apache Felix is running");
         }
         catch (Exception ex) {
-            throw new ConfigurationException("Couldn't start Felix (OSGi)", ex);
-        }
-
-        // Wait for all bundles to load
-        while (bundles.size() < bundlePaths) {
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                LOG.error("An error occured while waiting for bundle activation", e);
-            }
+            throw new ConfigurationException("Couldn't start Apache Felix", ex);
         }
 
         addSpringOSGiSupport();
+
+        //add the bundle context to the ServletContext
+        servletContext.setAttribute(OSGI_BUNDLE_CONTEXT, felix.getBundleContext());
+    }
+
+    /**
+     * Gets a param from the ServletContext, returning the default value if the param is not set 
+     * @param paramName the name of the param to get from the ServletContext
+     * @param defaultValue value to return if the param is not set
+     * @return
+     */
+    private String getServletContextParam(String paramName, String defaultValue) {
+        return StringUtils.defaultString(this.servletContext.getInitParameter(paramName), defaultValue);
     }
 
     protected int addAutoStartBundles(Properties configProps) {
@@ -329,19 +342,12 @@ public class FelixOsgiHost implements OsgiHost {
         }
     }
 
-    /**
-     * Bundle activators that will be added to the container
-     */
-    public void setExtraBundleActivators(List<? extends BundleActivator> extraBundleActivators) {
-        this.extraBundleActivators = extraBundleActivators;
-    }
-
     public Map<String, Bundle> getBundles() {
         return Collections.unmodifiableMap(bundles);
     }
 
-    public void addBundle(Bundle bundle) {
-        bundles.put(bundle.getSymbolicName(), bundle);
+    public BundleContext getBundleContext() {
+        return felix.getBundleContext();
     }
 
     public void destroy() throws Exception {
@@ -352,28 +358,18 @@ public class FelixOsgiHost implements OsgiHost {
         }
     }
 
-    @Override
-    public void init() throws Exception {
+    public void init(ServletContext servletContext) throws Exception {
+        this.servletContext = servletContext;
         startFelix();
     }
 
-    @Inject("struts.osgi.clearBundleCache")
-    public void setCleanBundleCache(String cleanBundleCache) {
-        this.cleanBundleCache = "true".equalsIgnoreCase(cleanBundleCache);
-    }
-
-    @Inject("struts.osgi.startRunLevel")
-    public void setStartRunLevel(String startRunLevel) {
-        this.startRunLevel = startRunLevel;
-    }
-
-    @Inject
-    public void setServletContext(ServletContext servletContext) {
-        this.servletContext = servletContext;
-    }
-
-    @Inject("struts.osgi.logLevel")
-    public void setLogLevel(String logLevel) {
-        this.logLevel = logLevel;
+    /**
+     * Listen to BundleEvent(s) and build a bundles list
+     */
+    public void bundleChanged(BundleEvent evt) {
+        Bundle bundle = evt.getBundle();
+        if (evt.getType() == BundleEvent.STARTED && bundle.getSymbolicName() != null) {
+            this.bundles.put(bundle.getSymbolicName(), bundle);            
+        }
     }
 }

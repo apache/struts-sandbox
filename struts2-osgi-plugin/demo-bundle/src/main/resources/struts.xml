@@ -4,7 +4,7 @@
     "http://struts.apache.org/dtds/struts-2.0.dtd">
 
 <struts>
-    <package name="bundle-demo" namespace="/osgi" extends="struts-default">
+    <package name="bundle-demo" namespace="/osgi" extends="osgi-default">
         <default-action-ref name="home" />
         <action name="hello-velocity" class="helloWorldAction">
             <result type="velocity">/content/osgi/hello.vm</result>

@@ -21,87 +21,58 @@
 
 package org.apache.struts2.osgi;
 
-import com.opensymphony.xwork2.ObjectFactory;
 import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.ObjectFactory;
 import com.opensymphony.xwork2.config.Configuration;
 import com.opensymphony.xwork2.config.ConfigurationException;
 import com.opensymphony.xwork2.config.PackageProvider;
 import com.opensymphony.xwork2.config.entities.PackageConfig;
-import com.opensymphony.xwork2.inject.Inject;
 import com.opensymphony.xwork2.inject.Container;
+import com.opensymphony.xwork2.inject.Inject;
+import com.opensymphony.xwork2.util.finder.ClassLoaderInterface;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
-import com.opensymphony.xwork2.util.finder.ClassLoaderInterface;
 import org.apache.struts2.osgi.loaders.VelocityBundleResourceLoader;
 import org.apache.struts2.views.velocity.VelocityManager;
 import org.apache.velocity.app.Velocity;
-import org.apache.commons.lang.xwork.StringUtils;
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleEvent;
-import org.osgi.framework.BundleListener;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 
-import java.util.Arrays;
+import javax.servlet.ServletContext;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.List;
-import java.util.ArrayList;
 
 /**
  * Struts package provider that starts the OSGi container and deelgates package loading
  */
 public class OsgiConfigurationProvider implements PackageProvider {
 
+    private static final String STRUTS_ENABLED = "Struts2-Enabled";
     private static final Logger LOG = LoggerFactory.getLogger(OsgiConfigurationProvider.class);
 
     private Configuration configuration;
     private ObjectFactory objectFactory;
-    private OsgiHost osgiHost;
 
+    private OsgiHost osgiHost;
     private BundleContext bundleContext;
     private BundleAccessor bundleAccessor;
     private boolean bundlesChanged = false;
-
-    public void destroy() {
-        try {
-            if (LOG.isTraceEnabled())
-                LOG.trace("Stopping OSGi container");
-            osgiHost.destroy();
-        } catch (Exception e) {
-            LOG.error("Failed to stop OSGi container", e);
-        }
-    }
+    private ServletContext servletContext;
 
     public void init(Configuration configuration) throws ConfigurationException {
-        if (LOG.isTraceEnabled())
-            LOG.trace("Starting OSGi container");
-        try {
-            osgiHost.setExtraBundleActivators(Arrays.asList(new BundleRegistrationListener()));
-            osgiHost.init();
-            bundleAccessor.setBundles(osgiHost.getBundles());
-        } catch (Exception e) {
-            if (LOG.isErrorEnabled())
-                LOG.error("Failed to start the OSGi container", e);
-            throw new ConfigurationException(e);
-        }
+        osgiHost = (OsgiHost) servletContext.getAttribute(StrutsOsgiListener.OSGI_HOST);
+        bundleContext = osgiHost.getBundleContext();
+        bundleAccessor.setBundles(osgiHost.getBundles());
+        bundleAccessor.setBundleContext(bundleContext);
         this.configuration = configuration;
     }
 
     public synchronized void loadPackages() throws ConfigurationException {
-        ServiceReference[] refs;
-        try {
-            refs = bundleContext.getServiceReferences(PackageLoader.class.getName(), null);
-        } catch (InvalidSyntaxException e) {
-            throw new ConfigurationException(e);
-        }
-
-
         //init action contect
         ActionContext ctx = ActionContext.getContext();
         if (ctx == null) {
@@ -111,26 +82,20 @@ public class OsgiConfigurationProvider implements PackageProvider {
 
         Map<String, String> packageToBundle = new HashMap<String, String>();
         Set<String> bundleNames = new HashSet<String>();
-        
-        if (refs != null) {
-            for (ServiceReference ref : refs) {
-                String bundleName = ref.getBundle().getSymbolicName();
-                if (!bundleNames.contains(bundleName)) {
-                    bundleNames.add(bundleName);
 
-                    if (LOG.isDebugEnabled())
-                        LOG.debug("Loading packages from bundle [#0]", bundleName);
+        //iterate over the bundles and load packages from them
+        for (Bundle bundle : osgiHost.getBundles().values()) {
+            String bundleName = bundle.getSymbolicName();
+            if (shouldProcessBundle(bundle) && !bundleNames.contains(bundleName)) {
+                bundleNames.add(bundleName);
 
-                    PackageLoader loader = (PackageLoader) bundleContext.getService(ref);
-                    try {
-                        ctx.put(BundleAccessor.CURRENT_BUNDLE_NAME, bundleName);
-                        for (PackageConfig pkg : loader.loadPackages(ref.getBundle(), bundleContext, objectFactory, configuration.getPackageConfigs())) {
-                            configuration.addPackageConfig(pkg.getName(), pkg);
-                            packageToBundle.put(pkg.getName(), bundleName);
-                        }
-                    } finally {
-                        ctx.put(BundleAccessor.CURRENT_BUNDLE_NAME, null);                        
-                    }
+                if (LOG.isDebugEnabled())
+                    LOG.debug("Loading packages from bundle [#0]", bundleName);
+
+                PackageLoader loader = new BundlePackageLoader();
+                for (PackageConfig pkg : loader.loadPackages(bundle, bundleContext, objectFactory, configuration.getPackageConfigs())) {
+                    configuration.addPackageConfig(pkg.getName(), pkg);
+                    packageToBundle.put(pkg.getName(), bundleName);
                 }
             }
         }
@@ -138,7 +103,7 @@ public class OsgiConfigurationProvider implements PackageProvider {
         //add the loaded packages to the BundleAccessor
         bundleAccessor.setPackageToBundle(packageToBundle);
 
-        //reload container that will load configuration based on bundles (like convention plugin)
+        //reload container, that will load configuration based on bundles (like convention plugin)
         reloadExtraProviders(configuration.getContainer());
 
         bundlesChanged = false;
@@ -151,26 +116,22 @@ public class OsgiConfigurationProvider implements PackageProvider {
         if (conventionPackageProvider != null)
             providers.add(conventionPackageProvider);
 
-        //init action context
-        ActionContext ctx = ActionContext.getContext();
-        if (ctx == null) {
-            ctx = new ActionContext(new HashMap());
-            ActionContext.setContext(ctx);
-        }
-
         //reload all providers by bundle
+        ActionContext ctx = ActionContext.getContext();
         for (Bundle bundle : osgiHost.getBundles().values()) {
-            try {
-                //the Convention plugin will use BundleClassLoaderInterface from the ActionContext to find resources
-                //and load classes
-                ctx.put(ClassLoaderInterface.CLASS_LOADER_INTERFACE, new BundleClassLoaderInterface());
-                ctx.put(BundleAccessor.CURRENT_BUNDLE_NAME, bundle.getSymbolicName());
-                
-                Object bundleActivator = bundle.getHeaders().get("Bundle-Activator");
-                if (bundleActivator != null && StringUtils.equals(StrutsActivator.class.getName(), bundleActivator.toString())) {                   ctx.put(BundleAccessor.CURRENT_BUNDLE_NAME, bundle.getSymbolicName());
+            String bundleName = bundle.getSymbolicName();
+            if (shouldProcessBundle(bundle)) {
+                try {
+                    //the Convention plugin will use BundleClassLoaderInterface from the ActionContext to find resources
+                    //and load classes
+                    ctx.put(ClassLoaderInterface.CLASS_LOADER_INTERFACE, new BundleClassLoaderInterface());
+                    ctx.put(BundleAccessor.CURRENT_BUNDLE_NAME, bundleName);
+
                     for (PackageProvider provider : providers) {
-                        if (LOG.isDebugEnabled())
-                            LOG.debug("Reloading provider [#0] for bundle [#1]", provider.getClass().getName(), bundle.getSymbolicName());
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug("Reloading provider [#0] for bundle [#1]", provider.getClass().getName(), bundleName);
+                        }
+
                         //get the existing packages before reloading the provider (se we can figure out what are the new packages)
                         Set<String> packagesBeforeLoading = new HashSet(configuration.getPackageConfigNames());
                         provider.loadPackages();
@@ -182,12 +143,21 @@ public class OsgiConfigurationProvider implements PackageProvider {
                                 bundleAccessor.addPackageFromBundle(bundle, packageName);
                         }
                     }
+                } finally {
+                    ctx.put(BundleAccessor.CURRENT_BUNDLE_NAME, null);
+                    ctx.put(ClassLoaderInterface.CLASS_LOADER_INTERFACE, null);
                 }
-            } finally {
-                ctx.put(BundleAccessor.CURRENT_BUNDLE_NAME, null);
-                ctx.put(ClassLoaderInterface.CLASS_LOADER_INTERFACE, null);
             }
         }
+    }
+
+    /**
+     * Checks for "Struts2-Enabled" header in the bundle
+     */
+    protected boolean shouldProcessBundle(Bundle bundle) {
+        String strutsEnabled = (String) bundle.getHeaders().get(STRUTS_ENABLED);
+
+        return "true".equalsIgnoreCase(strutsEnabled);
     }
 
     public synchronized boolean needsReload() {
@@ -218,28 +188,18 @@ public class OsgiConfigurationProvider implements PackageProvider {
         vm.setVelocityProperties(props);
     }
 
-    /**
-     * Listens to bundle events and adds bundles to the bundle list when one is activated
-     */
-    class BundleRegistrationListener implements BundleActivator, BundleListener {
-        public void start(BundleContext context) throws Exception {
-            context.addBundleListener(this);
-            bundleContext = context;
-            bundleAccessor.setBundleContext(bundleContext);
-        }
-
-        public void stop(BundleContext ctx) throws Exception {
-        }
-
-        public void bundleChanged(BundleEvent evt) {
-            if (evt.getType() == BundleEvent.STARTED && evt.getBundle().getSymbolicName() != null) {
-                if (LOG.isDebugEnabled())
-                    LOG.debug("Started bundle [#0]", evt.getBundle().getSymbolicName());
-
-                osgiHost.addBundle(evt.getBundle());
-                bundlesChanged = true;
-            }
-        }
+    @Inject
+    public void setServletContext(ServletContext servletContext) {
+        this.servletContext = servletContext;
     }
 
+    public void destroy() {
+        try {
+            if (LOG.isTraceEnabled())
+                LOG.trace("Stopping OSGi container");
+            osgiHost.destroy();
+        } catch (Exception e) {
+            LOG.error("Failed to stop OSGi container", e);
+        }
+    }
 }

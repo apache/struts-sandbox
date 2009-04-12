@@ -39,6 +39,12 @@
             <version>2.1.7-SNAPSHOT</version>
         </dependency>
 
+         <dependency>
+            <groupId>org.apache.struts</groupId>
+            <artifactId>struts2-osgi-plugin</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.struts</groupId>
             <artifactId>struts2-spring-plugin</artifactId>
@@ -56,15 +62,9 @@
                 <configuration>
                     <instructions>
                         <manifestLocation>META-INF</manifestLocation>
-                        <Import-Package>
-                            *,com.opensymphony.xwork2
-                        </Import-Package>
-                        <Bundle-Activator>
-                            org.apache.struts2.osgi.StrutsActivator
-                        </Bundle-Activator>
-                        <Spring-Context>
-                            *;create-asynchronously:=false
-                        </Spring-Context>
+                        <Import-Package>*,com.opensymphony.xwork2</Import-Package>
+                        <Spring-Context>*;create-asynchronously:=false</Spring-Context>
+                        <Struts2-Enabled>true</Struts2-Enabled>
                     </instructions>
                 </configuration>
             </plugin>

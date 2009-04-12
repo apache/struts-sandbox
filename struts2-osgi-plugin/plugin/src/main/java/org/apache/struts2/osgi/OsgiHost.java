@@ -23,14 +23,21 @@ package org.apache.struts2.osgi;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 
+import javax.servlet.ServletContext;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Implementations of this class start an OSGi container. They must also add the BundleContext to
+ * the ServletContext under the key  OsgiHost.OSGI_BUNDLE_CONTEXT;
+ */
 public interface OsgiHost {
+    String OSGI_BUNDLE_CONTEXT = "__struts_osgi_bundle_context"; 
+
     void destroy() throws Exception;
-    void init() throws Exception;
-    void setExtraBundleActivators(List<? extends BundleActivator> extraBundleActivators);
+    void init(ServletContext servletContext) throws Exception;
     Map<String, Bundle> getBundles();
-    void addBundle(Bundle bundle);
+    BundleContext getBundleContext();
 }
