@@ -65,6 +65,11 @@ import java.util.regex.Pattern;
 /**
  * Apache felix implementation of an OsgiHost
  * See http://felix.apache.org/site/apache-felix-framework-launching-and-embedding.html
+ * <br/>
+ * Servlet config params:
+ * <p>struts.osgi.clearBundleCache: Defaults to "true" delete installed bundles when the comntainer starts</p>
+ * <p>struts.osgi.logLevel: Defaults to "1". Felix log level. 1 = error, 2 = warning, 3 = information, and 4 = debug </p>
+ * <p>struts.osgi.runLevel: Defaults to "3". Run level to start the container.</p>
  */
 public class FelixOsgiHost implements OsgiHost, BundleListener {
     private static final Logger LOG = LoggerFactory.getLogger(FelixOsgiHost.class);
@@ -95,7 +100,7 @@ public class FelixOsgiHost implements OsgiHost, BundleListener {
         if (LOG.isDebugEnabled())
             LOG.debug("Storing bundle at [#0]", storageDir);
 
-        String cleanBundleCache = getServletContextParam("struts.osgi.cleanBundleCache", "true");
+        String cleanBundleCache = getServletContextParam("struts.osgi.clearBundleCache", "true");
         if ("true".equalsIgnoreCase(cleanBundleCache)) {
             if (LOG.isDebugEnabled())
                 LOG.debug("Clearing bundle cache");
