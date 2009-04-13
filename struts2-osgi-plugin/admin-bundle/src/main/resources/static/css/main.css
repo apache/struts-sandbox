@@ -94,5 +94,10 @@ img {
     clear: both;
 }
 
+.propertyValue {
+    width: 600px;
+    overflow: auto;
+}
+
 
 

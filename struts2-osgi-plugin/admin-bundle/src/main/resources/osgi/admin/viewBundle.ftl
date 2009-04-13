@@ -137,7 +137,7 @@
         <#list headerKeys as header>
             <tr>
                 <td class="name">${header}</td>
-                <td>${bundle.headers.get(header)}</td>
+                <td><div class="propertyValue">${bundle.headers.get(header)}</div> </td>
             </tr>
         </#list>
         </table>
