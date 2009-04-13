@@ -37,6 +37,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class BundlesAction extends ActionSupport implements ServletContextAware {
 
@@ -121,7 +123,13 @@ public class BundlesAction extends ActionSupport implements ServletContextAware 
     }
 
     public Collection<Bundle> getBundles() {
-        return osgiHost.getBundles().values();
+        List<Bundle> bundles = new ArrayList(osgiHost.getBundles().values());
+        Collections.sort(bundles, new Comparator<Bundle>() {
+            public int compare(Bundle bundle1, Bundle bundle2) {
+                return bundle1.getSymbolicName().compareTo(bundle2.getSymbolicName());
+            }
+        });
+        return bundles;
     }
 
     public String displayProperty(Object obj) {

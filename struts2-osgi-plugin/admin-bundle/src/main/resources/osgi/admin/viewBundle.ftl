@@ -1,110 +1,136 @@
 <html>
     <head>
-        <@s.url var="mainCss" value="/static/main.css" includeParams="none" />
-        <link rel="stylesheet" type="text/css" href="${mainCss}" />
+        <title>${bundle.symbolicName!}</title>
+
+        <link rel="stylesheet" type="text/css" href="<@s.url value="/static/css/main.css" />" />
+        <link rel="stylesheet" type="text/css" href="<@s.url value="/static/css/redmond/jquery-ui-1.7.1.custom.css" />" />
+
+        <script src="<@s.url value="/static/js/jquery-1.3.2.min.js" />"></script>
+        <script src="<@s.url value="/static/js/jquery-ui-1.7.1.custom.min.js" />"></script>
+
+        <script type="text/javascript">
+            $(function() {
+                $("#tabs").tabs();
+            });
+        </script>
+
     </head>
 <body>
 
-<div class="right">
-    <@s.url var="bundlesUrl" nampespace="/osgi/admin" action="bundles" includeParams="none" />
-    <@s.url var="osgiShellUrl" namespace="/osgi/admin" action="shell" includeParams="none" />
-    <a href="${bundlesUrl}"><img src='<@s.url value="/static/search.gif"/>'</a>
-    <a href="${bundlesUrl}">Installed Bundles</a>
-    <a href="${bundlesUrl}"><img src='<@s.url value="/static/terminal.gif"/>'</a>
-    <a href="${osgiShellUrl}">OSGi Shell</a>
+<div class="menu">
+    <div style="float:left;">
+        <#if action.isAllowedAction(bundle, "start")>
+        <a href="bundle_${bundle.symbolicName}!start.action" class="ui-state-default ui-corner-all fg-button fg-button-icon-left">
+            <span class="ui-icon ui-icon-play"></span>
+            Start
+        </a>
+        </#if>
+
+        <#if action.isAllowedAction(bundle, "stop")>
+        <a href="bundle_${bundle.symbolicName}!stop.action" class="ui-state-default ui-corner-all fg-button fg-button-icon-left">
+            <span class="ui-icon ui-icon-stop"></span>
+            Stop
+        </a>
+        </#if>
+
+        <#if action.isAllowedAction(bundle, "update")>
+        <a href="bundle_${bundle.symbolicName}!update.action" class="ui-state-default ui-corner-all fg-button fg-button-icon-left">
+            <span class="ui-icon ui-icon-refresh"></span>
+            Update
+        </a>
+        </#if>
+    </div>
+
+    <div  style="float:right;">
+        <@s.url var="bundlesUrl" namespace="/osgi/admin" action="bundles" includeParams="none" />
+        <@s.url var="osgiShellUrl" namespace="/osgi/admin" action="shell" includeParams="none" />
+        <a href="${bundlesUrl}" class="ui-state-default ui-corner-all fg-button fg-button-icon-left">
+            <span class="ui-icon ui-icon-bullet"></span>
+            Bundles
+        </a>
+        <a href="${osgiShellUrl}" class="ui-state-default ui-corner-all fg-button fg-button-icon-left">
+            <span class="ui-icon ui-icon-transferthick-e-w"></span>
+            OSGi Shell
+        </a>
+    </div>    
 </div>
 
 <@s.actionerror />
 
-<table class="bundleDetails" style="clear:both">
-    <tr class="detailRow">
-        <td class="rowTitle">Id</td>
-        <td class="rowValue">${bundle.bundleId!}</td>
-    </tr>
-    <tr class="detailRow">
-        <td class="rowTitle">Name</td>
-        <td class="rowValue">${bundle.symbolicName!}</td>
-    </tr>
-    <tr class="detailRow">
-        <td class="rowTitle">Location</td>
-        <td class="rowValue">${bundle.location!}</td>
-    </tr>
-    <tr class="detailRow">
-        <td class="rowTitle">State</td>
-        <td class="rowValue">${action.getBundleState(bundle)}</td>
-    </tr>
-    <tr class="detailRow">
-        <td class="rowTitle">Registered Services</td>
-        <td class="rowValue">
-            <#list (bundle.registeredServices)! as service>
-                <table class="properties">
-                    <#list (service.propertyKeys)! as key >
-                        <tr>
-                            <td class="name">${key}</td>
-                            <td>${action.displayProperty(service.getProperty(key))}</td>
-                        </tr>
-                    </#list>
-                </table>
-                <br/>
-            </#list>
-        </td>
-    </tr>
-    <tr class="detailRow">
-        <td class="rowTitle">Services in Use</td>
-        <td class="rowValue">
-            <#list (bundle.servicesInUse)! as service>
-                <table class="properties">
-                    <#list (service.propertyKeys)! as key >
-                        <tr>
-                            <td class="name">${key}</td>
-                            <td>${action.displayProperty(service.getProperty(key))!}</td>
-                        </tr>
-                    </#list>
-                </table>
-                <br/>
-           </#list>
-        </td>
-    </tr>
-    <tr class="detailRow">
-        <td class="rowTitle">Packages</td>
-        <td class="rowValue">
-            <#list packages! as pkg>
-                <table class="properties">
+<div id="tabs" class="tabs">
+    <ul>
+        <li><a href="#tabs-1">OSGi Metadata</a></li>
+        <li><a href="#tabs-2">Resgistered Services</a></li>
+        <li><a href="#tabs-3">Services in Use</a></li>
+        <li><a href="#tabs-4">Packages</a></li>
+    </ul>
+    <div id="tabs-1">
+        <table class="properties">
+            <tr>
+                <td class="name">Id</td>
+                <td>${bundle.bundleId!}</td>
+            </tr>
+            <tr>
+                <td class="name">Name</td>
+                <td>${bundle.symbolicName!}</td>
+            </tr>
+            <tr>
+                <td class="name">Location</td>
+                <td>${bundle.location!}</td>
+            </tr>
+            <tr>
+                <td class="name">State</td>
+                <td>${action.getBundleState(bundle)}</td>
+            </tr>
+        </table>
+    </div>
+    <div id="tabs-2">
+        <#list (bundle.registeredServices)! as service>
+            <table class="properties">
+                <#list (service.propertyKeys)! as key >
                     <tr>
-                        <td class="name">Name</td>
-                        <td>${pkg.name}</td>
+                        <td class="name">${key}</td>
+                        <td>${action.displayProperty(service.getProperty(key))}</td>
                     </tr>
+                </#list>
+            </table>
+            <br/>
+        </#list>
+    </div>
+    <div id="tabs-3">
+        <#list (bundle.servicesInUse)! as service>
+            <table class="properties">
+                <#list (service.propertyKeys)! as key >
                     <tr>
-                        <td class="name">Actions</td>
-                        <td>
-                            <ul>
-                                <#list (pkg.actionConfigs.keySet())! as name >
-                                    <li>${name}</li>
-                                </#list>
-                            </ul>
-                        </td>
+                        <td class="name">${key}</td>
+                        <td>${action.displayProperty(service.getProperty(key))!}</td>
                     </tr>
-                </table>
-                <br/>
-            </#list>
-        </td>
-    </tr>
-    <tr class="detailRow">
-        <td class="rowTitle">Actions</td>
-        <td class="rowValue">
-            <#if action.isAllowedAction(bundle, "start")>
-            <a href="bundle_${bundle.symbolicName}!start.action">Start</a>
-            </#if>
-
-            <#if action.isAllowedAction(bundle, "stop")>
-            <a href="bundle_${bundle.symbolicName}!stop.action">Stop</a>
-            </#if>
-
-            <#if action.isAllowedAction(bundle, "update")>
-            <a href="bundle_${bundle.symbolicName}!update.action">Update</a>
-            </#if>
-        </td>
-    </tr>
-</table>
+                </#list>
+            </table>
+            <br/>
+        </#list>
+    </div>
+    <div id="tabs-4">
+        <#list packages! as pkg>
+            <table class="properties">
+                <tr>
+                    <td class="name">Name</td>
+                    <td>${pkg.name}</td>
+                </tr>
+                <tr>
+                    <td class="name">Actions</td>
+                    <td>
+                        <ul>
+                            <#list (pkg.actionConfigs.keySet())! as name >
+                                <li>${name}</li>
+                            </#list>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+            <br/>
+        </#list>
+    </div>
+</div>
 </body>
 </html>

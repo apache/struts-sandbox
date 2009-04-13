@@ -21,10 +21,10 @@
 
   function printResult(result_string)
   {
-      var result_div = document.getElementById('wc-result');
+      var result_div = $('#wc-result')[0];
       var result_array = result_string.split('\n');
 
-      var new_command = document.getElementById('wc-command').value;
+      var new_command = $('#wc-command').val();
       result_div.appendChild(document.createTextNode(new_command));
       result_div.appendChild(document.createElement('br'));
 
@@ -36,40 +36,43 @@
           result_div.appendChild(document.createElement('br'));
 
       }
-      result_div.appendChild(document.createTextNode(':-> '));
+      result_div.appendChild(document.createTextNode('$ '));
 
       result_div.scrollTop = result_div.scrollHeight;
-      document.getElementById('wc-command').value = '';
+      $('#wc-command').val('');
   }
 
   function keyEvent(event, url)
   {
       switch(event.keyCode){
           case 13:
-              var the_shell_command = document.getElementById('wc-command').value;
+              var the_shell_command = $('#wc-command').val();
               if (the_shell_command) {
                   commands_history[commands_history.length] = the_shell_command;
                   history_pointer = commands_history.length;
-                  dojo.io.bind({
-                        url: url,
-                        formNode: dojo.byId("wc-form"),
-                        load: function(type, data, evt){
-                            printResult(data);
-                        },
-                        mimetype: "text/plain"
-                    });
+                  $.ajax({
+                     type: "GET",
+                     url: url,
+                     data: $("#wc-command").serialize(),
+                     success: function (data, textStatus) {
+                        printResult(data);
+                     },
+                     error: function (request, textStatus) {
+                        printResult(textStatus);
+                     }
+                 });
               }
               break;
           case 38: // this is the arrow up
               if (history_pointer > 0) {
                   history_pointer--;
-                  document.getElementById('wc-command').value = commands_history[history_pointer];
+                  $('#wc-command').val(commands_history[history_pointer]);
               }
               break;
           case 40: // this is the arrow down
               if (history_pointer < commands_history.length - 1 ) {
                   history_pointer++;
-                  document.getElementById('wc-command').value = commands_history[history_pointer];
+                  $('#wc-command').val(commands_history[history_pointer]);
               }
               break;
           default:

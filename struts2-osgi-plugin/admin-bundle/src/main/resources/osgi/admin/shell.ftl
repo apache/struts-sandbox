@@ -21,21 +21,31 @@
  */
 -->
 <html>
-<head>
-<link rel="stylesheet" type="text/css" href="<@s.url value="/static/shell.css" />" />
-<script src=" <@s.url value="/static/shell.js" />"></script>
-<script src="<@s.url value="/static/dojo.js" />"></script>
-<link rel="stylesheet" type="text/css" href="<@s.url value="/static/main.css" />" />
-<title>OSGi Console</title>
-</head>
+    <head>
+        <title>OSGi Console</title>
+
+        <link rel="stylesheet" type="text/css" href="<@s.url value="/static/css/shell.css" />" />
+        <link rel="stylesheet" type="text/css" href="<@s.url value="/static/css/main.css" />" />
+        <link rel="stylesheet" type="text/css" href="<@s.url value="/static/css/redmond/jquery-ui-1.7.1.custom.css" />" />
+
+        <script src="<@s.url value="/static/js/shell.js" />"></script>
+        <script src="<@s.url value="/static/js/jquery-1.3.2.min.js" />"></script>
+        <script src="<@s.url value="/static/js/jquery-ui-1.7.1.custom.min.js" />"></script>
+    </head>
 <body>
-<div class="right">
-    <@s.url var="bundlesUrl" nampespace="/osgi/admin" action="bundles" includeParams="none" />
-    <@s.url var="osgiShellUrl" namespace="/osgi/admin" action="shell" includeParams="none" />
-    <a href="${bundlesUrl}"><img src='<@s.url value="/static/search.gif"/>'</a>
-    <a href="${bundlesUrl}">Installed Bundles</a>
-    <a href="${bundlesUrl}"><img src='<@s.url value="/static/terminal.gif"/>'</a>
-    <a href="${osgiShellUrl}">OSGi Shell</a>
+<div class="menu">
+    <div  style="float:right;">
+        <@s.url var="bundlesUrl" namespace="/osgi/admin" action="bundles" includeParams="none" />
+        <@s.url var="osgiShellUrl" namespace="/osgi/admin" action="shell" includeParams="none" />
+        <a href="${bundlesUrl}" class="ui-state-default ui-corner-all fg-button fg-button-icon-left">
+            <span class="ui-icon ui-icon-bullet"></span>
+            Bundles
+        </a>
+        <a href="${osgiShellUrl}" class="ui-state-default ui-corner-all fg-button fg-button-icon-left">
+            <span class="ui-icon ui-icon-transferthick-e-w"></span>
+            OSGi Shell
+        </a>
+    </div>
 </div>
 <div id="shell" >
    <form onsubmit="return false" id="wc-form">
