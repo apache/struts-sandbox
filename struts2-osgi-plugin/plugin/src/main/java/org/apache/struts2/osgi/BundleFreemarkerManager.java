@@ -44,7 +44,7 @@ import freemarker.cache.WebappTemplateLoader;
  */
 public class BundleFreemarkerManager extends FreemarkerManager {
     private static final Logger LOG = LoggerFactory.getLogger(BundleFreemarkerManager.class);
-    
+
     @Override
     protected TemplateLoader getTemplateLoader(ServletContext servletContext) {
         // construct a FileTemplateLoader for the init-param 'TemplatePath'
@@ -59,7 +59,8 @@ public class BundleFreemarkerManager extends FreemarkerManager {
             try {
                 templatePathLoader = new FileTemplateLoader(new File(templatePath));
             } catch (IOException e) {
-                LOG.error("Invalid template path specified: #1",e, e.getMessage());
+                if (LOG.isErrorEnabled())
+                    LOG.error("Invalid template path specified: [#0]", e, e.getMessage());
             }
         }
 
@@ -73,10 +74,10 @@ public class BundleFreemarkerManager extends FreemarkerManager {
                         new FreeMarkerBundleResourceLoader()
                 })
                 : new MultiTemplateLoader(new TemplateLoader[]{
-                    new WebappTemplateLoader(servletContext),
-                    new StrutsClassTemplateLoader(),
-                    new FreeMarkerBundleResourceLoader()
-                });
+                new WebappTemplateLoader(servletContext),
+                new StrutsClassTemplateLoader(),
+                new FreeMarkerBundleResourceLoader()
+        });
     }
-    
+
 }

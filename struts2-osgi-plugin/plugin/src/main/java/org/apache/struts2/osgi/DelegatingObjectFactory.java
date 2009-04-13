@@ -61,7 +61,10 @@ public class DelegatingObjectFactory extends ObjectFactory implements ObjectFact
         try {
             return delegateObjectFactory.buildBean(className, extraContext, injectInternal);
         } catch (Exception e) {
-            return bundleResourceLoader.loadClass(className).newInstance();
+            Object object = bundleResourceLoader.loadClass(className).newInstance();
+            if (injectInternal)
+                injectInternalBeans(object);
+            return object;
         }
     }
 

@@ -71,11 +71,10 @@ import java.util.regex.Pattern;
  * <p>struts.osgi.logLevel: Defaults to "1". Felix log level. 1 = error, 2 = warning, 3 = information, and 4 = debug </p>
  * <p>struts.osgi.runLevel: Defaults to "3". Run level to start the container.</p>
  */
-public class FelixOsgiHost implements OsgiHost, BundleListener {
+public class FelixOsgiHost implements OsgiHost {
     private static final Logger LOG = LoggerFactory.getLogger(FelixOsgiHost.class);
 
     private Felix felix;
-    private Map<String, Bundle> bundles = Collections.synchronizedMap(new HashMap<String, Bundle>());
     private static final Pattern versionPattern = Pattern.compile("([\\d])+[\\.-]");
     private ServletContext servletContext;
 
@@ -98,7 +97,7 @@ public class FelixOsgiHost implements OsgiHost, BundleListener {
         String storageDir = System.getProperty("java.io.tmpdir") + ".felix-cache";
         configProps.setProperty(Constants.FRAMEWORK_STORAGE, storageDir);
         if (LOG.isDebugEnabled())
-            LOG.debug("Storing bundle at [#0]", storageDir);
+            LOG.debug("Storing bundles at [#0]", storageDir);
 
         String cleanBundleCache = getServletContextParam("struts.osgi.clearBundleCache", "true");
         if ("true".equalsIgnoreCase(cleanBundleCache)) {
@@ -116,17 +115,6 @@ public class FelixOsgiHost implements OsgiHost, BundleListener {
         try {
             List<BundleActivator> list = new ArrayList<BundleActivator>();
             list.add(new AutoActivator(configProps));
-
-            //this activator just hooks this class as a BundleListener
-            list.add(new BundleActivator() {
-                public void start(BundleContext bundleContext) throws Exception {
-                    bundleContext.addBundleListener(FelixOsgiHost.this);
-                }
-
-                public void stop(BundleContext bundleContext) throws Exception {
-                }
-            });
-
             configProps.put(FelixConstants.SYSTEMBUNDLE_ACTIVATORS_PROP, list);
 
             felix = new Felix(configProps);
@@ -145,8 +133,9 @@ public class FelixOsgiHost implements OsgiHost, BundleListener {
     }
 
     /**
-     * Gets a param from the ServletContext, returning the default value if the param is not set 
-     * @param paramName the name of the param to get from the ServletContext
+     * Gets a param from the ServletContext, returning the default value if the param is not set
+     *
+     * @param paramName    the name of the param to get from the ServletContext
      * @param defaultValue value to return if the param is not set
      * @return
      */
@@ -352,17 +341,22 @@ public class FelixOsgiHost implements OsgiHost, BundleListener {
      * Use getActiveBundles() for active bundles
      */
     public Map<String, Bundle> getBundles() {
+        Map<String, Bundle> bundles = new HashMap<String, Bundle>();
+        for (Bundle bundle : felix.getBundleContext().getBundles()) {
+            bundles.put(bundle.getSymbolicName(), bundle);
+        }
+
         return Collections.unmodifiableMap(bundles);
     }
 
     public Map<String, Bundle> getActiveBundles() {
-        Map<String, Bundle> activeBundleMap = new HashMap<String, Bundle>();
-        for (Map.Entry<String, Bundle> entry : bundles.entrySet()) {
-            if (entry.getValue().getState() == Bundle.ACTIVE)
-                activeBundleMap.put(entry.getKey(), entry.getValue());
+        Map<String, Bundle> bundles = new HashMap<String, Bundle>();
+        for (Bundle bundle : felix.getBundleContext().getBundles()) {
+            if (bundle.getState() == Bundle.ACTIVE)
+                bundles.put(bundle.getSymbolicName(), bundle);
         }
 
-        return activeBundleMap;
+        return Collections.unmodifiableMap(bundles);
     }
 
     public BundleContext getBundleContext() {
@@ -370,30 +364,13 @@ public class FelixOsgiHost implements OsgiHost, BundleListener {
     }
 
     public void destroy() throws Exception {
-        try {
-            felix.stop();
-        } finally {
-            bundles = null;
-        }
+        felix.stop();
+        if (LOG.isTraceEnabled())
+            LOG.trace("Apache Felix has stopped");
     }
 
     public void init(ServletContext servletContext) {
         this.servletContext = servletContext;
         startFelix();
-    }
-
-    /**
-     * Listen to BundleEvent(s) and build a bundles list
-     */
-    public void bundleChanged(BundleEvent evt) {
-        Bundle bundle = evt.getBundle();
-        String bundleName = bundle.getSymbolicName();
-        if (bundleName != null) {
-            switch (evt.getType()) {
-                case BundleEvent.STARTED:
-                    this.bundles.put(bundleName, bundle);
-                    break;
-            }
-        }
     }
 }

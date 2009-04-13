@@ -32,6 +32,9 @@ import com.opensymphony.xwork2.config.ConfigurationException;
 import com.opensymphony.xwork2.config.PackageProvider;
 import com.opensymphony.xwork2.config.entities.PackageConfig;
 
+/**
+ * Implementations of this interface can load packages from a Bundle
+ */
 public interface PackageLoader {
     List<PackageConfig> loadPackages(Bundle bundle, BundleContext bundleContext, ObjectFactory objectFactory, Map<String, PackageConfig> map) throws ConfigurationException;
 }

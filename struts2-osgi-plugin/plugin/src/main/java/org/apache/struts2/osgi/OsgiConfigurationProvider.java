@@ -35,8 +35,11 @@ import com.opensymphony.xwork2.util.logging.LoggerFactory;
 import org.apache.struts2.osgi.loaders.VelocityBundleResourceLoader;
 import org.apache.struts2.views.velocity.VelocityManager;
 import org.apache.velocity.app.Velocity;
+import org.apache.commons.lang.xwork.StringUtils;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleListener;
+import org.osgi.framework.BundleEvent;
 
 import javax.servlet.ServletContext;
 import java.util.ArrayList;
@@ -50,7 +53,7 @@ import java.util.Set;
 /**
  * Struts package provider that starts the OSGi container and deelgates package loading
  */
-public class OsgiConfigurationProvider implements PackageProvider {
+public class OsgiConfigurationProvider implements PackageProvider, BundleListener {
 
     private static final String STRUTS_ENABLED = "Struts2-Enabled";
     private static final Logger LOG = LoggerFactory.getLogger(OsgiConfigurationProvider.class);
@@ -68,13 +71,14 @@ public class OsgiConfigurationProvider implements PackageProvider {
         osgiHost = (OsgiHost) servletContext.getAttribute(StrutsOsgiListener.OSGI_HOST);
         bundleContext = osgiHost.getBundleContext();
         bundleAccessor.setBundleContext(bundleContext);
-        // I can't figure out why BundleAccessor doesn't get the OsgiHost injected
-        //for reason it always gets a new instace...weird
         bundleAccessor.setOsgiHost(osgiHost);
         this.configuration = configuration;
     }
 
     public synchronized void loadPackages() throws ConfigurationException {
+        if (LOG.isTraceEnabled())
+            LOG.trace("Loading packages from XML and Convention on startup");                
+
         //init action contect
         ActionContext ctx = ActionContext.getContext();
         if (ctx == null) {
@@ -82,7 +86,6 @@ public class OsgiConfigurationProvider implements PackageProvider {
             ActionContext.setContext(ctx);
         }
 
-        Map<String, String> packageToBundle = new HashMap<String, String>();
         Set<String> bundleNames = new HashSet<String>();
 
         //iterate over the bundles and load packages from them
@@ -90,66 +93,74 @@ public class OsgiConfigurationProvider implements PackageProvider {
             String bundleName = bundle.getSymbolicName();
             if (shouldProcessBundle(bundle) && !bundleNames.contains(bundleName)) {
                 bundleNames.add(bundleName);
-
-                if (LOG.isDebugEnabled())
-                    LOG.debug("Loading packages from bundle [#0]", bundleName);
-
-                PackageLoader loader = new BundlePackageLoader();
-                for (PackageConfig pkg : loader.loadPackages(bundle, bundleContext, objectFactory, configuration.getPackageConfigs())) {
-                    configuration.addPackageConfig(pkg.getName(), pkg);
-                    packageToBundle.put(pkg.getName(), bundleName);
-                }
+                //load XML and COnvention config
+                loadConfigFromBundle(bundle);
             }
         }
 
-        //add the loaded packages to the BundleAccessor
-        bundleAccessor.setPackageToBundle(packageToBundle);
-
-        //reload container, that will load configuration based on bundles (like convention plugin)
-        reloadExtraProviders(configuration.getContainer());
-
         bundlesChanged = false;
+        bundleContext.addBundleListener(this);
     }
 
-    protected void reloadExtraProviders(Container container) {
-        //these providers will be reloaded for each bundle
-        List<PackageProvider> providers = new ArrayList<PackageProvider>();
-        PackageProvider conventionPackageProvider = container.getInstance(PackageProvider.class, "convention.packageProvider");
-        if (conventionPackageProvider != null)
-            providers.add(conventionPackageProvider);
+    /**
+     * Loads XML config as well as Convention config from a bundle
+     * Limitation: Constants and Beans are ignored on XML config
+     */
+    protected void loadConfigFromBundle(Bundle bundle) {
+        String bundleName = bundle.getSymbolicName();
+        if (LOG.isDebugEnabled())
+            LOG.debug("Loading packages from bundle [#0]", bundleName);
 
-        //reload all providers by bundle
+        //init action context
         ActionContext ctx = ActionContext.getContext();
-        for (Bundle bundle : osgiHost.getBundles().values()) {
-            String bundleName = bundle.getSymbolicName();
-            if (shouldProcessBundle(bundle)) {
-                try {
-                    //the Convention plugin will use BundleClassLoaderInterface from the ActionContext to find resources
-                    //and load classes
-                    ctx.put(ClassLoaderInterface.CLASS_LOADER_INTERFACE, new BundleClassLoaderInterface());
-                    ctx.put(BundleAccessor.CURRENT_BUNDLE_NAME, bundleName);
+        if (ctx == null) {
+            ctx = new ActionContext(new HashMap());
+            ActionContext.setContext(ctx);
+        }
 
-                    for (PackageProvider provider : providers) {
-                        if (LOG.isDebugEnabled()) {
-                            LOG.debug("Reloading provider [#0] for bundle [#1]", provider.getClass().getName(), bundleName);
-                        }
+        try {
+            //the Convention plugin will use BundleClassLoaderInterface from the ActionContext to find resources
+            //and load classes
+            ctx.put(ClassLoaderInterface.CLASS_LOADER_INTERFACE, new BundleClassLoaderInterface());
+            ctx.put(BundleAccessor.CURRENT_BUNDLE_NAME, bundleName);
 
-                        //get the existing packages before reloading the provider (se we can figure out what are the new packages)
-                        Set<String> packagesBeforeLoading = new HashSet(configuration.getPackageConfigNames());
-                        provider.loadPackages();
-                        Set<String> packagesAfterLoading = new HashSet(configuration.getPackageConfigNames());
-                        packagesAfterLoading.removeAll(packagesBeforeLoading);
-                        if (!packagesAfterLoading.isEmpty()) {
-                            //add the new packages to the map of bundle -> package
-                            for (String packageName : packagesAfterLoading)
-                                bundleAccessor.addPackageFromBundle(bundle, packageName);
-                        }
-                    }
-                } finally {
-                    ctx.put(BundleAccessor.CURRENT_BUNDLE_NAME, null);
-                    ctx.put(ClassLoaderInterface.CLASS_LOADER_INTERFACE, null);
-                }
+            if (LOG.isTraceEnabled())
+                LOG.trace("Loading XML config from bundle [#0]", bundleName);
+
+            //XML config
+            PackageLoader loader = new BundlePackageLoader();
+            for (PackageConfig pkg : loader.loadPackages(bundle, bundleContext, objectFactory, configuration.getPackageConfigs())) {
+                configuration.addPackageConfig(pkg.getName(), pkg);
+                bundleAccessor.addPackageFromBundle(bundle, pkg.getName());
             }
+
+            //Convention
+            //get the existing packages before reloading the provider (se we can figure out what are the new packages)
+            Set<String> packagesBeforeLoading = new HashSet(configuration.getPackageConfigNames());
+
+            PackageProvider conventionPackageProvider = configuration.getContainer().getInstance(PackageProvider.class, "convention.packageProvider");
+            if (conventionPackageProvider != null) {
+                if (LOG.isTraceEnabled())
+                    LOG.trace("Loading Convention config from bundle [#0]", bundleName);
+                conventionPackageProvider.loadPackages();
+            }
+
+            Set<String> packagesAfterLoading = new HashSet(configuration.getPackageConfigNames());
+            packagesAfterLoading.removeAll(packagesBeforeLoading);
+            if (!packagesAfterLoading.isEmpty()) {
+                //add the new packages to the map of bundle -> package
+                for (String packageName : packagesAfterLoading)
+                    bundleAccessor.addPackageFromBundle(bundle, packageName);
+            }
+
+            if (this.configuration.getRuntimeConfiguration() != null) {
+                //if there is a runtime config, it meas that this method was called froma bundle start event
+                //instead of the initial load, in that case, reload the config
+                this.configuration.rebuildRuntimeConfiguration();
+            }
+        } finally {
+            ctx.put(BundleAccessor.CURRENT_BUNDLE_NAME, null);
+            ctx.put(ClassLoaderInterface.CLASS_LOADER_INTERFACE, null);
         }
     }
 
@@ -169,11 +180,6 @@ public class OsgiConfigurationProvider implements PackageProvider {
     @Inject
     public void setObjectFactory(ObjectFactory factory) {
         this.objectFactory = factory;
-    }
-
-    @Inject("felix")
-    public void setOsgiHost(OsgiHost osgiHost) {
-        this.osgiHost = osgiHost;
     }
 
     @Inject
@@ -197,11 +203,45 @@ public class OsgiConfigurationProvider implements PackageProvider {
 
     public void destroy() {
         try {
-            if (LOG.isTraceEnabled())
-                LOG.trace("Stopping OSGi container");
             osgiHost.destroy();
         } catch (Exception e) {
-            LOG.error("Failed to stop OSGi container", e);
+            if (LOG.isErrorEnabled())
+                LOG.error("Failed to stop OSGi container", e);
+        }
+    }
+
+    /**
+     * Listens to bundle event to load/unload config
+     */
+    public void bundleChanged(BundleEvent bundleEvent) {
+        Bundle bundle = bundleEvent.getBundle();
+        String bundleName = bundle.getSymbolicName();
+        if (bundleName != null && shouldProcessBundle(bundle)) {
+            switch (bundleEvent.getType()) {
+                case BundleEvent.STARTED:
+                    if (LOG.isTraceEnabled())
+                        LOG.trace("The bundlde [#0] has been activated and will be scanned for struts configuration", bundleName);
+                    loadConfigFromBundle(bundle);
+                    break;
+                case BundleEvent.STOPPED:
+                    onBundleStopped(bundle);
+                    break;
+            }
+        }
+    }
+
+    /**
+     * This method is called when a bundle is stopped, so the config that is related to it is removed
+     *
+     * @param bundle the bundle that stopped
+     */
+    protected void onBundleStopped(Bundle bundle) {
+        Set<String> packages = bundleAccessor.getPackagesByBundle(bundle);
+        if (!packages.isEmpty()) {
+            if (LOG.isTraceEnabled())
+                LOG.trace("The bundle [#0] has been stopped. The packages [#1] will be disabled", bundle.getSymbolicName(), StringUtils.join(packages, ","));
+            for (String packageName : packages)
+                configuration.removePackageConfig(packageName);
         }
     }
 }

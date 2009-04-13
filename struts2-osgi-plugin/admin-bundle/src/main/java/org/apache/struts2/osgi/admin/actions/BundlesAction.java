@@ -21,23 +21,24 @@
 
 package org.apache.struts2.osgi.admin.actions;
 
+import com.opensymphony.xwork2.ActionSupport;
+import com.opensymphony.xwork2.config.Configuration;
+import com.opensymphony.xwork2.config.entities.PackageConfig;
+import com.opensymphony.xwork2.inject.Inject;
+import org.apache.struts2.osgi.BundleAccessor;
+import org.apache.struts2.osgi.OsgiHost;
+import org.apache.struts2.osgi.StrutsOsgiListener;
+import org.apache.struts2.util.ServletContextAware;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleException;
+
+import javax.servlet.ServletContext;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.struts2.dispatcher.DefaultActionSupport;
-import org.apache.struts2.osgi.BundleAccessor;
-import org.apache.struts2.osgi.DefaultBundleAccessor;
-import org.apache.struts2.osgi.OsgiHost;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleException;
-
-import com.opensymphony.xwork2.config.Configuration;
-import com.opensymphony.xwork2.config.entities.PackageConfig;
-import com.opensymphony.xwork2.inject.Inject;
-
-public class BundlesAction extends DefaultActionSupport {
+public class BundlesAction extends ActionSupport implements ServletContextAware {
 
     private String id;
 
@@ -46,7 +47,6 @@ public class BundlesAction extends DefaultActionSupport {
     private OsgiHost osgiHost;
 
     public BundlesAction() {
-         this.bundleAccessor = DefaultBundleAccessor.getInstance();
     }
 
     public String index() {
@@ -61,6 +61,11 @@ public class BundlesAction extends DefaultActionSupport {
         Bundle bundle = osgiHost.getBundles().get(id);
         try {
             bundle.start();
+
+            //start fires the BundleEvent.STARTED, which load the config
+            //we need to wait until the config is loaded from that bundle
+            //there no easy way/elegant way to know if the bundle is being processed
+            Thread.sleep(1000);
         } catch (Exception e) {
             addActionError(e.toString());
         }
@@ -105,8 +110,12 @@ public class BundlesAction extends DefaultActionSupport {
     public List<PackageConfig> getPackages() {
         List<PackageConfig> pkgs = new ArrayList<PackageConfig>();
         Bundle bundle = getBundle();
-        for (String name : bundleAccessor.getPackagesByBundle(bundle)) {
-            pkgs.add(configuration.getPackageConfig(name));
+        if (bundle.getState() == Bundle.ACTIVE) {
+            for (String name : bundleAccessor.getPackagesByBundle(bundle)) {
+                PackageConfig packageConfig = configuration.getPackageConfig(name);
+                if (packageConfig != null)
+                    pkgs.add(packageConfig);
+            }
         }
         return pkgs;
     }
@@ -161,7 +170,11 @@ public class BundlesAction extends DefaultActionSupport {
     }
 
     @Inject
-    public void setOsgiHost(OsgiHost osgiHost) {
-        this.osgiHost = osgiHost;
+    public void setBundleAccessor(BundleAccessor bundleAccessor) {
+        this.bundleAccessor = bundleAccessor;
+    }
+
+    public void setServletContext(ServletContext servletContext) {
+        osgiHost = (OsgiHost) servletContext.getAttribute(StrutsOsgiListener.OSGI_HOST);
     }
 }

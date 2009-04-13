@@ -14,6 +14,12 @@
             <artifactId>struts2-osgi-plugin</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
+       <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.4</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -36,20 +42,25 @@
                 <configuration>
                     <instructions>
                         <manifestLocation>META-INF</manifestLocation>
-                        <Import-Package>
-                            *,com.opensymphony.xwork2
-                        </Import-Package>
-                        <Export-Package>
-                            org.apache.struts2.osgi.admin*
-                        </Export-Package>
-                        <Bundle-Activator>
-                            org.apache.struts2.osgi.StrutsActivator
-                        </Bundle-Activator>
-                        <Spring-Context>
-                            *;create-asynchronously:=false
-                        </Spring-Context>
+                        <Struts2-Enabled>true</Struts2-Enabled>
+                        <Import-Package>*,com.opensymphony.xwork2</Import-Package>
+                        <Export-Package>org.apache.struts2.osgi.admin*</Export-Package>
+                        <Spring-Context>*;create-asynchronously:=false</Spring-Context>
                     </instructions>
                 </configuration>
+            </plugin>
+            <plugin>
+                <inherited>true</inherited>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
         <pluginManagement>
@@ -64,5 +75,4 @@
             </plugins>
         </pluginManagement>
     </build>
-
 </project>

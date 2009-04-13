@@ -36,8 +36,6 @@ public interface BundleAccessor {
 
     String CURRENT_BUNDLE_NAME = "__bundle_name__";
 
-    void setPackageToBundle(Map<String, String> packageToBundle);
-
     Class loadClass(String name) throws ClassNotFoundException;
 
     InputStream loadResourceAsStream(String name) throws IOException;

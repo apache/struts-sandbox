@@ -41,48 +41,41 @@ import com.opensymphony.xwork2.util.location.Location;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
 
+/**
+ * Package loader implementation that loads resources from a bundle
+ */
 public class BundlePackageLoader implements PackageLoader {
     private static final Logger LOG = LoggerFactory.getLogger(BundlePackageLoader.class);
 
-    public List<PackageConfig> loadPackages(Bundle bundle, BundleContext bundleContext, ObjectFactory objectFactory, Map<String,PackageConfig> pkgConfigs) throws ConfigurationException {
+    public List<PackageConfig> loadPackages(Bundle bundle, BundleContext bundleContext, ObjectFactory objectFactory, Map<String, PackageConfig> pkgConfigs) throws ConfigurationException {
         Configuration config = new DefaultConfiguration("struts.xml");
-        ActionContext ctx = ActionContext.getContext();
-        if (ctx == null) {
-            ctx = new ActionContext(new HashMap());
-            ActionContext.setContext(ctx);
+        BundleConfigurationProvider prov = new BundleConfigurationProvider("struts.xml", bundle, bundleContext);
+        for (PackageConfig pkg : pkgConfigs.values()) {
+            config.addPackageConfig(pkg.getName(), pkg);
         }
-
-        try {
-            // Ensure all requested classes and resources will be resolved using the current bundle
-            ctx.put(BundleAccessor.CURRENT_BUNDLE_NAME, bundle.getSymbolicName());
-
-            BundleConfigurationProvider prov = new BundleConfigurationProvider("struts.xml", bundle, bundleContext);
-            for (PackageConfig pkg : pkgConfigs.values()) {
-                config.addPackageConfig(pkg.getName(), pkg);
-            }
-            prov.setObjectFactory(objectFactory);
-            prov.init(config);
-            prov.loadPackages();
-        } finally {
-            ctx.put(BundleAccessor.CURRENT_BUNDLE_NAME, null);
-        }
+        prov.setObjectFactory(objectFactory);
+        prov.init(config);
+        prov.loadPackages();
 
         List<PackageConfig> list = new ArrayList<PackageConfig>(config.getPackageConfigs().values());
         list.removeAll(pkgConfigs.values());
-        
+
         return list;
     }
-    
+
     static class BundleConfigurationProvider extends XmlConfigurationProvider {
         private Bundle bundle;
         private BundleContext bundleContext;
 
-        public BundleConfigurationProvider(String filename, Bundle bundle, BundleContext bundleContext) { 
+        public BundleConfigurationProvider(String filename, Bundle bundle, BundleContext bundleContext) {
             super(filename, false);
             this.bundle = bundle;
             this.bundleContext = bundleContext;
         }
-        public BundleConfigurationProvider(String filename) { super(filename); }
+
+        public BundleConfigurationProvider(String filename) {
+            super(filename);
+        }
 
         @Override
         protected Iterator<URL> getConfigurationUrls(String fileName) throws IOException {
@@ -90,23 +83,25 @@ public class BundlePackageLoader implements PackageLoader {
             return e.hasMoreElements() ? new EnumeratorIterator<URL>(e) : null;
         }
     }
-    
+
     static class EnumeratorIterator<E> implements Iterator<E> {
         Enumeration<E> e = null;
+
         public EnumeratorIterator(Enumeration<E> e) {
             this.e = e;
         }
+
         public boolean hasNext() {
-          return e.hasMoreElements();
+            return e.hasMoreElements();
         }
 
         public E next() {
-          return e.nextElement();
+            return e.nextElement();
         }
 
         public void remove() {
-          throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException();
         }
-      }
+    }
 
 }

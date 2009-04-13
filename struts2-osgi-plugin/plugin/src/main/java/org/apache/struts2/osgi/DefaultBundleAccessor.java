@@ -50,8 +50,8 @@ public class DefaultBundleAccessor implements BundleAccessor {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultBundleAccessor.class);
 
     private BundleContext bundleContext;
-    private Map<String, String> packageToBundle;
-    private Map<Bundle, Set<String>> packagesByBundle;
+    private Map<String, String> packageToBundle = new HashMap<String, String>();
+    private Map<Bundle, Set<String>> packagesByBundle = new HashMap<Bundle, Set<String>>();
     private OsgiHost osgiHost;
 
     public DefaultBundleAccessor() {
@@ -88,15 +88,6 @@ public class DefaultBundleAccessor implements BundleAccessor {
         return bundleContext != null ? bundleContext.getServiceReferences(className, params) : null;
     }
 
-    public void setPackageToBundle(Map<String, String> packageToBundle) {
-        this.packageToBundle = packageToBundle;
-        this.packagesByBundle = new HashMap<Bundle, Set<String>>();
-        for (Map.Entry<String, String> entry : packageToBundle.entrySet()) {
-            Bundle bundle = osgiHost.getActiveBundles().get(entry.getValue());
-            addPackageFromBundle(bundle, entry.getKey());
-        }
-    }
-
     /**
      *  Add as Bundle -> Package mapping 
      * @param bundle the bundle where the package was loaded from
@@ -117,7 +108,7 @@ public class DefaultBundleAccessor implements BundleAccessor {
         if (bundle != null) {
             Class cls = bundle.loadClass(className);
             if (LOG.isTraceEnabled())
-                LOG.debug("Located class [#0] in bundle [#1]", className, bundle.getSymbolicName());
+                LOG.trace("Located class [#0] in bundle [#1]", className, bundle.getSymbolicName());
             return cls;
         }
 
