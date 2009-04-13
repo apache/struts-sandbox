@@ -54,8 +54,6 @@ import java.util.Set;
  * Struts package provider that starts the OSGi container and deelgates package loading
  */
 public class OsgiConfigurationProvider implements PackageProvider, BundleListener {
-
-    private static final String STRUTS_ENABLED = "Struts2-Enabled";
     private static final Logger LOG = LoggerFactory.getLogger(OsgiConfigurationProvider.class);
 
     private Configuration configuration;
@@ -168,7 +166,7 @@ public class OsgiConfigurationProvider implements PackageProvider, BundleListene
      * Checks for "Struts2-Enabled" header in the bundle
      */
     protected boolean shouldProcessBundle(Bundle bundle) {
-        String strutsEnabled = (String) bundle.getHeaders().get(STRUTS_ENABLED);
+        String strutsEnabled = (String) bundle.getHeaders().get(OsgiHost.OSGI_HEADER_STRUTS_ENABLED);
 
         return "true".equalsIgnoreCase(strutsEnabled);
     }

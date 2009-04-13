@@ -25,7 +25,7 @@
       var result_array = result_string.split('\n');
 
       var new_command = $('#wc-command').val();
-      result_div.appendChild(document.createTextNode(new_command));
+      result_div.appendChild(document.createTextNode('$ ' + new_command));
       result_div.appendChild(document.createElement('br'));
 
       for (var line_index in result_array) {
@@ -36,7 +36,6 @@
           result_div.appendChild(document.createElement('br'));
 
       }
-      result_div.appendChild(document.createTextNode('$ '));
 
       result_div.scrollTop = result_div.scrollHeight;
       $('#wc-command').val('');

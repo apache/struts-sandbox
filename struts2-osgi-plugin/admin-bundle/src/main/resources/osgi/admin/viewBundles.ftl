@@ -24,11 +24,12 @@
         </a>
     </div>    
 </div>
-<table class="properties" style="clear:bothl; width:700px">
+<table class="properties" style="clear:both; width:700px">
     <thead>
         <tr>
             <th>Name</th>
-            <th>State</th>
+            <th>Status</th>
+            <th>Struts Bundle</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -39,6 +40,7 @@
                 <a href="bundle_${bundle.symbolicName}!view.action">${bundle.symbolicName}</a>
             </td>
             <td>${action.getBundleState(bundle)}</td>
+            <td>${action.isStrutsEnabled(bundle)?string("yes", "no")}</td>
             <td style="width:200px">
                 <#if action.isAllowedAction(bundle, "start")>
                 <a href="bundle_${bundle.symbolicName}!start.action" class="ui-state-default ui-corner-all fg-button-small fg-button-icon-left">

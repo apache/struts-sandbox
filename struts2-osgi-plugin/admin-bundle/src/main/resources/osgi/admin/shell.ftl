@@ -52,7 +52,6 @@
         <div class="wc-results" id="wc-result">
              Welcome to the OSGi console! Type 'help' to see the list of available commands.
              <br />
-             :-&gt;
         </div>
         <@s.url var="execUrl" namespace="/osgi/admin" action="execCommand" />
         <label for"command">Command:</label>

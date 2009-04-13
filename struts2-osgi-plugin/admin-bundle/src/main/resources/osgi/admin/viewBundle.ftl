@@ -63,6 +63,7 @@
         <li><a href="#tabs-2">Resgistered Services</a></li>
         <li><a href="#tabs-3">Services in Use</a></li>
         <li><a href="#tabs-4">Packages</a></li>
+        <li><a href="#tabs-5">Headers</a></li>
     </ul>
     <div id="tabs-1">
         <table class="properties">
@@ -79,7 +80,7 @@
                 <td>${bundle.location!}</td>
             </tr>
             <tr>
-                <td class="name">State</td>
+                <td class="name">Status</td>
                 <td>${action.getBundleState(bundle)}</td>
             </tr>
         </table>
@@ -130,6 +131,16 @@
             </table>
             <br/>
         </#list>
+    </div>
+    <div id="tabs-5">
+        <table class="properties">
+        <#list headerKeys as header>
+            <tr>
+                <td class="name">${header}</td>
+                <td>${bundle.headers.get(header)}</td>
+            </tr>
+        </#list>
+        </table>
     </div>
 </div>
 </body>

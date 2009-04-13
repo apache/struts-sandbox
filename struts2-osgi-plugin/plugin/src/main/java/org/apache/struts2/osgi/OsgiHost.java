@@ -35,6 +35,7 @@ import java.util.Map;
  */
 public interface OsgiHost {
     String OSGI_BUNDLE_CONTEXT = "__struts_osgi_bundle_context"; 
+    String OSGI_HEADER_STRUTS_ENABLED = "Struts2-Enabled";
 
     void destroy() throws Exception;
     void init(ServletContext servletContext);

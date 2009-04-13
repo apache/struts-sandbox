@@ -28,6 +28,7 @@ import com.opensymphony.xwork2.inject.Inject;
 import org.apache.struts2.osgi.BundleAccessor;
 import org.apache.struts2.osgi.OsgiHost;
 import org.apache.struts2.osgi.StrutsOsgiListener;
+import org.apache.struts2.osgi.OsgiConfigurationProvider;
 import org.apache.struts2.util.ServletContextAware;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
@@ -39,6 +40,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Enumeration;
+import java.util.Dictionary;
 
 public class BundlesAction extends ActionSupport implements ServletContextAware {
 
@@ -64,9 +69,9 @@ public class BundlesAction extends ActionSupport implements ServletContextAware 
         try {
             bundle.start();
 
-            //start fires the BundleEvent.STARTED, which load the config
-            //we need to wait until the config is loaded from that bundle
-            //there no easy way/elegant way to know if the bundle is being processed
+            //start() fires a BundleEvent.STARTED, which loads the config
+            //we need to wait until the config is loaded from that bundle but
+            //there no easy way/elegant way to know if the bundle was processed already
             Thread.sleep(1000);
         } catch (Exception e) {
             addActionError(e.toString());
@@ -97,6 +102,10 @@ public class BundlesAction extends ActionSupport implements ServletContextAware 
         return view();
     }
 
+    public boolean isStrutsEnabled(Bundle bundle) {
+        return "true".equalsIgnoreCase((String) bundle.getHeaders().get(OsgiHost.OSGI_HEADER_STRUTS_ENABLED));
+    }
+
     public String getId() {
         return id;
     }
@@ -122,11 +131,22 @@ public class BundlesAction extends ActionSupport implements ServletContextAware 
         return pkgs;
     }
 
+    public ArrayList<String> getHeaderKeys() {
+        return Collections.list(getBundle().getHeaders().keys());
+    }
+
     public Collection<Bundle> getBundles() {
         List<Bundle> bundles = new ArrayList(osgiHost.getBundles().values());
         Collections.sort(bundles, new Comparator<Bundle>() {
             public int compare(Bundle bundle1, Bundle bundle2) {
-                return bundle1.getSymbolicName().compareTo(bundle2.getSymbolicName());
+                boolean bundle1StrutsEnabled = isStrutsEnabled(bundle1);
+                boolean bundle2StrutsEnabled = isStrutsEnabled(bundle2);
+
+                if ((bundle1StrutsEnabled && bundle2StrutsEnabled) || (!bundle1StrutsEnabled && !bundle2StrutsEnabled))
+                    return bundle1.getSymbolicName().compareTo(bundle2.getSymbolicName());
+                else {
+                    return bundle1StrutsEnabled ? -1 : 1;
+                }
             }
         });
         return bundles;
