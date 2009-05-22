@@ -22,6 +22,9 @@
  TODO Need to check on elements like inputtransferselect and doubleselect
 -->
 <#include "/${parameters.templateDir}/xhtml/control-close.ftl" />
+<#-- the following </form> is just a hack, 
+     TODO check the logic in template/simple/form-close.ftl to see if we need to include it as well 
+--></form>
 <#include "/${parameters.templateDir}/jquery/form-close-validate.ftl" />
 <#if parameters.focusElement?if_exists != "">
 <script type="text/javascript">
