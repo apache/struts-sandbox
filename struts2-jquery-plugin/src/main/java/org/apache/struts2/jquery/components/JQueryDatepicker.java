@@ -22,12 +22,13 @@ package org.apache.struts2.jquery.components;
 
 import com.opensymphony.xwork2.inject.Inject;
 import com.opensymphony.xwork2.util.ValueStack;
-import com.opensymphony.xwork2.util.TextUtils;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
 import org.apache.struts2.jquery.JQueryPluginConstants;
 import org.apache.struts2.views.annotations.StrutsTag;
 import org.apache.struts2.views.annotations.StrutsTagAttribute;
+import org.apache.commons.lang.xwork.StringEscapeUtils;
+import org.apache.commons.lang.xwork.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -93,8 +94,8 @@ public class JQueryDatepicker extends JQueryTextField {
 
         if (this.options != null) {
             String ops = findString(this.options);
-            if (TextUtils.stringSet(ops))
-                addParameter("options", TextUtils.escapeJavaScript(ops));
+            if (StringUtils.isNotEmpty(ops))
+                addParameter("options", StringEscapeUtils.escapeJavaScript(ops));
         }
 
         Object currentValue = null;

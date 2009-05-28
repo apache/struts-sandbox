@@ -23,9 +23,9 @@
 <script src="${base}/struts/jqueryUtils.js" type="text/javascript"></script>
 
 <script src="${base}/struts/js/jquery-1.3.2.min.js" type="text/javascript"></script>
-<script src="${base}/struts/js/jquery-ui-1.7.custom.min.js" type="text/javascript"></script>
+<script src="${base}/struts/js/jquery-ui-1.7.1.custom.min.js" type="text/javascript"></script>
 
-<link href="${base}/struts/css/smoothness/jquery-ui-1.7.custom.css" rel="stylesheet" type="text/css" />
+<link href="${base}/struts/css/smoothness/jquery-ui-1.7.1.custom.css" rel="stylesheet" type="text/css" />
 <link href="${base}/struts/css/smoothness/main.css" rel="stylesheet" type="text/css" />
 
 
