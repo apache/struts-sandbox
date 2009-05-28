@@ -3,6 +3,8 @@
     "http://struts.apache.org/dtds/struts-2.0.dtd">
 
 <struts>
+    <constant name="struts.devMode" value="true" />
+
     <package name="s2-jquery-showcase" extends="struts-default" namespace="/">
         <action name="showcase">
             <result>/WEB-INF/content/index.jsp</result>
