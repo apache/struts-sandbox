@@ -60,6 +60,6 @@ public final class FileUploadConstants {
     /**
      *
      */
-    public static final String TIME_TO_KEEP_STATUS = "struts.fileupload.timetokeepstatus";
+    public static final String TIME_TO_KEEP_STATUS = "struts.fileuploadplugin.timetokeepstatus";
 
 }
