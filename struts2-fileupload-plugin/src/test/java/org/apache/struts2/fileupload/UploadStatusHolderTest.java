@@ -39,15 +39,15 @@ public class UploadStatusHolderTest {
         UploadStatus status1 = new UploadStatus();
         status1.setBytesRead(1L);
         status1.setContentLength(1L);
-        status1.setItem(1L);
+        status1.setItemId(1);
         holder1.addUploadStatus("status1",status1);
 
         UploadStatusHolder holder2 = new UploadStatusHolder();
-        UploadStatus status2 = holder2.getUploadStatus("status1");
+        UploadStatus status2 = holder2.getUploadStatus("status1", 1);
 
         assertTrue(status1.getBytesRead() == status2.getBytesRead());
         assertTrue(status1.getContentLength() == status2.getContentLength());
-        assertTrue(status1.getItem() == status2.getItem());
+        assertTrue(status1.getItemId() == status2.getItemId());
     }
 
     /**
@@ -61,10 +61,10 @@ public class UploadStatusHolderTest {
         UploadStatus status1 = new UploadStatus();
         status1.setBytesRead(1L);
         status1.setContentLength(1L);
-        status1.setItem(1L);
+        status1.setItemId(1);
         holder1.addUploadStatus("status1",status1);
         Thread.sleep(5000L);
-        UploadStatus status2 = holder1.getUploadStatus("status1");
+        UploadStatus status2 = holder1.getUploadStatus("status1", 1);
         assertTrue(status2 == null);
     }
 }

@@ -27,12 +27,10 @@ import static org.junit.Assert.assertTrue;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.StrutsStatics;
 import org.springframework.mock.web.MockServletContext;
-import org.springframework.mock.web.MockHttpSession;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import com.opensymphony.xwork2.ActionContext;
 
-import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
@@ -85,11 +83,11 @@ public class BasicProgressListenerTest implements StrutsStatics {
         String key = request.getSession().getId();
         System.err.println("key - " + key);
 
-        UploadStatus status = holder.getUploadStatus(key );
+        UploadStatus status = holder.getUploadStatus(key , 1);
 
         assertTrue(status.getBytesRead() == 10L);
         assertTrue(status.getContentLength() == 10L);
-        assertTrue(status.getItem() == 1);
+        assertTrue(status.getItemId() == 1);
     }
 
     /**
@@ -107,11 +105,11 @@ public class BasicProgressListenerTest implements StrutsStatics {
         String key = request.getSession().getId();
         System.err.println("key - " + key);
 
-        UploadStatus status = holder.getUploadStatus(key );
+        UploadStatus status = holder.getUploadStatus(key, 1 );
 
         assertTrue(status.getBytesRead() == 10L);
         assertTrue(status.getContentLength() == 10L);
-        assertTrue(status.getItem() == 1);
+        assertTrue(status.getItemId() == 1);
 
     }
 }

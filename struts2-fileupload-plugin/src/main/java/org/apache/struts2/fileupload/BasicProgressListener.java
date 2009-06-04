@@ -73,7 +73,7 @@ public class BasicProgressListener implements ProgressListener {
             UploadStatus status = new UploadStatus();
             status.setBytesRead(bytesRead);
             status.setContentLength(contentLength);
-            status.setItem(item);
+            status.setItemId(item);
             holder.addUploadStatus(sessionId, status);
         }
     }

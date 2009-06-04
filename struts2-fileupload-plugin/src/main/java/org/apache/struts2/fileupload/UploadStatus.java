@@ -33,7 +33,7 @@ public class UploadStatus {
     private long lastAccess ;
     private long bytesRead ;
     private long contentLength ;
-    private long item ;
+    private int itemId;
 
     /**
      *
@@ -42,7 +42,7 @@ public class UploadStatus {
         updateLastAccess() ;
         bytesRead = 0;
         contentLength = 0;
-        item = 0;
+        itemId = 0;
     }
 
     /**
@@ -87,17 +87,17 @@ public class UploadStatus {
     /**
      *
      */
-    public long getItem() {
+    public int getItemId() {
         updateLastAccess();
-        return item;
+        return itemId;
     }
 
     /**
      *
      */
-    public void setItem(long item) {
+    public void setItemId(int itemId) {
         updateLastAccess();
-        this.item = item;
+        this.itemId = itemId;
     }
 
     /**

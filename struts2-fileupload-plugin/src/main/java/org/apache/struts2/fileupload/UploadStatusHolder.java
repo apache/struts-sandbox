@@ -38,7 +38,7 @@ import java.util.List;
 public class UploadStatusHolder {
 
     private int secondsToKeep = 600 ; //default to ten minutes
-    public static Map<String,UploadStatus> statuses = new HashMap<String,UploadStatus>();
+    public static Map<UploadFile,UploadStatus> statuses = new HashMap<UploadFile,UploadStatus>();
 
     private long lastRun = 0; // keep track so we aren't cleaning up all the time
 
@@ -63,7 +63,7 @@ public class UploadStatusHolder {
      * @param status
      */
     public void addUploadStatus(String key, UploadStatus status ) {
-        statuses.put(key,status);
+        statuses.put(new UploadFile(key, status.getItemId()),status);
     }
 
     /**
@@ -71,21 +71,40 @@ public class UploadStatusHolder {
      * @param key
      * @return
      */
-    public UploadStatus getUploadStatus(String key) {
+    public UploadStatus getUploadStatus(String key, int fileItemId) {
+        cleanUp();
+        UploadFile mapKey = new UploadFile(key, fileItemId);
+        return statuses.get(mapKey);
+    }
+
+    /**
+     *
+     * @param sessionId
+     * @return
+     */
+    public List<UploadStatus> getAllStatusesInSession(String sessionId) {
+        List<UploadStatus> statusesInSession = new ArrayList<UploadStatus>();
+        for (UploadFile candidate : statuses.keySet()) {
+            if (candidate.getSessionId() != null && candidate.getSessionId().equals(sessionId)) {
+                statusesInSession.add(statuses.get(candidate));
+            }
+        }
+        return statusesInSession;
+    }
+
+    private void cleanUp() {
         long now = Calendar.getInstance().getTimeInMillis() / 1000 ;
         if ( now - lastRun > secondsToKeep) {
             // time to clean up
-            List<String> keys2del = new ArrayList<String>();
-            for (String cleanUpKey : statuses.keySet()) {
+            List<UploadFile> keys2del = new ArrayList<UploadFile>();
+            for (UploadFile cleanUpKey : statuses.keySet()) {
                 if ( now - statuses.get(cleanUpKey).getLastAccess() > secondsToKeep ) {
                     keys2del.add(cleanUpKey);
                 }
             }
-            for (String key2del : keys2del) {
+            for (UploadFile key2del : keys2del) {
                 statuses.remove(key2del);
             }
         }
-
-        return statuses.get(key);
     }
 }

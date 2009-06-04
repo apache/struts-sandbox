@@ -44,4 +44,5 @@
     <constant name="struts.fileuploadplugin.listenerupdatefrequency" value="2048" />
     <constant name="struts.fileuploadplugin.isportletupload" value="false"/>
     <constant name="struts.fileuploadplugin.timetokeepstatus" value="600" />
+    
 </struts>

@@ -40,11 +40,11 @@ public class UploadStatusTest {
         long firstAccess = stat.getLastAccess();
         stat.setBytesRead(1L);
         stat.setContentLength(1L);
-        stat.setItem(1L);
+        stat.setItemId(1);
         Thread.sleep(5000L);
         assertTrue(1 == stat.getBytesRead());
         assertTrue(1 == stat.getContentLength());
-        assertTrue(1 == stat.getItem());
+        assertTrue(1 == stat.getItemId());
         assertTrue(firstAccess < stat.getLastAccess());
     }
 }
