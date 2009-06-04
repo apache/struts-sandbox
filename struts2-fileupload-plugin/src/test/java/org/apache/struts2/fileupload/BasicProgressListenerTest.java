@@ -35,6 +35,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Unit test for BasicProgressListener
@@ -54,6 +55,13 @@ public class BasicProgressListenerTest implements StrutsStatics {
      */
     @Before
     public void setUp() {
+        // the basic progress listener keys off of the session id
+        // and the file item id. To find the session id, it will
+        // try to get a session from the servletActionContext
+        // so, we setup a mock context to let it work. I'm not sure
+        // if all of the following is necessary, but it appears to
+        // work and ids are properly generating as of $Date$
+
         Map extraContext = new HashMap();
 
         servletContext = new MockServletContext();
@@ -83,7 +91,7 @@ public class BasicProgressListenerTest implements StrutsStatics {
         UploadStatusTracker tracker2 = new UploadStatusHolder();
 
         String key = request.getSession().getId();
-        System.err.println("key - " + key);
+        // System.err.println("key - " + key);
 
         UploadStatus status = tracker2.getUploadStatus(key , 1);
 
@@ -107,13 +115,46 @@ public class BasicProgressListenerTest implements StrutsStatics {
         UploadStatusTracker tracker2 = new UploadStatusHolder();
 
         String key = request.getSession().getId();
-        System.err.println("key - " + key);
+        // System.err.println("key - " + key);
 
         UploadStatus status = tracker2.getUploadStatus(key, 1 );
 
         assertTrue(status.getBytesRead() == 10L);
         assertTrue(status.getContentLength() == 10L);
         assertTrue(status.getItemId() == 1);
+
+    }
+
+    /**
+     * 
+     */
+    @Test
+    public void testMultipleFileUploadProgress() {
+        BasicProgressListener listener = new BasicProgressListener();
+        UploadStatusTracker tracker = new UploadStatusHolder();
+        listener.setTracker(tracker);
+        listener.setUpdateFrequency("10");
+        listener.update(10L, 10L, 1);
+        listener.update(100L, 100L, 2);
+
+        UploadStatusTracker tracker2 = new UploadStatusHolder();
+        String key = request.getSession().getId();
+        // System.err.println("key - " + key);
+
+        UploadStatus status = tracker2.getUploadStatus(key, 1 );
+
+        assertTrue(status.getBytesRead() == 10L);
+        assertTrue(status.getContentLength() == 10L);
+        assertTrue(status.getItemId() == 1);
+
+        UploadStatus status2 = tracker2.getUploadStatus(key, 2 );
+
+        assertTrue(status2.getBytesRead() == 100L);
+        assertTrue(status2.getContentLength() == 100L);
+        assertTrue(status2.getItemId() == 2);
+
+        List<UploadStatus> bothStatuses = tracker2.getAllStatusesInSession(key);
+        assertTrue(bothStatuses.size() == 2) ;
 
     }
 }
