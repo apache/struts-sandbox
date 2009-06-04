@@ -76,14 +76,16 @@ public class BasicProgressListenerTest implements StrutsStatics {
     public void testUpdate() {
         BasicProgressListener listener = new BasicProgressListener();
         listener.setUpdateFrequency("1");
+        UploadStatusTracker tracker = new UploadStatusHolder();
+        listener.setTracker(tracker);
         listener.update(10L,10L,1);
 
-        UploadStatusHolder holder = new UploadStatusHolder();
+        UploadStatusTracker tracker2 = new UploadStatusHolder();
 
         String key = request.getSession().getId();
         System.err.println("key - " + key);
 
-        UploadStatus status = holder.getUploadStatus(key , 1);
+        UploadStatus status = tracker2.getUploadStatus(key , 1);
 
         assertTrue(status.getBytesRead() == 10L);
         assertTrue(status.getContentLength() == 10L);
@@ -97,15 +99,17 @@ public class BasicProgressListenerTest implements StrutsStatics {
     public void testDontUpdate() {
         BasicProgressListener listener = new BasicProgressListener();
         // listener.setUpdateFrequency("1000"); // let default of 2048 take over
+        UploadStatusTracker tracker = new UploadStatusHolder();
+        listener.setTracker(tracker);
         listener.update(10L,10L,1);
         listener.update(100L,100L,1);
 
-        UploadStatusHolder holder = new UploadStatusHolder();
+        UploadStatusTracker tracker2 = new UploadStatusHolder();
 
         String key = request.getSession().getId();
         System.err.println("key - " + key);
 
-        UploadStatus status = holder.getUploadStatus(key, 1 );
+        UploadStatus status = tracker2.getUploadStatus(key, 1 );
 
         assertTrue(status.getBytesRead() == 10L);
         assertTrue(status.getContentLength() == 10L);

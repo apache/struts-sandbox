@@ -35,7 +35,7 @@ import java.util.List;
  *
  * @author Wes W
  */
-public class UploadStatusHolder {
+public class UploadStatusHolder implements UploadStatusTracker {
 
     private int secondsToKeep = 600 ; //default to ten minutes
     public static Map<UploadFile,UploadStatus> statuses = new HashMap<UploadFile,UploadStatus>();

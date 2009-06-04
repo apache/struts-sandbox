@@ -35,14 +35,14 @@ public class UploadStatusHolderTest {
      */
     @Test
     public void testStatusHolding() {
-        UploadStatusHolder holder1 = new UploadStatusHolder();
+        UploadStatusTracker holder1 = new UploadStatusHolder();
         UploadStatus status1 = new UploadStatus();
         status1.setBytesRead(1L);
         status1.setContentLength(1L);
         status1.setItemId(1);
         holder1.addUploadStatus("status1",status1);
 
-        UploadStatusHolder holder2 = new UploadStatusHolder();
+        UploadStatusTracker holder2 = new UploadStatusHolder();
         UploadStatus status2 = holder2.getUploadStatus("status1", 1);
 
         assertTrue(status1.getBytesRead() == status2.getBytesRead());

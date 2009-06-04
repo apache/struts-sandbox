@@ -32,6 +32,8 @@
           class="org.apache.struts2.fileupload.DiskFileItemFactoryWrapper"/>
     <bean type="org.apache.commons.fileupload.ProgressListener" name="struts.fileuploadplugin.progressListener"
           class="org.apache.struts2.fileupload.BasicProgressListener" />
+    <bean type="org.apache.struts2.fileupload.UploadStatusTracker" name="struts.fileuploadplugin.holder"
+          class="org.apache.struts2.fileupload.UploadStatusHolder" />
 
     <bean type="org.apache.struts2.dispatcher.multipart.MultiPartRequest" name="struts"
           class="org.apache.struts2.fileupload.EnhancedJakartaMultiPartRequest"/>

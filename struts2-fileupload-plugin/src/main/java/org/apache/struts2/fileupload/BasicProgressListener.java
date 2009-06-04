@@ -37,8 +37,17 @@ import com.opensymphony.xwork2.inject.Inject;
 public class BasicProgressListener implements ProgressListener {
 
     private int updateFrequency = 2048; // magic number for a default
-    private UploadStatusHolder holder = new UploadStatusHolder();
+    private UploadStatusTracker tracker;
     private long lastUpdate = -1L; //
+
+    /**
+     *
+     * @param tracker
+     */
+    @Inject(FileUploadConstants.UPLOAD_STATUS_HOLDER)
+    public void setTracker(UploadStatusTracker tracker) {
+        this.tracker = tracker;
+    }
 
     /**
      * 
@@ -74,7 +83,7 @@ public class BasicProgressListener implements ProgressListener {
             status.setBytesRead(bytesRead);
             status.setContentLength(contentLength);
             status.setItemId(item);
-            holder.addUploadStatus(sessionId, status);
+            tracker.addUploadStatus(sessionId, status);
         }
     }
 }
