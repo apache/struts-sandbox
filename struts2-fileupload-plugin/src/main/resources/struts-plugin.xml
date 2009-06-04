@@ -46,5 +46,12 @@
     <constant name="struts.fileuploadplugin.listenerupdatefrequency" value="2048" />
     <constant name="struts.fileuploadplugin.isportletupload" value="false"/>
     <constant name="struts.fileuploadplugin.timetokeepstatus" value="600" />
-    
+
+    <package name="uploadStatus" namespace="/upload">
+        <action name="status" class="org.apache.struts2.fileupload.UploadStatusAction">
+            <result name="success" type="xslt">
+                <param name="exposedValue">uploadStatus</param>
+            </result>
+        </action>
+    </package>
 </struts>
