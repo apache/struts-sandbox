@@ -12,8 +12,13 @@ import org.apache.struts2.StrutsStatics;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
+import java.io.InputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 import com.opensymphony.xwork2.ActionContext;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -64,16 +69,31 @@ public class UploadStatusActionTest implements StrutsStatics {
      *
      */
     @Test
-    public void testUploadStatusActionGetUploadStatus() {
+    public void testUploadStatusActionGetUploadStatus() throws Exception {
         BasicProgressListener listener = new BasicProgressListener();
-        UploadStatusTracker tracker = new UploadStatusHolder();
+        UploadStatusHolder tracker = new UploadStatusHolder();
+        tracker.setSecondsToKeep("600");
         listener.setTracker(tracker);
         listener.setUpdateFrequency("10");
         listener.update(10L, 10L, 1);
         listener.update(100L, 100L, 2);
 
         UploadStatusAction action = new UploadStatusAction();
-        List<UploadStatus> statuses = action.getUploadStatus();
+        InputStream in = action.getJsonStream();
+
+        StringBuilder builder = new StringBuilder();
+        BufferedReader br =
+                new BufferedReader(new InputStreamReader(in));
+
+        String inputLine;
+        while ((inputLine = br.readLine()) != null) {
+            builder.append(inputLine);
+        }
+        in.close();
+        System.err.println(builder.toString());
+        XStream xstream = new XStream(new JettisonMappedXmlDriver());
+        xstream.alias("status", UploadStatus.class);
+        List<UploadStatus> statuses = (List<UploadStatus>) xstream.fromXML(builder.toString()) ;
 
         for (UploadStatus status : statuses) {
             if (status.getItemId() == 1) {

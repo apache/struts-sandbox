@@ -35,7 +35,8 @@ public class UploadStatusHolderTest {
      */
     @Test
     public void testStatusHolding() {
-        UploadStatusTracker holder1 = new UploadStatusHolder();
+        UploadStatusHolder holder1 = new UploadStatusHolder();
+        holder1.setSecondsToKeep("600");
         UploadStatus status1 = new UploadStatus();
         status1.setBytesRead(1L);
         status1.setContentLength(1L);
@@ -58,13 +59,19 @@ public class UploadStatusHolderTest {
     public void testStatusHoldingGetsRemoved() throws Exception {
         UploadStatusHolder holder1 = new UploadStatusHolder();
         holder1.setSecondsToKeep("1");
+
         UploadStatus status1 = new UploadStatus();
         status1.setBytesRead(1L);
         status1.setContentLength(1L);
         status1.setItemId(1);
+
         holder1.addUploadStatus("status1",status1);
         Thread.sleep(5000L);
+
         UploadStatus status2 = holder1.getUploadStatus("status1", 1);
-        assertTrue(status2 == null);
+        assertTrue(status2 != null);
+        // cleanup happens after retrieval, so it will most likely take at least one retrieval for objects to disappear
+        UploadStatus status3 = holder1.getUploadStatus("status1", 1);
+        assertTrue(status3 == null);
     }
 }

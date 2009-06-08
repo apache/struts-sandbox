@@ -49,6 +49,7 @@ public class BasicProgressListenerTest implements StrutsStatics {
     private MockServletContext servletContext;
     private HttpServletRequest request;
     private HttpServletResponse response;
+    private UploadStatusHolder tracker;
 
     /**
      *
@@ -75,6 +76,10 @@ public class BasicProgressListenerTest implements StrutsStatics {
 
         actionContext = new ActionContext(extraContext);
         ServletActionContext.setContext(actionContext);
+
+        tracker = new UploadStatusHolder();
+        tracker.setSecondsToKeep("600");
+
     }
 
     /**
@@ -84,15 +89,12 @@ public class BasicProgressListenerTest implements StrutsStatics {
     public void testUpdate() {
         BasicProgressListener listener = new BasicProgressListener();
         listener.setUpdateFrequency("1");
-        UploadStatusTracker tracker = new UploadStatusHolder();
         listener.setTracker(tracker);
         listener.update(10L,10L,1);
 
         UploadStatusTracker tracker2 = new UploadStatusHolder();
 
         String key = request.getSession().getId();
-        // System.err.println("key - " + key);
-
         UploadStatus status = tracker2.getUploadStatus(key , 1);
 
         assertTrue(status.getBytesRead() == 10L);
@@ -106,19 +108,17 @@ public class BasicProgressListenerTest implements StrutsStatics {
     @Test
     public void testDontUpdate() {
         BasicProgressListener listener = new BasicProgressListener();
-        // listener.setUpdateFrequency("1000"); // let default of 2048 take over
-        UploadStatusTracker tracker = new UploadStatusHolder();
+
         listener.setTracker(tracker);
+        listener.setUpdateFrequency("512");
+
         listener.update(10L,10L,1);
         listener.update(100L,100L,1);
 
-        UploadStatusTracker tracker2 = new UploadStatusHolder();
+        String key = ServletActionContext.getRequest().getSession().getId();
 
-        String key = request.getSession().getId();
-        // System.err.println("key - " + key);
-
-        UploadStatus status = tracker2.getUploadStatus(key, 1 );
-
+        UploadStatus status = tracker.getUploadStatus(key, 1 );
+        assertTrue(status != null);
         assertTrue(status.getBytesRead() == 10L);
         assertTrue(status.getContentLength() == 10L);
         assertTrue(status.getItemId() == 1);
@@ -130,16 +130,16 @@ public class BasicProgressListenerTest implements StrutsStatics {
      */
     @Test
     public void testMultipleFileUploadProgress() {
+
         BasicProgressListener listener = new BasicProgressListener();
-        UploadStatusTracker tracker = new UploadStatusHolder();
         listener.setTracker(tracker);
-        listener.setUpdateFrequency("10");
+        listener.setUpdateFrequency("512");
+
         listener.update(10L, 10L, 1);
         listener.update(100L, 100L, 2);
 
         UploadStatusTracker tracker2 = new UploadStatusHolder();
         String key = request.getSession().getId();
-        // System.err.println("key - " + key);
 
         UploadStatus status = tracker2.getUploadStatus(key, 1 );
 

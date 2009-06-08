@@ -35,9 +35,7 @@
     <bean type="org.apache.struts2.fileupload.UploadStatusTracker" name="struts.fileuploadplugin.holder"
           class="org.apache.struts2.fileupload.UploadStatusHolder" />
 
-    <bean type="org.apache.struts2.dispatcher.multipart.MultiPartRequest" name="struts"
-          class="org.apache.struts2.fileupload.EnhancedJakartaMultiPartRequest"/>
-    <bean type="org.apache.struts2.dispatcher.multipart.MultiPartRequest" name="jakarta"
+    <bean type="org.apache.struts2.dispatcher.multipart.MultiPartRequest" name="upload-plugin"
           class="org.apache.struts2.fileupload.EnhancedJakartaMultiPartRequest"/>
 
 
@@ -47,10 +45,12 @@
     <constant name="struts.fileuploadplugin.isportletupload" value="false"/>
     <constant name="struts.fileuploadplugin.timetokeepstatus" value="600" />
 
-    <package name="uploadStatus" namespace="/upload">
+    <package name="uploadStatus" namespace="/upload" extends="struts-default">
         <action name="status" class="org.apache.struts2.fileupload.UploadStatusAction">
-            <result name="success" type="xslt">
-                <param name="exposedValue">uploadStatus</param>
+            <result name="success" type="stream">
+                <param name="contentType">application/json</param>
+                <param name="inputName">jsonStream</param>
+                <param name="allowCaching">false</param>
             </result>
         </action>
     </package>

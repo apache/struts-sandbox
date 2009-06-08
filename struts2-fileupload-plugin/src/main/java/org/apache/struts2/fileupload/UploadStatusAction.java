@@ -21,8 +21,13 @@
 package org.apache.struts2.fileupload;
 
 import com.opensymphony.xwork2.ActionSupport;
+import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
+import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
+import com.thoughtworks.xstream.XStream;
 
 import java.util.List;
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
 
 import org.apache.struts2.ServletActionContext;
 
@@ -35,9 +40,17 @@ import org.apache.struts2.ServletActionContext;
  */
 public class UploadStatusAction extends ActionSupport {
 
-    public List<UploadStatus> getUploadStatus() {
+
+    public InputStream getJsonStream() {
         UploadStatusHolder holder = new UploadStatusHolder();
-        return holder.getAllStatusesInSession(
+        List<UploadStatus> statuses = holder.getAllStatusesInSession(
                 ServletActionContext.getRequest().getSession(true).getId() );
+
+        XStream xstream = new XStream(new JettisonMappedXmlDriver());
+        // xstream.omitField(UploadStatus.class, "lastAccess");
+        xstream.setMode(XStream.NO_REFERENCES);
+        xstream.alias("status", UploadStatus.class);
+        ByteArrayInputStream stream = new ByteArrayInputStream(xstream.toXML(statuses).getBytes());
+        return stream;
     }
 }

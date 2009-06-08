@@ -25,6 +25,9 @@ import org.apache.commons.fileupload.ProgressListener;
 import org.apache.struts2.ServletActionContext;
 import com.opensymphony.xwork2.inject.Inject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Just a simple ProgressListener for Jakarta FileUpload. It will store
  * file progress in a HashMap that gets cleaned out once in a while.
@@ -38,7 +41,7 @@ public class BasicProgressListener implements ProgressListener {
 
     private int updateFrequency = 2048; // magic number for a default
     private UploadStatusTracker tracker;
-    private long lastUpdate = -1L; //
+    private static Map<UploadFile,Long> lastUpdates = new HashMap<UploadFile,Long>(); //
 
     /**
      *
@@ -71,14 +74,20 @@ public class BasicProgressListener implements ProgressListener {
      * @param item
      */
     public void update(long bytesRead, long contentLength, int item) {
-        if ( bytesRead / updateFrequency > lastUpdate) {
+        String sessionId = ServletActionContext.getRequest().getSession(true).getId();
+        UploadFile curKey = new UploadFile(sessionId,item);
+        Long lastUpdateValue = lastUpdates.get(curKey);
+        long lastUpdate = 0;
+        if (lastUpdateValue != null ) {
+            lastUpdate = lastUpdateValue.longValue();
+        }
+        if ( bytesRead / updateFrequency >= lastUpdate) {
             lastUpdate = bytesRead / updateFrequency;
             if (lastUpdate == 0 ) {
-                // we could get stuck here if we leave it
-                lastUpdate = 1L;
+                lastUpdate = 1;
             }
-            // I wonder if this will ever NPE
-            String sessionId = ServletActionContext.getRequest().getSession(true).getId();
+            lastUpdates.remove(curKey);
+            lastUpdates.put(curKey, lastUpdate);
             UploadStatus status = new UploadStatus();
             status.setBytesRead(bytesRead);
             status.setContentLength(contentLength);

@@ -38,9 +38,9 @@ import java.util.List;
 public class UploadStatusHolder implements UploadStatusTracker {
 
     private int secondsToKeep = 600 ; //default to ten minutes
-    public static Map<UploadFile,UploadStatus> statuses = new HashMap<UploadFile,UploadStatus>();
+    private static Map<UploadFile,UploadStatus> statuses = new HashMap<UploadFile,UploadStatus>();
 
-    private long lastRun = 0; // keep track so we aren't cleaning up all the time
+    private static long lastRun = 0; // keep track so we aren't cleaning up all the time
 
     /**
      *
@@ -72,9 +72,12 @@ public class UploadStatusHolder implements UploadStatusTracker {
      * @return
      */
     public UploadStatus getUploadStatus(String key, int fileItemId) {
-        cleanUp();
         UploadFile mapKey = new UploadFile(key, fileItemId);
-        return statuses.get(mapKey);
+        UploadStatus status = statuses.get(mapKey);
+
+        cleanUp();
+        // dumpMap();
+        return status;
     }
 
     /**
@@ -89,11 +92,13 @@ public class UploadStatusHolder implements UploadStatusTracker {
                 statusesInSession.add(statuses.get(candidate));
             }
         }
+        cleanUp();
+        // dumpMap();
         return statusesInSession;
     }
 
     private void cleanUp() {
-        long now = Calendar.getInstance().getTimeInMillis() / 1000 ;
+        long now = Calendar.getInstance().getTimeInMillis() / 1000L ;
         if ( now - lastRun > secondsToKeep) {
             // time to clean up
             List<UploadFile> keys2del = new ArrayList<UploadFile>();
@@ -105,6 +110,17 @@ public class UploadStatusHolder implements UploadStatusTracker {
             for (UploadFile key2del : keys2del) {
                 statuses.remove(key2del);
             }
+        }
+        lastRun = now;
+    }
+
+    // TODO - implement proper logging
+    private void dumpMap() {
+        System.err.println("lastRun = " + lastRun) ;
+        for (UploadFile dumpKey : statuses.keySet()) {
+            System.err.println("key: sessionId - " + dumpKey.getSessionId() + " itemId - " + dumpKey.getFileItemId() +
+                ", entry: lastAccess - " + statuses.get(dumpKey).getLastAccess() + " itemId - " + statuses.get(dumpKey).getItemId() +
+                " contentLength - " + statuses.get(dumpKey).getContentLength() + " bytesRead - " + statuses.get(dumpKey).getBytesRead());
         }
     }
 }
