@@ -52,20 +52,16 @@ public class DiskFileItemFactoryWrapper implements FileItemFactoryWrapper {
      * @param sizeThreshold
      * @param repositoryPath
      */
+    @Inject
     public DiskFileItemFactoryWrapper(
-            @Inject(FileUploadConstants.SIZE_THRESHOLD)
-                String sizeThreshold,
-            @Inject(FileUploadConstants.FILE_REPOSITORY_PATH)
-                String repositoryPath ) {
+            @Inject(FileUploadConstants.SIZE_THRESHOLD) String sizeThreshold,
+            @Inject(FileUploadConstants.FILE_REPOSITORY_PATH) String repositoryPath ) {
 
         int threshold ;
         try {
             threshold = Integer.parseInt(sizeThreshold);
         }
         catch (NumberFormatException nfe) {
-            // how hard is it to specify a valid integer?
-        }
-        finally {
             threshold = 256; // I guess this is a magic number
         }
 

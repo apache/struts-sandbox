@@ -54,7 +54,7 @@ public class EnhancedJakartaMultiPartRequest
     static final Logger LOG = LoggerFactory.getLogger(MultiPartRequest.class);
 
     protected ProgressListener progressListener;
-    protected FileItemFactory fileItemFactory;
+    protected FileItemFactoryWrapper fileItemFactoryWrapper;
     protected boolean portletUpload;
 
     /**
@@ -68,11 +68,11 @@ public class EnhancedJakartaMultiPartRequest
 
     /**
      *
-     * @param fileItemFactory
+     * @param fileItemFactoryWrapper
      */
     @Inject(FileUploadConstants.FILE_ITEM_FACTORY)
-    public void setFileItemFactory(FileItemFactory fileItemFactory) {
-        this.fileItemFactory = fileItemFactory;
+    public void setFileItemFactory(FileItemFactoryWrapper fileItemFactoryWrapper) {
+        this.fileItemFactoryWrapper = fileItemFactoryWrapper;
     }
 
     /**
@@ -96,10 +96,10 @@ public class EnhancedJakartaMultiPartRequest
 
             FileUpload upload ;
             if (portletUpload) {
-                upload = new PortletFileUpload(fileItemFactory);
+                upload = new PortletFileUpload(fileItemFactoryWrapper.getFileItemFactory());
             }
             else {
-                upload = new ServletFileUpload(fileItemFactory);
+                upload = new ServletFileUpload(fileItemFactoryWrapper.getFileItemFactory());
             }
 
             upload.setSizeMax(maxSize);
