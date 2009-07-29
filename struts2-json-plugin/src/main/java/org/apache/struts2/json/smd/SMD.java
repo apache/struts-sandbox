@@ -23,6 +23,9 @@ package org.apache.struts2.json.smd;
 import java.util.Set;
 import java.util.TreeSet;
 
+/*
+ * HOlds SMD declarations for a class
+ */
 public class SMD {
     public static final String DEFAULT_VERSION = ".1";
     public static final String DEFAULT_SERVICE_TYPE = "JSON-RPC";
