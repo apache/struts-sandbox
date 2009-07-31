@@ -1,10 +1,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>struts2-jsp-plugin</groupId>
+     <parent>
+        <groupId>org.apache.struts</groupId>
+        <artifactId>struts2-plugins</artifactId>
+        <version>2.1.8-SNAPSHOT</version>
+    </parent>
+
+    <groupId>org.apache.struts</groupId>
     <artifactId>struts2-jsp-plugin</artifactId>
     <packaging>jar</packaging>
-    <version>1.0</version>
     <name>struts2-jsp-plugin</name>
     <url>http://maven.apache.org</url>
     <dependencies>
@@ -44,13 +49,13 @@
         </dependency>
         <dependency>
             <groupId>tomcat</groupId>
-            <artifactId>jasper-compiler</artifactId>
+            <artifactId>jasper-runtime</artifactId>
             <version>5.5.23</version>
         </dependency>
         <dependency>
-            <groupId>tomcat</groupId>
-            <artifactId>jasper-runtime</artifactId>
-            <version>5.5.23</version>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>2.0</version>
         </dependency>
     </dependencies>
 </project>

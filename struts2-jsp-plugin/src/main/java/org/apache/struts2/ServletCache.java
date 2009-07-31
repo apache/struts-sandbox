@@ -18,7 +18,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.struts;
+package org.apache.struts2;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;

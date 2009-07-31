@@ -18,35 +18,23 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.struts;
+package org.apache.struts2.jasper;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
-import java.util.Enumeration;
-import java.util.Collections;
+import org.apache.struts2.jasper.compiler.*;
+import org.apache.struts2.jasper.JasperException;
 
-public class JSPServletConfig implements ServletConfig {
-    private final Enumeration EMPTY_ENUMERATION = Collections.enumeration(Collections.EMPTY_LIST);
+import java.io.*;
 
-    private ServletContext servletContext;
+public class CustomCompiler extends org.apache.struts2.jasper.compiler.Compiler{
 
-    public JSPServletConfig(ServletContext servletContext) {
-        this.servletContext = servletContext;
+    public boolean isOutDated() {
+        return true;
     }
 
-    public String getInitParameter(String name) {
-        return null;  
+    public boolean isOutDated(boolean checkClass) {
+        return true;
     }
 
-    public Enumeration getInitParameterNames() {
-        return EMPTY_ENUMERATION;
-    }
-
-    public ServletContext getServletContext() {
-        return servletContext;
-    }
-
-    public String getServletName() {
-        return null;  
+    protected void generateClass(String[] smap) throws FileNotFoundException, JasperException, Exception {
     }
 }
