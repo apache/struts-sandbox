@@ -18,23 +18,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.struts2.jasper;
+package org.apache.struts2;
 
-import org.apache.struts2.jasper.compiler.*;
-import org.apache.struts2.jasper.JasperException;
+import javax.servlet.Servlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.jsp.HttpJspPage;
 
-import java.io.*;
+public class ServletRuntime {
+    //maps from jsp path -> pagelet
+    private static final ServletCache servletCache = new ServletCache(ServletActionContext.getServletContext());
 
-public class CustomCompiler extends org.apache.struts2.jasper.compiler.Compiler{
-
-    public boolean isOutDated() {
-        return true;
-    }
-
-    public boolean isOutDated(boolean checkClass) {
-        return true;
-    }
-
-    protected void generateClass(String[] smap) throws FileNotFoundException, JasperException, Exception {
+    public void invoke(String finalLocation, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Servlet servlet = servletCache.get(finalLocation);
+        HttpJspPage page = (HttpJspPage) servlet;
+        page.jspInit();
+        page._jspService(request, response);
     }
 }
