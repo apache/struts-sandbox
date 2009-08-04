@@ -16,16 +16,11 @@
  */
 package org.apache.struts2.jasper.compiler;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Vector;
-
 import org.apache.struts2.jasper.Constants;
 import org.apache.struts2.jasper.JasperException;
+
 import javax.servlet.jsp.tagext.TagLibraryInfo;
+import java.util.*;
 
 /**
  * A repository for various info about the translation unit under compilation.

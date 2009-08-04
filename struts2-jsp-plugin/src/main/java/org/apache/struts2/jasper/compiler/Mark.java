@@ -16,10 +16,11 @@
  */
 package org.apache.struts2.jasper.compiler;
 
-import java.util.Stack;
-import java.net.URL;
-import java.net.MalformedURLException;
 import org.apache.struts2.jasper.JspCompilationContext;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Stack;
 
 /**
  * Mark represents a point in the JSP input. 

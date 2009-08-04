@@ -17,15 +17,16 @@
 
 package org.apache.struts2.jasper.compiler;
 
-import java.util.*;
-import java.io.*;
-import javax.servlet.ServletContext;
-
 import org.apache.struts2.jasper.JasperException;
-import org.apache.struts2.jasper.xmlparser.ParserUtils;
-import org.apache.struts2.jasper.xmlparser.TreeNode;
 import org.apache.struts2.jasper.compiler.tagplugin.TagPlugin;
 import org.apache.struts2.jasper.compiler.tagplugin.TagPluginContext;
+import org.apache.struts2.jasper.xmlparser.ParserUtils;
+import org.apache.struts2.jasper.xmlparser.TreeNode;
+
+import javax.servlet.ServletContext;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * Manages tag plugin optimizations.

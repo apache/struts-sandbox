@@ -17,30 +17,22 @@
 
 package org.apache.struts2.jasper.compiler;
 
-import java.io.InputStream;
-import java.net.JarURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.net.URLConnection;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.StringTokenizer;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
-import org.xml.sax.InputSource;
-
-import javax.servlet.ServletContext;
-
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.jasper.Constants;
 import org.apache.struts2.jasper.JasperException;
 import org.apache.struts2.jasper.xmlparser.ParserUtils;
 import org.apache.struts2.jasper.xmlparser.TreeNode;
+import org.xml.sax.InputSource;
+
+import javax.servlet.ServletContext;
+import java.io.File;
+import java.io.InputStream;
+import java.net.*;
+import java.util.*;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 /**
  * A container for all tag libraries that are defined "globally"
@@ -224,6 +216,24 @@ public class TldLocationsCache {
             init();
         }
         return (String[]) mappings.get(uri);
+    }
+
+    /**
+     * Returns a list of absolute paths of the locations in the cache
+     */
+    public Set<String> getAbsolutePathsOfLocations() {
+        Set<String> paths = new HashSet<String>(mappings.size());
+        for (Object value : mappings.values()) {
+            String[] location = (String[]) value;
+
+            try {
+                File file = FileUtils.toFile(new URL(location[0]));
+                paths.add(file.getAbsolutePath());
+            } catch (Exception e) {
+                //ignore
+            }
+        }
+        return paths;
     }
 
     /** 

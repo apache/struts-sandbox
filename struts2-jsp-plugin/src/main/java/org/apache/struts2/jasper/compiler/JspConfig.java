@@ -17,19 +17,18 @@
 
 package org.apache.struts2.jasper.compiler;
 
-import java.io.InputStream;
-import java.util.Iterator;
-import java.util.Vector;
-import java.net.URL;
-
-import javax.servlet.ServletContext;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.jasper.JasperException;
 import org.apache.struts2.jasper.xmlparser.ParserUtils;
 import org.apache.struts2.jasper.xmlparser.TreeNode;
 import org.xml.sax.InputSource;
+
+import javax.servlet.ServletContext;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Iterator;
+import java.util.Vector;
 
 /**
  * Handles the jsp-config element in WEB_INF/web.xml.  This is used

@@ -18,7 +18,8 @@
 
 package org.apache.struts2.jasper.tagplugins.jstl.core;
 
-import org.apache.struts2.jasper.compiler.tagplugin.*;
+import org.apache.struts2.jasper.compiler.tagplugin.TagPlugin;
+import org.apache.struts2.jasper.compiler.tagplugin.TagPluginContext;
 
 public final class ForEach implements TagPlugin {
     

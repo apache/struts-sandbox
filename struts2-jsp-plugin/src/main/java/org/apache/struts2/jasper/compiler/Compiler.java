@@ -17,17 +17,16 @@
 
 package org.apache.struts2.jasper.compiler;
 
+import org.apache.struts2.jasper.JasperException;
+import org.apache.struts2.jasper.JspCompilationContext;
+import org.apache.struts2.jasper.Options;
+import org.apache.struts2.jasper.servlet.JspServletWrapper;
+
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Iterator;
 import java.util.List;
-
-import org.apache.struts2.jasper.JasperException;
-import org.apache.struts2.jasper.JspCompilationContext;
-import org.apache.struts2.jasper.Options;
-import org.apache.struts2.jasper.servlet.JspServletWrapper;
-import org.apache.struts2.jasper.JspCompilationContext;
 
 /**
  * Main JSP compiler class. This class uses Ant for compiling.

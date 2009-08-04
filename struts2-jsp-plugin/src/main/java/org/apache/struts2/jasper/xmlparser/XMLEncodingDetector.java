@@ -25,18 +25,14 @@
 
 package org.apache.struts2.jasper.xmlparser;
 
-import java.io.EOFException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.IOException;
-import java.io.Reader;
-import java.util.Locale;
-import java.util.jar.JarFile;
-
 import org.apache.struts2.jasper.JasperException;
 import org.apache.struts2.jasper.JspCompilationContext;
 import org.apache.struts2.jasper.compiler.ErrorDispatcher;
 import org.apache.struts2.jasper.compiler.JspUtil;
+
+import java.io.*;
+import java.util.Locale;
+import java.util.jar.JarFile;
 
 public class XMLEncodingDetector {
     

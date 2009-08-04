@@ -17,6 +17,11 @@
 
 package org.apache.struts2.jasper.compiler;
 
+import org.apache.struts2.jasper.JasperException;
+import org.apache.struts2.jasper.JspCompilationContext;
+import org.apache.struts2.jasper.xmlparser.XMLEncodingDetector;
+import org.xml.sax.Attributes;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -24,11 +29,6 @@ import java.net.JarURLConnection;
 import java.net.URL;
 import java.util.Stack;
 import java.util.jar.JarFile;
-
-import org.apache.struts2.jasper.JasperException;
-import org.apache.struts2.jasper.JspCompilationContext;
-import org.apache.struts2.jasper.xmlparser.XMLEncodingDetector;
-import org.xml.sax.Attributes;
 
 /**
  * Controller for the parsing of a JSP page.

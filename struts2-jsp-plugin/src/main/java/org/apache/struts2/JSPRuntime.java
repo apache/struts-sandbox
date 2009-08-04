@@ -1,16 +1,18 @@
 package org.apache.struts2;
 
+import com.opensymphony.xwork2.ActionContext;
 import org.apache.struts2.views.util.UrlHelper;
 
+import javax.servlet.Servlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.Servlet;
 import javax.servlet.jsp.HttpJspPage;
 import java.util.Map;
 
-import com.opensymphony.xwork2.ActionContext;
-
-
+/**
+ * Maintains a cache of jsp locations -> servlet instances for those jsps. When a jsp is requested
+ * from the cache, the cache will block if the jsp was not compiled already, and wait for the compilation
+ */
 public abstract class JSPRuntime {
     //maps from jsp path -> pagelet
     private static final ServletCache servletCache = new ServletCache();

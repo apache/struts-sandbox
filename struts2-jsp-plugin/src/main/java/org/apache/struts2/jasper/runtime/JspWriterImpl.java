@@ -17,17 +17,16 @@
 
 package org.apache.struts2.jasper.runtime;
 
+import org.apache.struts2.jasper.Constants;
+import org.apache.struts2.jasper.compiler.Localizer;
+import org.apache.struts2.jasper.security.SecurityUtil;
+
+import javax.servlet.ServletResponse;
+import javax.servlet.jsp.JspWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-
-import javax.servlet.ServletResponse;
-import javax.servlet.jsp.JspWriter;
-
-import org.apache.struts2.jasper.Constants;
-import org.apache.struts2.jasper.compiler.Localizer;
-import org.apache.struts2.jasper.security.SecurityUtil;
 
 /**
  * Write text to a character-output stream, buffering characters so as

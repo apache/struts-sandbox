@@ -17,14 +17,13 @@
 
 package org.apache.struts2.jasper.runtime;
 
-import java.util.Enumeration;
-import java.util.Vector;
+import org.apache.struts2.jasper.Constants;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.Tag;
-
-import org.apache.struts2.jasper.Constants;
+import java.util.Enumeration;
+import java.util.Vector;
 
 /**
  * Thread-local based pool of tag handlers that can be reused.

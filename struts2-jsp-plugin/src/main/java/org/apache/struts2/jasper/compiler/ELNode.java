@@ -17,9 +17,12 @@
 
 package org.apache.struts2.jasper.compiler;
 
-import java.util.*;
-import javax.servlet.jsp.tagext.FunctionInfo;
 import org.apache.struts2.jasper.JasperException;
+
+import javax.servlet.jsp.tagext.FunctionInfo;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * This class defines internal representation for an EL Expression

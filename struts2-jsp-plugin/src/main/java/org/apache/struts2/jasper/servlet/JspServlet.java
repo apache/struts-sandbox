@@ -17,9 +17,13 @@
 
 package org.apache.struts2.jasper.servlet;
 
-import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.util.Enumeration;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.struts2.jasper.Constants;
+import org.apache.struts2.jasper.EmbeddedServletOptions;
+import org.apache.struts2.jasper.Options;
+import org.apache.struts2.jasper.compiler.JspRuntimeContext;
+import org.apache.struts2.jasper.compiler.Localizer;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -27,15 +31,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import org.apache.struts2.jasper.Constants;
-import org.apache.struts2.jasper.EmbeddedServletOptions;
-import org.apache.struts2.jasper.Options;
-import org.apache.struts2.jasper.compiler.JspRuntimeContext;
-import org.apache.struts2.jasper.compiler.Localizer;
+import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.util.Enumeration;
 
 /**
  * The JSP engine (a.k.a Jasper).

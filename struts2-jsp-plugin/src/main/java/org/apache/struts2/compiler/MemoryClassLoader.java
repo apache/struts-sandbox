@@ -20,12 +20,18 @@
  */
 package org.apache.struts2.compiler;
 
-import javax.tools.JavaFileObject;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MemoryClassLoader extends ClassLoader {
     private Map<String, MemoryJavaFileObject> cachedObjects = new ConcurrentHashMap<String, MemoryJavaFileObject>();
+
+    public MemoryClassLoader() {
+        //without this, the tests will not run, because the tests are loaded by a custom classloader
+        //so the classes referenced from the compiled code will not be found by the System Class Loader because
+        //the target dir is not part of the classpath used when calling the jvm to execute the tests
+        super(Thread.currentThread().getContextClassLoader());
+    }
 
     @Override
     protected Class<?> findClass(String name) throws

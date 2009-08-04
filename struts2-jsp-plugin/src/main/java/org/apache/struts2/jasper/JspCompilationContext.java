@@ -17,7 +17,14 @@
 
 package org.apache.struts2.jasper;
 
-import java.io.File;
+import com.opensymphony.xwork2.util.finder.ClassLoaderInterface;
+import org.apache.struts2.jasper.compiler.Compiler;
+import org.apache.struts2.jasper.compiler.*;
+import org.apache.struts2.jasper.servlet.JasperLoader;
+import org.apache.struts2.jasper.servlet.JspServletWrapper;
+
+import javax.servlet.ServletContext;
+import javax.servlet.jsp.tagext.TagInfo;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -25,19 +32,6 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Hashtable;
 import java.util.Set;
-
-import javax.servlet.ServletContext;
-import javax.servlet.jsp.tagext.TagInfo;
-
-import org.apache.struts2.jasper.compiler.Compiler;
-import org.apache.struts2.jasper.compiler.JspRuntimeContext;
-import org.apache.struts2.jasper.compiler.JspUtil;
-import org.apache.struts2.jasper.compiler.Localizer;
-import org.apache.struts2.jasper.compiler.ServletWriter;
-import org.apache.struts2.jasper.servlet.JasperLoader;
-import org.apache.struts2.jasper.servlet.JspServletWrapper;
-import org.apache.commons.lang.xwork.StringUtils;
-import com.opensymphony.xwork2.util.finder.ClassLoaderInterface;
 
 /**
  * A place holder for various things that are used through out the JSP

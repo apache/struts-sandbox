@@ -17,26 +17,17 @@
 
 package org.apache.struts2.jasper.compiler;
 
+import org.apache.struts2.jasper.Constants;
+import org.apache.struts2.jasper.JasperException;
+import org.xml.sax.Attributes;
+
+import javax.servlet.jsp.el.FunctionMapper;
+import javax.servlet.jsp.tagext.*;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
-
-import javax.servlet.jsp.el.FunctionMapper;
-import javax.servlet.jsp.tagext.FunctionInfo;
-import javax.servlet.jsp.tagext.JspFragment;
-import javax.servlet.jsp.tagext.PageData;
-import javax.servlet.jsp.tagext.TagAttributeInfo;
-import javax.servlet.jsp.tagext.TagData;
-import javax.servlet.jsp.tagext.TagExtraInfo;
-import javax.servlet.jsp.tagext.TagInfo;
-import javax.servlet.jsp.tagext.TagLibraryInfo;
-import javax.servlet.jsp.tagext.ValidationMessage;
-
-import org.apache.struts2.jasper.Constants;
-import org.apache.struts2.jasper.JasperException;
-import org.xml.sax.Attributes;
 
 /**
  * Performs validation on the page elements.  Attributes are checked for

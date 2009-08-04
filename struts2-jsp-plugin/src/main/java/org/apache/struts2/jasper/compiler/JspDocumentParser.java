@@ -16,32 +16,25 @@
  */
 package org.apache.struts2.jasper.compiler;
 
-import java.io.CharArrayWriter;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-
-import java.util.Iterator;
-import java.util.List;
-import java.util.jar.JarFile;
+import org.apache.struts2.jasper.JasperException;
+import org.apache.struts2.jasper.JspCompilationContext;
+import org.xml.sax.*;
+import org.xml.sax.ext.LexicalHandler;
+import org.xml.sax.helpers.AttributesImpl;
+import org.xml.sax.helpers.DefaultHandler;
 
 import javax.servlet.jsp.tagext.TagFileInfo;
 import javax.servlet.jsp.tagext.TagInfo;
 import javax.servlet.jsp.tagext.TagLibraryInfo;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-
-import org.apache.struts2.jasper.JasperException;
-import org.apache.struts2.jasper.JspCompilationContext;
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.Locator;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.ext.LexicalHandler;
-import org.xml.sax.helpers.AttributesImpl;
-import org.xml.sax.helpers.DefaultHandler;
+import java.io.CharArrayWriter;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Iterator;
+import java.util.List;
+import java.util.jar.JarFile;
 
 /**
  * Class implementing a parser for a JSP document, that is, a JSP page in XML

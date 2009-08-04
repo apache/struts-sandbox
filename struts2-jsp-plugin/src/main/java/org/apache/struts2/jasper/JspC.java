@@ -17,36 +17,17 @@
 
 package org.apache.struts2.jasper;
 
-import java.io.BufferedReader;
-import java.io.CharArrayWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.Writer;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.net.URI;
-import java.util.*;
-
+import com.opensymphony.xwork2.util.finder.ClassLoaderInterface;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.jasper.compiler.Compiler;
-import org.apache.struts2.jasper.compiler.JspConfig;
-import org.apache.struts2.jasper.compiler.JspRuntimeContext;
-import org.apache.struts2.jasper.compiler.Localizer;
-import org.apache.struts2.jasper.compiler.TagPluginManager;
-import org.apache.struts2.jasper.compiler.TldLocationsCache;
+import org.apache.struts2.jasper.compiler.*;
 import org.apache.struts2.jasper.servlet.JspCServletContext;
 
-import com.opensymphony.xwork2.util.finder.ClassLoaderInterface;
-
-import javax.tools.*;
+import java.io.*;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.*;
 
 /**
  * Shell for the jspc compiler.  Handles all options associated with the
@@ -898,6 +879,10 @@ public class JspC implements Options {
                 Thread.currentThread().setContextClassLoader(originalClassLoader);
             }
         }
+    }
+
+    public Set<String> getTldAbsolutePaths() {
+        return tldLocationsCache.getAbsolutePathsOfLocations();
     }
 
 

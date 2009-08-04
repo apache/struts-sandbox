@@ -17,10 +17,11 @@
 
 package org.apache.struts2.jasper.runtime;
 
+import org.apache.struts2.jasper.Constants;
+
+import javax.servlet.ServletConfig;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.Tag;
-import javax.servlet.ServletConfig;
-import org.apache.struts2.jasper.Constants;
 
 /**
  * Pool of tag handlers that can be reused.

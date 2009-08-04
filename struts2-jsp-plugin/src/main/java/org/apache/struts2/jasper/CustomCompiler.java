@@ -20,10 +20,7 @@
  */
 package org.apache.struts2.jasper;
 
-import org.apache.struts2.jasper.compiler.*;
-import org.apache.struts2.jasper.JasperException;
-
-import java.io.*;
+import java.io.FileNotFoundException;
 
 public class CustomCompiler extends org.apache.struts2.jasper.compiler.Compiler{
 

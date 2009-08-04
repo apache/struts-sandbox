@@ -17,13 +17,17 @@
 
 package org.apache.struts2.jasper.compiler;
 
-import java.util.*;
-import javax.servlet.jsp.tagext.FunctionInfo;
-import javax.servlet.jsp.tagext.TagLibraryInfo;
-import javax.servlet.jsp.tagext.TagInfo;
-import javax.servlet.jsp.tagext.TagFileInfo;
-import org.apache.struts2.jasper.JspCompilationContext;
 import org.apache.struts2.jasper.JasperException;
+import org.apache.struts2.jasper.JspCompilationContext;
+
+import javax.servlet.jsp.tagext.FunctionInfo;
+import javax.servlet.jsp.tagext.TagFileInfo;
+import javax.servlet.jsp.tagext.TagInfo;
+import javax.servlet.jsp.tagext.TagLibraryInfo;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.Vector;
 
 /**
  * Class responsible for generating an implicit tag library containing tag

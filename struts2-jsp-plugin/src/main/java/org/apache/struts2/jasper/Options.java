@@ -17,12 +17,12 @@
 
 package org.apache.struts2.jasper;
 
-import java.io.File;
-import java.util.Map;
-
 import org.apache.struts2.jasper.compiler.JspConfig;
 import org.apache.struts2.jasper.compiler.TagPluginManager;
 import org.apache.struts2.jasper.compiler.TldLocationsCache;
+
+import java.io.File;
+import java.util.Map;
 
 /**
  * A class to hold all init parameters specific to the JSP engine. 

@@ -31,6 +31,16 @@ public class EmbeddedJSPResultTest extends TestCase {
         assertEquals("hello", response.getContentAsString());
     }
 
+    public void testTag0() throws Exception {
+        //mock objects
+        EmbeddedJSPResult result = new EmbeddedJSPResult();
+
+        result.setLocation("org/apache/struts2/tag0.jsp");
+        result.execute(null);
+
+        assertEquals("Thissessionisnotsecure.OtherText", cleanup(response.getContentAsString()));
+    }
+
      public void testIncludeSimple() throws Exception {
         //mock objects
         EmbeddedJSPResult result = new EmbeddedJSPResult();

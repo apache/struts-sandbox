@@ -22,9 +22,12 @@ package org.apache.struts2;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
-import java.util.Enumeration;
 import java.util.Collections;
+import java.util.Enumeration;
 
+/**
+ * Used to init the servlets for the jsps
+ */
 public class JSPServletConfig implements ServletConfig {
     private final Enumeration EMPTY_ENUMERATION = Collections.enumeration(Collections.EMPTY_LIST);
 

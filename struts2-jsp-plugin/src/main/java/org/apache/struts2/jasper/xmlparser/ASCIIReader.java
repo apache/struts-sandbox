@@ -17,10 +17,11 @@
 
 package org.apache.struts2.jasper.xmlparser;
 
-import java.io.InputStream;
-import java.io.IOException;
-import java.io.Reader;
 import org.apache.struts2.jasper.compiler.Localizer;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
 
 /**
  * A simple ASCII byte reader. This is an optimized reader for reading

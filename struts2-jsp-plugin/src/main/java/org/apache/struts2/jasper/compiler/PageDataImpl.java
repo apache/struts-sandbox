@@ -16,15 +16,16 @@
  */
 package org.apache.struts2.jasper.compiler;
 
-import java.io.InputStream;
-import java.io.ByteArrayInputStream;
-import java.io.CharArrayWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.ListIterator;
-import javax.servlet.jsp.tagext.PageData;
+import org.apache.struts2.jasper.JasperException;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.AttributesImpl;
-import org.apache.struts2.jasper.JasperException;
+
+import javax.servlet.jsp.tagext.PageData;
+import java.io.ByteArrayInputStream;
+import java.io.CharArrayWriter;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.ListIterator;
 
 /**
  * An implementation of <tt>javax.servlet.jsp.tagext.PageData</tt> which

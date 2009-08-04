@@ -21,11 +21,11 @@
 package org.apache.struts2;
 
 import javax.servlet.Servlet;
-import javax.servlet.ServletContext;
 import java.util.concurrent.*;
 
 /**
- * Caches servlet instances by jsp location
+ * Caches servlet instances by jsp location. If a requested jsp is not in the cache, "get"
+ * will block and wait for the jsp to be loaded
  */
 public class ServletCache {
     private final ConcurrentMap<String, Future<Servlet>> cache

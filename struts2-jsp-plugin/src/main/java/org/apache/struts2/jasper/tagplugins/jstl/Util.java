@@ -18,13 +18,6 @@
 
 package org.apache.struts2.jasper.tagplugins.jstl;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.Locale;
-
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,6 +25,8 @@ import javax.servlet.http.HttpServletResponseWrapper;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
+import java.io.*;
+import java.util.Locale;
 
 /**
  * Util contains some often used consts, static methods and embedded class

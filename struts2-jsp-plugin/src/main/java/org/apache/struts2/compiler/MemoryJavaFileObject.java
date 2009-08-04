@@ -23,8 +23,8 @@ package org.apache.struts2.compiler;
 import javax.tools.JavaFileObject;
 import javax.tools.SimpleJavaFileObject;
 import java.io.*;
-import java.net.URISyntaxException;
 import java.net.URI;
+import java.net.URISyntaxException;
 
 public class MemoryJavaFileObject extends SimpleJavaFileObject {
 

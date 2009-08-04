@@ -16,19 +16,18 @@
  */
 package org.apache.struts2.jasper.runtime;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.struts2.jasper.util.SimplePool;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.jsp.JspFactory;
 import javax.servlet.jsp.JspEngineInfo;
+import javax.servlet.jsp.JspFactory;
 import javax.servlet.jsp.PageContext;
-
-import org.apache.struts2.jasper.util.SimplePool;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 
 /**
  * Implementation of JspFactory.

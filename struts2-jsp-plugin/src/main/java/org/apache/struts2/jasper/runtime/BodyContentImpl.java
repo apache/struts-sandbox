@@ -17,15 +17,14 @@
 
 package org.apache.struts2.jasper.runtime;
 
+import org.apache.struts2.jasper.Constants;
+
+import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.tagext.BodyContent;
 import java.io.CharArrayReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
-
-import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.tagext.BodyContent;
-
-import org.apache.struts2.jasper.Constants;
 
 /**
  * Write text to a character-output stream, buffering characters so as

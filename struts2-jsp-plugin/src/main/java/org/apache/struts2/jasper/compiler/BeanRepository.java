@@ -17,10 +17,10 @@
 package org.apache.struts2.jasper.compiler;
 
 
-import java.util.Vector;
-import java.util.Hashtable;
-
 import org.apache.struts2.jasper.JasperException;
+
+import java.util.Hashtable;
+import java.util.Vector;
 
 /**
  * Repository of {page, request, session, application}-scoped beans 

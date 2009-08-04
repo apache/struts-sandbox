@@ -17,8 +17,8 @@
 
 package org.apache.struts2.jasper.compiler;
 
-import org.xml.sax.Attributes;
 import org.apache.struts2.jasper.JasperException;
+import org.xml.sax.Attributes;
 
 class Dumper {
 

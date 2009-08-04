@@ -20,29 +20,29 @@
  */
 package org.apache.struts2;
 
+import com.opensymphony.xwork2.util.finder.ClassLoaderInterfaceDelegate;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
-import com.opensymphony.xwork2.util.finder.ClassLoaderInterfaceDelegate;
-
-import javax.servlet.Servlet;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.jsp.JspPage;
-import javax.tools.*;
-import java.io.*;
-import java.net.*;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ArrayList;
-import java.security.CodeSource;
-import java.security.ProtectionDomain;
-
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.xwork.StringUtils;
+import org.apache.struts2.compiler.MemoryClassLoader;
+import org.apache.struts2.compiler.MemoryJavaFileObject;
 import org.apache.struts2.jasper.JasperException;
 import org.apache.struts2.jasper.JspC;
 import org.apache.struts2.jasper.compiler.JspUtil;
-import org.apache.struts2.compiler.MemoryClassLoader;
-import org.apache.struts2.compiler.MemoryJavaFileObject;
-import org.apache.commons.lang.xwork.StringUtils;
+
+import javax.servlet.Servlet;
+import javax.servlet.ServletException;
+import javax.servlet.jsp.JspPage;
+import javax.tools.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.security.CodeSource;
+import java.security.ProtectionDomain;
+import java.util.*;
 
 /**
  * Uses jasper to extract a JSP from the classpath to a file and compile it
@@ -56,14 +56,20 @@ public class JSPLoader {
 
     public Servlet load(String location) throws Exception {
         location = StringUtils.substringBeforeLast(location, "?");
-        
-        String source = compileJSP(location);
 
-//        System.out.print(source);
+        //use Jasper to compile the JSP into java code
+        JspC jspC = compileJSP(location);
+        String source = jspC.getSourceCode();
+
+        //System.out.print(source);
 
         String className = toClassName(location);
-        compileJava(className, source);
 
+        //use Java Compiler API to compile the java code into a class
+        //the tlds that were discovered are added (their jars) to the classpath
+        compileJava(className, source, jspC.getTldAbsolutePaths());
+
+        //load the class that was just built
         Class clazz = Class.forName(className, false, classLoader);
         return createServlet(clazz);
     }
@@ -85,7 +91,7 @@ public class JSPLoader {
         return servlet;
     }
 
-    private void compileJava(String className, final String source) {
+    private void compileJava(String className, final String source, Set<String> extraClassPath) {
         JavaCompiler compiler =
                 ToolProvider.getSystemJavaCompiler();
 
@@ -132,6 +138,17 @@ public class JSPLoader {
         //jsp api
         classPath.append(getJarUrl(JspPage.class));
 
+        if (!extraClassPath.isEmpty())
+            classPath.append(";");
+
+        //add extra classpath entries (jars where tlds were found will be here)
+        for (Iterator<String> iterator = extraClassPath.iterator(); iterator.hasNext();) {
+            String entry = iterator.next();
+            classPath.append(entry);
+            if (iterator.hasNext())
+                classPath.append(";");
+        }
+
         optionList.addAll(Arrays.asList("-classpath", classPath.toString()));
 
 
@@ -148,17 +165,11 @@ public class JSPLoader {
         ProtectionDomain protectionDomain = clazz.getProtectionDomain();
         CodeSource codeSource = protectionDomain.getCodeSource();
         URL loc = codeSource.getLocation();
-        try {
-            File file = new File(loc.toURI());
-            return file.getAbsolutePath();
-        } catch (URISyntaxException e) {
-            //can this ever happen?
-            LOG.error("Unable to get the jar file for class", e, clazz.getName());
-        }
-        return loc.toExternalForm();
+        File file = FileUtils.toFile(loc);
+        return file.getAbsolutePath();
     }
 
-    private String compileJSP(String location) throws JasperException {
+    private JspC compileJSP(String location) throws JasperException {
         JspC jspC = new JspC();
         //TODO: get this from context so OSGI works
         jspC.setClassLoaderInterface(new ClassLoaderInterfaceDelegate(Thread.currentThread().getContextClassLoader()));
@@ -166,7 +177,7 @@ public class JSPLoader {
         jspC.setJspFiles(location);
         jspC.setPackage(DEFAULT_PACKAGE);
         jspC.execute();
-        return jspC.getSourceCode();
+        return jspC;
     }
 
     private static URI toURI(String name) {

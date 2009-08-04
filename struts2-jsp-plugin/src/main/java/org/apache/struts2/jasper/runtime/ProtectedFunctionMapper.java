@@ -17,15 +17,15 @@
 
 package org.apache.struts2.jasper.runtime;
 
-import java.util.HashMap;
+import org.apache.struts2.jasper.security.SecurityUtil;
+
+import javax.servlet.jsp.el.FunctionMapper;
+import java.lang.reflect.Method;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.security.PrivilegedExceptionAction;
 import java.security.PrivilegedActionException;
-import java.lang.reflect.Method;
-import javax.servlet.jsp.el.FunctionMapper;
-
-import org.apache.struts2.jasper.security.SecurityUtil;
+import java.security.PrivilegedExceptionAction;
+import java.util.HashMap;
 
 /**
  * Maps EL functions to their Java method counterparts.  Keeps the

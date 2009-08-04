@@ -17,19 +17,20 @@
 
 package org.apache.struts2.jasper;
 
-import java.io.File;
-import java.util.*;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.struts2.jasper.compiler.JspConfig;
+import org.apache.struts2.jasper.compiler.Localizer;
+import org.apache.struts2.jasper.compiler.TagPluginManager;
+import org.apache.struts2.jasper.compiler.TldLocationsCache;
+import org.apache.struts2.jasper.xmlparser.ParserUtils;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
-
-import org.apache.struts2.jasper.compiler.TldLocationsCache;
-import org.apache.struts2.jasper.compiler.JspConfig;
-import org.apache.struts2.jasper.compiler.TagPluginManager;
-import org.apache.struts2.jasper.compiler.Localizer;
-import org.apache.struts2.jasper.xmlparser.ParserUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.io.File;
+import java.util.Enumeration;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * A class to hold all init parameters specific to the JSP engine. 

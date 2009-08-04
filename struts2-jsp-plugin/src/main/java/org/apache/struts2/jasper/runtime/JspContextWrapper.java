@@ -17,20 +17,10 @@
 
 package org.apache.struts2.jasper.runtime;
 
-import java.io.IOException;
-import java.io.Writer;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Map;
+import org.apache.commons.el.VariableResolverImpl;
+import org.apache.struts2.jasper.compiler.Localizer;
 
-import javax.servlet.Servlet;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspWriter;
@@ -40,9 +30,9 @@ import javax.servlet.jsp.el.ExpressionEvaluator;
 import javax.servlet.jsp.el.VariableResolver;
 import javax.servlet.jsp.tagext.BodyContent;
 import javax.servlet.jsp.tagext.VariableInfo;
-
-import org.apache.commons.el.VariableResolverImpl;
-import org.apache.struts2.jasper.compiler.Localizer;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.*;
 
 /**
  * Implementation of a JSP Context Wrapper.

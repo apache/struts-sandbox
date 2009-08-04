@@ -16,15 +16,15 @@
  */
 package org.apache.struts2.jasper.compiler;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.Vector;
-import java.net.MalformedURLException;
-
 import org.apache.struts2.jasper.JasperException;
 import org.apache.struts2.jasper.JspCompilationContext;
 import org.xml.sax.SAXException;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
+import java.net.MalformedURLException;
+import java.util.Vector;
 
 /**
  * Class responsible for dispatching JSP parse and javac compilation errors

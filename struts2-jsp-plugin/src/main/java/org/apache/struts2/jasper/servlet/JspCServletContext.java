@@ -20,21 +20,16 @@ package org.apache.struts2.jasper.servlet;
 
 import com.opensymphony.xwork2.util.finder.ClassLoaderInterface;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.Servlet;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import java.io.File;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Set;
-import java.util.Vector;
-
-import javax.servlet.RequestDispatcher;
-import javax.servlet.Servlet;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
+import java.util.*;
 
 
 /**

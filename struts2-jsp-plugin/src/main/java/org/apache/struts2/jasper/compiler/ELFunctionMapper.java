@@ -17,9 +17,11 @@
 
 package org.apache.struts2.jasper.compiler;
 
-import java.util.*;
-import javax.servlet.jsp.tagext.FunctionInfo;
 import org.apache.struts2.jasper.JasperException;
+
+import javax.servlet.jsp.tagext.FunctionInfo;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * This class generates functions mappers for the EL expressions in the page.

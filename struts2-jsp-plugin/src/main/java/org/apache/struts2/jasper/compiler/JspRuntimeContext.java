@@ -17,6 +17,17 @@
 
 package org.apache.struts2.jasper.compiler;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.struts2.jasper.Constants;
+import org.apache.struts2.jasper.JspCompilationContext;
+import org.apache.struts2.jasper.Options;
+import org.apache.struts2.jasper.runtime.JspFactoryImpl;
+import org.apache.struts2.jasper.security.SecurityClassLoad;
+import org.apache.struts2.jasper.servlet.JspServletWrapper;
+
+import javax.servlet.ServletContext;
+import javax.servlet.jsp.JspFactory;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FilePermission;
@@ -30,18 +41,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
-import javax.servlet.ServletContext;
-import javax.servlet.jsp.JspFactory;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.struts2.jasper.Constants;
-import org.apache.struts2.jasper.JspCompilationContext;
-import org.apache.struts2.jasper.Options;
-import org.apache.struts2.jasper.runtime.JspFactoryImpl;
-import org.apache.struts2.jasper.security.SecurityClassLoad;
-import org.apache.struts2.jasper.servlet.JspServletWrapper;
 
 /**
  * Class for tracking JSP compile time file dependencies when the

@@ -17,27 +17,20 @@
 
 package org.apache.struts2.jasper.compiler;
 
+import org.apache.struts2.jasper.JasperException;
+import org.apache.struts2.jasper.JspCompilationContext;
+import org.apache.struts2.jasper.runtime.JspSourceDependent;
+import org.apache.struts2.jasper.servlet.JspServletWrapper;
+
+import javax.servlet.jsp.tagext.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
-import java.util.HashMap;
-
-import javax.servlet.jsp.tagext.TagAttributeInfo;
-import javax.servlet.jsp.tagext.TagExtraInfo;
-import javax.servlet.jsp.tagext.TagFileInfo;
-import javax.servlet.jsp.tagext.TagInfo;
-import javax.servlet.jsp.tagext.TagLibraryInfo;
-import javax.servlet.jsp.tagext.TagVariableInfo;
-import javax.servlet.jsp.tagext.VariableInfo;
-
-import org.apache.struts2.jasper.JasperException;
-import org.apache.struts2.jasper.JspCompilationContext;
-import org.apache.struts2.jasper.servlet.JspServletWrapper;
-import org.apache.struts2.jasper.runtime.JspSourceDependent;
 
 /**
  * 1. Processes and extracts the directive info in a tag file.

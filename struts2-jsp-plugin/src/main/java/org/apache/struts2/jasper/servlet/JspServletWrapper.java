@@ -17,20 +17,6 @@
 
 package org.apache.struts2.jasper.servlet;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URL;
-
-import javax.servlet.Servlet;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.SingleThreadModel;
-import javax.servlet.UnavailableException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.jsp.tagext.TagInfo;
-
 import org.apache.struts2.jasper.JasperException;
 import org.apache.struts2.jasper.JspCompilationContext;
 import org.apache.struts2.jasper.Options;
@@ -39,6 +25,14 @@ import org.apache.struts2.jasper.compiler.JavacErrorDetail;
 import org.apache.struts2.jasper.compiler.JspRuntimeContext;
 import org.apache.struts2.jasper.compiler.Localizer;
 import org.apache.struts2.jasper.runtime.JspSourceDependent;
+
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.jsp.tagext.TagInfo;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URL;
 
 /**
  * The JSP engine (a.k.a Jasper).

@@ -17,14 +17,13 @@
 
 package org.apache.struts2.jasper.runtime;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-
 import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import javax.servlet.jsp.JspWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * ServletResponseWrapper used by the JSP 'include' action.

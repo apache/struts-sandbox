@@ -17,24 +17,19 @@
 
 package org.apache.struts2.jasper.compiler;
 
-import java.io.CharArrayWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.util.Vector;
-import java.util.jar.JarFile;
-import java.util.zip.ZipEntry;
-
-import javax.servlet.jsp.el.ELException;
-import javax.servlet.jsp.el.ELParseException;
-import javax.servlet.jsp.el.FunctionMapper;
-
 import org.apache.commons.el.ExpressionEvaluatorImpl;
 import org.apache.struts2.jasper.Constants;
 import org.apache.struts2.jasper.JasperException;
 import org.apache.struts2.jasper.JspCompilationContext;
 import org.xml.sax.Attributes;
+
+import javax.servlet.jsp.el.ELException;
+import javax.servlet.jsp.el.ELParseException;
+import javax.servlet.jsp.el.FunctionMapper;
+import java.io.*;
+import java.util.Vector;
+import java.util.jar.JarFile;
+import java.util.zip.ZipEntry;
 
 /** 
  * This class has all the utility method(s).
