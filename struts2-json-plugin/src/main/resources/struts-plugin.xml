@@ -7,7 +7,7 @@
 <struts>
     <package name="json-default" extends="struts-default">
         <result-types>
-            <result-type name="json" class="org.apache.struts2.json.JSONUtil"/>
+            <result-type name="json" class="org.apache.struts2.json.JSONResult"/>
         </result-types>
         <interceptors>
             <interceptor name="json" class="org.apache.struts2.json.JSONInterceptor"/>
