@@ -27,15 +27,22 @@ import com.opensymphony.xwork2.util.finder.ClassLoaderInterfaceDelegate;
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.jsp.JspPage;
 import javax.tools.*;
 import java.io.*;
 import java.net.*;
 import java.util.Arrays;
+import java.util.List;
+import java.util.ArrayList;
+import java.security.CodeSource;
+import java.security.ProtectionDomain;
 
 import org.apache.struts2.jasper.JasperException;
 import org.apache.struts2.jasper.JspC;
+import org.apache.struts2.jasper.compiler.JspUtil;
 import org.apache.struts2.compiler.MemoryClassLoader;
 import org.apache.struts2.compiler.MemoryJavaFileObject;
+import org.apache.commons.lang.xwork.StringUtils;
 
 /**
  * Uses jasper to extract a JSP from the classpath to a file and compile it
@@ -46,28 +53,33 @@ public class JSPLoader {
 
     private static MemoryClassLoader classLoader = new MemoryClassLoader();
     private static final String DEFAULT_PACKAGE = "org.apache.struts2.jsp";
-    private static final String DEFAULT_PATH = "org/apache/jsp";
 
-    public Servlet load(String location, ServletContext servletContext) throws Exception {
+    public Servlet load(String location) throws Exception {
+        location = StringUtils.substringBeforeLast(location, "?");
+        
         String source = compileJSP(location);
+
+//        System.out.print(source);
+
         String className = toClassName(location);
         compileJava(className, source);
 
         Class clazz = Class.forName(className, false, classLoader);
-        return createServlet(clazz, servletContext);
+        return createServlet(clazz);
     }
 
     private String toClassName(String location) {
-        String[] splitted = location.split("\\.|/");
-        return DEFAULT_PACKAGE + "." + splitted[splitted.length - 2] + "_jsp";
+        String className = StringUtils.substringBeforeLast(location, ".jsp");
+        className = JspUtil.makeJavaPackage(className);
+        return DEFAULT_PACKAGE + "." + className + "_jsp";
     }
 
     /**
      * Creates and inits a servlet
      */
-    private Servlet createServlet(Class clazz, ServletContext servletContext) throws IllegalAccessException, InstantiationException, ServletException {
+    private Servlet createServlet(Class clazz) throws IllegalAccessException, InstantiationException, ServletException {
         Servlet servlet = (Servlet) clazz.newInstance();
-        JSPServletConfig config = new JSPServletConfig(servletContext);
+        JSPServletConfig config = new JSPServletConfig(ServletActionContext.getServletContext());
         servlet.init(config);
 
         return servlet;
@@ -108,13 +120,42 @@ public class JSPLoader {
 
         };
 
+        //build classpath
+        List<String> optionList = new ArrayList<String>();
+        StringBuilder classPath = new StringBuilder();
+        //this jar
+        classPath.append(getJarUrl(EmbeddedJSPResult.class));
+        classPath.append(";");
+        //servlet api
+        classPath.append(getJarUrl(Servlet.class));
+        classPath.append(";");
+        //jsp api
+        classPath.append(getJarUrl(JspPage.class));
+
+        optionList.addAll(Arrays.asList("-classpath", classPath.toString()));
+
+
         JavaCompiler.CompilationTask task = compiler.getTask(
-                null, jfm, diagnostics, null, null,
+                null, jfm, diagnostics, optionList, null,
                 Arrays.asList(sourceCodeObject));
 
         if (!task.call()) {
             throw new RuntimeException("Compilation failed:" + diagnostics.getDiagnostics().get(0).toString());
         }
+    }
+
+    protected String getJarUrl(Class clazz) {
+        ProtectionDomain protectionDomain = clazz.getProtectionDomain();
+        CodeSource codeSource = protectionDomain.getCodeSource();
+        URL loc = codeSource.getLocation();
+        try {
+            File file = new File(loc.toURI());
+            return file.getAbsolutePath();
+        } catch (URISyntaxException e) {
+            //can this ever happen?
+            LOG.error("Unable to get the jar file for class", e, clazz.getName());
+        }
+        return loc.toExternalForm();
     }
 
     private String compileJSP(String location) throws JasperException {

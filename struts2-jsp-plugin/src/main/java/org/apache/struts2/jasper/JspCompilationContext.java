@@ -36,6 +36,7 @@ import org.apache.struts2.jasper.compiler.Localizer;
 import org.apache.struts2.jasper.compiler.ServletWriter;
 import org.apache.struts2.jasper.servlet.JasperLoader;
 import org.apache.struts2.jasper.servlet.JspServletWrapper;
+import org.apache.commons.lang.xwork.StringUtils;
 import com.opensymphony.xwork2.util.finder.ClassLoaderInterface;
 
 /**
@@ -360,15 +361,20 @@ public class JspCompilationContext {
             }
             return pkgName;
         } else {
-            return basePackageName;
+            String dPackageName = getDerivedPackageName();
+            if (dPackageName.length() == 0) {
+                return basePackageName;
+            }
+            return basePackageName + '.' + getDerivedPackageName();
         }
+
     }
 
     private String getDerivedPackageName() {
         if (derivedPackageName == null) {
             int iSep = jspUri.lastIndexOf('/');
             derivedPackageName = (iSep > 0) ?
-                    JspUtil.makeJavaPackage(jspUri.substring(1,iSep)) : "";
+                    JspUtil.makeJavaPackage(jspUri.substring(0,iSep)) : "";
         }
         return derivedPackageName;
     }
@@ -529,7 +535,11 @@ public class JspCompilationContext {
         }
     }
 
-    // ==================== Manipulating the class ====================
+    public String getJspUri() {
+        return jspUri;
+    }
+
+// ==================== Manipulating the class ====================
 
     public Class load() 
         throws JasperException, FileNotFoundException
@@ -563,7 +573,7 @@ public class JspCompilationContext {
        return (c == '/' || c == '\\');
     }
 
-    private static final String canonicalURI(String s) {
+    public static final String canonicalURI(String s) {
        if (s == null) return null;
        StringBuffer result = new StringBuffer();
        final int len = s.length();

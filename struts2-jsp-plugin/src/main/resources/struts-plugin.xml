@@ -29,7 +29,7 @@
     <package name="jsp-default" extends="struts-default">
 
     	<result-types>
-    		<result-type name="jsp" class="org.apache.struts2.EmbeddedJSPResult"/>
+    		<result-type name="embeddedJsp" class="org.apache.struts2.EmbeddedJSPResult"/>
     	</result-types>
     </package>
 

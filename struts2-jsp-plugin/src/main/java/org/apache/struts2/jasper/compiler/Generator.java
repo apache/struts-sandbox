@@ -42,6 +42,8 @@ import org.apache.struts2.jasper.Constants;
 import org.apache.struts2.jasper.JasperException;
 import org.apache.struts2.jasper.JspCompilationContext;
 import org.apache.struts2.jasper.runtime.JspRuntimeLibrary;
+import org.apache.struts2.JSPRuntime;
+import org.apache.commons.lang.xwork.StringUtils;
 import org.xml.sax.Attributes;
 
 /**
@@ -896,10 +898,10 @@ class Generator {
             }
 
             out.printin(
-                "org.apache.struts2.jasper.runtime.JspRuntimeLibrary.include(request, response, "
+                    JSPRuntime.class.getName() + ".handle("
                     + pageParam);
             printParams(n, pageParam, page.isLiteral());
-            out.println(", out, " + isFlush + ");");
+            out.println(", " + isFlush + ");");
 
             n.setEndJavaLine(out.getJavaLine());
         }

@@ -33,19 +33,13 @@ public class ServletCache {
 
     private final JSPLoader jspLoader = new JSPLoader();
 
-    private final ServletContext servletContext;
-
-    public ServletCache(ServletContext servletContext) {
-        this.servletContext = servletContext;
-    }
-
     public Servlet get(final String location) throws InterruptedException {
         while (true) {
             Future<Servlet> future = cache.get(location);
             if (future == null) {
                 Callable<Servlet> loadJSPCallable = new Callable<Servlet>() {
                     public Servlet call() throws Exception {
-                        return jspLoader.load(location, servletContext);
+                        return jspLoader.load(location);
                     }
                 };
                 FutureTask<Servlet> futureTask = new FutureTask<Servlet>(loadJSPCallable);
