@@ -1,3 +1,23 @@
+/*
+ * $Id$
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.apache.struts2;
 
 import com.opensymphony.xwork2.ActionContext;
@@ -13,6 +33,7 @@ import org.springframework.mock.web.MockServletContext;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.servlet.Servlet;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,11 +41,9 @@ public class EmbeddedJSPResultTest extends TestCase {
     private HttpServletRequest request;
     private MockHttpServletResponse response;
     private MockServletContext context;
+    private EmbeddedJSPResult result;
 
     public void testSimple() throws Exception {
-        //mock objects
-        EmbeddedJSPResult result = new EmbeddedJSPResult();
-
         result.setLocation("org/apache/struts2/simple0.jsp");
         result.execute(null);
 
@@ -32,52 +51,57 @@ public class EmbeddedJSPResultTest extends TestCase {
     }
 
     public void testTag0() throws Exception {
-        //mock objects
-        EmbeddedJSPResult result = new EmbeddedJSPResult();
-
         result.setLocation("org/apache/struts2/tag0.jsp");
         result.execute(null);
 
         assertEquals("Thissessionisnotsecure.OtherText", cleanup(response.getContentAsString()));
     }
 
-     public void testIncludeSimple() throws Exception {
-        //mock objects
-        EmbeddedJSPResult result = new EmbeddedJSPResult();
-
+    public void testIncludeSimple() throws Exception {
         result.setLocation("org/apache/struts2/includes0.jsp");
         result.execute(null);
 
         assertEquals("helloTest", cleanup(response.getContentAsString()));
     }
 
-      public void testIncludeSimpleWithDirective() throws Exception {
-        //mock objects
-        EmbeddedJSPResult result = new EmbeddedJSPResult();
-
+    public void testIncludeSimpleWithDirective() throws Exception {
         result.setLocation("org/apache/struts2/includes3.jsp");
         result.execute(null);
 
         assertEquals("helloTest", cleanup(response.getContentAsString()));
     }
 
-     public void testIncludeWithSubdir() throws Exception {
-        EmbeddedJSPResult result = new EmbeddedJSPResult();
-
+    public void testIncludeWithSubdir() throws Exception {
         result.setLocation("org/apache/struts2/includes1.jsp");
         result.execute(null);
 
         assertEquals("subTest", cleanup(response.getContentAsString()));
     }
 
-     public void testIncludeWithParam() throws Exception {
-        //mock objects
-        EmbeddedJSPResult result = new EmbeddedJSPResult();
-
+    public void testIncludeWithParam() throws Exception {
         result.setLocation("org/apache/struts2/includes2.jsp");
         result.execute(null);
 
         assertEquals("JGTest", cleanup(response.getContentAsString()));
+    }
+
+    public void testBroken0() throws Exception {
+        try {
+            result.setLocation("org/apache/struts2/broken0.jsp");
+            result.execute(null);
+            fail("should have failed with broken jsp");
+        } catch (IllegalStateException ex) {
+            //ok
+        }
+    }
+
+
+     public void testCachedInstances() throws InterruptedException {
+        ServletCache cache = new ServletCache();
+        Servlet servlet1 = cache.get("org/apache/struts2/simple0.jsp");
+        Servlet servlet2 = cache.get("org/apache/struts2/simple0.jsp");
+
+        assertSame(servlet1, servlet2);
     }
 
     private String cleanup(String str) {
@@ -88,7 +112,9 @@ public class EmbeddedJSPResultTest extends TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        
+
+        result = new EmbeddedJSPResult();
+
         request = EasyMock.createNiceMock(HttpServletRequest.class);
         response = new MockHttpServletResponse();
         context = new MockServletContext();
@@ -103,7 +129,7 @@ public class EmbeddedJSPResultTest extends TestCase {
         EasyMock.expect(request.getParameter("username")).andAnswer(new IAnswer<String>() {
             @Override
             public String answer() throws Throwable {
-                return ((String[])params.get("username"))[0];  
+                return ((String[]) params.get("username"))[0];
             }
         });
 
@@ -135,7 +161,7 @@ public class EmbeddedJSPResultTest extends TestCase {
         actionContext.setValueStack(valueStack);
 
         //XWorkConverter conv = ((Container)stack.getContext().get(ActionContext.CONTAINER)).getInstance(XWorkConverter.class);
-        
+
         if (JSPLoader.JSP_DIR.exists())
             FileUtils.forceDelete(JSPLoader.JSP_DIR);
     }
@@ -143,5 +169,5 @@ public class EmbeddedJSPResultTest extends TestCase {
 
 //converter has a protected default constructor...meh
 class DummyConverter extends XWorkConverter {
-    
+
 }

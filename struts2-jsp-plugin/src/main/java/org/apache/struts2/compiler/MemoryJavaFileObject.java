@@ -26,6 +26,9 @@ import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+/**
+ * Captures the output of the java compiler in memory
+ */
 public class MemoryJavaFileObject extends SimpleJavaFileObject {
 
     private ByteArrayOutputStream out;

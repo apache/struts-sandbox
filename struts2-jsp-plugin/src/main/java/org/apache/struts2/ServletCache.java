@@ -28,7 +28,7 @@ import java.util.concurrent.*;
  * will block and wait for the jsp to be loaded
  */
 public class ServletCache {
-    private final ConcurrentMap<String, Future<Servlet>> cache
+    protected final ConcurrentMap<String, Future<Servlet>> cache
             = new ConcurrentHashMap<String, Future<Servlet>>();
 
     private final JSPLoader jspLoader = new JSPLoader();
@@ -65,7 +65,7 @@ public class ServletCache {
         else if (t instanceof Error)
             throw (Error) t;
         else
-            throw new IllegalStateException("Not unchecked", t);
+            throw new IllegalStateException(t);
     }
 
 }
