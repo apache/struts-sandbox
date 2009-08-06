@@ -21,8 +21,10 @@
 package org.apache.struts2;
 
 import com.opensymphony.xwork2.util.finder.ClassLoaderInterfaceDelegate;
+import com.opensymphony.xwork2.util.finder.UrlSet;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
+import com.opensymphony.xwork2.util.URLUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.xwork.StringUtils;
 import org.apache.struts2.compiler.MemoryClassLoader;
@@ -45,7 +47,11 @@ import java.security.ProtectionDomain;
 import java.util.*;
 
 /**
- * Uses jasper to extract a JSP from the classpath to a file and compile it
+ * Uses jasper to extract a JSP from the classpath to a file and compile it. The classpathc used for
+ * compilation is built by finding all the jar files using the current class loader (Thread), then adding
+ * the plugin jar and the jars that contain these classes:
+ * javax.servlet.Servlet
+ * javax.servlet.jsp.JspPage
  */
 public class JSPLoader {
     private static final Logger LOG = LoggerFactory.getLogger(JSPLoader.class);
@@ -95,7 +101,7 @@ public class JSPLoader {
      * Compiles the given source code into java bytecode
      *
      */
-    private void compileJava(String className, final String source, Set<String> extraClassPath) {
+    private void compileJava(String className, final String source, Set<String> extraClassPath) throws IOException {
         JavaCompiler compiler =
                 ToolProvider.getSystemJavaCompiler();
 
@@ -133,28 +139,34 @@ public class JSPLoader {
 
         //build classpath
         List<String> optionList = new ArrayList<String>();
-        StringBuilder classPath = new StringBuilder();
-        //this jar
-        classPath.append(getJarUrl(EmbeddedJSPResult.class));
-        classPath.append(";");
-        //servlet api
-        classPath.append(getJarUrl(Servlet.class));
-        classPath.append(";");
-        //jsp api
-        classPath.append(getJarUrl(JspPage.class));
+        Set<String> classPath = new HashSet<String>();
 
-        if (!extraClassPath.isEmpty())
-            classPath.append(";");
+        //find available jars
+        UrlSet urlSet = new UrlSet(getClassLoaderInterface());
+        urlSet = urlSet.matching(".*?\\.jar(!/)?$");
+        List<URL> urls = urlSet.getUrls();
+        if (urls != null) {
+            for (URL url : urls) {
+                File file = FileUtils.toFile(URLUtil.normalizeToFileProtocol(url));
+                classPath.add(file.getAbsolutePath());
+            }
+        }
+
+
+        //this jar
+        classPath.add(getJarUrl(EmbeddedJSPResult.class));
+        //servlet api
+        classPath.add(getJarUrl(Servlet.class));
+        //jsp api
+        classPath.add(getJarUrl(JspPage.class));
 
         //add extra classpath entries (jars where tlds were found will be here)
         for (Iterator<String> iterator = extraClassPath.iterator(); iterator.hasNext();) {
             String entry = iterator.next();
-            classPath.append(entry);
-            if (iterator.hasNext())
-                classPath.append(";");
+            classPath.add(entry);
         }
 
-        optionList.addAll(Arrays.asList("-classpath", classPath.toString()));
+        optionList.addAll(Arrays.asList("-classpath", StringUtils.join(classPath, ";")));
 
 
         //compile
@@ -177,13 +189,17 @@ public class JSPLoader {
 
     private JspC compileJSP(String location) throws JasperException {
         JspC jspC = new JspC();
-        //TODO: get this from context so OSGI works
-        jspC.setClassLoaderInterface(new ClassLoaderInterfaceDelegate(Thread.currentThread().getContextClassLoader()));
+        jspC.setClassLoaderInterface(getClassLoaderInterface());
         jspC.setCompile(false);
         jspC.setJspFiles(location);
         jspC.setPackage(DEFAULT_PACKAGE);
         jspC.execute();
         return jspC;
+    }
+
+    private ClassLoaderInterfaceDelegate getClassLoaderInterface() {
+        //TODO: get this from context so OSGI works
+        return new ClassLoaderInterfaceDelegate(Thread.currentThread().getContextClassLoader());
     }
 
     private static URI toURI(String name) {

@@ -95,6 +95,13 @@ public class EmbeddedJSPResultTest extends TestCase {
         }
     }
 
+    public void testJSTL() throws Exception {
+           result.setLocation("org/apache/struts2/jstl.jsp");
+           result.execute(null);
+
+           assertEquals("XXXXXXXXXXX", cleanup(response.getContentAsString()));
+       }
+
 
      public void testCachedInstances() throws InterruptedException {
         ServletCache cache = new ServletCache();
