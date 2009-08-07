@@ -36,6 +36,11 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.Servlet;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.BrokenBarrierException;
 
 public class EmbeddedJSPResultTest extends TestCase {
     private HttpServletRequest request;
@@ -96,19 +101,50 @@ public class EmbeddedJSPResultTest extends TestCase {
     }
 
     public void testJSTL() throws Exception {
-           result.setLocation("org/apache/struts2/jstl.jsp");
-           result.execute(null);
+        result.setLocation("org/apache/struts2/jstl.jsp");
+        result.execute(null);
 
-           assertEquals("XXXXXXXXXXX", cleanup(response.getContentAsString()));
-       }
+        assertEquals("XXXXXXXXXXXY", cleanup(response.getContentAsString()));
+    }
 
 
-     public void testCachedInstances() throws InterruptedException {
+    public void testCachedInstances() throws InterruptedException {
         ServletCache cache = new ServletCache();
         Servlet servlet1 = cache.get("org/apache/struts2/simple0.jsp");
         Servlet servlet2 = cache.get("org/apache/struts2/simple0.jsp");
 
         assertSame(servlet1, servlet2);
+    }
+
+    public void testCacheInstanceWithManyThreads() throws BrokenBarrierException, InterruptedException {
+        //start a bunch of thread at the same time using CyclicBarrier and hit the cache
+        //then wait for all the threads to end and check that they all got a reference to the same object
+        //and the cache size should be 1
+
+        DummyServletCache cache = new DummyServletCache();
+        int numThreads = 70;
+
+        CyclicBarrier startBarrier = new CyclicBarrier(numThreads + 1);
+        CyclicBarrier endBarrier = new CyclicBarrier(numThreads + 1);
+
+        List<ServletGetRunnable> runnables = new ArrayList<ServletGetRunnable>(numThreads);
+
+        //create the threads
+        for (int i = 0; i < numThreads; i++) {
+            ServletGetRunnable runnable = new ServletGetRunnable(cache, startBarrier, endBarrier, ActionContext.getContext());
+            Thread thread = new Thread(runnable);
+            runnables.add(runnable);
+            thread.start();
+        }
+
+        startBarrier.await();
+        endBarrier.await();
+        Object servlet = cache.get("org/apache/struts2/simple0.jsp");
+        assertEquals(1, cache.size());
+
+        for (ServletGetRunnable runnable : runnables) {
+            assertSame(servlet, runnable.getObject());
+        }
     }
 
     private String cleanup(String str) {
@@ -177,4 +213,42 @@ public class EmbeddedJSPResultTest extends TestCase {
 //converter has a protected default constructor...meh
 class DummyConverter extends XWorkConverter {
 
+}
+
+class DummyServletCache extends ServletCache {
+    public int size() {
+        return cache.size();
+    }
+}
+
+class ServletGetRunnable implements Runnable {
+    private ServletCache servletCache;
+    private Object object;
+    private CyclicBarrier startBarrier;
+    private ActionContext actionContext;
+    private CyclicBarrier endBarrier;
+
+    ServletGetRunnable(ServletCache servletCache, CyclicBarrier startBarrier, CyclicBarrier endBarrier, ActionContext actionContext) {
+        this.servletCache = servletCache;
+        this.startBarrier = startBarrier;
+        this.endBarrier = endBarrier;
+        this.actionContext = actionContext;
+    }
+
+    @Override
+    public void run() {
+        ActionContext.setContext(actionContext);
+        //wait to start all therads at once..or try at least
+        try {
+            startBarrier.await();
+            object = servletCache.get("org/apache/struts2/simple0.jsp");
+            endBarrier.await();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Object getObject() {
+        return object;
+    }
 }

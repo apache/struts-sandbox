@@ -4,3 +4,6 @@
 <c:forEach begin="0" end="${number}">
 X    
 </c:forEach>
+<c:if test="${number < 15}">
+Y
+</c:if>
