@@ -17,7 +17,7 @@
         <dependency>
             <groupId>org.apache.struts</groupId>
             <artifactId>struts2-core</artifactId>
-            <version>2.1.7-SNAPSHOT</version>
+            <version>${parent.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.struts</groupId>
@@ -58,6 +58,14 @@
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.3</version>
+                <configuration>
+                    <includeEmptyDirs>true</includeEmptyDirs>
+                </configuration>
+            </plugin>
+            <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <source>1.5</source>
@@ -70,7 +78,8 @@
                 <version>1.0.15</version>
                 <configuration>
                     <A>
-                        uri=/struts-jquery-tags,tlibVersion=2.2.3,jspVersion=2.0,shortName=sjx,displayName="Struts JQuery Tags",
+                        uri=/struts-jquery-tags,tlibVersion=2.2.3,jspVersion=2.0,shortName=sjx,displayName="Struts
+                        JQuery Tags",
                         outFile=${basedir}/target/classes/META-INF/struts-jquery-tags.tld,
                         description="Struts AJAX tags based on JQuery.",
                         outTemplatesDir=${basedir}/src/site/docs
