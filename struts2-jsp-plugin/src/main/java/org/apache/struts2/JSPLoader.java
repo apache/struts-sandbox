@@ -22,11 +22,14 @@ package org.apache.struts2;
 
 import com.opensymphony.xwork2.util.finder.ClassLoaderInterfaceDelegate;
 import com.opensymphony.xwork2.util.finder.UrlSet;
+import com.opensymphony.xwork2.util.finder.ClassLoaderInterface;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
 import com.opensymphony.xwork2.util.URLUtil;
+import com.opensymphony.xwork2.ActionContext;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.xwork.StringUtils;
+import org.apache.commons.lang.xwork.ObjectUtils;
 import org.apache.struts2.compiler.MemoryClassLoader;
 import org.apache.struts2.compiler.MemoryJavaFileObject;
 import org.apache.struts2.jasper.JasperException;
@@ -62,6 +65,10 @@ public class JSPLoader {
 
     public Servlet load(String location) throws Exception {
         location = StringUtils.substringBeforeLast(location, "?");
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Compiling JSP [#0]", location);
+        }
 
         //use Jasper to compile the JSP into java code
         JspC jspC = compileJSP(location);
@@ -99,9 +106,11 @@ public class JSPLoader {
 
     /**
      * Compiles the given source code into java bytecode
-     *
      */
     private void compileJava(String className, final String source, Set<String> extraClassPath) throws IOException {
+        if (LOG.isTraceEnabled())
+            LOG.trace("Compiling [#0], source: [#1]", className, source);
+
         JavaCompiler compiler =
                 ToolProvider.getSystemJavaCompiler();
 
@@ -197,9 +206,13 @@ public class JSPLoader {
         return jspC;
     }
 
-    private ClassLoaderInterfaceDelegate getClassLoaderInterface() {
-        //TODO: get this from context so OSGI works
-        return new ClassLoaderInterfaceDelegate(Thread.currentThread().getContextClassLoader());
+    private ClassLoaderInterface getClassLoaderInterface() {
+        ClassLoaderInterface classLoaderInterface = null;
+        ActionContext ctx = ActionContext.getContext();
+        if (ctx != null)
+            classLoaderInterface = (ClassLoaderInterface) ctx.get(ClassLoaderInterface.CLASS_LOADER_INTERFACE);
+
+        return (ClassLoaderInterface) ObjectUtils.defaultIfNull(classLoaderInterface, new ClassLoaderInterfaceDelegate(JSPLoader.class.getClassLoader()));
     }
 
     private static URI toURI(String name) {
