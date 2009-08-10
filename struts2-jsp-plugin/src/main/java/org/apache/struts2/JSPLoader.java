@@ -38,6 +38,7 @@ import org.apache.struts2.jasper.compiler.JspUtil;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
+import javax.servlet.ServletContext;
 import javax.servlet.jsp.JspPage;
 import javax.tools.*;
 import java.io.File;
@@ -208,9 +209,9 @@ public class JSPLoader {
 
     private ClassLoaderInterface getClassLoaderInterface() {
         ClassLoaderInterface classLoaderInterface = null;
-        ActionContext ctx = ActionContext.getContext();
+        ServletContext ctx =  ServletActionContext.getServletContext();
         if (ctx != null)
-            classLoaderInterface = (ClassLoaderInterface) ctx.get(ClassLoaderInterface.CLASS_LOADER_INTERFACE);
+            classLoaderInterface = (ClassLoaderInterface) ctx.getAttribute(ClassLoaderInterface.CLASS_LOADER_INTERFACE);
 
         return (ClassLoaderInterface) ObjectUtils.defaultIfNull(classLoaderInterface, new ClassLoaderInterfaceDelegate(JSPLoader.class.getClassLoader()));
     }
