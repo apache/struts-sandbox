@@ -45,6 +45,7 @@
         </result-types>
     </package>    
     -->
+    <bean class="org.apache.struts2.jquery.JQueryTaglib" name="sjx" type="org.apache.struts2.views.TagLibrary" />
     <constant name="struts.jquery.default.theme" value="jquery" />
 
 </struts>
