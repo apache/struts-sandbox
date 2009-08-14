@@ -58,7 +58,6 @@ public abstract class JSPRuntime {
 
         Servlet servlet = servletCache.get(location);
         HttpJspPage page = (HttpJspPage) servlet;
-        page.jspInit();
 
         page._jspService(request, response);
         if (flush)

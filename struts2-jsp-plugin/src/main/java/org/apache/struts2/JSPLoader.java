@@ -39,6 +39,7 @@ import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.jsp.JspPage;
+import javax.servlet.jsp.HttpJspPage;
 import javax.tools.*;
 import java.io.File;
 import java.io.IOException;
@@ -94,10 +95,14 @@ public class JSPLoader {
      * Creates and inits a servlet
      */
     private Servlet createServlet(Class clazz) throws IllegalAccessException, InstantiationException, ServletException {
-        Servlet servlet = (Servlet) clazz.newInstance();
         JSPServletConfig config = new JSPServletConfig(ServletActionContext.getServletContext());
+
+        Servlet servlet = (Servlet) clazz.newInstance();
         servlet.init(config);
 
+        HttpJspPage page = (HttpJspPage) servlet;
+        page.jspInit();
+        
         return servlet;
     }
 
