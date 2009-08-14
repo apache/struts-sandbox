@@ -59,7 +59,6 @@ import java.util.*;
  */
 public class JSPLoader {
     private static final Logger LOG = LoggerFactory.getLogger(JSPLoader.class);
-    public static final File JSP_DIR = new File(System.getProperty("java.io.tmpdir"), "struts_jsps");
 
     private static MemoryClassLoader classLoader = new MemoryClassLoader();
     private static final String DEFAULT_PACKAGE = "org.apache.struts2.jsp";
@@ -148,12 +147,14 @@ public class JSPLoader {
         };
 
         //build classpath
+        //some entries will be added multiple times, hence the set
         List<String> optionList = new ArrayList<String>();
         Set<String> classPath = new HashSet<String>();
 
         //find available jars
-        UrlSet urlSet = new UrlSet(getClassLoaderInterface());
-        urlSet = urlSet.matching(".*?\\.jar(!/)?$");
+        ClassLoaderInterface classLoaderInterface = getClassLoaderInterface();
+        UrlSet urlSet = new UrlSet(classLoaderInterface);
+
         List<URL> urls = urlSet.getUrls();
         if (urls != null) {
             for (URL url : urls) {
@@ -162,13 +163,20 @@ public class JSPLoader {
             }
         }
 
-
-        //this jar
-        classPath.add(getJarUrl(EmbeddedJSPResult.class));
-        //servlet api
-        classPath.add(getJarUrl(Servlet.class));
-        //jsp api
-        classPath.add(getJarUrl(JspPage.class));
+        //UrlSet searches for dirs that end in WEB-INF/classes, so when running test
+        //from maven, it won't find test-classes dir
+        //find directories in the classpath
+        Enumeration<URL> rootUrls = classLoaderInterface.getResources("");
+        while (rootUrls.hasMoreElements()) {
+            URL url = rootUrls.nextElement();
+            URL normalized = URLUtil.normalizeToFileProtocol(url);
+            if (normalized == null) {
+                //this means that it is directory, not a jar, double check
+                File file = FileUtils.toFile(url);
+                if (file.exists() && file.isDirectory())
+                    classPath.add(file.getAbsolutePath());
+            }
+        }
 
         //add extra classpath entries (jars where tlds were found will be here)
         for (Iterator<String> iterator = extraClassPath.iterator(); iterator.hasNext();) {
@@ -176,8 +184,12 @@ public class JSPLoader {
             classPath.add(entry);
         }
 
-        optionList.addAll(Arrays.asList("-classpath", StringUtils.join(classPath, ";")));
+        String classPathString = StringUtils.join(classPath, ";");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Compiling [#0] with classpath [#1]", className, classPathString);
+        }
 
+        optionList.addAll(Arrays.asList("-classpath", classPathString));
 
         //compile
         JavaCompiler.CompilationTask task = compiler.getTask(

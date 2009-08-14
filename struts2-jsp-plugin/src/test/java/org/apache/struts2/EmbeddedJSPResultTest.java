@@ -147,6 +147,13 @@ public class EmbeddedJSPResultTest extends TestCase {
         }
     }
 
+     public void testBeans() throws Exception {
+        result.setLocation("org/apache/struts2/beans.jsp");
+        result.execute(null);
+
+        assertEquals("WhoamI?", cleanup(response.getContentAsString()));
+    }
+
     private String cleanup(String str) {
         return str.replaceAll("\\s", "");
     }
@@ -204,9 +211,6 @@ public class EmbeddedJSPResultTest extends TestCase {
         actionContext.setValueStack(valueStack);
 
         //XWorkConverter conv = ((Container)stack.getContext().get(ActionContext.CONTAINER)).getInstance(XWorkConverter.class);
-
-        if (JSPLoader.JSP_DIR.exists())
-            FileUtils.forceDelete(JSPLoader.JSP_DIR);
     }
 }
 
