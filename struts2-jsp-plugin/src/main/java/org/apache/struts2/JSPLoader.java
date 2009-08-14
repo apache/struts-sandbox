@@ -51,11 +51,9 @@ import java.security.ProtectionDomain;
 import java.util.*;
 
 /**
- * Uses jasper to extract a JSP from the classpath to a file and compile it. The classpathc used for
- * compilation is built by finding all the jar files using the current class loader (Thread), then adding
- * the plugin jar and the jars that contain these classes:
- * javax.servlet.Servlet
- * javax.servlet.jsp.JspPage
+ * Uses jasper to extract a JSP from the classpath to a file and compile it. The classpath used for
+ * compilation is built by finding all the jar files using the current class loader (Thread), plus
+ * directories.
  */
 public class JSPLoader {
     private static final Logger LOG = LoggerFactory.getLogger(JSPLoader.class);
