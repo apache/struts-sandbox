@@ -55,6 +55,13 @@ public class EmbeddedJSPResultTest extends TestCase {
         assertEquals("hello", response.getContentAsString());
     }
 
+    public void tesAbsolutePatht() throws Exception {
+        result.setLocation("/org/apache/struts2/simple0.jsp");
+        result.execute(null);
+
+        assertEquals("hello", response.getContentAsString());
+    }
+
     public void testTag0() throws Exception {
         result.setLocation("org/apache/struts2/tag0.jsp");
         result.execute(null);
