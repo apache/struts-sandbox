@@ -100,9 +100,13 @@ public class JSPLoader {
         Servlet servlet = (Servlet) clazz.newInstance();
         servlet.init(config);
 
-        HttpJspPage page = (HttpJspPage) servlet;
-        page.jspInit();
-        
+        /*
+         there is no need to call JspPage.init explicitly because Jasper's
+         JSP base classe HttpJspBase.init(ServletConfig) calls:
+         jspInit();
+         _jspInit();
+         */
+
         return servlet;
     }
 
