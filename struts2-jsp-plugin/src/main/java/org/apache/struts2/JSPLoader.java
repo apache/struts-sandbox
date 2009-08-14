@@ -38,6 +38,7 @@ import org.apache.struts2.jasper.compiler.JspUtil;
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.jsp.JspPage;
 import javax.tools.*;
 import java.io.File;
 import java.io.IOException;
@@ -158,6 +159,14 @@ public class JSPLoader {
                 classPath.add(file.getAbsolutePath());
             }
         }
+
+        //these should be in the list already, but I am feeling paranoid
+        //this jar
+        classPath.add(getJarUrl(EmbeddedJSPResult.class));
+        //servlet api
+        classPath.add(getJarUrl(Servlet.class));
+        //jsp api
+        classPath.add(getJarUrl(JspPage.class));
 
         //UrlSet searches for dirs that end in WEB-INF/classes, so when running test
         //from maven, it won't find test-classes dir
