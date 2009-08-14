@@ -25,63 +25,63 @@ import org.apache.struts2.jasper.JasperException;
  * @author Jan Luehe
  */
 class DefaultErrorHandler implements ErrorHandler {
-    
+
     /*
-     * Processes the given JSP parse error.
-     *
-     * @param fname Name of the JSP file in which the parse error occurred
-     * @param line Parse error line number
-     * @param column Parse error column number
-     * @param errMsg Parse error message
-     * @param exception Parse exception
-     */
+    * Processes the given JSP parse error.
+    *
+    * @param fname Name of the JSP file in which the parse error occurred
+    * @param line Parse error line number
+    * @param column Parse error column number
+    * @param errMsg Parse error message
+    * @param exception Parse exception
+    */
     public void jspError(String fname, int line, int column, String errMsg,
-            Exception ex) throws JasperException {
+                         Exception ex) throws JasperException {
         throw new JasperException(fname + "(" + line + "," + column + ")"
                 + " " + errMsg, ex);
     }
-    
+
     /*
-     * Processes the given JSP parse error.
-     *
-     * @param errMsg Parse error message
-     * @param exception Parse exception
-     */
+    * Processes the given JSP parse error.
+    *
+    * @param errMsg Parse error message
+    * @param exception Parse exception
+    */
     public void jspError(String errMsg, Exception ex) throws JasperException {
         throw new JasperException(errMsg, ex);
     }
-    
+
     /*
-     * Processes the given javac compilation errors.
-     *
-     * @param details Array of JavacErrorDetail instances corresponding to the
-     * compilation errors
-     */
+    * Processes the given javac compilation errors.
+    *
+    * @param details Array of JavacErrorDetail instances corresponding to the
+    * compilation errors
+    */
     public void javacError(JavacErrorDetail[] details) throws JasperException {
-        
+
         if (details == null) {
             return;
         }
-        
+
         Object[] args = null;
         StringBuffer buf = new StringBuffer();
-        
-        for (int i=0; i < details.length; i++) {
+
+        for (int i = 0; i < details.length; i++) {
             buf.append("\n");
             if (details[i].getJspBeginLineNumber() >= 0) {
-                args = new Object[] {
-                        new Integer(details[i].getJspBeginLineNumber()), 
-                        details[i].getJspFileName() };
+                args = new Object[]{
+                        new Integer(details[i].getJspBeginLineNumber()),
+                        details[i].getJspFileName()};
                 buf.append("\n");
                 buf.append(Localizer.getMessage("jsp.error.single.line.number",
                         args));
-                buf.append("\n"); 
+                buf.append("\n");
                 buf.append(details[i].getErrorMessage());
-                buf.append("\n"); 
+                buf.append("\n");
                 buf.append(details[i].getJspExtract());
             } else {
-                args = new Object[] {
-                        new Integer(details[i].getJavaLineNumber()) };
+                args = new Object[]{
+                        new Integer(details[i].getJavaLineNumber())};
                 buf.append("\n\n");
                 buf.append(Localizer.getMessage("jsp.error.java.line.number",
                         args));
@@ -92,18 +92,18 @@ class DefaultErrorHandler implements ErrorHandler {
         buf.append("\n\nStacktrace:");
         throw new JasperException(Localizer.getMessage("jsp.error.unable.compile") + ": " + buf);
     }
-    
+
     /**
      * Processes the given javac error report and exception.
      *
      * @param errorReport Compilation error report
-     * @param exception Compilation exception
+     * @param exception   Compilation exception
      */
     public void javacError(String errorReport, Exception exception)
-    throws JasperException {
-        
+            throws JasperException {
+
         throw new JasperException(
                 Localizer.getMessage("jsp.error.unable.compile"), exception);
     }
-    
+
 }

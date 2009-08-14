@@ -20,16 +20,15 @@
  */
 package org.apache.struts2;
 
+import com.opensymphony.xwork2.util.URLUtil;
+import com.opensymphony.xwork2.util.finder.ClassLoaderInterface;
 import com.opensymphony.xwork2.util.finder.ClassLoaderInterfaceDelegate;
 import com.opensymphony.xwork2.util.finder.UrlSet;
-import com.opensymphony.xwork2.util.finder.ClassLoaderInterface;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
-import com.opensymphony.xwork2.util.URLUtil;
-import com.opensymphony.xwork2.ActionContext;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.xwork.StringUtils;
 import org.apache.commons.lang.xwork.ObjectUtils;
+import org.apache.commons.lang.xwork.StringUtils;
 import org.apache.struts2.compiler.MemoryClassLoader;
 import org.apache.struts2.compiler.MemoryJavaFileObject;
 import org.apache.struts2.jasper.JasperException;
@@ -37,9 +36,8 @@ import org.apache.struts2.jasper.JspC;
 import org.apache.struts2.jasper.compiler.JspUtil;
 
 import javax.servlet.Servlet;
-import javax.servlet.ServletException;
 import javax.servlet.ServletContext;
-import javax.servlet.jsp.JspPage;
+import javax.servlet.ServletException;
 import javax.tools.*;
 import java.io.File;
 import java.io.IOException;
@@ -219,7 +217,7 @@ public class JSPLoader {
 
     private ClassLoaderInterface getClassLoaderInterface() {
         ClassLoaderInterface classLoaderInterface = null;
-        ServletContext ctx =  ServletActionContext.getServletContext();
+        ServletContext ctx = ServletActionContext.getServletContext();
         if (ctx != null)
             classLoaderInterface = (ClassLoaderInterface) ctx.getAttribute(ClassLoaderInterface.CLASS_LOADER_INTERFACE);
 

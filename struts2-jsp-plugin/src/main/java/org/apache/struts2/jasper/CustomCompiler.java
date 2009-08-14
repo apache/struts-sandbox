@@ -22,7 +22,7 @@ package org.apache.struts2.jasper;
 
 import java.io.FileNotFoundException;
 
-public class CustomCompiler extends org.apache.struts2.jasper.compiler.Compiler{
+public class CustomCompiler extends org.apache.struts2.jasper.compiler.Compiler {
 
     public boolean isOutDated() {
         return true;

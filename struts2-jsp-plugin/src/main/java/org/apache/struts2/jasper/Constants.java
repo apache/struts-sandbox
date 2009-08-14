@@ -28,12 +28,12 @@ package org.apache.struts2.jasper;
  */
 public class Constants {
     /**
-     * The base class of the generated servlets. 
+     * The base class of the generated servlets.
      */
     public static final String JSP_SERVLET_BASE = "org.apache.struts2.jasper.runtime.HttpJspBase";
 
     /**
-     * _jspService is the name of the method that is called by 
+     * _jspService is the name of the method that is called by
      * HttpJspBase.service(). This is where most of the code generated
      * from JSPs go.
      */
@@ -46,19 +46,19 @@ public class Constants {
 
     /**
      * These classes/packages are automatically imported by the
-     * generated code. 
+     * generated code.
      */
-    public static final String[] STANDARD_IMPORTS = { 
-	"javax.servlet.*", 
-	"javax.servlet.http.*", 
-	"javax.servlet.jsp.*"
+    public static final String[] STANDARD_IMPORTS = {
+            "javax.servlet.*",
+            "javax.servlet.http.*",
+            "javax.servlet.jsp.*"
     };
 
     /**
      * FIXME
-     * ServletContext attribute for classpath. This is tomcat specific. 
-     * Other servlet engines may choose to support this attribute if they 
-     * want to have this JSP engine running on them. 
+     * ServletContext attribute for classpath. This is tomcat specific.
+     * Other servlet engines may choose to support this attribute if they
+     * want to have this JSP engine running on them.
      */
     public static final String SERVLET_CLASSPATH = "org.apache.catalina.jsp_classpath";
 
@@ -74,9 +74,9 @@ public class Constants {
 
     /**
      * FIXME
-     * ServletContext attribute for class loader. This is tomcat specific. 
-     * Other servlet engines can choose to have this attribute if they 
-     * want to have this JSP engine running on them. 
+     * ServletContext attribute for class loader. This is tomcat specific.
+     * Other servlet engines can choose to have this attribute if they
+     * want to have this JSP engine running on them.
      */
     //public static final String SERVLET_CLASS_LOADER = "org.apache.tomcat.classloader";
     public static final String SERVLET_CLASS_LOADER = "org.apache.catalina.classloader";
@@ -85,7 +85,7 @@ public class Constants {
      * Default size of the JSP buffer.
      */
     public static final int K = 1024;
-    public static final int DEFAULT_BUFFER_SIZE = 8*K;
+    public static final int DEFAULT_BUFFER_SIZE = 8 * K;
 
     /**
      * Default size for the tag buffers.
@@ -99,7 +99,7 @@ public class Constants {
 
     /**
      * The query parameter that causes the JSP engine to just
-     * pregenerated the servlet but not invoke it. 
+     * pregenerated the servlet but not invoke it.
      */
     public static final String PRECOMPILE = "jsp_precompile";
 
@@ -115,7 +115,7 @@ public class Constants {
 
     /**
      * Servlet context and request attributes that the JSP engine
-     * uses. 
+     * uses.
      */
     public static final String INC_REQUEST_URI = "javax.servlet.include.request_uri";
     public static final String INC_SERVLET_PATH = "javax.servlet.include.servlet_path";
@@ -126,90 +126,92 @@ public class Constants {
     public static final String ALT_DD_ATTR = "org.apache.catalina.deploy.alt_dd";
 
     /**
-     * Public Id and the Resource path (of the cached copy) 
-     * of the DTDs for tag library descriptors. 
+     * Public Id and the Resource path (of the cached copy)
+     * of the DTDs for tag library descriptors.
      */
-    public static final String TAGLIB_DTD_PUBLIC_ID_11 = 
-	"-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.1//EN";
-    public static final String TAGLIB_DTD_RESOURCE_PATH_11 = 
-	"/javax/servlet/jsp/resources/web-jsptaglibrary_1_1.dtd";
-    public static final String TAGLIB_DTD_PUBLIC_ID_12 = 
-	"-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN";
-    public static final String TAGLIB_DTD_RESOURCE_PATH_12 = 
-	"/javax/servlet/jsp/resources/web-jsptaglibrary_1_2.dtd";
+    public static final String TAGLIB_DTD_PUBLIC_ID_11 =
+            "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.1//EN";
+    public static final String TAGLIB_DTD_RESOURCE_PATH_11 =
+            "/javax/servlet/jsp/resources/web-jsptaglibrary_1_1.dtd";
+    public static final String TAGLIB_DTD_PUBLIC_ID_12 =
+            "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN";
+    public static final String TAGLIB_DTD_RESOURCE_PATH_12 =
+            "/javax/servlet/jsp/resources/web-jsptaglibrary_1_2.dtd";
 
     /**
-     * Public Id and the Resource path (of the cached copy) 
+     * Public Id and the Resource path (of the cached copy)
      * of the DTDs for web application deployment descriptors
      */
-    public static final String WEBAPP_DTD_PUBLIC_ID_22 = 
-	"-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN";
-    public static final String WEBAPP_DTD_RESOURCE_PATH_22 = 
-	"/javax/servlet/resources/web-app_2_2.dtd";
-    public static final String WEBAPP_DTD_PUBLIC_ID_23 = 
-	"-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN";
-    public static final String WEBAPP_DTD_RESOURCE_PATH_23 = 
-	"/javax/servlet/resources/web-app_2_3.dtd";
+    public static final String WEBAPP_DTD_PUBLIC_ID_22 =
+            "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN";
+    public static final String WEBAPP_DTD_RESOURCE_PATH_22 =
+            "/javax/servlet/resources/web-app_2_2.dtd";
+    public static final String WEBAPP_DTD_PUBLIC_ID_23 =
+            "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN";
+    public static final String WEBAPP_DTD_RESOURCE_PATH_23 =
+            "/javax/servlet/resources/web-app_2_3.dtd";
 
     /**
      * List of the Public IDs that we cache, and their
-     * associated location. This is used by 
+     * associated location. This is used by
      * an EntityResolver to return the location of the
      * cached copy of a DTD.
      */
     public static final String[] CACHED_DTD_PUBLIC_IDS = {
-	TAGLIB_DTD_PUBLIC_ID_11,
-	TAGLIB_DTD_PUBLIC_ID_12,
-	WEBAPP_DTD_PUBLIC_ID_22,
-	WEBAPP_DTD_PUBLIC_ID_23,
+            TAGLIB_DTD_PUBLIC_ID_11,
+            TAGLIB_DTD_PUBLIC_ID_12,
+            WEBAPP_DTD_PUBLIC_ID_22,
+            WEBAPP_DTD_PUBLIC_ID_23,
     };
     public static final String[] CACHED_DTD_RESOURCE_PATHS = {
-	TAGLIB_DTD_RESOURCE_PATH_11,
-	TAGLIB_DTD_RESOURCE_PATH_12,
-	WEBAPP_DTD_RESOURCE_PATH_22,
-	WEBAPP_DTD_RESOURCE_PATH_23,
+            TAGLIB_DTD_RESOURCE_PATH_11,
+            TAGLIB_DTD_RESOURCE_PATH_12,
+            WEBAPP_DTD_RESOURCE_PATH_22,
+            WEBAPP_DTD_RESOURCE_PATH_23,
     };
-    
+
     /**
      * Default URLs to download the pluging for Netscape and IE.
      */
-    public static final String NS_PLUGIN_URL = 
-        "http://java.sun.com/products/plugin/";
+    public static final String NS_PLUGIN_URL =
+            "http://java.sun.com/products/plugin/";
 
-    public static final String IE_PLUGIN_URL = 
-        "http://java.sun.com/products/plugin/1.2.2/jinstall-1_2_2-win.cab#Version=1,2,2,0";
+    public static final String IE_PLUGIN_URL =
+            "http://java.sun.com/products/plugin/1.2.2/jinstall-1_2_2-win.cab#Version=1,2,2,0";
 
     /**
      * Prefix to use for generated temporary variable names
      */
     public static final String TEMP_VARIABLE_NAME_PREFIX =
-        "_jspx_temp";
+            "_jspx_temp";
 
     /**
      * Previous replacement char for "\$".
+     *
      * @deprecated
      */
-    public static final char ESC='\u001b';
-    
+    public static final char ESC = '\u001b';
+
     /**
      * Previous replacement char for "\$".
+     *
      * @deprecated
      */
-    public static final String ESCStr="'\\u001b'";
-    
+    public static final String ESCStr = "'\\u001b'";
+
     /**
      * Replacement char for "\$". This is the first unicode character in the
      * private use area.
      * XXX This is a hack to avoid changing EL interpreter to recognize "\$"
      */
     public static final char HACK_CHAR = '\ue000';
-    
+
     /**
      * Replacement string for "\$". This is the first unicode character in the
      * private use area.
      * XXX This is a hack to avoid changing EL interpreter to recognize "\$"
      */
     public static final String HACK_STR = "'\\ue000'";
-    
+
 }
 

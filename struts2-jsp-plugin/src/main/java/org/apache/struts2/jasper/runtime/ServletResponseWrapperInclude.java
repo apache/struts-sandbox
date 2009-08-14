@@ -27,7 +27,7 @@ import java.io.PrintWriter;
 
 /**
  * ServletResponseWrapper used by the JSP 'include' action.
- *
+ * <p/>
  * This wrapper response object is passed to RequestDispatcher.include(), so
  * that the output of the included resource is appended to that of the
  * including page.
@@ -44,22 +44,22 @@ public class ServletResponseWrapperInclude extends HttpServletResponseWrapper {
 
     private JspWriter jspWriter;
 
-    public ServletResponseWrapperInclude(ServletResponse response, 
-					 JspWriter jspWriter) {
-	super((HttpServletResponse)response);
-	this.printWriter = new PrintWriter(jspWriter);
-	this.jspWriter = jspWriter;
+    public ServletResponseWrapperInclude(ServletResponse response,
+                                         JspWriter jspWriter) {
+        super((HttpServletResponse) response);
+        this.printWriter = new PrintWriter(jspWriter);
+        this.jspWriter = jspWriter;
     }
 
     /**
      * Returns a wrapper around the JspWriter of the including page.
      */
     public PrintWriter getWriter() throws IOException {
-	return printWriter;
+        return printWriter;
     }
 
     public ServletOutputStream getOutputStream() throws IOException {
-	throw new IllegalStateException();
+        throw new IllegalStateException();
     }
 
     /**
@@ -67,9 +67,9 @@ public class ServletResponseWrapperInclude extends HttpServletResponseWrapper {
      * page.
      */
     public void resetBuffer() {
-	try {
-	    jspWriter.clearBuffer();
-	} catch (IOException ioe) {
-	}
+        try {
+            jspWriter.clearBuffer();
+        } catch (IOException ioe) {
+        }
     }
 }

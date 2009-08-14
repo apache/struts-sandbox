@@ -23,9 +23,9 @@ import java.io.PrintStream;
 
 
 /**
- * This helper class may be used to do sophisticated redirection of 
+ * This helper class may be used to do sophisticated redirection of
  * System.out and System.err.
- * 
+ *
  * @author Remy Maucherat
  */
 public class SystemLogHandler extends PrintStream {
@@ -68,7 +68,7 @@ public class SystemLogHandler extends PrintStream {
 
 
     public PrintStream getWrapped() {
-      return wrapped;
+        return wrapped;
     }
 
     /**
@@ -85,8 +85,8 @@ public class SystemLogHandler extends PrintStream {
      * Stop capturing thread's output and return captured data as a String.
      */
     public static String unsetThread() {
-        ByteArrayOutputStream baos = 
-            (ByteArrayOutputStream) data.get();
+        ByteArrayOutputStream baos =
+                (ByteArrayOutputStream) data.get();
         if (baos == null) {
             return null;
         }
@@ -135,7 +135,7 @@ public class SystemLogHandler extends PrintStream {
     }
 
     public void write(byte[] b)
-        throws IOException {
+            throws IOException {
         findStream().write(b);
     }
 

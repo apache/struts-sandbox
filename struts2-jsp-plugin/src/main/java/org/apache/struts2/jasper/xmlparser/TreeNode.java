@@ -28,7 +28,7 @@ import java.util.Iterator;
  * parse of an XML document.  This class is used to represent a DOM tree
  * so that the XML parser's implementation of <code>org.w3c.dom</code> need
  * not be visible to the remainder of Jasper.
- * <p>
+ * <p/>
  * <strong>WARNING</strong> - Construction of a new tree, or modifications
  * to an existing one, are not thread-safe and such accesses must be
  * synchronized.
@@ -58,7 +58,7 @@ public class TreeNode {
     /**
      * Construct a new node with the specified parent.
      *
-     * @param name The name of this node
+     * @param name   The name of this node
      * @param parent The node that is the parent of this node
      */
     public TreeNode(String name, TreeNode parent) {
@@ -113,7 +113,7 @@ public class TreeNode {
      * Add an attribute to this node, replacing any existing attribute
      * with the same name.
      *
-     * @param name The attribute name to add
+     * @param name  The attribute name to add
      * @param value The new attribute value
      */
     public void addAttribute(String name, String value) {
@@ -305,9 +305,9 @@ public class TreeNode {
      * Append to the specified StringBuffer a character representation of
      * this node, with the specified amount of indentation.
      *
-     * @param sb The StringBuffer to append to
+     * @param sb     The StringBuffer to append to
      * @param indent Number of characters of indentation
-     * @param node The TreeNode to be printed
+     * @param node   The TreeNode to be printed
      */
     protected void toString(StringBuffer sb, int indent,
                             TreeNode node) {

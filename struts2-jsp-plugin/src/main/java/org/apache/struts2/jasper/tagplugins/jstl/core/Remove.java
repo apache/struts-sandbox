@@ -23,23 +23,23 @@ import org.apache.struts2.jasper.compiler.tagplugin.TagPluginContext;
 import org.apache.struts2.jasper.tagplugins.jstl.Util;
 
 public class Remove implements TagPlugin {
-    
+
     public void doTag(TagPluginContext ctxt) {
-        
+
         //scope flag
         boolean hasScope = ctxt.isAttributeSpecified("scope");
-        
+
         //the value of the "var"
         String strVar = ctxt.getConstantAttribute("var");
-        
+
         //remove attribute from certain scope.
         //default scope is "page".
-        if(hasScope){
+        if (hasScope) {
             int iScope = Util.getScope(ctxt.getConstantAttribute("scope"));
             ctxt.generateJavaSource("pageContext.removeAttribute(\"" + strVar + "\"," + iScope + ");");
-        }else{
+        } else {
             ctxt.generateJavaSource("pageContext.removeAttribute(\"" + strVar + "\");");
         }
     }
-    
+
 }

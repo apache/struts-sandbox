@@ -19,6 +19,7 @@ package org.apache.struts2.jasper.servlet;
 
 
 import com.opensymphony.xwork2.util.finder.ClassLoaderInterface;
+import com.opensymphony.xwork2.ActionContext;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.Servlet;
@@ -30,6 +31,8 @@ import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
+
+import org.apache.struts2.ServletActionContext;
 
 
 /**
@@ -57,6 +60,7 @@ public class JspCServletContext implements ServletContext {
     protected PrintWriter myLogWriter;
 
     private ClassLoaderInterface classLoaderInterface;
+    private static final String WEB_XML = "/WEB-INF/web.xml";
 
 
     // ----------------------------------------------------------- Constructors
@@ -188,14 +192,14 @@ public class JspCServletContext implements ServletContext {
     public String getRealPath(String path) {
         try {
             return
-                (getResource(path).getFile().replace('/', File.separatorChar));
+                    (getResource(path).getFile().replace('/', File.separatorChar));
         } catch (Throwable t) {
             return (null);
         }
 
     }
-            
-            
+
+
     /**
      * Return a request dispatcher for the specified context-relative path.
      *
@@ -213,11 +217,18 @@ public class JspCServletContext implements ServletContext {
      * specified context-relative path.
      *
      * @param path Context-relative path of the desired resource
-     *
-     * @exception MalformedURLException if the resource path is
-     *  not properly formed
+     * @throws MalformedURLException if the resource path is
+     *                               not properly formed
      */
     public URL getResource(String path) throws MalformedURLException {
+        if (WEB_XML.equals(path)) {
+            if (ActionContext.getContext() != null) {
+                ServletContext context = ServletActionContext.getServletContext();
+                return context.getResource(path);
+            }
+
+            return null;
+        }
         return classLoaderInterface.getResource(path);
     }
 
@@ -283,7 +294,6 @@ public class JspCServletContext implements ServletContext {
      * Return a null reference for the specified servlet name.
      *
      * @param name Name of the requested servlet
-     *
      * @deprecated This method has been deprecated with no replacement
      */
     public Servlet getServlet(String name) throws ServletException {
@@ -343,8 +353,7 @@ public class JspCServletContext implements ServletContext {
      * Log the specified message and exception.
      *
      * @param exception The exception to be logged
-     * @param message The message to be logged
-     *
+     * @param message   The message to be logged
      * @deprecated Use log(String,Throwable) instead
      */
     public void log(Exception exception, String message) {
@@ -357,7 +366,7 @@ public class JspCServletContext implements ServletContext {
     /**
      * Log the specified message and exception.
      *
-     * @param message The message to be logged
+     * @param message   The message to be logged
      * @param exception The exception to be logged
      */
     public void log(String message, Throwable exception) {
@@ -383,7 +392,7 @@ public class JspCServletContext implements ServletContext {
     /**
      * Set or replace the specified context attribute.
      *
-     * @param name Name of the context attribute to set
+     * @param name  Name of the context attribute to set
      * @param value Corresponding attribute value
      */
     public void setAttribute(String name, Object value) {
@@ -391,7 +400,6 @@ public class JspCServletContext implements ServletContext {
         myAttributes.put(name, value);
 
     }
-
 
 
 }

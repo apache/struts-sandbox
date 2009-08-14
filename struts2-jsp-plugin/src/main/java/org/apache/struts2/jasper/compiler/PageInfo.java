@@ -47,7 +47,7 @@ class PageInfo {
     private String session;
     private boolean isSession = true;
     private String bufferValue;
-    private int buffer = 8*1024;    // XXX confirm
+    private int buffer = 8 * 1024;    // XXX confirm
     private String autoFlush;
     private boolean isAutoFlush = true;
     private String isThreadSafeValue;
@@ -93,13 +93,14 @@ class PageInfo {
         this.prefixes = new HashSet();
 
         // Enter standard imports
-        for(int i = 0; i < Constants.STANDARD_IMPORTS.length; i++)
+        for (int i = 0; i < Constants.STANDARD_IMPORTS.length; i++)
             imports.add(Constants.STANDARD_IMPORTS[i]);
     }
 
     /**
      * Check if the plugin ID has been previously declared.  Make a not
      * that this Id is now declared.
+     *
      * @return true if Id has been declared.
      */
     public boolean isPluginDeclared(String id) {
@@ -127,7 +128,7 @@ class PageInfo {
 
     public void addDependant(String d) {
         if (!dependants.contains(d) && !jspFile.equals(d))
-                dependants.add(d);
+            dependants.add(d);
     }
 
     public List getDependants() {
@@ -348,9 +349,10 @@ class PageInfo {
     /*
      * language
      */
+
     public void setLanguage(String value, Node n, ErrorDispatcher err,
-                boolean pagedir)
-        throws JasperException {
+                            boolean pagedir)
+            throws JasperException {
 
         if (!"java".equalsIgnoreCase(value)) {
             if (pagedir)
@@ -391,12 +393,11 @@ class PageInfo {
      * Gets the value of the 'extends' page directive attribute.
      *
      * @param useDefault TRUE if the default
-     * (org.apache.jasper.runtime.HttpJspBase) should be returned if this
-     * attribute has not been set, FALSE otherwise
-     *
+     *                   (org.apache.jasper.runtime.HttpJspBase) should be returned if this
+     *                   attribute has not been set, FALSE otherwise
      * @return The value of the 'extends' page directive attribute, or the
-     * default (org.apache.jasper.runtime.HttpJspBase) if this attribute has
-     * not been set and useDefault is TRUE
+     *         default (org.apache.jasper.runtime.HttpJspBase) if this attribute has
+     *         not been set and useDefault is TRUE
      */
     public String getExtends(boolean useDefault) {
         return (xtends == null && useDefault ? defaultExtends : xtends);
@@ -406,8 +407,8 @@ class PageInfo {
      * Gets the value of the 'extends' page directive attribute.
      *
      * @return The value of the 'extends' page directive attribute, or the
-     * default (org.apache.jasper.runtime.HttpJspBase) if this attribute has
-     * not been set
+     *         default (org.apache.jasper.runtime.HttpJspBase) if this attribute has
+     *         not been set
      */
     public String getExtends() {
         return getExtends(true);
@@ -430,7 +431,7 @@ class PageInfo {
      * buffer
      */
     public void setBufferValue(String value, Node n, ErrorDispatcher err)
-        throws JasperException {
+            throws JasperException {
 
         if ("none".equalsIgnoreCase(value))
             buffer = 0;
@@ -438,7 +439,7 @@ class PageInfo {
             if (value == null || !value.endsWith("kb"))
                 err.jspError(n, "jsp.error.page.invalid.buffer");
             try {
-                Integer k = new Integer(value.substring(0, value.length()-2));
+                Integer k = new Integer(value.substring(0, value.length() - 2));
                 buffer = k.intValue() * 1024;
             } catch (NumberFormatException e) {
                 err.jspError(n, "jsp.error.page.invalid.buffer");
@@ -461,7 +462,7 @@ class PageInfo {
      * session
      */
     public void setSession(String value, Node n, ErrorDispatcher err)
-        throws JasperException {
+            throws JasperException {
 
         if ("true".equalsIgnoreCase(value))
             isSession = true;
@@ -486,7 +487,7 @@ class PageInfo {
      * autoFlush
      */
     public void setAutoFlush(String value, Node n, ErrorDispatcher err)
-        throws JasperException {
+            throws JasperException {
 
         if ("true".equalsIgnoreCase(value))
             isAutoFlush = true;
@@ -511,7 +512,7 @@ class PageInfo {
      * isThreadSafe
      */
     public void setIsThreadSafe(String value, Node n, ErrorDispatcher err)
-        throws JasperException {
+            throws JasperException {
 
         if ("true".equalsIgnoreCase(value))
             isThreadSafe = true;
@@ -560,7 +561,7 @@ class PageInfo {
      * isErrorPage
      */
     public void setIsErrorPage(String value, Node n, ErrorDispatcher err)
-        throws JasperException {
+            throws JasperException {
 
         if ("true".equalsIgnoreCase(value))
             isErrorPage = true;
@@ -585,8 +586,8 @@ class PageInfo {
      * isELIgnored
      */
     public void setIsELIgnored(String value, Node n, ErrorDispatcher err,
-                   boolean pagedir)
-        throws JasperException {
+                               boolean pagedir)
+            throws JasperException {
 
         if ("true".equalsIgnoreCase(value))
             isELIgnored = true;

@@ -29,61 +29,61 @@ import java.util.Vector;
 public class Queue {
     private Vector vector = new Vector();
 
-    /** 
+    /**
      * Put the object into the queue.
-     * 
-     * @param	object		the object to be appended to the
-     * 				queue. 
+     *
+     * @param object the object to be appended to the
+     *               queue.
      */
     public synchronized void put(Object object) {
-	vector.addElement(object);
-	notify();
+        vector.addElement(object);
+        notify();
     }
-    
+
     /**
      * Pull the first object out of the queue. Wait if the queue is
      * empty.
      */
     public synchronized Object pull() {
-	while (isEmpty())
-	    try {
-		wait();
-	    } catch (InterruptedException ex) {
-	    }
-	return get();
+        while (isEmpty())
+            try {
+                wait();
+            } catch (InterruptedException ex) {
+            }
+        return get();
     }
 
     /**
      * Get the first object out of the queue. Return null if the queue
-     * is empty. 
+     * is empty.
      */
     public synchronized Object get() {
-	Object object = peek();
-	if (object != null)
-	    vector.removeElementAt(0);
-	return object;
+        Object object = peek();
+        if (object != null)
+            vector.removeElementAt(0);
+        return object;
     }
 
     /**
      * Peek to see if something is available.
      */
     public Object peek() {
-	if (isEmpty())
-	    return null;
-	return vector.elementAt(0);
+        if (isEmpty())
+            return null;
+        return vector.elementAt(0);
     }
-    
+
     /**
      * Is the queue empty?
      */
     public boolean isEmpty() {
-	return vector.isEmpty();
+        return vector.isEmpty();
     }
 
     /**
      * How many elements are there in this queue?
      */
     public int size() {
-	return vector.size();
+        return vector.size();
     }
 }

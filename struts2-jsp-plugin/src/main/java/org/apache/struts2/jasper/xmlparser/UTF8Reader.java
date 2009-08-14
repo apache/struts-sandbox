@@ -17,6 +17,8 @@
 
 package org.apache.struts2.jasper.xmlparser;
 
+import com.opensymphony.xwork2.util.logging.Logger;
+import com.opensymphony.xwork2.util.logging.LoggerFactory;
 import org.apache.struts2.jasper.compiler.Localizer;
 
 import java.io.IOException;
@@ -26,49 +28,59 @@ import java.io.UTFDataFormatException;
 
 /**
  * @author Andy Clark, IBM
- *
  * @version $Id: UTF8Reader.java 466606 2006-10-21 23:07:12Z markt $
  */
 public class UTF8Reader
-    extends Reader {
+        extends Reader {
 
-    private org.apache.commons.logging.Log log=
-        org.apache.commons.logging.LogFactory.getLog( UTF8Reader.class );
-    
+    private Logger log = LoggerFactory.getLogger(UTF8Reader.class);
+
     //
     // Constants
     //
 
-    /** Default byte buffer size (2048). */
+    /**
+     * Default byte buffer size (2048).
+     */
     public static final int DEFAULT_BUFFER_SIZE = 2048;
 
     // debugging
 
-    /** Debug read. */
+    /**
+     * Debug read.
+     */
     private static final boolean DEBUG_READ = false;
 
     //
     // Data
     //
 
-    /** Input stream. */
+    /**
+     * Input stream.
+     */
     protected InputStream fInputStream;
 
-    /** Byte buffer. */
+    /**
+     * Byte buffer.
+     */
     protected byte[] fBuffer;
 
-    /** Offset into buffer. */
+    /**
+     * Offset into buffer.
+     */
     protected int fOffset;
 
-    /** Surrogate character. */
+    /**
+     * Surrogate character.
+     */
     private int fSurrogate = -1;
 
     //
     // Constructors
     //
 
-    /** 
-     * Constructs a UTF-8 reader from the specified input stream, 
+    /**
+     * Constructs a UTF-8 reader from the specified input stream,
      * buffer size and MessageFormatter.
      *
      * @param inputStream The input stream.
@@ -86,15 +98,14 @@ public class UTF8Reader
     /**
      * Read a single character.  This method will block until a character is
      * available, an I/O error occurs, or the end of the stream is reached.
-     *
+     * <p/>
      * <p> Subclasses that intend to support efficient single-character input
      * should override this method.
      *
-     * @return     The character read, as an integer in the range 0 to 16383
-     *             (<tt>0x00-0xffff</tt>), or -1 if the end of the stream has
-     *             been reached
-     *
-     * @exception  IOException  If an I/O error occurs
+     * @return The character read, as an integer in the range 0 to 16383
+     *         (<tt>0x00-0xffff</tt>), or -1 if the end of the stream has
+     *         been reached
+     * @throws IOException If an I/O error occurs
      */
     public int read() throws IOException {
 
@@ -106,8 +117,8 @@ public class UTF8Reader
             int index = 0;
 
             // get first byte
-            int b0 = index == fOffset 
-                   ? fInputStream.read() : fBuffer[index++] & 0x00FF;
+            int b0 = index == fOffset
+                    ? fInputStream.read() : fBuffer[index++] & 0x00FF;
             if (b0 == -1) {
                 return -1;
             }
@@ -115,14 +126,14 @@ public class UTF8Reader
             // UTF-8:   [0xxx xxxx]
             // Unicode: [0000 0000] [0xxx xxxx]
             if (b0 < 0x80) {
-                c = (char)b0;
+                c = (char) b0;
             }
 
             // UTF-8:   [110y yyyy] [10xx xxxx]
             // Unicode: [0000 0yyy] [yyxx xxxx]
             else if ((b0 & 0xE0) == 0xC0) {
-                int b1 = index == fOffset 
-                       ? fInputStream.read() : fBuffer[index++] & 0x00FF;
+                int b1 = index == fOffset
+                        ? fInputStream.read() : fBuffer[index++] & 0x00FF;
                 if (b1 == -1) {
                     expectedByte(2, 2);
                 }
@@ -136,15 +147,15 @@ public class UTF8Reader
             // Unicode: [zzzz yyyy] [yyxx xxxx]
             else if ((b0 & 0xF0) == 0xE0) {
                 int b1 = index == fOffset
-                       ? fInputStream.read() : fBuffer[index++] & 0x00FF;
+                        ? fInputStream.read() : fBuffer[index++] & 0x00FF;
                 if (b1 == -1) {
                     expectedByte(2, 3);
                 }
                 if ((b1 & 0xC0) != 0x80) {
                     invalidByte(2, 3, b1);
                 }
-                int b2 = index == fOffset 
-                       ? fInputStream.read() : fBuffer[index++] & 0x00FF;
+                int b2 = index == fOffset
+                        ? fInputStream.read() : fBuffer[index++] & 0x00FF;
                 if (b2 == -1) {
                     expectedByte(3, 3);
                 }
@@ -152,7 +163,7 @@ public class UTF8Reader
                     invalidByte(3, 3, b2);
                 }
                 c = ((b0 << 12) & 0xF000) | ((b1 << 6) & 0x0FC0) |
-                    (b2 & 0x003F);
+                        (b2 & 0x003F);
             }
 
             // UTF-8:   [1111 0uuu] [10uu zzzz] [10yy yyyy] [10xx xxxx]*
@@ -160,24 +171,24 @@ public class UTF8Reader
             //          [1101 11yy] [yyxx xxxx] (low surrogate)
             //          * uuuuu = wwww + 1
             else if ((b0 & 0xF8) == 0xF0) {
-                int b1 = index == fOffset 
-                       ? fInputStream.read() : fBuffer[index++] & 0x00FF;
+                int b1 = index == fOffset
+                        ? fInputStream.read() : fBuffer[index++] & 0x00FF;
                 if (b1 == -1) {
                     expectedByte(2, 4);
                 }
                 if ((b1 & 0xC0) != 0x80) {
                     invalidByte(2, 3, b1);
                 }
-                int b2 = index == fOffset 
-                       ? fInputStream.read() : fBuffer[index++] & 0x00FF;
+                int b2 = index == fOffset
+                        ? fInputStream.read() : fBuffer[index++] & 0x00FF;
                 if (b2 == -1) {
                     expectedByte(3, 4);
                 }
                 if ((b2 & 0xC0) != 0x80) {
                     invalidByte(3, 3, b2);
                 }
-                int b3 = index == fOffset 
-                       ? fInputStream.read() : fBuffer[index++] & 0x00FF;
+                int b3 = index == fOffset
+                        ? fInputStream.read() : fBuffer[index++] & 0x00FF;
                 if (b3 == -1) {
                     expectedByte(4, 4);
                 }
@@ -189,9 +200,9 @@ public class UTF8Reader
                     invalidSurrogate(uuuuu);
                 }
                 int wwww = uuuuu - 1;
-                int hs = 0xD800 | 
-                         ((wwww << 6) & 0x03C0) | ((b1 << 2) & 0x003C) | 
-                         ((b2 >> 4) & 0x0003);
+                int hs = 0xD800 |
+                        ((wwww << 6) & 0x03C0) | ((b1 << 2) & 0x003C) |
+                        ((b2 >> 4) & 0x0003);
                 int ls = 0xDC00 | ((b2 << 6) & 0x03C0) | (b3 & 0x003F);
                 c = hs;
                 fSurrogate = ls;
@@ -211,7 +222,7 @@ public class UTF8Reader
         // return character
         if (DEBUG_READ) {
             if (log.isDebugEnabled())
-                log.debug("read(): 0x"+Integer.toHexString(c));
+                log.debug("read(): 0x" + Integer.toHexString(c));
         }
         return c;
 
@@ -222,21 +233,19 @@ public class UTF8Reader
      * until some input is available, an I/O error occurs, or the end of the
      * stream is reached.
      *
-     * @param      ch     Destination buffer
-     * @param      offset Offset at which to start storing characters
-     * @param      length Maximum number of characters to read
-     *
-     * @return     The number of characters read, or -1 if the end of the
-     *             stream has been reached
-     *
-     * @exception  IOException  If an I/O error occurs
+     * @param ch     Destination buffer
+     * @param offset Offset at which to start storing characters
+     * @param length Maximum number of characters to read
+     * @return The number of characters read, or -1 if the end of the
+     *         stream has been reached
+     * @throws IOException If an I/O error occurs
      */
     public int read(char ch[], int offset, int length) throws IOException {
 
         // handle surrogate
         int out = offset;
         if (fSurrogate != -1) {
-            ch[offset + 1] = (char)fSurrogate;
+            ch[offset + 1] = (char) fSurrogate;
             fSurrogate = -1;
             length--;
             out++;
@@ -278,7 +287,7 @@ public class UTF8Reader
             // UTF-8:   [0xxx xxxx]
             // Unicode: [0000 0000] [0xxx xxxx]
             if (b0 < 0x80) {
-                ch[out++] = (char)b0;
+                ch[out++] = (char) b0;
                 continue;
             }
 
@@ -286,14 +295,13 @@ public class UTF8Reader
             // Unicode: [0000 0yyy] [yyxx xxxx]
             if ((b0 & 0xE0) == 0xC0) {
                 int b1 = -1;
-                if (++in < total) { 
-                    b1 = fBuffer[in] & 0x00FF; 
-                }
-                else {
+                if (++in < total) {
+                    b1 = fBuffer[in] & 0x00FF;
+                } else {
                     b1 = fInputStream.read();
                     if (b1 == -1) {
                         if (out > offset) {
-                            fBuffer[0] = (byte)b0;
+                            fBuffer[0] = (byte) b0;
                             fOffset = 1;
                             return out - offset;
                         }
@@ -303,15 +311,15 @@ public class UTF8Reader
                 }
                 if ((b1 & 0xC0) != 0x80) {
                     if (out > offset) {
-                        fBuffer[0] = (byte)b0;
-                        fBuffer[1] = (byte)b1;
+                        fBuffer[0] = (byte) b0;
+                        fBuffer[1] = (byte) b1;
                         fOffset = 2;
                         return out - offset;
                     }
                     invalidByte(2, 2, b1);
                 }
                 int c = ((b0 << 6) & 0x07C0) | (b1 & 0x003F);
-                ch[out++] = (char)c;
+                ch[out++] = (char) c;
                 count -= 1;
                 continue;
             }
@@ -320,14 +328,13 @@ public class UTF8Reader
             // Unicode: [zzzz yyyy] [yyxx xxxx]
             if ((b0 & 0xF0) == 0xE0) {
                 int b1 = -1;
-                if (++in < total) { 
-                    b1 = fBuffer[in] & 0x00FF; 
-                }
-                else {
+                if (++in < total) {
+                    b1 = fBuffer[in] & 0x00FF;
+                } else {
                     b1 = fInputStream.read();
                     if (b1 == -1) {
                         if (out > offset) {
-                            fBuffer[0] = (byte)b0;
+                            fBuffer[0] = (byte) b0;
                             fOffset = 1;
                             return out - offset;
                         }
@@ -337,23 +344,22 @@ public class UTF8Reader
                 }
                 if ((b1 & 0xC0) != 0x80) {
                     if (out > offset) {
-                        fBuffer[0] = (byte)b0;
-                        fBuffer[1] = (byte)b1;
+                        fBuffer[0] = (byte) b0;
+                        fBuffer[1] = (byte) b1;
                         fOffset = 2;
                         return out - offset;
                     }
                     invalidByte(2, 3, b1);
                 }
                 int b2 = -1;
-                if (++in < total) { 
-                    b2 = fBuffer[in] & 0x00FF; 
-                }
-                else {
+                if (++in < total) {
+                    b2 = fBuffer[in] & 0x00FF;
+                } else {
                     b2 = fInputStream.read();
                     if (b2 == -1) {
                         if (out > offset) {
-                            fBuffer[0] = (byte)b0;
-                            fBuffer[1] = (byte)b1;
+                            fBuffer[0] = (byte) b0;
+                            fBuffer[1] = (byte) b1;
                             fOffset = 2;
                             return out - offset;
                         }
@@ -363,9 +369,9 @@ public class UTF8Reader
                 }
                 if ((b2 & 0xC0) != 0x80) {
                     if (out > offset) {
-                        fBuffer[0] = (byte)b0;
-                        fBuffer[1] = (byte)b1;
-                        fBuffer[2] = (byte)b2;
+                        fBuffer[0] = (byte) b0;
+                        fBuffer[1] = (byte) b1;
+                        fBuffer[2] = (byte) b2;
                         fOffset = 3;
                         return out - offset;
                     }
@@ -373,7 +379,7 @@ public class UTF8Reader
                 }
                 int c = ((b0 << 12) & 0xF000) | ((b1 << 6) & 0x0FC0) |
                         (b2 & 0x003F);
-                ch[out++] = (char)c;
+                ch[out++] = (char) c;
                 count -= 2;
                 continue;
             }
@@ -384,14 +390,13 @@ public class UTF8Reader
             //          * uuuuu = wwww + 1
             if ((b0 & 0xF8) == 0xF0) {
                 int b1 = -1;
-                if (++in < total) { 
-                    b1 = fBuffer[in] & 0x00FF; 
-                }
-                else {
+                if (++in < total) {
+                    b1 = fBuffer[in] & 0x00FF;
+                } else {
                     b1 = fInputStream.read();
                     if (b1 == -1) {
                         if (out > offset) {
-                            fBuffer[0] = (byte)b0;
+                            fBuffer[0] = (byte) b0;
                             fOffset = 1;
                             return out - offset;
                         }
@@ -401,23 +406,22 @@ public class UTF8Reader
                 }
                 if ((b1 & 0xC0) != 0x80) {
                     if (out > offset) {
-                        fBuffer[0] = (byte)b0;
-                        fBuffer[1] = (byte)b1;
+                        fBuffer[0] = (byte) b0;
+                        fBuffer[1] = (byte) b1;
                         fOffset = 2;
                         return out - offset;
                     }
                     invalidByte(2, 4, b1);
                 }
                 int b2 = -1;
-                if (++in < total) { 
-                    b2 = fBuffer[in] & 0x00FF; 
-                }
-                else {
+                if (++in < total) {
+                    b2 = fBuffer[in] & 0x00FF;
+                } else {
                     b2 = fInputStream.read();
                     if (b2 == -1) {
                         if (out > offset) {
-                            fBuffer[0] = (byte)b0;
-                            fBuffer[1] = (byte)b1;
+                            fBuffer[0] = (byte) b0;
+                            fBuffer[1] = (byte) b1;
                             fOffset = 2;
                             return out - offset;
                         }
@@ -427,25 +431,24 @@ public class UTF8Reader
                 }
                 if ((b2 & 0xC0) != 0x80) {
                     if (out > offset) {
-                        fBuffer[0] = (byte)b0;
-                        fBuffer[1] = (byte)b1;
-                        fBuffer[2] = (byte)b2;
+                        fBuffer[0] = (byte) b0;
+                        fBuffer[1] = (byte) b1;
+                        fBuffer[2] = (byte) b2;
                         fOffset = 3;
                         return out - offset;
                     }
                     invalidByte(3, 4, b2);
                 }
                 int b3 = -1;
-                if (++in < total) { 
-                    b3 = fBuffer[in] & 0x00FF; 
-                }
-                else {
+                if (++in < total) {
+                    b3 = fBuffer[in] & 0x00FF;
+                } else {
                     b3 = fInputStream.read();
                     if (b3 == -1) {
                         if (out > offset) {
-                            fBuffer[0] = (byte)b0;
-                            fBuffer[1] = (byte)b1;
-                            fBuffer[2] = (byte)b2;
+                            fBuffer[0] = (byte) b0;
+                            fBuffer[1] = (byte) b1;
+                            fBuffer[2] = (byte) b2;
                             fOffset = 3;
                             return out - offset;
                         }
@@ -455,10 +458,10 @@ public class UTF8Reader
                 }
                 if ((b3 & 0xC0) != 0x80) {
                     if (out > offset) {
-                        fBuffer[0] = (byte)b0;
-                        fBuffer[1] = (byte)b1;
-                        fBuffer[2] = (byte)b2;
-                        fBuffer[3] = (byte)b3;
+                        fBuffer[0] = (byte) b0;
+                        fBuffer[1] = (byte) b1;
+                        fBuffer[2] = (byte) b2;
+                        fBuffer[3] = (byte) b3;
                         fOffset = 4;
                         return out - offset;
                     }
@@ -478,15 +481,15 @@ public class UTF8Reader
                 int ls = 0xDC00 | ((yyyyyy << 6) & 0x03C0) | xxxxxx;
 
                 // set characters
-                ch[out++] = (char)hs;
-                ch[out++] = (char)ls;
+                ch[out++] = (char) hs;
+                ch[out++] = (char) ls;
                 count -= 2;
                 continue;
             }
 
             // error
             if (out > offset) {
-                fBuffer[0] = (byte)b0;
+                fBuffer[0] = (byte) b0;
                 fOffset = 1;
                 return out - offset;
             }
@@ -496,7 +499,7 @@ public class UTF8Reader
         // return number of characters converted
         if (DEBUG_READ) {
             if (log.isDebugEnabled())
-                log.debug("read(char[],"+offset+','+length+"): count="+count);
+                log.debug("read(char[]," + offset + ',' + length + "): count=" + count);
         }
         return count;
 
@@ -506,23 +509,20 @@ public class UTF8Reader
      * Skip characters.  This method will block until some characters are
      * available, an I/O error occurs, or the end of the stream is reached.
      *
-     * @param  n  The number of characters to skip
-     *
-     * @return    The number of characters actually skipped
-     *
-     * @exception  IOException  If an I/O error occurs
+     * @param n The number of characters to skip
+     * @return The number of characters actually skipped
+     * @throws IOException If an I/O error occurs
      */
     public long skip(long n) throws IOException {
 
         long remaining = n;
         final char[] ch = new char[fBuffer.length];
         do {
-            int length = ch.length < remaining ? ch.length : (int)remaining;
+            int length = ch.length < remaining ? ch.length : (int) remaining;
             int count = read(ch, 0, length);
             if (count > 0) {
                 remaining -= count;
-            }
-            else {
+            } else {
                 break;
             }
         } while (remaining > 0);
@@ -536,20 +536,19 @@ public class UTF8Reader
      * Tell whether this stream is ready to be read.
      *
      * @return True if the next read() is guaranteed not to block for input,
-     * false otherwise.  Note that returning false does not guarantee that the
-     * next read will block.
-     *
-     * @exception  IOException  If an I/O error occurs
+     *         false otherwise.  Note that returning false does not guarantee that the
+     *         next read will block.
+     * @throws IOException If an I/O error occurs
      */
     public boolean ready() throws IOException {
-	    return false;
+        return false;
     } // ready()
 
     /**
      * Tell whether this stream supports the mark() operation.
      */
     public boolean markSupported() {
-	    return false;
+        return false;
     } // markSupported()
 
     /**
@@ -557,18 +556,17 @@ public class UTF8Reader
      * will attempt to reposition the stream to this point.  Not all
      * character-input streams support the mark() operation.
      *
-     * @param  readAheadLimit  Limit on the number of characters that may be
-     *                         read while still preserving the mark.  After
-     *                         reading this many characters, attempting to
-     *                         reset the stream may fail.
-     *
-     * @exception  IOException  If the stream does not support mark(),
-     *                          or if some other I/O error occurs
+     * @param readAheadLimit Limit on the number of characters that may be
+     *                       read while still preserving the mark.  After
+     *                       reading this many characters, attempting to
+     *                       reset the stream may fail.
+     * @throws IOException If the stream does not support mark(),
+     *                     or if some other I/O error occurs
      */
     public void mark(int readAheadLimit) throws IOException {
-	throw new IOException(
+        throw new IOException(
                 Localizer.getMessage("jsp.error.xml.operationNotSupported",
-				     "mark()", "UTF-8"));
+                        "mark()", "UTF-8"));
     }
 
     /**
@@ -579,10 +577,10 @@ public class UTF8Reader
      * character-input streams support the reset() operation, and some support
      * reset() without supporting mark().
      *
-     * @exception  IOException  If the stream has not been marked,
-     *                          or if the mark has been invalidated,
-     *                          or if the stream does not support reset(),
-     *                          or if some other I/O error occurs
+     * @throws IOException If the stream has not been marked,
+     *                     or if the mark has been invalidated,
+     *                     or if the stream does not support reset(),
+     *                     or if some other I/O error occurs
      */
     public void reset() throws IOException {
         fOffset = 0;
@@ -594,7 +592,7 @@ public class UTF8Reader
      * ready(), mark(), or reset() invocations will throw an IOException.
      * Closing a previously-closed stream, however, has no effect.
      *
-     * @exception  IOException  If an I/O error occurs
+     * @throws IOException If an I/O error occurs
      */
     public void close() throws IOException {
         fInputStream.close();
@@ -604,33 +602,39 @@ public class UTF8Reader
     // Private methods
     //
 
-    /** Throws an exception for expected byte. */
+    /**
+     * Throws an exception for expected byte.
+     */
     private void expectedByte(int position, int count)
-        throws UTFDataFormatException {
+            throws UTFDataFormatException {
 
         throw new UTFDataFormatException(
                 Localizer.getMessage("jsp.error.xml.expectedByte",
-				     Integer.toString(position),
-				     Integer.toString(count)));
+                        Integer.toString(position),
+                        Integer.toString(count)));
 
     } // expectedByte(int,int,int)
 
-    /** Throws an exception for invalid byte. */
-    private void invalidByte(int position, int count, int c) 
-        throws UTFDataFormatException {
+    /**
+     * Throws an exception for invalid byte.
+     */
+    private void invalidByte(int position, int count, int c)
+            throws UTFDataFormatException {
 
         throw new UTFDataFormatException(
                 Localizer.getMessage("jsp.error.xml.invalidByte",
-				     Integer.toString(position),
-				     Integer.toString(count)));
+                        Integer.toString(position),
+                        Integer.toString(count)));
     } // invalidByte(int,int,int,int)
 
-    /** Throws an exception for invalid surrogate bits. */
+    /**
+     * Throws an exception for invalid surrogate bits.
+     */
     private void invalidSurrogate(int uuuuu) throws UTFDataFormatException {
-        
+
         throw new UTFDataFormatException(
                 Localizer.getMessage("jsp.error.xml.invalidHighSurrogate",
-				     Integer.toHexString(uuuuu)));
+                        Integer.toHexString(uuuuu)));
     } // invalidSurrogate(int)
 
 } // class UTF8Reader

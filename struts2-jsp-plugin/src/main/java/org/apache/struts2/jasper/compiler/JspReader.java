@@ -17,8 +17,8 @@
 
 package org.apache.struts2.jasper.compiler;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.opensymphony.xwork2.util.logging.Logger;
+import com.opensymphony.xwork2.util.logging.LoggerFactory;
 import org.apache.struts2.jasper.JasperException;
 import org.apache.struts2.jasper.JspCompilationContext;
 
@@ -53,7 +53,7 @@ class JspReader {
     /**
      * Logger.
      */
-    private Log log = LogFactory.getLog(JspReader.class);
+    private Logger log = LoggerFactory.getLogger(JspReader.class);
 
     /**
      * The current spot in the file.
@@ -100,14 +100,14 @@ class JspReader {
     /**
      * Constructor.
      *
-     * @param ctxt The compilation context
-     * @param fname The file name
+     * @param ctxt     The compilation context
+     * @param fname    The file name
      * @param encoding The file encoding
-     * @param jarFile ?
-     * @param err The error dispatcher
-     * @throws JasperException If a Jasper-internal error occurs
+     * @param jarFile  ?
+     * @param err      The error dispatcher
+     * @throws JasperException       If a Jasper-internal error occurs
      * @throws FileNotFoundException If the JSP file is not found (or is unreadable)
-     * @throws IOException If an IO-level error occurs, e.g. reading the file
+     * @throws IOException           If an IO-level error occurs, e.g. reading the file
      */
     public JspReader(JspCompilationContext ctxt,
                      String fname,
@@ -117,8 +117,8 @@ class JspReader {
             throws JasperException, FileNotFoundException, IOException {
 
         this(ctxt, fname, encoding,
-             JspUtil.getReader(fname, encoding, jarFile, ctxt, err),
-             err);
+                JspUtil.getReader(fname, encoding, jarFile, ctxt, err),
+                err);
     }
 
     /**
@@ -142,13 +142,13 @@ class JspReader {
     }
 
     /**
-     * @return JSP compilation context with which this JspReader is 
-     * associated
+     * @return JSP compilation context with which this JspReader is
+     *         associated
      */
     JspCompilationContext getJspCompilationContext() {
         return context;
     }
-    
+
     /**
      * Returns the file at the given position in the list.
      *
@@ -158,16 +158,16 @@ class JspReader {
     String getFile(final int fileid) {
         return (String) sourceFiles.get(fileid);
     }
-       
+
     /**
      * Checks if the current file has more input.
      *
      * @return True if more reading is possible
      * @throws JasperException if an error occurs
-     */ 
+     */
     boolean hasMoreInput() throws JasperException {
         if (current.cursor >= current.stream.length) {
-            if (singleFile) return false; 
+            if (singleFile) return false;
             while (popFile()) {
                 if (current.cursor < current.stream.length) return true;
             }
@@ -175,15 +175,15 @@ class JspReader {
         }
         return true;
     }
-    
+
     int nextChar() throws JasperException {
         if (!hasMoreInput())
             return -1;
-        
+
         int ch = current.stream[current.cursor];
 
         current.cursor++;
-        
+
         if (ch == '\n') {
             current.line++;
             current.col = 0;
@@ -244,10 +244,11 @@ class JspReader {
 
     /**
      * search the stream for a match to a string
+     *
      * @param string The string to match
      * @return <strong>true</strong> is one is found, the current position
      *         in stream is positioned after the search string, <strong>
-     *               false</strong> otherwise, position in stream unchanged.
+     *         false</strong> otherwise, position in stream unchanged.
      */
     boolean matches(String string) throws JasperException {
         Mark mark = mark();
@@ -277,18 +278,17 @@ class JspReader {
     }
 
     boolean matchesETagWithoutLessThan(String tagName)
-        throws JasperException
-    {
-       Mark mark = mark();
+            throws JasperException {
+        Mark mark = mark();
 
-       if (!matches("/" + tagName))
-           return false;
-       skipSpaces();
-       if (nextChar() == '>')
-           return true;
+        if (!matches("/" + tagName))
+            return false;
+        skipSpaces();
+        if (nextChar() == '>')
+            return true;
 
-       reset(mark);
-       return false;
+        reset(mark);
+        return false;
     }
 
 
@@ -298,15 +298,14 @@ class JspReader {
      * characters are skipped.  If not, false is returned and the
      * position is restored to where we were before.
      */
-    boolean matchesOptionalSpacesFollowedBy( String s )
-        throws JasperException
-    {
+    boolean matchesOptionalSpacesFollowedBy(String s)
+            throws JasperException {
         Mark mark = mark();
 
         skipSpaces();
-        boolean result = matches( s );
-        if( !result ) {
-            reset( mark );
+        boolean result = matches(s);
+        if (!result) {
+            reset(mark);
         }
 
         return result;
@@ -335,12 +334,12 @@ class JspReader {
         int limlen = limit.length();
         int ch;
 
-    skip:
-        for (ret = mark(), ch = nextChar() ; ch != -1 ;
-                 ret = mark(), ch = nextChar()) {
+        skip:
+        for (ret = mark(), ch = nextChar(); ch != -1;
+             ret = mark(), ch = nextChar()) {
             if (ch == limit.charAt(0)) {
                 Mark restart = mark();
-                for (int i = 1 ; i < limlen ; i++) {
+                for (int i = 1; i < limlen; i++) {
                     if (peekChar() == limit.charAt(i))
                         nextChar();
                     else {
@@ -369,15 +368,14 @@ class JspReader {
         int limlen = limit.length();
         int ch;
         int prev = 'x';        // Doesn't matter
-        
-    skip:
-        for (ret = mark(), ch = nextChar() ; ch != -1 ;
-                 ret = mark(), prev = ch, ch = nextChar()) {            
+
+        skip:
+        for (ret = mark(), ch = nextChar(); ch != -1;
+             ret = mark(), prev = ch, ch = nextChar()) {
             if (ch == '\\' && prev == '\\') {
                 ch = 0;                // Double \ is not an escape char anymore
-            }
-            else if (ch == limit.charAt(0) && prev != '\\') {
-                for (int i = 1 ; i < limlen ; i++) {
+            } else if (ch == limit.charAt(0) && prev != '\\') {
+                for (int i = 1; i < limlen; i++) {
                     if (peekChar() == limit.charAt(i))
                         nextChar();
                     else
@@ -388,14 +386,14 @@ class JspReader {
         }
         return null;
     }
-    
+
     /**
      * Skip until the given end tag is matched in the stream.
      * When returned, the context is positioned past the end of the tag.
      *
      * @param tag The name of the tag whose ETag (</tag>) to match.
      * @return A non-null <code>Mark</code> instance (positioned immediately
-     *               before the ETag) if found, <strong>null</strong> otherwise.
+     *         before the ETag) if found, <strong>null</strong> otherwise.
      */
     Mark skipUntilETag(String tag) throws JasperException {
         Mark ret = skipUntil("</" + tag);
@@ -423,13 +421,13 @@ class JspReader {
         StringBuffer stringBuffer = new StringBuffer();
         skipSpaces();
         stringBuffer.setLength(0);
-        
+
         if (!hasMoreInput()) {
             return "";
         }
 
         int ch = peekChar();
-        
+
         if (quoted) {
             if (ch == '"' || ch == '\'') {
 
@@ -437,8 +435,8 @@ class JspReader {
                 // Consume the open quote: 
                 ch = nextChar();
                 for (ch = nextChar(); ch != -1 && ch != endQuote;
-                         ch = nextChar()) {
-                    if (ch == '\\') 
+                     ch = nextChar()) {
+                    if (ch == '\\')
                         ch = nextChar();
                     stringBuffer.append((char) ch);
                 }
@@ -457,7 +455,7 @@ class JspReader {
                     // Take care of the quoting here.
                     if (ch == '\\') {
                         if (peekChar() == '"' || peekChar() == '\'' ||
-                               peekChar() == '>' || peekChar() == '%')
+                                peekChar() == '>' || peekChar() == '%')
                             ch = nextChar();
                     }
                     stringBuffer.append((char) ch);
@@ -477,11 +475,9 @@ class JspReader {
      * Gets the URL for the given path name.
      *
      * @param path Path name
-     *
      * @return URL for the given path name.
-     *
-     * @exception MalformedURLException if the path name is not given in 
-     * the correct form
+     * @throws MalformedURLException if the path name is not given in
+     *                               the correct form
      */
     URL getResource(String path) throws MalformedURLException {
         return context.getResource(path);
@@ -496,7 +492,7 @@ class JspReader {
      * @return A boolean.
      */
     private boolean isDelimiter() throws JasperException {
-        if (! isSpace()) {
+        if (!isSpace()) {
             int ch = peekChar();
             // Look for a single-char work delimiter:
             if (ch == '=' || ch == '>' || ch == '"' || ch == '\''
@@ -539,7 +535,7 @@ class JspReader {
 
         return sourceFiles.size() - 1;
     }
-    
+
 
     /**
      * Unregister the source file.
@@ -563,9 +559,9 @@ class JspReader {
      * Push a file (and its associated Stream) on the file stack.  THe
      * current position in the current file is remembered.
      */
-    private void pushFile(String file, String encoding, 
-                           InputStreamReader reader) 
-                throws JasperException, FileNotFoundException {
+    private void pushFile(String file, String encoding,
+                          InputStreamReader reader)
+            throws JasperException, FileNotFoundException {
 
         // Register the file
         String longName = file;
@@ -574,11 +570,11 @@ class JspReader {
 
         if (fileid == -1) {
             // Bugzilla 37407: http://issues.apache.org/bugzilla/show_bug.cgi?id=37407
-            if(reader != null) {
+            if (reader != null) {
                 try {
                     reader.close();
                 } catch (Exception any) {
-                    if(log.isDebugEnabled()) {
+                    if (log.isDebugEnabled()) {
                         log.debug("Exception closing reader: ", any);
                     }
                 }
@@ -592,15 +588,15 @@ class JspReader {
         try {
             CharArrayWriter caw = new CharArrayWriter();
             char buf[] = new char[1024];
-            for (int i = 0 ; (i = reader.read(buf)) != -1 ;)
+            for (int i = 0; (i = reader.read(buf)) != -1;)
                 caw.write(buf, 0, i);
             caw.close();
             if (current == null) {
-                current = new Mark(this, caw.toCharArray(), fileid, 
-                                   getFile(fileid), master, encoding);
+                current = new Mark(this, caw.toCharArray(), fileid,
+                        getFile(fileid), master, encoding);
             } else {
                 current.pushStream(caw.toCharArray(), fileid, getFile(fileid),
-                                   longName, encoding);
+                        longName, encoding);
             }
         } catch (Throwable ex) {
             log.error("Exception parsing file ", ex);
@@ -612,7 +608,7 @@ class JspReader {
                 try {
                     reader.close();
                 } catch (Exception any) {
-                    if(log.isDebugEnabled()) {
+                    if (log.isDebugEnabled()) {
                         log.debug("Exception closing reader: ", any);
                     }
                 }
@@ -624,6 +620,7 @@ class JspReader {
      * Pop a file from the file stack.  The field "current" is retored
      * to the value to point to the previous files, if any, and is set
      * to null otherwise.
+     *
      * @return true is there is a previous file on the stack.
      *         false otherwise.
      */

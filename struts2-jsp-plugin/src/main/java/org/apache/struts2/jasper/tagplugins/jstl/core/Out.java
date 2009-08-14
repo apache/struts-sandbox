@@ -23,21 +23,21 @@ import org.apache.struts2.jasper.compiler.tagplugin.TagPluginContext;
 
 
 public final class Out implements TagPlugin {
-    
+
     public void doTag(TagPluginContext ctxt) {
-        
+
         //these two data member are to indicate 
         //whether the corresponding attribute is specified
-        boolean hasDefault=false, hasEscapeXml=false;
+        boolean hasDefault = false, hasEscapeXml = false;
         hasDefault = ctxt.isAttributeSpecified("default");
         hasEscapeXml = ctxt.isAttributeSpecified("escapeXml");
-        
+
         //strValName, strEscapeXmlName & strDefName are two variables' name 
         //standing for value, escapeXml and default attribute
         String strValName = ctxt.getTemporaryVariableName();
         String strDefName = ctxt.getTemporaryVariableName();
         String strEscapeXmlName = ctxt.getTemporaryVariableName();
-        
+
         //according to the tag file, the value attribute is mandatory.
         ctxt.generateJavaSource("String " + strValName + " = null;");
         ctxt.generateJavaSource("if(");
@@ -47,11 +47,11 @@ public final class Out implements TagPlugin {
         ctxt.generateAttribute("value");
         ctxt.generateJavaSource(").toString();");
         ctxt.generateJavaSource("}");
-        
+
         //initiate the strDefName with null.
         //if the default has been specified, then assign the value to it;
         ctxt.generateJavaSource("String " + strDefName + " = null;\n");
-        if(hasDefault){
+        if (hasDefault) {
             ctxt.generateJavaSource("if(");
             ctxt.generateAttribute("default");
             ctxt.generateJavaSource(" != null){");
@@ -60,18 +60,18 @@ public final class Out implements TagPlugin {
             ctxt.generateJavaSource(").toString();");
             ctxt.generateJavaSource("}");
         }
-        
+
         //initiate the strEscapeXmlName with true;
         //if the escapeXml is specified, assign the value to it;
         ctxt.generateJavaSource("boolean " + strEscapeXmlName + " = true;");
-        if(hasEscapeXml){
+        if (hasEscapeXml) {
             ctxt.generateJavaSource(strEscapeXmlName + " = Boolean.parseBoolean((");
             ctxt.generateAttribute("default");
             ctxt.generateJavaSource(").toString());");
         }
-        
+
         //main part. 
-        ctxt.generateJavaSource("if(null != " + strValName +"){");
+        ctxt.generateJavaSource("if(null != " + strValName + "){");
         ctxt.generateJavaSource("    if(" + strEscapeXmlName + "){");
         ctxt.generateJavaSource("        " + strValName + " = org.apache.struts2.jasper.tagplugins.jstl.Util.escapeXml(" + strValName + ");");
         ctxt.generateJavaSource("    }");
@@ -85,6 +85,6 @@ public final class Out implements TagPlugin {
         ctxt.generateJavaSource("    }else{");
         ctxt.generateBody();
         ctxt.generateJavaSource("    }");
-        ctxt.generateJavaSource("}");   
+        ctxt.generateJavaSource("}");
     }
 }

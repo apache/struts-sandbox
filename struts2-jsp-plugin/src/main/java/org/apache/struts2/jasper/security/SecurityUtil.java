@@ -22,21 +22,21 @@ package org.apache.struts2.jasper.security;
  * @author Jean-Francois Arcand
  */
 
-public final class SecurityUtil{
-    
-    private static boolean packageDefinitionEnabled =  
-         System.getProperty("package.definition") == null ? false : true;
-    
+public final class SecurityUtil {
+
+    private static boolean packageDefinitionEnabled =
+            System.getProperty("package.definition") == null ? false : true;
+
     /**
      * Return the <code>SecurityManager</code> only if Security is enabled AND
      * package protection mechanism is enabled.
      */
-    public static boolean isPackageProtectionEnabled(){
-        if (packageDefinitionEnabled && System.getSecurityManager() !=  null){
+    public static boolean isPackageProtectionEnabled() {
+        if (packageDefinitionEnabled && System.getSecurityManager() != null) {
             return true;
         }
         return false;
     }
-    
-    
+
+
 }

@@ -32,7 +32,7 @@ import java.util.jar.JarFile;
 
 /**
  * Controller for the parsing of a JSP page.
- * <p>
+ * <p/>
  * The same ParserController instance is used for a JSP page and any JSP
  * segments included by it (via an include directive), where each segment may
  * be provided in standard or XML syntax. This class selects and invokes the
@@ -59,7 +59,7 @@ class ParserController implements TagConstants {
      * for include directives that refer to relative paths.
      */
     private Stack baseDirStack = new Stack();
-    
+
     private boolean isEncodingSpecifiedInProlog;
 
     private String sourceEnc;
@@ -72,17 +72,17 @@ class ParserController implements TagConstants {
      * Constructor
      */
     public ParserController(JspCompilationContext ctxt, Compiler compiler) {
-        this.ctxt = ctxt; 
-	this.compiler = compiler;
-	this.err = compiler.getErrorDispatcher();
+        this.ctxt = ctxt;
+        this.compiler = compiler;
+        this.err = compiler.getErrorDispatcher();
     }
 
-    public JspCompilationContext getJspCompilationContext () {
-	return ctxt;
+    public JspCompilationContext getJspCompilationContext() {
+        return ctxt;
     }
 
-    public Compiler getCompiler () {
-	return compiler;
+    public Compiler getCompiler() {
+        return compiler;
     }
 
     /**
@@ -91,11 +91,11 @@ class ParserController implements TagConstants {
      * @param inFileName The path to the JSP page or tag file to be parsed.
      */
     public Node.Nodes parse(String inFileName)
-	        throws FileNotFoundException, JasperException, IOException {
-	// If we're parsing a packaged tag file or a resource included by it
-	// (using an include directive), ctxt.getTagFileJar() returns the 
-	// JAR file from which to read the tag file or included resource,
-	// respectively.
+            throws FileNotFoundException, JasperException, IOException {
+        // If we're parsing a packaged tag file or a resource included by it
+        // (using an include directive), ctxt.getTagFileJar() returns the
+        // JAR file from which to read the tag file or included resource,
+        // respectively.
         isTagFile = ctxt.isTagFile();
         directiveOnly = false;
         return doParse(inFileName, null, ctxt.getTagFileJarUrl());
@@ -105,13 +105,13 @@ class ParserController implements TagConstants {
      * Processes an include directive with the given path.
      *
      * @param inFileName The path to the resource to be included.
-     * @param parent The parent node of the include directive.
-     * @param jarFile The JAR file from which to read the included resource,
-     * or null of the included resource is to be read from the filesystem
+     * @param parent     The parent node of the include directive.
+     * @param jarFile    The JAR file from which to read the included resource,
+     *                   or null of the included resource is to be read from the filesystem
      */
     public Node.Nodes parse(String inFileName, Node parent,
-			    URL jarFileUrl)
-	        throws FileNotFoundException, JasperException, IOException {
+                            URL jarFileUrl)
+            throws FileNotFoundException, JasperException, IOException {
         // For files that are statically included, isTagfile and directiveOnly
         // remain unchanged.
         return doParse(inFileName, parent, jarFileUrl);
@@ -120,19 +120,19 @@ class ParserController implements TagConstants {
     /**
      * Extracts tag file directive information from the tag file with the
      * given name.
-     *
-     * This is invoked by the compiler 
+     * <p/>
+     * This is invoked by the compiler
      *
      * @param inFileName The name of the tag file to be parsed.
      */
     public Node.Nodes parseTagFileDirectives(String inFileName)
-	        throws FileNotFoundException, JasperException, IOException {
+            throws FileNotFoundException, JasperException, IOException {
         boolean isTagFileSave = isTagFile;
         boolean directiveOnlySave = directiveOnly;
         isTagFile = true;
         directiveOnly = true;
         Node.Nodes page = doParse(inFileName, null,
-                             (URL) ctxt.getTagFileJarUrls().get(inFileName));
+                (URL) ctxt.getTagFileJarUrls().get(inFileName));
         directiveOnly = directiveOnlySave;
         isTagFile = isTagFileSave;
         return page;
@@ -141,97 +141,98 @@ class ParserController implements TagConstants {
     /**
      * Parses the JSP page or tag file with the given path name.
      *
-     * @param inFileName The name of the JSP page or tag file to be parsed.
-     * @param parent The parent node (non-null when processing an include
-     * directive)
-     * @param isTagFile true if file to be parsed is tag file, and false if it
-     * is a regular JSP page
+     * @param inFileName     The name of the JSP page or tag file to be parsed.
+     * @param parent         The parent node (non-null when processing an include
+     *                       directive)
+     * @param isTagFile      true if file to be parsed is tag file, and false if it
+     *                       is a regular JSP page
      * @param directivesOnly true if the file to be parsed is a tag file and
-     * we are only interested in the directives needed for constructing a
-     * TagFileInfo.
-     * @param jarFile The JAR file from which to read the JSP page or tag file,
-     * or null if the JSP page or tag file is to be read from the filesystem
+     *                       we are only interested in the directives needed for constructing a
+     *                       TagFileInfo.
+     * @param jarFile        The JAR file from which to read the JSP page or tag file,
+     *                       or null if the JSP page or tag file is to be read from the filesystem
      */
     private Node.Nodes doParse(String inFileName,
                                Node parent,
                                URL jarFileUrl)
-	        throws FileNotFoundException, JasperException, IOException {
+            throws FileNotFoundException, JasperException, IOException {
 
-	Node.Nodes parsedPage = null;
-	isEncodingSpecifiedInProlog = false;
-	isDefaultPageEncoding = false;
+        Node.Nodes parsedPage = null;
+        isEncodingSpecifiedInProlog = false;
+        isDefaultPageEncoding = false;
 
-	JarFile jarFile = getJarFile(jarFileUrl);
-	String absFileName = resolveFileName(inFileName);
-	String jspConfigPageEnc = getJspConfigPageEncoding(absFileName);
+        JarFile jarFile = getJarFile(jarFileUrl);
+        String absFileName = resolveFileName(inFileName);
+        String jspConfigPageEnc = getJspConfigPageEncoding(absFileName);
 
-	// Figure out what type of JSP document and encoding type we are
-	// dealing with
-	determineSyntaxAndEncoding(absFileName, jarFile, jspConfigPageEnc);
+        // Figure out what type of JSP document and encoding type we are
+        // dealing with
+        determineSyntaxAndEncoding(absFileName, jarFile, jspConfigPageEnc);
 
-	if (parent != null) {
-	    // Included resource, add to dependent list
-	    compiler.getPageInfo().addDependant(absFileName);
-	}
+        if (parent != null) {
+            // Included resource, add to dependent list
+            compiler.getPageInfo().addDependant(absFileName);
+        }
 
-	if (isXml && isEncodingSpecifiedInProlog) {
-	    /*
-	     * Make sure the encoding explicitly specified in the XML
-	     * prolog (if any) matches that in the JSP config element
-	     * (if any), treating "UTF-16", "UTF-16BE", and "UTF-16LE" as
-	     * identical.
-	     */
-	    if (jspConfigPageEnc != null && !jspConfigPageEnc.equals(sourceEnc)
-		        && (!jspConfigPageEnc.startsWith("UTF-16")
-			    || !sourceEnc.startsWith("UTF-16"))) {
-		err.jspError("jsp.error.prolog_config_encoding_mismatch",
-			     sourceEnc, jspConfigPageEnc);
-	    }
-	}
+        if (isXml && isEncodingSpecifiedInProlog) {
+            /*
+            * Make sure the encoding explicitly specified in the XML
+            * prolog (if any) matches that in the JSP config element
+            * (if any), treating "UTF-16", "UTF-16BE", and "UTF-16LE" as
+            * identical.
+            */
+            if (jspConfigPageEnc != null && !jspConfigPageEnc.equals(sourceEnc)
+                    && (!jspConfigPageEnc.startsWith("UTF-16")
+                    || !sourceEnc.startsWith("UTF-16"))) {
+                err.jspError("jsp.error.prolog_config_encoding_mismatch",
+                        sourceEnc, jspConfigPageEnc);
+            }
+        }
 
-	// Dispatch to the appropriate parser
-	if (isXml) {
-	    // JSP document (XML syntax)
+        // Dispatch to the appropriate parser
+        if (isXml) {
+            // JSP document (XML syntax)
             // InputStream for jspx page is created and properly closed in
             // JspDocumentParser.
             parsedPage = JspDocumentParser.parse(this, absFileName,
-                                                 jarFile, parent,
-                                                 isTagFile, directiveOnly,
-                                                 sourceEnc,
-                                                 jspConfigPageEnc,
-                                                 isEncodingSpecifiedInProlog);
-	} else {
-	    // Standard syntax
-	    InputStreamReader inStreamReader = null;
-	    try {
-		inStreamReader = JspUtil.getReader(absFileName, sourceEnc,
-						   jarFile, ctxt, err);
-		JspReader jspReader = new JspReader(ctxt, absFileName,
-						    sourceEnc, inStreamReader,
-						    err);
+                    jarFile, parent,
+                    isTagFile, directiveOnly,
+                    sourceEnc,
+                    jspConfigPageEnc,
+                    isEncodingSpecifiedInProlog);
+        } else {
+            // Standard syntax
+            InputStreamReader inStreamReader = null;
+            try {
+                inStreamReader = JspUtil.getReader(absFileName, sourceEnc,
+                        jarFile, ctxt, err);
+                JspReader jspReader = new JspReader(ctxt, absFileName,
+                        sourceEnc, inStreamReader,
+                        err);
                 parsedPage = Parser.parse(this, jspReader, parent, isTagFile,
-					  directiveOnly, jarFileUrl,
-					  sourceEnc, jspConfigPageEnc,
-					  isDefaultPageEncoding);
+                        directiveOnly, jarFileUrl,
+                        sourceEnc, jspConfigPageEnc,
+                        isDefaultPageEncoding);
             } finally {
-		if (inStreamReader != null) {
-		    try {
-			inStreamReader.close();
-		    } catch (Exception any) {
-		    }
-		}
-	    }
-	}
+                if (inStreamReader != null) {
+                    try {
+                        inStreamReader.close();
+                    } catch (Exception any) {
+                    }
+                }
+            }
+        }
 
-	if (jarFile != null) {
-	    try {
-		jarFile.close();
-	    } catch (Throwable t) {}
-	}
+        if (jarFile != null) {
+            try {
+                jarFile.close();
+            } catch (Throwable t) {
+            }
+        }
 
-	baseDirStack.pop();
+        baseDirStack.pop();
 
-	return parsedPage;
+        return parsedPage;
     }
 
     /*
@@ -247,10 +248,10 @@ class ParserController implements TagConstants {
     private String getJspConfigPageEncoding(String absFileName)
             throws JasperException {
 
-	JspConfig jspConfig = ctxt.getOptions().getJspConfig();
-	JspConfig.JspProperty jspProperty
-	    = jspConfig.findJspProperty(absFileName);
-	return jspProperty.getPageEncoding();
+        JspConfig jspConfig = ctxt.getOptions().getJspConfig();
+        JspConfig.JspProperty jspProperty
+                = jspConfig.findJspProperty(absFileName);
+        return jspProperty.getPageEncoding();
     }
 
     /**
@@ -259,152 +260,152 @@ class ParserController implements TagConstants {
      * instance variables, respectively.
      */
     private void determineSyntaxAndEncoding(String absFileName,
-					    JarFile jarFile,
-					    String jspConfigPageEnc)
-	        throws JasperException, IOException {
+                                            JarFile jarFile,
+                                            String jspConfigPageEnc)
+            throws JasperException, IOException {
 
-	isXml = false;
+        isXml = false;
 
-	/*
-	 * 'true' if the syntax (XML or standard) of the file is given
-	 * from external information: either via a JSP configuration element,
-	 * the ".jspx" suffix, or the enclosing file (for included resources)
-	 */
-	boolean isExternal = false;
+        /*
+       * 'true' if the syntax (XML or standard) of the file is given
+       * from external information: either via a JSP configuration element,
+       * the ".jspx" suffix, or the enclosing file (for included resources)
+       */
+        boolean isExternal = false;
 
-	/*
-	 * Indicates whether we need to revert from temporary usage of
-	 * "ISO-8859-1" back to "UTF-8"
-	 */
-	boolean revert = false;
+        /*
+       * Indicates whether we need to revert from temporary usage of
+       * "ISO-8859-1" back to "UTF-8"
+       */
+        boolean revert = false;
 
         JspConfig jspConfig = ctxt.getOptions().getJspConfig();
         JspConfig.JspProperty jspProperty = jspConfig.findJspProperty(
-                                                                absFileName);
+                absFileName);
         if (jspProperty.isXml() != null) {
             // If <is-xml> is specified in a <jsp-property-group>, it is used.
             isXml = JspUtil.booleanValue(jspProperty.isXml());
-	    isExternal = true;
-	} else if (absFileName.endsWith(".jspx")
-		   || absFileName.endsWith(".tagx")) {
-	    isXml = true;
-	    isExternal = true;
-	}
-	
-	if (isExternal && !isXml) {
-	    // JSP (standard) syntax. Use encoding specified in jsp-config
-	    // if provided.
-	    sourceEnc = jspConfigPageEnc;
-	    if (sourceEnc != null) {
-		return;
-	    }
-	    // We don't know the encoding
-	    sourceEnc = "ISO-8859-1";
-	} else {
-	    // XML syntax or unknown, (auto)detect encoding ...
-	    Object[] ret = XMLEncodingDetector.getEncoding(absFileName,
-							   jarFile, ctxt, err);
-	    sourceEnc = (String) ret[0];
-	    if (((Boolean) ret[1]).booleanValue()) {
-		isEncodingSpecifiedInProlog = true;
-	    }
+            isExternal = true;
+        } else if (absFileName.endsWith(".jspx")
+                || absFileName.endsWith(".tagx")) {
+            isXml = true;
+            isExternal = true;
+        }
 
-	    if (!isXml && sourceEnc.equals("UTF-8")) {
-		/*
-		 * We don't know if we're dealing with XML or standard syntax.
-		 * Therefore, we need to check to see if the page contains
-		 * a <jsp:root> element.
-		 *
-		 * We need to be careful, because the page may be encoded in
-		 * ISO-8859-1 (or something entirely different), and may
-		 * contain byte sequences that will cause a UTF-8 converter to
-		 * throw exceptions. 
-		 *
-		 * It is safe to use a source encoding of ISO-8859-1 in this
-		 * case, as there are no invalid byte sequences in ISO-8859-1,
-		 * and the byte/character sequences we're looking for (i.e.,
-		 * <jsp:root>) are identical in either encoding (both UTF-8
-		 * and ISO-8859-1 are extensions of ASCII).
-		 */
-		sourceEnc = "ISO-8859-1";
-		revert = true;
-	    }
-	}
+        if (isExternal && !isXml) {
+            // JSP (standard) syntax. Use encoding specified in jsp-config
+            // if provided.
+            sourceEnc = jspConfigPageEnc;
+            if (sourceEnc != null) {
+                return;
+            }
+            // We don't know the encoding
+            sourceEnc = "ISO-8859-1";
+        } else {
+            // XML syntax or unknown, (auto)detect encoding ...
+            Object[] ret = XMLEncodingDetector.getEncoding(absFileName,
+                    jarFile, ctxt, err);
+            sourceEnc = (String) ret[0];
+            if (((Boolean) ret[1]).booleanValue()) {
+                isEncodingSpecifiedInProlog = true;
+            }
 
-	if (isXml) {
-	    // (This implies 'isExternal' is TRUE.)
-	    // We know we're dealing with a JSP document (via JSP config or
-	    // ".jspx" suffix), so we're done.
-	    return;
-	}
+            if (!isXml && sourceEnc.equals("UTF-8")) {
+                /*
+             * We don't know if we're dealing with XML or standard syntax.
+             * Therefore, we need to check to see if the page contains
+             * a <jsp:root> element.
+             *
+             * We need to be careful, because the page may be encoded in
+             * ISO-8859-1 (or something entirely different), and may
+             * contain byte sequences that will cause a UTF-8 converter to
+             * throw exceptions.
+             *
+             * It is safe to use a source encoding of ISO-8859-1 in this
+             * case, as there are no invalid byte sequences in ISO-8859-1,
+             * and the byte/character sequences we're looking for (i.e.,
+             * <jsp:root>) are identical in either encoding (both UTF-8
+             * and ISO-8859-1 are extensions of ASCII).
+             */
+                sourceEnc = "ISO-8859-1";
+                revert = true;
+            }
+        }
 
-	/*
-	 * At this point, 'isExternal' or 'isXml' is FALSE.
-	 * Search for jsp:root action, in order to determine if we're dealing 
-	 * with XML or standard syntax (unless we already know what we're 
-	 * dealing with, i.e., when 'isExternal' is TRUE and 'isXml' is FALSE).
-	 * No check for XML prolog, since nothing prevents a page from
-	 * outputting XML and still using JSP syntax (in this case, the 
-	 * XML prolog is treated as template text).
-	 */
-	JspReader jspReader = null;
-	try {
-	    jspReader = new JspReader(ctxt, absFileName, sourceEnc, jarFile,
-				      err);
-	} catch (FileNotFoundException ex) {
-	    throw new JasperException(ex);
-	}
+        if (isXml) {
+            // (This implies 'isExternal' is TRUE.)
+            // We know we're dealing with a JSP document (via JSP config or
+            // ".jspx" suffix), so we're done.
+            return;
+        }
+
+        /*
+       * At this point, 'isExternal' or 'isXml' is FALSE.
+       * Search for jsp:root action, in order to determine if we're dealing
+       * with XML or standard syntax (unless we already know what we're
+       * dealing with, i.e., when 'isExternal' is TRUE and 'isXml' is FALSE).
+       * No check for XML prolog, since nothing prevents a page from
+       * outputting XML and still using JSP syntax (in this case, the
+       * XML prolog is treated as template text).
+       */
+        JspReader jspReader = null;
+        try {
+            jspReader = new JspReader(ctxt, absFileName, sourceEnc, jarFile,
+                    err);
+        } catch (FileNotFoundException ex) {
+            throw new JasperException(ex);
+        }
         jspReader.setSingleFile(true);
         Mark startMark = jspReader.mark();
-	if (!isExternal) {
-	    jspReader.reset(startMark);
-	    if (hasJspRoot(jspReader)) {
-	        isXml = true;
-		if (revert) sourceEnc = "UTF-8";
-		return;
-	    } else {
-	        isXml = false;
-	    }
-	}
+        if (!isExternal) {
+            jspReader.reset(startMark);
+            if (hasJspRoot(jspReader)) {
+                isXml = true;
+                if (revert) sourceEnc = "UTF-8";
+                return;
+            } else {
+                isXml = false;
+            }
+        }
 
-	/*
-	 * At this point, we know we're dealing with JSP syntax.
-	 * If an XML prolog is provided, it's treated as template text.
-	 * Determine the page encoding from the page directive, unless it's
-	 * specified via JSP config.
-	 */
-	sourceEnc = jspConfigPageEnc;
-	if (sourceEnc == null) {
-	    sourceEnc = getPageEncodingForJspSyntax(jspReader, startMark);
-	    if (sourceEnc == null) {
-		// Default to "ISO-8859-1" per JSP spec
-		sourceEnc = "ISO-8859-1";
-		isDefaultPageEncoding = true;
-	    }
-	}
+        /*
+       * At this point, we know we're dealing with JSP syntax.
+       * If an XML prolog is provided, it's treated as template text.
+       * Determine the page encoding from the page directive, unless it's
+       * specified via JSP config.
+       */
+        sourceEnc = jspConfigPageEnc;
+        if (sourceEnc == null) {
+            sourceEnc = getPageEncodingForJspSyntax(jspReader, startMark);
+            if (sourceEnc == null) {
+                // Default to "ISO-8859-1" per JSP spec
+                sourceEnc = "ISO-8859-1";
+                isDefaultPageEncoding = true;
+            }
+        }
     }
-    
-    /*
-     * Determines page source encoding for page or tag file in JSP syntax,
-     * by reading (in this order) the value of the 'pageEncoding' page
-     * directive attribute, or the charset value of the 'contentType' page
-     * directive attribute.
-     *
-     * @return The page encoding, or null if not found
-     */
-    private String getPageEncodingForJspSyntax(JspReader jspReader,
-					       Mark startMark)
-	        throws JasperException {
 
-	String encoding = null;
+    /*
+    * Determines page source encoding for page or tag file in JSP syntax,
+    * by reading (in this order) the value of the 'pageEncoding' page
+    * directive attribute, or the charset value of the 'contentType' page
+    * directive attribute.
+    *
+    * @return The page encoding, or null if not found
+    */
+    private String getPageEncodingForJspSyntax(JspReader jspReader,
+                                               Mark startMark)
+            throws JasperException {
+
+        String encoding = null;
         String saveEncoding = null;
 
         jspReader.reset(startMark);
 
-	/*
-	 * Determine page encoding from directive of the form <%@ page %>,
-	 * <%@ tag %>, <jsp:directive.page > or <jsp:directive.tag >.
-	 */
+        /*
+       * Determine page encoding from directive of the form <%@ page %>,
+       * <%@ tag %>, <jsp:directive.page > or <jsp:directive.tag >.
+       */
         while (true) {
             if (jspReader.skipUntil("<") == null) {
                 break;
@@ -419,36 +420,35 @@ class ParserController implements TagConstants {
             }
             boolean isDirective = jspReader.matches("%@");
             if (isDirective) {
-	        jspReader.skipSpaces();
-            }
-            else {
+                jspReader.skipSpaces();
+            } else {
                 isDirective = jspReader.matches("jsp:directive.");
             }
             if (!isDirective) {
                 continue;
             }
 
-	    // compare for "tag ", so we don't match "taglib"
-	    if (jspReader.matches("tag ") || jspReader.matches("page")) {
+            // compare for "tag ", so we don't match "taglib"
+            if (jspReader.matches("tag ") || jspReader.matches("page")) {
 
-		jspReader.skipSpaces();
+                jspReader.skipSpaces();
                 Attributes attrs = Parser.parseAttributes(this, jspReader);
-		encoding = getPageEncodingFromDirective(attrs, "pageEncoding");
+                encoding = getPageEncodingFromDirective(attrs, "pageEncoding");
                 if (encoding != null) {
                     break;
                 }
-		encoding = getPageEncodingFromDirective(attrs, "contentType");
+                encoding = getPageEncodingFromDirective(attrs, "contentType");
                 if (encoding != null) {
                     saveEncoding = encoding;
                 }
-	    }
-	}
+            }
+        }
 
         if (encoding == null) {
             encoding = saveEncoding;
         }
 
-	return encoding;
+        return encoding;
     }
 
     /*
@@ -467,7 +467,7 @@ class ParserController implements TagConstants {
      */
     private String getPageEncodingFromDirective(Attributes attrs,
                                                 String attrName) {
-	String value = attrs.getValue(attrName);
+        String value = attrs.getValue(attrName);
         if (attrName.equals("pageEncoding")) {
             return value;
         }
@@ -476,13 +476,13 @@ class ParserController implements TagConstants {
         String contentType = value;
         String encoding = null;
         if (contentType != null) {
-	    int loc = contentType.indexOf(CHARSET);
-	    if (loc != -1) {
-		encoding = contentType.substring(loc + CHARSET.length());
-	    }
-	}
+            int loc = contentType.indexOf(CHARSET);
+            if (loc != -1) {
+                encoding = contentType.substring(loc + CHARSET.length());
+            }
+        }
 
-	return encoding;
+        return encoding;
     }
 
     /*
@@ -493,10 +493,10 @@ class ParserController implements TagConstants {
      */
     private String resolveFileName(String inFileName) {
         String fileName = inFileName.replace('\\', '/');
-	String baseDir = 
-	    fileName.substring(0, fileName.lastIndexOf("/") + 1);
-	baseDirStack.push(baseDir);
-	return fileName;
+        String baseDir =
+                fileName.substring(0, fileName.lastIndexOf("/") + 1);
+        baseDirStack.push(baseDir);
+        return fileName;
     }
 
     /*
@@ -514,67 +514,67 @@ class ParserController implements TagConstants {
      */
     private boolean hasJspRoot(JspReader reader) throws JasperException {
 
-	// <prefix>:root must be the first element
-	Mark start = null;
-	while ((start = reader.skipUntil("<")) != null) {
-	    int c = reader.nextChar();
-	    if (c != '!' && c != '?') break;
-	}
-	if (start == null) {
-	    return false;
-	}
-	Mark stop = reader.skipUntil(":root");
-	if (stop == null) {
-	    return false;
-	}
-	// call substring to get rid of leading '<'
-	String prefix = reader.getText(start, stop).substring(1);
+        // <prefix>:root must be the first element
+        Mark start = null;
+        while ((start = reader.skipUntil("<")) != null) {
+            int c = reader.nextChar();
+            if (c != '!' && c != '?') break;
+        }
+        if (start == null) {
+            return false;
+        }
+        Mark stop = reader.skipUntil(":root");
+        if (stop == null) {
+            return false;
+        }
+        // call substring to get rid of leading '<'
+        String prefix = reader.getText(start, stop).substring(1);
 
-	start = stop;
-	stop = reader.skipUntil(">");
-	if (stop == null) {
-	    return false;
-	}
+        start = stop;
+        stop = reader.skipUntil(">");
+        if (stop == null) {
+            return false;
+        }
 
-	// Determine namespace associated with <root> element's prefix
-	String root = reader.getText(start, stop);
-	String xmlnsDecl = "xmlns:" + prefix;
-	int index = root.indexOf(xmlnsDecl);
-	if (index == -1) {
-	    return false;
-	}
-	index += xmlnsDecl.length();
-	while (index < root.length()
-	           && Character.isWhitespace(root.charAt(index))) {
-	    index++;
-	}
-	if (index < root.length() && root.charAt(index) == '=') {
-	    index++;
-	    while (index < root.length()
-		       && Character.isWhitespace(root.charAt(index))) {
-		index++;
-	    }
-	    if (index < root.length() && root.charAt(index++) == '"'
-		    && root.regionMatches(index, JSP_URI, 0,
-					  JSP_URI.length())) {
-		return true;
-	    }
-	}
+        // Determine namespace associated with <root> element's prefix
+        String root = reader.getText(start, stop);
+        String xmlnsDecl = "xmlns:" + prefix;
+        int index = root.indexOf(xmlnsDecl);
+        if (index == -1) {
+            return false;
+        }
+        index += xmlnsDecl.length();
+        while (index < root.length()
+                && Character.isWhitespace(root.charAt(index))) {
+            index++;
+        }
+        if (index < root.length() && root.charAt(index) == '=') {
+            index++;
+            while (index < root.length()
+                    && Character.isWhitespace(root.charAt(index))) {
+                index++;
+            }
+            if (index < root.length() && root.charAt(index++) == '"'
+                    && root.regionMatches(index, JSP_URI, 0,
+                    JSP_URI.length())) {
+                return true;
+            }
+        }
 
-	return false;
+        return false;
     }
 
     private JarFile getJarFile(URL jarFileUrl) throws IOException {
-	JarFile jarFile = null;
+        JarFile jarFile = null;
 
-	if (jarFileUrl != null) {
-	    JarURLConnection conn = (JarURLConnection) jarFileUrl.openConnection();
-	    conn.setUseCaches(false);
-	    conn.connect();
-	    jarFile = conn.getJarFile();
-	}
+        if (jarFileUrl != null) {
+            JarURLConnection conn = (JarURLConnection) jarFileUrl.openConnection();
+            conn.setUseCaches(false);
+            conn.connect();
+            jarFile = conn.getJarFile();
+        }
 
-	return jarFile;
+        return jarFile;
     }
 
 }

@@ -17,8 +17,8 @@
 
 package org.apache.struts2.jasper;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.opensymphony.xwork2.util.logging.Logger;
+import com.opensymphony.xwork2.util.logging.LoggerFactory;
 import org.apache.struts2.jasper.compiler.JspConfig;
 import org.apache.struts2.jasper.compiler.Localizer;
 import org.apache.struts2.jasper.compiler.TagPluginManager;
@@ -33,254 +33,254 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * A class to hold all init parameters specific to the JSP engine. 
+ * A class to hold all init parameters specific to the JSP engine.
  *
  * @author Anil K. Vijendran
  * @author Hans Bergsten
  * @author Pierre Delisle
  */
 public final class EmbeddedServletOptions implements Options {
-    
+
     // Logger
-    private Log log = LogFactory.getLog(EmbeddedServletOptions.class);
-    
+    private Logger log = LoggerFactory.getLogger(EmbeddedServletOptions.class);
+
     private Properties settings = new Properties();
-    
+
     /**
      * Is Jasper being used in development mode?
      */
     private boolean development = true;
-    
+
     /**
      * Should Ant fork its java compiles of JSP pages.
      */
     public boolean fork = true;
-    
+
     /**
      * Do you want to keep the generated Java files around?
      */
     private boolean keepGenerated = true;
-    
+
     /**
      * Should white spaces between directives or actions be trimmed?
      */
     private boolean trimSpaces = false;
-    
+
     /**
      * Determines whether tag handler pooling is enabled.
      */
     private boolean isPoolingEnabled = true;
-    
+
     /**
      * Do you want support for "mapped" files? This will generate
      * servlet that has a print statement per line of the JSP file.
      * This seems like a really nice feature to have for debugging.
      */
     private boolean mappedFile = true;
-    
+
     /**
      * Do you want stack traces and such displayed in the client's
      * browser? If this is false, such messages go to the standard
-     * error or a log file if the standard error is redirected. 
+     * error or a log file if the standard error is redirected.
      */
     private boolean sendErrorToClient = false;
-    
+
     /**
      * Do we want to include debugging information in the class file?
      */
     private boolean classDebugInfo = true;
-    
+
     /**
      * Background compile thread check interval in seconds.
      */
     private int checkInterval = 0;
-    
+
     /**
      * Is the generation of SMAP info for JSR45 debuggin suppressed?
      */
     private boolean isSmapSuppressed = false;
-    
+
     /**
      * Should SMAP info for JSR45 debugging be dumped to a file?
      */
     private boolean isSmapDumped = false;
-    
+
     /**
      * Are Text strings to be generated as char arrays?
      */
     private boolean genStringAsCharArray = false;
-    
+
     private boolean errorOnUseBeanInvalidClassAttribute = true;
-    
+
     /**
      * I want to see my generated servlets. Which directory are they
      * in?
      */
     private File scratchDir;
-    
+
     /**
      * Need to have this as is for versions 4 and 5 of IE. Can be set from
      * the initParams so if it changes in the future all that is needed is
      * to have a jsp initParam of type ieClassId="<value>"
      */
     private String ieClassId = "clsid:8AD9C840-044E-11D1-B3E9-00805F499D93";
-    
+
     /**
      * What classpath should I use while compiling generated servlets?
      */
     private String classpath = null;
-    
+
     /**
      * Compiler to use.
      */
     private String compiler = null;
-    
+
     /**
      * Compiler target VM.
      */
     private String compilerTargetVM = "1.5";
-    
+
     /**
      * The compiler source VM.
      */
     private String compilerSourceVM = "1.5";
-    
+
     /**
      * Cache for the TLD locations
      */
     private TldLocationsCache tldLocationsCache = null;
-    
+
     /**
      * Jsp config information
      */
     private JspConfig jspConfig = null;
-    
+
     /**
      * TagPluginManager
      */
     private TagPluginManager tagPluginManager = null;
-    
+
     /**
      * Java platform encoding to generate the JSP
      * page servlet.
      */
     private String javaEncoding = "UTF8";
-    
+
     /**
      * Modification test interval.
      */
     private int modificationTestInterval = 4;
-    
+
     /**
      * Is generation of X-Powered-By response header enabled/disabled?
      */
     private boolean xpoweredBy;
-    
-    public String getProperty(String name ) {
-        return settings.getProperty( name );
+
+    public String getProperty(String name) {
+        return settings.getProperty(name);
     }
-    
-    public void setProperty(String name, String value ) {
-        if (name != null && value != null){ 
-            settings.setProperty( name, value );
+
+    public void setProperty(String name, String value) {
+        if (name != null && value != null) {
+            settings.setProperty(name, value);
         }
     }
-    
+
     /**
      * Are we keeping generated code around?
      */
     public boolean getKeepGenerated() {
         return keepGenerated;
     }
-    
+
     /**
      * Should white spaces between directives or actions be trimmed?
      */
     public boolean getTrimSpaces() {
         return trimSpaces;
     }
-    
+
     public boolean isPoolingEnabled() {
         return isPoolingEnabled;
     }
-    
+
     /**
      * Are we supporting HTML mapped servlets?
      */
     public boolean getMappedFile() {
         return mappedFile;
     }
-    
+
     /**
      * Should errors be sent to client or thrown into stderr?
      */
     public boolean getSendErrorToClient() {
         return sendErrorToClient;
     }
-    
+
     /**
      * Should class files be compiled with debug information?
      */
     public boolean getClassDebugInfo() {
         return classDebugInfo;
     }
-    
+
     /**
      * Background JSP compile thread check intervall
      */
     public int getCheckInterval() {
         return checkInterval;
     }
-    
+
     /**
      * Modification test interval.
      */
     public int getModificationTestInterval() {
         return modificationTestInterval;
     }
-    
+
     /**
      * Is Jasper being used in development mode?
      */
     public boolean getDevelopment() {
         return development;
     }
-    
+
     /**
      * Is the generation of SMAP info for JSR45 debuggin suppressed?
      */
     public boolean isSmapSuppressed() {
         return isSmapSuppressed;
     }
-    
+
     /**
      * Should SMAP info for JSR45 debugging be dumped to a file?
      */
     public boolean isSmapDumped() {
         return isSmapDumped;
     }
-    
+
     /**
      * Are Text strings to be generated as char arrays?
      */
     public boolean genStringAsCharArray() {
         return this.genStringAsCharArray;
     }
-    
+
     /**
-     * Class ID for use in the plugin tag when the browser is IE. 
+     * Class ID for use in the plugin tag when the browser is IE.
      */
     public String getIeClassId() {
         return ieClassId;
     }
-    
+
     /**
      * What is my scratch dir?
      */
     public File getScratchDir() {
         return scratchDir;
     }
-    
+
     /**
      * What classpath should I use while compiling the servlets
      * generated from JSP files?
@@ -288,82 +288,82 @@ public final class EmbeddedServletOptions implements Options {
     public String getClassPath() {
         return classpath;
     }
-    
+
     /**
      * Is generation of X-Powered-By response header enabled/disabled?
      */
     public boolean isXpoweredBy() {
         return xpoweredBy;
     }
-    
+
     /**
      * Compiler to use.
      */
     public String getCompiler() {
         return compiler;
     }
-    
+
     /**
      * @see Options#getCompilerTargetVM
      */
     public String getCompilerTargetVM() {
         return compilerTargetVM;
     }
-    
+
     /**
      * @see Options#getCompilerSourceVM
      */
     public String getCompilerSourceVM() {
         return compilerSourceVM;
     }
-    
+
     public boolean getErrorOnUseBeanInvalidClassAttribute() {
         return errorOnUseBeanInvalidClassAttribute;
     }
-    
+
     public void setErrorOnUseBeanInvalidClassAttribute(boolean b) {
         errorOnUseBeanInvalidClassAttribute = b;
     }
-    
+
     public TldLocationsCache getTldLocationsCache() {
         return tldLocationsCache;
     }
-    
-    public void setTldLocationsCache( TldLocationsCache tldC ) {
+
+    public void setTldLocationsCache(TldLocationsCache tldC) {
         tldLocationsCache = tldC;
     }
-    
+
     public String getJavaEncoding() {
         return javaEncoding;
     }
-    
+
     public boolean getFork() {
         return fork;
     }
-    
+
     public JspConfig getJspConfig() {
         return jspConfig;
     }
-    
+
     public TagPluginManager getTagPluginManager() {
         return tagPluginManager;
     }
-    
+
     public boolean isCaching() {
         return false;
     }
-    
+
     public Map getCache() {
         return null;
     }
 
     /**
      * Create an EmbeddedServletOptions object using data available from
-     * ServletConfig and ServletContext. 
+     * ServletConfig and ServletContext.
      */
     public EmbeddedServletOptions(ServletConfig config,
-            ServletContext context) {
-        
+                                  ServletContext context) {
+
         // JVM version numbers
         try {
             if (Float.parseFloat(System.getProperty("java.specification.version")) > 1.4) {
@@ -374,18 +374,18 @@ public final class EmbeddedServletOptions implements Options {
         } catch (NumberFormatException e) {
             // Ignore
         }
-        
-        Enumeration enumeration=config.getInitParameterNames();
-        while( enumeration.hasMoreElements() ) {
-            String k=(String)enumeration.nextElement();
-            String v=config.getInitParameter( k );
-            setProperty( k, v);
+
+        Enumeration enumeration = config.getInitParameterNames();
+        while (enumeration.hasMoreElements()) {
+            String k = (String) enumeration.nextElement();
+            String v = config.getInitParameter(k);
+            setProperty(k, v);
         }
-        
+
         // quick hack
-        String validating=config.getInitParameter( "validating");
-        if( "false".equals( validating )) ParserUtils.validating=false;
-        
+        String validating = config.getInitParameter("validating");
+        if ("false".equals(validating)) ParserUtils.validating = false;
+
         String keepgen = config.getInitParameter("keepgenerated");
         if (keepgen != null) {
             if (keepgen.equalsIgnoreCase("true")) {
@@ -398,9 +398,9 @@ public final class EmbeddedServletOptions implements Options {
                 }
             }
         }
-        
-        
-        String trimsp = config.getInitParameter("trimSpaces"); 
+
+
+        String trimsp = config.getInitParameter("trimSpaces");
         if (trimsp != null) {
             if (trimsp.equalsIgnoreCase("true")) {
                 trimSpaces = true;
@@ -412,10 +412,10 @@ public final class EmbeddedServletOptions implements Options {
                 }
             }
         }
-        
+
         this.isPoolingEnabled = true;
         String poolingEnabledParam
-        = config.getInitParameter("enablePooling"); 
+                = config.getInitParameter("enablePooling");
         if (poolingEnabledParam != null
                 && !poolingEnabledParam.equalsIgnoreCase("true")) {
             if (poolingEnabledParam.equalsIgnoreCase("false")) {
@@ -423,11 +423,11 @@ public final class EmbeddedServletOptions implements Options {
             } else {
                 if (log.isWarnEnabled()) {
                     log.warn(Localizer.getMessage("jsp.warning.enablePooling"));
-                }		       	   
+                }
             }
         }
-        
-        String mapFile = config.getInitParameter("mappedfile"); 
+
+        String mapFile = config.getInitParameter("mappedfile");
         if (mapFile != null) {
             if (mapFile.equalsIgnoreCase("true")) {
                 this.mappedFile = true;
@@ -439,7 +439,7 @@ public final class EmbeddedServletOptions implements Options {
                 }
             }
         }
-        
+
         String senderr = config.getInitParameter("sendErrToClient");
         if (senderr != null) {
             if (senderr.equalsIgnoreCase("true")) {
@@ -452,42 +452,42 @@ public final class EmbeddedServletOptions implements Options {
                 }
             }
         }
-        
+
         String debugInfo = config.getInitParameter("classdebuginfo");
         if (debugInfo != null) {
             if (debugInfo.equalsIgnoreCase("true")) {
-                this.classDebugInfo  = true;
+                this.classDebugInfo = true;
             } else if (debugInfo.equalsIgnoreCase("false")) {
-                this.classDebugInfo  = false;
+                this.classDebugInfo = false;
             } else {
                 if (log.isWarnEnabled()) {
                     log.warn(Localizer.getMessage("jsp.warning.classDebugInfo"));
                 }
             }
         }
-        
+
         String checkInterval = config.getInitParameter("checkInterval");
         if (checkInterval != null) {
             try {
                 this.checkInterval = Integer.parseInt(checkInterval);
-            } catch(NumberFormatException ex) {
+            } catch (NumberFormatException ex) {
                 if (log.isWarnEnabled()) {
                     log.warn(Localizer.getMessage("jsp.warning.checkInterval"));
                 }
             }
         }
-        
+
         String modificationTestInterval = config.getInitParameter("modificationTestInterval");
         if (modificationTestInterval != null) {
             try {
                 this.modificationTestInterval = Integer.parseInt(modificationTestInterval);
-            } catch(NumberFormatException ex) {
+            } catch (NumberFormatException ex) {
                 if (log.isWarnEnabled()) {
                     log.warn(Localizer.getMessage("jsp.warning.modificationTestInterval"));
                 }
             }
         }
-        
+
         String development = config.getInitParameter("development");
         if (development != null) {
             if (development.equalsIgnoreCase("true")) {
@@ -500,7 +500,7 @@ public final class EmbeddedServletOptions implements Options {
                 }
             }
         }
-        
+
         String suppressSmap = config.getInitParameter("suppressSmap");
         if (suppressSmap != null) {
             if (suppressSmap.equalsIgnoreCase("true")) {
@@ -513,7 +513,7 @@ public final class EmbeddedServletOptions implements Options {
                 }
             }
         }
-        
+
         String dumpSmap = config.getInitParameter("dumpSmap");
         if (dumpSmap != null) {
             if (dumpSmap.equalsIgnoreCase("true")) {
@@ -526,7 +526,7 @@ public final class EmbeddedServletOptions implements Options {
                 }
             }
         }
-        
+
         String genCharArray = config.getInitParameter("genStrAsCharArray");
         if (genCharArray != null) {
             if (genCharArray.equalsIgnoreCase("true")) {
@@ -539,9 +539,9 @@ public final class EmbeddedServletOptions implements Options {
                 }
             }
         }
-        
+
         String errBeanClass =
-            config.getInitParameter("errorOnUseBeanInvalidClassAttribute");
+                config.getInitParameter("errorOnUseBeanInvalidClassAttribute");
         if (errBeanClass != null) {
             if (errBeanClass.equalsIgnoreCase("true")) {
                 errorOnUseBeanInvalidClassAttribute = true;
@@ -553,19 +553,19 @@ public final class EmbeddedServletOptions implements Options {
                 }
             }
         }
-        
+
         String ieClassId = config.getInitParameter("ieClassId");
         if (ieClassId != null)
             this.ieClassId = ieClassId;
-        
+
         String classpath = config.getInitParameter("classpath");
         if (classpath != null)
             this.classpath = classpath;
-        
+
         /*
-         * scratchdir
-         */
-        String dir = config.getInitParameter("scratchdir"); 
+        * scratchdir
+        */
+        String dir = config.getInitParameter("scratchdir");
         if (dir != null) {
             scratchDir = new File(dir);
         } else {
@@ -578,34 +578,34 @@ public final class EmbeddedServletOptions implements Options {
                 if (dir != null)
                     scratchDir = new File(dir);
             }
-        }      
+        }
         if (this.scratchDir == null) {
             log.fatal(Localizer.getMessage("jsp.error.no.scratch.dir"));
             return;
         }
-        
+
         if (!(scratchDir.exists() && scratchDir.canRead() &&
                 scratchDir.canWrite() && scratchDir.isDirectory()))
             log.fatal(Localizer.getMessage("jsp.error.bad.scratch.dir",
                     scratchDir.getAbsolutePath()));
-        
+
         this.compiler = config.getInitParameter("compiler");
-        
+
         String compilerTargetVM = config.getInitParameter("compilerTargetVM");
-        if(compilerTargetVM != null) {
+        if (compilerTargetVM != null) {
             this.compilerTargetVM = compilerTargetVM;
         }
-        
+
         String compilerSourceVM = config.getInitParameter("compilerSourceVM");
-        if(compilerSourceVM != null) {
+        if (compilerSourceVM != null) {
             this.compilerSourceVM = compilerSourceVM;
         }
-        
+
         String javaEncoding = config.getInitParameter("javaEncoding");
         if (javaEncoding != null) {
             this.javaEncoding = javaEncoding;
         }
-        
+
         String fork = config.getInitParameter("fork");
         if (fork != null) {
             if (fork.equalsIgnoreCase("true")) {
@@ -618,8 +618,8 @@ public final class EmbeddedServletOptions implements Options {
                 }
             }
         }
-        
-        String xpoweredBy = config.getInitParameter("xpoweredBy"); 
+
+        String xpoweredBy = config.getInitParameter("xpoweredBy");
         if (xpoweredBy != null) {
             if (xpoweredBy.equalsIgnoreCase("true")) {
                 this.xpoweredBy = true;
@@ -631,17 +631,17 @@ public final class EmbeddedServletOptions implements Options {
                 }
             }
         }
-        
+
         // Setup the global Tag Libraries location cache for this
         // web-application.
         tldLocationsCache = new TldLocationsCache(context);
-        
+
         // Setup the jsp config info for this web app.
         jspConfig = new JspConfig(context);
-        
+
         // Create a Tag plugin instance
         tagPluginManager = new TagPluginManager(context);
     }
-    
+
 }
 

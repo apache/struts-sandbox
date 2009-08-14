@@ -39,13 +39,13 @@ public class FastDateFormat extends DateFormat {
     private long lastSec = -1;
     private StringBuffer sb = new StringBuffer();
     private FieldPosition fp = new FieldPosition(DateFormat.MILLISECOND_FIELD);
-    
+
     public FastDateFormat(DateFormat df) {
         this.df = df;
     }
 
     public Date parse(String text, ParsePosition pos) {
-	return df.parse(text, pos);
+        return df.parse(text, pos);
     }
 
     /**
@@ -54,7 +54,7 @@ public class FastDateFormat extends DateFormat {
      * instead if you want a msec field.
      */
     public StringBuffer format(Date date, StringBuffer toAppendTo,
-			       FieldPosition fieldPosition) {
+                               FieldPosition fieldPosition) {
         long dt = date.getTime();
         long ds = dt / 1000;
         if (ds != lastSec) {
@@ -62,52 +62,52 @@ public class FastDateFormat extends DateFormat {
             df.format(date, sb, fp);
             lastSec = ds;
         } else {
-	    // munge current msec into existing string
-            int ms = (int)(dt % 1000);
+            // munge current msec into existing string
+            int ms = (int) (dt % 1000);
             int pos = fp.getEndIndex();
-	    int begin = fp.getBeginIndex();
-	    if (pos > 0) {
-		if (pos > begin)
-		    sb.setCharAt(--pos, Character.forDigit(ms % 10, 10));
-		ms /= 10;
-		if (pos > begin)
-		    sb.setCharAt(--pos, Character.forDigit(ms % 10, 10));
-		ms /= 10;
-		if (pos > begin)
-		    sb.setCharAt(--pos, Character.forDigit(ms % 10, 10));
-	    }
+            int begin = fp.getBeginIndex();
+            if (pos > 0) {
+                if (pos > begin)
+                    sb.setCharAt(--pos, Character.forDigit(ms % 10, 10));
+                ms /= 10;
+                if (pos > begin)
+                    sb.setCharAt(--pos, Character.forDigit(ms % 10, 10));
+                ms /= 10;
+                if (pos > begin)
+                    sb.setCharAt(--pos, Character.forDigit(ms % 10, 10));
+            }
         }
-	toAppendTo.append(sb.toString());
-	return toAppendTo;
+        toAppendTo.append(sb.toString());
+        return toAppendTo;
     }
 
     public static void main(String[] args) {
-	String format = "yyyy-MM-dd HH:mm:ss.SSS";
-	if (args.length > 0)
-	    format = args[0];
+        String format = "yyyy-MM-dd HH:mm:ss.SSS";
+        if (args.length > 0)
+            format = args[0];
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         FastDateFormat fdf = new FastDateFormat(sdf);
         Date d = new Date();
 
-	d.setTime(1);
-	System.out.println(fdf.format(d) + "\t" + sdf.format(d));
-	d.setTime(20);
-	System.out.println(fdf.format(d) + "\t" + sdf.format(d));
-	d.setTime(500);
-	System.out.println(fdf.format(d) + "\t" + sdf.format(d));
-	d.setTime(543);
-	System.out.println(fdf.format(d) + "\t" + sdf.format(d));
-	d.setTime(999);
-	System.out.println(fdf.format(d) + "\t" + sdf.format(d));
-	d.setTime(1050);
-	System.out.println(fdf.format(d) + "\t" + sdf.format(d));
-	d.setTime(2543);
-	System.out.println(fdf.format(d) + "\t" + sdf.format(d));
-	d.setTime(12345);
-	System.out.println(fdf.format(d) + "\t" + sdf.format(d));
-	d.setTime(12340);
-	System.out.println(fdf.format(d) + "\t" + sdf.format(d));
-	
+        d.setTime(1);
+        System.out.println(fdf.format(d) + "\t" + sdf.format(d));
+        d.setTime(20);
+        System.out.println(fdf.format(d) + "\t" + sdf.format(d));
+        d.setTime(500);
+        System.out.println(fdf.format(d) + "\t" + sdf.format(d));
+        d.setTime(543);
+        System.out.println(fdf.format(d) + "\t" + sdf.format(d));
+        d.setTime(999);
+        System.out.println(fdf.format(d) + "\t" + sdf.format(d));
+        d.setTime(1050);
+        System.out.println(fdf.format(d) + "\t" + sdf.format(d));
+        d.setTime(2543);
+        System.out.println(fdf.format(d) + "\t" + sdf.format(d));
+        d.setTime(12345);
+        System.out.println(fdf.format(d) + "\t" + sdf.format(d));
+        d.setTime(12340);
+        System.out.println(fdf.format(d) + "\t" + sdf.format(d));
+
         final int reps = 100000;
         {
             long start = System.currentTimeMillis();
@@ -117,7 +117,7 @@ public class FastDateFormat extends DateFormat {
             }
             long elap = System.currentTimeMillis() - start;
             System.out.println("fast: " + elap + " elapsed");
-	    System.out.println(fdf.format(d));
+            System.out.println(fdf.format(d));
         }
         {
             long start = System.currentTimeMillis();
@@ -125,9 +125,9 @@ public class FastDateFormat extends DateFormat {
                 d.setTime(System.currentTimeMillis());
                 sdf.format(d);
             }
-            long elap = System.currentTimeMillis() - start;	    
+            long elap = System.currentTimeMillis() - start;
             System.out.println("slow: " + elap + " elapsed");
-	    System.out.println(sdf.format(d));
+            System.out.println(sdf.format(d));
         }
     }
 }

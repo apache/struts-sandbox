@@ -25,7 +25,7 @@ import java.io.File;
 import java.util.Map;
 
 /**
- * A class to hold all init parameters specific to the JSP engine. 
+ * A class to hold all init parameters specific to the JSP engine.
  *
  * @author Anil K. Vijendran
  * @author Hans Bergsten
@@ -59,7 +59,7 @@ public interface Options {
      * Should errors be sent to client or thrown into stderr?
      */
     public boolean getSendErrorToClient();
- 
+
     /**
      * Should we include debug information in compiled class?
      */
@@ -93,7 +93,7 @@ public interface Options {
     public boolean getTrimSpaces();
 
     /**
-     * Class ID for use in the plugin tag when the browser is IE. 
+     * Class ID for use in the plugin tag when the browser is IE.
      */
     public String getIeClassId();
 
@@ -121,18 +121,18 @@ public interface Options {
     /**
      * Compiler source VM, e.g. 1.3, 1.4, or 1.5.
      */
-    public String getCompilerSourceVM();   
+    public String getCompilerSourceVM();
 
     /**
      * The cache for the location of the TLD's
      * for the various tag libraries 'exposed'
      * by the web application.
-     * A tag library is 'exposed' either explicitely in 
-     * web.xml or implicitely via the uri tag in the TLD 
+     * A tag library is 'exposed' either explicitely in
+     * web.xml or implicitely via the uri tag in the TLD
      * of a taglib deployed in a jar file (WEB-INF/lib).
      *
      * @return the instance of the TldLocationsCache
-     * for the web-application.
+     *         for the web-application.
      */
     public TldLocationsCache getTldLocationsCache();
 
@@ -148,7 +148,7 @@ public interface Options {
     public boolean getFork();
 
     /**
-     * Obtain JSP configuration informantion specified in web.xml.  
+     * Obtain JSP configuration informantion specified in web.xml.
      */
     public JspConfig getJspConfig();
 
@@ -166,24 +166,24 @@ public interface Options {
      * Are Text strings to be generated as char arrays?
      */
     public boolean genStringAsCharArray();
-    
+
     /**
      * Modification test interval.
      */
     public int getModificationTestInterval();
-    
+
     /**
      * Is caching enabled (used for precompilation).
      */
     public boolean isCaching();
-    
+
     /**
      * The web-application wide cache for the returned TreeNode
      * by parseXMLDocument in TagLibraryInfoImpl.parseTLD,
      * if isCaching returns true.
-     * 
+     *
      * @return the Map(String uri, TreeNode tld) instance.
      */
     public Map getCache();
-    
+
 }

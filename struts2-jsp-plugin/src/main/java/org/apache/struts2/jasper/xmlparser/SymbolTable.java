@@ -30,22 +30,22 @@ package org.apache.struts2.jasper.xmlparser;
  * strings used as identifiers are unique references. Multiple calls
  * to <code>addSymbol</code> will always return the same string
  * reference.
- * <p>
+ * <p/>
  * The symbol table performs the same task as <code>String.intern()</code>
  * with the following differences:
  * <ul>
- *  <li>
- *   A new string object does not need to be created in order to
- *   retrieve a unique reference. Symbols can be added by using
- *   a series of characters in a character array.
- *  </li>
- *  <li>
- *   Users of the symbol table can provide their own symbol hashing
- *   implementation. For example, a simple string hashing algorithm
- *   may fail to produce a balanced set of hashcodes for symbols
- *   that are <em>mostly</em> unique. Strings with similar leading
- *   characters are especially prone to this poor hashing behavior.
- *  </li>
+ * <li>
+ * A new string object does not need to be created in order to
+ * retrieve a unique reference. Symbols can be added by using
+ * a series of characters in a character array.
+ * </li>
+ * <li>
+ * Users of the symbol table can provide their own symbol hashing
+ * implementation. For example, a simple string hashing algorithm
+ * may fail to produce a balanced set of hashcodes for symbols
+ * that are <em>mostly</em> unique. Strings with similar leading
+ * characters are especially prone to this poor hashing behavior.
+ * </li>
  * </ul>
  *
  * @author Andy Clark
@@ -57,14 +57,18 @@ public class SymbolTable {
     // Constants
     //
 
-    /** Default table size. */
+    /**
+     * Default table size.
+     */
     protected static final int TABLE_SIZE = 101;
 
     //
     // Data
     //
 
-    /** Buckets. */
+    /**
+     * Buckets.
+     */
     protected Entry[] fBuckets = null;
 
     // actual table size
@@ -74,12 +78,16 @@ public class SymbolTable {
     // Constructors
     //
 
-    /** Constructs a symbol table with a default number of buckets. */
+    /**
+     * Constructs a symbol table with a default number of buckets.
+     */
     public SymbolTable() {
         this(TABLE_SIZE);
     }
 
-    /** Constructs a symbol table with a specified number of buckets. */
+    /**
+     * Constructs a symbol table with a specified number of buckets.
+     */
     public SymbolTable(int tableSize) {
         fTableSize = tableSize;
         fBuckets = new Entry[fTableSize];
@@ -102,7 +110,8 @@ public class SymbolTable {
         // search for identical symbol
         int bucket = hash(symbol) % fTableSize;
         int length = symbol.length();
-        OUTER: for (Entry entry = fBuckets[bucket]; entry != null; entry = entry.next) {
+        OUTER:
+        for (Entry entry = fBuckets[bucket]; entry != null; entry = entry.next) {
             if (length == entry.characters.length) {
                 for (int i = 0; i < length; i++) {
                     if (symbol.charAt(i) != entry.characters[i]) {
@@ -134,7 +143,8 @@ public class SymbolTable {
 
         // search for identical symbol
         int bucket = hash(buffer, offset, length) % fTableSize;
-        OUTER: for (Entry entry = fBuckets[bucket]; entry != null; entry = entry.next) {
+        OUTER:
+        for (Entry entry = fBuckets[bucket]; entry != null; entry = entry.next) {
             if (length == entry.characters.length) {
                 for (int i = 0; i < length; i++) {
                     if (buffer[offset + i] != entry.characters[i]) {
@@ -203,7 +213,8 @@ public class SymbolTable {
         // search for identical symbol
         int bucket = hash(symbol) % fTableSize;
         int length = symbol.length();
-        OUTER: for (Entry entry = fBuckets[bucket]; entry != null; entry = entry.next) {
+        OUTER:
+        for (Entry entry = fBuckets[bucket]; entry != null; entry = entry.next) {
             if (length == entry.characters.length) {
                 for (int i = 0; i < length; i++) {
                     if (symbol.charAt(i) != entry.characters[i]) {
@@ -230,7 +241,8 @@ public class SymbolTable {
 
         // search for identical symbol
         int bucket = hash(buffer, offset, length) % fTableSize;
-        OUTER: for (Entry entry = fBuckets[bucket]; entry != null; entry = entry.next) {
+        OUTER:
+        for (Entry entry = fBuckets[bucket]; entry != null; entry = entry.next) {
             if (length == entry.characters.length) {
                 for (int i = 0; i < length; i++) {
                     if (buffer[offset + i] != entry.characters[i]) {
@@ -259,7 +271,9 @@ public class SymbolTable {
         // Data
         //
 
-        /** Symbol. */
+        /**
+         * Symbol.
+         */
         public String symbol;
 
         /**
@@ -268,7 +282,9 @@ public class SymbolTable {
          */
         public char[] characters;
 
-        /** The next entry. */
+        /**
+         * The next entry.
+         */
         public Entry next;
 
         //

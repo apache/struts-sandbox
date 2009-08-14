@@ -41,10 +41,10 @@ public class ELFunctionMapper {
      * Creates the functions mappers for all EL expressions in the JSP page.
      *
      * @param compiler Current compiler, mainly for accessing error dispatcher.
-     * @param page The current compilation unit.
+     * @param page     The current compilation unit.
      */
-    public static void map(Compiler compiler, Node.Nodes page) 
-                throws JasperException {
+    public static void map(Compiler compiler, Node.Nodes page)
+            throws JasperException {
 
         ELFunctionMapper map = new ELFunctionMapper();
         map.ds = new StringBuffer();
@@ -66,7 +66,7 @@ public class ELFunctionMapper {
      * for functions, and if found functions mappers are created.
      */
     class ELFunctionVisitor extends Node.Visitor {
-        
+
         /**
          * Use a global name map to facilitate reuse of function maps.
          * The key used is prefix:function:uri.
@@ -135,7 +135,7 @@ public class ELFunctionMapper {
             doMap(n.getEL());
         }
 
-        private void doMap(Node.JspAttribute attr) 
+        private void doMap(Node.JspAttribute attr)
                 throws JasperException {
             if (attr != null) {
                 doMap(attr.getEL());
@@ -145,17 +145,18 @@ public class ELFunctionMapper {
         /**
          * Creates function mappers, if needed, from ELNodes
          */
-        private void doMap(ELNode.Nodes el) 
+        private void doMap(ELNode.Nodes el)
                 throws JasperException {
 
             // Only care about functions in ELNode's
             class Fvisitor extends ELNode.Visitor {
                 ArrayList funcs = new ArrayList();
                 HashMap keyMap = new HashMap();
+
                 public void visit(ELNode.Function n) throws JasperException {
                     String key = n.getPrefix() + ":" + n.getName();
-                    if (! keyMap.containsKey(key)) {
-                        keyMap.put(key,"");
+                    if (!keyMap.containsKey(key)) {
+                        keyMap.put(key, "");
                         funcs.add(n);
                     }
                 }
@@ -180,7 +181,7 @@ public class ELFunctionMapper {
                 el.setMapName(decName);
                 return;
             }
-        
+
             // Generate declaration for the map statically
             decName = getMapName();
             ss.append("static private org.apache.struts2.jasper.runtime.ProtectedFunctionMapper " + decName + ";\n");
@@ -199,9 +200,9 @@ public class ELFunctionMapper {
 
             // Setup arguments for either getMapForFunction or mapFunction
             for (int i = 0; i < functions.size(); i++) {
-                ELNode.Function f = (ELNode.Function)functions.get(i);
+                ELNode.Function f = (ELNode.Function) functions.get(i);
                 FunctionInfo funcInfo = f.getFunctionInfo();
-                String key = f.getPrefix()+ ":" + f.getName();
+                String key = f.getPrefix() + ":" + f.getName();
                 ds.append(funcMethod + "(\"" + key + "\", " +
                         funcInfo.getFunctionClass() + ".class, " +
                         '\"' + f.getMethodName() + "\", " +
@@ -214,8 +215,7 @@ public class ELFunctionMapper {
                     int iArray = params[k].indexOf('[');
                     if (iArray < 0) {
                         ds.append(params[k] + ".class");
-                    }
-                    else {
+                    } else {
                         String baseType = params[k].substring(0, iArray);
                         ds.append("java.lang.reflect.Array.newInstance(");
                         ds.append(baseType);
@@ -223,7 +223,7 @@ public class ELFunctionMapper {
 
                         // Count the number of array dimension
                         int aCount = 0;
-                        for (int jj = iArray; jj < params[k].length(); jj++ ) {
+                        for (int jj = iArray; jj < params[k].length(); jj++) {
                             if (params[k].charAt(jj) == '[') {
                                 aCount++;
                             }
@@ -238,7 +238,7 @@ public class ELFunctionMapper {
                 ds.append("});\n");
                 // Put the current name in the global function map
                 gMap.put(f.getPrefix() + ':' + f.getName() + ':' + f.getUri(),
-                         decName);
+                        decName);
             }
             el.setMapName(decName);
         }
@@ -246,6 +246,7 @@ public class ELFunctionMapper {
         /**
          * Find the name of the function mapper for an EL.  Reuse a
          * previously generated one if possible.
+         *
          * @param functions An ArrayList of ELNode.Function instances that
          *                  represents the functions in an EL
          * @return A previous generated function mapper name that can be used
@@ -255,9 +256,9 @@ public class ELFunctionMapper {
 
             String mapName = null;
             for (int i = 0; i < functions.size(); i++) {
-                ELNode.Function f = (ELNode.Function)functions.get(i);
+                ELNode.Function f = (ELNode.Function) functions.get(i);
                 String temName = (String) gMap.get(f.getPrefix() + ':' +
-                                        f.getName() + ':' + f.getUri());
+                        f.getName() + ':' + f.getUri());
                 if (temName == null) {
                     return null;
                 }

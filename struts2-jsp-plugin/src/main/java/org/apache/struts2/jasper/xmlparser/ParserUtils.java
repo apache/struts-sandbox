@@ -17,8 +17,7 @@
 
 package org.apache.struts2.jasper.xmlparser;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.opensymphony.xwork2.util.logging.LoggerFactory;
 import org.apache.struts2.jasper.Constants;
 import org.apache.struts2.jasper.JasperException;
 import org.apache.struts2.jasper.compiler.Localizer;
@@ -64,43 +63,42 @@ public class ParserUtils {
      * that corresponds to the root node of the document tree.
      *
      * @param uri URI of the XML document being parsed
-     * @param is Input source containing the deployment descriptor
-     *
-     * @exception JasperException if an input/output error occurs
-     * @exception JasperException if a parsing error occurs
+     * @param is  Input source containing the deployment descriptor
+     * @throws JasperException if an input/output error occurs
+     * @throws JasperException if a parsing error occurs
      */
     public TreeNode parseXMLDocument(String uri, InputSource is)
-        throws JasperException {
+            throws JasperException {
 
         Document document = null;
 
         // Perform an XML parse of this document, via JAXP
         try {
             DocumentBuilderFactory factory =
-                DocumentBuilderFactory.newInstance();
+                    DocumentBuilderFactory.newInstance();
             factory.setNamespaceAware(true);
             factory.setValidating(validating);
             DocumentBuilder builder = factory.newDocumentBuilder();
             builder.setEntityResolver(entityResolver);
             builder.setErrorHandler(errorHandler);
             document = builder.parse(is);
-	} catch (ParserConfigurationException ex) {
+        } catch (ParserConfigurationException ex) {
             throw new JasperException
-                (Localizer.getMessage("jsp.error.parse.xml", uri), ex);
-	} catch (SAXParseException ex) {
+                    (Localizer.getMessage("jsp.error.parse.xml", uri), ex);
+        } catch (SAXParseException ex) {
             throw new JasperException
-                (Localizer.getMessage("jsp.error.parse.xml.line",
-				      uri,
-				      Integer.toString(ex.getLineNumber()),
-				      Integer.toString(ex.getColumnNumber())),
-		 ex);
-	} catch (SAXException sx) {
+                    (Localizer.getMessage("jsp.error.parse.xml.line",
+                            uri,
+                            Integer.toString(ex.getLineNumber()),
+                            Integer.toString(ex.getColumnNumber())),
+                            ex);
+        } catch (SAXException sx) {
             throw new JasperException
-                (Localizer.getMessage("jsp.error.parse.xml", uri), sx);
+                    (Localizer.getMessage("jsp.error.parse.xml", uri), sx);
         } catch (IOException io) {
             throw new JasperException
-                (Localizer.getMessage("jsp.error.parse.xml", uri), io);
-	}
+                    (Localizer.getMessage("jsp.error.parse.xml", uri), io);
+        }
 
         // Convert the resulting document to a graph of TreeNodes
         return (convert(null, document.getDocumentElement()));
@@ -112,10 +110,9 @@ public class ParserUtils {
      * that corresponds to the root node of the document tree.
      *
      * @param uri URI of the XML document being parsed
-     * @param is Input stream containing the deployment descriptor
-     *
-     * @exception JasperException if an input/output error occurs
-     * @exception JasperException if a parsing error occurs
+     * @param is  Input stream containing the deployment descriptor
+     * @throws JasperException if an input/output error occurs
+     * @throws JasperException if a parsing error occurs
      */
     public TreeNode parseXMLDocument(String uri, InputStream is)
             throws JasperException {
@@ -132,7 +129,7 @@ public class ParserUtils {
      * including processing all of the attributes and children nodes.
      *
      * @param parent The parent TreeNode (if any) for the new TreeNode
-     * @param node The XML document Node to be converted
+     * @param node   The XML document Node to be converted
      */
     protected TreeNode convert(TreeNode parent, Node node) {
 
@@ -146,7 +143,7 @@ public class ParserUtils {
             for (int i = 0; i < n; i++) {
                 Node attribute = attributes.item(i);
                 treeNode.addAttribute(attribute.getNodeName(),
-                                      attribute.getNodeValue());
+                        attribute.getNodeValue());
             }
         }
 
@@ -170,7 +167,7 @@ public class ParserUtils {
                 }
             }
         }
-        
+
         // Return the completed TreeNode graph
         return (treeNode);
     }
@@ -197,7 +194,7 @@ class MyEntityResolver implements EntityResolver {
                 return isrc;
             }
         }
-        Log log = LogFactory.getLog(MyEntityResolver.class);
+        com.opensymphony.xwork2.util.logging.Logger log = LoggerFactory.getLogger(MyEntityResolver.class);
         if (log.isDebugEnabled())
             log.debug("Resolve entity failed" + publicId + " " + systemId);
         log.error(Localizer.getMessage("jsp.error.parse.xml.invalidPublicId",
@@ -209,7 +206,7 @@ class MyEntityResolver implements EntityResolver {
 class MyErrorHandler implements ErrorHandler {
 
     public void warning(SAXParseException ex) throws SAXException {
-        Log log = LogFactory.getLog(MyErrorHandler.class);
+        com.opensymphony.xwork2.util.logging.Logger log = LoggerFactory.getLogger(MyErrorHandler.class);
         if (log.isDebugEnabled())
             log.debug("ParserUtils: warning ", ex);
         // We ignore warnings

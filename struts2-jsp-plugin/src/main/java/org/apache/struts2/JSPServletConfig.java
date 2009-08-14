@@ -38,7 +38,7 @@ public class JSPServletConfig implements ServletConfig {
     }
 
     public String getInitParameter(String name) {
-        return null;  
+        return null;
     }
 
     public Enumeration getInitParameterNames() {
@@ -50,6 +50,6 @@ public class JSPServletConfig implements ServletConfig {
     }
 
     public String getServletName() {
-        return null;  
+        return null;
     }
 }

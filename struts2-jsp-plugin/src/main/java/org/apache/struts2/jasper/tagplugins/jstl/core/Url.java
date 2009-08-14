@@ -23,73 +23,73 @@ import org.apache.struts2.jasper.compiler.tagplugin.TagPluginContext;
 import org.apache.struts2.jasper.tagplugins.jstl.Util;
 
 public class Url implements TagPlugin {
-    
+
     public void doTag(TagPluginContext ctxt) {
-        
+
         //flags
         boolean hasVar, hasContext, hasScope;
-        
+
         //init flags
         hasVar = ctxt.isAttributeSpecified("var");
         hasContext = ctxt.isAttributeSpecified("context");
         hasScope = ctxt.isAttributeSpecified("scope");
-        
+
         //define name of the temp variables
         String valueName = ctxt.getTemporaryVariableName();
         String contextName = ctxt.getTemporaryVariableName();
         String baseUrlName = ctxt.getTemporaryVariableName();
         String resultName = ctxt.getTemporaryVariableName();
         String responseName = ctxt.getTemporaryVariableName();
-        
+
         //get the scope
         String strScope = "page";
-        if(hasScope){
+        if (hasScope) {
             strScope = ctxt.getConstantAttribute("scope");
         }
         int iScope = Util.getScope(strScope);
-        
+
         //get the value
         ctxt.generateJavaSource("String " + valueName + " = ");
         ctxt.generateAttribute("value");
         ctxt.generateJavaSource(";");
-        
+
         //get the context
         ctxt.generateJavaSource("String " + contextName + " = null;");
-        if(hasContext){
+        if (hasContext) {
             ctxt.generateJavaSource(contextName + " = ");
             ctxt.generateAttribute("context");
             ctxt.generateJavaSource(";");
         }
-        
+
         //get the raw url
         ctxt.generateJavaSource("String " + baseUrlName + " = " +
                 "org.apache.struts2.jasper.tagplugins.jstl.Util.resolveUrl(" + valueName + ", " + contextName + ", pageContext);");
         ctxt.generateJavaSource("pageContext.setAttribute" +
                 "(\"url_without_param\", " + baseUrlName + ");");
-        
+
         //add params
         ctxt.generateBody();
-        
+
         ctxt.generateJavaSource("String " + resultName + " = " +
-        "(String)pageContext.getAttribute(\"url_without_param\");");
+                "(String)pageContext.getAttribute(\"url_without_param\");");
         ctxt.generateJavaSource("pageContext.removeAttribute(\"url_without_param\");");
-        
+
         //if the url is relative, encode it
         ctxt.generateJavaSource("if(!org.apache.struts2.jasper.tagplugins.jstl.Util.isAbsoluteUrl(" + resultName + ")){");
         ctxt.generateJavaSource("    HttpServletResponse " + responseName + " = " +
-        "((HttpServletResponse) pageContext.getResponse());");
+                "((HttpServletResponse) pageContext.getResponse());");
         ctxt.generateJavaSource("    " + resultName + " = "
                 + responseName + ".encodeURL(" + resultName + ");");
         ctxt.generateJavaSource("}");
-        
+
         //if "var" is specified, the url string store in the attribute var defines
-        if(hasVar){
+        if (hasVar) {
             String strVar = ctxt.getConstantAttribute("var");
             ctxt.generateJavaSource("pageContext.setAttribute" +
                     "(\"" + strVar + "\", " + resultName + ", " + iScope + ");");
-            
+
             //if var is not specified, just print out the url string
-        }else{
+        } else {
             ctxt.generateJavaSource("try{");
             ctxt.generateJavaSource("    pageContext.getOut().print(" + resultName + ");");
             ctxt.generateJavaSource("}catch(java.io.IOException ex){");
@@ -97,5 +97,5 @@ public class Url implements TagPlugin {
             ctxt.generateJavaSource("}");
         }
     }
-    
+
 }

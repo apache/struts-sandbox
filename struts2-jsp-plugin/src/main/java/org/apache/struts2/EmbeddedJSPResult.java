@@ -1,6 +1,7 @@
 package org.apache.struts2;
 
 import com.opensymphony.xwork2.ActionInvocation;
+import org.apache.commons.lang.xwork.StringUtils;
 import org.apache.struts2.dispatcher.StrutsResultSupport;
 
 /**
@@ -8,6 +9,6 @@ import org.apache.struts2.dispatcher.StrutsResultSupport;
  */
 public class EmbeddedJSPResult extends StrutsResultSupport {
     protected void doExecute(String finalLocation, ActionInvocation invocation) throws Exception {
-       JSPRuntime.handle(finalLocation);
+        JSPRuntime.handle(StringUtils.removeStart(finalLocation, "/"));
     }
 }

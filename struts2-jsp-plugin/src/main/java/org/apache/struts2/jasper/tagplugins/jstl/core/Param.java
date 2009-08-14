@@ -22,35 +22,35 @@ import org.apache.struts2.jasper.compiler.tagplugin.TagPlugin;
 import org.apache.struts2.jasper.compiler.tagplugin.TagPluginContext;
 
 public class Param implements TagPlugin {
-    
+
     public void doTag(TagPluginContext ctxt) {
-        
+
         //don't support the body content
-        
+
         //define names of all the temp variables
         String nameName = ctxt.getTemporaryVariableName();
         String valueName = ctxt.getTemporaryVariableName();
         String urlName = ctxt.getTemporaryVariableName();
         String encName = ctxt.getTemporaryVariableName();
         String index = ctxt.getTemporaryVariableName();
-        
+
         //if the param tag has no parents, throw a exception
         TagPluginContext parent = ctxt.getParentContext();
-        if(parent == null){
+        if (parent == null) {
             ctxt.generateJavaSource(" throw new JspTagExcption" +
-            "(\"&lt;param&gt; outside &lt;import&gt; or &lt;urlEncode&gt;\");");
+                    "(\"&lt;param&gt; outside &lt;import&gt; or &lt;urlEncode&gt;\");");
             return;
         }
-        
+
         //get the url string before adding this param
         ctxt.generateJavaSource("String " + urlName + " = " +
-        "(String)pageContext.getAttribute(\"url_without_param\");");
-        
+                "(String)pageContext.getAttribute(\"url_without_param\");");
+
         //get the value of "name"
         ctxt.generateJavaSource("String " + nameName + " = ");
         ctxt.generateAttribute("name");
         ctxt.generateJavaSource(";");
-        
+
         //if the "name" is null then do nothing.
         //else add such string "name=value" to the url.
         //and the url should be encoded
@@ -72,6 +72,6 @@ public class Param implements TagPlugin {
         ctxt.generateJavaSource("        " + urlName + " = " + urlName + " + \"&\" + " + nameName + " + \"=\" + " + valueName + ";");
         ctxt.generateJavaSource("    }");
         ctxt.generateJavaSource("    pageContext.setAttribute(\"url_without_param\"," + urlName + ");");
-        ctxt.generateJavaSource("}");	
+        ctxt.generateJavaSource("}");
     }
 }

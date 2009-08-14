@@ -79,22 +79,20 @@ public class PerThreadTagHandlerPool extends TagHandlerPool {
      * instantiating one if this tag handler pool is empty.
      *
      * @param handlerClass Tag handler class
-     *
      * @return Reused or newly instantiated tag handler
-     *
      * @throws JspException if a tag handler cannot be instantiated
      */
     public Tag get(Class handlerClass) throws JspException {
-        PerThreadData ptd = (PerThreadData)perThread.get();
-        if(ptd.current >=0 ) {
+        PerThreadData ptd = (PerThreadData) perThread.get();
+        if (ptd.current >= 0) {
             return ptd.handlers[ptd.current--];
         } else {
-	    try {
-		return (Tag) handlerClass.newInstance();
-	    } catch (Exception e) {
-		throw new JspException(e.getMessage(), e);
-	    }
-	}
+            try {
+                return (Tag) handlerClass.newInstance();
+            } catch (Exception e) {
+                throw new JspException(e.getMessage(), e);
+            }
+        }
     }
 
     /**
@@ -105,9 +103,9 @@ public class PerThreadTagHandlerPool extends TagHandlerPool {
      * @param handler Tag handler to add to this tag handler pool
      */
     public void reuse(Tag handler) {
-        PerThreadData ptd=(PerThreadData)perThread.get();
-	if (ptd.current < (ptd.handlers.length - 1)) {
-	    ptd.handlers[++ptd.current] = handler;
+        PerThreadData ptd = (PerThreadData) perThread.get();
+        if (ptd.current < (ptd.handlers.length - 1)) {
+            ptd.handlers[++ptd.current] = handler;
         } else {
             handler.release();
         }
@@ -116,15 +114,15 @@ public class PerThreadTagHandlerPool extends TagHandlerPool {
     /**
      * Calls the release() method of all tag handlers in this tag handler pool.
      */
-    public void release() {        
+    public void release() {
         Enumeration enumeration = perThreadDataVector.elements();
         while (enumeration.hasMoreElements()) {
-	    PerThreadData ptd = (PerThreadData)enumeration.nextElement();
+            PerThreadData ptd = (PerThreadData) enumeration.nextElement();
             if (ptd.handlers != null) {
-                for (int i=ptd.current; i>=0; i--) {
+                for (int i = ptd.current; i >= 0; i--) {
                     if (ptd.handlers[i] != null) {
                         ptd.handlers[i].release();
-		    }
+                    }
                 }
             }
         }

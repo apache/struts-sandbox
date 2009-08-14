@@ -31,7 +31,7 @@ import java.util.Vector;
 
 /**
  * Class responsible for generating an implicit tag library containing tag
- * handlers corresponding to the tag files in "/WEB-INF/tags/" or a 
+ * handlers corresponding to the tag files in "/WEB-INF/tags/" or a
  * subdirectory of it.
  *
  * @author Jan Luehe
@@ -55,57 +55,57 @@ class ImplicitTagLibraryInfo extends TagLibraryInfo {
      * Constructor.
      */
     public ImplicitTagLibraryInfo(JspCompilationContext ctxt,
-				  ParserController pc,
-				  String prefix,
-				  String tagdir,
-				  ErrorDispatcher err) throws JasperException {
+                                  ParserController pc,
+                                  String prefix,
+                                  String tagdir,
+                                  ErrorDispatcher err) throws JasperException {
         super(prefix, null);
-	this.pc = pc;
-	this.tagFileMap = new Hashtable();
-	this.vec = new Vector();
+        this.pc = pc;
+        this.tagFileMap = new Hashtable();
+        this.vec = new Vector();
 
         // Implicit tag libraries have no functions:
         this.functions = new FunctionInfo[0];
 
-	tlibversion = TLIB_VERSION;
-	jspversion = JSP_VERSION;
+        tlibversion = TLIB_VERSION;
+        jspversion = JSP_VERSION;
 
-	if (!tagdir.startsWith(WEB_INF_TAGS)) {
-	    err.jspError("jsp.error.invalid.tagdir", tagdir);
-	}
-	
-	// Determine the value of the <short-name> subelement of the
-	// "imaginary" <taglib> element
-	if (tagdir.equals(WEB_INF_TAGS)
-	        || tagdir.equals( WEB_INF_TAGS + "/")) {
-	    shortname = TAGS_SHORTNAME;
-	} else {
-	    shortname = tagdir.substring(WEB_INF_TAGS.length());
-	    shortname = shortname.replace('/', '-');
-	}
+        if (!tagdir.startsWith(WEB_INF_TAGS)) {
+            err.jspError("jsp.error.invalid.tagdir", tagdir);
+        }
 
-	// Populate mapping of tag names to tag file paths
-	Set dirList = ctxt.getResourcePaths(tagdir);
-	if (dirList != null) {
-	    Iterator it = dirList.iterator();
-	    while (it.hasNext()) {
-		String path = (String) it.next();
-		if (path.endsWith(TAG_FILE_SUFFIX)
-		        || path.endsWith(TAGX_FILE_SUFFIX)) {
-		    /*
-		     * Use the filename of the tag file, without the .tag or
-		     * .tagx extension, respectively, as the <name> subelement
-		     * of the "imaginary" <tag-file> element
-		     */
-		    String suffix = path.endsWith(TAG_FILE_SUFFIX) ?
-			TAG_FILE_SUFFIX : TAGX_FILE_SUFFIX; 
-		    String tagName = path.substring(path.lastIndexOf("/") + 1);
-		    tagName = tagName.substring(0,
-						tagName.lastIndexOf(suffix));
-		    tagFileMap.put(tagName, path);
-		}
-	    }
-	}
+        // Determine the value of the <short-name> subelement of the
+        // "imaginary" <taglib> element
+        if (tagdir.equals(WEB_INF_TAGS)
+                || tagdir.equals(WEB_INF_TAGS + "/")) {
+            shortname = TAGS_SHORTNAME;
+        } else {
+            shortname = tagdir.substring(WEB_INF_TAGS.length());
+            shortname = shortname.replace('/', '-');
+        }
+
+        // Populate mapping of tag names to tag file paths
+        Set dirList = ctxt.getResourcePaths(tagdir);
+        if (dirList != null) {
+            Iterator it = dirList.iterator();
+            while (it.hasNext()) {
+                String path = (String) it.next();
+                if (path.endsWith(TAG_FILE_SUFFIX)
+                        || path.endsWith(TAGX_FILE_SUFFIX)) {
+                    /*
+                  * Use the filename of the tag file, without the .tag or
+                  * .tagx extension, respectively, as the <name> subelement
+                  * of the "imaginary" <tag-file> element
+                  */
+                    String suffix = path.endsWith(TAG_FILE_SUFFIX) ?
+                            TAG_FILE_SUFFIX : TAGX_FILE_SUFFIX;
+                    String tagName = path.substring(path.lastIndexOf("/") + 1);
+                    tagName = tagName.substring(0,
+                            tagName.lastIndexOf(suffix));
+                    tagFileMap.put(tagName, path);
+                }
+            }
+        }
     }
 
     /**
@@ -113,34 +113,34 @@ class ImplicitTagLibraryInfo extends TagLibraryInfo {
      * and if so, parses the corresponding tag file.
      *
      * @return The TagFileInfo corresponding to the given tag name, or null if
-     * the given tag name is not implemented as a tag file
+     *         the given tag name is not implemented as a tag file
      */
     public TagFileInfo getTagFile(String shortName) {
 
-	TagFileInfo tagFile = super.getTagFile(shortName);
-	if (tagFile == null) {
-	    String path = (String) tagFileMap.get(shortName);
-	    if (path == null) {
-		return null;
-	    }
+        TagFileInfo tagFile = super.getTagFile(shortName);
+        if (tagFile == null) {
+            String path = (String) tagFileMap.get(shortName);
+            if (path == null) {
+                return null;
+            }
 
-	    TagInfo tagInfo = null;
-	    try {
-		tagInfo = TagFileProcessor.parseTagFileDirectives(pc,
-								  shortName,
-								  path,
-								  this);
-	    } catch (JasperException je) {
-		throw new RuntimeException(je.toString());
-	    }
+            TagInfo tagInfo = null;
+            try {
+                tagInfo = TagFileProcessor.parseTagFileDirectives(pc,
+                        shortName,
+                        path,
+                        this);
+            } catch (JasperException je) {
+                throw new RuntimeException(je.toString());
+            }
 
-	    tagFile = new TagFileInfo(shortName, path, tagInfo);
-	    vec.addElement(tagFile);
+            tagFile = new TagFileInfo(shortName, path, tagInfo);
+            vec.addElement(tagFile);
 
-	    this.tagFiles = new TagFileInfo[vec.size()];
-	    vec.copyInto(this.tagFiles);
-	}
+            this.tagFiles = new TagFileInfo[vec.size()];
+            vec.copyInto(this.tagFiles);
+        }
 
-	return tagFile;
+        return tagFile;
     }
 }

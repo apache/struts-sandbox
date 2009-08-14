@@ -22,7 +22,7 @@ import org.apache.struts2.jasper.compiler.tagplugin.TagPlugin;
 import org.apache.struts2.jasper.compiler.tagplugin.TagPluginContext;
 
 public final class If implements TagPlugin {
-    
+
     public void doTag(TagPluginContext ctxt) {
         String condV = ctxt.getTemporaryVariableName();
         ctxt.generateJavaSource("boolean " + condV + "=");

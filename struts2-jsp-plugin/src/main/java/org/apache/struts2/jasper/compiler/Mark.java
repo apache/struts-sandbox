@@ -23,7 +23,7 @@ import java.net.URL;
 import java.util.Stack;
 
 /**
- * Mark represents a point in the JSP input. 
+ * Mark represents a point in the JSP input.
  *
  * @author Anil K. Vijendran
  */
@@ -61,11 +61,11 @@ final class Mark {
     /**
      * Constructor
      *
-     * @param reader JspReader this mark belongs to
-     * @param inStream current stream for this mark
-     * @param fileId id of requested jsp file
-     * @param name JSP file name
-     * @param inBaseDir base directory of requested jsp file
+     * @param reader     JspReader this mark belongs to
+     * @param inStream   current stream for this mark
+     * @param fileId     id of requested jsp file
+     * @param name       JSP file name
+     * @param inBaseDir  base directory of requested jsp file
      * @param inEncoding encoding of current file
      */
     Mark(JspReader reader, char[] inStream, int fileId, String name,
@@ -103,15 +103,15 @@ final class Mark {
 
         // clone includeStack without cloning contents
         includeStack = new Stack();
-        for ( int i=0; i < other.includeStack.size(); i++ ) {
-            includeStack.addElement( other.includeStack.elementAt(i) );
+        for (int i = 0; i < other.includeStack.size(); i++) {
+            includeStack.addElement(other.includeStack.elementAt(i));
         }
     }
 
 
     /**
      * Constructor
-     */    
+     */
     Mark(JspCompilationContext ctxt, String filename, int line, int col) {
 
         this.reader = null;
@@ -132,18 +132,17 @@ final class Mark {
      * Sets this mark's state to a new stream.
      * It will store the current stream in it's includeStack.
      *
-     * @param inStream new stream for mark
-     * @param inFileId id of new file from which stream comes from
-     * @param inBaseDir directory of file
+     * @param inStream   new stream for mark
+     * @param inFileId   id of new file from which stream comes from
+     * @param inBaseDir  directory of file
      * @param inEncoding encoding of new file
      */
     public void pushStream(char[] inStream, int inFileId, String name,
-                           String inBaseDir, String inEncoding) 
-    {
+                           String inBaseDir, String inEncoding) {
         // store current state in stack
         includeStack.push(new IncludeState(cursor, line, col, fileId,
-                                           fileName, baseDir, 
-					   encoding, stream) );
+                fileName, baseDir,
+                encoding, stream));
 
         // set new variables
         cursor = 0;
@@ -159,17 +158,18 @@ final class Mark {
 
     /**
      * Restores this mark's state to a previously stored stream.
+     *
      * @return The previous Mark instance when the stream was pushed, or null
-     * if there is no previous stream
+     *         if there is no previous stream
      */
     public Mark popStream() {
         // make sure we have something to pop
-        if ( includeStack.size() <= 0 ) {
+        if (includeStack.size() <= 0) {
             return null;
         }
 
         // get previous state in stack
-        IncludeState state = (IncludeState) includeStack.pop( );
+        IncludeState state = (IncludeState) includeStack.pop();
 
         // set new variables
         cursor = state.cursor;
@@ -202,7 +202,7 @@ final class Mark {
     }
 
     public String toString() {
-	return getFile()+"("+line+","+col+")";
+        return getFile() + "(" + line + "," + col + ")";
     }
 
     public String getFile() {
@@ -213,30 +213,29 @@ final class Mark {
      * Gets the URL of the resource with which this Mark is associated
      *
      * @return URL of the resource with which this Mark is associated
-     *
-     * @exception MalformedURLException if the resource pathname is incorrect
+     * @throws MalformedURLException if the resource pathname is incorrect
      */
     public URL getURL() throws MalformedURLException {
         return ctxt.getResource(getFile());
     }
 
     public String toShortString() {
-        return "("+line+","+col+")";
+        return "(" + line + "," + col + ")";
     }
 
     public boolean equals(Object other) {
-	if (other instanceof Mark) {
-	    Mark m = (Mark) other;
-	    return this.reader == m.reader && this.fileId == m.fileId 
-		&& this.cursor == m.cursor && this.line == m.line 
-		&& this.col == m.col;
-	} 
-	return false;
+        if (other instanceof Mark) {
+            Mark m = (Mark) other;
+            return this.reader == m.reader && this.fileId == m.fileId
+                    && this.cursor == m.cursor && this.line == m.line
+                    && this.col == m.col;
+        }
+        return false;
     }
 
     /**
      * @return true if this Mark is greather than the <code>other</code>
-     * Mark, false otherwise.
+     *         Mark, false otherwise.
      */
     public boolean isGreater(Mark other) {
 
@@ -265,7 +264,7 @@ final class Mark {
         String encoding;
         char[] stream = null;
 
-        IncludeState(int inCursor, int inLine, int inCol, int inFileId, 
+        IncludeState(int inCursor, int inLine, int inCol, int inFileId,
                      String name, String inBaseDir, String inEncoding,
                      char[] inStream) {
             cursor = inCursor;

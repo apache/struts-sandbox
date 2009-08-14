@@ -19,10 +19,10 @@ package org.apache.struts2.jasper.compiler;
 
 /**
  * This class implements a parser for EL expressions.
- *
+ * <p/>
  * It takes strings of the form xxx${..}yyy${..}zzz etc, and turn it into
  * a ELNode.Nodes.
- *
+ * <p/>
  * Currently, it only handles text outside ${..} and functions in ${ ..}.
  *
  * @author Kin-man Chung
@@ -38,9 +38,9 @@ public class ELParser {
     private boolean escapeBS;        // is '\' an escape char in text outside EL?
 
     private static final String reservedWords[] = {
-        "and", "div", "empty", "eq", "false",
-        "ge", "gt", "instanceof", "le", "lt", "mod",
-        "ne", "not", "null", "or", "true"};
+            "and", "div", "empty", "eq", "false",
+            "ge", "gt", "instanceof", "le", "lt", "mod",
+            "ne", "not", "null", "or", "true"};
 
     public ELParser(String expression) {
         index = 0;
@@ -50,6 +50,7 @@ public class ELParser {
 
     /**
      * Parse an EL expression
+     *
      * @param expression The input expression string of the form
      *                   Char* ('${' Char* '}')* Char*
      * @return Parsed EL expression in ELNode.Nodes
@@ -62,7 +63,7 @@ public class ELParser {
                 parser.expr.add(new ELNode.Text(text));
             }
             ELNode.Nodes elexpr = parser.parseEL();
-            if (! elexpr.isEmpty()) {
+            if (!elexpr.isEmpty()) {
                 parser.expr.add(new ELNode.Root(elexpr));
             }
         }
@@ -71,9 +72,10 @@ public class ELParser {
 
     /**
      * Parse an EL expression string '${...}'
-     *@return An ELNode.Nodes representing the EL expression
-     * TODO: Currently only parsed into functions and text strings.  This
-     *       should be rewritten for a full parser.
+     *
+     * @return An ELNode.Nodes representing the EL expression
+     *         TODO: Currently only parsed into functions and text strings.  This
+     *         should be rewritten for a full parser.
      */
     private ELNode.Nodes parseEL() {
 
@@ -106,11 +108,11 @@ public class ELParser {
     /**
      * Parse for a function
      * FunctionInvokation ::= (identifier ':')? identifier '('
-     *                              (Expression (,Expression)*)? ')'
+     * (Expression (,Expression)*)? ')'
      * Note: currently we don't parse arguments
      */
     private boolean parseFunction() {
-        if (! (curToken instanceof Id) || isELReserved(curToken.toString())) {
+        if (!(curToken instanceof Id) || isELReserved(curToken.toString())) {
             return false;
         }
         String s1 = null;                 // Function prefix
@@ -146,13 +148,13 @@ public class ELParser {
         int i = 0;
         int j = reservedWords.length;
         while (i < j) {
-            int k = (i+j)/2;
+            int k = (i + j) / 2;
             int result = reservedWords[k].compareTo(id);
             if (result == 0) {
                 return true;
             }
             if (result < 0) {
-                i = k+1;
+                i = k + 1;
             } else {
                 j = k;
             }
@@ -163,6 +165,7 @@ public class ELParser {
     /**
      * Skip until an EL expression ('${') is reached, allowing escape sequences
      * '\\' and '\$'.
+     *
      * @return The text string up to the EL expression
      */
     private String skipUntilEL() {
@@ -184,7 +187,7 @@ public class ELParser {
                 if (ch == '{') {
                     prev = 0;
                     break;
-                } 
+                }
                 buf.append('$');
                 buf.append(ch);
                 prev = 0;
@@ -220,7 +223,7 @@ public class ELParser {
                 StringBuffer buf = new StringBuffer();
                 buf.append(ch);
                 while ((ch = peekChar()) != -1 &&
-                                Character.isJavaIdentifierPart(ch)) {
+                        Character.isJavaIdentifierPart(ch)) {
                     buf.append(ch);
                     nextChar();
                 }
@@ -281,14 +284,14 @@ public class ELParser {
 
     private char nextChar() {
         if (index >= expression.length()) {
-            return (char)-1;
+            return (char) -1;
         }
         return expression.charAt(index++);
     }
 
     private char peekChar() {
         if (index >= expression.length()) {
-            return (char)-1;
+            return (char) -1;
         }
         return expression.charAt(index);
     }

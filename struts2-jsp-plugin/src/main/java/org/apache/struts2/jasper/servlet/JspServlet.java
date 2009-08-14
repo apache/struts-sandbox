@@ -17,8 +17,8 @@
 
 package org.apache.struts2.jasper.servlet;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.opensymphony.xwork2.util.logging.Logger;
+import com.opensymphony.xwork2.util.logging.LoggerFactory;
 import org.apache.struts2.jasper.Constants;
 import org.apache.struts2.jasper.EmbeddedServletOptions;
 import org.apache.struts2.jasper.Options;
@@ -37,7 +37,7 @@ import java.util.Enumeration;
 
 /**
  * The JSP engine (a.k.a Jasper).
- *
+ * <p/>
  * The servlet container is responsible for providing a
  * URLClassLoader for the web application context Jasper
  * is being used in. Jasper will try get the Tomcat
@@ -54,7 +54,7 @@ import java.util.Enumeration;
 public class JspServlet extends HttpServlet {
 
     // Logger
-    private Log log = LogFactory.getLog(JspServlet.class);
+    private Logger log = LoggerFactory.getLogger(JspServlet.class);
 
     private ServletContext context;
     private ServletConfig config;
@@ -66,24 +66,24 @@ public class JspServlet extends HttpServlet {
      * Initializes this JspServlet.
      */
     public void init(ServletConfig config) throws ServletException {
-        
+
         super.init(config);
         this.config = config;
         this.context = config.getServletContext();
-        
+
         // Initialize the JSP Runtime Context
         // Check for a custom Options implementation
-        String engineOptionsName = 
-            config.getInitParameter("engineOptionsClass");
+        String engineOptionsName =
+                config.getInitParameter("engineOptionsClass");
         if (engineOptionsName != null) {
             // Instantiate the indicated Options implementation
             try {
                 ClassLoader loader = Thread.currentThread()
                         .getContextClassLoader();
                 Class engineOptionsClass = loader.loadClass(engineOptionsName);
-                Class[] ctorSig = { ServletConfig.class, ServletContext.class };
+                Class[] ctorSig = {ServletConfig.class, ServletContext.class};
                 Constructor ctor = engineOptionsClass.getConstructor(ctorSig);
-                Object[] args = { config, context };
+                Object[] args = {config, context};
                 options = (Options) ctor.newInstance(args);
             } catch (Throwable e) {
                 // Need to localize this.
@@ -96,7 +96,7 @@ public class JspServlet extends HttpServlet {
             options = new EmbeddedServletOptions(config, context);
         }
         rctxt = new JspRuntimeContext(context, options);
-        
+
         if (log.isDebugEnabled()) {
             log.debug(Localizer.getMessage("jsp.message.scratch.dir.is",
                     options.getScratchDir().toString()));
@@ -109,11 +109,11 @@ public class JspServlet extends HttpServlet {
      * Returns the number of JSPs for which JspServletWrappers exist, i.e.,
      * the number of JSPs that have been loaded into the webapp with which
      * this JspServlet is associated.
-     *
+     * <p/>
      * <p>This info may be used for monitoring purposes.
      *
      * @return The number of JSPs that have been loaded into the webapp with
-     * which this JspServlet is associated
+     *         which this JspServlet is associated
      */
     public int getJspCount() {
         return this.rctxt.getJspCount();
@@ -132,11 +132,11 @@ public class JspServlet extends HttpServlet {
 
     /**
      * Gets the number of JSPs that have been reloaded.
-     *
+     * <p/>
      * <p>This info may be used for monitoring purposes.
      *
      * @return The number of JSPs (in the webapp with which this JspServlet is
-     * associated) that have been reloaded
+     *         associated) that have been reloaded
      */
     public int getJspReloadCount() {
         return this.rctxt.getJspReloadCount();
@@ -152,9 +152,8 @@ public class JspServlet extends HttpServlet {
      * <code>request.setCharacterEncoding()</code> first.</p>
      *
      * @param request The servlet requset we are processing
-     *
-     * @exception ServletException if an invalid parameter value for the
-     *  <code>jsp_precompile</code> parameter name is specified
+     * @throws ServletException if an invalid parameter value for the
+     *                          <code>jsp_precompile</code> parameter name is specified
      */
     boolean preCompile(HttpServletRequest request) throws ServletException {
 
@@ -167,7 +166,7 @@ public class JspServlet extends HttpServlet {
             return (false);
         }
         queryString =
-            queryString.substring(start + Constants.PRECOMPILE.length());
+                queryString.substring(start + Constants.PRECOMPILE.length());
         if (queryString.length() == 0) {
             return (true);             // ?jsp_precompile
         }
@@ -194,16 +193,16 @@ public class JspServlet extends HttpServlet {
             return (true);             // ?jsp_precompile=false
         } else {
             throw new ServletException("Cannot have request parameter " +
-                                       Constants.PRECOMPILE + " set to " +
-                                       value);
+                    Constants.PRECOMPILE + " set to " +
+                    value);
         }
 
     }
-    
 
-    public void service (HttpServletRequest request, 
-                         HttpServletResponse response)
-                throws ServletException, IOException {
+
+    public void service(HttpServletRequest request,
+                        HttpServletResponse response)
+            throws ServletException, IOException {
 
         String jspUri = null;
 
@@ -224,7 +223,7 @@ public class JspServlet extends HttpServlet {
                  * relevant javax.servlet.include.* request attributes
                  */
                 String pathInfo = (String) request.getAttribute(
-                                    "javax.servlet.include.path_info");
+                        "javax.servlet.include.path_info");
                 if (pathInfo != null) {
                     jspUri += pathInfo;
                 }
@@ -253,8 +252,8 @@ public class JspServlet extends HttpServlet {
             Enumeration e = request.getParameterNames();
             while (e.hasMoreElements()) {
                 String name = (String) e.nextElement();
-                log.debug("\t\t " + name + " = " 
-                          + request.getParameter(name));
+                log.debug("\t\t " + name + " = "
+                        + request.getParameter(name));
             }
         }
 
@@ -287,39 +286,39 @@ public class JspServlet extends HttpServlet {
     private void serviceJspFile(HttpServletRequest request,
                                 HttpServletResponse response, String jspUri,
                                 Throwable exception, boolean precompile)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
 
         JspServletWrapper wrapper =
-            (JspServletWrapper) rctxt.getWrapper(jspUri);
+                (JspServletWrapper) rctxt.getWrapper(jspUri);
         if (wrapper == null) {
-            synchronized(this) {
+            synchronized (this) {
                 wrapper = (JspServletWrapper) rctxt.getWrapper(jspUri);
                 if (wrapper == null) {
                     // Check if the requested JSP page exists, to avoid
                     // creating unnecessary directories and files.
                     if (null == context.getResource(jspUri)) {
                         String includeRequestUri = (String)
-                        request.getAttribute("javax.servlet.include.request_uri");
+                                request.getAttribute("javax.servlet.include.request_uri");
                         if (includeRequestUri != null) {
                             // This file was included. Throw an exception as
                             // a response.sendError() will be ignored
                             throw new ServletException(Localizer.getMessage(
-                                    "jsp.error.file.not.found",jspUri));
+                                    "jsp.error.file.not.found", jspUri));
                         } else {
                             try {
                                 response.sendError(HttpServletResponse.SC_NOT_FOUND,
                                         request.getRequestURI());
-                        } catch (IllegalStateException ise) {
-                            log.error(Localizer.getMessage("jsp.error.file.not.found",
-                                   jspUri));
+                            } catch (IllegalStateException ise) {
+                                log.error(Localizer.getMessage("jsp.error.file.not.found",
+                                        jspUri));
+                            }
                         }
-                    }
                         return;
                     }
                     boolean isErrorPage = exception != null;
                     wrapper = new JspServletWrapper(config, options, jspUri,
-                                                    isErrorPage, rctxt);
-                    rctxt.addWrapper(jspUri,wrapper);
+                            isErrorPage, rctxt);
+                    rctxt.addWrapper(jspUri, wrapper);
                 }
             }
         }

@@ -2,8 +2,8 @@
 
 <c:set var="number" value="10"/>
 <c:forEach begin="0" end="${number}">
-X    
+    X
 </c:forEach>
 <c:if test="${number < 15}">
-Y
+    Y
 </c:if>

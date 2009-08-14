@@ -42,9 +42,9 @@ public class TextOptimizer {
             collectText();
         }
 
-	/*
-         * The following directis are ignored in text concatenation
-         */
+        /*
+        * The following directis are ignored in text concatenation
+        */
 
         public void visit(Node.PageDirective n) throws JasperException {
         }
@@ -88,7 +88,7 @@ public class TextOptimizer {
 
         /**
          * This method breaks concatenation mode.  As a side effect it copies
-         * the concatenated string to the first text node 
+         * the concatenated string to the first text node
          */
         private void collectText() {
 
@@ -107,7 +107,7 @@ public class TextOptimizer {
         TextCatVisitor v = new TextCatVisitor(compiler);
         page.visit(v);
 
-	// Cleanup, in case the page ends with a template text
+        // Cleanup, in case the page ends with a template text
         v.collectText();
     }
 }

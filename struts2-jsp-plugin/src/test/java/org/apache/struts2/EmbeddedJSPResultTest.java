@@ -25,28 +25,43 @@ import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
 import com.opensymphony.xwork2.inject.Container;
 import com.opensymphony.xwork2.util.ValueStack;
 import junit.framework.TestCase;
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.xwork.StringUtils;
 import org.easymock.EasyMock;
 import org.easymock.IAnswer;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockServletContext;
 
+import javax.servlet.Servlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.servlet.Servlet;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
 import java.util.ArrayList;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CyclicBarrier;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 
 public class EmbeddedJSPResultTest extends TestCase {
     private HttpServletRequest request;
     private MockHttpServletResponse response;
     private MockServletContext context;
     private EmbeddedJSPResult result;
+
+    public void testEmbedded() throws Exception {
+        //the jsp is inside jsps.jar
+        result.setLocation("dir/all.jsp");
+        result.execute(null);
+
+        assertEquals("helloJGWhoamI?XXXXXXXXXXXYThissessionisnotsecure.", StringUtils.deleteWhitespace(response.getContentAsString()));
+    }
+
+    public void testEmbeddedAbsolutePath() throws Exception {
+        //the jsp is inside jsps.jar
+        result.setLocation("/dir/all.jsp");
+        result.execute(null);
+
+        assertEquals("helloJGWhoamI?XXXXXXXXXXXYThissessionisnotsecure.", StringUtils.deleteWhitespace(response.getContentAsString()));
+    }
 
     public void testSimple() throws Exception {
         result.setLocation("org/apache/struts2/simple0.jsp");
@@ -66,35 +81,35 @@ public class EmbeddedJSPResultTest extends TestCase {
         result.setLocation("org/apache/struts2/tag0.jsp");
         result.execute(null);
 
-        assertEquals("Thissessionisnotsecure.OtherText", cleanup(response.getContentAsString()));
+        assertEquals("Thissessionisnotsecure.OtherText", StringUtils.deleteWhitespace(response.getContentAsString()));
     }
 
     public void testIncludeSimple() throws Exception {
         result.setLocation("org/apache/struts2/includes0.jsp");
         result.execute(null);
 
-        assertEquals("helloTest", cleanup(response.getContentAsString()));
+        assertEquals("helloTest", StringUtils.deleteWhitespace(response.getContentAsString()));
     }
 
     public void testIncludeSimpleWithDirective() throws Exception {
         result.setLocation("org/apache/struts2/includes3.jsp");
         result.execute(null);
 
-        assertEquals("helloTest", cleanup(response.getContentAsString()));
+        assertEquals("helloTest", StringUtils.deleteWhitespace(response.getContentAsString()));
     }
 
     public void testIncludeWithSubdir() throws Exception {
         result.setLocation("org/apache/struts2/includes1.jsp");
         result.execute(null);
 
-        assertEquals("subTest", cleanup(response.getContentAsString()));
+        assertEquals("subTest", StringUtils.deleteWhitespace(response.getContentAsString()));
     }
 
     public void testIncludeWithParam() throws Exception {
         result.setLocation("org/apache/struts2/includes2.jsp");
         result.execute(null);
 
-        assertEquals("JGTest", cleanup(response.getContentAsString()));
+        assertEquals("JGTest", StringUtils.deleteWhitespace(response.getContentAsString()));
     }
 
     public void testBroken0() throws Exception {
@@ -111,7 +126,7 @@ public class EmbeddedJSPResultTest extends TestCase {
         result.setLocation("org/apache/struts2/jstl.jsp");
         result.execute(null);
 
-        assertEquals("XXXXXXXXXXXY", cleanup(response.getContentAsString()));
+        assertEquals("XXXXXXXXXXXY", StringUtils.deleteWhitespace(response.getContentAsString()));
     }
 
 
@@ -154,17 +169,12 @@ public class EmbeddedJSPResultTest extends TestCase {
         }
     }
 
-     public void testBeans() throws Exception {
+    public void testBeans() throws Exception {
         result.setLocation("org/apache/struts2/beans.jsp");
         result.execute(null);
 
-        assertEquals("WhoamI?", cleanup(response.getContentAsString()));
+        assertEquals("WhoamI?", StringUtils.deleteWhitespace(response.getContentAsString()));
     }
-
-    private String cleanup(String str) {
-        return str.replaceAll("\\s", "");
-    }
-
 
     @Override
     protected void setUp() throws Exception {
