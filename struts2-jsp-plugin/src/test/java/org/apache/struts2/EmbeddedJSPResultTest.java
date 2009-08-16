@@ -47,6 +47,13 @@ public class EmbeddedJSPResultTest extends TestCase {
     private MockServletContext context;
     private EmbeddedJSPResult result;
 
+    public void testScriptlet() throws Exception {
+        result.setLocation("org/apache/struts2/scriptlet.jsp");
+        result.execute(null);
+
+        assertEquals("Saynotoscriptlets", StringUtils.deleteWhitespace(response.getContentAsString()));
+    }
+
     public void testEmbedded() throws Exception {
         //the jsp is inside jsps.jar
         result.setLocation("dir/all.jsp");
@@ -262,7 +269,10 @@ class ServletGetRunnable implements Runnable {
         //wait to start all therads at once..or try at least
         try {
             startBarrier.await();
-            object = servletCache.get("org/apache/struts2/simple0.jsp");
+            Object servlet = servletCache.get("org/apache/struts2/simple0.jsp");
+
+            for ()
+
             endBarrier.await();
         } catch (Exception e) {
             throw new RuntimeException(e);
