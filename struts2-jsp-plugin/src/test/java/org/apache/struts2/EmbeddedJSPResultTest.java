@@ -269,9 +269,13 @@ class ServletGetRunnable implements Runnable {
         //wait to start all therads at once..or try at least
         try {
             startBarrier.await();
-            Object servlet = servletCache.get("org/apache/struts2/simple0.jsp");
+            object = servletCache.get("org/apache/struts2/simple0.jsp");
 
-            for ()
+            for (int i = 0; i < 10; i++) {
+                Object object2 = servletCache.get("org/apache/struts2/simple0.jsp");
+                if (object2 != object)
+                    throw new RuntimeException("gat different object from cache");
+            }
 
             endBarrier.await();
         } catch (Exception e) {

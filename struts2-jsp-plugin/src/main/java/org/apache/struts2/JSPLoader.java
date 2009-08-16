@@ -161,12 +161,19 @@ public class JSPLoader {
         ClassLoaderInterface classLoaderInterface = getClassLoaderInterface();
         UrlSet urlSet = new UrlSet(classLoaderInterface);
 
+        //find jars
         List<URL> urls = urlSet.getUrls();
-        if (urls != null) {
-            for (URL url : urls) {
-                File file = FileUtils.toFile(URLUtil.normalizeToFileProtocol(url));
+        
+        //UrlSet searches for dirs that end in WEB-INF/classes, so when running test
+        //from maven, it won't find test-classes dir
+        //find directories in the classpath
+        urls.addAll(Collections.list(classLoaderInterface.getResources("")));
+
+        for (URL url : urls) {
+            URL normalizedUrl = URLUtil.normalizeToFileProtocol(url);
+            File file = FileUtils.toFile((URL) ObjectUtils.defaultIfNull(normalizedUrl, url));
+            if (file.exists())
                 classPath.add(file.getAbsolutePath());
-            }
         }
 
         //these should be in the list already, but I am feeling paranoid
@@ -176,21 +183,6 @@ public class JSPLoader {
         classPath.add(getJarUrl(Servlet.class));
         //jsp api
         classPath.add(getJarUrl(JspPage.class));
-
-        //UrlSet searches for dirs that end in WEB-INF/classes, so when running test
-        //from maven, it won't find test-classes dir
-        //find directories in the classpath
-        Enumeration<URL> rootUrls = classLoaderInterface.getResources("");
-        while (rootUrls.hasMoreElements()) {
-            URL url = rootUrls.nextElement();
-            URL normalized = URLUtil.normalizeToFileProtocol(url);
-            if (normalized == null) {
-                //this means that it is directory, not a jar, double check
-                File file = FileUtils.toFile(url);
-                if (file.exists() && file.isDirectory())
-                    classPath.add(file.getAbsolutePath());
-            }
-        }
 
         //add extra classpath entries (jars where tlds were found will be here)
         for (Iterator<String> iterator = extraClassPath.iterator(); iterator.hasNext();) {
