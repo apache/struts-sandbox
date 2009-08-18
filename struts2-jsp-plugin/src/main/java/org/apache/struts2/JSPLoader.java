@@ -49,6 +49,8 @@ import java.net.URL;
 import java.security.CodeSource;
 import java.security.ProtectionDomain;
 import java.util.*;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 /**
  * Uses jasper to extract a JSP from the classpath to a file and compile it. The classpath used for
@@ -60,6 +62,9 @@ public class JSPLoader {
 
     private static MemoryClassLoader classLoader = new MemoryClassLoader();
     private static final String DEFAULT_PACKAGE = "org.apache.struts2.jsp";
+
+    private static final Pattern PACKAGE_PATTERN = Pattern.compile("package (.*?);");
+    private static final Pattern CLASS_PATTERN = Pattern.compile("public final class (.*?) ");
 
     public Servlet load(String location) throws Exception {
         location = StringUtils.substringBeforeLast(location, "?");
@@ -74,7 +79,7 @@ public class JSPLoader {
 
         //System.out.print(source);
 
-        String className = toClassName(location);
+        String className = extractClassName(source);
 
         //use Java Compiler API to compile the java code into a class
         //the tlds that were discovered are added (their jars) to the classpath
@@ -85,10 +90,16 @@ public class JSPLoader {
         return createServlet(clazz);
     }
 
-    private String toClassName(String location) {
-        String className = StringUtils.substringBeforeLast(location, ".jsp");
-        className = JspUtil.makeJavaPackage(className);
-        return DEFAULT_PACKAGE + "." + className + "_jsp";
+    private String extractClassName(String source) {
+        Matcher matcher = PACKAGE_PATTERN.matcher(source);
+        matcher.find();
+        String packageName = matcher.group(1);
+
+        matcher = CLASS_PATTERN.matcher(source);
+        matcher.find();
+        String className = matcher.group(1);
+
+        return packageName + "." + className;
     }
 
     /**
@@ -163,11 +174,6 @@ public class JSPLoader {
 
         //find jars
         List<URL> urls = urlSet.getUrls();
-        
-        //UrlSet searches for dirs that end in WEB-INF/classes, so when running test
-        //from maven, it won't find test-classes dir
-        //find directories in the classpath
-        urls.addAll(Collections.list(classLoaderInterface.getResources("")));
 
         for (URL url : urls) {
             URL normalizedUrl = URLUtil.normalizeToFileProtocol(url);

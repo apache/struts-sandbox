@@ -26,11 +26,9 @@
         "http://struts.apache.org/dtds/struts-2.0.dtd">
 
 <struts>
-    <package name="jsp-default" extends="struts-default">
-
+    <package name="embeddedjsp-default" extends="struts-default" abstract="true">
         <result-types>
             <result-type name="embeddedJsp" class="org.apache.struts2.EmbeddedJSPResult"/>
         </result-types>
     </package>
-
 </struts>

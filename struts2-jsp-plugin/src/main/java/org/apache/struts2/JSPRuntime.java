@@ -37,6 +37,10 @@ public abstract class JSPRuntime {
     //maps from jsp path -> pagelet
     protected static final ServletCache servletCache = new ServletCache();
 
+    public static void clearCache() {
+        servletCache.clear();
+    }
+
     public static void handle(String location) throws Exception {
         handle(location, false);
     }

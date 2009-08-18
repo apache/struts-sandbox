@@ -24,6 +24,7 @@ import org.apache.struts2.jasper.compiler.Compiler;
 import org.apache.struts2.jasper.compiler.*;
 import org.apache.struts2.jasper.servlet.JasperLoader;
 import org.apache.struts2.jasper.servlet.JspServletWrapper;
+import org.apache.commons.lang.xwork.StringUtils;
 
 import javax.servlet.ServletContext;
 import javax.servlet.jsp.tagext.TagInfo;
@@ -220,7 +221,7 @@ public class JspCompilationContext {
      */
     public java.io.InputStream getResourceAsStream(String res) {
         try {
-            return classLoaderInterface.getResourceAsStream(canonicalURI(res));
+            return classLoaderInterface.getResourceAsStream(canonicalURI(StringUtils.removeStart(res, "/")));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -228,7 +229,7 @@ public class JspCompilationContext {
 
 
     public URL getResource(String res) throws MalformedURLException {
-        return classLoaderInterface.getResource(canonicalURI(res));
+        return classLoaderInterface.getResource(canonicalURI(StringUtils.removeStart(res, "/")));
     }
 
     public Set getResourcePaths(String path) {

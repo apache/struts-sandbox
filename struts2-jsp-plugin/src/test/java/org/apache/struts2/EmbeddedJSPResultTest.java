@@ -24,6 +24,8 @@ import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
 import com.opensymphony.xwork2.inject.Container;
 import com.opensymphony.xwork2.util.ValueStack;
+import com.opensymphony.xwork2.util.finder.ClassLoaderInterface;
+import com.opensymphony.xwork2.util.finder.ClassLoaderInterfaceDelegate;
 import junit.framework.TestCase;
 import org.apache.commons.lang.xwork.StringUtils;
 import org.easymock.EasyMock;
@@ -34,6 +36,7 @@ import org.springframework.mock.web.MockServletContext;
 import javax.servlet.Servlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -62,6 +65,25 @@ public class EmbeddedJSPResultTest extends TestCase {
         assertEquals("helloJGWhoamI?XXXXXXXXXXXYThissessionisnotsecure.", StringUtils.deleteWhitespace(response.getContentAsString()));
     }
 
+    public void testFilesAreReadOnlyOnce() throws Exception {
+        //make sure that files are not read multiple times
+        String jsp = "org/apache/struts2/dont-use.jsp";
+
+        CountingClassLoaderInterface classLoaderInterface = new CountingClassLoaderInterface(this.getClass().getClassLoader());
+        context.setAttribute(ClassLoaderInterface.CLASS_LOADER_INTERFACE, classLoaderInterface);
+        result.setLocation(jsp);
+
+        result.execute(null);
+        Integer counter0 = classLoaderInterface.counters.get(jsp);
+        assertNotNull(counter0);
+
+        result.execute(null);
+        Integer counter1 = classLoaderInterface.counters.get(jsp);
+        assertNotNull(counter1);
+
+        assertEquals(counter0, counter1);
+    }
+
     public void testEmbeddedAbsolutePath() throws Exception {
         //the jsp is inside jsps.jar
         result.setLocation("/dir/all.jsp");
@@ -75,6 +97,13 @@ public class EmbeddedJSPResultTest extends TestCase {
         result.execute(null);
 
         assertEquals("hello", response.getContentAsString());
+    }
+
+    public void testEL() throws Exception {
+        result.setLocation("org/apache/struts2/el.jsp");
+        result.execute(null);
+
+        assertEquals("somethingelseText", response.getContentAsString());
     }
 
     public void tesAbsolutePatht() throws Exception {
@@ -206,6 +235,7 @@ public class EmbeddedJSPResultTest extends TestCase {
                 return ((String[]) params.get("username"))[0];
             }
         });
+        EasyMock.expect(request.getAttribute("something")).andReturn("somethingelse").anyTimes();
 
         EasyMock.replay(request);
 
@@ -233,8 +263,6 @@ public class EmbeddedJSPResultTest extends TestCase {
         actionContext.setContainer(container);
 
         actionContext.setValueStack(valueStack);
-
-        //XWorkConverter conv = ((Container)stack.getContext().get(ActionContext.CONTAINER)).getInstance(XWorkConverter.class);
     }
 }
 
@@ -274,7 +302,7 @@ class ServletGetRunnable implements Runnable {
             for (int i = 0; i < 10; i++) {
                 Object object2 = servletCache.get("org/apache/struts2/simple0.jsp");
                 if (object2 != object)
-                    throw new RuntimeException("gat different object from cache");
+                    throw new RuntimeException("got different object from cache");
             }
 
             endBarrier.await();
@@ -285,5 +313,22 @@ class ServletGetRunnable implements Runnable {
 
     public Object getObject() {
         return object;
+    }
+}
+
+class CountingClassLoaderInterface extends ClassLoaderInterfaceDelegate {
+    public Map<String, Integer> counters = new HashMap<String, Integer>();
+
+    public CountingClassLoaderInterface(ClassLoader classLoader) {
+        super(classLoader);
+    }
+
+    @Override
+    public InputStream getResourceAsStream(String name) {
+        Integer counter = counters.get(name);
+        counter = counter == null ? 1 : counter + 1;
+        counters.put(name, counter);
+
+        return super.getResourceAsStream(name);
     }
 }

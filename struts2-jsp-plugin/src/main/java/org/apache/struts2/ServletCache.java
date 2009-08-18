@@ -33,6 +33,10 @@ public class ServletCache {
 
     private final JSPLoader jspLoader = new JSPLoader();
 
+    public void clear() {
+        cache.clear();        
+    }
+
     public Servlet get(final String location) throws InterruptedException {
         while (true) {
             Future<Servlet> future = cache.get(location);

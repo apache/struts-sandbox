@@ -37,12 +37,6 @@ public class MemoryJavaFileObject extends SimpleJavaFileObject {
         super(toURI(name), kind);
     }
 
-    public CharSequence getCharContent(boolean ignoreEncodingErrors)
-            throws IOException, IllegalStateException,
-            UnsupportedOperationException {
-        throw new UnsupportedOperationException();
-    }
-
     public InputStream openInputStream() throws IOException,
             IllegalStateException, UnsupportedOperationException {
         return new ByteArrayInputStream(out.toByteArray());
