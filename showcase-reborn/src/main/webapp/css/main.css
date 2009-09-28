@@ -1,0 +1,22 @@
+#left-nav {
+    width: 300px;
+    float: left;
+}
+
+#content {
+    float: left;
+    width: 900px;
+}
+
+.section {
+    border: 1px solid #DDDDDD;
+}
+
+.errorMessage {
+    color: red;
+}
+
+/* overwrite jquery theme */
+.ui-helper-reset {
+    font-size: 10pt !important;
+}

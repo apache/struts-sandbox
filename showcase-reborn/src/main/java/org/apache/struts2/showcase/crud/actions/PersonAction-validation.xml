@@ -1,0 +1,19 @@
+<!DOCTYPE validators PUBLIC "-//OpenSymphony Group//XWork Validator 1.0.2//EN"
+       "http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
+<validators>
+    <field name="person.name">
+    	<field-validator type="requiredstring">
+          <message>Your friend must have a name.</message>
+      	</field-validator>
+    </field>
+    <field name="person.birthDay">
+    	<field-validator type="required">
+          <message>If you are a good friend, you will know your friend's birthday.</message>
+      	</field-validator>
+    </field>
+    <field name="person.coolness">
+    	<field-validator type="required">
+          <message>You have to rate your friend's coolness.</message>
+      	</field-validator>
+    </field>
+</validators>
