@@ -16,43 +16,43 @@ import com.opensymphony.xwork2.util.reflection.ReflectionException;
  * A OgnlReflectionProvider based on Unified EL.
  */
 public class UelReflectionProvider extends OgnlReflectionProvider {
-	private ExpressionFactory factory;
-	private XWorkConverter xworkConverter;
+    private ExpressionFactory factory;
+    private XWorkConverter xworkConverter;
 
-	@Inject
-	public void setXWorkConverter(XWorkConverter conv) {
-		this.xworkConverter = conv;
-	}
+    @Inject
+    public void setXWorkConverter(XWorkConverter conv) {
+        this.xworkConverter = conv;
+    }
 
-	public void initExpressionFactory() {
-		if (factory == null) {
-			factory = ExpressionFactoryHolder.getExpressionFactory();
-		}
-	}
-	
+    public void initExpressionFactory() {
+        if (factory == null) {
+            factory = ExpressionFactoryHolder.getExpressionFactory();
+        }
+    }
+
     @Override
     public Object getValue(String expr, Map context, Object root) throws ReflectionException {
-    	initExpressionFactory();
+        initExpressionFactory();
         CompoundRoot compoundRoot = new CompoundRoot();
         compoundRoot.add(root);
         ELContext elContext = new CompoundRootELContext();
         elContext.putContext(XWorkConverter.class, xworkConverter);
         // parse our expression
         ValueExpression valueExpr = factory.createValueExpression(elContext,
-            expr, String.class);
+                expr, String.class);
         return (String) valueExpr.getValue(elContext);
     }
 
     @Override
     public void setValue(String expr, Map context, Object root, Object value) throws ReflectionException {
-    	initExpressionFactory();
+        initExpressionFactory();
         CompoundRoot compoundRoot = new CompoundRoot();
         compoundRoot.add(root);
         ELContext elContext = new CompoundRootELContext();
         elContext.putContext(XWorkConverter.class, xworkConverter);
         // parse our expression
         ValueExpression valueExpr = factory.createValueExpression(elContext,
-            expr, String.class);
+                expr, String.class);
         valueExpr.setValue(elContext, value);
     }
 }

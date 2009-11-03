@@ -17,161 +17,173 @@ import com.opensymphony.xwork2.util.ValueStack;
  * A ValueStack that uses Unified EL as the underlying Expression Language.
  */
 public class UelValueStack implements ValueStack {
-	private CompoundRoot root = new CompoundRoot();
-	private transient Map context;
-	private Class defaultType;
-	private Map overrides;
-	private XWorkConverter xworkConverter;
+    private CompoundRoot root = new CompoundRoot();
+    private transient Map context;
+    private Class defaultType;
+    private Map overrides;
+    private XWorkConverter xworkConverter;
 
-	private ExpressionFactory factory;
+    private ExpressionFactory factory;
 
-	private ELContext elContext;
+    private ELContext elContext;
 
-	public UelValueStack(ExpressionFactory factory,
-			XWorkConverter xworkConverter) {
-		this(factory, xworkConverter, new CompoundRoot());
-	}
+    public UelValueStack(ExpressionFactory factory,
+                         XWorkConverter xworkConverter) {
+        this(factory, xworkConverter, new CompoundRoot());
+    }
 
-	public UelValueStack(ExpressionFactory factory,
-			XWorkConverter xworkConverter, ValueStack vs) {
-		this(factory, xworkConverter, new CompoundRoot(vs.getRoot()));
-	}
+    public UelValueStack(ExpressionFactory factory,
+                         XWorkConverter xworkConverter, ValueStack vs) {
+        this(factory, xworkConverter, new CompoundRoot(vs.getRoot()));
+    }
 
-	public UelValueStack(ExpressionFactory factory,
-			XWorkConverter xworkConverter, CompoundRoot root) {
-		this.xworkConverter = xworkConverter;
-		this.factory = factory;
-		setRoot(new CompoundRoot());
-	}
+    public UelValueStack(ExpressionFactory factory,
+                         XWorkConverter xworkConverter, CompoundRoot root) {
+        this.xworkConverter = xworkConverter;
+        this.factory = factory;
+        setRoot(new CompoundRoot());
+    }
 
-	public String findString(String expr) {
-		return (String) findValue(expr, String.class);
-	}
+    public String findString(String expr, boolean throwException) {
+        return (String) findValue(expr, String.class);
+    }
 
-	public Object findValue(String expr) {
-		return findValue(expr, Object.class);
-	}
+    public String findString(String expr) {
+        return findString(expr, false);
+    }
 
-	public Object findValue(String expr, Class asType) {
-		String originalExpression = expr;
-		try {
-			if (expr != null && expr.startsWith("#") && !expr.startsWith("#{")) {
-				int firstDot = expr.indexOf('.');
-				if (firstDot < 0) {
-					String key = expr.substring(1);
-					return (Object) context.get(key);
-				} else {
-					String key = expr.substring(1, firstDot);
-					String value = expr.substring(firstDot + 1);
-					Map map = (Map) context.get(key);
-					return map.get(value);
-				}
-			}
-			if ((overrides != null) && overrides.containsKey(expr)) {
-				expr = (String) overrides.get(expr);
-			}
-			if (expr != null && expr.startsWith("%{")) {
-				// replace %{ with ${
-				expr = "#" + expr.substring(1);
-			}
-			if (expr != null && !expr.startsWith("${")
-					&& !expr.startsWith("#{")) {
-				expr = "#{" + expr + "}";
-			}
-	        elContext.putContext(XWorkConverter.class, xworkConverter);
-	        elContext.putContext(CompoundRoot.class, root);
-			// parse our expression
-			ValueExpression valueExpr = factory.createValueExpression(
-					elContext, expr, Object.class);
-			Object retVal = valueExpr.getValue(elContext);
-			if (!Object.class.equals(asType)) {
-				retVal = xworkConverter.convertValue(null, retVal, asType);
-			}
-			return retVal;
-		} catch (PropertyNotFoundException e) {
-			if (context.containsKey(originalExpression)) {
-				return context.get(originalExpression);
-			}
-			// property not found
-			return null;
-		} catch (ELException e) {
-			// fail silently so we don't mess things up
-			return null;
-		}
-	}
+     public Object findValue(String expr) {
+        return findValue(expr, Object.class, false);
+    }
 
-	public Map getContext() {
-		return context;
-	}
+    public Object findValue(String expr, boolean throwException) {
+        return findValue(expr, Object.class, false);
+    }
 
-	public Map getExprOverrides() {
-		return overrides;
-	}
+    public Object findValue(String expr, Class asType) {
+        return findValue(expr, asType, false);
+    }
 
-	public CompoundRoot getRoot() {
-		return root;
-	}
+    public Object findValue(String expr, Class asType, boolean throwException) {
+        String originalExpression = expr;
+        try {
+            if (expr != null && expr.startsWith("#") && !expr.startsWith("#{")) {
+                int firstDot = expr.indexOf('.');
+                if (firstDot < 0) {
+                    String key = expr.substring(1);
+                    return (Object) context.get(key);
+                } else {
+                    String key = expr.substring(1, firstDot);
+                    String value = expr.substring(firstDot + 1);
+                    Map map = (Map) context.get(key);
+                    return map.get(value);
+                }
+            }
+            if ((overrides != null) && overrides.containsKey(expr)) {
+                expr = (String) overrides.get(expr);
+            }
+            if (expr != null && expr.startsWith("%{")) {
+                // replace %{ with ${
+                expr = "#" + expr.substring(1);
+            }
+            if (expr != null && !expr.startsWith("${")
+                    && !expr.startsWith("#{")) {
+                expr = "#{" + expr + "}";
+            }
+            elContext.putContext(XWorkConverter.class, xworkConverter);
+            elContext.putContext(CompoundRoot.class, root);
+            // parse our expression
+            ValueExpression valueExpr = factory.createValueExpression(
+                    elContext, expr, Object.class);
+            Object retVal = valueExpr.getValue(elContext);
+            if (!Object.class.equals(asType)) {
+                retVal = xworkConverter.convertValue(null, retVal, asType);
+            }
+            return retVal;
+        } catch (PropertyNotFoundException e) {
+            if (context.containsKey(originalExpression)) {
+                return context.get(originalExpression);
+            }
+            // property not found
+            return null;
+        } catch (ELException e) {
+            // fail silently so we don't mess things up
+            return null;
+        }
+    }
 
-	public Object peek() {
-		return root.peek();
-	}
+    public Map getContext() {
+        return context;
+    }
 
-	public Object pop() {
-		return root.pop();
-	}
+    public Map getExprOverrides() {
+        return overrides;
+    }
 
-	public void push(Object o) {
-		root.push(o);
-	}
+    public CompoundRoot getRoot() {
+        return root;
+    }
 
-	public void setDefaultType(Class defaultType) {
-		this.defaultType = defaultType;
-	}
+    public Object peek() {
+        return root.peek();
+    }
 
-	public void setExprOverrides(Map overrides) {
-		if (this.overrides == null) {
-			this.overrides = overrides;
-		} else {
-			this.overrides.putAll(overrides);
-		}
-	}
+    public Object pop() {
+        return root.pop();
+    }
 
-	public void set(String key, Object o) {
-		overrides.put(key, o);
-	}
+    public void push(Object o) {
+        root.push(o);
+    }
 
-	public void setValue(String expr, Object value) {
-		setValue(expr, value, false);
-	}
+    public void setDefaultType(Class defaultType) {
+        this.defaultType = defaultType;
+    }
 
-	public void setValue(String expr, Object value,
-			boolean throwExceptionOnFailure) {
-		try {
-			if (expr != null && !expr.startsWith("${")
-					&& !expr.startsWith("#{")) {
-				expr = "#{" + expr + "}";
-			}
-	        elContext.putContext(XWorkConverter.class, xworkConverter);
-	        elContext.putContext(CompoundRoot.class, root);
-			// parse our expression
-			ValueExpression valueExpr = factory.createValueExpression(
-					elContext, expr, Object.class);
-			valueExpr.setValue(elContext, value);
-		} catch (ELException e) {
-			if (throwExceptionOnFailure) {
-				throw e;
-			}
-		}
-	}
+    public void setExprOverrides(Map overrides) {
+        if (this.overrides == null) {
+            this.overrides = overrides;
+        } else {
+            this.overrides.putAll(overrides);
+        }
+    }
 
-	public int size() {
-		return root.size();
-	}
+    public void set(String key, Object o) {
+        overrides.put(key, o);
+    }
 
-	protected void setRoot(CompoundRoot root) {
-		this.context = new TreeMap();
-		context.put(VALUE_STACK, this);
-		this.root = root;
-		elContext = new CompoundRootELContext();
-	}
+    public void setValue(String expr, Object value) {
+        setValue(expr, value, false);
+    }
+
+    public void setValue(String expr, Object value,
+                         boolean throwExceptionOnFailure) {
+        try {
+            if (expr != null && !expr.startsWith("${")
+                    && !expr.startsWith("#{")) {
+                expr = "#{" + expr + "}";
+            }
+            elContext.putContext(XWorkConverter.class, xworkConverter);
+            elContext.putContext(CompoundRoot.class, root);
+            // parse our expression
+            ValueExpression valueExpr = factory.createValueExpression(
+                    elContext, expr, Object.class);
+            valueExpr.setValue(elContext, value);
+        } catch (ELException e) {
+            if (throwExceptionOnFailure) {
+                throw e;
+            }
+        }
+    }
+
+    public int size() {
+        return root.size();
+    }
+
+    protected void setRoot(CompoundRoot root) {
+        this.context = new TreeMap();
+        context.put(VALUE_STACK, this);
+        this.root = root;
+        elContext = new CompoundRootELContext();
+    }
 }

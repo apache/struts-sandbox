@@ -19,33 +19,33 @@ import org.apache.struts2.uelplugin.elresolvers.XWorkBeanELResolver;
  * CompoundRoot.
  */
 public class CompoundRootELContext extends ELContext {
-	private ELResolver DEFAULT_RESOLVER_READ_WRITE;
+    private ELResolver DEFAULT_RESOLVER_READ_WRITE;
 
-	public CompoundRootELContext() {
-		DEFAULT_RESOLVER_READ_WRITE = new CompositeELResolver() {
-			{
-				add(new CompoundRootELResolver());
-				add(new ArrayELResolver(false));
-				add(new ListELResolver(false));
-				add(new MapELResolver(false));
-				add(new ResourceBundleELResolver());
-				add(new XWorkBeanELResolver());
-			}
-		};
-	}
+    public CompoundRootELContext() {
+        DEFAULT_RESOLVER_READ_WRITE = new CompositeELResolver() {
+            {
+                add(new CompoundRootELResolver());
+                add(new ArrayELResolver(false));
+                add(new ListELResolver(false));
+                add(new MapELResolver(false));
+                add(new ResourceBundleELResolver());
+                add(new XWorkBeanELResolver());
+            }
+        };
+    }
 
-	@Override
-	public VariableMapper getVariableMapper() {
-		return null;
-	}
+    @Override
+    public VariableMapper getVariableMapper() {
+        return null;
+    }
 
-	@Override
-	public ELResolver getELResolver() {
-		return DEFAULT_RESOLVER_READ_WRITE;
-	}
+    @Override
+    public ELResolver getELResolver() {
+        return DEFAULT_RESOLVER_READ_WRITE;
+    }
 
-	@Override
-	public FunctionMapper getFunctionMapper() {
-		return null;
-	}
+    @Override
+    public FunctionMapper getFunctionMapper() {
+        return null;
+    }
 }
