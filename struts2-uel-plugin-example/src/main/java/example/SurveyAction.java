@@ -11,7 +11,7 @@ public class SurveyAction extends ActionSupport {
 
 	public String edit() {
 		surveyBean.setAge(22);
-		surveyBean.setFirstName("Musachy");
+		surveyBean.setFirstName("Lex");
 		surveyBean.setBirthdate(new Date());
 		return SUCCESS;
 	}
