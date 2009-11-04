@@ -59,8 +59,24 @@ public class UelTest extends XWorkTestCase {
         assertEquals("Hello World", value);
 
         stack.setValue("${age}", "56");
-        String age = stack.findString("${age}");
-        assertEquals("56", age);
+        Integer age = (Integer) stack.findValue("${age}");
+        assertEquals(56, (int)age);
+    }
+
+    public void testNestedFind() throws IllegalAccessException,
+            InvocationTargetException, NoSuchMethodException {
+        CompoundRoot root = new CompoundRoot();
+        TestObject obj = new TestObject();
+        TestObject obj2 = new TestObject();
+        obj2.setAge(100);
+        obj.setInner(obj2);
+        root.add(obj);
+
+        UelValueStack stack = new UelValueStack(factory, converter);
+        stack.setRoot(root);
+
+        assertSame(obj2, stack.findValue("${inner}"));
+        assertEquals(100, stack.findValue("${inner.age}"));
     }
 
     public void testSetStringArray() throws IllegalAccessException,
@@ -165,53 +181,5 @@ public class UelTest extends XWorkTestCase {
 
         value = stack.findString("VALUENOTHERE");
         assertNull(value);
-    }
-
-    public class TestObject {
-        private String value;
-        private int age;
-        private Date date;
-        private TestObject inner;
-        private Map parameters;
-
-        public String getValue() {
-            return value;
-        }
-
-        public void setValue(String value) {
-            this.value = value;
-        }
-
-        public int getAge() {
-            return age;
-        }
-
-        public void setAge(int age) {
-            this.age = age;
-        }
-
-        public Date getDate() {
-            return date;
-        }
-
-        public void setDate(Date date) {
-            this.date = date;
-        }
-
-        public TestObject getInner() {
-            return inner;
-        }
-
-        public void setInner(TestObject inner) {
-            this.inner = inner;
-        }
-
-        public Map getParameters() {
-            return parameters;
-        }
-
-        public void setParameters(Map parameters) {
-            this.parameters = parameters;
-        }
     }
 }

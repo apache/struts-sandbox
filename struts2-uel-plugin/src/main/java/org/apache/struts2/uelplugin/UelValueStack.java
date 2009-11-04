@@ -27,21 +27,18 @@ public class UelValueStack implements ValueStack {
 
     private ELContext elContext;
 
-    public UelValueStack(ExpressionFactory factory,
-                         XWorkConverter xworkConverter) {
+    public UelValueStack(ExpressionFactory factory, XWorkConverter xworkConverter) {
         this(factory, xworkConverter, new CompoundRoot());
     }
 
-    public UelValueStack(ExpressionFactory factory,
-                         XWorkConverter xworkConverter, ValueStack vs) {
+    public UelValueStack(ExpressionFactory factory, XWorkConverter xworkConverter, ValueStack vs) {
         this(factory, xworkConverter, new CompoundRoot(vs.getRoot()));
     }
 
-    public UelValueStack(ExpressionFactory factory,
-                         XWorkConverter xworkConverter, CompoundRoot root) {
+    public UelValueStack(ExpressionFactory factory, XWorkConverter xworkConverter, CompoundRoot root) {
         this.xworkConverter = xworkConverter;
         this.factory = factory;
-        setRoot(new CompoundRoot());
+        setRoot(new CompoundRoot(root));
     }
 
     public String findString(String expr, boolean throwException) {
@@ -52,7 +49,7 @@ public class UelValueStack implements ValueStack {
         return findString(expr, false);
     }
 
-     public Object findValue(String expr) {
+    public Object findValue(String expr) {
         return findValue(expr, Object.class, false);
     }
 
@@ -86,15 +83,13 @@ public class UelValueStack implements ValueStack {
                 // replace %{ with ${
                 expr = "#" + expr.substring(1);
             }
-            if (expr != null && !expr.startsWith("${")
-                    && !expr.startsWith("#{")) {
+            if (expr != null && !expr.startsWith("${") && !expr.startsWith("#{")) {
                 expr = "#{" + expr + "}";
             }
             elContext.putContext(XWorkConverter.class, xworkConverter);
             elContext.putContext(CompoundRoot.class, root);
             // parse our expression
-            ValueExpression valueExpr = factory.createValueExpression(
-                    elContext, expr, Object.class);
+            ValueExpression valueExpr = factory.createValueExpression(elContext, expr, Object.class);
             Object retVal = valueExpr.getValue(elContext);
             if (!Object.class.equals(asType)) {
                 retVal = xworkConverter.convertValue(null, retVal, asType);
@@ -156,18 +151,15 @@ public class UelValueStack implements ValueStack {
         setValue(expr, value, false);
     }
 
-    public void setValue(String expr, Object value,
-                         boolean throwExceptionOnFailure) {
+    public void setValue(String expr, Object value, boolean throwExceptionOnFailure) {
         try {
-            if (expr != null && !expr.startsWith("${")
-                    && !expr.startsWith("#{")) {
+            if (expr != null && !expr.startsWith("${") && !expr.startsWith("#{")) {
                 expr = "#{" + expr + "}";
             }
             elContext.putContext(XWorkConverter.class, xworkConverter);
             elContext.putContext(CompoundRoot.class, root);
             // parse our expression
-            ValueExpression valueExpr = factory.createValueExpression(
-                    elContext, expr, Object.class);
+            ValueExpression valueExpr = factory.createValueExpression(elContext, expr, Object.class);
             valueExpr.setValue(elContext, value);
         } catch (ELException e) {
             if (throwExceptionOnFailure) {

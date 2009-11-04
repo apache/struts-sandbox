@@ -32,7 +32,7 @@
                 <interceptor-ref name="actionMappingParams"/>
                 <interceptor-ref name="params">
                     <param name="excludeParams">dojo\..*,^struts\..*</param>
-                    <param name="setAcceptParamNames">[[\p{Graph}\s]&amp;&amp;[^,:=]]*</param>
+                    <param name="acceptParamNames">[[\p{Graph}\s]&amp;&amp;[^:=]]*</param>
                 </interceptor-ref>
                 <interceptor-ref name="conversionError"/>
                 <interceptor-ref name="validation">
