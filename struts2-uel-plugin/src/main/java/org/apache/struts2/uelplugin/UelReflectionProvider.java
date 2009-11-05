@@ -1,20 +1,16 @@
 package org.apache.struts2.uelplugin;
 
-import java.util.Map;
-import java.lang.reflect.InvocationTargetException;
-
-import javax.el.ELContext;
-import javax.el.ExpressionFactory;
-import javax.el.ValueExpression;
-
 import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
 import com.opensymphony.xwork2.inject.Inject;
 import com.opensymphony.xwork2.ognl.OgnlReflectionProvider;
-import com.opensymphony.xwork2.util.CompoundRoot;
 import com.opensymphony.xwork2.util.reflection.ReflectionException;
-import org.apache.commons.lang.xwork.StringUtils;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.lang.xwork.StringUtils;
+
+import javax.el.ExpressionFactory;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
 
 /**
  * A OgnlReflectionProvider based on Unified EL.
@@ -27,7 +23,6 @@ public class UelReflectionProvider extends OgnlReflectionProvider {
     public void setXWorkConverter(XWorkConverter conv) {
         this.xworkConverter = conv;
     }
-
 
 
     @Override
@@ -62,7 +57,6 @@ public class UelReflectionProvider extends OgnlReflectionProvider {
             sb.append(expr);
             sb.append("}");
             return sb.toString();
-        } else
-            return expr;
+        } else return expr;
     }
 }

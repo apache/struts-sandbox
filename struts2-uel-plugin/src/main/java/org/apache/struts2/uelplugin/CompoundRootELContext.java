@@ -1,11 +1,11 @@
 package org.apache.struts2.uelplugin;
 
-import javax.el.*;
-
+import de.odysseus.el.util.SimpleContext;
 import org.apache.struts2.uelplugin.elresolvers.CompoundRootELResolver;
 import org.apache.struts2.uelplugin.elresolvers.XWorkBeanELResolver;
-import org.apache.struts2.uelplugin.elresolvers.PublicMethodResolver;
-import de.odysseus.el.util.SimpleContext;
+import org.apache.struts2.uelplugin.elresolvers.ValueStackContextResolver;
+
+import javax.el.*;
 
 
 /**
@@ -13,19 +13,18 @@ import de.odysseus.el.util.SimpleContext;
  * CompoundRoot.
  */
 public class CompoundRootELContext extends SimpleContext {
+    private final static BuiltinFunctionMapper BUILTIN_FUNCTION_MAPPER = new BuiltinFunctionMapper();
     public CompoundRootELContext() {
         super(new CompositeELResolver() {
             {
-                add(new BeanELResolver());
-                add(new PublicMethodResolver());
                 add(new CompoundRootELResolver());
+                add(new ValueStackContextResolver());
                 add(new ArrayELResolver(false));
                 add(new ListELResolver(false));
                 add(new MapELResolver(false));
                 add(new ResourceBundleELResolver());
                 add(new XWorkBeanELResolver());
-            }
-        });
+            }});
     }
 
     @Override
@@ -35,6 +34,6 @@ public class CompoundRootELContext extends SimpleContext {
 
     @Override
     public FunctionMapper getFunctionMapper() {
-        return null;
+        return BUILTIN_FUNCTION_MAPPER;
     }
 }

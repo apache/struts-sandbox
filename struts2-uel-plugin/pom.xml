@@ -1,5 +1,11 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.apache.struts</groupId>
+        <artifactId>struts2-plugins</artifactId>
+        <version>2.2.0-SNAPSHOT</version>
+    </parent>
     <groupId>org.apache.struts2.uelplugin</groupId>
     <artifactId>struts2-uel-plugin</artifactId>
     <packaging>jar</packaging>
@@ -50,6 +56,18 @@
             </exclusions>
         </dependency>
         <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${struts2.springPlatformVersion}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${struts2.springPlatformVersion}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.4</version>
@@ -58,13 +76,13 @@
         <dependency>
             <groupId>de.odysseus.juel</groupId>
             <artifactId>juel-impl</artifactId>
-            <version>2.1.2</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>de.odysseus.juel</groupId>
-                    <artifactId>juel-api</artifactId>
-                </exclusion>
-            </exclusions>
+            <version>2.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>de.odysseus.juel</groupId>
+            <artifactId>juel-api</artifactId>
+            <version>2.2.0</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mortbay.jetty</groupId>

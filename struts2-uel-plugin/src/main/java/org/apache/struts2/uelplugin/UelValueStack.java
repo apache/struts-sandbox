@@ -1,43 +1,39 @@
 package org.apache.struts2.uelplugin;
 
-import java.util.Map;
-import java.util.TreeMap;
-
-import javax.el.ELContext;
-import javax.el.ELException;
-import javax.el.ExpressionFactory;
-import javax.el.PropertyNotFoundException;
-import javax.el.ValueExpression;
-
 import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
 import com.opensymphony.xwork2.util.CompoundRoot;
 import com.opensymphony.xwork2.util.ValueStack;
+import com.opensymphony.xwork2.util.logging.LoggerFactory;
+import com.opensymphony.xwork2.util.logging.Logger;
+
+import javax.el.*;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * A ValueStack that uses Unified EL as the underlying Expression Language.
  */
 public class UelValueStack implements ValueStack {
+    private static final Logger LOG = LoggerFactory.getLogger(UelValueStack.class);
+
     private CompoundRoot root = new CompoundRoot();
     private transient Map context;
     private Class defaultType;
     private Map overrides;
     private XWorkConverter xworkConverter;
 
-    private ExpressionFactory factory;
-
     private ELContext elContext;
 
-    public UelValueStack(ExpressionFactory factory, XWorkConverter xworkConverter) {
-        this(factory, xworkConverter, new CompoundRoot());
+    public UelValueStack(XWorkConverter xworkConverter) {
+        this(xworkConverter, new CompoundRoot());
     }
 
-    public UelValueStack(ExpressionFactory factory, XWorkConverter xworkConverter, ValueStack vs) {
-        this(factory, xworkConverter, new CompoundRoot(vs.getRoot()));
+    public UelValueStack(XWorkConverter xworkConverter, ValueStack vs) {
+        this(xworkConverter, new CompoundRoot(vs.getRoot()));
     }
 
-    public UelValueStack(ExpressionFactory factory, XWorkConverter xworkConverter, CompoundRoot root) {
+    public UelValueStack(XWorkConverter xworkConverter, CompoundRoot root) {
         this.xworkConverter = xworkConverter;
-        this.factory = factory;
         setRoot(new CompoundRoot(root));
     }
 
@@ -64,18 +60,6 @@ public class UelValueStack implements ValueStack {
     public Object findValue(String expr, Class asType, boolean throwException) {
         String originalExpression = expr;
         try {
-            if (expr != null && expr.startsWith("#") && !expr.startsWith("#{")) {
-                int firstDot = expr.indexOf('.');
-                if (firstDot < 0) {
-                    String key = expr.substring(1);
-                    return (Object) context.get(key);
-                } else {
-                    String key = expr.substring(1, firstDot);
-                    String value = expr.substring(firstDot + 1);
-                    Map map = (Map) context.get(key);
-                    return map.get(value);
-                }
-            }
             if ((overrides != null) && overrides.containsKey(expr)) {
                 expr = (String) overrides.get(expr);
             }
@@ -88,7 +72,9 @@ public class UelValueStack implements ValueStack {
             }
             elContext.putContext(XWorkConverter.class, xworkConverter);
             elContext.putContext(CompoundRoot.class, root);
+
             // parse our expression
+            ExpressionFactory factory = getExpressionFactory();
             ValueExpression valueExpr = factory.createValueExpression(elContext, expr, Object.class);
             Object retVal = valueExpr.getValue(elContext);
             if (!Object.class.equals(asType)) {
@@ -105,6 +91,23 @@ public class UelValueStack implements ValueStack {
             // fail silently so we don't mess things up
             return null;
         }
+    }
+
+    protected ExpressionFactory getExpressionFactory() {
+        ExpressionFactory factory = ExpressionFactoryHolder.getExpressionFactory();
+        if (factory == null) {
+            String message = "********** FATAL ERROR STARTING UP STRUTS-UEL INTEGRATION **********\n" +
+                    "Looks like the UEL listener was not configured for your web app! \n" +
+                    "Nothing will work until UelServletContextListener is added as a listener in web.xml.\n" +
+                    "You might need to add the following to web.xml: \n" +
+                    "    <listener>\n" +
+                    "        <listener-class>org.apache.struts2.uelplugin.UelServletContextListener</listener-class>\n" +
+                    "    </listener>";
+            LOG.fatal(message);
+            throw new IllegalStateException("Unable to find ExpressionFactory instance. Make sure that 'UelServletContextListener' " +
+                    "is configured in web.xml as a listener");
+        } else
+            return factory;
     }
 
     public Map getContext() {
@@ -158,7 +161,9 @@ public class UelValueStack implements ValueStack {
             }
             elContext.putContext(XWorkConverter.class, xworkConverter);
             elContext.putContext(CompoundRoot.class, root);
+
             // parse our expression
+            ExpressionFactory factory = getExpressionFactory();
             ValueExpression valueExpr = factory.createValueExpression(elContext, expr, Object.class);
             valueExpr.setValue(elContext, value);
         } catch (ELException e) {

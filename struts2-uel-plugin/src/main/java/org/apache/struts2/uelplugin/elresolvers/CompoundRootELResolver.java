@@ -1,5 +1,13 @@
 package org.apache.struts2.uelplugin.elresolvers;
 
+import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
+import com.opensymphony.xwork2.util.CompoundRoot;
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.lang.xwork.StringUtils;
+
+import javax.el.ELContext;
+import javax.el.ELResolver;
 import java.beans.BeanInfo;
 import java.beans.FeatureDescriptor;
 import java.beans.Introspector;
@@ -7,15 +15,6 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Iterator;
-
-import javax.el.ELContext;
-import javax.el.ELResolver;
-
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.beanutils.PropertyUtils;
-
-import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
-import com.opensymphony.xwork2.util.CompoundRoot;
 
 /**
  * An ELResolver that is capable of resolving properties against the
@@ -33,15 +32,13 @@ public class CompoundRootELResolver extends ELResolver {
     }
 
     @Override
-    public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context,
-                                                             Object base) {
+    public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
         // only resolve at the root of the context
         if (base != null) {
             return null;
         }
 
-        CompoundRoot root = (CompoundRoot) context
-                .getContext(CompoundRoot.class);
+        CompoundRoot root = (CompoundRoot) context.getContext(CompoundRoot.class);
         if (root == null) {
             return null;
         }
@@ -78,8 +75,7 @@ public class CompoundRootELResolver extends ELResolver {
             return null;
         }
 
-        CompoundRoot root = (CompoundRoot) context
-                .getContext(CompoundRoot.class);
+        CompoundRoot root = (CompoundRoot) context.getContext(CompoundRoot.class);
         if (root == null) {
             return null;
         }
@@ -104,22 +100,28 @@ public class CompoundRootELResolver extends ELResolver {
     @Override
     public Object getValue(ELContext context, Object base, Object property) {
         if (context == null) {
-            throw new NullPointerException();
+            throw new IllegalArgumentException("ElContext cannot be null");
         }
+
+        String propertyName = (String) property;
+
+        if (StringUtils.startsWith(propertyName, "#"))
+            return null;
+
         // only resolve at the root of the context
         if (base != null) {
             return null;
         }
 
-        CompoundRoot root = (CompoundRoot) context
-                .getContext(CompoundRoot.class);
+        CompoundRoot root = (CompoundRoot) context.getContext(CompoundRoot.class);
         if (root == null) {
             return null;
         }
-        String propertyName = (String) property;
+
         if ("top".equals(propertyName) && root.size() > 0) {
             return root.get(0);
         }
+
         try {
             Object bean = findObjectForProperty(root, propertyName);
             if (bean != null) {
@@ -147,8 +149,7 @@ public class CompoundRootELResolver extends ELResolver {
     }
 
     @Override
-    public void setValue(ELContext context, Object base, Object property,
-                         Object value) {
+    public void setValue(ELContext context, Object base, Object property, Object value) {
         if (context == null) {
             throw new NullPointerException();
         }
@@ -157,15 +158,13 @@ public class CompoundRootELResolver extends ELResolver {
             return;
         }
 
-        CompoundRoot root = (CompoundRoot) context
-                .getContext(CompoundRoot.class);
+        CompoundRoot root = (CompoundRoot) context.getContext(CompoundRoot.class);
         String propertyName = (String) property;
         try {
             if (base == null && property != null && root != null) {
                 Object bean = findObjectForProperty(root, propertyName);
                 if (bean != null) {
-                    XWorkConverter converter = (XWorkConverter) context
-                            .getContext(XWorkConverter.class);
+                    XWorkConverter converter = (XWorkConverter) context.getContext(XWorkConverter.class);
                     if (converter != null && root != null) {
                         Class propType = determineType(bean, propertyName);
                         value = converter.convertValue(null, value, propType);
@@ -183,8 +182,7 @@ public class CompoundRootELResolver extends ELResolver {
         }
     }
 
-    protected Class<?> determineType(Object bean, String property)
-            throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+    protected Class<?> determineType(Object bean, String property) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         return PropertyUtils.getPropertyType(bean, property);
     }
 
@@ -193,8 +191,7 @@ public class CompoundRootELResolver extends ELResolver {
             return root.get(0);
         }
         for (int i = 0; i < root.size(); i++) {
-            if (PropertyUtils.isReadable(root.get(i), propertyName)
-                    || PropertyUtils.isWriteable(root.get(i), propertyName)) {
+            if (PropertyUtils.isReadable(root.get(i), propertyName) || PropertyUtils.isWriteable(root.get(i), propertyName)) {
                 return root.get(i);
             }
         }

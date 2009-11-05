@@ -1,13 +1,11 @@
 package org.apache.struts2.uelplugin.elresolvers;
 
-import java.lang.reflect.InvocationTargetException;
+import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
+import org.apache.commons.beanutils.PropertyUtils;
 
 import javax.el.BeanELResolver;
 import javax.el.ELContext;
-
-import org.apache.commons.beanutils.PropertyUtils;
-
-import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
+import java.lang.reflect.InvocationTargetException;
 
 public class XWorkBeanELResolver extends BeanELResolver {
 
@@ -35,14 +33,11 @@ public class XWorkBeanELResolver extends BeanELResolver {
     }
 
     @Override
-    public void setValue(ELContext context, Object base, Object property,
-                         Object value) {
-        XWorkConverter converter = (XWorkConverter) context
-                .getContext(XWorkConverter.class);
+    public void setValue(ELContext context, Object base, Object property, Object value) {
+        XWorkConverter converter = (XWorkConverter) context.getContext(XWorkConverter.class);
         try {
             if (converter != null && base != null) {
-                Class propType = PropertyUtils.getPropertyType(base, property
-                        .toString());
+                Class propType = PropertyUtils.getPropertyType(base, property.toString());
                 value = converter.convertValue(null, value, propType);
             }
             super.setValue(context, base, property, value);

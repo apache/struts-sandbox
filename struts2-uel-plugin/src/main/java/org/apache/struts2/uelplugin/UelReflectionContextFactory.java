@@ -1,9 +1,9 @@
 package org.apache.struts2.uelplugin;
 
+import com.opensymphony.xwork2.util.reflection.ReflectionContextFactory;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import com.opensymphony.xwork2.util.reflection.ReflectionContextFactory;
 
 /**
  * ReflectionContextFactory for Unified EL.
