@@ -41,23 +41,23 @@ import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.dispatcher.StrutsResultSupport;
 import org.apache.struts2.portlet.PortletActionConstants;
 import org.apache.struts2.portlet.context.PortletActionContext;
+import org.apache.commons.lang.xwork.StringUtils;
 
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.inject.Inject;
-import com.opensymphony.xwork2.util.TextUtils;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
 
 /**
  * Result type that includes a JSP to render.
- * 
+ *
  */
 public class PortletResult extends StrutsResultSupport implements PortletActionConstants {
 
 	private static final long serialVersionUID = 434251393926178567L;
 
 	private boolean useDispatcherServlet;
-	
+
 	private String dispatcherServletName = DEFAULT_DISPATCHER_SERVLET_NAME;
 
 	/**
@@ -68,7 +68,7 @@ public class PortletResult extends StrutsResultSupport implements PortletActionC
 	private String contentType = "text/html";
 
 	private String title;
-	
+
 	protected PortletMode portletMode;
 
 	public PortletResult() {
@@ -83,7 +83,7 @@ public class PortletResult extends StrutsResultSupport implements PortletActionC
 	 * Execute the result. Obtains the
 	 * {@link javax.portlet.PortletRequestDispatcher}from the
 	 * {@link PortletActionContext}and includes the JSP.
-	 * 
+	 *
 	 * @see com.opensymphony.xwork2.Result#execute(com.opensymphony.xwork2.ActionInvocation)
 	 */
 	public void doExecute(String finalLocation, ActionInvocation actionInvocation) throws Exception {
@@ -99,7 +99,7 @@ public class PortletResult extends StrutsResultSupport implements PortletActionC
 
 	/**
 	 * Executes the regular servlet result.
-	 * 
+	 *
 	 * @param finalLocation
 	 * @param actionInvocation
 	 */
@@ -121,16 +121,16 @@ public class PortletResult extends StrutsResultSupport implements PortletActionC
 
 	/**
 	 * Executes the action result.
-	 * 
+	 *
 	 * @param finalLocation
 	 * @param invocation
 	 */
 	protected void executeActionResult(String finalLocation, ActionInvocation invocation) throws Exception {
         String phase = (PortletActionContext.isEvent()) ? "Event" : "Action";
-		LOG.debug("Executing result in "+phase+" phase");
+		if (LOG.isDebugEnabled()) LOG.debug("Executing result in "+phase+" phase");
 		StateAwareResponse res = (StateAwareResponse)PortletActionContext.getResponse();
 		Map sessionMap = invocation.getInvocationContext().getSession();
-		LOG.debug("Setting event render parameter: " + finalLocation);
+		if (LOG.isDebugEnabled()) LOG.debug("Setting event render parameter: " + finalLocation);
 		if (finalLocation.indexOf('?') != -1) {
 			convertQueryParamsToRenderParams(res, finalLocation.substring(finalLocation.indexOf('?') + 1));
 			finalLocation = finalLocation.substring(0, finalLocation.indexOf('?'));
@@ -156,7 +156,7 @@ public class PortletResult extends StrutsResultSupport implements PortletActionC
 
 	/**
 	 * Converts the query params to render params.
-	 * 
+	 *
 	 * @param response
 	 * @param queryParams
 	 */
@@ -172,21 +172,21 @@ public class PortletResult extends StrutsResultSupport implements PortletActionC
 
     /**
      * Executes the render result.
-     * 
+     *
      * @param finalLocation
      * @throws PortletException
      * @throws IOException
      */
     protected void executeMimeResult(final String finalLocation) throws PortletException, IOException {
-        LOG.debug("Executing mime result");
+        if (LOG.isDebugEnabled()) LOG.debug("Executing mime result");
         PortletContext ctx = PortletActionContext.getPortletContext();
         PortletRequest req = PortletActionContext.getRequest();
         MimeResponse res = (MimeResponse)PortletActionContext.getResponse();
         res.setContentType(contentType);
-		if (TextUtils.stringSet(title) && res instanceof RenderResponse) {
+		if (StringUtils.isNotEmpty(title) && res instanceof RenderResponse) {
 		    ((RenderResponse)res).setTitle(title);
 		}
-        LOG.debug("Location: " + finalLocation);
+        if (LOG.isDebugEnabled()) LOG.debug("Location: " + finalLocation);
         if (useDispatcherServlet) {
             req.setAttribute(DISPATCH_TO, finalLocation);
             PortletRequestDispatcher dispatcher = ctx.getNamedDispatcher(dispatcherServletName);
@@ -205,7 +205,7 @@ public class PortletResult extends StrutsResultSupport implements PortletActionC
 
 	/**
 	 * Sets the content type.
-	 * 
+	 *
 	 * @param contentType
 	 *            The content type to set.
 	 */
@@ -215,25 +215,25 @@ public class PortletResult extends StrutsResultSupport implements PortletActionC
 
 	/**
 	 * Sets the title.
-	 * 
+	 *
 	 * @param title
 	 *            The title to set.
 	 */
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
+
 	public void setPortletMode(String portletMode) {
 		if(portletMode != null) {
 			this.portletMode = new PortletMode(portletMode);
 		}
 	}
 
-	@Inject("struts.portlet.useDispatcherServlet") 
+	@Inject("struts.portlet.useDispatcherServlet")
 	public void setUseDispatcherServlet(String useDispatcherServlet) {
 		this.useDispatcherServlet = "true".equalsIgnoreCase(useDispatcherServlet);
 	}
-	
+
 	@Inject("struts.portlet.dispatcherServletName")
 	public void setDispatcherServletName(String dispatcherServletName) {
 		this.dispatcherServletName = dispatcherServletName;

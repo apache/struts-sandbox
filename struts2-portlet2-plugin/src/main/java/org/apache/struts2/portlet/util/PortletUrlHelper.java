@@ -39,8 +39,8 @@ import javax.portlet.WindowState;
 
 import org.apache.struts2.StrutsException;
 import org.apache.struts2.portlet.context.PortletActionContext;
+import org.apache.commons.lang.xwork.StringUtils;
 
-import com.opensymphony.xwork2.util.TextUtils;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
 /**
@@ -88,7 +88,7 @@ public class PortletUrlHelper {
         LOG.debug("Creating url. Action = " + action + ", Namespace = "
                 + namespace + ", Type = " + type);
         namespace = prependNamespace(namespace, portletMode);
-        if (!TextUtils.stringSet(portletMode)) {
+        if (StringUtils.isEmpty(portletMode)) {
             portletMode = PortletActionContext.getRequest().getPortletMode().toString();
         }
         String result = null;
@@ -105,30 +105,30 @@ public class PortletUrlHelper {
                 params.put(key, new String[] { val });
             }
         }
-        if (TextUtils.stringSet(namespace)) {
+        if (StringUtils.isNotEmpty(namespace)) {
             resultingAction.append(namespace);
             if(!action.startsWith("/") && !namespace.endsWith("/")) {
                 resultingAction.append("/");
             }
         }
         resultingAction.append(action);
-        if(TextUtils.stringSet(method)) {
+        if(StringUtils.isNotEmpty(method)) {
         	resultingAction.append("!").append(method);
         }
-        LOG.debug("Resulting actionPath: " + resultingAction);
+        if (LOG.isDebugEnabled()) LOG.debug("Resulting actionPath: " + resultingAction);
         params.put(ACTION_PARAM, new String[] { resultingAction.toString() });
 
         BaseURL url = null;
         if ("action".equalsIgnoreCase(type)) {
-            LOG.debug("Creating action url");
+            if (LOG.isDebugEnabled()) LOG.debug("Creating action url");
             url = response.createActionURL();
         }
         else if("resource".equalsIgnoreCase(type)) {
-        	LOG.debug("Creating resource url");
+        	if (LOG.isDebugEnabled()) LOG.debug("Creating resource url");
         	url = response.createResourceURL();
         }
         else {
-            LOG.debug("Creating render url");
+            if (LOG.isDebugEnabled()) LOG.debug("Creating render url");
             url = response.createRenderURL();
         }
 
@@ -144,8 +144,9 @@ public class PortletUrlHelper {
         }
         if(url instanceof PortletURL) {
         	try {
-        		((PortletURL)url).setPortletMode(getPortletMode(request, portletMode));
-        		((PortletURL)url).setWindowState(getWindowState(request, windowState));
+                final PortletURL portletUrl = (PortletURL) url;
+                portletUrl.setPortletMode(getPortletMode(request, portletMode));
+        		portletUrl.setWindowState(getWindowState(request, windowState));
         	} catch (Exception e) {
         		LOG.error("Unable to set mode or state:" + e.getMessage(), e);
         	}
@@ -171,28 +172,28 @@ public class PortletUrlHelper {
     private static String prependNamespace(String namespace, String portletMode) {
         StringBuffer sb = new StringBuffer();
         PortletMode mode = PortletActionContext.getRequest().getPortletMode();
-        if(TextUtils.stringSet(portletMode)) {
+        if(StringUtils.isNotEmpty(portletMode)) {
             mode = new PortletMode(portletMode);
         }
         String portletNamespace = PortletActionContext.getPortletNamespace();
         String modeNamespace = (String)PortletActionContext.getModeNamespaceMap().get(mode);
-        LOG.debug("PortletNamespace: " + portletNamespace + ", modeNamespace: " + modeNamespace);
-        if(TextUtils.stringSet(portletNamespace)) {
+        if (LOG.isDebugEnabled()) LOG.debug("PortletNamespace: " + portletNamespace + ", modeNamespace: " + modeNamespace);
+        if(StringUtils.isNotEmpty(portletNamespace)) {
             sb.append(portletNamespace);
         }
-        if(TextUtils.stringSet(modeNamespace)) {
+        if(StringUtils.isNotEmpty(modeNamespace)) {
             if(!modeNamespace.startsWith("/")) {
                 sb.append("/");
             }
             sb.append(modeNamespace);
         }
-        if(TextUtils.stringSet(namespace)) {
+        if(StringUtils.isNotEmpty(namespace)) {
             if(!namespace.startsWith("/")) {
                 sb.append("/");
             }
             sb.append(namespace);
         }
-        LOG.debug("Resulting namespace: " + sb);
+        if (LOG.isDebugEnabled()) LOG.debug("Resulting namespace: " + sb);
         return sb.toString();
     }
 
@@ -264,13 +265,12 @@ public class PortletUrlHelper {
      * @param portletReq The PortletRequest.
      * @param windowState The WindowState as a String.
      * @return The WindowState that mathces the <tt>windowState</tt> String, or if
-     * the Sring is blank, the current WindowState.
+     * the String is blank, the current WindowState.
      */
     private static WindowState getWindowState(PortletRequest portletReq,
             String windowState) {
         WindowState state = portletReq.getWindowState();
-        if (TextUtils.stringSet(windowState)) {
-            state = portletReq.getWindowState();
+        if (StringUtils.isNotEmpty(windowState)) {
             if ("maximized".equalsIgnoreCase(windowState)) {
                 state = WindowState.MAXIMIZED;
             } else if ("normal".equalsIgnoreCase(windowState)) {
@@ -291,14 +291,13 @@ public class PortletUrlHelper {
      * @param portletReq The PortletRequest.
      * @param portletMode The PortletMode as a String.
      * @return The PortletMode that mathces the <tt>portletMode</tt> String, or if
-     * the Sring is blank, the current PortletMode.
+     * the String is blank, the current PortletMode.
      */
     private static PortletMode getPortletMode(PortletRequest portletReq,
             String portletMode) {
         PortletMode mode = portletReq.getPortletMode();
 
-        if (TextUtils.stringSet(portletMode)) {
-            mode = portletReq.getPortletMode();
+        if (StringUtils.isNotEmpty(portletMode)) {
             if ("edit".equalsIgnoreCase(portletMode)) {
                 mode = PortletMode.EDIT;
             } else if ("view".equalsIgnoreCase(portletMode)) {

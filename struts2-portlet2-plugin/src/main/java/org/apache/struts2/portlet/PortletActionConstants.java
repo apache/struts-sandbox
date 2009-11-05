@@ -1,5 +1,5 @@
 /*
- * $Id: PortletActionConstants.java 566324 2007-08-15 20:14:20Z nilsga $
+ * $Id: PortletActionConstants.java 671156 2008-06-24 12:33:59Z nilsga $
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,14 +18,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package org.apache.struts2.portlet;
 
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.portlet.dispatcher.DispatcherServlet;
 
 /**
- * Interface defining some constants used in the Struts portlet implementation.
- * 
- * @deprecated Use the {@link PortletContstants} class instead.
+ * Interface defining some constants used in the Struts portlet implementation
  *
  */
 public interface PortletActionConstants {
@@ -54,13 +54,13 @@ public interface PortletActionConstants {
      * Constant used for the render phase (
      * {@link javax.portlet.Portlet#render(javax.portlet.RenderRequest, javax.portlet.RenderResponse)})
      */
-    Integer RENDER_PHASE = PortletContstants.RENDER_PHASE;
+    Integer RENDER_PHASE = new Integer(1);
 
     /**
      * Constant used for the event phase (
      * {@link javax.portlet.Portlet#processAction(javax.portlet.ActionRequest, javax.portlet.ActionResponse)})
      */
-    Integer EVENT_PHASE = PortletContstants.ACTION_PHASE;
+    Integer EVENT_PHASE = new Integer(2);
 
     /**
      * Key used for looking up and storing the
@@ -107,22 +107,22 @@ public interface PortletActionConstants {
      * {@link org.apache.struts2.portlet.context.PortletActionContext}.
      */
     String DEFAULT_ACTION_FOR_MODE = "struts.portlet.defaultActionForMode";
-    
+
     /**
-     * Key for request attribute indicating if the action has been reset. 
+     * Key for request attribute indicating if the action has been reset.
      */
     String ACTION_RESET = "struts.portlet.actionReset";
-    
+
     /**
      * Key for session attribute indicating the location of the render direct action.
      */
     String RENDER_DIRECT_LOCATION = "struts.portlet.renderDirectLocation";
-    
+
     /**
      * Key for the dispatch instruction for the {@link DispatcherServlet}
      */
 	String DISPATCH_TO = "struts.portlet.dispatchTo";
-	
+
 	/**
 	 * Session key where the value stack from the event phase is stored.
 	 */
@@ -132,4 +132,9 @@ public interface PortletActionConstants {
 	 * Default name of dispatcher servlet in web.xml
 	 */
 	String DEFAULT_DISPATCHER_SERVLET_NAME = "Struts2PortletDispatcherServlet";
+
+	/**
+	 * Key for the action mapping in the context
+    */
+	String ACTION_MAPPING = ServletActionContext.ACTION_MAPPING;
 }

@@ -22,42 +22,60 @@ package org.apache.struts2.components;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
-import com.opensymphony.xwork2.util.TextUtils;
+import com.opensymphony.xwork2.inject.Inject;
 import org.apache.struts2.StrutsException;
+import org.apache.struts2.dispatcher.mapper.ActionMapper;
 import org.apache.struts2.portlet.util.PortletUrlHelper;
+import org.apache.struts2.portlet.context.PortletActionContext;
+import org.apache.commons.lang.xwork.StringUtils;
 
 import java.io.IOException;
 import java.io.Writer;
 
 /**
  * Implementation of the {@link UrlRenderer} interface that renders URLs for portlet environments.
- * 
+ *
  * @see UrlRenderer
  *
  */
 public class PortletUrlRenderer implements UrlRenderer {
-	
+
+    /**
+     * The servlet renderer used when not executing in a portlet context.
+     */
+    private UrlRenderer servletRenderer = null;
+
+    public PortletUrlRenderer() {
+        this.servletRenderer = new ServletUrlRenderer();
+    }
+
+    @Inject
+    public void setActionMapper( ActionMapper actionMapper) {
+        servletRenderer.setActionMapper(actionMapper);
+    }
+
 	/**
 	 * {@inheritDoc}
 	 */
-	public void renderUrl(Writer writer, URL urlComponent) {
-		String scheme = urlComponent.req.getScheme();
+	public void renderUrl(Writer writer, UrlProvider urlComponent) {
+        String scheme = urlComponent.getHttpServletRequest().getScheme();
 
-		if (urlComponent.scheme != null) {
-			scheme = urlComponent.scheme;
-		}
+        if (urlComponent.getScheme() != null) {
+            scheme = urlComponent.getScheme();
+        }
 
         String result;
         if (onlyActionSpecified(urlComponent)) {
-                result = PortletUrlHelper.buildUrl(urlComponent.action, urlComponent.namespace, urlComponent.method, urlComponent.parameters, urlComponent.portletUrlType, urlComponent.portletMode, urlComponent.windowState);
+                result = PortletUrlHelper.buildUrl(urlComponent.getAction(), urlComponent.getNamespace(), urlComponent.getMethod(), urlComponent.getParameters(), urlComponent.getPortletUrlType(), urlComponent.getPortletMode(), urlComponent.getWindowState());
         } else if(onlyValueSpecified(urlComponent)){
-                result = PortletUrlHelper.buildResourceUrl(urlComponent.value, urlComponent.parameters);
+                result = PortletUrlHelper.buildResourceUrl(urlComponent.getValue(), urlComponent.getParameters());
         }
         else {
         	result = createDefaultUrl(urlComponent);
         }
-        if ( urlComponent.anchor != null && urlComponent.anchor.length() > 0 ) {
-            result += '#' + urlComponent.anchor;
+        final String anchor = urlComponent.getAnchor();
+        if ( anchor != null && anchor.length() > 0 ) {
+            result += '#' + anchor;
         }
 
         String var = urlComponent.getVar();
@@ -66,7 +84,7 @@ public class PortletUrlRenderer implements UrlRenderer {
             urlComponent.putInContext(result);
 
             // add to the request and page scopes as well
-            urlComponent.req.setAttribute(var, result);
+            urlComponent.getHttpServletRequest().setAttribute(var, result);
         } else {
             try {
                 writer.write(result);
@@ -76,69 +94,77 @@ public class PortletUrlRenderer implements UrlRenderer {
         }
 	}
 
-	private String createDefaultUrl(URL urlComponent) {
+	private String createDefaultUrl(UrlProvider urlComponent) {
 		String result;
 		ActionInvocation ai = (ActionInvocation)urlComponent.getStack().getContext().get(
 				ActionContext.ACTION_INVOCATION);
 		String action = ai.getProxy().getActionName();
-		result = PortletUrlHelper.buildUrl(action, urlComponent.namespace, urlComponent.method, urlComponent.parameters, urlComponent.portletUrlType, urlComponent.portletMode, urlComponent.windowState);
+		result = PortletUrlHelper.buildUrl(action, urlComponent.getNamespace(), urlComponent.getMethod(), urlComponent.getParameters(),
+                urlComponent.getPortletUrlType(), urlComponent.getPortletMode(), urlComponent.getWindowState());
 		return result;
 	}
 
-	private boolean onlyValueSpecified(URL urlComponent) {
-		return urlComponent.value != null && urlComponent.action == null;
-	}
+    private boolean onlyValueSpecified(UrlProvider urlComponent) {
+        return urlComponent.getValue() != null && urlComponent.getAction() == null;
+    }
 
-	private boolean onlyActionSpecified(URL urlComponent) {
-		return urlComponent.value == null && urlComponent.action != null;
-	}
+    private boolean onlyActionSpecified(UrlProvider urlComponent) {
+        return urlComponent.getValue() == null && urlComponent.getAction() != null;
+    }
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void renderFormUrl(Form formComponent) {
-		String action = null;
-        if (formComponent.action != null) {
-            action = formComponent.findString(formComponent.action);
+        if(PortletActionContext.getPortletContext() == null) {
+            servletRenderer.renderFormUrl(formComponent);
         }
         else {
-        	ActionInvocation ai = (ActionInvocation) formComponent.getStack().getContext().get(ActionContext.ACTION_INVOCATION);
-        	action = ai.getProxy().getActionName();
-        }
-
-        String type = "action";
-        if (TextUtils.stringSet(formComponent.method)) {
-            if ("GET".equalsIgnoreCase(formComponent.method.trim())) {
-                type = "render";
+            String namespace = formComponent.determineNamespace(formComponent.namespace, formComponent.getStack(),
+                    formComponent.request);
+            String action = null;
+            if (formComponent.action != null) {
+                action = formComponent.findString(formComponent.action);
             }
-        }
-        if (action != null) {
-            String result = PortletUrlHelper.buildUrl(action, formComponent.namespace, null,
-                    formComponent.getParameters(), type, formComponent.portletMode, formComponent.windowState);
-            formComponent.addParameter("action", result);
+            else {
+                ActionInvocation ai = (ActionInvocation) formComponent.getStack().getContext().get(ActionContext.ACTION_INVOCATION);
+                action = ai.getProxy().getActionName();
+            }
 
-
-            // name/id: cut out anything between / and . should be the id and
-            // name
-            String id = formComponent.getId();
-            if (id == null) {
-                int slash = action.lastIndexOf('/');
-                int dot = action.indexOf('.', slash);
-                if (dot != -1) {
-                    id = action.substring(slash + 1, dot);
-                } else {
-                    id = action.substring(slash + 1);
+            String type = "action";
+            if (StringUtils.isNotEmpty(formComponent.method)) {
+                if ("GET".equalsIgnoreCase(formComponent.method.trim())) {
+                    type = "render";
                 }
-                formComponent.addParameter("id", formComponent.escape(id));
+            }
+            if (action != null) {
+                String result = PortletUrlHelper.buildUrl(action, namespace, null,
+                        formComponent.getParameters(), type, formComponent.portletMode, formComponent.windowState);
+                formComponent.addParameter("action", result);
+
+
+                // name/id: cut out anything between / and . should be the id and
+                // name
+                String id = formComponent.getId();
+                if (id == null) {
+                    int slash = action.lastIndexOf('/');
+                    int dot = action.indexOf('.', slash);
+                    if (dot != -1) {
+                        id = action.substring(slash + 1, dot);
+                    } else {
+                        id = action.substring(slash + 1);
+                    }
+                    formComponent.addParameter("id", formComponent.escape(id));
+                }
             }
         }
 
-		
 	}
 
-	public void beforeRenderUrl(URL arg0) {
-		// TODO Auto-generated method stub
-		
+	public void beforeRenderUrl(UrlProvider urlComponent) {
+		if(PortletActionContext.getPortletContext() == null) {
+			servletRenderer.beforeRenderUrl(urlComponent);
+		}
 	}
 
 }

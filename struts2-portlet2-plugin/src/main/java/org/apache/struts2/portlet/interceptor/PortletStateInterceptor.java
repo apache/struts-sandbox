@@ -30,12 +30,12 @@ import org.apache.struts2.portlet.dispatcher.DirectRenderFromEventAction;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 import com.opensymphony.xwork2.util.CompoundRoot;
-import com.opensymphony.xwork2.util.TextUtils;
 import com.opensymphony.xwork2.util.ValueStack;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
 
 import static org.apache.struts2.portlet.PortletContstants.*;
+import org.apache.commons.lang.xwork.StringUtils;
 
 public class PortletStateInterceptor extends AbstractInterceptor {
 
@@ -71,9 +71,9 @@ public class PortletStateInterceptor extends AbstractInterceptor {
 	@SuppressWarnings("unchecked")
 	private void restoreStack(ActionInvocation invocation) {
 		RenderRequest request = (RenderRequest) invocation.getInvocationContext().get(REQUEST);
-		if (TextUtils.stringSet(request.getParameter(EVENT_ACTION))) {
+		if (StringUtils.isNotEmpty(request.getParameter(EVENT_ACTION))) {
 			if(!isProperPrg(invocation)) {
-				LOG.debug("Restoring value stack from event phase");
+				if (LOG.isDebugEnabled()) LOG.debug("Restoring value stack from event phase");
 				ValueStack oldStack = (ValueStack) invocation.getInvocationContext().getSession().get(
 				STACK_FROM_EVENT_PHASE);
 				if (oldStack != null) {
@@ -81,11 +81,11 @@ public class PortletStateInterceptor extends AbstractInterceptor {
 					ValueStack currentStack = invocation.getStack();
 					CompoundRoot root = currentStack.getRoot();
 					root.addAll(oldRoot);
-					LOG.debug("Restored stack");
+					if (LOG.isDebugEnabled()) LOG.debug("Restored stack");
 				}
 			}
 			else {
-				LOG.debug("Won't restore stack from event phase since it's a proper PRG request");
+				if (LOG.isDebugEnabled()) LOG.debug("Won't restore stack from event phase since it's a proper PRG request");
 			}
 		}
 	}

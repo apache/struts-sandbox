@@ -20,42 +20,23 @@
  */
 package org.apache.struts2.portlet.dispatcher;
 
-import java.io.File;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.ListResourceBundle;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.PortletConfig;
-import javax.portlet.PortletContext;
-import javax.portlet.PortletMode;
-import javax.portlet.PortletSession;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-import javax.portlet.WindowState;
-
-import org.apache.struts2.StrutsConstants;
-import org.apache.struts2.dispatcher.mapper.ActionMapping;
-import org.easymock.EasyMock;
-import org.jmock.Mock;
-import org.jmock.cglib.MockObjectTestCase;
-import org.jmock.core.Constraint;
-import org.springframework.mock.web.portlet.MockActionRequest;
-import org.springframework.mock.web.portlet.MockActionResponse;
-import org.springframework.mock.web.portlet.MockPortletConfig;
-import org.springframework.mock.web.portlet.MockPortletContext;
-
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.ActionProxy;
 import com.opensymphony.xwork2.ActionProxyFactory;
 import com.opensymphony.xwork2.util.ValueStack;
-
+import org.apache.struts2.StrutsConstants;
+import org.apache.struts2.dispatcher.mapper.ActionMapping;
 import static org.apache.struts2.portlet.PortletContstants.*;
+import org.easymock.EasyMock;
+import org.jmock.Mock;
+import org.jmock.cglib.MockObjectTestCase;
+import org.jmock.core.Constraint;
+import org.springframework.mock.web.portlet.MockPortletConfig;
+import org.springframework.mock.web.portlet.MockPortletContext;
+
+import javax.portlet.*;
+import java.util.*;
 
 /**
  * Jsr168DispatcherTest. Insert description.
@@ -244,10 +225,8 @@ public class Jsr168DispatcherTest extends MockObjectTestCase {
 
     private void setupParamStub(Map<String, String[]> requestParams, Mock mockRequest, String method) {
         Map<String, String> newMap = new HashMap<String, String>();
-        Iterator<String> it = requestParams.keySet().iterator();
-        while(it.hasNext()) {
-            String key = it.next();
-            String[] val = (String[])requestParams.get(key);
+        for ( String key : requestParams.keySet() ) {
+            String[] val = requestParams.get(key);
             newMap.put(key, val[0]);
         }
         setupStub(newMap, mockRequest, method);
@@ -263,9 +242,7 @@ public class Jsr168DispatcherTest extends MockObjectTestCase {
      * @param method The name of the method to stub.
      */
     private void setupStub(Map map, Mock mock, String method) {
-        Iterator it = map.keySet().iterator();
-        while(it.hasNext()) {
-            Object key = it.next();
+        for ( Object key : map.keySet() ) {
             Object val = map.get(key);
             mock.stubs().method(method).with(eq(key)).will(returnValue(val));
         }
@@ -307,23 +284,4 @@ public class Jsr168DispatcherTest extends MockObjectTestCase {
         }
     }
     
-    public void testMultipartRequest_parametersAreCopiedToActionInvocation() throws Exception {
-    	MockPortletContext ctx = new MockPortletContext();
-    	ctx.setAttribute("javax.servlet.context.tempdir", new File("target").getAbsoluteFile());
-    	MockActionRequest request = new MockActionRequest(ctx);
-    	request.setContent(MULTIPART_REQUEST.getBytes("US-ASCII"));
-    	request.setContentType("multipart/form-data; boundary=---------------------------4827543632391");
-    	request.setProperty("Content-Length", "" + MULTIPART_REQUEST.length());
-    	MockActionResponse response = new MockActionResponse();
-    	Map<String, Object> requestMap = new HashMap<String, Object>();
-    	Map<String, String[]> paramMap = new HashMap<String, String[]>();
-    	Map<String, Object> sessionMap = new HashMap<String, Object>();
-    	Map<String, Object> applicationMap = new HashMap<String, Object>();
-    	initPortletConfig(new HashMap<String, String>(), new HashMap<String, Object>());
-    	MockPortletConfig config = new MockPortletConfig(ctx);
-    	dispatcher.init(config);
-    	dispatcher.createContextMap(requestMap, paramMap, sessionMap, applicationMap, request, response, config, ACTION_PHASE);
-    	assertNotNull("Caption was not found in parameter map!", paramMap.get("caption"));
-    	assertEquals("TestCaption", paramMap.get("caption")[0]);
-    }
 }
