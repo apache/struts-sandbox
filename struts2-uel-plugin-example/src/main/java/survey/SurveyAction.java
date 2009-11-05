@@ -1,4 +1,4 @@
-package example;
+package survey;
 
 import java.util.Date;
 import com.opensymphony.xwork2.ActionSupport;
@@ -12,6 +12,7 @@ public class SurveyAction extends ActionSupport {
 	public String edit() {
 		surveyBean.setAge(22);
 		surveyBean.setFirstName("Lex");
+        surveyBean.setLastName("Luthor");
 		surveyBean.setBirthdate(new Date());
 		return SUCCESS;
 	}

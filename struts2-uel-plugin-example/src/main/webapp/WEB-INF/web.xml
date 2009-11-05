@@ -20,7 +20,7 @@
 
 	<listener>
 		<listener-class>
-			org.apache.struts2.uelplugin.contextlistener.UelServletContextListener
+			org.apache.struts2.uelplugin.UelServletContextListener
 		</listener-class>
 	</listener>
 

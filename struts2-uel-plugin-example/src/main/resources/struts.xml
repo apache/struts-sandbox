@@ -3,15 +3,30 @@
         "http://struts.apache.org/dtds/struts-2.0.dtd">
 
 <struts>
-    <package name="example" namespace="/example" extends="uel-default">
+    <constant name="struts.custom.i18n.resources" value="globalMessages"/>
+    <constant name="struts.enableSimpleParametersBinder" value="true"/>
 
-        <action name="SurveyEdit" class="example.SurveyAction" method="edit">
-            <result name="success">/example/survey.jsp</result>
+    <package name="survey" namespace="/survey" extends="uel-default">
+
+        <action name="edit" class="survey.SurveyAction" method="edit">
+            <result>/survey/survey.jsp</result>
         </action>
 
-        <action name="SurveySave" class="example.SurveyAction" method="save">
-            <result name="success">/example/surveyResults.jsp</result>
+        <action name="save" class="survey.SurveyAction" method="save">
+            <result>/survey/survey-results.jsp</result>
+            <result name="input">/survey/survey.jsp</result>
+        </action>
+    </package>
+
+    <package name="root" namespace="/" extends="struts-default">
+        <default-action-ref name="index"/>
+
+        <action name="index">
+           <result>/index.jsp</result>
         </action>
 
+        <action name="uel-expressions">
+           <result>/uel-expressions.jsp</result>
+        </action>
     </package>
 </struts>

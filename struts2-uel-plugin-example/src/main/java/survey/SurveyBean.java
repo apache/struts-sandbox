@@ -1,4 +1,4 @@
-package example;
+package survey;
 
 import java.util.Date;
 
