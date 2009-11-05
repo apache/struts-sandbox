@@ -103,7 +103,7 @@ public class CompoundRootELResolver extends ELResolver {
             throw new IllegalArgumentException("ElContext cannot be null");
         }
 
-        String propertyName = (String) property;
+        String propertyName = property.toString();
 
         if (StringUtils.startsWith(propertyName, "#"))
             return null;

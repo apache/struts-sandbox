@@ -33,14 +33,12 @@ public class JUELExtensionBuilder extends Builder {
     };
 
     static AstBinary.Operator EXTENDED_ADD_OPERATOR = new AstBinary.SimpleOperator() {
-
         public Object apply(TypeConverter converter, Object o1, Object o2) {
             if (o1 instanceof String || o2 instanceof String)
                 return StringUtils.join(new Object[]{o1, o2});
             else
                 return NumberOperations.add(converter, o1, o2);
         }
-
 
         public String toString() {
             return "+";
@@ -52,9 +50,9 @@ public class JUELExtensionBuilder extends Builder {
      */
     static Parser.ExtensionHandler SHARP_HANDLER = new Parser.ExtensionHandler(Parser.ExtensionPoint.UNARY) {
         public AstNode createAstNode(AstNode... children) {
-            AstIdentifier astIdentifier = (AstIdentifier) children[0];
-            ValueStackAstIdentifier valueStackAstIdentifier = new ValueStackAstIdentifier(astIdentifier.getName(), astIdentifier.getIndex());
-            return new AstUnary(valueStackAstIdentifier, SHARP_OPERATOR);
+            //AstIdentifier astIdentifier = (AstIdentifier) children[0];
+            //ValueStackAstIdentifier valueStackAstIdentifier = new ValueStackAstIdentifier(astIdentifier.getName(), astIdentifier.getIndex());
+            return new AstUnary(children[0], SHARP_OPERATOR);
         }
     };
 
@@ -88,11 +86,16 @@ public class JUELExtensionBuilder extends Builder {
                     char current = input.charAt(currentIndex);
 
                     if (current == '#' && (!StringUtils.substring(input, currentIndex + 1, currentIndex + 2).equals('{'))) {
+                        //fake unary operator so it is accepted by the parser
                         return SHARP_TOKEN;
+                    } else if (currentIndex > 0 && input.charAt(currentIndex - 1) == '#' && current != '{') {
+                        //direct reference, like #obj, let the parser extract the token
+                        Token token = super.nextEval();
+                        //add #to the name of the token
+                        return token(Symbol.IDENTIFIER, "#" + token.getImage(), token.getSize());
                     } else if (current == '+') {
                         return EXTENDED_ADD_TOKEN;
                     }
-
 
                     return super.nextEval();
                 }

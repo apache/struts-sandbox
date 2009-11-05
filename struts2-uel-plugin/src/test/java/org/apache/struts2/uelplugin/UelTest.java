@@ -14,9 +14,7 @@ import javax.servlet.ServletContextEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class UelTest extends XWorkTestCase {
     private ExpressionFactory factory = ExpressionFactory.newInstance();
@@ -83,6 +81,43 @@ public class UelTest extends XWorkTestCase {
 
     }
 
+    public void testExpressionSyntax() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        TestObject obj = new TestObject();
+        obj.setValue("val");
+        obj.setAge(1);
+        stack.getContext().put("obj", obj);
+
+        assertEquals("val", stack.findValue("${#obj.value}"));
+        assertEquals("val", stack.findValue("%{#obj.value}"));
+        assertEquals("val", stack.findValue("#{#obj.value}"));
+    }
+
+    public void testSuperNested() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        TestObject obj0 = new TestObject("0");
+        root.push(obj0);
+
+        TestObject obj1 = new TestObject("1");
+        obj0.setInner(obj1);
+
+        TestObject obj2 = new TestObject("2");
+        Map map = new HashMap();
+        map.put("key0", obj2);
+        obj1.setParameters(map);
+
+        TestObject obj3 = new TestObject("3");
+        List list = new ArrayList();
+        list.add(obj3);
+        obj2.setObject(obj3);
+
+        TestObject obj4 = new TestObject("4");
+        TestObject[] array = new TestObject[]{obj4};
+        obj3.setObject(array);
+
+        stack.getContext().put("obj", obj0);
+
+        assertEquals("4", stack.findValue("${inner.parameters['key0'].object.object[0].value}"));
+    }
+
     public void testContextReferences() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         TestObject obj = new TestObject();
         obj.setValue("val");
@@ -105,6 +140,20 @@ public class UelTest extends XWorkTestCase {
         //string addition
         assertEquals("valval2", stack.findValue("#obj.value + #obj2.value"));
         assertEquals("1val2", stack.findValue("#obj.age + #obj2.value"));
+
+        //map
+        Map someMap = new HashMap();
+        obj.setInner(obj2);
+        someMap.put("val", obj);
+        stack.getContext().put("map", someMap);
+        assertEquals("val", stack.findValue("#map[#obj.value].value"));
+
+        //list
+        List someList = new ArrayList(3);
+        obj.setAge(0);
+        someList.add(obj);
+        stack.getContext().put("list", someList);
+        assertEquals("val", stack.findValue("#list[#obj.age].value"));
     }
 
     public void testBasicFind() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {

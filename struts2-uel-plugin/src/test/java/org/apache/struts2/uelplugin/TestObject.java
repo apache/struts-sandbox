@@ -10,6 +10,22 @@ public class TestObject {
     private Date date;
     private TestObject inner;
     private Map parameters;
+    private Object object;
+
+    public TestObject() {
+    }
+
+    public TestObject(String value) {
+        this.value = value;
+    }
+
+    public Object getObject() {
+        return object;
+    }
+
+    public void setObject(Object object) {
+        this.object = object;
+    }
 
     public String getValue() {
         return value;

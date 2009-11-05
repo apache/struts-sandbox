@@ -8,19 +8,24 @@ import javax.el.ELContext;
 import java.util.Iterator;
 import java.beans.FeatureDescriptor;
 
+import org.apache.commons.lang.xwork.StringUtils;
+
 
 public class ValueStackContextResolver extends ELResolver {
     public Object getValue(ELContext context, Object base, Object property) {
         String objectName = property.toString();
+        if (StringUtils.startsWith(objectName, "#")) {
+            objectName = StringUtils.removeStart(property.toString(), "#");
 
-        ActionContext actionContext = ActionContext.getContext();
-        if (context != null) {
-            ValueStack valueStack = actionContext.getValueStack();
-            if (valueStack != null) {
-                Object obj = valueStack.getContext().get(objectName);
-                if (obj != null) {
-                    context.setPropertyResolved(true);
-                    return obj;
+            ActionContext actionContext = ActionContext.getContext();
+            if (context != null) {
+                ValueStack valueStack = actionContext.getValueStack();
+                if (valueStack != null) {
+                    Object obj = valueStack.getContext().get(objectName);
+                    if (obj != null) {
+                        context.setPropertyResolved(true);
+                        return obj;
+                    }
                 }
             }
         }
