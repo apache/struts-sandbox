@@ -31,7 +31,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.portlet.ActionRequest;
-import javax.portlet.EventRequest;
 import javax.portlet.PortletContext;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletRequestDispatcher;
