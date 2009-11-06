@@ -2,7 +2,21 @@ package org.apache.struts2.uelplugin;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.XWorkTestCase;
+import com.opensymphony.xwork2.ActionProxyFactory;
+import com.opensymphony.xwork2.ognl.OgnlReflectionProvider;
+import com.opensymphony.xwork2.inject.Container;
+import com.opensymphony.xwork2.inject.ContainerBuilder;
+import com.opensymphony.xwork2.inject.Scope;
+import com.opensymphony.xwork2.config.ConfigurationManager;
+import com.opensymphony.xwork2.config.Configuration;
+import com.opensymphony.xwork2.config.ConfigurationProvider;
+import com.opensymphony.xwork2.config.ConfigurationException;
 import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
+import com.opensymphony.xwork2.util.reflection.ReflectionProvider;
+import com.opensymphony.xwork2.util.location.LocatableProperties;
+import com.opensymphony.xwork2.util.ValueStack;
+import com.opensymphony.xwork2.util.ValueStackFactory;
+import com.opensymphony.xwork2.util.LocalizedTextUtil;
 import com.opensymphony.xwork2.util.CompoundRoot;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.uelplugin.UelServletContextListener;
@@ -16,49 +30,17 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.*;
 
-public class UelTest extends XWorkTestCase {
-    private ExpressionFactory factory = ExpressionFactory.newInstance();
-    private XWorkConverter converter;
-    private DateFormat format = DateFormat.getDateInstance();
-    private CompoundRoot root;
-    private UelValueStack stack;
+public class UelTest extends AbstractUelBaseTest {
 
-    private class DateConverter extends StrutsTypeConverter {
+    public void testReadList() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        TestObject obj = new TestObject();
+        root.push(obj);
 
-        @Override
-        public Object convertFromString(Map context, String[] values, Class toClass) {
-            try {
-                return format.parseObject(values[0]);
-            } catch (ParseException e) {
-                return null;
-            }
-        }
-
-        @Override
-        public String convertToString(Map context, Object o) {
-            return format.format(o);
-        }
-
-    }
-
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        converter = container.getInstance(XWorkConverter.class);
-        converter.registerConverter("java.util.Date", new DateConverter());
-        this.root = new CompoundRoot();
-        this.stack = new UelValueStack(converter);
-        stack.setRoot(root);
-        stack.getContext().put(ActionContext.CONTAINER, container);
-
-        MockServletContext servletContext = new MockServletContext();
-        ActionContext context = new ActionContext(stack.getContext());
-        ActionContext.setContext(context);
-        ServletActionContext.setServletContext(servletContext);
-
-        //simulate start up
-        UelServletContextListener listener = new UelServletContextListener();
-        listener.contextInitialized(new ServletContextEvent(servletContext));
+        //list
+        List someList = new ArrayList(3);
+        obj.setObject(someList);
+        someList.add(10);
+        assertEquals(10, stack.findValue("object[0]"));
     }
 
 

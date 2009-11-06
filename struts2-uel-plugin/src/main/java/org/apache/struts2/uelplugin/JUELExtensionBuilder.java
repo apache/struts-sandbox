@@ -11,6 +11,10 @@ import de.odysseus.el.tree.impl.ast.AstUnary;
 import de.odysseus.el.tree.impl.ast.AstIdentifier;
 import org.apache.commons.lang.xwork.StringUtils;
 
+/**
+ * Plugs into JUEL parser to supper expressions like "#obj", to provide some level
+ * of backward compatibility with OGNL
+ */
 public class JUELExtensionBuilder extends Builder {
 
     /**
@@ -117,11 +121,5 @@ public class JUELExtensionBuilder extends Builder {
 
     protected Parser createParser(String expression) {
         return new ExtendedParser(this, expression);
-    }
-}
-
-class ValueStackAstIdentifier extends AstIdentifier {
-    public ValueStackAstIdentifier(String name, int index) {
-        super("#"+name, index);
     }
 }

@@ -14,6 +14,12 @@ import java.util.HashMap;
 
 import org.apache.commons.lang.xwork.StringUtils;
 
+/**
+ * <p>Builtin function availabe from UEL. Available functions are</p>
+ * <ul>
+ * <li>getText(String):Looks up a text from resource bundles using the parameter as a key</li>
+ * </ul>
+ */
 public class BuiltinFunctionMapper extends FunctionMapper {
     private static final Map<String, Method> BUILTIN_FUNCTIONS = new HashMap<String, Method>() {
         {

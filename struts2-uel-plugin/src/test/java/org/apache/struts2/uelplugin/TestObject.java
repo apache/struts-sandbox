@@ -2,6 +2,7 @@ package org.apache.struts2.uelplugin;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.List;
 
 
 public class TestObject {
@@ -11,6 +12,24 @@ public class TestObject {
     private TestObject inner;
     private Map parameters;
     private Object object;
+    private List list;
+    private List<TestObject> typedList;
+
+    public List<TestObject> getTypedList() {
+        return typedList;
+    }
+
+    public void setTypedList(List<TestObject> typedList) {
+        this.typedList = typedList;
+    }
+
+    public List getList() {
+        return list;
+    }
+
+    public void setList(List list) {
+        this.list = list;
+    }
 
     public TestObject() {
     }

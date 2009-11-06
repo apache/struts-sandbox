@@ -1,52 +1,76 @@
 package org.apache.struts2.uelplugin.elresolvers;
 
 import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
+import com.opensymphony.xwork2.parameters.accessor.ParametersPropertyAccessor;
+import com.opensymphony.xwork2.util.reflection.ReflectionProvider;
+import com.opensymphony.xwork2.util.reflection.ReflectionContextState;
+import com.opensymphony.xwork2.inject.Container;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.struts2.StrutsException;
 
 import javax.el.BeanELResolver;
 import javax.el.ELContext;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
 
-public class XWorkBeanELResolver extends BeanELResolver {
-
-    public XWorkBeanELResolver() {
-        super(false);
+public class XWorkBeanELResolver extends AbstractResolver {
+    public XWorkBeanELResolver(Container container) {
+        super(container);
     }
 
-    /**
-     * Re-implement this to always return Object. We don't want unified EL to do
-     * type conversion, we do that in the setter using xwork type conversion
-     * framework.
-     */
-    @Override
-    public Class<?> getType(ELContext context, Object base, Object property) {
-        if (context == null) {
-            throw new NullPointerException();
-        }
+    public Object getValue(ELContext elContext, Object target, Object property) {
+        if (target != null && property != null) {
+            Map<String, Object> reflectionContext = (Map<String, Object>) elContext.getContext(AccessorsContextKey.class);
+            String propertyName = property.toString();
 
-        if (base == null || property == null) {
-            return null;
-        }
+            //only handle this if there is such a property
+            if (PropertyUtils.isReadable(target, propertyName)) {
+                try {
+                    Object obj = reflectionProvider.getValue(propertyName, reflectionContext, target);
 
-        context.setPropertyResolved(true);
-        return Object.class;
-    }
+                    reflectionContext.put(XWorkConverter.LAST_BEAN_CLASS_ACCESSED, target.getClass());
+                    reflectionContext.put(XWorkConverter.LAST_BEAN_PROPERTY_ACCESSED, property.toString());
 
-    @Override
-    public void setValue(ELContext context, Object base, Object property, Object value) {
-        XWorkConverter converter = (XWorkConverter) context.getContext(XWorkConverter.class);
-        try {
-            if (converter != null && base != null) {
-                Class propType = PropertyUtils.getPropertyType(base, property.toString());
-                value = converter.convertValue(null, value, propType);
+                    //if object is null, and create objects is enabled, lets do it
+                    if (obj == null && ReflectionContextState.isCreatingNullObjects(reflectionContext)) {
+                        obj = nullHandler.nullPropertyValue(reflectionContext, target, property);
+                        PropertyUtils.setProperty(target, propertyName, obj);
+                    }
+
+                    elContext.setPropertyResolved(true);
+                    return obj;
+                } catch (Exception e) {
+                    throw new StrutsException(e);
+                }
             }
-            super.setValue(context, base, property, value);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
+        }
+
+        return null;
+    }
+
+    public void setValue(ELContext elContext, Object target, Object property, Object value) {
+        if (target != null && property != null) {
+            try {
+                Map<String, Object> reflectionContext = (Map<String, Object>) elContext.getContext(AccessorsContextKey.class);
+                String propertyName = property.toString();
+                Class targetType = target.getClass();
+
+                //only handle this if there is such a property
+                if (PropertyUtils.isReadable(target, propertyName)) {
+
+                    Class expectedType = reflectionProvider.getPropertyDescriptor(targetType, propertyName).getWriteMethod().getParameterTypes()[0];
+                    Class valueType = value.getClass();
+
+                    //convert value, if needed
+                    if (!expectedType.isAssignableFrom(valueType)) {
+                        value = xworkConverter.convertValue(reflectionContext, value, expectedType);
+                    }
+                    reflectionProvider.setValue(propertyName, reflectionContext, target, value);
+                    elContext.setPropertyResolved(true);
+                }
+            } catch (Exception e) {
+                throw new StrutsException(e);
+            }
         }
     }
 }

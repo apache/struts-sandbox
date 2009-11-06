@@ -3,39 +3,48 @@ package org.apache.struts2.uelplugin;
 import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
 import com.opensymphony.xwork2.util.CompoundRoot;
 import com.opensymphony.xwork2.util.ValueStack;
+import com.opensymphony.xwork2.util.ClearableValueStack;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
 import com.opensymphony.xwork2.util.logging.Logger;
+import com.opensymphony.xwork2.inject.Container;
+import com.opensymphony.xwork2.inject.Inject;
 
 import javax.el.*;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.HashMap;
+
+import org.apache.struts2.uelplugin.elresolvers.AccessorsContextKey;
 
 /**
  * A ValueStack that uses Unified EL as the underlying Expression Language.
  */
-public class UelValueStack implements ValueStack {
+public class UelValueStack implements ValueStack, ClearableValueStack {
     private static final Logger LOG = LoggerFactory.getLogger(UelValueStack.class);
 
     private CompoundRoot root = new CompoundRoot();
     private transient Map context;
     private Class defaultType;
     private Map overrides;
-    private XWorkConverter xworkConverter;
 
     private ELContext elContext;
+    private Container container;
+    private XWorkConverter xworkConverter;
 
-    public UelValueStack(XWorkConverter xworkConverter) {
-        this(xworkConverter, new CompoundRoot());
+    public UelValueStack(Container container) {
+        this(container, new CompoundRoot());
     }
 
-    public UelValueStack(XWorkConverter xworkConverter, ValueStack vs) {
-        this(xworkConverter, new CompoundRoot(vs.getRoot()));
+    public UelValueStack(Container container, ValueStack vs) {
+        this(container, new CompoundRoot(vs.getRoot()));
     }
 
-    public UelValueStack(XWorkConverter xworkConverter, CompoundRoot root) {
-        this.xworkConverter = xworkConverter;
+    public UelValueStack(Container container, CompoundRoot root) {
+        this.container = container;
+        this.xworkConverter = container.getInstance(XWorkConverter.class);
         setRoot(new CompoundRoot(root));
     }
+
 
     public String findString(String expr, boolean throwException) {
         return (String) findValue(expr, String.class);
@@ -70,6 +79,8 @@ public class UelValueStack implements ValueStack {
             if (expr != null && !expr.startsWith("${") && !expr.startsWith("#{")) {
                 expr = "#{" + expr + "}";
             }
+
+            elContext.putContext(AccessorsContextKey.class, context);
             elContext.putContext(XWorkConverter.class, xworkConverter);
             elContext.putContext(CompoundRoot.class, root);
 
@@ -159,6 +170,7 @@ public class UelValueStack implements ValueStack {
             if (expr != null && !expr.startsWith("${") && !expr.startsWith("#{")) {
                 expr = "#{" + expr + "}";
             }
+            elContext.putContext(AccessorsContextKey.class, context);
             elContext.putContext(XWorkConverter.class, xworkConverter);
             elContext.putContext(CompoundRoot.class, root);
 
@@ -181,6 +193,10 @@ public class UelValueStack implements ValueStack {
         this.context = new TreeMap();
         context.put(VALUE_STACK, this);
         this.root = root;
-        elContext = new CompoundRootELContext();
+        elContext = new CompoundRootELContext(container);
+    }
+
+    public void clearContextValues() {
+        getContext().clear();        
     }
 }

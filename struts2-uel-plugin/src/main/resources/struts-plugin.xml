@@ -8,7 +8,7 @@
     <bean type="com.opensymphony.xwork2.util.ValueStackFactory" name="uel"
           class="org.apache.struts2.uelplugin.UelValueStackFactory"/>
     <bean type="com.opensymphony.xwork2.util.reflection.ReflectionProvider" name="uel"
-          class="org.apache.struts2.uelplugin.UelReflectionProvider"/>
+          class="org.apache.struts2.uelplugin.reflection.GenericReflectionProvider"/>
     <bean type="com.opensymphony.xwork2.util.reflection.ReflectionContextFactory" name="uel"
           class="org.apache.struts2.uelplugin.UelReflectionContextFactory"/>
 

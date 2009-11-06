@@ -31,13 +31,14 @@ public class UelValueStackFactory implements ValueStackFactory {
 
 
     public ValueStack createValueStack() {
-        ValueStack results = new UelValueStack(xworkConverter);
+        ValueStack results = new UelValueStack(container);
         results.getContext().put(ActionContext.CONTAINER, container);
         return results;
     }
 
     public ValueStack createValueStack(ValueStack stack) {
-        ValueStack results = new UelValueStack(xworkConverter, stack);
+        ValueStack results = new UelValueStack(container, stack);
+        container.inject(results);
         results.getContext().put(ActionContext.CONTAINER, container);
         return results;
     }

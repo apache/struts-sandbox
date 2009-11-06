@@ -1,7 +1,10 @@
 package org.apache.struts2.uelplugin.elresolvers;
 
 import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
+import com.opensymphony.xwork2.conversion.NullHandler;
 import com.opensymphony.xwork2.util.CompoundRoot;
+import com.opensymphony.xwork2.util.reflection.ReflectionContextState;
+import com.opensymphony.xwork2.inject.Container;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.xwork.StringUtils;
@@ -15,86 +18,16 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * An ELResolver that is capable of resolving properties against the
  * CompoundRoot if available in the ELContext.
  */
-public class CompoundRootELResolver extends ELResolver {
+public class CompoundRootELResolver extends AbstractResolver {
 
-    @Override
-    public Class<?> getCommonPropertyType(ELContext context, Object base) {
-        if (base == null) {
-            return null;
-        }
-
-        return String.class;
-    }
-
-    @Override
-    public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
-        // only resolve at the root of the context
-        if (base != null) {
-            return null;
-        }
-
-        CompoundRoot root = (CompoundRoot) context.getContext(CompoundRoot.class);
-        if (root == null) {
-            return null;
-        }
-
-        ArrayList<FeatureDescriptor> list = new ArrayList<FeatureDescriptor>();
-        if (root.size() > 0) {
-            FeatureDescriptor descriptor = new FeatureDescriptor();
-            descriptor.setValue("type", root.get(0).getClass());
-            descriptor.setValue("resolvableAtDesignTime", Boolean.FALSE);
-            list.add(descriptor);
-        }
-
-        for (Object bean : root) {
-            BeanInfo info = null;
-            try {
-                info = Introspector.getBeanInfo(base.getClass());
-            } catch (Exception ex) {
-            }
-            if (info != null) {
-                for (PropertyDescriptor pd : info.getPropertyDescriptors()) {
-                    pd.setValue("type", pd.getPropertyType());
-                    pd.setValue("resolvableAtDesignTime", Boolean.FALSE);
-                    list.add(pd);
-                }
-            }
-        }
-        return list.iterator();
-    }
-
-    @Override
-    public Class<?> getType(ELContext context, Object base, Object property) {
-        // only resolve at the root of the context
-        if (base != null) {
-            return null;
-        }
-
-        CompoundRoot root = (CompoundRoot) context.getContext(CompoundRoot.class);
-        if (root == null) {
-            return null;
-        }
-        String propertyName = (String) property;
-        Object bean = findObjectForProperty(root, propertyName);
-        if (bean == null) {
-            return null;
-        }
-        try {
-            Class type = determineType(bean, propertyName);
-            context.setPropertyResolved(true);
-            return type;
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
+    public CompoundRootELResolver(Container container) {
+        super(container);
     }
 
     @Override
@@ -122,29 +55,30 @@ public class CompoundRootELResolver extends ELResolver {
             return root.get(0);
         }
 
-        try {
-            Object bean = findObjectForProperty(root, propertyName);
-            if (bean != null) {
-                Object retVal = PropertyUtils.getProperty(bean, propertyName);
-                context.setPropertyResolved(true);
-                return retVal;
+        Map<String, Object> reflectionContext = (Map) context.getContext(AccessorsContextKey.class);
+
+        Object bean = findObjectForProperty(root, propertyName);
+        if (bean != null) {
+            Object retVal = reflectionProvider.getValue(propertyName, reflectionContext, bean);
+
+            reflectionContext.put(XWorkConverter.LAST_BEAN_CLASS_ACCESSED, bean.getClass());
+            reflectionContext.put(XWorkConverter.LAST_BEAN_PROPERTY_ACCESSED, propertyName);
+
+            //if object is null, and create objects is enabled, lets do it
+            if (retVal == null && ReflectionContextState.isCreatingNullObjects(reflectionContext)) {
+                retVal = nullHandler.nullPropertyValue(reflectionContext, bean, property);
+                reflectionProvider.setValue(propertyName, reflectionContext, bean, retVal);
             }
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
+
+            context.setPropertyResolved(true);
+            return retVal;
         }
+        
         return null;
     }
 
     @Override
     public boolean isReadOnly(ELContext context, Object base, Object property) {
-        if (context == null) {
-            throw new NullPointerException();
-        }
-
         return false;
     }
 

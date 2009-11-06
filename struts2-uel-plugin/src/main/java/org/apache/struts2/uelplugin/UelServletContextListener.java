@@ -12,7 +12,8 @@ import java.util.Properties;
 import org.apache.struts2.uelplugin.ExpressionFactoryHolder;
 
 /**
- * Responsible for registering the ELResolvers.
+ * Responsible for creating the ExpressionFactory that will be used by the
+ * UelValueStack
  */
 public class UelServletContextListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent contextEvent) {
