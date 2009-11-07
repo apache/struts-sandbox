@@ -8,10 +8,18 @@ import com.opensymphony.xwork2.conversion.annotations.TypeConversion;
 @Conversion
 public class TestAction extends ActionSupport {
     private TestObject object;
+    private int bar;
+
+    public int getBar() {
+        return bar;
+    }
+
+    public void setBar(int bar) {
+        this.bar = bar;
+    }
 
     private String converted;
 
-    @TypeConversion(type = ConversionType.APPLICATION, converter = "org.apache.struts2.uelplugin.DummyTypeConverter")
     public String getConverted() {
         return converted;
     }

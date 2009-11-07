@@ -18,14 +18,15 @@ public class XWorkBeanELResolver extends AbstractResolver {
         if (target != null && property != null) {
             Map<String, Object> reflectionContext = (Map<String, Object>) elContext.getContext(AccessorsContextKey.class);
             String propertyName = property.toString();
+            Class targetType = target.getClass();
 
             //only handle this if there is such a property
             if (PropertyUtils.isReadable(target, propertyName)) {
                 try {
                     Object obj = reflectionProvider.getValue(propertyName, reflectionContext, target);
 
-                    reflectionContext.put(XWorkConverter.LAST_BEAN_CLASS_ACCESSED, target.getClass());
-                    reflectionContext.put(XWorkConverter.LAST_BEAN_PROPERTY_ACCESSED, property.toString());
+                    reflectionContext.put(XWorkConverter.LAST_BEAN_CLASS_ACCESSED, targetType);
+                    reflectionContext.put(XWorkConverter.LAST_BEAN_PROPERTY_ACCESSED, propertyName);
 
                     //if object is null, and create objects is enabled, lets do it
                     if (obj == null && ReflectionContextState.isCreatingNullObjects(reflectionContext)) {

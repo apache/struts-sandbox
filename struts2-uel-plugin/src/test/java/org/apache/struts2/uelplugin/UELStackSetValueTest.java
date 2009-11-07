@@ -1,18 +1,21 @@
 package org.apache.struts2.uelplugin;
 
-import com.opensymphony.xwork2.interceptor.ParametersInterceptor;
-import com.opensymphony.xwork2.ActionProxy;
-import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.util.reflection.ReflectionContextState;
 
-import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.lang.reflect.InvocationTargetException;
 
 
-public class ParametersTest extends AbstractUelBaseTest {
+public class UELStackSetValueTest extends AbstractUELTest {
+    public void testSuperNested() {
+        TestObject obj = new TestObject();
+        root.push(obj);
+
+        stack.setValue("inner.typedMap[10].inner.typedList[2].typedMap[1].value", "whoa");
+        assertEquals("whoa", obj.getInner().getTypedMap().get(10).getInner().getTypedList().get(2).getTypedMap().get(1).getValue());
+    }
+
+
     public void testWriteList() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         //not null
         List list = new ArrayList();
@@ -45,16 +48,17 @@ public class ParametersTest extends AbstractUelBaseTest {
         assertEquals("val", obj.getTypedList().get(1).getValue());
     }
 
-     public void testWriteArray() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+    public void testWriteArray() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         //not null
-        Object[] array = new Object[2];
+        TestObject[] array = new TestObject[2];
         TestObject obj = new TestObject();
-        //obj.setObjectArray(array);
-        //assertNotNull(obj.getObjectArray());
+        obj.setTypedArray2(array);
+        assertNotNull(obj.getTypedArray2());
         root.push(obj);
 
-        stack.setValue("objectArray[0].value", "val");
-        assertEquals("val", ((TestObject)array[0]).getValue());
+        stack.setValue("typedArray2[0].value", "val");
+        assertNotNull(array[0]);
+        assertEquals("val", ((TestObject) array[0]).getValue());
     }
 
     public void testWriteMap() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
@@ -98,6 +102,47 @@ public class ParametersTest extends AbstractUelBaseTest {
         stack.setValue("inner.inner.value", "val");
         assertNotNull(obj.getInner().getInner());
         assertEquals("val", obj.getInner().getInner().getValue());
+    }
+
+    public void testSetStringArray() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        TestObject obj = new TestObject();
+        root.add(obj);
+
+        stack.setValue("${value}", new String[]{"Hello World"});
+        String value = stack.findString("${value}");
+        assertEquals("Hello World", value);
+
+        stack.setValue("${age}", new String[]{"67"});
+        assertEquals(new Integer(67), stack.findValue("${age}"));
+    }
+
+    public void test2LevelSet() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        TestObject obj = new TestObject();
+        TestObject nestedObj = new TestObject();
+        obj.setInner(nestedObj);
+        root.add(obj);
+
+        stack.setValue("${inner.age}", "66");
+        assertEquals(66, obj.getInner().getAge());
+    }
+
+    public void testTypeConversion() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        TestObject obj = new TestObject();
+        TestObject inner = new TestObject();
+        obj.setInner(inner);
+        root.add(obj);
+
+        stack.setValue("${age}", "22");
+        assertEquals(stack.findValue("${age}"), obj.getAge());
+
+        stack.setValue("${inner.value}", "George");
+        assertEquals(stack.findValue("${inner.value}"), obj.getInner().getValue());
+
+        stack.setValue("${inner.age}", "44");
+        assertEquals(stack.findValue("${inner.age}"), obj.getInner().getAge());
+
+        stack.setValue("${date}", new Date());
+        assertEquals(stack.findString("${date}"), format.format(obj.getDate()));
     }
 
 

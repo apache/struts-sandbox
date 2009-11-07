@@ -1,7 +1,6 @@
 package org.apache.struts2.uelplugin.elresolvers;
 
 import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
-import com.opensymphony.xwork2.conversion.NullHandler;
 import com.opensymphony.xwork2.util.CompoundRoot;
 import com.opensymphony.xwork2.util.reflection.ReflectionContextState;
 import com.opensymphony.xwork2.inject.Container;
@@ -10,14 +9,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.xwork.StringUtils;
 
 import javax.el.ELContext;
-import javax.el.ELResolver;
-import java.beans.BeanInfo;
-import java.beans.FeatureDescriptor;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -31,8 +23,8 @@ public class CompoundRootELResolver extends AbstractResolver {
     }
 
     @Override
-    public Object getValue(ELContext context, Object base, Object property) {
-        if (context == null) {
+    public Object getValue(ELContext elContext, Object base, Object property) {
+        if (elContext == null) {
             throw new IllegalArgumentException("ElContext cannot be null");
         }
 
@@ -46,16 +38,17 @@ public class CompoundRootELResolver extends AbstractResolver {
             return null;
         }
 
-        CompoundRoot root = (CompoundRoot) context.getContext(CompoundRoot.class);
+        CompoundRoot root = (CompoundRoot) elContext.getContext(CompoundRoot.class);
         if (root == null) {
             return null;
         }
 
         if ("top".equals(propertyName) && root.size() > 0) {
+            elContext.setPropertyResolved(true);
             return root.get(0);
         }
 
-        Map<String, Object> reflectionContext = (Map) context.getContext(AccessorsContextKey.class);
+        Map<String, Object> reflectionContext = (Map) elContext.getContext(AccessorsContextKey.class);
 
         Object bean = findObjectForProperty(root, propertyName);
         if (bean != null) {
@@ -70,10 +63,10 @@ public class CompoundRootELResolver extends AbstractResolver {
                 reflectionProvider.setValue(propertyName, reflectionContext, bean, retVal);
             }
 
-            context.setPropertyResolved(true);
+            elContext.setPropertyResolved(true);
             return retVal;
         }
-        
+
         return null;
     }
 
@@ -93,15 +86,20 @@ public class CompoundRootELResolver extends AbstractResolver {
         }
 
         CompoundRoot root = (CompoundRoot) context.getContext(CompoundRoot.class);
+        Map<String, Object> reflectionContext = (Map) context.getContext(AccessorsContextKey.class);
         String propertyName = (String) property;
         try {
             if (base == null && property != null && root != null) {
                 Object bean = findObjectForProperty(root, propertyName);
                 if (bean != null) {
+                    reflectionContext.put(XWorkConverter.LAST_BEAN_CLASS_ACCESSED, bean.getClass());
+                    reflectionContext.put(XWorkConverter.LAST_BEAN_PROPERTY_ACCESSED, propertyName);
+
+
                     XWorkConverter converter = (XWorkConverter) context.getContext(XWorkConverter.class);
                     if (converter != null && root != null) {
                         Class propType = determineType(bean, propertyName);
-                        value = converter.convertValue(null, value, propType);
+                        value = converter.convertValue(reflectionContext, bean, null, propertyName, value, propType);
                     }
                     BeanUtils.setProperty(bean, propertyName, value);
                     context.setPropertyResolved(true);

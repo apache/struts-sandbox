@@ -1,19 +1,9 @@
 package org.apache.struts2.uelplugin;
 
-import com.opensymphony.xwork2.ActionContext;
-import com.opensymphony.xwork2.XWorkTestCase;
-import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
-import com.opensymphony.xwork2.util.CompoundRoot;
-import org.apache.struts2.ServletActionContext;
-import org.apache.struts2.uelplugin.UelServletContextListener;
-import org.springframework.mock.web.MockServletContext;
-
-import javax.servlet.ServletContextEvent;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
 
 
-public class JuelMethodInvocationTest extends AbstractUelBaseTest {
+public class UELMethodInvocationTest extends AbstractUELTest {
     public void testBasicMethods() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         assertEquals("text", stack.findValue("${' text '.trim()}"));
         assertEquals(3, stack.findValue("${'123'.length()}"));
@@ -28,5 +18,15 @@ public class JuelMethodInvocationTest extends AbstractUelBaseTest {
         stack.getContext().put("s0", "Lex");
         stack.getContext().put("s1", "Luthor");
         assertEquals("Lex Luthor", stack.findValue("${#s0.concat(' ').concat(#s1)}"));
+    }
+
+     public void testCallMethodsOnCompundRoot() {
+        //this shuld not fail as the property is defined on a parent class
+        TestObject obj = new TestObject();
+        root.push(obj);
+        ChildTestAction childTestAction = new ChildTestAction();
+        obj.setChildTestAction(childTestAction);
+
+        assertSame(childTestAction, stack.findValue("top.getChildTestAction()", true));
     }
 }

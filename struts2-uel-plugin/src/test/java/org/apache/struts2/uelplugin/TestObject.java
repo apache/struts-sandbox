@@ -18,8 +18,31 @@ public class TestObject {
     private Map map;
     private Map<Integer, TestObject> typedMap;
     private Object[] objectArray;
-    private Integer[] typedArray;
+    private int[] typedArray;
+    private TestObject[] typedArray2;
     private Set set;
+
+    private ChildTestAction childTestAction;
+
+    public ChildTestAction getChildTestAction() {
+        return childTestAction;
+    }
+
+    public void setChildTestAction(ChildTestAction childTestAction) {
+        this.childTestAction = childTestAction;
+    }
+
+    public Object getFail() {
+        throw new RuntimeException("kaboom");
+    }
+
+    public TestObject[] getTypedArray2() {
+        return typedArray2;
+    }
+
+    public void setTypedArray2(TestObject[] typedArray2) {
+        this.typedArray2 = typedArray2;
+    }
 
     public Set getSet() {
         return set;
@@ -37,11 +60,11 @@ public class TestObject {
         this.objectArray = objectArray;
     }
 
-    public Integer[] getTypedArray() {
+    public int[] getTypedArray() {
         return typedArray;
     }
 
-    public void setTypedArray(Integer[] typedArray) {
+    public void setTypedArray(int[] typedArray) {
         this.typedArray = typedArray;
     }
 
