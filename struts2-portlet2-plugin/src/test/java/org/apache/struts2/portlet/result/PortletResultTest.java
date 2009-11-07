@@ -87,6 +87,7 @@ public class PortletResultTest extends MockObjectTestCase implements StrutsStati
         Constraint[] params = new Constraint[]{same(req), same(res)};
         mockRd.expects(once()).method("include").with(params);
         mockCtx.expects(once()).method("getRequestDispatcher").with(eq("/WEB-INF/pages/testPage.jsp")).will(returnValue(rd));
+        mockCtx.expects(atLeastOnce()).method("getMajorVersion").will(returnValue(1));
         mockResponse.expects(once()).method("setContentType").with(eq("text/html"));
 
         mockRequest.stubs().method("getPortletMode").will(returnValue(PortletMode.VIEW));
@@ -118,6 +119,7 @@ public class PortletResultTest extends MockObjectTestCase implements StrutsStati
         params = new Constraint[]{eq(MODE_PARAM), eq(PortletMode.VIEW.toString())};
         mockResponse.expects(once()).method("setRenderParameter").with(params);
         mockRequest.stubs().method("getPortletMode").will(returnValue(PortletMode.VIEW));
+        mockCtx.expects(atLeastOnce()).method("getMajorVersion").will(returnValue(1));
         ActionContext ctx = ActionContext.getContext();
 
         ctx.put(REQUEST, mockRequest.proxy());
@@ -144,7 +146,8 @@ public class PortletResultTest extends MockObjectTestCase implements StrutsStati
         params = new Constraint[]{eq(MODE_PARAM), eq(PortletMode.VIEW.toString())};
         mockResponse.expects(once()).method("setRenderParameter").with(params);
         mockRequest.stubs().method("getPortletMode").will(returnValue(PortletMode.VIEW));
-
+        mockCtx.expects(atLeastOnce()).method("getMajorVersion").will(returnValue(1));
+ 
         ActionContext ctx = ActionContext.getContext();
 
         Map session = new HashMap();
@@ -178,6 +181,7 @@ public class PortletResultTest extends MockObjectTestCase implements StrutsStati
         params = new Constraint[]{eq(MODE_PARAM), eq(PortletMode.VIEW.toString())};
         mockResponse.expects(once()).method("setRenderParameter").with(params);
         mockRequest.stubs().method("getPortletMode").will(returnValue(PortletMode.VIEW));
+        mockCtx.expects(atLeastOnce()).method("getMajorVersion").will(returnValue(1));
 
         ActionContext ctx = ActionContext.getContext();
 
@@ -208,6 +212,7 @@ public class PortletResultTest extends MockObjectTestCase implements StrutsStati
         Constraint[] params = new Constraint[]{same(req), same(res)};
         mockRd.expects(once()).method("include").with(params);
         mockCtx.expects(once()).method("getRequestDispatcher").with(eq("/WEB-INF/pages/testPage.jsp")).will(returnValue(rd));
+        mockCtx.expects(atLeastOnce()).method("getMajorVersion").will(returnValue(1));
 
         mockRequest.stubs().method("getPortletMode").will(returnValue(PortletMode.VIEW));
 

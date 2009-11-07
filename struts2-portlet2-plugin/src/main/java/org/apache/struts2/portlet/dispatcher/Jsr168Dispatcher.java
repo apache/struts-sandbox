@@ -412,7 +412,7 @@ public class Jsr168Dispatcher extends GenericPortlet implements StrutsStatics,
         try {
             ServletContext servletContext = new PortletServletContext(getPortletContext());
             HttpServletRequest servletRequest = new PortletServletRequest(request, getPortletContext());
-            HttpServletResponse servletResponse = new PortletServletResponse(response);
+            HttpServletResponse servletResponse = createPortletServletResponse(response);
             if(EVENT_PHASE.equals(phase)) {
             	servletRequest = dispatcherUtils.wrapRequest(servletRequest, servletContext);
         		if(servletRequest instanceof MultiPartRequestWrapper) {
@@ -448,7 +448,7 @@ public class Jsr168Dispatcher extends GenericPortlet implements StrutsStatics,
         }
     }
 
-	/**
+    /**
      * Returns a Map of all application attributes. Copies all attributes from
      * the {@link PortletActionContext}into an {@link ApplicationMap}.
      *
@@ -611,6 +611,17 @@ public class Jsr168Dispatcher extends GenericPortlet implements StrutsStatics,
      */
     public void setActionMapper(ActionMapper actionMapper) {
         this.actionMapper = actionMapper;
+    }
+
+    /**
+     * Method to create a PortletServletResponse matching the used Portlet API, to be overridden for JSR286 Dispatcher.
+     *
+     * @param response The Response used for building the wrapper.
+     *
+     * @return The wrapper response for Servlet bound usage.
+     */
+    protected PortletServletResponse createPortletServletResponse( PortletResponse response ) {
+        return new PortletServletResponse(response);
     }
 
 }

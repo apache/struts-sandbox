@@ -24,14 +24,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import javax.portlet.PortletContext;
-import javax.portlet.PortletException;
-import javax.portlet.PortletMode;
-import javax.portlet.PortletRequestDispatcher;
-import javax.portlet.PortletRequest;
-import javax.portlet.MimeResponse;
-import javax.portlet.RenderResponse;
-import javax.portlet.StateAwareResponse;
+import javax.portlet.*;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -71,13 +64,25 @@ public class PortletResult extends StrutsResultSupport implements PortletActionC
 
 	protected PortletMode portletMode;
 
+    PortletResultHelper resultHelper;
+
 	public PortletResult() {
 		super();
+        determineResultHelper();
 	}
 
 	public PortletResult(String location) {
 		super(location);
+        determineResultHelper();
 	}
+
+    private void determineResultHelper() {
+        if (PortletActionContext.isJSR268Supported()) {
+            this.resultHelper = new PortletResultHelperJSR286();
+        } else {
+            this.resultHelper = new PortletResultHelperJSR168();
+        }
+    }
 
 	/**
 	 * Execute the result. Obtains the
@@ -128,28 +133,28 @@ public class PortletResult extends StrutsResultSupport implements PortletActionC
 	protected void executeActionResult(String finalLocation, ActionInvocation invocation) throws Exception {
         String phase = (PortletActionContext.isEvent()) ? "Event" : "Action";
 		if (LOG.isDebugEnabled()) LOG.debug("Executing result in "+phase+" phase");
-		StateAwareResponse res = (StateAwareResponse)PortletActionContext.getResponse();
 		Map sessionMap = invocation.getInvocationContext().getSession();
 		if (LOG.isDebugEnabled()) LOG.debug("Setting event render parameter: " + finalLocation);
 		if (finalLocation.indexOf('?') != -1) {
-			convertQueryParamsToRenderParams(res, finalLocation.substring(finalLocation.indexOf('?') + 1));
+			convertQueryParamsToRenderParams(finalLocation.substring(finalLocation.indexOf('?') + 1));
 			finalLocation = finalLocation.substring(0, finalLocation.indexOf('?'));
 		}
+        PortletResponse response = PortletActionContext.getResponse();
 		if (finalLocation.endsWith(".action")) {
 			// View is rendered with a view action...luckily...
 			finalLocation = finalLocation.substring(0, finalLocation.lastIndexOf("."));
-			res.setRenderParameter(ACTION_PARAM, finalLocation);
+			resultHelper.setRenderParameter(response, ACTION_PARAM, finalLocation);
 		} else {
 			// View is rendered outside an action...uh oh...
-			res.setRenderParameter(ACTION_PARAM, "renderDirect");
+			resultHelper.setRenderParameter(response, ACTION_PARAM, "renderDirect");
 			sessionMap.put(RENDER_DIRECT_LOCATION, finalLocation);
 		}
 		if(portletMode != null) {
-			res.setPortletMode(portletMode);
-			res.setRenderParameter(PortletActionConstants.MODE_PARAM, portletMode.toString());
+			resultHelper.setPortletMode(response, portletMode);
+			resultHelper.setRenderParameter(response, PortletActionConstants.MODE_PARAM, portletMode.toString());
 		}
 		else {
-			res.setRenderParameter(PortletActionConstants.MODE_PARAM, PortletActionContext.getRequest().getPortletMode()
+			resultHelper.setRenderParameter(response, PortletActionConstants.MODE_PARAM, PortletActionContext.getRequest().getPortletMode()
 					.toString());
 		}
 	}
@@ -160,13 +165,13 @@ public class PortletResult extends StrutsResultSupport implements PortletActionC
 	 * @param response
 	 * @param queryParams
 	 */
-	protected static void convertQueryParamsToRenderParams(StateAwareResponse response, String queryParams) {
+	protected void convertQueryParamsToRenderParams(String queryParams) {
 		StringTokenizer tok = new StringTokenizer(queryParams, "&");
 		while (tok.hasMoreTokens()) {
 			String token = tok.nextToken();
 			String key = token.substring(0, token.indexOf('='));
 			String value = token.substring(token.indexOf('=') + 1);
-			response.setRenderParameter(key, value);
+			resultHelper.setRenderParameter(PortletActionContext.getResponse(), key, value);
 		}
 	}
 
@@ -181,26 +186,26 @@ public class PortletResult extends StrutsResultSupport implements PortletActionC
         if (LOG.isDebugEnabled()) LOG.debug("Executing mime result");
         PortletContext ctx = PortletActionContext.getPortletContext();
         PortletRequest req = PortletActionContext.getRequest();
-        MimeResponse res = (MimeResponse)PortletActionContext.getResponse();
-        res.setContentType(contentType);
+        PortletResponse res = PortletActionContext.getResponse();
+
 		if (StringUtils.isNotEmpty(title) && res instanceof RenderResponse) {
 		    ((RenderResponse)res).setTitle(title);
 		}
         if (LOG.isDebugEnabled()) LOG.debug("Location: " + finalLocation);
+        PortletRequestDispatcher dispatcher;
         if (useDispatcherServlet) {
             req.setAttribute(DISPATCH_TO, finalLocation);
-            PortletRequestDispatcher dispatcher = ctx.getNamedDispatcher(dispatcherServletName);
+            dispatcher = ctx.getNamedDispatcher(dispatcherServletName);
             if(dispatcher == null) {
                 throw new PortletException("Could not locate dispatcher servlet \"" + dispatcherServletName + "\". Please configure it in your web.xml file");
             }
-            dispatcher.include(req, res);
         } else {
-            PortletRequestDispatcher dispatcher = ctx.getRequestDispatcher(finalLocation);
+            dispatcher = ctx.getRequestDispatcher(finalLocation);
             if (dispatcher == null) {
                 throw new PortletException("Could not locate dispatcher for '" + finalLocation + "'");
             }
-            dispatcher.include(req, res);
         }
+        resultHelper.include( dispatcher, contentType, req, res );
     }
 
 	/**

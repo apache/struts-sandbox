@@ -22,10 +22,13 @@ package org.apache.struts2.components;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
+import com.opensymphony.xwork2.util.logging.Logger;
+import com.opensymphony.xwork2.util.logging.LoggerFactory;
 import com.opensymphony.xwork2.inject.Inject;
 import org.apache.struts2.StrutsException;
 import org.apache.struts2.dispatcher.mapper.ActionMapper;
 import org.apache.struts2.portlet.util.PortletUrlHelper;
+import org.apache.struts2.portlet.util.PortletUrlHelperJSR286;
 import org.apache.struts2.portlet.context.PortletActionContext;
 import org.apache.commons.lang.xwork.StringUtils;
 
@@ -40,13 +43,22 @@ import java.io.Writer;
  */
 public class PortletUrlRenderer implements UrlRenderer {
 
+    private static final Logger LOG = LoggerFactory.getLogger(PortletUrlRenderer.class);
+
     /**
      * The servlet renderer used when not executing in a portlet context.
      */
     private UrlRenderer servletRenderer = null;
+    private PortletUrlHelper portletUrlHelper = null;
 
     public PortletUrlRenderer() {
         this.servletRenderer = new ServletUrlRenderer();
+
+        if (PortletActionContext.isJSR268Supported()) {
+            this.portletUrlHelper = new PortletUrlHelperJSR286();
+        } else {
+            this.portletUrlHelper = new PortletUrlHelper();
+        }
     }
 
     @Inject
@@ -66,9 +78,9 @@ public class PortletUrlRenderer implements UrlRenderer {
 
         String result;
         if (onlyActionSpecified(urlComponent)) {
-                result = PortletUrlHelper.buildUrl(urlComponent.getAction(), urlComponent.getNamespace(), urlComponent.getMethod(), urlComponent.getParameters(), urlComponent.getPortletUrlType(), urlComponent.getPortletMode(), urlComponent.getWindowState());
+                result = portletUrlHelper.buildUrl(urlComponent.getAction(), urlComponent.getNamespace(), urlComponent.getMethod(), urlComponent.getParameters(), urlComponent.getPortletUrlType(), urlComponent.getPortletMode(), urlComponent.getWindowState());
         } else if(onlyValueSpecified(urlComponent)){
-                result = PortletUrlHelper.buildResourceUrl(urlComponent.getValue(), urlComponent.getParameters());
+                result = portletUrlHelper.buildResourceUrl(urlComponent.getValue(), urlComponent.getParameters());
         }
         else {
         	result = createDefaultUrl(urlComponent);
@@ -99,7 +111,7 @@ public class PortletUrlRenderer implements UrlRenderer {
 		ActionInvocation ai = (ActionInvocation)urlComponent.getStack().getContext().get(
 				ActionContext.ACTION_INVOCATION);
 		String action = ai.getProxy().getActionName();
-		result = PortletUrlHelper.buildUrl(action, urlComponent.getNamespace(), urlComponent.getMethod(), urlComponent.getParameters(),
+		result = portletUrlHelper.buildUrl(action, urlComponent.getNamespace(), urlComponent.getMethod(), urlComponent.getParameters(),
                 urlComponent.getPortletUrlType(), urlComponent.getPortletMode(), urlComponent.getWindowState());
 		return result;
 	}
@@ -138,7 +150,7 @@ public class PortletUrlRenderer implements UrlRenderer {
                 }
             }
             if (action != null) {
-                String result = PortletUrlHelper.buildUrl(action, namespace, null,
+                String result = portletUrlHelper.buildUrl(action, namespace, null,
                         formComponent.getParameters(), type, formComponent.portletMode, formComponent.windowState);
                 formComponent.addParameter("action", result);
 

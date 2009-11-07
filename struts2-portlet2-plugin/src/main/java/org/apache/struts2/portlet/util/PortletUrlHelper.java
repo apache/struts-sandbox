@@ -29,13 +29,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import javax.portlet.BaseURL;
-import javax.portlet.PortletMode;
-import javax.portlet.PortletSecurityException;
-import javax.portlet.PortletURL;
-import javax.portlet.PortletRequest;
-import javax.portlet.MimeResponse;
-import javax.portlet.WindowState;
+import javax.portlet.*;
 
 import org.apache.struts2.StrutsException;
 import org.apache.struts2.portlet.context.PortletActionContext;
@@ -43,6 +37,7 @@ import org.apache.commons.lang.xwork.StringUtils;
 
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
+
 /**
  * Helper class for creating Portlet URLs. Portlet URLs are fundamentally different from regular
  * servlet URLs since they never target the application itself; all requests go through the portlet
@@ -68,7 +63,7 @@ public class PortletUrlHelper {
      * @param state The WindowState of the URL.
      * @return The URL String.
      */
-    public static String buildUrl(String action, String namespace, String method, Map<String, Object> params,
+    public String buildUrl(String action, String namespace, String method, Map<String, Object> params,
             String type, String mode, String state) {
         return buildUrl(action, namespace, method, params, null, type, mode, state,
                 true, true);
@@ -77,21 +72,19 @@ public class PortletUrlHelper {
     /**
      * Create a portlet URL with for the specified action and namespace.
      *
-     * @see #buildUrl(String, String, Map, String, String, String)
+     * @see #buildUrl(String, String, String, java.util.Map, String, String, String)
      */
-    public static String buildUrl(String action, String namespace, String method, Map<String, Object> params,
+    public String buildUrl(String action, String namespace, String method, Map<String, Object> params,
             String scheme, String type, String portletMode, String windowState,
             boolean includeContext, boolean encodeResult) {
     	StringBuffer resultingAction = new StringBuffer();
         PortletRequest request = PortletActionContext.getRequest();
-        MimeResponse response = (MimeResponse)PortletActionContext.getResponse();
         LOG.debug("Creating url. Action = " + action + ", Namespace = "
                 + namespace + ", Type = " + type);
         namespace = prependNamespace(namespace, portletMode);
         if (StringUtils.isEmpty(portletMode)) {
             portletMode = PortletActionContext.getRequest().getPortletMode().toString();
         }
-        String result = null;
         int paramStartIndex = action.indexOf('?');
         if (paramStartIndex > 0) {
             String value = action;
@@ -117,31 +110,10 @@ public class PortletUrlHelper {
         }
         if (LOG.isDebugEnabled()) LOG.debug("Resulting actionPath: " + resultingAction);
         params.put(ACTION_PARAM, new String[] { resultingAction.toString() });
-
-        BaseURL url = null;
-        if ("action".equalsIgnoreCase(type)) {
-            if (LOG.isDebugEnabled()) LOG.debug("Creating action url");
-            url = response.createActionURL();
-        }
-        else if("resource".equalsIgnoreCase(type)) {
-        	if (LOG.isDebugEnabled()) LOG.debug("Creating resource url");
-        	url = response.createResourceURL();
-        }
-        else {
-            if (LOG.isDebugEnabled()) LOG.debug("Creating render url");
-            url = response.createRenderURL();
-        }
-
         params.put(MODE_PARAM, new String[]{portletMode});
-        url.setParameters(ensureParamsAreStringArrays(params));
+        final Map<String, String[]> portletParams = ensureParamsAreStringArrays(params);
 
-        if ("HTTPS".equalsIgnoreCase(scheme)) {
-            try {
-                url.setSecure(true);
-            } catch (PortletSecurityException e) {
-                LOG.error("Cannot set scheme to https", e);
-            }
-        }
+        Object url = createUrl(scheme, type, portletParams);
         if(url instanceof PortletURL) {
         	try {
                 final PortletURL portletUrl = (PortletURL) url;
@@ -151,13 +123,38 @@ public class PortletUrlHelper {
         		LOG.error("Unable to set mode or state:" + e.getMessage(), e);
         	}
         }
-        result = url.toString();
+
+        String result = url.toString();
         // TEMP BUG-WORKAROUND FOR DOUBLE ESCAPING OF AMPERSAND
         if(result.indexOf("&amp;") >= 0) {
             result = result.replace("&amp;", "&");
         }
         return result;
 
+    }
+
+    protected Object createUrl( String scheme, String type, Map<String, String[]> portletParams ) {
+        RenderResponse response = PortletActionContext.getRenderResponse();
+        PortletURL url;
+        if ("action".equalsIgnoreCase(type)) {
+            if (LOG.isDebugEnabled()) LOG.debug("Creating action url");
+            url = response.createActionURL();
+        }
+        else {
+            if (LOG.isDebugEnabled()) LOG.debug("Creating render url");
+            url = response.createRenderURL();
+        }
+
+        url.setParameters(portletParams);
+
+        if ("HTTPS".equalsIgnoreCase(scheme)) {
+            try {
+                url.setSecure(true);
+            } catch ( PortletSecurityException e) {
+                LOG.error("Cannot set scheme to https", e);
+            }
+        }
+        return url;
     }
 
     /**
@@ -169,7 +166,7 @@ public class PortletUrlHelper {
      *
      * @return prepended namespace.
      */
-    private static String prependNamespace(String namespace, String portletMode) {
+    private String prependNamespace(String namespace, String portletMode) {
         StringBuffer sb = new StringBuffer();
         PortletMode mode = PortletActionContext.getRequest().getPortletMode();
         if(StringUtils.isNotEmpty(portletMode)) {
@@ -204,7 +201,7 @@ public class PortletUrlHelper {
      * @param value
      * @return encoded url to non Struts action resources.
      */
-    public static String buildResourceUrl(String value, Map params) {
+    public String buildResourceUrl(String value, Map params) {
         StringBuffer sb = new StringBuffer();
         // Relative URLs are not allowed in a portlet
         if (!value.startsWith("/")) {
@@ -229,8 +226,12 @@ public class PortletUrlHelper {
                 throw new StrutsException("Encoding "+ENCODING+" not found");
             }
         }
-        MimeResponse resp = (MimeResponse)PortletActionContext.getResponse();
         PortletRequest req = PortletActionContext.getRequest();
+        return encodeUrl(sb, req);
+    }
+
+    protected String encodeUrl( StringBuffer sb, PortletRequest req ) {
+        RenderResponse resp = PortletActionContext.getRenderResponse();
         return resp.encodeURL(req.getContextPath() + sb.toString());
     }
 
@@ -245,14 +246,12 @@ public class PortletUrlHelper {
         Map<String, String[]> result = null;
         if (params != null) {
             result = new LinkedHashMap<String, String[]>(params.size());
-            Iterator<String> it = params.keySet().iterator();
-            while (it.hasNext()) {
-                String key = it.next();
+            for ( String key : params.keySet() ) {
                 Object val = params.get(key);
                 if (val instanceof String[]) {
-                    result.put(key, (String[])val);
+                    result.put(key, (String[]) val);
                 } else {
-                    result.put(key, new String[] { val.toString() });
+                    result.put(key, new String[]{val.toString()});
                 }
             }
         }
@@ -267,7 +266,7 @@ public class PortletUrlHelper {
      * @return The WindowState that mathces the <tt>windowState</tt> String, or if
      * the String is blank, the current WindowState.
      */
-    private static WindowState getWindowState(PortletRequest portletReq,
+    private WindowState getWindowState(PortletRequest portletReq,
             String windowState) {
         WindowState state = portletReq.getWindowState();
         if (StringUtils.isNotEmpty(windowState)) {
@@ -293,7 +292,7 @@ public class PortletUrlHelper {
      * @return The PortletMode that mathces the <tt>portletMode</tt> String, or if
      * the String is blank, the current PortletMode.
      */
-    private static PortletMode getPortletMode(PortletRequest portletReq,
+    private PortletMode getPortletMode(PortletRequest portletReq,
             String portletMode) {
         PortletMode mode = portletReq.getPortletMode();
 

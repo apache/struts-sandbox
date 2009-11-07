@@ -83,7 +83,7 @@ public class PortletUrlHelperTest extends TestCase {
         EasyMock.replay(renderRequest);
         EasyMock.replay(renderResponse);
 
-        PortletUrlHelper.buildUrl("testAction", null, null,
+        (new PortletUrlHelper()).buildUrl("testAction", null, null,
                 new HashMap(), null, null, null);
         assertEquals(PortletMode.VIEW, url.getPortletMode());
         assertEquals(WindowState.NORMAL, url.getWindowState());
@@ -97,7 +97,7 @@ public class PortletUrlHelperTest extends TestCase {
         EasyMock.replay(renderRequest);
         EasyMock.replay(renderResponse);
 
-        PortletUrlHelper.buildUrl("testAction", null, null,
+        (new PortletUrlHelper()).buildUrl("testAction", null, null,
                 new HashMap(), null, "edit", null);
         
         assertEquals(PortletMode.EDIT, url.getPortletMode());
@@ -112,7 +112,7 @@ public class PortletUrlHelperTest extends TestCase {
         EasyMock.replay(renderRequest);
         EasyMock.replay(renderResponse);
         
-        PortletUrlHelper.buildUrl("testAction", null, null,
+        (new PortletUrlHelper()).buildUrl("testAction", null, null,
                 new HashMap(), null, null, "maximized");
         
         assertEquals(PortletMode.VIEW, url.getPortletMode());
@@ -127,7 +127,7 @@ public class PortletUrlHelperTest extends TestCase {
         EasyMock.replay(renderResponse);
         EasyMock.replay(renderRequest);
         
-        PortletUrlHelper.buildUrl("testAction", null, null,
+        (new PortletUrlHelper()).buildUrl("testAction", null, null,
                 new HashMap(), "action", null, null);
         
         assertEquals(PortletMode.VIEW, url.getPortletMode());

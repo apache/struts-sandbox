@@ -216,4 +216,13 @@ public class PortletActionContext {
 		return EVENT_PHASE.equals(getPhase());
 	}
 
+    /**
+     * Whether JSR286 features are supported.
+     *
+     * @return <code>true</code> if {@link javax.portlet.PortletContext#getMajorVersion()} returns a value greater than 1
+     */
+    public static boolean isJSR268Supported() {
+        return getPortletContext().getMajorVersion() > 1;
+    }
+
 }

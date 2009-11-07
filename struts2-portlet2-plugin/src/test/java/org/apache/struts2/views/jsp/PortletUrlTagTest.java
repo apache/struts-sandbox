@@ -25,13 +25,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.portlet.PortletMode;
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletResponse;
-import javax.portlet.PortletURL;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-import javax.portlet.WindowState;
+import javax.portlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.PageContext;
@@ -41,6 +35,8 @@ import junit.textui.TestRunner;
 import org.apache.struts2.dispatcher.Dispatcher;
 import org.apache.struts2.portlet.PortletActionConstants;
 import org.apache.struts2.portlet.util.PortletUrlHelper;
+import org.apache.struts2.StrutsStatics;
+import static org.apache.struts2.StrutsStatics.*;
 import org.jmock.Mock;
 import org.jmock.cglib.MockObjectTestCase;
 import org.jmock.core.Constraint;
@@ -49,6 +45,8 @@ import com.mockobjects.servlet.MockJspWriter;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.ActionProxy;
+import static com.opensymphony.xwork2.ActionContext.SESSION;
+import static com.opensymphony.xwork2.ActionContext.PARAMETERS;
 import com.opensymphony.xwork2.util.ValueStack;
 import com.opensymphony.xwork2.util.ValueStackFactory;
 
@@ -73,11 +71,14 @@ public class PortletUrlTagTest extends MockObjectTestCase {
 
     MockJspWriter mockJspWriter = null;
 
+    Mock mockCtx = null;
+
     ValueStack stack = null;
 
     public static void main(String[] args) {
         TestRunner.run(PortletUrlTagTest.class);
     }
+
 
     public void setUp() throws Exception {
         super.setUp();
@@ -99,6 +100,7 @@ public class PortletUrlTagTest extends MockObjectTestCase {
         mockPageCtx = mock(PageContext.class);
         mockPortletUrl = mock(PortletURL.class);
         mockJspWriter = new MockJspWriter();
+        mockCtx = mock(PortletContext.class);
 
         mockPageCtx.stubs().method("getRequest").will(
                 returnValue((HttpServletRequest) mockHttpReq.proxy()));
@@ -133,6 +135,7 @@ public class PortletUrlTagTest extends MockObjectTestCase {
         contextMap.put(PortletActionConstants.RESPONSE, mockPortletRes.proxy());
         contextMap.put(PortletActionConstants.PHASE, PortletActionConstants.RENDER_PHASE);
         contextMap.put(PortletActionConstants.MODE_NAMESPACE_MAP, modeMap);
+        contextMap.put(STRUTS_PORTLET_CONTEXT, mockCtx.proxy());
         ActionContext ctx = new ActionContext(contextMap);
         ctx.setValueStack(stack);
         ActionContext.setContext(ctx);
@@ -156,6 +159,7 @@ public class PortletUrlTagTest extends MockObjectTestCase {
 
         mockPortletRes.expects(once()).method("createRenderURL").will(
                 returnValue((PortletURL) mockPortletUrl.proxy()));
+        mockCtx.expects(atLeastOnce()).method("getMajorVersion").will(returnValue(1));
 
         Map paramMap = new HashMap();
         paramMap.put(PortletActionConstants.ACTION_PARAM, new String[]{"/view/testAction"});
@@ -180,6 +184,7 @@ public class PortletUrlTagTest extends MockObjectTestCase {
 
         mockPortletRes.expects(once()).method("createRenderURL").will(
                 returnValue((PortletURL) mockPortletUrl.proxy()));
+        mockCtx.expects(atLeastOnce()).method("getMajorVersion").will(returnValue(1));
 
         Map paramMap = new HashMap();
         paramMap.put(PortletActionConstants.ACTION_PARAM, new String[]{"/help/testAction"});
@@ -203,6 +208,7 @@ public class PortletUrlTagTest extends MockObjectTestCase {
 
         mockPortletRes.expects(once()).method("createRenderURL").will(
                 returnValue((PortletURL) mockPortletUrl.proxy()));
+        mockCtx.expects(atLeastOnce()).method("getMajorVersion").will(returnValue(1));
 
         Map paramMap = new HashMap();
         paramMap.put(PortletActionConstants.ACTION_PARAM, new String[]{"/view/testAction"});
@@ -226,6 +232,7 @@ public class PortletUrlTagTest extends MockObjectTestCase {
 
         mockPortletRes.expects(once()).method("createActionURL").will(
                 returnValue((PortletURL) mockPortletUrl.proxy()));
+        mockCtx.expects(atLeastOnce()).method("getMajorVersion").will(returnValue(1));
 
         Map paramMap = new HashMap();
         paramMap.put(PortletActionConstants.ACTION_PARAM, new String[]{"/view/testAction"});
@@ -245,6 +252,7 @@ public class PortletUrlTagTest extends MockObjectTestCase {
         mockHttpReq.stubs().method("getQueryString").will(returnValue(""));
         mockPortletRes.expects(once()).method("encodeURL").will(returnValue("/contextPath/image.gif"));
         mockJspWriter.setExpectedData("/contextPath/image.gif");
+        mockCtx.expects(atLeastOnce()).method("getMajorVersion").will(returnValue(1));
         tag.setValue("image.gif");
         tag.doStartTag();
         tag.doEndTag();
@@ -255,6 +263,7 @@ public class PortletUrlTagTest extends MockObjectTestCase {
         mockHttpReq.stubs().method("getQueryString").will(returnValue(""));
         mockPortletRes.expects(once()).method("encodeURL").with(eq("/contextPath/image.gif?testParam1=testValue1")).will(returnValue("/contextPath/image.gif?testParam1=testValue1"));
         mockJspWriter.setExpectedData("/contextPath/image.gif?testParam1=testValue1");
+        mockCtx.expects(atLeastOnce()).method("getMajorVersion").will(returnValue(1));
 
         ParamTag paramTag = new ParamTag();
         paramTag.setPageContext((PageContext)mockPageCtx.proxy());
@@ -273,6 +282,7 @@ public class PortletUrlTagTest extends MockObjectTestCase {
         mockHttpReq.stubs().method("getQueryString").will(returnValue(""));
         mockPortletRes.expects(once()).method("encodeURL").with(eq("/contextPath/image.gif?testParam1=testValue1&testParam2=testValue2")).will(returnValue("/contextPath/image.gif?testParam1=testValue1&testParam2=testValue2"));
         mockJspWriter.setExpectedData("/contextPath/image.gif?testParam1=testValue1&testParam2=testValue2");
+        mockCtx.expects(atLeastOnce()).method("getMajorVersion").will(returnValue(1));
 
         ParamTag paramTag = new ParamTag();
         paramTag.setPageContext((PageContext)mockPageCtx.proxy());
@@ -299,6 +309,7 @@ public class PortletUrlTagTest extends MockObjectTestCase {
     	mockHttpReq.stubs().method("getQueryString").will(returnValue(""));
         mockPortletRes.expects(once()).method("createRenderURL").will(
                 returnValue((PortletURL) mockPortletUrl.proxy()));
+        mockCtx.expects(atLeastOnce()).method("getMajorVersion").will(returnValue(1));
     	tag.setAction("testAction");
     	Map paramMap = new HashMap();
         paramMap.put(PortletActionConstants.ACTION_PARAM, new String[]{"/view/testAction!input"});
@@ -316,6 +327,7 @@ public class PortletUrlTagTest extends MockObjectTestCase {
     	mockHttpReq.stubs().method("getQueryString").will(returnValue(""));
         mockPortletRes.expects(once()).method("createRenderURL").will(
                 returnValue((PortletURL) mockPortletUrl.proxy()));
+        mockCtx.expects(atLeastOnce()).method("getMajorVersion").will(returnValue(1));
     	Map paramMap = new HashMap();
     	
     	Mock mockActionProxy = mock(ActionProxy.class);
