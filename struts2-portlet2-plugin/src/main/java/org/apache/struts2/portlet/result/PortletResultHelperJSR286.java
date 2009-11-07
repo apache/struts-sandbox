@@ -11,7 +11,8 @@ import java.io.IOException;
 public class PortletResultHelperJSR286 implements PortletResultHelper {
 
     /**
-     * Set a render parameter, abstracted from the used Portlet API version
+     * Set a render parameter, abstracted from the used Portlet API version. This implementation assumes that the given
+     * response is a {@link javax.portlet.StateAwareResponse}, as JSR286 implies.
      *
      * @param response The response to set the parameter on.
      * @param key      The parameter key to set.
@@ -22,7 +23,8 @@ public class PortletResultHelperJSR286 implements PortletResultHelper {
     }
 
     /**
-     * Set a portlet mode, abstracted from the used Portlet API version
+     * Set a portlet mode, abstracted from the used Portlet API version. This implementation assumes that the given
+     * response is a {@link javax.portlet.StateAwareResponse}, as JSR286 implies.
      *
      * @param response    The response to set the portlet mode on.
      * @param portletMode The portlet mode to set.
@@ -32,7 +34,8 @@ public class PortletResultHelperJSR286 implements PortletResultHelper {
     }
 
     /**
-     * Call a dispatcher's include method, abstracted from the used Portlet API version.
+     * Call a dispatcher's include method, abstracted from the used Portlet API version. This implementation assumes
+     * that the response is a {@link javax.portlet.MimeResponse}, as JSR286 implies.
      *
      * @param dispatcher  The dispatcher to call the include method on.
      * @param contentType The content type to set for the response.
