@@ -8,6 +8,7 @@ import com.opensymphony.xwork2.util.reflection.ReflectionContextState;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.lang.reflect.InvocationTargetException;
 
 
@@ -44,15 +45,43 @@ public class ParametersTest extends AbstractUelBaseTest {
         assertEquals("val", obj.getTypedList().get(1).getValue());
     }
 
-    public void testAnnotatedTypeConverter() {
-        TestAction action = new TestAction();
-        assertNull(action.getConverted());
-        root.push(action);
+     public void testWriteArray() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        //not null
+        Object[] array = new Object[2];
+        TestObject obj = new TestObject();
+        //obj.setObjectArray(array);
+        //assertNotNull(obj.getObjectArray());
+        root.push(obj);
 
-        stack.setValue("converted", "someval");
-        assertEquals("converted", action.getConverted());
+        stack.setValue("objectArray[0].value", "val");
+        assertEquals("val", ((TestObject)array[0]).getValue());
     }
 
+    public void testWriteMap() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        //not null
+        Map map = new HashMap();
+        TestObject obj = new TestObject();
+        obj.setMap(map);
+        assertNotNull(obj.getMap());
+        root.push(obj);
+
+        stack.setValue("map['str']", "val");
+        assertEquals(1, map.size());
+        assertEquals("val", map.get("str"));
+
+        //null list
+        obj.setMap(null);
+        assertNull(obj.getMap());
+        stack.setValue("map['str']", "val");
+        assertNotNull(obj.getMap());
+        assertEquals("val", stack.findValue("map['str']"));
+
+        //test type determiner
+        obj.setTypedMap(null);
+        stack.setValue("typedMap[1].value", "val");
+        assertEquals(1, obj.getTypedMap().size());
+        assertEquals("val", obj.getTypedMap().get(1).getValue());
+    }
 
     public void testSetPropertiesOnNestedNullObject() {
         TestObject obj = new TestObject();

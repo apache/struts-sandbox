@@ -66,6 +66,7 @@ public abstract class AbstractUelBaseTest extends XWorkTestCase {
                 builder.factory(ValueStack.class, UelValueStack.class);
                 builder.factory(ValueStackFactory.class, UelValueStackFactory.class);
                 builder.factory(ReflectionProvider.class, GenericReflectionProvider.class);
+                //builder.factory(StrutsTypeConverter)
             }
         });
 

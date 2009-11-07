@@ -1,16 +1,12 @@
 package org.apache.struts2.uelplugin.elresolvers;
 
 import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
-import com.opensymphony.xwork2.parameters.accessor.ParametersPropertyAccessor;
-import com.opensymphony.xwork2.util.reflection.ReflectionProvider;
-import com.opensymphony.xwork2.util.reflection.ReflectionContextState;
 import com.opensymphony.xwork2.inject.Container;
+import com.opensymphony.xwork2.util.reflection.ReflectionContextState;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.struts2.StrutsException;
 
-import javax.el.BeanELResolver;
 import javax.el.ELContext;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 public class XWorkBeanELResolver extends AbstractResolver {

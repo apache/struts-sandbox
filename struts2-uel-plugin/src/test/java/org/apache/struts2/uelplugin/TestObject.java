@@ -3,6 +3,7 @@ package org.apache.struts2.uelplugin;
 import java.util.Date;
 import java.util.Map;
 import java.util.List;
+import java.util.Set;
 
 
 public class TestObject {
@@ -14,6 +15,51 @@ public class TestObject {
     private Object object;
     private List list;
     private List<TestObject> typedList;
+    private Map map;
+    private Map<Integer, TestObject> typedMap;
+    private Object[] objectArray;
+    private Integer[] typedArray;
+    private Set set;
+
+    public Set getSet() {
+        return set;
+    }
+
+    public void setSet(Set set) {
+        this.set = set;
+    }
+
+    public Object[] getObjectArray() {
+        return objectArray;
+    }
+
+    public void setObjectArray(Object[] objectArray) {
+        this.objectArray = objectArray;
+    }
+
+    public Integer[] getTypedArray() {
+        return typedArray;
+    }
+
+    public void setTypedArray(Integer[] typedArray) {
+        this.typedArray = typedArray;
+    }
+
+    public Map getMap() {
+        return map;
+    }
+
+    public void setMap(Map map) {
+        this.map = map;
+    }
+
+    public Map<Integer, TestObject> getTypedMap() {
+        return typedMap;
+    }
+
+    public void setTypedMap(Map<Integer, TestObject> typedMap) {
+        this.typedMap = typedMap;
+    }
 
     public List<TestObject> getTypedList() {
         return typedList;

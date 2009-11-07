@@ -16,9 +16,9 @@ public class XWorkListELResolver extends AbstractResolver {
     }
 
     public Object getValue(ELContext elContext, Object target, Object property) {
-        Map<String, Object> context = (Map) elContext.getContext(AccessorsContextKey.class);
-
         if (target != null && property != null && target instanceof List) {
+
+            Map<String, Object> context = (Map) elContext.getContext(AccessorsContextKey.class);
             List list = (List) target;
 
             Class lastClass = (Class) context.get(XWorkConverter.LAST_BEAN_CLASS_ACCESSED);
@@ -31,49 +31,49 @@ public class XWorkListELResolver extends AbstractResolver {
                 //ignore
             }
 
-            if (numericValue != null
-                    && ReflectionContextState.isCreatingNullObjects(context)
-                    && objectTypeDeterminer.shouldCreateIfNew(lastClass, lastProperty, target, null, true)) {
-                int index = numericValue.intValue();
-                int listSize = list.size();
+            if (numericValue != null) {
+                if (ReflectionContextState.isCreatingNullObjects(context) && objectTypeDeterminer.shouldCreateIfNew(lastClass, lastProperty, target, null, true)) {
+                    int index = numericValue.intValue();
+                    int listSize = list.size();
 
-                /*if (lastClass == null || lastProperty == null) {
-                    return super.getProperty(context, target, name);
-                }*/
-                Class beanClass = objectTypeDeterminer.getElementClass(lastClass, lastProperty, property);
-                if (listSize <= index) {
-                    Object result = null;
+                    /*if (lastClass == null || lastProperty == null) {
+                        return super.getProperty(context, target, name);
+                    }*/
+                    Class beanClass = objectTypeDeterminer.getElementClass(lastClass, lastProperty, property);
+                    if (listSize <= index) {
+                        Object result = null;
 
-                    for (int i = listSize; i < index; i++) {
-                        list.add(null);
+                        for (int i = listSize; i < index; i++) {
+                            list.add(null);
+                        }
+                        try {
+                            list.add(index, result = objectFactory.buildBean(beanClass, context));
+                        } catch (Exception exc) {
+                            throw new XWorkException(exc);
+                        }
+
+                        elContext.setPropertyResolved(true);
+                        return result;
+                    } else if (list.get(index) == null) {
+                        Object result = null;
+                        try {
+                            list.set(index, result = objectFactory.buildBean(beanClass, context));
+                        } catch (Exception exc) {
+                            throw new XWorkException(exc);
+                        }
+
+                        elContext.setPropertyResolved(true);
+                        return result;
+                    } else {
+                        elContext.setPropertyResolved(true);
+                        return list.get(index);
                     }
-                    try {
-                        list.add(index, result = objectFactory.buildBean(beanClass, context));
-                    } catch (Exception exc) {
-                        throw new XWorkException(exc);
-                    }
-
-                    elContext.setPropertyResolved(true);
-                    return result;
-                } else if (list.get(index) == null) {
-                    Object result = null;
-                    try {
-                        list.set(index, result = objectFactory.buildBean(beanClass, context));
-                    } catch (Exception exc) {
-                        throw new XWorkException(exc);
-                    }
-
-                    elContext.setPropertyResolved(true);
-                    return result;
                 } else {
-                    elContext.setPropertyResolved(true);
-                    return list.get(index);
-                }
-            } else {
-                //try normal list
-                if (numericValue < list.size()) {
-                    elContext.setPropertyResolved(true);
-                    return list.get(numericValue);
+                    //try normal list
+                    if (numericValue < list.size()) {
+                        elContext.setPropertyResolved(true);
+                        return list.get(numericValue);
+                    }
                 }
             }
         }

@@ -43,6 +43,28 @@ public class UelTest extends AbstractUelBaseTest {
         assertEquals(10, stack.findValue("object[0]"));
     }
 
+    public void testReadArray() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        TestObject obj = new TestObject();
+        Integer[] ints = {10, 20};
+        obj.setTypedArray(ints);
+        root.push(obj);
+
+        //list
+        assertEquals(20, stack.findValue("typedArray[1]"));
+    }
+
+
+    public void testMap() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        HashMap map = new HashMap();
+        map.put("nameValue", "Lex");
+        TestObject obj = new TestObject();
+        obj.setParameters(map);
+        root.add(obj);
+
+        assertEquals("Lex", stack.findValue("parameters.nameValue"));
+        assertEquals("Lex", stack.findValue("parameters['nameValue']"));
+    }
+
 
     public void testContextReferencesWithSameObjectInStack() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         //if there as object in the stack with the property "X" and there is an object in the
@@ -187,17 +209,6 @@ public class UelTest extends AbstractUelBaseTest {
 
         stack.setValue("#{date}", new Date());
         assertEquals(stack.findString("#{date}"), format.format(obj.getDate()));
-    }
-
-    public void testMap() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-        HashMap map = new HashMap();
-        map.put("nameValue", "Lex");
-        TestObject obj = new TestObject();
-        obj.setParameters(map);
-        root.add(obj);
-
-        String value = (String) stack.findValue("parameters.nameValue", String.class);
-        assertEquals("Lex", value);
     }
 
     public void test2LevelSet() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
