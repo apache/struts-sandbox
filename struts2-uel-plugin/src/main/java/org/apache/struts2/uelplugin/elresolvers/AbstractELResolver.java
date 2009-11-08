@@ -1,26 +1,26 @@
 package org.apache.struts2.uelplugin.elresolvers;
 
-import com.opensymphony.xwork2.util.reflection.ReflectionProvider;
-import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
+import com.opensymphony.xwork2.ObjectFactory;
 import com.opensymphony.xwork2.conversion.NullHandler;
 import com.opensymphony.xwork2.conversion.ObjectTypeDeterminer;
+import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
 import com.opensymphony.xwork2.inject.Container;
-import com.opensymphony.xwork2.ObjectFactory;
+import com.opensymphony.xwork2.util.reflection.ReflectionProvider;
 
-import javax.el.ELResolver;
 import javax.el.ELContext;
-import java.util.Iterator;
+import javax.el.ELResolver;
 import java.beans.FeatureDescriptor;
+import java.util.Iterator;
 
 
-public abstract class AbstractResolver extends ELResolver {
-    protected ReflectionProvider reflectionProvider;
-    protected XWorkConverter xworkConverter;
-    protected NullHandler nullHandler;
-    protected ObjectTypeDeterminer objectTypeDeterminer;
-    protected ObjectFactory objectFactory;
+public abstract class AbstractELResolver extends ELResolver {
+    protected final ReflectionProvider reflectionProvider;
+    protected final XWorkConverter xworkConverter;
+    protected final NullHandler nullHandler;
+    protected final ObjectTypeDeterminer objectTypeDeterminer;
+    protected final ObjectFactory objectFactory;
 
-    public AbstractResolver(Container container) {
+    public AbstractELResolver(Container container) {
         this.reflectionProvider = container.getInstance(ReflectionProvider.class);
         this.xworkConverter = container.getInstance(XWorkConverter.class);
         this.nullHandler = container.getInstance(NullHandler.class, "java.lang.Object");

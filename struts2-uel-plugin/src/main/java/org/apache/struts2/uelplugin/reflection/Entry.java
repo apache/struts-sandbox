@@ -9,21 +9,19 @@ class Entry {
     Class key;
     Object value;
 
-    public Entry(Class key, Object value)
-    {
+    public Entry(Class key, Object value) {
         this.key = key;
         this.value = value;
     }
 
-    public String toString()
-    {
+    public String toString() {
         return "Entry[" +
-               "next=" + next +
-               '\n' +
-               ", key=" + key +
-               '\n' +
-               ", value=" + value +
-               '\n' +
-               ']';
+                "next=" + next +
+                '\n' +
+                ", key=" + key +
+                '\n' +
+                ", value=" + value +
+                '\n' +
+                ']';
     }
 }

@@ -1,18 +1,16 @@
 package org.apache.struts2.uelplugin;
 
 import com.opensymphony.xwork2.ActionContext;
-import com.opensymphony.xwork2.TextProviderFactory;
-import com.opensymphony.xwork2.TextProvider;
 import com.opensymphony.xwork2.LocaleProvider;
-import com.opensymphony.xwork2.util.CompoundRoot;
+import com.opensymphony.xwork2.TextProvider;
+import com.opensymphony.xwork2.TextProviderFactory;
 import com.opensymphony.xwork2.util.ValueStack;
+import org.apache.commons.lang.xwork.StringUtils;
 
 import javax.el.FunctionMapper;
 import java.lang.reflect.Method;
-import java.util.Map;
 import java.util.HashMap;
-
-import org.apache.commons.lang.xwork.StringUtils;
+import java.util.Map;
 
 /**
  * <p>Builtin function availabe from UEL. Available functions are</p>

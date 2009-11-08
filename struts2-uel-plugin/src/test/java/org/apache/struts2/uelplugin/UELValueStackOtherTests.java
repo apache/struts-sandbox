@@ -1,10 +1,10 @@
 package org.apache.struts2.uelplugin;
 
-import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
 import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
 
-import java.util.Map;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 
 public class UELValueStackOtherTests extends AbstractUELTest {
@@ -56,7 +56,7 @@ public class UELValueStackOtherTests extends AbstractUELTest {
         }
     }
 
-     public void testFailsOnMissingNestedPropertyWithThrowException() {
+    public void testFailsOnMissingNestedPropertyWithThrowException() {
         TestObject obj = new TestObject();
         root.push(obj);
         try {
@@ -123,7 +123,7 @@ public class UELValueStackOtherTests extends AbstractUELTest {
         }
     }
 
-     public void testPrimitiveSettingWithInvalidValueAddsFieldErrorInNonDevMode() {
+    public void testPrimitiveSettingWithInvalidValueAddsFieldErrorInNonDevMode() {
         TestAction action = new TestAction();
         stack.getContext().put(XWorkConverter.REPORT_CONVERSION_ERRORS, Boolean.TRUE);
         stack.setDevMode("false");
@@ -134,7 +134,7 @@ public class UELValueStackOtherTests extends AbstractUELTest {
         assertTrue(conversionErrors.containsKey("bar"));
     }
 
-     public void testPrimitiveSettingWithInvalidValueAddsFieldErrorInDevMode() {
+    public void testPrimitiveSettingWithInvalidValueAddsFieldErrorInDevMode() {
         TestAction action = new TestAction();
         stack.getContext().put(XWorkConverter.REPORT_CONVERSION_ERRORS, Boolean.TRUE);
         stack.setDevMode("true");

@@ -9,7 +9,7 @@ public class UELStackReadValueTest extends AbstractUELTest {
         TestObject obj = new TestObject();
         obj.setValue("0");
         root.push(obj);
-        
+
         obj = new TestObject();
         obj.setValue("1");
         root.push(obj);

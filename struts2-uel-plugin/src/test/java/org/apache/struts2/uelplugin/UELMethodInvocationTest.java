@@ -20,7 +20,7 @@ public class UELMethodInvocationTest extends AbstractUELTest {
         assertEquals("Lex Luthor", stack.findValue("${#s0.concat(' ').concat(#s1)}"));
     }
 
-     public void testCallMethodsOnCompundRoot() {
+    public void testCallMethodsOnCompundRoot() {
         //this shuld not fail as the property is defined on a parent class
         TestObject obj = new TestObject();
         root.push(obj);

@@ -9,14 +9,14 @@ import org.apache.struts2.StrutsException;
 import javax.el.ELContext;
 import java.util.Map;
 
-public class XWorkBeanELResolver extends AbstractResolver {
+public class XWorkBeanELResolver extends AbstractELResolver {
     public XWorkBeanELResolver(Container container) {
         super(container);
     }
 
     public Object getValue(ELContext elContext, Object target, Object property) {
         if (target != null && property != null) {
-            Map<String, Object> reflectionContext = (Map<String, Object>) elContext.getContext(AccessorsContextKey.class);
+            Map<String, Object> reflectionContext = (Map<String, Object>) elContext.getContext(XWorkValueStackContext.class);
             String propertyName = property.toString();
             Class targetType = target.getClass();
 
@@ -48,7 +48,7 @@ public class XWorkBeanELResolver extends AbstractResolver {
     public void setValue(ELContext elContext, Object target, Object property, Object value) {
         if (target != null && property != null) {
             try {
-                Map<String, Object> reflectionContext = (Map<String, Object>) elContext.getContext(AccessorsContextKey.class);
+                Map<String, Object> reflectionContext = (Map<String, Object>) elContext.getContext(XWorkValueStackContext.class);
                 String propertyName = property.toString();
                 Class targetType = target.getClass();
 

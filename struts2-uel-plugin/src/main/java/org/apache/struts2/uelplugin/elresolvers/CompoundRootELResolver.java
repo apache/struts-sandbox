@@ -1,9 +1,9 @@
 package org.apache.struts2.uelplugin.elresolvers;
 
 import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
+import com.opensymphony.xwork2.inject.Container;
 import com.opensymphony.xwork2.util.CompoundRoot;
 import com.opensymphony.xwork2.util.reflection.ReflectionContextState;
-import com.opensymphony.xwork2.inject.Container;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.xwork.StringUtils;
@@ -16,7 +16,7 @@ import java.util.Map;
  * An ELResolver that is capable of resolving properties against the
  * CompoundRoot if available in the ELContext.
  */
-public class CompoundRootELResolver extends AbstractResolver {
+public class CompoundRootELResolver extends AbstractELResolver {
 
     public CompoundRootELResolver(Container container) {
         super(container);
@@ -48,7 +48,7 @@ public class CompoundRootELResolver extends AbstractResolver {
             return root.get(0);
         }
 
-        Map<String, Object> reflectionContext = (Map) elContext.getContext(AccessorsContextKey.class);
+        Map<String, Object> reflectionContext = (Map) elContext.getContext(XWorkValueStackContext.class);
 
         Object bean = findObjectForProperty(root, propertyName);
         if (bean != null) {
@@ -86,7 +86,7 @@ public class CompoundRootELResolver extends AbstractResolver {
         }
 
         CompoundRoot root = (CompoundRoot) context.getContext(CompoundRoot.class);
-        Map<String, Object> reflectionContext = (Map) context.getContext(AccessorsContextKey.class);
+        Map<String, Object> reflectionContext = (Map) context.getContext(XWorkValueStackContext.class);
         String propertyName = (String) property;
         try {
             if (base == null && property != null && root != null) {

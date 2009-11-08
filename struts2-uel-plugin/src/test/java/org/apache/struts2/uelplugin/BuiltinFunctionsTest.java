@@ -1,8 +1,8 @@
 package org.apache.struts2.uelplugin;
 
-import java.lang.reflect.InvocationTargetException;
-
 import org.apache.struts2.views.util.ContextUtil;
+
+import java.lang.reflect.InvocationTargetException;
 
 
 public class BuiltinFunctionsTest extends AbstractUELTest {

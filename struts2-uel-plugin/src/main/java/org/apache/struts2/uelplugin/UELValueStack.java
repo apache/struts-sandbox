@@ -9,15 +9,15 @@ import com.opensymphony.xwork2.util.CompoundRoot;
 import com.opensymphony.xwork2.util.ValueStack;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
-import org.apache.struts2.uelplugin.elresolvers.AccessorsContextKey;
+import org.apache.struts2.uelplugin.elresolvers.XWorkValueStackContext;
 
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.el.PropertyNotFoundException;
 import javax.el.ValueExpression;
+import java.io.Serializable;
 import java.util.Map;
 import java.util.TreeMap;
-import java.io.Serializable;
 
 /**
  * A ValueStack that uses Unified EL as the underlying Expression Language.
@@ -95,7 +95,7 @@ public class UELValueStack implements ValueStack, ClearableValueStack, Serializa
                 expr = "#{" + expr + "}";
             }
 
-            elContext.putContext(AccessorsContextKey.class, context);
+            elContext.putContext(XWorkValueStackContext.class, context);
             elContext.putContext(XWorkConverter.class, xworkConverter);
             elContext.putContext(CompoundRoot.class, root);
 
@@ -195,7 +195,7 @@ public class UELValueStack implements ValueStack, ClearableValueStack, Serializa
             if (expr != null && !expr.startsWith("${") && !expr.startsWith("#{")) {
                 expr = "#{" + expr + "}";
             }
-            elContext.putContext(AccessorsContextKey.class, context);
+            elContext.putContext(XWorkValueStackContext.class, context);
             elContext.putContext(XWorkConverter.class, xworkConverter);
             elContext.putContext(CompoundRoot.class, root);
 

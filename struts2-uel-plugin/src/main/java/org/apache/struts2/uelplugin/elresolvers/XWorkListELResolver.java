@@ -1,16 +1,16 @@
 package org.apache.struts2.uelplugin.elresolvers;
 
-import com.opensymphony.xwork2.inject.Container;
-import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
-import com.opensymphony.xwork2.util.reflection.ReflectionContextState;
 import com.opensymphony.xwork2.XWorkException;
+import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
+import com.opensymphony.xwork2.inject.Container;
+import com.opensymphony.xwork2.util.reflection.ReflectionContextState;
 
 import javax.el.ELContext;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Collection;
 
-public class XWorkListELResolver extends AbstractResolver {
+public class XWorkListELResolver extends AbstractELResolver {
     public XWorkListELResolver(Container container) {
         super(container);
     }
@@ -18,7 +18,7 @@ public class XWorkListELResolver extends AbstractResolver {
     public Object getValue(ELContext elContext, Object target, Object property) {
         if (target != null && property != null && target instanceof List) {
 
-            Map<String, Object> context = (Map) elContext.getContext(AccessorsContextKey.class);
+            Map<String, Object> context = (Map) elContext.getContext(XWorkValueStackContext.class);
             List list = (List) target;
 
             Class lastClass = (Class) context.get(XWorkConverter.LAST_BEAN_CLASS_ACCESSED);
@@ -82,7 +82,7 @@ public class XWorkListELResolver extends AbstractResolver {
     }
 
     public void setValue(ELContext elContext, Object target, Object property, Object value) {
-        Map<String, Object> context = (Map) elContext.getContext(AccessorsContextKey.class);
+        Map<String, Object> context = (Map) elContext.getContext(XWorkValueStackContext.class);
         if (target != null && property != null && target instanceof List) {
             Class lastClass = (Class) context.get(XWorkConverter.LAST_BEAN_CLASS_ACCESSED);
             String lastProperty = (String) context.get(XWorkConverter.LAST_BEAN_PROPERTY_ACCESSED);

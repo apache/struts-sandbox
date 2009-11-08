@@ -1,8 +1,8 @@
 package org.apache.struts2.uelplugin;
 
 import java.util.Date;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -23,6 +23,11 @@ public class TestObject {
     private Set set;
 
     private ChildTestAction childTestAction;
+    private boolean invoked;
+
+    public boolean wasInvoked() {
+        return invoked;
+    }
 
     public ChildTestAction getChildTestAction() {
         return childTestAction;
@@ -30,6 +35,10 @@ public class TestObject {
 
     public void setChildTestAction(ChildTestAction childTestAction) {
         this.childTestAction = childTestAction;
+    }
+
+    public void invoke() {
+        this.invoked = true;
     }
 
     public Object getFail() {

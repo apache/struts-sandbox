@@ -1,17 +1,16 @@
 package org.apache.struts2.uelplugin.elresolvers;
 
-import com.opensymphony.xwork2.inject.Container;
 import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
+import com.opensymphony.xwork2.inject.Container;
 import com.opensymphony.xwork2.util.reflection.ReflectionContextState;
 
 import javax.el.ELContext;
 import javax.el.ELException;
-import java.util.List;
-import java.util.Map;
 import java.lang.reflect.Array;
+import java.util.Map;
 
 
-public class XWorkArrayELResolver extends AbstractResolver {
+public class XWorkArrayELResolver extends AbstractELResolver {
     public XWorkArrayELResolver(Container container) {
         super(container);
     }
@@ -19,7 +18,7 @@ public class XWorkArrayELResolver extends AbstractResolver {
     public Object getValue(ELContext elContext, Object target, Object property) {
         if (target != null && property != null && target.getClass().isArray()) {
 
-            Map<String, Object> context = (Map) elContext.getContext(AccessorsContextKey.class);
+            Map<String, Object> context = (Map) elContext.getContext(XWorkValueStackContext.class);
 
             Class lastClass = (Class) context.get(XWorkConverter.LAST_BEAN_CLASS_ACCESSED);
             String lastProperty = (String) context.get(XWorkConverter.LAST_BEAN_PROPERTY_ACCESSED);
@@ -74,7 +73,7 @@ public class XWorkArrayELResolver extends AbstractResolver {
     public void setValue(ELContext elContext, Object target, Object property, Object value) {
         if (target != null && property != null && target.getClass().isArray()) {
 
-            Map<String, Object> context = (Map) elContext.getContext(AccessorsContextKey.class);
+            Map<String, Object> context = (Map) elContext.getContext(XWorkValueStackContext.class);
 
             Class lastClass = (Class) context.get(XWorkConverter.LAST_BEAN_CLASS_ACCESSED);
             String lastProperty = (String) context.get(XWorkConverter.LAST_BEAN_PROPERTY_ACCESSED);

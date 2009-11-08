@@ -1,15 +1,14 @@
 package org.apache.struts2.uelplugin.elresolvers;
 
-import com.opensymphony.xwork2.util.reflection.ReflectionContextState;
 import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
 import com.opensymphony.xwork2.inject.Container;
+import com.opensymphony.xwork2.util.reflection.ReflectionContextState;
 
 import javax.el.ELContext;
 import java.util.Map;
-import java.util.List;
 import java.util.WeakHashMap;
 
-public class XWorkMapELResolver extends AbstractResolver {
+public class XWorkMapELResolver extends AbstractELResolver {
     private final Map<Key, Class> keyClassCache = new WeakHashMap<Key, Class>();
 
     public XWorkMapELResolver(Container container) {
@@ -17,7 +16,7 @@ public class XWorkMapELResolver extends AbstractResolver {
     }
 
     public Object getValue(ELContext elContext, Object target, Object property) {
-        Map<String, Object> context = (Map) elContext.getContext(AccessorsContextKey.class);
+        Map<String, Object> context = (Map) elContext.getContext(XWorkValueStackContext.class);
 
         if (target != null && property != null && target instanceof Map) {
             Object result = null;
@@ -84,12 +83,13 @@ public class XWorkMapELResolver extends AbstractResolver {
     }
 
     public void setValue(ELContext elContext, Object target, Object property, Object value) {
-        Map<String, Object> context = (Map) elContext.getContext(AccessorsContextKey.class);
+        Map<String, Object> context = (Map) elContext.getContext(XWorkValueStackContext.class);
 
         if (target != null && property != null && target instanceof Map) {
             Object key = getKey(context, property);
             Map map = (Map) target;
-            map.put(key, getValue(context, value));
+            map.put(key, value);
+            elContext.setPropertyResolved(true);
         }
     }
 

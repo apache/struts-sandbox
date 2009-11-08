@@ -2,8 +2,6 @@ package org.apache.struts2.uelplugin;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.conversion.annotations.Conversion;
-import com.opensymphony.xwork2.conversion.annotations.ConversionType;
-import com.opensymphony.xwork2.conversion.annotations.TypeConversion;
 
 @Conversion
 public class TestAction extends ActionSupport {

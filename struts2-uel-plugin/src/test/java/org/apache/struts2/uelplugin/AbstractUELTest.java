@@ -1,26 +1,26 @@
 package org.apache.struts2.uelplugin;
 
-import com.opensymphony.xwork2.XWorkTestCase;
 import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.XWorkTestCase;
+import com.opensymphony.xwork2.config.ConfigurationException;
+import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
 import com.opensymphony.xwork2.inject.ContainerBuilder;
 import com.opensymphony.xwork2.test.StubConfigurationProvider;
-import com.opensymphony.xwork2.config.ConfigurationException;
 import com.opensymphony.xwork2.util.CompoundRoot;
 import com.opensymphony.xwork2.util.ValueStack;
 import com.opensymphony.xwork2.util.ValueStackFactory;
 import com.opensymphony.xwork2.util.location.LocatableProperties;
 import com.opensymphony.xwork2.util.reflection.ReflectionProvider;
-import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
-import org.springframework.mock.web.MockServletContext;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.uelplugin.reflection.GenericReflectionProvider;
 import org.apache.struts2.util.StrutsTypeConverter;
+import org.springframework.mock.web.MockServletContext;
 
-import javax.servlet.ServletContextEvent;
 import javax.el.ExpressionFactory;
-import java.util.Map;
-import java.text.ParseException;
+import javax.servlet.ServletContextEvent;
 import java.text.DateFormat;
+import java.text.ParseException;
+import java.util.Map;
 
 
 public abstract class AbstractUELTest extends XWorkTestCase {

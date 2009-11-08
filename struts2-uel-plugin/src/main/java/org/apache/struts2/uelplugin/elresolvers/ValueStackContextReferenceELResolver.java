@@ -1,29 +1,38 @@
 package org.apache.struts2.uelplugin.elresolvers;
 
 import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
+import com.opensymphony.xwork2.inject.Container;
 import com.opensymphony.xwork2.util.ValueStack;
-
-import javax.el.ELResolver;
-import javax.el.ELContext;
-import java.util.Iterator;
-import java.beans.FeatureDescriptor;
-
 import org.apache.commons.lang.xwork.StringUtils;
 
+import javax.el.ELContext;
+import java.beans.FeatureDescriptor;
+import java.util.Iterator;
+import java.util.Map;
 
-public class ValueStackContextResolver extends ELResolver {
-    public Object getValue(ELContext context, Object base, Object property) {
+
+public class ValueStackContextReferenceELResolver extends AbstractELResolver {
+    public ValueStackContextReferenceELResolver(Container container) {
+        super(container);
+    }
+
+    public Object getValue(ELContext elContext, Object base, Object property) {
         String objectName = property.toString();
         if (StringUtils.startsWith(objectName, "#")) {
             objectName = StringUtils.removeStart(property.toString(), "#");
 
             ActionContext actionContext = ActionContext.getContext();
-            if (context != null) {
+            if (elContext != null) {
                 ValueStack valueStack = actionContext.getValueStack();
                 if (valueStack != null) {
                     Object obj = valueStack.getContext().get(objectName);
                     if (obj != null) {
-                        context.setPropertyResolved(true);
+                        Map<String, Object> reflectionContext = (Map) elContext.getContext(XWorkValueStackContext.class);
+
+                        reflectionContext.put(XWorkConverter.LAST_BEAN_CLASS_ACCESSED, obj.getClass());
+                        reflectionContext.put(XWorkConverter.LAST_BEAN_PROPERTY_ACCESSED, objectName);
+                        elContext.setPropertyResolved(true);
                         return obj;
                     }
                 }

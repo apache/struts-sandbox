@@ -1,15 +1,20 @@
 package org.apache.struts2.uelplugin;
 
-import de.odysseus.el.misc.TypeConverter;
 import de.odysseus.el.misc.NumberOperations;
+import de.odysseus.el.misc.TypeConverter;
+import de.odysseus.el.tree.Bindings;
+import de.odysseus.el.tree.Node;
 import de.odysseus.el.tree.impl.Builder;
 import de.odysseus.el.tree.impl.Parser;
 import de.odysseus.el.tree.impl.Scanner;
 import de.odysseus.el.tree.impl.ast.AstBinary;
 import de.odysseus.el.tree.impl.ast.AstNode;
 import de.odysseus.el.tree.impl.ast.AstUnary;
-import de.odysseus.el.tree.impl.ast.AstIdentifier;
 import org.apache.commons.lang.xwork.StringUtils;
+
+import javax.el.ELContext;
+import javax.el.MethodInfo;
+import javax.el.ValueReference;
 
 /**
  * Plugs into JUEL parser to supper expressions like "#obj", to provide some level
@@ -54,9 +59,7 @@ public class JUELExtensionBuilder extends Builder {
      */
     static Parser.ExtensionHandler SHARP_HANDLER = new Parser.ExtensionHandler(Parser.ExtensionPoint.UNARY) {
         public AstNode createAstNode(AstNode... children) {
-            //AstIdentifier astIdentifier = (AstIdentifier) children[0];
-            //ValueStackAstIdentifier valueStackAstIdentifier = new ValueStackAstIdentifier(astIdentifier.getName(), astIdentifier.getIndex());
-            return new AstUnary(children[0], SHARP_OPERATOR);
+            return new DelegateAstNode(children[0]);
         }
     };
 
@@ -121,5 +124,61 @@ public class JUELExtensionBuilder extends Builder {
 
     protected Parser createParser(String expression) {
         return new ExtendedParser(this, expression);
+    }
+}
+
+class DelegateAstNode extends AstNode {
+    private final AstNode child;
+
+    public DelegateAstNode(AstNode child) {
+        this.child = child;
+    }
+
+    public void appendStructure(StringBuilder builder, Bindings bindings) {
+        child.appendStructure(builder, bindings);
+    }
+
+    public Object eval(Bindings bindings, ELContext context) {
+        return child.eval(bindings, context);
+    }
+
+    public int getCardinality() {
+        return child.getCardinality();
+    }
+
+    public Node getChild(int i) {
+        return child.getChild(i);
+    }
+
+    public MethodInfo getMethodInfo(Bindings bindings, ELContext context, Class<?> returnType, Class<?>[] paramTypes) {
+        return child.getMethodInfo(bindings, context, returnType, paramTypes);
+    }
+
+    public Class<?> getType(Bindings bindings, ELContext context) {
+        return child.getType(bindings, context);
+    }
+
+    public ValueReference getValueReference(Bindings bindings, ELContext context) {
+        return child.getValueReference(bindings, context);
+    }
+
+    public Object invoke(Bindings bindings, ELContext context, Class<?> returnType, Class<?>[] paramTypes, Object[] paramValues) {
+        return child.invoke(bindings, context, returnType, paramTypes, paramValues);
+    }
+
+    public boolean isLeftValue() {
+        return child.isLeftValue();
+    }
+
+    public boolean isLiteralText() {
+        return child.isLiteralText();
+    }
+
+    public boolean isReadOnly(Bindings bindings, ELContext context) {
+        return child.isReadOnly(bindings, context);
+    }
+
+    public void setValue(Bindings bindings, ELContext context, Object value) {
+        child.setValue(bindings, context, value);
     }
 }

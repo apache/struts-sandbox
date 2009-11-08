@@ -2,8 +2,8 @@ package org.apache.struts2.uelplugin;
 
 import com.opensymphony.xwork2.util.reflection.ReflectionContextState;
 
-import java.util.*;
 import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 
 public class UELStackSetValueTest extends AbstractUELTest {
@@ -46,6 +46,13 @@ public class UELStackSetValueTest extends AbstractUELTest {
         stack.setValue("typedList[1].value", "val");
         assertEquals(2, obj.getTypedList().size());
         assertEquals("val", obj.getTypedList().get(1).getValue());
+
+        //context ref
+        list = new ArrayList();
+        stack.getContext().put("theTypedList", list);
+        stack.setValue("#theTypedList[0]", "val");
+        assertEquals(1, list.size());
+        assertEquals("val", list.get(0));
     }
 
     public void testWriteArray() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
@@ -85,6 +92,13 @@ public class UELStackSetValueTest extends AbstractUELTest {
         stack.setValue("typedMap[1].value", "val");
         assertEquals(1, obj.getTypedMap().size());
         assertEquals("val", obj.getTypedMap().get(1).getValue());
+
+        //context ref
+        map = new HashMap();
+        stack.getContext().put("themap", map);
+        stack.setValue("#themap['str']", "val");
+        assertEquals(1, map.size());
+        assertEquals("val", map.get("str"));
     }
 
     public void testSetPropertiesOnNestedNullObject() {

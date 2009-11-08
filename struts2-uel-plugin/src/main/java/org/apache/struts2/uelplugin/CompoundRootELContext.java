@@ -4,7 +4,10 @@ import com.opensymphony.xwork2.inject.Container;
 import de.odysseus.el.util.SimpleContext;
 import org.apache.struts2.uelplugin.elresolvers.*;
 
-import javax.el.*;
+import javax.el.BeanELResolver;
+import javax.el.CompositeELResolver;
+import javax.el.FunctionMapper;
+import javax.el.VariableMapper;
 
 
 /**
@@ -13,11 +16,13 @@ import javax.el.*;
  */
 public class CompoundRootELContext extends SimpleContext {
     private final static BuiltinFunctionMapper BUILTIN_FUNCTION_MAPPER = new BuiltinFunctionMapper();
+
     public CompoundRootELContext(final Container container) {
         super(new CompositeELResolver() {
             {
+                add(new MethodInvocationGuardELResolver(container));
                 add(new CompoundRootELResolver(container));
-                add(new ValueStackContextResolver());
+                add(new ValueStackContextReferenceELResolver(container));
                 add(new XWorkBeanELResolver(container));
                 add(new XWorkListELResolver(container));
                 add(new XWorkMapELResolver(container));
