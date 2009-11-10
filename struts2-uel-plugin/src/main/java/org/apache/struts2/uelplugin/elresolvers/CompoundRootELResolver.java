@@ -4,12 +4,10 @@ import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
 import com.opensymphony.xwork2.inject.Container;
 import com.opensymphony.xwork2.util.CompoundRoot;
 import com.opensymphony.xwork2.util.reflection.ReflectionContextState;
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.xwork.StringUtils;
 
 import javax.el.ELContext;
-import java.lang.reflect.InvocationTargetException;
+import javax.el.ELException;
 import java.util.Map;
 
 /**
@@ -22,111 +20,90 @@ public class CompoundRootELResolver extends AbstractELResolver {
         super(container);
     }
 
-    @Override
     public Object getValue(ELContext elContext, Object base, Object property) {
-        if (elContext == null) {
-            throw new IllegalArgumentException("ElContext cannot be null");
-        }
+        //EL doesn't know of value stack, so when an expression like "A.B" is evaluated
+        //this method will be called with a null target and an "A" property
+        if (base == null) {
 
-        String propertyName = property.toString();
+            String propertyName = property.toString();
 
-        if (StringUtils.startsWith(propertyName, "#"))
-            return null;
+            if (StringUtils.startsWith(propertyName, "#"))
+                return null;
 
-        // only resolve at the root of the context
-        if (base != null) {
-            return null;
-        }
-
-        CompoundRoot root = (CompoundRoot) elContext.getContext(CompoundRoot.class);
-        if (root == null) {
-            return null;
-        }
-
-        if ("top".equals(propertyName) && root.size() > 0) {
-            elContext.setPropertyResolved(true);
-            return root.get(0);
-        }
-
-        Map<String, Object> reflectionContext = (Map) elContext.getContext(XWorkValueStackContext.class);
-
-        Object bean = findObjectForProperty(root, propertyName);
-        if (bean != null) {
-            Object retVal = reflectionProvider.getValue(propertyName, reflectionContext, bean);
-
-            reflectionContext.put(XWorkConverter.LAST_BEAN_CLASS_ACCESSED, bean.getClass());
-            reflectionContext.put(XWorkConverter.LAST_BEAN_PROPERTY_ACCESSED, propertyName);
-
-            //if object is null, and create objects is enabled, lets do it
-            if (retVal == null && ReflectionContextState.isCreatingNullObjects(reflectionContext)) {
-                retVal = nullHandler.nullPropertyValue(reflectionContext, bean, property);
-                reflectionProvider.setValue(propertyName, reflectionContext, bean, retVal);
+            CompoundRoot root = (CompoundRoot) elContext.getContext(CompoundRoot.class);
+            if (root == null) {
+                return null;
             }
 
-            elContext.setPropertyResolved(true);
-            return retVal;
+            if ("top".equals(propertyName) && root.size() > 0) {
+                elContext.setPropertyResolved(true);
+                return root.get(0);
+            }
+
+            Map<String, Object> valueStackContext = getValueStackContext(elContext);
+
+            Object bean = findObjectForProperty(valueStackContext, root, propertyName);
+            if (bean != null) {
+                Object retVal = reflectionProvider.getValue(propertyName, valueStackContext, bean);
+
+                valueStackContext.put(XWorkConverter.LAST_BEAN_CLASS_ACCESSED, bean.getClass());
+                valueStackContext.put(XWorkConverter.LAST_BEAN_PROPERTY_ACCESSED, propertyName);
+
+                //if object is null, and create objects is enabled, lets do it
+                if (retVal == null && ReflectionContextState.isCreatingNullObjects(valueStackContext)) {
+                    retVal = nullHandler.nullPropertyValue(valueStackContext, bean, property);
+                    reflectionProvider.setValue(propertyName, valueStackContext, bean, retVal);
+                }
+
+                elContext.setPropertyResolved(true);
+                return retVal;
+            }
         }
 
         return null;
     }
 
-    @Override
+
     public boolean isReadOnly(ELContext context, Object base, Object property) {
         return false;
     }
 
-    @Override
-    public void setValue(ELContext context, Object base, Object property, Object value) {
-        if (context == null) {
-            throw new NullPointerException();
-        }
-        // only resolve at the root of the context
-        if (base != null) {
-            return;
-        }
 
-        CompoundRoot root = (CompoundRoot) context.getContext(CompoundRoot.class);
-        Map<String, Object> reflectionContext = (Map) context.getContext(XWorkValueStackContext.class);
-        String propertyName = (String) property;
-        try {
-            if (base == null && property != null && root != null) {
-                Object bean = findObjectForProperty(root, propertyName);
-                if (bean != null) {
-                    reflectionContext.put(XWorkConverter.LAST_BEAN_CLASS_ACCESSED, bean.getClass());
-                    reflectionContext.put(XWorkConverter.LAST_BEAN_PROPERTY_ACCESSED, propertyName);
+    public void setValue(ELContext elContext, Object base, Object property, Object value) {
+        //EL doesn't know of value stack, so when an expression like "A.B" is evaluated
+        //this method will be called with a null target and an "A" property
+        if (base == null) {
+            CompoundRoot root = (CompoundRoot) elContext.getContext(CompoundRoot.class);
+            Map<String, Object> valueStackContext = getValueStackContext(elContext);
+            String propertyName = (String) property;
+            try {
+                if (property != null && root != null) {
+                    Object bean = findObjectForProperty(valueStackContext, root, propertyName);
+                    if (bean != null) {
+                        valueStackContext.put(XWorkConverter.LAST_BEAN_CLASS_ACCESSED, bean.getClass());
+                        valueStackContext.put(XWorkConverter.LAST_BEAN_PROPERTY_ACCESSED, propertyName);
 
 
-                    XWorkConverter converter = (XWorkConverter) context.getContext(XWorkConverter.class);
-                    if (converter != null && root != null) {
-                        Class propType = determineType(bean, propertyName);
-                        value = converter.convertValue(reflectionContext, bean, null, propertyName, value, propType);
+                        XWorkConverter converter = (XWorkConverter) elContext.getContext(XWorkConverter.class);
+                        if (converter != null) {
+                            Class propType = reflectionProvider.getPropertyDescriptor(bean.getClass(), propertyName).getWriteMethod().getParameterTypes()[0];
+                            value = converter.convertValue(valueStackContext, bean, null, propertyName, value, propType);
+                        }
+                        reflectionProvider.setValue(propertyName, valueStackContext, bean, value);
+                        elContext.setPropertyResolved(true);
                     }
-                    BeanUtils.setProperty(bean, propertyName, value);
-                    context.setPropertyResolved(true);
                 }
+            } catch (Exception e) {
+                throw new ELException(e);
             }
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
         }
     }
 
-    protected Class<?> determineType(Object bean, String property) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-        return PropertyUtils.getPropertyType(bean, property);
-    }
-
-    protected Object findObjectForProperty(CompoundRoot root, String propertyName) {
+    protected Object findObjectForProperty(Map<String, Object> reflectionContext, CompoundRoot root, String propertyName) {
         if ("top".equals(propertyName) && root.size() > 0) {
             return root.get(0);
         }
-        for (int i = 0; i < root.size(); i++) {
-            if (PropertyUtils.isReadable(root.get(i), propertyName) || PropertyUtils.isWriteable(root.get(i), propertyName)) {
-                return root.get(i);
-            }
-        }
-        return null;
+
+        return reflectionProvider.getRealTarget(propertyName, reflectionContext, root);
     }
 }

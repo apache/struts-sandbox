@@ -1,15 +1,37 @@
+/*
+ * $Id$
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.apache.struts2.uelplugin.elresolvers;
 
-import com.opensymphony.xwork2.XWorkException;
 import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
 import com.opensymphony.xwork2.inject.Container;
 import com.opensymphony.xwork2.util.reflection.ReflectionContextState;
 
 import javax.el.ELContext;
-import java.util.Collection;
+import javax.el.ELException;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Sets and gets values froma  list
+ */
 public class XWorkListELResolver extends AbstractELResolver {
     public XWorkListELResolver(Container container) {
         super(container);
@@ -18,11 +40,11 @@ public class XWorkListELResolver extends AbstractELResolver {
     public Object getValue(ELContext elContext, Object target, Object property) {
         if (target != null && property != null && target instanceof List) {
 
-            Map<String, Object> context = (Map) elContext.getContext(XWorkValueStackContext.class);
+            Map<String, Object> valueStackContext = getValueStackContext(elContext);
             List list = (List) target;
 
-            Class lastClass = (Class) context.get(XWorkConverter.LAST_BEAN_CLASS_ACCESSED);
-            String lastProperty = (String) context.get(XWorkConverter.LAST_BEAN_PROPERTY_ACCESSED);
+            Class lastClass = (Class) valueStackContext.get(XWorkConverter.LAST_BEAN_CLASS_ACCESSED);
+            String lastProperty = (String) valueStackContext.get(XWorkConverter.LAST_BEAN_PROPERTY_ACCESSED);
 
             Integer numericValue = null;
             try {
@@ -32,7 +54,7 @@ public class XWorkListELResolver extends AbstractELResolver {
             }
 
             if (numericValue != null) {
-                if (ReflectionContextState.isCreatingNullObjects(context) && objectTypeDeterminer.shouldCreateIfNew(lastClass, lastProperty, target, null, true)) {
+                if (ReflectionContextState.isCreatingNullObjects(valueStackContext) && objectTypeDeterminer.shouldCreateIfNew(lastClass, lastProperty, target, null, true)) {
                     int index = numericValue.intValue();
                     int listSize = list.size();
 
@@ -41,15 +63,15 @@ public class XWorkListELResolver extends AbstractELResolver {
                     }*/
                     Class beanClass = objectTypeDeterminer.getElementClass(lastClass, lastProperty, property);
                     if (listSize <= index) {
-                        Object result = null;
+                        Object result;
 
                         for (int i = listSize; i < index; i++) {
                             list.add(null);
                         }
                         try {
-                            list.add(index, result = objectFactory.buildBean(beanClass, context));
+                            list.add(index, result = objectFactory.buildBean(beanClass, valueStackContext));
                         } catch (Exception exc) {
-                            throw new XWorkException(exc);
+                            throw new ELException(exc);
                         }
 
                         elContext.setPropertyResolved(true);
@@ -57,9 +79,9 @@ public class XWorkListELResolver extends AbstractELResolver {
                     } else if (list.get(index) == null) {
                         Object result = null;
                         try {
-                            list.set(index, result = objectFactory.buildBean(beanClass, context));
+                            list.set(index, result = objectFactory.buildBean(beanClass, valueStackContext));
                         } catch (Exception exc) {
-                            throw new XWorkException(exc);
+                            throw new ELException(exc);
                         }
 
                         elContext.setPropertyResolved(true);
@@ -82,31 +104,13 @@ public class XWorkListELResolver extends AbstractELResolver {
     }
 
     public void setValue(ELContext elContext, Object target, Object property, Object value) {
-        Map<String, Object> context = (Map) elContext.getContext(XWorkValueStackContext.class);
         if (target != null && property != null && target instanceof List) {
-            Class lastClass = (Class) context.get(XWorkConverter.LAST_BEAN_CLASS_ACCESSED);
-            String lastProperty = (String) context.get(XWorkConverter.LAST_BEAN_PROPERTY_ACCESSED);
+            Map<String, Object> valueStackContext = getValueStackContext(elContext);
+            Class lastClass = (Class) valueStackContext.get(XWorkConverter.LAST_BEAN_CLASS_ACCESSED);
+            String lastProperty = (String) valueStackContext.get(XWorkConverter.LAST_BEAN_PROPERTY_ACCESSED);
             Class convertToClass = objectTypeDeterminer.getElementClass(lastClass, lastProperty, property);
 
-            if (property instanceof String && value.getClass().isArray()) {
-                // looks like the input game in the form of "someList.foo" and
-                // we are expected to define the index values ourselves.
-                // So let's do it:
-
-                Collection c = (Collection) value;
-                Object[] values = (Object[]) value;
-                for (Object v : values) {
-                    try {
-                        Object o = objectFactory.buildBean(convertToClass, context);
-                        reflectionProvider.setProperty(property.toString(), value, target, context);
-                        c.add(o);
-                    } catch (Exception e) {
-                        throw new XWorkException("Error converting given String values for Collection.", e);
-                    }
-                }
-            }
-
-            Object realValue = getRealValue(context, value, convertToClass);
+            Object realValue = getRealValue(valueStackContext, value, convertToClass);
 
             Long numericValue = null;
             try {
@@ -115,7 +119,7 @@ public class XWorkListELResolver extends AbstractELResolver {
                 //ignore
             }
 
-            if (target instanceof List && numericValue != null) {
+            if (numericValue != null) {
                 //make sure there are enough spaces in the List to set
                 List list = (List) target;
                 int listSize = list.size();

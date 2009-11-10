@@ -1,3 +1,23 @@
+/*
+ * $Id$
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.apache.struts2.uelplugin;
 
 import com.opensymphony.xwork2.util.reflection.ReflectionContextState;
@@ -7,6 +27,49 @@ import java.util.*;
 
 
 public class UELStackSetValueTest extends AbstractUELTest {
+
+    public void testPrivateMethod() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        TestObject obj = new TestObject();
+        root.push(obj);
+
+        stack.setValue("somePrivateField", "owned");
+        assertNull(obj.getValue());
+    }
+
+    public void testProtectedMethod() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        TestObject obj = new TestObject();
+        root.push(obj);
+
+        stack.setValue("someProtectedField", "owned");
+        assertNull(obj.getValue());
+    }
+
+    public void testPrivateField() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        TestObject obj = new TestObject();
+        root.push(obj);
+
+        stack.setValue("privateField", "owned");
+        assertNull(obj.getValue());
+    }
+
+    public void testProtectedField() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        TestObject obj = new TestObject();
+        root.push(obj);
+
+        stack.setValue("protectedField", "owned");
+        assertNull(obj.getValue());
+    }
+
+
+    public void testSetterWithoutGetter() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        TestObject obj = new TestObject();
+        root.push(obj);
+
+        assertNull(obj.getValue());
+        stack.setValue("propWithoutGetter", "go");
+        assertEquals("go", obj.getValue());
+    }
+
     public void testSuperNested() {
         TestObject obj = new TestObject();
         root.push(obj);

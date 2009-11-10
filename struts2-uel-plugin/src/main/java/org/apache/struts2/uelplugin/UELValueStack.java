@@ -1,3 +1,23 @@
+/*
+ * $Id$
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.apache.struts2.uelplugin;
 
 import com.opensymphony.xwork2.XWorkException;
@@ -9,30 +29,32 @@ import com.opensymphony.xwork2.util.CompoundRoot;
 import com.opensymphony.xwork2.util.ValueStack;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
-import org.apache.struts2.uelplugin.elresolvers.XWorkValueStackContext;
 
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.el.PropertyNotFoundException;
 import javax.el.ValueExpression;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * A ValueStack that uses Unified EL as the underlying Expression Language.
  */
 public class UELValueStack implements ValueStack, ClearableValueStack, Serializable {
+    public interface ContextKey {
+    }
+
     private static final Logger LOG = LoggerFactory.getLogger(UELValueStack.class);
 
     private CompoundRoot root = new CompoundRoot();
     private transient Map context;
-    private Class defaultType;
+    private Class defaultType = Object.class;
     private Map overrides;
 
     private ELContext elContext;
-    private Container container;
-    private XWorkConverter xworkConverter;
+    private final Container container;
+    private final XWorkConverter xworkConverter;
 
     private boolean logMissingProperties;
     private boolean devMode;
@@ -70,11 +92,11 @@ public class UELValueStack implements ValueStack, ClearableValueStack, Serializa
     }
 
     public Object findValue(String expr) {
-        return findValue(expr, Object.class, false);
+        return findValue(expr, defaultType, false);
     }
 
     public Object findValue(String expr, boolean throwException) {
-        return findValue(expr, Object.class, throwException);
+        return findValue(expr, defaultType, throwException);
     }
 
     public Object findValue(String expr, Class asType) {
@@ -91,18 +113,21 @@ public class UELValueStack implements ValueStack, ClearableValueStack, Serializa
                 // replace %{ with ${
                 expr = "#" + expr.substring(1);
             }
-            if (expr != null && !expr.startsWith("${") && !expr.startsWith("#{")) {
-                expr = "#{" + expr + "}";
-            }
+            expr = toUELExpression(expr);
 
-            elContext.putContext(XWorkValueStackContext.class, context);
+            //context variables
+            elContext.putContext(ContextKey.class, context);
             elContext.putContext(XWorkConverter.class, xworkConverter);
             elContext.putContext(CompoundRoot.class, root);
+            elContext.putContext(ValueStack.class, this);
 
             // parse our expression
             ExpressionFactory factory = getExpressionFactory();
             ValueExpression valueExpr = factory.createValueExpression(elContext, expr, Object.class);
+
+            //eval expression
             Object retVal = valueExpr.getValue(elContext);
+
             if (!Object.class.equals(asType)) {
                 retVal = xworkConverter.convertValue(context, root, null, null, retVal, asType);
             }
@@ -110,6 +135,13 @@ public class UELValueStack implements ValueStack, ClearableValueStack, Serializa
         } catch (Exception e) {
             return handleException(e, originalExpression, throwException);
         }
+    }
+
+    private String toUELExpression(String expr) {
+        if (expr != null && !expr.startsWith("${") && !expr.startsWith("#{")) {
+            expr = "#{" + expr + "}";
+        }
+        return expr;
     }
 
     private Object handleException(Exception exception, String expression, boolean throwException) {
@@ -192,12 +224,13 @@ public class UELValueStack implements ValueStack, ClearableValueStack, Serializa
 
     public void setValue(String expr, Object value, boolean throwExceptionOnFailure) {
         try {
-            if (expr != null && !expr.startsWith("${") && !expr.startsWith("#{")) {
-                expr = "#{" + expr + "}";
-            }
-            elContext.putContext(XWorkValueStackContext.class, context);
+            expr = toUELExpression(expr);
+
+            //context variables
+            elContext.putContext(ContextKey.class, context);
             elContext.putContext(XWorkConverter.class, xworkConverter);
             elContext.putContext(CompoundRoot.class, root);
+            elContext.putContext(ValueStack.class, this);
 
             // parse our expression
             ExpressionFactory factory = getExpressionFactory();
@@ -205,7 +238,7 @@ public class UELValueStack implements ValueStack, ClearableValueStack, Serializa
             valueExpr.setValue(elContext, value);
         } catch (Exception e) {
             if (e instanceof PropertyNotFoundException && devMode && logMissingProperties)
-                LOG.warn("Could not find property [" + ((PropertyNotFoundException) e).getMessage() + "]");
+                LOG.warn("Could not find property [" + e.getMessage() + "]");
 
             if (throwExceptionOnFailure)
                 throw new XWorkException(e);
@@ -217,7 +250,7 @@ public class UELValueStack implements ValueStack, ClearableValueStack, Serializa
     }
 
     protected void setRoot(CompoundRoot root) {
-        this.context = new TreeMap();
+        this.context = new HashMap();
         context.put(VALUE_STACK, this);
         this.root = root;
         elContext = new CompoundRootELContext(container);

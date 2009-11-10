@@ -1,3 +1,23 @@
+/*
+ * $Id$
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.apache.struts2.uelplugin;
 
 import de.odysseus.el.misc.NumberOperations;
@@ -25,8 +45,8 @@ public class JUELExtensionBuilder extends Builder {
     /**
      * We need a new token for "#".
      */
-    static Scanner.ExtensionToken SHARP_TOKEN = new Scanner.ExtensionToken("#");
-    static Scanner.ExtensionToken EXTENDED_ADD_TOKEN = new Scanner.ExtensionToken("+");
+    static final Scanner.ExtensionToken SHARP_TOKEN = new Scanner.ExtensionToken("#");
+    static final Scanner.ExtensionToken EXTENDED_ADD_TOKEN = new Scanner.ExtensionToken("+");
 
     /**
      * This is our operator which will be passed to an <code>AstBinary</code>.
@@ -41,7 +61,7 @@ public class JUELExtensionBuilder extends Builder {
         }
     };
 
-    static AstBinary.Operator EXTENDED_ADD_OPERATOR = new AstBinary.SimpleOperator() {
+    static final AstBinary.Operator EXTENDED_ADD_OPERATOR = new AstBinary.SimpleOperator() {
         public Object apply(TypeConverter converter, Object o1, Object o2) {
             if (o1 instanceof String || o2 instanceof String)
                 return StringUtils.join(new Object[]{o1, o2});
@@ -57,13 +77,13 @@ public class JUELExtensionBuilder extends Builder {
     /**
      * This is our handler which will create the abstract syntax node.
      */
-    static Parser.ExtensionHandler SHARP_HANDLER = new Parser.ExtensionHandler(Parser.ExtensionPoint.UNARY) {
+    static final Parser.ExtensionHandler SHARP_HANDLER = new Parser.ExtensionHandler(Parser.ExtensionPoint.UNARY) {
         public AstNode createAstNode(AstNode... children) {
             return new DelegateAstNode(children[0]);
         }
     };
 
-    static Parser.ExtensionHandler EXTENDED_ADD_HANDLER = new Parser.ExtensionHandler(Parser.ExtensionPoint.ADD) {
+    static final Parser.ExtensionHandler EXTENDED_ADD_HANDLER = new Parser.ExtensionHandler(Parser.ExtensionPoint.ADD) {
         public AstNode createAstNode(AstNode... children) {
             return new AstBinary(children[0], children[1], EXTENDED_ADD_OPERATOR);
         }
