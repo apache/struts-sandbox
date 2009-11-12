@@ -3,7 +3,7 @@
         "http://struts.apache.org/dtds/struts-2.0.dtd">
 <struts>
     <package name="test" namespace="/test" extends="struts-default">
-        <action name="test" class="org.apache.struts2.uelplugin.TestAction">
+        <action name="test" class="org.apache.struts2.uel.TestAction">
             <result>something.jsp</result>
         </action>
     </package>
