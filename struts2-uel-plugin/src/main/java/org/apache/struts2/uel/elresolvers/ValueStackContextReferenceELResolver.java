@@ -36,19 +36,16 @@ public class ValueStackContextReferenceELResolver extends AbstractELResolver {
     }
 
     public Object getValue(ELContext elContext, Object base, Object property) {
-        String objectName = property.toString();
-        if (StringUtils.startsWith(objectName, "#")) {
-            objectName = StringUtils.removeStart(property.toString(), "#");
+        String objectName = StringUtils.removeStart(property.toString(), "#");
 
-            Map valueStackContext = getValueStackContext(elContext);
-            Object obj = valueStackContext.get(objectName);
+        Map valueStackContext = getValueStackContext(elContext);
+        Object obj = valueStackContext.get(objectName);
 
-            if (obj != null) {
-                valueStackContext.put(XWorkConverter.LAST_BEAN_CLASS_ACCESSED, obj.getClass());
-                valueStackContext.put(XWorkConverter.LAST_BEAN_PROPERTY_ACCESSED, objectName);
-                elContext.setPropertyResolved(true);
-                return obj;
-            }
+        if (obj != null) {
+            valueStackContext.put(XWorkConverter.LAST_BEAN_CLASS_ACCESSED, obj.getClass());
+            valueStackContext.put(XWorkConverter.LAST_BEAN_PROPERTY_ACCESSED, objectName);
+            elContext.setPropertyResolved(true);
+            return obj;
         }
 
         return null;

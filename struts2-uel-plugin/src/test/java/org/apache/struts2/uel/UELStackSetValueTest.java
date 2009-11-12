@@ -26,7 +26,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 
-public class UELStackSetValueTest extends AbstractUELTest {
+public class UELStackSetValueTest extends UELBaseTest {
 
     public void testPrivateMethod() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         TestObject obj = new TestObject();

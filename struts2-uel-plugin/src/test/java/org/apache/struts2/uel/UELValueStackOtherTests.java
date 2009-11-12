@@ -27,7 +27,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 
-public class UELValueStackOtherTests extends AbstractUELTest {
+public class UELValueStackOtherTests extends UELBaseTest {
 
     public void testExpOverridesCanStackExpUp() throws Exception {
         Map expr1 = new LinkedHashMap();

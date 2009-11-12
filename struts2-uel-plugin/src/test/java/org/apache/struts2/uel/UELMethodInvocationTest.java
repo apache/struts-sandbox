@@ -23,7 +23,7 @@ package org.apache.struts2.uel;
 import java.lang.reflect.InvocationTargetException;
 
 
-public class UELMethodInvocationTest extends AbstractUELTest {
+public class UELMethodInvocationTest extends UELBaseTest {
     public void testBasicMethods() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         assertEquals("text", stack.findValue("${' text '.trim()}"));
         assertEquals(3, stack.findValue("${'123'.length()}"));

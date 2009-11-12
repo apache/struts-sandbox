@@ -23,7 +23,7 @@ package org.apache.struts2.uel;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
-public class UELStackReadValueTest extends AbstractUELTest {
+public class UELStackReadValueTest extends UELBaseTest {
 
     public void testPrivateMethod() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         TestObject obj = new TestObject();
@@ -257,5 +257,15 @@ public class UELStackReadValueTest extends AbstractUELTest {
 
         value = stack.findString("VALUENOTHERE");
         assertNull(value);
+    }
+
+    public void testArithmetics() {
+        Map uelContext =  stack.getContext();
+
+        uelContext.put("x", 1);
+        uelContext.put("y", 2);
+        uelContext.put("z", 3);
+        
+        assertEquals(7L, stack.findValue("x + y * z"));
     }
 }

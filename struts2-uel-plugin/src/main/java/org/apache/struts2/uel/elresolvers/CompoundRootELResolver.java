@@ -23,13 +23,9 @@ public class CompoundRootELResolver extends AbstractELResolver {
     public Object getValue(ELContext elContext, Object base, Object property) {
         //EL doesn't know of value stack, so when an expression like "A.B" is evaluated
         //this method will be called with a null target and an "A" property
-        if (base == null) {
+        String propertyName = property.toString();
 
-            String propertyName = property.toString();
-
-            if (StringUtils.startsWith(propertyName, "#"))
-                return null;
-
+        if (base == null && !StringUtils.startsWith(propertyName, "#")) {
             CompoundRoot root = (CompoundRoot) elContext.getContext(CompoundRoot.class);
             if (root == null) {
                 return null;

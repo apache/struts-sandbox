@@ -44,7 +44,7 @@ import java.text.ParseException;
 import java.util.Map;
 
 
-public abstract class AbstractUELTest extends XWorkTestCase {
+public abstract class UELBaseTest extends XWorkTestCase {
     private ExpressionFactory factory = ExpressionFactory.newInstance();
     protected XWorkConverter converter;
     protected CompoundRoot root;

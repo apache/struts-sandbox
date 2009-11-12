@@ -25,7 +25,7 @@ import org.apache.struts2.views.util.ContextUtil;
 import java.lang.reflect.InvocationTargetException;
 
 
-public class BuiltinFunctionsTest extends AbstractUELTest {
+public class BuiltinFunctionsTest extends UELBaseTest {
     public void testGetText() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         TestAction action = new TestAction();
         stack.push(action);
