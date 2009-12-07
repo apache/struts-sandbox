@@ -1,0 +1,46 @@
+package org.apache.struts2.cdi;
+
+import org.jboss.weld.environment.se.StartMain;
+import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.mock.jndi.SimpleNamingContextBuilder;
+
+import javax.enterprise.inject.spi.InjectionTarget;
+
+/**
+ * CdiObjectFactoryTest.
+ *
+ * @author Rene Gielen
+ */
+public class CdiObjectFactoryTest {
+
+    @Before
+    public void setUp() throws Exception {
+        SimpleNamingContextBuilder builder = new SimpleNamingContextBuilder();
+        builder.activate();
+
+        StartMain sm = new StartMain(new String[0]);
+        builder.bind(CdiObjectFactory.CDI_JNDIKEY_BEANMANAGER_COMP, sm.go());
+    }
+
+    @Test
+    public void testFindBeanManager() throws Exception {
+        assertNotNull(new CdiObjectFactory().findBeanManager());
+    }
+
+    @Test
+    public void testGetBean() throws Exception {
+        final CdiObjectFactory cdiObjectFactory = new CdiObjectFactory();
+        FooConsumer fooConsumer = (FooConsumer) cdiObjectFactory.buildBean(FooConsumer.class.getCanonicalName(), null, false);
+        assertNotNull(fooConsumer);
+    }
+
+    @Test public void testGetInjectionTarget() throws Exception {
+        final CdiObjectFactory cdiObjectFactory = new CdiObjectFactory();
+        final InjectionTarget<?> injectionTarget = cdiObjectFactory.getInjectionTarget(FooConsumer.class);
+        assertNotNull(injectionTarget);
+        assertTrue(cdiObjectFactory.injectionTargetCache.containsKey(FooConsumer.class));
+        assertSame(cdiObjectFactory.getInjectionTarget(FooConsumer.class), injectionTarget);
+    }
+}
