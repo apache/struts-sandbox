@@ -36,7 +36,7 @@ import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.util.ValueStack;
 import com.opensymphony.xwork2.util.ValueStackFactory;
 
-import static org.apache.struts2.portlet.PortletContstants.*;
+import static org.apache.struts2.portlet.PortletConstants.*;
 
 public class PortletStateInterceptorTest extends StrutsTestCase {
 

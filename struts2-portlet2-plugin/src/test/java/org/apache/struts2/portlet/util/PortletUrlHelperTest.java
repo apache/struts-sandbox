@@ -20,7 +20,7 @@
  */
 package org.apache.struts2.portlet.util;
 
-import static org.apache.struts2.portlet.PortletContstants.*;
+import static org.apache.struts2.portlet.PortletConstants.*;
 
 import java.io.IOException;
 import java.io.Writer;

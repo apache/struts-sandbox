@@ -57,10 +57,10 @@ public interface PortletActionConstants {
     Integer RENDER_PHASE = new Integer(1);
 
     /**
-     * Constant used for the event phase (
+     * Constant used for the action phase (
      * {@link javax.portlet.Portlet#processAction(javax.portlet.ActionRequest, javax.portlet.ActionResponse)})
      */
-    Integer EVENT_PHASE = new Integer(2);
+    Integer ACTION_PHASE = new Integer(2);
 
     /**
      * Key used for looking up and storing the

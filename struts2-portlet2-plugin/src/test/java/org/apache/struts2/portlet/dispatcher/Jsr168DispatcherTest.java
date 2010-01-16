@@ -27,7 +27,7 @@ import com.opensymphony.xwork2.ActionProxyFactory;
 import com.opensymphony.xwork2.util.ValueStack;
 import org.apache.struts2.StrutsConstants;
 import org.apache.struts2.dispatcher.mapper.ActionMapping;
-import static org.apache.struts2.portlet.PortletContstants.*;
+import static org.apache.struts2.portlet.PortletConstants.*;
 import org.easymock.EasyMock;
 import org.jmock.Mock;
 import org.jmock.cglib.MockObjectTestCase;

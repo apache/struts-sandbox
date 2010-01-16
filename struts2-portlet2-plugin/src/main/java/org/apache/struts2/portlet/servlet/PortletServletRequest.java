@@ -42,7 +42,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import static org.apache.struts2.portlet.PortletContstants.*;
+import static org.apache.struts2.portlet.PortletConstants.*;
 
 /**
  * Wrapper object exposing a {@link PortletRequest} as a

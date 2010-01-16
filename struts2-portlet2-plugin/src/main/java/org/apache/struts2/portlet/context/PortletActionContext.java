@@ -36,7 +36,7 @@ import org.apache.struts2.dispatcher.mapper.ActionMapping;
 
 import com.opensymphony.xwork2.ActionContext;
 
-import static org.apache.struts2.portlet.PortletContstants.*;
+import static org.apache.struts2.portlet.PortletConstants.*;
 
 
 /**

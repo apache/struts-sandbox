@@ -20,7 +20,7 @@
  */
 package org.apache.struts2.portlet.result;
 
-import static org.apache.struts2.portlet.PortletContstants.*;
+import static org.apache.struts2.portlet.PortletConstants.*;
 import static com.opensymphony.xwork2.ActionContext.*;
 
 import java.util.HashMap;

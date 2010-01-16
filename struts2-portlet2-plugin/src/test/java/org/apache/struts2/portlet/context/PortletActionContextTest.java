@@ -20,7 +20,7 @@
  */
 package org.apache.struts2.portlet.context;
 
-import static org.apache.struts2.portlet.PortletContstants.*;
+import static org.apache.struts2.portlet.PortletConstants.*;
 import static org.apache.struts2.portlet.context.PortletActionContext.*;
 
 import java.util.HashMap;

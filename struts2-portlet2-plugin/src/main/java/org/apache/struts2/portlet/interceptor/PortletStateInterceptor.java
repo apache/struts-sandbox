@@ -34,7 +34,7 @@ import com.opensymphony.xwork2.util.ValueStack;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
 
-import static org.apache.struts2.portlet.PortletContstants.*;
+import static org.apache.struts2.portlet.PortletConstants.*;
 import org.apache.commons.lang.xwork.StringUtils;
 
 public class PortletStateInterceptor extends AbstractInterceptor {

@@ -41,10 +41,7 @@ import org.apache.struts2.dispatcher.SessionMap;
 import org.apache.struts2.dispatcher.mapper.ActionMapper;
 import org.apache.struts2.dispatcher.mapper.ActionMapping;
 import org.apache.struts2.dispatcher.multipart.MultiPartRequestWrapper;
-import org.apache.struts2.portlet.PortletActionConstants;
-import org.apache.struts2.portlet.PortletApplicationMap;
-import org.apache.struts2.portlet.PortletRequestMap;
-import org.apache.struts2.portlet.PortletSessionMap;
+import org.apache.struts2.portlet.*;
 import org.apache.struts2.portlet.context.PortletActionContext;
 import org.apache.struts2.portlet.servlet.PortletServletContext;
 import org.apache.struts2.portlet.servlet.PortletServletRequest;
@@ -60,6 +57,8 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import static org.apache.struts2.portlet.PortletConstants.*;
 
 /**
  * <!-- START SNIPPET: javadoc -->
@@ -151,8 +150,7 @@ import java.util.Map;
  * <!-- END SNIPPET: example -->
  * </pre>
  */
-public class Jsr168Dispatcher extends GenericPortlet implements StrutsStatics,
-        PortletActionConstants {
+public class Jsr168Dispatcher extends GenericPortlet implements StrutsStatics {
 
     private static final Logger LOG = LoggerFactory.getLogger(Jsr168Dispatcher.class);
 
@@ -284,7 +282,7 @@ public class Jsr168Dispatcher extends GenericPortlet implements StrutsStatics,
         try {
             serviceAction(request, response, getRequestMap(request), getParameterMap(request),
                     getSessionMap(request), getApplicationMap(),
-                    portletNamespace, EVENT_PHASE);
+                    portletNamespace, ACTION_PHASE);
             if (LOG.isDebugEnabled()) LOG.debug("Leaving processAction");
         } finally {
             ActionContext.setContext(null);
@@ -413,7 +411,7 @@ public class Jsr168Dispatcher extends GenericPortlet implements StrutsStatics,
             ServletContext servletContext = new PortletServletContext(getPortletContext());
             HttpServletRequest servletRequest = new PortletServletRequest(request, getPortletContext());
             HttpServletResponse servletResponse = createPortletServletResponse(response);
-            if(EVENT_PHASE.equals(phase)) {
+            if(ACTION_PHASE.equals(phase)) {
             	servletRequest = dispatcherUtils.wrapRequest(servletRequest, servletContext);
         		if(servletRequest instanceof MultiPartRequestWrapper) {
         			// Multipart request. Request parameters are encoded in the multipart data,
@@ -464,7 +462,9 @@ public class Jsr168Dispatcher extends GenericPortlet implements StrutsStatics,
      * <code>view</code>, and edit mode is mapped to the namespace
      * <code>edit</code>
      *
-     * @param request the PortletRequest object.
+     * @param portletRequest the PortletRequest object.
+     * @param servletRequest the ServletRequest to use
+     *
      * @return the namespace of the action.
      */
     protected ActionMapping getActionMapping(final PortletRequest portletRequest, final HttpServletRequest servletRequest) {

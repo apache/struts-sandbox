@@ -3,12 +3,14 @@ package org.apache.struts2.portlet.dispatcher;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
-import static org.apache.struts2.portlet.PortletContstants.SERVE_RESOURCE_PHASE;
 import org.apache.struts2.portlet.servlet.PortletServletResponse;
 import org.apache.struts2.portlet.servlet.PortletServletResponseJSR286;
 
 import javax.portlet.*;
 import java.io.IOException;
+
+import static org.apache.struts2.portlet.PortletConstants.EVENT_PHASE;
+import static org.apache.struts2.portlet.PortletConstants.SERVE_RESOURCE_PHASE;
 
 public class Jsr286Dispatcher extends Jsr168Dispatcher {
 
@@ -26,7 +28,7 @@ public class Jsr286Dispatcher extends Jsr168Dispatcher {
 					getRequestMap(request), getParameterMap(request),
 					getSessionMap(request), getApplicationMap(),
 					portletNamespace, EVENT_PHASE);
-			if (LOG.isDebugEnabled()) LOG.debug("Leaving processAction");
+			if (LOG.isDebugEnabled()) LOG.debug("Leaving processEvent");
 		} finally {
 			ActionContext.setContext(null);
 		}

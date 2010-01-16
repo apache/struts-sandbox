@@ -2,7 +2,7 @@ package org.apache.struts2.portlet;
 
 import org.apache.struts2.portlet.dispatcher.DispatcherServlet;
 
-public class PortletContstants {
+public class PortletConstants {
 	/**
      * Default action name to use when no default action has been configured in the portlet
      * init parameters.
