@@ -43,14 +43,6 @@
             <artifactId>weld-core</artifactId>
             <version>1.0.1-Final</version>
             <scope>provided</scope>
-<!--
-            <exclusions>
-                <exclusion>
-                    <groupId>org.jboss.interceptor</groupId>
-                    <artifactId>jboss-interceptor</artifactId>
-                </exclusion>
-            </exclusions>
--->
         </dependency>
 
         <dependency>
