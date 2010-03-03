@@ -4,14 +4,12 @@ import javax.inject.Inject;
 
 /**
  * FooConsumer.
- *
- * @author Rene Gielen
  */
 public class FooConsumer {
 
     @Inject
-    private FooService fooService;
-
+    FooService fooService;
+    
     public void foo() {
         System.out.println(fooService.getHello());
     }

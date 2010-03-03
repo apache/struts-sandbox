@@ -2,6 +2,8 @@ package org.apache.struts2.cdi;
 
 import org.jboss.weld.environment.se.StartMain;
 import static org.junit.Assert.*;
+
+import org.jboss.weld.environment.se.WeldContainer;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.mock.jndi.SimpleNamingContextBuilder;
@@ -10,8 +12,6 @@ import javax.enterprise.inject.spi.InjectionTarget;
 
 /**
  * CdiObjectFactoryTest.
- *
- * @author Rene Gielen
  */
 public class CdiObjectFactoryTest {
 
@@ -21,7 +21,8 @@ public class CdiObjectFactoryTest {
         builder.activate();
 
         StartMain sm = new StartMain(new String[0]);
-        builder.bind(CdiObjectFactory.CDI_JNDIKEY_BEANMANAGER_COMP, sm.go());
+        WeldContainer weldContainer = sm.go();
+        builder.bind(CdiObjectFactory.CDI_JNDIKEY_BEANMANAGER_COMP, weldContainer.getBeanManager());
     }
 
     @Test
@@ -34,6 +35,7 @@ public class CdiObjectFactoryTest {
         final CdiObjectFactory cdiObjectFactory = new CdiObjectFactory();
         FooConsumer fooConsumer = (FooConsumer) cdiObjectFactory.buildBean(FooConsumer.class.getCanonicalName(), null, false);
         assertNotNull(fooConsumer);
+        assertNotNull(fooConsumer.fooService);
     }
 
     @Test public void testGetInjectionTarget() throws Exception {
