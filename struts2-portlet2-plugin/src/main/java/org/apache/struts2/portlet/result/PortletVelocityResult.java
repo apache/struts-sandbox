@@ -95,6 +95,8 @@ public class PortletVelocityResult extends StrutsResultSupport {
     
     private String defaultEncoding;
     private VelocityManager velocityManager;
+    private JspFactory jspFactory = JspFactory.getDefaultFactory();
+    
     public PortletVelocityResult() {
         super();
     }
@@ -159,7 +161,6 @@ public class PortletVelocityResult extends StrutsResultSupport {
 
         HttpServletRequest request = ServletActionContext.getRequest();
         HttpServletResponse response = ServletActionContext.getResponse();
-        JspFactory jspFactory = null;
         ServletContext servletContext = ServletActionContext
                 .getServletContext();
         Servlet servlet = JspSupportServlet.jspSupportServlet;
@@ -171,7 +172,6 @@ public class PortletVelocityResult extends StrutsResultSupport {
                 ServletActionContext.PAGE_CONTEXT);
 
         if (pageContext == null && servlet != null) {
-            jspFactory = JspFactory.getDefaultFactory();
             pageContext = jspFactory.getPageContext(servlet, request, response,
                     null, true, 8192, true);
             ActionContext.getContext().put(ServletActionContext.PAGE_CONTEXT,
