@@ -20,7 +20,8 @@
  */
 package org.apache.struts2.portlet.util;
 
-import static org.apache.struts2.portlet.PortletConstants.*;
+import static org.apache.struts2.portlet.PortletConstants.ACTION_PARAM;
+import static org.apache.struts2.portlet.PortletConstants.MODE_PARAM;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -29,11 +30,16 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import javax.portlet.*;
+import javax.portlet.PortletMode;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletSecurityException;
+import javax.portlet.PortletURL;
+import javax.portlet.RenderResponse;
+import javax.portlet.WindowState;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.struts2.StrutsException;
 import org.apache.struts2.portlet.context.PortletActionContext;
-import org.apache.commons.lang.xwork.StringUtils;
 
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;

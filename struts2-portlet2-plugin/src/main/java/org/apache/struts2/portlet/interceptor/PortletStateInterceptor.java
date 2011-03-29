@@ -20,11 +20,20 @@
  */
 package org.apache.struts2.portlet.interceptor;
 
+import static org.apache.struts2.portlet.PortletConstants.ACTION_PHASE;
+import static org.apache.struts2.portlet.PortletConstants.EVENT_ACTION;
+import static org.apache.struts2.portlet.PortletConstants.PHASE;
+import static org.apache.struts2.portlet.PortletConstants.RENDER_PHASE;
+import static org.apache.struts2.portlet.PortletConstants.REQUEST;
+import static org.apache.struts2.portlet.PortletConstants.RESPONSE;
+import static org.apache.struts2.portlet.PortletConstants.STACK_FROM_EVENT_PHASE;
+
 import java.util.Map;
 
 import javax.portlet.ActionResponse;
 import javax.portlet.RenderRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.struts2.portlet.dispatcher.DirectRenderFromEventAction;
 
 import com.opensymphony.xwork2.ActionInvocation;
@@ -33,9 +42,6 @@ import com.opensymphony.xwork2.util.CompoundRoot;
 import com.opensymphony.xwork2.util.ValueStack;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
-
-import static org.apache.struts2.portlet.PortletConstants.*;
-import org.apache.commons.lang.xwork.StringUtils;
 
 public class PortletStateInterceptor extends AbstractInterceptor {
 
