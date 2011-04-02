@@ -57,6 +57,13 @@ public class PortletUrlHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(PortletUrlHelper.class);
 
+    protected static final String PORTLETMODE_NAME_EDIT = "edit";
+    protected static final String PORTLETMODE_NAME_VIEW = "view";
+    protected static final String PORTLETMODE_NAME_HELP = "help";
+
+    protected static final String URLTYPE_NAME_ACTION = "action";
+    protected static final String URLTYPE_NAME_RESOURCE = "resource";
+
     /**
      * Create a portlet URL with for the specified action and namespace.
      *
@@ -87,7 +94,7 @@ public class PortletUrlHelper {
         PortletRequest request = PortletActionContext.getRequest();
         LOG.debug("Creating url. Action = " + action + ", Namespace = "
                 + namespace + ", Type = " + type);
-        namespace = prependNamespace(namespace, portletMode);
+        namespace = prependNamespace(namespace, portletMode, !URLTYPE_NAME_RESOURCE.equalsIgnoreCase(type));
         if (StringUtils.isEmpty(portletMode)) {
             portletMode = PortletActionContext.getRequest().getPortletMode().toString();
         }
@@ -142,7 +149,7 @@ public class PortletUrlHelper {
     protected Object createUrl( String scheme, String type, Map<String, String[]> portletParams ) {
         RenderResponse response = PortletActionContext.getRenderResponse();
         PortletURL url;
-        if ("action".equalsIgnoreCase(type)) {
+        if (URLTYPE_NAME_ACTION.equalsIgnoreCase(type)) {
             if (LOG.isDebugEnabled()) LOG.debug("Creating action url");
             url = response.createActionURL();
         }
@@ -164,23 +171,32 @@ public class PortletUrlHelper {
     }
 
     /**
-     *
      * Prepend the namespace configuration for the specified namespace and PortletMode.
      *
-     * @param namespace The base namespace.
-     * @param portletMode The PortletMode.
-     *
+     * @param namespace            The base namespace.
+     * @param portletMode          The PortletMode.
+     * @param prependModeNamespace In JSR286, the new URL type resource was added, which does not operate in the context
+     *                             of a portlet mode. If the URL to create is of type resource, this parameter should be
+     *                             set to false. Set it to true in any other case.
      * @return prepended namespace.
      */
-    private String prependNamespace(String namespace, String portletMode) {
+    private String prependNamespace(String namespace, String portletMode, boolean prependModeNamespace) {
         StringBuffer sb = new StringBuffer();
-        PortletMode mode = PortletActionContext.getRequest().getPortletMode();
-        if(StringUtils.isNotEmpty(portletMode)) {
-            mode = new PortletMode(portletMode);
+        String modeNamespace;
+        if (prependModeNamespace) {
+            PortletMode mode = PortletActionContext.getRequest().getPortletMode();
+            if(StringUtils.isNotEmpty(portletMode)) {
+                mode = new PortletMode(portletMode);
+            }
+            modeNamespace = (String)PortletActionContext.getModeNamespaceMap().get(mode);
+        } else {
+            modeNamespace = null;
         }
         String portletNamespace = PortletActionContext.getPortletNamespace();
-        String modeNamespace = (String)PortletActionContext.getModeNamespaceMap().get(mode);
-        if (LOG.isDebugEnabled()) LOG.debug("PortletNamespace: " + portletNamespace + ", modeNamespace: " + modeNamespace);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("PortletNamespace: " + portletNamespace + ", modeNamespace: "
+                    + (modeNamespace!=null ? modeNamespace : "IGNORED"));
+        }
         if(StringUtils.isNotEmpty(portletNamespace)) {
             sb.append(portletNamespace);
         }
@@ -303,11 +319,11 @@ public class PortletUrlHelper {
         PortletMode mode = portletReq.getPortletMode();
 
         if (StringUtils.isNotEmpty(portletMode)) {
-            if ("edit".equalsIgnoreCase(portletMode)) {
+            if (PORTLETMODE_NAME_EDIT.equalsIgnoreCase(portletMode)) {
                 mode = PortletMode.EDIT;
-            } else if ("view".equalsIgnoreCase(portletMode)) {
+            } else if (PORTLETMODE_NAME_VIEW.equalsIgnoreCase(portletMode)) {
                 mode = PortletMode.VIEW;
-            } else if ("help".equalsIgnoreCase(portletMode)) {
+            } else if (PORTLETMODE_NAME_HELP.equalsIgnoreCase(portletMode)) {
                 mode = PortletMode.HELP;
             }
         }

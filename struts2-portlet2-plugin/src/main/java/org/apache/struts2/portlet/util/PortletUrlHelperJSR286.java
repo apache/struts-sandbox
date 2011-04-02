@@ -27,11 +27,11 @@ public class PortletUrlHelperJSR286 extends PortletUrlHelper {
     protected Object createUrl( String scheme, String type, Map<String, String[]> portletParams ) {
         MimeResponse response = (MimeResponse) PortletActionContext.getResponse();
         BaseURL url;
-        if ("action".equalsIgnoreCase(type)) {
+        if (URLTYPE_NAME_ACTION.equalsIgnoreCase(type)) {
             if (LOG.isDebugEnabled()) LOG.debug("Creating action url");
             url = response.createActionURL();
         }
-        else if("resource".equalsIgnoreCase(type)) {
+        else if(URLTYPE_NAME_RESOURCE.equalsIgnoreCase(type)) {
         	if (LOG.isDebugEnabled()) LOG.debug("Creating resource url");
         	url = response.createResourceURL();
         }
