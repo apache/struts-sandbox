@@ -1,12 +1,16 @@
 package org.apache.struts2.portlet.servlet;
 
-import javax.servlet.ServletOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Locale;
-import javax.portlet.ResourceResponse;
+
 import javax.portlet.MimeResponse;
 import javax.portlet.PortletResponse;
+import javax.portlet.ResourceResponse;
+import javax.servlet.ServletOutputStream;
+
+import com.opensymphony.xwork2.util.logging.Logger;
+import com.opensymphony.xwork2.util.logging.LoggerFactory;
 
 /**
  * PortletServletResponseJSR286.
@@ -15,6 +19,8 @@ import javax.portlet.PortletResponse;
  */
 public class PortletServletResponseJSR286 extends PortletServletResponse {
 
+  private static final Logger LOG = LoggerFactory.getLogger(PortletServletResponseJSR286.class);
+  
     public PortletServletResponseJSR286( PortletResponse portletResponse ) {
         super(portletResponse);
     }
@@ -123,14 +129,18 @@ public class PortletServletResponseJSR286 extends PortletServletResponse {
         if(portletResponse instanceof ResourceResponse) {
             ((ResourceResponse)portletResponse).setCharacterEncoding(charset);
         }
-        throw new IllegalStateException("Only allowed in resource phase");
+        else {
+          throw new IllegalStateException("Only allowed in resource phase");
+        }
     }
 
     public void setContentLength(int len) {
         if(portletResponse instanceof ResourceResponse) {
             ((ResourceResponse)portletResponse).setContentLength(len);
         }
-        throw new IllegalStateException("Only allowed in resource phase");
+        else {
+          throw new IllegalStateException("Only allowed in resource phase");
+        }
     }
 
     public void setContentType(String type) {
@@ -146,7 +156,9 @@ public class PortletServletResponseJSR286 extends PortletServletResponse {
         if(portletResponse instanceof ResourceResponse) {
             ((ResourceResponse)portletResponse).setLocale(loc);
         }
-        throw new IllegalStateException("Only allowed in resource phase");
+        else {
+          throw new IllegalStateException("Only allowed in resource phase");
+        }
     }
 
 }
