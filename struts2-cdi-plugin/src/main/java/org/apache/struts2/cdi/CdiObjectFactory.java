@@ -23,14 +23,14 @@ import com.opensymphony.xwork2.ObjectFactory;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
 
+import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.InjectionTarget;
-import javax.enterprise.context.spi.CreationalContext;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import java.util.Map;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * CdiObjectFactory allows Struts 2 managed objects, like Actions, Interceptors or Results, to be injected by a Contexts
@@ -52,7 +52,7 @@ public class CdiObjectFactory extends ObjectFactory {
     protected BeanManager beanManager;
     protected CreationalContext ctx;
 
-    Map<Class<?>, InjectionTarget<?>> injectionTargetCache = new HashMap<Class<?>, InjectionTarget<?>>();
+    Map<Class<?>, InjectionTarget<?>> injectionTargetCache = new ConcurrentHashMap<Class<?>, InjectionTarget<?>>();
 
     public CdiObjectFactory() {
         super();
@@ -76,25 +76,17 @@ public class CdiObjectFactory extends ObjectFactory {
         BeanManager bm;
         try {
             Context initialContext = new InitialContext();
-            if (LOG.isInfoEnabled()) {
-                LOG.info("[findBeanManager]: Checking for BeanManager under JNDI key " + CDI_JNDIKEY_BEANMANAGER_COMP);
-            }
+            LOG.info("[findBeanManager]: Checking for BeanManager under JNDI key " + CDI_JNDIKEY_BEANMANAGER_COMP);
             try {
                 bm = (BeanManager) initialContext.lookup(CdiObjectFactory.CDI_JNDIKEY_BEANMANAGER_COMP);
-            } catch ( NamingException e ) {
-                if (LOG.isWarnEnabled()) {
-                    LOG.warn("[findBeanManager]: Lookup failed.");
-                }
-                if (LOG.isInfoEnabled()) {
-                    LOG.info("[findBeanManager]: Checking for BeanManager under JNDI key " + CDI_JNDIKEY_BEANMANAGER_APP);
-                }
+            } catch (NamingException e) {
+                LOG.warn("[findBeanManager]: Lookup failed.", e);
+                LOG.info("[findBeanManager]: Checking for BeanManager under JNDI key " + CDI_JNDIKEY_BEANMANAGER_APP);
                 bm = (BeanManager) initialContext.lookup(CdiObjectFactory.CDI_JNDIKEY_BEANMANAGER_APP);
             }
-            if (LOG.isInfoEnabled()) {
-                LOG.info("[findBeanManager]: BeanManager found.");
-            }
+            LOG.info("[findBeanManager]: BeanManager found.");
             return bm;
-        } catch ( NamingException e ) {
+        } catch (NamingException e) {
             LOG.error("Could not get BeanManager from JNDI context", e);
         }
         return null;
@@ -102,7 +94,7 @@ public class CdiObjectFactory extends ObjectFactory {
 
     @Override
     @SuppressWarnings("unchecked")
-    public Object buildBean( String className, Map<String, Object> extraContext, boolean injectInternal )
+    public Object buildBean(String className, Map<String, Object> extraContext, boolean injectInternal)
             throws Exception {
 
         Class<?> clazz = getClassInstance(className);
@@ -124,19 +116,16 @@ public class CdiObjectFactory extends ObjectFactory {
      * will be created.
      *
      * @param clazz The class to get a InjectionTarget instance for.
-     *
      * @return if found in cache, an existing instance. A new instance otherwise.
      */
-    protected InjectionTarget<?> getInjectionTarget( Class<?> clazz ) {
+    protected InjectionTarget<?> getInjectionTarget(Class<?> clazz) {
         InjectionTarget<?> result;
-        synchronized ( this ) {
-            result = injectionTargetCache.get(clazz);
-            if (result == null) {
-                result = beanManager.createInjectionTarget(beanManager.createAnnotatedType(clazz));
-                injectionTargetCache.put(clazz, result);
-            }
-
+        result = injectionTargetCache.get(clazz);
+        if (result == null) {
+            result = beanManager.createInjectionTarget(beanManager.createAnnotatedType(clazz));
+            injectionTargetCache.put(clazz, result);
         }
+
         return result;
     }
 
@@ -144,11 +133,10 @@ public class CdiObjectFactory extends ObjectFactory {
      * Simple wrapper for CreationalContext creation.
      *
      * @param beanManager the BeanManager to use for creating the context.
-     *
      * @return the context to use, if given BeanManager was not <tt>null</tt>. <tt>null</tt> otherwise.
      */
     @SuppressWarnings("unchecked")
-    protected CreationalContext buildNonContextualCreationalContext( BeanManager beanManager ) {
+    protected CreationalContext buildNonContextualCreationalContext(BeanManager beanManager) {
         return beanManager != null ? beanManager.createCreationalContext(null) : null;
     }
 }
