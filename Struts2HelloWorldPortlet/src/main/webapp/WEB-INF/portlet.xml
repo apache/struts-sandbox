@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<portlet-app xmlns='http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd' 
+     xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' 
+     xsi:schemaLocation='http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd' version='1.0'>
+<portlet id="StrutsExample">
+        <description xml:lang="EN">Simple hello world portlet using Struts 2</description>
+        <!-- matches fname value in uPortal channel definition -->
+        <portlet-name>StrutsExample</portlet-name>
+        <display-name xml:lang="EN">Struts Example</display-name>
+    
+        <portlet-class>org.apache.struts2.portlet.dispatcher.Jsr168Dispatcher</portlet-class>
+
+		<!-- The namespace for the actions configured for view mode -->
+		<init-param>
+			<name>viewNamespace</name>
+			<value>/view</value>
+		</init-param>
+		
+         <!-- The default action to invoke in view mode. -->
+        <init-param>
+            <name>defaultViewAction</name>
+            <value>index</value>
+        </init-param>
+
+        <expiration-cache>0</expiration-cache>
+
+        <supports>
+            <mime-type>text/html</mime-type>
+			<portlet-mode>VIEW</portlet-mode>
+        </supports>
+
+        <supported-locale>en</supported-locale>
+
+        <portlet-info>
+            <title>Struts Example</title>
+        </portlet-info>
+    </portlet>
+  
+</portlet-app>
